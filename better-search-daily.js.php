@@ -35,7 +35,7 @@ function bsearch_daily_searches() {
 		$output .= $bsearch_settings['title_daily'];
 	}
 	
-	$output .= '<div text-align:center>'.bsearch_heatmap(true, $smallest, $largest, $unit, $cold, $hot, $before, $after, '',$limit).'</div>';
+	$output .= '<div text-align:center>'.get_bsearch_heatmap(true, $smallest, $largest, $unit, $cold, $hot, $before, $after, '',$limit).'</div>';
 		
 	if ($bsearch_settings['show_credit']) $output .= '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
 		
