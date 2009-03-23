@@ -15,7 +15,7 @@ Do you hate the inbuilt WordPress search?
 
 Improve your visitors search experience with <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search</a>
 
-Better Search will provide contextually search your WordPress blogs and then list the results based on relevance.
+Better Search will provide contextually search your WordPress blogs and then list the results based on relevance. It automatically replaces the default WordPress search and supports templates for perfect integration into your blog.
 
 Additionally, the plugin will track the searches and allow you present a "search heatmap" of the most popular searches.
 
@@ -25,13 +25,19 @@ Additionally, the plugin will track the searches and allow you present a "search
 * Automatically replaces your default WordPress search with Better Search results
 * Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap
 * Choose between WordPress search and Better Search (coming soon)
-* Manual installation for the brave at heart (coming soon)
+* Support for a template file for perfect integration into your blog template
 * Clean uninstall if you choose to delete the plugin from within WP-Admin
 * Works with caching plugins like WP-Super-Cache
 
 
 = Changelog =
 
+* 1.1
+	- Plugin now allows use of template file. Create a file <code>better-search-template.php</code> in your themes folder.
+	- Pages are also included in the results. You can turn it off in options
+	- Drafts are no longer included in results
+	- WordPress Title rewritten
+	- Added support for localization.
 * 1.0 - Release
 
 
@@ -52,13 +58,17 @@ Additionally, the plugin will track the searches and allow you present a "search
 
 = What are the requirements for this plugin? =
 
-WordPress 2.5 or above
+WordPress 2.7 or above
 
 = Can I customize what is displayed? =
 
 All options can be customized within the Options page in WP-Admin itself
 
 For more information, please visit http://ajaydsouza.com/wordpress/plugins/better-search/
+
+= Can I fit the results into the look and feel of my site? =
+
+Yes, with v1.1 onwards you can. Take a look at http://ajaydsouza.com/wordpress/plugins/better-search/bsearch-templates for use of custom templates and template tags supported by Better Search.
 
 = Support =
 
