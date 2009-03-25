@@ -88,7 +88,7 @@ function bsearch_options() {
     </p>
     <p>
       <label>
-      <?php _e('Title of Overall Popular Searchs: ', BSEARCH_LOCAL_NAME); ?>
+      <?php _e('Title of Overall Popular Searches: ', BSEARCH_LOCAL_NAME); ?>
       <input type="textbox" name="title" id="title" value="<?php echo stripslashes($bsearch_settings[title]); ?>">
       </label>
     </p>
