@@ -32,6 +32,7 @@ Additionally, the plugin will track the searches and allow you present a "search
 
 = Changelog =
 
+* 1.1.1 - Minor bug fixed that certain search terms didn't work
 * 1.1
 	- Plugin now allows use of template file. Create a file <code>better-search-template.php</code> in your themes folder.
 	- Pages are also included in the results. You can turn it off in options
