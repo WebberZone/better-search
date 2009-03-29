@@ -1,0 +1,194 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Better Search\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-03-24 23:27+0530\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
+"Language-Team:  <me@ajaydsouza.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-KeywordsList: __;_e;_c;__ngettext\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: admin.inc.php:45
+msgid "Options saved successfully."
+msgstr "Impostazioni salvate."
+
+#: admin.inc.php:54
+msgid "Options set to Default."
+msgstr "Impostazioni di default."
+
+#: admin.inc.php:65
+msgid "Support the Development"
+msgstr "Contribuisci allo sviluppo di questo software"
+
+#: admin.inc.php:69
+msgid "If you find "
+msgstr "Se trovi"
+
+#: admin.inc.php:71
+msgid "useful, please do"
+msgstr "utile, potresti"
+
+#: admin.inc.php:72
+msgid "drop in your contribution"
+msgstr "cacciare l'euro"
+
+#: admin.inc.php:73
+msgid "Some reasons why you should."
+msgstr "Alcuni buoni motivi"
+
+#: admin.inc.php:80
+msgid "Options:"
+msgstr "Impostazioni:"
+
+#: admin.inc.php:85
+msgid "Number of Search Results per page: "
+msgstr "Numero dei risultati per pagina:"
+
+#: admin.inc.php:91
+msgid "Title of Overall Popular Searches: "
+msgstr "Titolo di tutte le ricerche più frequenti:"
+
+#: admin.inc.php:97
+msgid "Title of Daily Popular Searches: "
+msgstr "Titolo delle ricerche più frequenti del giorno:"
+
+#: admin.inc.php:103
+msgid "Daily Popular should contain searches of how many days? "
+msgstr "Quanti giorni considerare per le ricerche più frequenti della settimana?"
+
+#: admin.inc.php:110
+msgid "Include WordPress static pages in Search Results"
+msgstr "Includi una pagina statica di Wordpress nei risultati di ricerca"
+
+#: admin.inc.php:116
+msgid "Bypass Cache for daily popular searches' heatmap? This options uses JavaScript to load the post and can increase your page load time"
+msgstr "Aggirare la cache per elaborare la lista dei risultati di ricerca più frequenti del giorno? Questa opzione usa JavaScript e potrebbe richiedere più tempo."
+
+#: admin.inc.php:122
+msgid "A link to the plugin is added as an extra list item to the list of popular searches. Not mandatory, but thanks if you do it!"
+msgstr "Aggiungere un link al plugin in fondo alla lista della ricerche più frequenti. Non è obbligatorio, ma se lo fai ci fa piacere. "
+
+#: admin.inc.php:129
+msgid "Heatmap (Popular searches) Options:"
+msgstr "Impostazioni della lista (delle ricerche più frequenti):"
+
+#: admin.inc.php:134
+msgid "Number of search terms to display: "
+msgstr "Numero dei termini di ricerca da evidenziare:"
+
+#: admin.inc.php:140
+msgid "Font size of least popular search term: "
+msgstr "Dimensione del font per i termini di ricerca meno frequenti:"
+
+#: admin.inc.php:146
+msgid "Font size of most popular search term: "
+msgstr "Dimensione del font per i termini di ricerca più frequenti:"
+
+#: admin.inc.php:152
+msgid "Color of least popular search term: "
+msgstr "Colore del font per i termini di ricerca meno frequenti:"
+
+#: admin.inc.php:158
+msgid "Color of most popular search term: "
+msgstr "Colore del font per i termini di ricerca più frequenti:"
+
+#: admin.inc.php:164
+msgid "Text to include before each search term in heatmap"
+msgstr "Testo da inserire nella lista prima di ogni termine di ricerca"
+
+#: admin.inc.php:170
+msgid "Text to include after each search term in heatmap"
+msgstr "Testo da inserire nella lista dopo ogni termine di ricerca "
+
+#: admin.inc.php:177
+msgid "Do you want to set options to Default?"
+msgstr "Vuoi tornare alle impostazioni di default?"
+
+#: admin.inc.php:201
+msgid "Better Search"
+msgstr "Better Search"
+
+#: admin.inc.php:251
+#: better-search.php:733
+#: better-search.php:745
+msgid "Popular Searches"
+msgstr "Ricerche più frequenti"
+
+#: admin.inc.php:252
+msgid "Daily Popular Searches"
+msgstr "Ricerche più frequenti del giorno"
+
+#: better-search.php:81
+msgid "Search Results for: "
+msgstr "Risultati della ricerca di:"
+
+#: better-search.php:236
+msgid "Relevance Score: "
+msgstr "Indice di rilevanza:"
+
+#: better-search.php:251
+msgid "Previous"
+msgstr "Precedente"
+
+#: better-search.php:268
+msgid "Next"
+msgstr "Seguente"
+
+#: better-search.php:277
+msgid "No results."
+msgstr "Nessun risultato."
+
+#: better-search.php:282
+msgid "Please type in your search terms. Use descriptive words since this search is intelligent."
+msgstr "Digita qui i tuoi termini di ricerca. Usa termini descrittivi, questo gingillo fa ricerche intelligenti."
+
+#: better-search.php:371
+msgid "Search for "
+msgstr "Cerca per"
+
+#: better-search.php:373
+msgid " (searched "
+msgstr "(termine cercato"
+
+#: better-search.php:375
+msgid " times)"
+msgstr "volte)"
+
+#: better-search.php:379
+msgid "No searches made yet"
+msgstr "Non risultano ricerche"
+
+#: better-search.php:421
+msgid "Search Results for "
+msgstr "Risultati della ricerca di "
+
+#: better-search.php:438
+msgid "Search for:"
+msgstr "Cerca nel blog:"
+
+#: better-search.php:440
+msgid "Search Again"
+msgstr "Cerca ancora"
+
+#: better-search.php:464
+msgid "<h3>Popular Searches</h3>"
+msgstr "<h3>Ricerche più frequqnti</h3>"
+
+#: better-search.php:465
+msgid "<h3>Weekly Popular Searches</h3>"
+msgstr "<h3>Ricerche più frequenti della settimana</h3>"
+
+#: better-search.php:704
+msgid "Weekly Heatmap"
+msgstr "Lista della settimana"
+
+#: better-search.php:746
+msgid "Weekly Popular Searches"
+msgstr "Ricerche più frequenti della settimana"
+
