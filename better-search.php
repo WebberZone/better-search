@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Better Search
-Version:     1.1.1
+Version:     1.1.2
 Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
 Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience. <a href="options-general.php?page=bsearch_options">Configure...</a>
 Author:      Ajay D'Souza
@@ -391,15 +391,15 @@ function bsearch_increment_counter($s) {
 // Insert into WordPress Head
 function bsearch_head()
 {
+	$s = attribute_escape(apply_filters('the_search_query', get_search_query()));
+	$s = quote_smart($s);
+	$s = RemoveXSS($s);
+	if((empty($paged))&&(empty($limit))) bsearch_increment_counter($s);
+
 	// If there is a template file then we use it
 	$exists = file_exists(TEMPLATEPATH . '/better-search-template.php');
-	if ($exists)
+	if (!$exists)
 	{
-		$s = attribute_escape(apply_filters('the_search_query', get_search_query()));
-		$s = quote_smart($s);
-		$s = RemoveXSS($s);
-		if((empty($paged))&&(empty($limit))) bsearch_increment_counter($s);
-	} else {
 ?>
 	<style type="text/css">
 	#bsearchform { margin: 20px; padding: 20px; }
