@@ -32,6 +32,7 @@ Additionally, the plugin will track the searches and allow you present a "search
 
 = Changelog =
 
+* 1.1.3 - Critical Fix: Possible security hole
 * 1.1.2 - Fixed: Searches not tracked when not using template
 * 1.1.1 - Fixed: Certain search terms didn't work
 * 1.1

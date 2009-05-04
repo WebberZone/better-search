@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Better Search
-Version:     1.1.2
+Version:     1.1.3
 Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
 Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience. <a href="options-general.php?page=bsearch_options">Configure...</a>
 Author:      Ajay D'Souza
@@ -824,6 +824,9 @@ function search_excerpt($content){
 
 function quote_smart($value)
 {
+	// Strip Tags
+	$value = strip_tags($value);
+	
 	// Stripslashes
 	if (get_magic_quotes_gpc()) {
 		$value = stripslashes($value);

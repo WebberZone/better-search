@@ -254,4 +254,20 @@ function bsearch_pop_dashboard_setup() {
 }
 add_action('wp_dashboard_setup', 'bsearch_pop_dashboard_setup');
 
+function bsearch_plugin_notice( $plugin ) {
+	global $cache_enabled;
+ 	if( $plugin == 'wp-super-cache/wp-cache.php' && !$cache_enabled && function_exists( "admin_url" ) )
+		echo '<td colspan="5" class="plugin-update">WP Super Cache must be configured. Go to <a href="' . admin_url( 'options-general.php?page=bsearch_options' ) . '">the admin page</a> to enable and configure the plugin.</td>';
+}
+//add_action( 'after_plugin_row', 'bsearch_plugin_notice' );
+
+function bsearch_plugin_actions( $links, $file ) {
+ 	if( $file == 'better-search/admin.inc.php' && function_exists( "admin_url" ) ) {
+		$settings_link = '<a href="' . admin_url( 'options-general.php?page=bsearch_options' ) . '">' . __('Settings', BSEARCH_LOCAL_NAME ) . '</a>';
+		array_unshift( $links, $settings_link ); // before other links
+	}
+	return $links;
+}
+add_filter( 'plugin_action_links', 'bsearch_plugin_actions', 10, 2 );
+
 ?>
