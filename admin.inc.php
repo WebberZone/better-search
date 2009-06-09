@@ -27,7 +27,7 @@ function bsearch_options() {
 		$bsearch_settings[title_daily] = ($_POST['title_daily']);
 		$bsearch_settings[daily_range] = ($_POST['daily_range']);
 		$bsearch_settings[limit] = ($_POST['limit']);
-		$bsearch_settings[use_fulltext] = (($_POST['use_fulltext']) ? true : false);
+	//	$bsearch_settings[use_fulltext] = (($_POST['use_fulltext']) ? true : false);
 		$bsearch_settings[d_use_js] = (($_POST['d_use_js']) ? true : false);
 		$bsearch_settings[include_pages] = (($_POST['include_pages']) ? true : false);
 		$bsearch_settings[show_credit] = (($_POST['show_credit']) ? true : false);

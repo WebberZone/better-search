@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Better Search
-Version:     1.1.3
+Version:     1.1.4
 Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
 Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience. <a href="options-general.php?page=bsearch_options">Configure...</a>
 Author:      Ajay D'Souza
@@ -53,6 +53,12 @@ function bsearch_template_redirect() {
 		include_once(TEMPLATEPATH . '/better-search-template.php');
 		exit;
 	}
+	elseif(file_exists(TEMPLATEPATH . '/search.php'))
+	{
+		include_once(TEMPLATEPATH . '/search.php');
+		exit;
+	}
+
 
 	get_header();
 
@@ -204,11 +210,17 @@ function bsearch_results($s = '',$limit) {
 		if($searches){
 			$output .= '<table width="100%" border="0">
 			 <tr>
-			  <td width="50%" align="left">
-				Results <strong>'.$first.'</strong> - <strong>'.$last.'</strong> of <strong>'.$numrows.'</strong>
+			  <td width="50%" align="left">';
+			$output .= __('Results', BSEARCH_LOCAL_NAME);
+			$output .= ' <strong>'.$first.'</strong> - <strong>'.$last.'</strong> ';
+			$output .= __('of', BSEARCH_LOCAL_NAME);
+			$output .= ' <strong>'.$numrows.'</strong>
 			  </td>
-			  <td width="50%" align="right">
-				Page <strong>'.$current.'</strong> of <strong>'.$total.'</strong>
+			  <td width="50%" align="right">';
+			$output .= 'Page', BSEARCH_LOCAL_NAME);
+			$output .= ' <strong>'.$current.'</strong> ';
+			$output .= __('of', BSEARCH_LOCAL_NAME);
+			$output .= ' <strong>'.$total.'</strong>
 			  </td>
 			 </tr>
 			 <tr>
@@ -216,8 +228,9 @@ function bsearch_results($s = '',$limit) {
 			 </tr>
 			 <tr>
 			  <td align="left"></td>';
-			$output .= '<td align="right">
-				Results per-page: <a href="'.get_settings('siteurl').'/?s='.$s.'&limit=10">10</a> | <a href="'.get_settings('siteurl').'/?s='.$s.'&limit=20">20</a> | <a href="'.get_settings('siteurl').'/?s='.$s.'&limit=50">50</a> | <a href="'.get_settings('siteurl').'/?s='.$s.'&limit=100">100</a> 
+			$output .= '<td align="right">';
+			$output .= __('Results per-page', BSEARCH_LOCAL_NAME);
+			$output .= ': <a href="'.get_settings('siteurl').'/?s='.$s.'&limit=10">10</a> | <a href="'.get_settings('siteurl').'/?s='.$s.'&limit=20">20</a> | <a href="'.get_settings('siteurl').'/?s='.$s.'&limit=50">50</a> | <a href="'.get_settings('siteurl').'/?s='.$s.'&limit=100">100</a> 
 			  </td>
 			 </tr>
 			 <tr>
