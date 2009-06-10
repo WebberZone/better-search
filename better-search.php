@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Better Search
-Version:     1.1.4
+Version:     1.1.5
 Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
 Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience. <a href="options-general.php?page=bsearch_options">Configure...</a>
 Author:      Ajay D'Souza
@@ -217,7 +217,7 @@ function bsearch_results($s = '',$limit) {
 			$output .= ' <strong>'.$numrows.'</strong>
 			  </td>
 			  <td width="50%" align="right">';
-			$output .= 'Page', BSEARCH_LOCAL_NAME);
+			$output .= __('Page', BSEARCH_LOCAL_NAME);
 			$output .= ' <strong>'.$current.'</strong> ';
 			$output .= __('of', BSEARCH_LOCAL_NAME);
 			$output .= ' <strong>'.$total.'</strong>
