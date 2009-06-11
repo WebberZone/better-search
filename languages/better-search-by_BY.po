@@ -1,0 +1,195 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Better Search\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-04-02 23:27+0530\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Илья <mrilyuha@gmail.com>\n"
+"Language-Team: Fat Cow <zhr@tut.by>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Belarusian\n"
+"X-Poedit-KeywordsList: __;_e;_c;__ngettext\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Country: BELARUS\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: admin.inc.php:45
+msgid "Options saved successfully."
+msgstr "Параметры паспяхова захаваныя."
+
+#: admin.inc.php:54
+msgid "Options set to Default."
+msgstr "Адноўленыя параметры па змаўчанні."
+
+#: admin.inc.php:65
+msgid "Support the Development"
+msgstr "Падтрымаеце распрацоўку"
+
+#: admin.inc.php:69
+msgid "If you find "
+msgstr "Калі Вы лічыце"
+
+#: admin.inc.php:71
+msgid "useful, please do"
+msgstr "карысным, "
+
+#: admin.inc.php:72
+msgid "drop in your contribution"
+msgstr "заплаціце за гэта."
+
+#: admin.inc.php:73
+msgid "Some reasons why you should."
+msgstr "Чаму?"
+
+#: admin.inc.php:80
+msgid "Options:"
+msgstr "Параметры"
+
+#: admin.inc.php:85
+msgid "Number of Search Results per page: "
+msgstr "Колькасць вынікаў пошуку на старонцы:"
+
+#: admin.inc.php:91
+msgid "Title of Overall Popular Searches: "
+msgstr "Загаловак падзелу Ўсяго папулярных варыянтаў пошуку:"
+
+#: admin.inc.php:97
+msgid "Title of Daily Popular Searches: "
+msgstr "Загаловак падзелу Штодзённых папулярных варыянтаў пошуку:"
+
+#: admin.inc.php:103
+msgid "Daily Popular should contain searches of how many days? "
+msgstr "Якая колькасць дзён павінен утрымоўваць падзел Штодзённых папулярных варыянтаў пошуку?"
+
+#: admin.inc.php:110
+msgid "Include WordPress static pages in Search Results"
+msgstr "Уключаць Статычныя старонкі WordPress у вынікі пошуку"
+
+#: admin.inc.php:116
+msgid "Bypass Cache for daily popular searches' heatmap? This options uses JavaScript to load the post and can increase your page load time"
+msgstr "Прапускаць кэшаваныя старонкі пры падліку статыстыкі штодзённых варыянтаў пошуку? Гэты параметр выкарыстае JavaScript для загрузкі паведамленняў і можа павялічыць час загрузкі"
+
+#: admin.inc.php:122
+msgid "A link to the plugin is added as an extra list item to the list of popular searches. Not mandatory, but thanks if you do it!"
+msgstr "Спасылка на дадатак дададзеная ў спіс папулярных варыянтаў пошуку. Не абавязкова, але я буду ўдзячны, калі Вы гэта зробіце!"
+
+#: admin.inc.php:129
+msgid "Heatmap (Popular searches) Options:"
+msgstr "Параметры Папулярных варыянтаў пошуку:"
+
+#: admin.inc.php:134
+msgid "Number of search terms to display: "
+msgstr "Колькасць ключавых слоў для паказу:"
+
+#: admin.inc.php:140
+msgid "Font size of least popular search term: "
+msgstr "Памер шрыфта для найменш папулярнага ключавога слова:"
+
+#: admin.inc.php:146
+msgid "Font size of most popular search term: "
+msgstr "Памер шрыфта для найболей папулярнага ключавога слова:"
+
+#: admin.inc.php:152
+msgid "Color of least popular search term: "
+msgstr "Колер для найменш папулярнага ключавога слова:"
+
+#: admin.inc.php:158
+msgid "Color of most popular search term: "
+msgstr "Колер для найболей папулярнага ключавога слова:"
+
+#: admin.inc.php:164
+msgid "Text to include before each search term in heatmap"
+msgstr "Тэкст перад кожным ключавым словам"
+
+#: admin.inc.php:170
+msgid "Text to include after each search term in heatmap"
+msgstr "Тэкст пасля кожнага ключавога слова"
+
+#: admin.inc.php:177
+msgid "Do you want to set options to Default?"
+msgstr "Вы жадаеце зрабіць гэтыя параметры параметрамі па змаўчанні?"
+
+#: admin.inc.php:201
+msgid "Better Search"
+msgstr "Палепшаны пошук"
+
+#: admin.inc.php:251
+#: better-search.php:733
+#: better-search.php:745
+msgid "Popular Searches"
+msgstr "Папулярныя варыянты пошуку"
+
+#: admin.inc.php:252
+msgid "Daily Popular Searches"
+msgstr "Штодзённыя папулярныя варыянты пошуку"
+
+#: better-search.php:81
+msgid "Search Results for: "
+msgstr "Вынікі пошуку для:"
+
+#: better-search.php:236
+msgid "Relevance Score: "
+msgstr "Каэфіцыент рэлевантнасці:"
+
+#: better-search.php:251
+msgid "Previous"
+msgstr "Назад"
+
+#: better-search.php:268
+msgid "Next"
+msgstr "Наперад"
+
+#: better-search.php:277
+msgid "No results."
+msgstr "Няма вынікаў."
+
+#: better-search.php:282
+msgid "Please type in your search terms. Use descriptive words since this search is intelligent."
+msgstr "Увядзіце ключавыя словы для пошуку. Выкарыстайце апісальныя словы паколькі пошук досыць інтэлектуальны."
+
+#: better-search.php:371
+msgid "Search for "
+msgstr "Пошук для"
+
+#: better-search.php:373
+msgid " (searched "
+msgstr "(шукалася"
+
+#: better-search.php:375
+msgid " times)"
+msgstr "раз)"
+
+#: better-search.php:379
+msgid "No searches made yet"
+msgstr "Ніякага пошуку яшчэ не выконвалася"
+
+#: better-search.php:421
+msgid "Search Results for "
+msgstr "Вынікі пошуку для"
+
+#: better-search.php:438
+msgid "Search for:"
+msgstr "Шукаць для:"
+
+#: better-search.php:440
+msgid "Search Again"
+msgstr "Шукаць яшчэ раз"
+
+#: better-search.php:464
+msgid "<h3>Popular Searches</h3>"
+msgstr "<h3>Папулярныя варыянты пошуку</h3>"
+
+#: better-search.php:465
+msgid "<h3>Weekly Popular Searches</h3>"
+msgstr "<h3>Штотыднёвыя папулярныя варыянты пошуку</h3>"
+
+#: better-search.php:704
+msgid "Weekly Heatmap"
+msgstr "Штотыднёвая карта пошукавых супадзенняў"
+
+#: better-search.php:746
+msgid "Weekly Popular Searches"
+msgstr "Штотыднёвыя папулярныя варыянты пошуку"
+
