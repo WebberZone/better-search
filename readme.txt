@@ -4,7 +4,7 @@ Contributors: Ajay, Mark Ghosh
 Donate link: http://ajaydsouza.com/donate/
 Stable tag: trunk
 Requires at least: 2.7
-Tested up to: 2.7.1
+Tested up to: 2.8.2
 
 
 Replace the default WordPress search with a contextual search. Search results are sorted by relevancy.
@@ -32,6 +32,7 @@ Additionally, the plugin will track the searches and allow you present a "search
 
 = Changelog =
 
+* 1.1.6 - Bug fixed in display of daily search heatmap
 * 1.1.5 - Fixed a bug
 * 1.1.4 - Fixed a bug
 * 1.1.3 - Critical Fix: Possible security hole

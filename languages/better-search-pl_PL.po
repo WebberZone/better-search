@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-02 23:27+0530\n"
+"POT-Creation-Date: 2009-08-06 00:39+0530\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team: Maciej Miasik <maciek@miasik.net>\n"
@@ -12,6 +12,9 @@ msgstr ""
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;_c\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
 
 #: admin.inc.php:45
 msgid "Options saved successfully."
@@ -114,8 +117,8 @@ msgid "Better Search"
 msgstr "Better Search"
 
 #: admin.inc.php:251
-#: better-search.php:733
-#: better-search.php:745
+#: better-search.php:748
+#: better-search.php:760
 msgid "Popular Searches"
 msgstr "Popularne wyszukiwania"
 
@@ -123,71 +126,93 @@ msgstr "Popularne wyszukiwania"
 msgid "Daily Popular Searches"
 msgstr "Popularne wyszukiwania dzienne"
 
-#: better-search.php:81
+#: admin.inc.php:266
+msgid "Settings"
+msgstr ""
+
+#: better-search.php:87
 msgid "Search Results for: "
 msgstr "Wyniki wyszukiwania dla: "
 
-#: better-search.php:236
+#: better-search.php:214
+#, fuzzy
+msgid "Results"
+msgstr "Brak wyników."
+
+#: better-search.php:216
+#: better-search.php:222
+msgid "of"
+msgstr ""
+
+#: better-search.php:220
+msgid "Page"
+msgstr ""
+
+#: better-search.php:232
+msgid "Results per-page"
+msgstr ""
+
+#: better-search.php:249
 msgid "Relevance Score: "
 msgstr "Ocena trafności: "
 
-#: better-search.php:251
+#: better-search.php:264
 msgid "Previous"
 msgstr "Poprzednie"
 
-#: better-search.php:268
+#: better-search.php:281
 msgid "Next"
 msgstr "Następne"
 
-#: better-search.php:277
+#: better-search.php:290
 msgid "No results."
 msgstr "Brak wyników."
 
-#: better-search.php:282
+#: better-search.php:295
 msgid "Please type in your search terms. Use descriptive words since this search is intelligent."
 msgstr "Wpisz wyszukiwane frazy. Użyj słów opisowaych, gdyż wyszukiwanie jest inteligentne."
 
-#: better-search.php:371
+#: better-search.php:386
 msgid "Search for "
 msgstr "Wyszukiwanie dla "
 
-#: better-search.php:373
+#: better-search.php:388
 msgid " (searched "
 msgstr "(wyszukiwano "
 
-#: better-search.php:375
+#: better-search.php:390
 msgid " times)"
 msgstr "razy)"
 
-#: better-search.php:379
+#: better-search.php:394
 msgid "No searches made yet"
 msgstr "Nie wykonywano jeszcze wyszukań"
 
-#: better-search.php:421
+#: better-search.php:436
 msgid "Search Results for "
 msgstr "Wyniki wyszukiwania dla "
 
-#: better-search.php:438
+#: better-search.php:453
 msgid "Search for:"
 msgstr "Wyszukaj dla:"
 
-#: better-search.php:440
+#: better-search.php:455
 msgid "Search Again"
 msgstr "Szukaj ponownie"
 
-#: better-search.php:464
+#: better-search.php:479
 msgid "<h3>Popular Searches</h3>"
 msgstr "<h3>Popularne wyszukiwania</h3>"
 
-#: better-search.php:465
+#: better-search.php:480
 msgid "<h3>Weekly Popular Searches</h3>"
 msgstr "<h3>Popularne wyszukiwania ostatniego tygodnia</h3>"
 
-#: better-search.php:704
+#: better-search.php:719
 msgid "Weekly Heatmap"
 msgstr "Tygodniowa mapa aktywności"
 
-#: better-search.php:746
+#: better-search.php:761
 msgid "Weekly Popular Searches"
 msgstr "Popularne wyszukiwania ostatniego tygodnia"
 

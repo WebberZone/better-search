@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-02 23:27+0530\n"
+"POT-Creation-Date: 2009-08-06 00:37+0530\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team:  <me@ajaydsouza.com>\n"
@@ -116,8 +116,8 @@ msgid "Better Search"
 msgstr "Une meilleure recherche (Better Search)"
 
 #: admin.inc.php:251
-#: better-search.php:733
-#: better-search.php:745
+#: better-search.php:748
+#: better-search.php:760
 msgid "Popular Searches"
 msgstr "Recherches fréquentes"
 
@@ -125,71 +125,93 @@ msgstr "Recherches fréquentes"
 msgid "Daily Popular Searches"
 msgstr "Recherches fréquentes sur une journée"
 
-#: better-search.php:81
+#: admin.inc.php:266
+msgid "Settings"
+msgstr ""
+
+#: better-search.php:87
 msgid "Search Results for: "
 msgstr "Résultats de la recherche : "
 
-#: better-search.php:236
+#: better-search.php:214
+#, fuzzy
+msgid "Results"
+msgstr "Aucun résultat."
+
+#: better-search.php:216
+#: better-search.php:222
+msgid "of"
+msgstr ""
+
+#: better-search.php:220
+msgid "Page"
+msgstr ""
+
+#: better-search.php:232
+msgid "Results per-page"
+msgstr ""
+
+#: better-search.php:249
 msgid "Relevance Score: "
 msgstr "Taux de pertinence :"
 
-#: better-search.php:251
+#: better-search.php:264
 msgid "Previous"
 msgstr "Précédent"
 
-#: better-search.php:268
+#: better-search.php:281
 msgid "Next"
 msgstr "Suivant"
 
-#: better-search.php:277
+#: better-search.php:290
 msgid "No results."
 msgstr "Aucun résultat."
 
-#: better-search.php:282
+#: better-search.php:295
 msgid "Please type in your search terms. Use descriptive words since this search is intelligent."
 msgstr "Veuiilez saisir les termes de votre recherche. Utilisez des mots descriptifs, cette recherche étant 'intelligente'."
 
-#: better-search.php:371
+#: better-search.php:386
 msgid "Search for "
 msgstr "Recherche de "
 
-#: better-search.php:373
+#: better-search.php:388
 msgid " (searched "
 msgstr "(recherché "
 
-#: better-search.php:375
+#: better-search.php:390
 msgid " times)"
 msgstr " fois)"
 
-#: better-search.php:379
+#: better-search.php:394
 msgid "No searches made yet"
 msgstr "Aucune recherche enregistrée pour l'instant."
 
-#: better-search.php:421
+#: better-search.php:436
 msgid "Search Results for "
 msgstr "Résultats de la recherche"
 
-#: better-search.php:438
+#: better-search.php:453
 msgid "Search for:"
 msgstr "Recherche :"
 
-#: better-search.php:440
+#: better-search.php:455
 msgid "Search Again"
 msgstr "Nouvelle recherche"
 
-#: better-search.php:464
+#: better-search.php:479
 msgid "<h3>Popular Searches</h3>"
 msgstr "<h3>Recherches fréquentes</h3>"
 
-#: better-search.php:465
+#: better-search.php:480
 msgid "<h3>Weekly Popular Searches</h3>"
 msgstr "<h3>Recherches fréquentes sur une semaine</h3>"
 
-#: better-search.php:704
+#: better-search.php:719
 msgid "Weekly Heatmap"
 msgstr "Visualisation des recherches fréquentes sur une semaine"
 
-#: better-search.php:746
+#: better-search.php:761
 msgid "Weekly Popular Searches"
 msgstr "Recherches fréquentes sur une semaine"
 

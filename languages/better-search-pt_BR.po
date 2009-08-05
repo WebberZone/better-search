@@ -3,9 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-02 23:27+0530\n"
-"PO-Revision-Date: 2009-05-29 12:59-0300\n"
-"Last-Translator: Guilherme Veras <guilhermeveras@gmail.com>\n"
+"POT-Creation-Date: 2009-08-06 00:39+0530\n"
+"PO-Revision-Date: 2009-08-06 00:39+0530\n"
+"Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team: Brazilian Portuguese <guilhermeveras@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -144,8 +144,8 @@ msgid "Better Search"
 msgstr "Melhor Pesquisa"
 
 #: admin.inc.php:251
-#: better-search.php:733
-#: better-search.php:745
+#: better-search.php:748
+#: better-search.php:760
 #, fuzzy
 msgid "Popular Searches"
 msgstr "Buscas Populares"
@@ -155,87 +155,109 @@ msgstr "Buscas Populares"
 msgid "Daily Popular Searches"
 msgstr "Buscas Populares por dia"
 
-#: better-search.php:81
+#: admin.inc.php:266
+msgid "Settings"
+msgstr ""
+
+#: better-search.php:87
 #, fuzzy
 msgid "Search Results for: "
 msgstr "Resultados da Busca para:"
 
-#: better-search.php:236
+#: better-search.php:214
+#, fuzzy
+msgid "Results"
+msgstr "Sem resultados."
+
+#: better-search.php:216
+#: better-search.php:222
+msgid "of"
+msgstr ""
+
+#: better-search.php:220
+msgid "Page"
+msgstr ""
+
+#: better-search.php:232
+msgid "Results per-page"
+msgstr ""
+
+#: better-search.php:249
 #, fuzzy
 msgid "Relevance Score: "
 msgstr "Pontuação de Relevancia:"
 
-#: better-search.php:251
+#: better-search.php:264
 #, fuzzy
 msgid "Previous"
 msgstr "Anterior"
 
-#: better-search.php:268
+#: better-search.php:281
 #, fuzzy
 msgid "Next"
 msgstr "Próximo"
 
-#: better-search.php:277
+#: better-search.php:290
 #, fuzzy
 msgid "No results."
 msgstr "Sem resultados."
 
-#: better-search.php:282
+#: better-search.php:295
 #, fuzzy
 msgid "Please type in your search terms. Use descriptive words since this search is intelligent."
 msgstr "Por favor use termos em sua pesquisa. Use palavras descritivas, dado que esta busca é inteligente."
 
-#: better-search.php:371
+#: better-search.php:386
 #, fuzzy
 msgid "Search for "
 msgstr "Procure por"
 
-#: better-search.php:373
+#: better-search.php:388
 #, fuzzy
 msgid " (searched "
 msgstr "(pesquisado"
 
-#: better-search.php:375
+#: better-search.php:390
 #, fuzzy
 msgid " times)"
 msgstr "tempos)"
 
-#: better-search.php:379
+#: better-search.php:394
 #, fuzzy
 msgid "No searches made yet"
 msgstr "Nenhuma pesquisa realizada"
 
-#: better-search.php:421
+#: better-search.php:436
 #, fuzzy
 msgid "Search Results for "
 msgstr "Resultados da Busca para"
 
-#: better-search.php:438
+#: better-search.php:453
 #, fuzzy
 msgid "Search for:"
 msgstr "Busca por:"
 
-#: better-search.php:440
+#: better-search.php:455
 #, fuzzy
 msgid "Search Again"
 msgstr "Busque novamente"
 
-#: better-search.php:464
+#: better-search.php:479
 #, fuzzy
 msgid "<h3>Popular Searches</h3>"
 msgstr "<h3>Buscas Populares</h3>"
 
-#: better-search.php:465
+#: better-search.php:480
 #, fuzzy
 msgid "<h3>Weekly Popular Searches</h3>"
 msgstr "<h3>Buscas Populares por Semana</h3>"
 
-#: better-search.php:704
+#: better-search.php:719
 #, fuzzy
 msgid "Weekly Heatmap"
 msgstr "Heatmap da Semana"
 
-#: better-search.php:746
+#: better-search.php:761
 #, fuzzy
 msgid "Weekly Popular Searches"
 msgstr "Buscas Populares Semanais"

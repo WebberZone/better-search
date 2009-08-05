@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-02 23:27+0530\n"
+"POT-Creation-Date: 2009-08-06 00:37+0530\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Илья <mrilyuha@gmail.com>\n"
+"Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team: Fat Cow <zhr@tut.by>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -116,8 +116,8 @@ msgid "Better Search"
 msgstr "Палепшаны пошук"
 
 #: admin.inc.php:251
-#: better-search.php:733
-#: better-search.php:745
+#: better-search.php:748
+#: better-search.php:760
 msgid "Popular Searches"
 msgstr "Папулярныя варыянты пошуку"
 
@@ -125,71 +125,93 @@ msgstr "Папулярныя варыянты пошуку"
 msgid "Daily Popular Searches"
 msgstr "Штодзённыя папулярныя варыянты пошуку"
 
-#: better-search.php:81
+#: admin.inc.php:266
+msgid "Settings"
+msgstr ""
+
+#: better-search.php:87
 msgid "Search Results for: "
 msgstr "Вынікі пошуку для:"
 
-#: better-search.php:236
+#: better-search.php:214
+#, fuzzy
+msgid "Results"
+msgstr "Няма вынікаў."
+
+#: better-search.php:216
+#: better-search.php:222
+msgid "of"
+msgstr ""
+
+#: better-search.php:220
+msgid "Page"
+msgstr ""
+
+#: better-search.php:232
+msgid "Results per-page"
+msgstr ""
+
+#: better-search.php:249
 msgid "Relevance Score: "
 msgstr "Каэфіцыент рэлевантнасці:"
 
-#: better-search.php:251
+#: better-search.php:264
 msgid "Previous"
 msgstr "Назад"
 
-#: better-search.php:268
+#: better-search.php:281
 msgid "Next"
 msgstr "Наперад"
 
-#: better-search.php:277
+#: better-search.php:290
 msgid "No results."
 msgstr "Няма вынікаў."
 
-#: better-search.php:282
+#: better-search.php:295
 msgid "Please type in your search terms. Use descriptive words since this search is intelligent."
 msgstr "Увядзіце ключавыя словы для пошуку. Выкарыстайце апісальныя словы паколькі пошук досыць інтэлектуальны."
 
-#: better-search.php:371
+#: better-search.php:386
 msgid "Search for "
 msgstr "Пошук для"
 
-#: better-search.php:373
+#: better-search.php:388
 msgid " (searched "
 msgstr "(шукалася"
 
-#: better-search.php:375
+#: better-search.php:390
 msgid " times)"
 msgstr "раз)"
 
-#: better-search.php:379
+#: better-search.php:394
 msgid "No searches made yet"
 msgstr "Ніякага пошуку яшчэ не выконвалася"
 
-#: better-search.php:421
+#: better-search.php:436
 msgid "Search Results for "
 msgstr "Вынікі пошуку для"
 
-#: better-search.php:438
+#: better-search.php:453
 msgid "Search for:"
 msgstr "Шукаць для:"
 
-#: better-search.php:440
+#: better-search.php:455
 msgid "Search Again"
 msgstr "Шукаць яшчэ раз"
 
-#: better-search.php:464
+#: better-search.php:479
 msgid "<h3>Popular Searches</h3>"
 msgstr "<h3>Папулярныя варыянты пошуку</h3>"
 
-#: better-search.php:465
+#: better-search.php:480
 msgid "<h3>Weekly Popular Searches</h3>"
 msgstr "<h3>Штотыднёвыя папулярныя варыянты пошуку</h3>"
 
-#: better-search.php:704
+#: better-search.php:719
 msgid "Weekly Heatmap"
 msgstr "Штотыднёвая карта пошукавых супадзенняў"
 
-#: better-search.php:746
+#: better-search.php:761
 msgid "Weekly Popular Searches"
 msgstr "Штотыднёвыя папулярныя варыянты пошуку"
 
