@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Better Search
-Version:     1.1.5
+Version:     1.1.6
 Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
 Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience. <a href="options-general.php?page=bsearch_options">Configure...</a>
 Author:      Ajay D'Souza
@@ -304,6 +304,8 @@ function bsearch_results($s = '',$limit) {
 // Search Heatmap
 function get_bsearch_heatmap($daily=false, $smallest=10, $largest=20, $unit="pt", $cold="00f", $hot="f00", $before='', $after='&nbsp;', $exclude='', $limit='30') {
 	global $wpdb;
+	$bsearch_settings = bsearch_read_options();
+
 	$table_name = $wpdb->prefix . "bsearch";
 	if ($daily) $table_name .= "_daily";	// If we're viewing daily posts, set this to true
 	$output = '';
