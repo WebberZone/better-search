@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-06 00:37+0530\n"
+"POT-Creation-Date: 2009-08-06 22:56+0530\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team:  <me@ajaydsouza.com>\n"
@@ -116,8 +116,8 @@ msgid "Better Search"
 msgstr "Une meilleure recherche (Better Search)"
 
 #: admin.inc.php:251
-#: better-search.php:748
-#: better-search.php:760
+#: better-search.php:750
+#: better-search.php:762
 msgid "Popular Searches"
 msgstr "Recherches fréquentes"
 
@@ -207,11 +207,11 @@ msgstr "<h3>Recherches fréquentes</h3>"
 msgid "<h3>Weekly Popular Searches</h3>"
 msgstr "<h3>Recherches fréquentes sur une semaine</h3>"
 
-#: better-search.php:719
+#: better-search.php:721
 msgid "Weekly Heatmap"
 msgstr "Visualisation des recherches fréquentes sur une semaine"
 
-#: better-search.php:761
+#: better-search.php:763
 msgid "Weekly Popular Searches"
 msgstr "Recherches fréquentes sur une semaine"
 

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Better Search
-Version:     1.1.6
+Version:     1.1.7
 Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
 Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience. <a href="options-general.php?page=bsearch_options">Configure...</a>
 Author:      Ajay D'Souza
@@ -538,6 +538,8 @@ function bsearch_install() {
 	$wpdb->hide_errors();
     $wpdb->query('ALTER TABLE '.$wpdb->posts.' ENGINE = MYISAM;');
     $wpdb->query('ALTER TABLE '.$wpdb->posts.' ADD FULLTEXT bsearch (post_title, post_content);');
+    $wpdb->query('ALTER TABLE '.$wpdb->posts.' ADD FULLTEXT bsearch_title (post_title);');
+    $wpdb->query('ALTER TABLE '.$wpdb->posts.' ADD FULLTEXT bsearch_content (post_content);');
     $wpdb->show_errors();
 
 	// Create the tables
