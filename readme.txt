@@ -32,6 +32,7 @@ Additionally, the plugin will track the searches and allow you present a "search
 
 = Changelog =
 
+* 1.1.7 - Two new fulltext indexes added... the first step to better control on search results
 * 1.1.6 - Bug fixed in display of daily search heatmap
 * 1.1.5 - Fixed a bug
 * 1.1.4 - Fixed a bug
