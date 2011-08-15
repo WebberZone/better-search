@@ -4,7 +4,7 @@ Contributors: Ajay, Mark Ghosh
 Donate link: http://ajaydsouza.com/donate/
 Stable tag: trunk
 Requires at least: 2.7
-Tested up to: 2.8.2
+Tested up to: 3.3
 
 
 Replace the default WordPress search with a contextual search. Search results are sorted by relevancy.
