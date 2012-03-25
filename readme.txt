@@ -17,7 +17,7 @@ The default WordPress search is limited because it doesn't give you results base
 
 Better Search supports templates for perfect integration into your blog template. Template for Twenty Eleven theme included in the package.
 
-Additionally, the plugin will track the searches and allow you present a "search heatmap" of the most popular searches. Support for WordPress widgets will allow you to easiy add this heatmap to your theme's sidebar or footer.
+Additionally, the plugin will track the searches and allow you present a "search heatmap" of the most popular searches. Support for WordPress widgets will allow you to easiy add this heatmap to your theme's sidebar or footer. 
 
 
 = Features =
