@@ -1,4 +1,4 @@
-=== Better Search ===
+﻿=== Better Search ===
 Tags: search, Better Search, related search, search results, heatmap, popular searches, top searches
 Contributors: Ajay, Mark Ghosh
 Donate link: http://ajaydsouza.com/donate/
@@ -103,7 +103,7 @@ If your question isn't listed here, please post a comment at the <a href="http:/
 
 = Can I customize the output? =
 
-Several customization options are available via the Settings page in WordPress Admin. You can access this via <strong>Settings � Better Search</strong>
+Several customization options are available via the Settings page in WordPress Admin. You can access this via <strong>Settings » Better Search</strong>
 
 The plugin also supports the use of template files within your theme. You can create a file called `better-search-template.php` in your theme's directory and the plugin will use it to display the results.
 
