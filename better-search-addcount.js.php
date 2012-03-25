@@ -18,8 +18,8 @@ function bsearch_inc_count() {
 	$table_name = $wpdb->prefix . "bsearch";
 	$table_name_daily = $wpdb->prefix . "bsearch_daily";
 	
-	$s = quote_smart($_GET['bsearch_id']);
-	$s = RemoveXSS($s);
+	$s = bsearch_quote_smart($_GET['bsearch_id']);
+	$s = bsearch_RemoveXSS($s);
 
 	if($s != '') {
 		$results = $wpdb->get_results("SELECT searchvar, cntaccess FROM $table_name WHERE searchvar = '$s'");
