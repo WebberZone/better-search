@@ -1,34 +1,26 @@
-﻿<?php /* Sample template for Better Search Plugin for WordPress Default theme */
+﻿<?php
+/**
+ * The template for displaying Search Results pages.
+ *
+ * @package WordPress
+ * @subpackage Twenty_Eleven
+ * @since Twenty Eleven 1.0
+ */
+$s = bsearch_clean_terms(apply_filters('the_search_query', get_search_query()));
+get_header(); ?>
 
-	get_header(); ?>
-	<div id="content" class="narrowcolumn">
+	<section id="primary">
+		<div id="content" role="main">
+			<?php $form = get_bsearch_form($s);
+			echo $form;	?>
+			<header class="page-header">
+				<h1 class="page-title"><?php printf( __( 'BS TEMPLATE Search Results for: %s', 'twentyeleven' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
+			</header>
 
-	<div id="heatmap" style="padding: 5px; border: 1px dashed #ccc">
-	<div style="padding: 5px; border-bottom: 1px dashed #ccc">
-	<h2>
-	<?php echo get_bsearch_title_daily(); ?>
-	</h2>
-	<?php echo get_bsearch_heatmap(true); ?>
-	</div>
-	<div style="padding: 5px;">
-	<h2>
-	<?php echo get_bsearch_title(); ?>
-	</h2>
-	<?php echo get_bsearch_heatmap(false); ?>
-	</div>
-	<div style="clear:both">&nbsp;</div>
-	</div>
-
-	<div style="padding: 5px;margin: 5px;">
-	<?php echo get_bsearch_form($s); ?>
-	</div>
-
-	<div id="searchresults"><h2 class="pagetitle">Search Results for:	&quot;<?php echo $s; ?>&quot;</h2>
-
-	<?php bsearch_results($s,$limit); ?>
-
-	</div>
-	</div>
+			<?php echo get_bsearch_results($s,$limit); ?>
+			<?php echo $form;	?>
+		</div><!-- #content -->
+	</section><!-- #primary -->
 
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>
