@@ -119,5 +119,3 @@ Yes I can. However, there are no guarantee on the time frame for the same. Addit
 
 If you have already created a template that you would like to share with the WordPress Community, you can <a href="http://ajaydsouza.com/contact/">contact me</a> and I will add it into the package.
 
-
-
