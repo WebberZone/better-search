@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Better Search
-Version:     1.2
+Version:     1.2.1
 Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
 Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience. 
 Author:      Ajay D'Souza
@@ -419,7 +419,7 @@ function get_bsearch_excerpt($content){
 }
 
 // Search Heatmap
-function get_bsearch_heatmap($daily=false, $smallest=10, $largest=20, $unit="pt", $cold="ccc", $hot="000", $before='', $after='&nbsp;', $exclude='', $limit='30', $daily_range) {
+function get_bsearch_heatmap($daily=false, $smallest=10, $largest=20, $unit="pt", $cold="ccc", $hot="000", $before='', $after='&nbsp;', $exclude='', $limit='30', $daily_range=null) {
 	global $wpdb,$bsearch_url;
 	$bsearch_settings = bsearch_read_options();
 
@@ -430,7 +430,7 @@ function get_bsearch_heatmap($daily=false, $smallest=10, $largest=20, $unit="pt"
 	if(!$daily) {
 		$query = "SELECT searchvar, cntaccess FROM ".$table_name." WHERE accessedid IN (SELECT accessedid FROM ".$table_name." WHERE searchvar <> '' ORDER BY cntaccess DESC, searchvar ASC) ORDER by accessedid LIMIT ".$limit;
 	} else {
-		if (empty($daily_range)) $daily_range = $bsearch_settings[daily_range];
+		if (is_null($daily_range)) $daily_range = $bsearch_settings[daily_range];
 		$daily_range = $daily_range. ' DAY';
 		$current_date = $wpdb->get_var("SELECT DATE_ADD(DATE_SUB(CURDATE(), INTERVAL ".$daily_range."), INTERVAL 1 DAY) ");
 	
