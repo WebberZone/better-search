@@ -33,10 +33,13 @@ Additionally, the plugin will track the searches and allow you to present a "sea
 
 == Upgrade Notice ==
 
-= 1.2 =
-Major release: Better template support, redesigned admin page, better WordPress widget support, etc. Please backup your database before upgrading.
+= 1.2.1 =
+Fixed: "Missing argument" error for heatmaps
 
 == Changelog ==
+
+= 1.2.1 =
+Fixed: "Missing argument" error for heatmaps
 
 = 1.2 =
 * Updates for better search template compatibility. New template included in this release
