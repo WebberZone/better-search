@@ -1,55 +1,69 @@
-﻿=== Better Search ===
-Tags: search, Better Search, related search, search results, heatmap, popular searches, top searches
-Contributors: Ajay, Mark Ghosh
+=== Better Search ===
+Tags: search, Better Search, related search, search results, heatmap, popular searches, top searches, relevance
+Contributors: Ajay
 Donate link: http://ajaydsouza.com/donate/
 Stable tag: trunk
 Requires at least: 3.1
-Tested up to: 3.4
+Tested up to: 3.6
+License: GPLv2 or later
 
 
-Replace the default WordPress search with a contextual search with search results sorted by relevance.
+Better Search replaces the default WordPress search with a better search that gives contextual results sorted by relevance
 
 == Description ==
 
-The default WordPress search is limited because it doesn't give you results based on the title or content of the post, but by date.
+The default WordPress search is limited because it gives you results by date and not by relevance.
 
-<a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search</a> replaces the default WordPress search engine with a more powerful search engine. Visitors will find more relevant search results of search terms. You can fine tune results by giving the title or the content more weighting.
+<a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search</a> replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find will find what they are looking for quicker than if you didn't have **Better Search** installed.
+
+Custom post type support means, visitors can search through your site for more than just posts.
+
+The plugin is packed with options to allow you to easily customise the output. You can also fine tune the results by assigning a greater weith to either the title or the content.
 
 Better Search supports templates for perfect integration into your blog template. Template for Twenty Eleven theme included in the package.
 
-Additionally, the plugin will track the searches and allow you to present a "search heatmap" of the most popular searches. Support for WordPress widgets will allow you to easily add this heatmap to your theme's sidebar or footer.
+Additionally, the plugin also tracks the searches and you to display a "search heatmap" of the most popular searches. Support for WordPress widgets will allow you to easily add this heatmap to your theme's sidebar or footer.
 
 
 = Features =
-* Automatically replaces your default WordPress search with Better Search results
-* Search results sorted by relevance. You can also include pages and attachments in the search results
-* Fine tune results by changing the weighting of post title and post content
-* Option to turn off relevancy based matching. This will sort results by date
-* Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap
-* Support for a template file for perfect integration into your blog template
-* Clean uninstall if you choose to delete the plugin from within WP-Admin
-* Works with caching plugins like WP-Super-Cache and W3 Total Cache
+* **Automatic**: Once activated, Better Search will automatic replace your default WordPress search with more relevant search results
+* **Relevance**: Search results sorted by relevance automatically sorted by relevance. You can also turn off relevancy based searching, in which results are sorted by date
+* **Control the results**: Fine tune results by changing the weighting of post title and post content. Turn on BOOLEAN search to override the default NATURAL LANGUAGE search of mySQL
+* **Popular searches**: Find out what visitors are searching for on your blog. Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap. Widget support for easy integration in your theme
+* **Customisation**: Support for a template file for perfect integration into your blog template. Alternatively, just input your own CSS styles in the *Custom Styles* tab in the Settings Page. Check the FAQ for more information
+* **Supports cache plugins**: Works with caching plugins like WP-Super-Cache and W3 Total Cache
 
 
 == Upgrade Notice ==
 
-= 1.2.1 =
-Fixed: "Missing argument" error for heatmaps
+= 1.3 =
+Fixed: Security fix; new admin interface; custom post type support; BOOLEAN MODE mySQL search; 
+For other changes, check out the changelog
+ 
 
 == Changelog ==
 
+= 1.3 =
+* Modified: Revamp of admin interface of the plugin 
+* Added: New option to activate BOOLEAN mode of mySQL FULLTEXT searching. <a href="https://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html" target="_blank">Check the mySQL docs for further information on this</a>
+* Added: Custom post type support. Now choose what visitors are allowed to search
+* Added: Links in the search heatmap are no-follow by default. You can turn this off in the Settings page
+* Added: Option to make make heatmap links to open in a new window
+* Added: Option to turn off the display of the heatmap on the results page
+* Added: New CSS classes for heatmaps on the search results page - `heatmap_daily` and `heatmap_overall`
+* Fixed: Possible cross-site request forgery issue in the Settings page
+
 = 1.2.1 =
-Fixed: "Missing argument" error for heatmaps
+* Fixed: "Missing argument" error for heatmaps
 
 = 1.2 =
-* Updates for better search template compatibility. New template included in this release
-* Quick links added in Plugins page in WP-Admin
-* Relevance score is now displayed as a percentage
+* New: Updates for better search template compatibility. New template included in this release
+* Modified: Relevance score is now displayed as a percentage
 * Fixed: Daily search terms were not being cleared
 * Modified: Default search colours for the heatmap are grey and black instead of blue and red
 * Modified: Plugin will not add a link to <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search homepage</a> by default
 * Modified: New WordPress widget to display the popular searches in your sidebar
-* Added: New template file based on Twenty Eleven WordPress theme
+* New: New template file based on Twenty Eleven WordPress theme
 
 = 1.1.7 =
 * Two new fulltext indexes added... the first step to better control on search results
@@ -73,7 +87,7 @@ Fixed: "Missing argument" error for heatmaps
 * Fixed: Certain search terms didn't work
 
 = 1.1 =
-* Plugin now allows use of template file. Create a file <code>better-search-template.php</code> in your themes folder.
+* Plugin now allows use of template file. Create a file `better-search-template.php` in your themes folder.
 * Pages are also included in the results. You can turn it off in options
 * Drafts are no longer included in results
 * WordPress Title rewritten
@@ -85,28 +99,40 @@ Fixed: "Missing argument" error for heatmaps
 
 == Installation ==
 
+= WordPress install =
+1. Navigate to Plugins within your WordPress Admin Area
+
+2. Click "Add new" and in the search box enter "Better Search" and select "Keyword" from the dropdown
+
+3. Find the plugin in the list (usually the first result) and click "Install Now"
+
+= Manual install =
 1. Download the plugin
 
 2. Extract the contents of better-search.zip to wp-content/plugins/ folder. You should get a folder called better-search.
 
 3. Activate the Plugin in WP-Admin. 
 
-4. Goto Settings > Better Search to configure
+4. Goto **Settings > Better Search** to configure
 
-5. Goto Appearance > Widgets to add the Popular Searches sidebar widgets to your theme
+5. Goto **Appearance > Widgets** to add the Popular Searches sidebar widgets to your theme
+
+6. Optionally visit the **Custom Styles** tab to add any custom CSS styles. These are added to `wp_head` on the pages where the posts are displayed
+
 
 == Screenshots ==
 
-1. Better Search options in WP-Admin
-
+1. Options in WP-Admin - General options
+2. Options in WP-Admin - Output options
+3. Options in WP-Admin - Custom Styles
 
 == Frequently Asked Questions ==
 
-If your question isn't listed here, please post a comment at the <a href="http://wordpress.org/tags/better-search?forum_id=10">WordPress.org support forum</a>. I monitor the forums on an ongoing basis. If you're looking for more advanced support, please see <a href="http://ajaydsouza.com/support/">details here</a>.
+If your question isn't listed here, please post a comment at the <a href="hhttp://wordpress.org/support/plugin/better-search">WordPress.org support forum</a>. I monitor the forums on an ongoing basis. If you're looking for more advanced paid support, please see <a href="http://ajaydsouza.com/support/">details here</a>.
 
-= Can I customize the output? =
+= Can I customize the output? =   
 
-Several customization options are available via the Settings page in WordPress Admin. You can access this via <strong>Settings » Better Search</strong>
+All options can be customized within the Options page in WP-Admin itself
 
 The plugin also supports the use of template files within your theme. You can create a file called `better-search-template.php` in your theme's directory and the plugin will use it to display the results.
 

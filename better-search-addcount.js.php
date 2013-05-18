@@ -2,14 +2,25 @@
 //"better-search-addcount.js.php" Add count to database
 Header("content-type: application/x-javascript");
 
-if (!function_exists('add_action')) {
-	$wp_root = '../../..';
-	if (file_exists($wp_root.'/wp-load.php')) {
-		require_once($wp_root.'/wp-load.php');
-	} else {
-		require_once($wp_root.'/wp-config.php');
-	}
+// Force a short-init since we just need core WP, not the entire framework stack
+//define( 'SHORTINIT', true );
+
+// Build the wp-load.php path from a plugin/theme
+$wp_load_path = dirname( dirname( dirname( __FILE__ ) ) );
+// Require the wp-load.php file (which loads wp-config.php and bootstraps WordPress)
+$wp_load_filename = '/wp-load.php';
+
+// Check if the file exists in the root or one level up
+if( !file_exists( $wp_load_path . $wp_load_filename ) ) {
+    // Just in case the user may have placed wp-config.php one more level up from the root
+    $wp_load_filename = dirname( $wp_load_path ) . $wp_load_filename;
 }
+// Require the wp-config.php file
+require( $wp_load_filename );
+
+// Include the now instantiated global $wpdb Class for use
+global $wpdb;
+
 
 // Ajax Increment Counter
 bsearch_inc_count();
@@ -18,11 +29,10 @@ function bsearch_inc_count() {
 	$table_name = $wpdb->prefix . "bsearch";
 	$table_name_daily = $wpdb->prefix . "bsearch_daily";
 	
-	$s = bsearch_quote_smart($_GET['bsearch_id']);
-	$s = bsearch_RemoveXSS($s);
+	$s = wp_kses($_GET['bsearch_id'],array());
 
 	if($s != '') {
-		$results = $wpdb->get_results("SELECT searchvar, cntaccess FROM $table_name WHERE searchvar = '$s'");
+		$results = $wpdb->get_results("SELECT searchvar, cntaccess FROM $table_name WHERE searchvar = '$s' LIMIT 1");
 		$test = 0;
 		if ($results) {
 			foreach ($results as $result) {
