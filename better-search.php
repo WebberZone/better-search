@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Better Search
-Version:     1.3
+Version:     1.3.1
 Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
 Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience. 
 Author:      Ajay D'Souza
@@ -52,9 +52,15 @@ function bsearch_template_redirect() {
 		return;
 	}
 	
-	$s = bsearch_clean_terms(apply_filters('the_search_query', get_search_query()));
+	// change status code to 200 OK since /search/ returns status code 404
+	@header("HTTP/1.1 200 OK",1);
+	@header("Status: 200 OK", 1);
 
 	global $bsearch_settings;
+
+	$s = bsearch_clean_terms(apply_filters('the_search_query', get_search_query()));
+	$limit = isset($_GET['limit']) ? intval($_GET['limit']) : $bsearch_settings['limit']; // Read from GET variable
+
 	add_action('wp_head', 'bsearch_head');
 	add_filter('wp_title', 'bsearch_title');
 
@@ -117,9 +123,10 @@ function get_bsearch_results($s = '',$limit) {
 	global $wpdb;
 	global $bsearch_settings;
 
-	$limit = (isset($_GET['limit'])) ? intval($_GET['limit']) : $bsearch_settings['limit']; // Read from GET variable
+	if (!($limit)) $limit = isset($_GET['limit']) ? intval($_GET['limit']) : $bsearch_settings['limit']; // Read from GET variable
 
-	$bydate = intval($_GET['bydate']);	
+
+	$bydate = isset($_GET['bydate']) ? intval($_GET['bydate']) : 0;		// Order by date or by score?
 	
 	$topscore = 0;
 
@@ -130,6 +137,8 @@ function get_bsearch_results($s = '',$limit) {
 			if($topscore < $search->score) $topscore = $search->score;
 		}
 		$numrows = count($searches);
+	} else {
+		$numrows = 1; 
 	}
 
 	$match_range = get_bsearch_range($numrows,$limit);
@@ -245,8 +254,8 @@ function get_bsearch_matches($search_info,$bydate) {
 
 	$search_info = get_bsearch_terms('');
 	
-	// $exact is true for exact match, currently not used
-	if ($exact) {
+	// $exact is true for exact match, currently not used	
+	if (empty($exact)) {
 		$n = '';
 	} else {
 		$n = '%';
@@ -312,10 +321,8 @@ function get_bsearch_matches($search_info,$bydate) {
 function get_bsearch_range($numrows, $limit) {
 	global $bsearch_settings;
 
-	if (!($limit)) $limit = intval(bsearch_clean_terms($_GET['limit'])); // Read from GET variable
-	if (!($limit)) $limit = $bsearch_settings['limit']; // Default number of results as entered in WP-Admin
-	$page = intval(bsearch_clean_terms($_GET['bpaged'])); // Read from GET variable
-	if (!($page)) $page = 0; // Default page value.
+	if (!($limit)) $limit = isset($_GET['limit']) ? intval($_GET['limit']) : $bsearch_settings['limit']; // Read from GET variable
+	$page = isset($_GET['bpaged']) ? intval(bsearch_clean_terms($_GET['bpaged'])) : 0; // Read from GET variable
 	
 	$last = min($page + $limit - 1, $numrows - 1);
 	
@@ -336,6 +343,7 @@ function get_bsearch_range($numrows, $limit) {
  */
 function get_bsearch_header($s,$numrows,$limit) {
 
+	$output = '';
 	$match_range = get_bsearch_range($numrows,$limit);
 	
 	$pages = intval($numrows/$limit); // Number of results pages.
@@ -644,8 +652,8 @@ function bsearch_title($title)
 	if (isset($s))
 	{
 		// change status code to 200 OK since /search/ returns status code 404
-		@header("HTTP/1.1 200 OK",1);
-		@header("Status: 200 OK", 1);
+//		@header("HTTP/1.1 200 OK",1);
+//		@header("Status: 200 OK", 1);
 		if ($s == '') return $s; else return __('Search Results for ', BSEARCH_LOCAL_NAME). '&quot;' . $s.'&quot; | ';
 	}
 	else

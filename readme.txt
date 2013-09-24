@@ -4,7 +4,7 @@ Contributors: Ajay
 Donate link: http://ajaydsouza.com/donate/
 Stable tag: trunk
 Requires at least: 3.1
-Tested up to: 3.6
+Tested up to: 3.7
 License: GPLv2 or later
 
 
@@ -36,12 +36,18 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 
 == Upgrade Notice ==
 
+= 1.3.1 =
+Fixed: PHP Notices
+
 = 1.3 =
 Fixed: Security fix; new admin interface; custom post type support; BOOLEAN MODE mySQL search; 
 For other changes, check out the changelog
  
 
 == Changelog ==
+
+= 1.3.1 =
+Fixed: PHP Notices
 
 = 1.3 =
 * Modified: Revamp of admin interface of the plugin 

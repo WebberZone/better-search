@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-18 23:23-0000\n"
+"POT-Creation-Date: 2013-09-25 00:01-0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team:  <me@ajaydsouza.com>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: __;_e;_c;__ngettext\n"
 "X-Poedit-Basepath: ../\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: admin.inc.php:72
@@ -244,7 +244,7 @@ msgstr ""
 msgid "Ajay's blog"
 msgstr ""
 
-#: admin.inc.php:298 better-search.php:1224
+#: admin.inc.php:298 better-search.php:1232
 msgid "Support"
 msgstr ""
 
@@ -260,7 +260,7 @@ msgstr ""
 msgid "Better Search"
 msgstr ""
 
-#: admin.inc.php:424 better-search.php:860
+#: admin.inc.php:424 better-search.php:868
 msgid "Popular Searches"
 msgstr ""
 
@@ -273,108 +273,108 @@ msgstr ""
 msgid "BS TEMPLATE Search Results for: %s"
 msgstr ""
 
-#: better-search.php:74
+#: better-search.php:80
 msgid "Search Results for: "
 msgstr ""
 
-#: better-search.php:153
+#: better-search.php:162
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Posted on: "
 msgstr ""
 
-#: better-search.php:165
+#: better-search.php:174
 msgid "No results."
 msgstr ""
 
-#: better-search.php:170
+#: better-search.php:179
 msgid ""
 "Please type in your search terms. Use descriptive words since this search is "
 "intelligent."
 msgstr ""
 
-#: better-search.php:176
+#: better-search.php:185
 msgid "Powered by "
 msgstr ""
 
-#: better-search.php:353
+#: better-search.php:361
 #, php-format
 msgid ""
 "Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</"
 "strong>"
 msgstr ""
 
-#: better-search.php:358
+#: better-search.php:366
 #, php-format
 msgid "Page <strong>%1$s</strong> of <strong>%2$s</strong>"
 msgstr ""
 
-#: better-search.php:366
+#: better-search.php:374
 msgid "Results per-page"
 msgstr ""
 
-#: better-search.php:396
+#: better-search.php:404
 msgid "Previous"
 msgstr ""
 
-#: better-search.php:413
+#: better-search.php:421
 msgid "Next"
 msgstr ""
 
-#: better-search.php:427
+#: better-search.php:435
 msgid "Relevance: "
 msgstr ""
 
-#: better-search.php:590
+#: better-search.php:598
 msgid "No searches made yet"
 msgstr ""
 
-#: better-search.php:649
+#: better-search.php:657
 msgid "Search Results for "
 msgstr ""
 
-#: better-search.php:670
+#: better-search.php:678
 msgid "Search for:"
 msgstr ""
 
-#: better-search.php:672
+#: better-search.php:680
 msgid "Search Again"
 msgstr ""
 
-#: better-search.php:808
+#: better-search.php:816
 msgid "Display the popular searches"
 msgstr ""
 
-#: better-search.php:809
+#: better-search.php:817
 msgid "Popular Searches [Better Search]"
 msgstr ""
 
-#: better-search.php:818
+#: better-search.php:826
 msgid "Title"
 msgstr ""
 
-#: better-search.php:823
+#: better-search.php:831
 msgid "Overall"
 msgstr ""
 
-#: better-search.php:824
+#: better-search.php:832
 msgid "Custom time period (Enter below)"
 msgstr ""
 
-#: better-search.php:829
+#: better-search.php:837
 msgid "Range in number of days (applies only to custom option above)"
 msgstr ""
 
-#: better-search.php:891
+#: better-search.php:899
 msgid "<h3>Popular Searches</h3>"
 msgstr ""
 
-#: better-search.php:892
+#: better-search.php:900
 msgid "<h3>Weekly Popular Searches</h3>"
 msgstr ""
 
-#: better-search.php:1202
+#: better-search.php:1210
 msgid "Settings"
 msgstr ""
 
-#: better-search.php:1225
+#: better-search.php:1233
 msgid "Donate"
 msgstr ""
