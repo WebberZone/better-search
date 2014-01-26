@@ -36,15 +36,19 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 
 == Upgrade Notice ==
 
-= 1.3.1 =
-Fixed: PHP Notices
-
-= 1.3 =
-Fixed: Security fix; new admin interface; custom post type support; BOOLEAN MODE mySQL search; 
-For other changes, check out the changelog
+= 1.3.2 =
+Bug fixes, better pagination, profanity filter, thumbnails 
  
 
 == Changelog ==
+
+= 1.3.2 =
+* New: Profanity filter. Courtesy <a href="http://banbuilder.com/">Banbuilders</a>
+* New: Option to turn of the search results tracking. Ideal if you don't care about the popular search terms on your blog
+* New: Option to include the thumbnails in the search results
+* Modified: Search results now have better pagination. This is especially good when you have lots of search results - Thanks to J Norton for this feature
+* Modified: Plugin should now return results even if the search word is less than 4 characters
+* Fixed: Bug fixes - Thanks to Rich for some of the fixes 
 
 = 1.3.1 =
 Fixed: PHP Notices
