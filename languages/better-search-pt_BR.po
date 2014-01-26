@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-18 23:24-0000\n"
-"PO-Revision-Date: 2013-05-18 23:24-0000\n"
+"POT-Creation-Date: 2014-01-26 09:29-0000\n"
+"PO-Revision-Date: 2014-01-26 09:29-0000\n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team: Brazilian Portuguese <guilhermeveras@gmail.com>\n"
 "Language: pt_BR\n"
@@ -13,68 +13,78 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: __;_e;_c;__ngettext\n"
 "X-Poedit-Basepath: ../\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.6.3\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: admin.inc.php:72
+#: admin.inc.php:74
 #, fuzzy
 msgid "Options saved successfully."
 msgstr "Opções Salvas com sucesso."
 
-#: admin.inc.php:81
+#: admin.inc.php:83
 #, fuzzy
 msgid "Options set to Default."
 msgstr "Voltar com as configurações padrão."
 
-#: admin.inc.php:87
+#: admin.inc.php:89
 #, fuzzy
 msgid "Popular searches count reset"
 msgstr "Buscas Populares"
 
-#: admin.inc.php:93
+#: admin.inc.php:95
 #, fuzzy
 msgid "Daily popular searches count reset"
 msgstr "Buscas Populares por dia"
 
-#: admin.inc.php:108
+#: admin.inc.php:110
 msgid "General options"
 msgstr ""
 
-#: admin.inc.php:111
+#: admin.inc.php:113
 #, fuzzy
 msgid "Number of Search Results per page: "
 msgstr "Número de Resultados por Página:"
 
-#: admin.inc.php:114
+#: admin.inc.php:116
 msgid ""
 "This is the maximum number of search results that will be displayed per page "
 "by default"
 msgstr ""
 
-#: admin.inc.php:117
+#: admin.inc.php:119
 msgid "Post types to include in results (including custom post types)"
 msgstr ""
 
-#: admin.inc.php:128
+#: admin.inc.php:130
 #, fuzzy
 msgid "Daily Popular should contain searches of how many days? "
 msgstr "As buscas populares deverão conter pesquisas de quantos dias?"
 
-#: admin.inc.php:133
+#: admin.inc.php:135
 msgid "Enable mySQL FULLTEXT searching"
 msgstr ""
 
-#: admin.inc.php:136
+#: admin.inc.php:138
 msgid "Disabling this option will no longer give relevancy based results."
 msgstr ""
 
-#: admin.inc.php:139
+#: admin.inc.php:141
+msgid "Enable search tracking?"
+msgstr ""
+
+#: admin.inc.php:144
+msgid ""
+"If you turn this off, then the plugin will no longer track and display the "
+"popular search terms."
+msgstr ""
+
+#: admin.inc.php:147
 #, fuzzy
 msgid "Bypass Cache for daily popular searches' heatmap?"
 msgstr "Buscas Populares por dia"
 
-#: admin.inc.php:142
+#: admin.inc.php:150
 #, fuzzy
 msgid ""
 "This options uses JavaScript to load the post and can increase your page "
@@ -83,11 +93,11 @@ msgstr ""
 "Aplicar o Cache para buscas diárias e populares? Esta opção utiliza "
 "Javascript para carregar e o carregamento da sua página pode demorar"
 
-#: admin.inc.php:145
+#: admin.inc.php:153
 msgid "Link to plugin homepage"
 msgstr ""
 
-#: admin.inc.php:148
+#: admin.inc.php:156
 #, fuzzy
 msgid ""
 "A nofollow link to the plugin is added as an extra list item to the list of "
@@ -96,23 +106,23 @@ msgstr ""
 "Um link para o plugin é adicionado como um item extra lista para a lista de "
 "buscas populares. Não é obrigatório, mas agradecemos se você ultiliza-lo!"
 
-#: admin.inc.php:151
+#: admin.inc.php:159
 msgid "Fine tune the results"
 msgstr ""
 
-#: admin.inc.php:153
+#: admin.inc.php:161
 msgid "Weight of the title: "
 msgstr ""
 
-#: admin.inc.php:158
+#: admin.inc.php:166
 msgid "Weight of the content: "
 msgstr ""
 
-#: admin.inc.php:163
+#: admin.inc.php:171
 msgid "Activate BOOLEAN mode of FULLTEXT search:"
 msgstr ""
 
-#: admin.inc.php:166
+#: admin.inc.php:174
 msgid ""
 "Limits relevancy matches but removes several limitations of NATURAL LANGUAGE "
 "mode. <a href=\"https://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html"
@@ -120,185 +130,205 @@ msgid ""
 "indices</a>"
 msgstr ""
 
-#: admin.inc.php:173
+#: admin.inc.php:177
+msgid "Filter these words:"
+msgstr ""
+
+#: admin.inc.php:180
+msgid ""
+"Words in this list will be stripped out of the search results. Enter these "
+"as a comma-separated list."
+msgstr ""
+
+#: admin.inc.php:187
 #, fuzzy
 msgid "Output options"
 msgstr "Opções:"
 
-#: admin.inc.php:176
+#: admin.inc.php:190
 #, fuzzy
 msgid "Title of Overall Popular Searches: "
 msgstr "Titulo das busca popular global:"
 
-#: admin.inc.php:180
+#: admin.inc.php:194
 #, fuzzy
 msgid "Title of Daily Popular Searches: "
 msgstr "Titulo das busca popular por dia:"
 
-#: admin.inc.php:184
+#: admin.inc.php:198
 msgid "Length of excerpt (in words): "
 msgstr ""
 
-#: admin.inc.php:188
+#: admin.inc.php:202
 msgid "Open links in new window"
 msgstr ""
 
-#: admin.inc.php:191
+#: admin.inc.php:205
 msgid "Add nofollow attribute to links in the list"
 msgstr ""
 
-#: admin.inc.php:194
+#: admin.inc.php:208
+#, fuzzy
+msgid "Include thumbnails in search results"
+msgstr "Incluir estátisticas do WordPress nos resultados de pesquisa"
+
+#: admin.inc.php:211
+msgid "Displays the featured image (post thumbnail) wherever available"
+msgstr ""
+
+#: admin.inc.php:214
 #, fuzzy
 msgid "Heatmap (Popular searches) Options:"
 msgstr "Heatmap (Buscas Populares) Opções:"
 
-#: admin.inc.php:196
+#: admin.inc.php:216
 #, fuzzy
 msgid "Include heatmap on the search results:"
 msgstr "Incluir estátisticas do WordPress nos resultados de pesquisa"
 
-#: admin.inc.php:199
+#: admin.inc.php:219
 msgid ""
 "This option will display the heatmaps at the bottom of the search results "
 "page. Display popular searches to your visitors"
 msgstr ""
 
-#: admin.inc.php:202
+#: admin.inc.php:222
 #, fuzzy
 msgid "Number of search terms to display: "
 msgstr "Número de buscas e termos exibidos na tela:"
 
-#: admin.inc.php:207
+#: admin.inc.php:227
 #, fuzzy
 msgid "Font size of least popular search term: "
 msgstr "Tamanho da fonte para pesquisas menos  populares:"
 
-#: admin.inc.php:212
+#: admin.inc.php:232
 #, fuzzy
 msgid "Font size of most popular search term: "
 msgstr "Tamanho da fonte para pesquisas mais populares:"
 
-#: admin.inc.php:217
+#: admin.inc.php:237
 #, fuzzy
 msgid "Color of least popular search term: "
 msgstr "Cor da busca do termo menos popular:"
 
-#: admin.inc.php:222
+#: admin.inc.php:242
 #, fuzzy
 msgid "Color of most popular search term: "
 msgstr "Cor da busca do termo mais popular:"
 
-#: admin.inc.php:227
+#: admin.inc.php:247
 #, fuzzy
 msgid "Text to include before each search term in heatmap"
 msgstr "Texto a incluir antes de cada termo de pesquisa do heatmap"
 
-#: admin.inc.php:232
+#: admin.inc.php:252
 #, fuzzy
 msgid "Text to include after each search term in heatmap"
 msgstr "Texto incluir depois de cada termo de pesquisa do heatmap"
 
-#: admin.inc.php:241
+#: admin.inc.php:261
 msgid "Custom Styles"
 msgstr ""
 
-#: admin.inc.php:243
+#: admin.inc.php:263
 msgid "Custom CSS to add to header:"
 msgstr ""
 
-#: admin.inc.php:246
+#: admin.inc.php:266
 msgid ""
 "Do not include <code>style</code> tags. Check out the <a href=\"http://"
 "wordpress.org/extend/plugins/better-search/faq/\" target=\"_blank\">FAQ</a> "
 "for available CSS classes to style."
 msgstr ""
 
-#: admin.inc.php:253
+#: admin.inc.php:273
 #, fuzzy
 msgid "Do you want to set options to Default?"
 msgstr "Você deseja definir as opções Padrão?"
 
-#: admin.inc.php:255
+#: admin.inc.php:275
 msgid "Reset count"
 msgstr ""
 
-#: admin.inc.php:257
+#: admin.inc.php:277
 msgid ""
 "This cannot be reversed. Make sure that your database has been backed up "
 "before proceeding"
 msgstr ""
 
-#: admin.inc.php:260
+#: admin.inc.php:280
 #, fuzzy
 msgid "Reset popular search count"
 msgstr "Cor da busca do termo menos popular:"
 
-#: admin.inc.php:260
+#: admin.inc.php:280
 msgid "Are you sure you want to reset the popular searches?"
 msgstr ""
 
-#: admin.inc.php:261
+#: admin.inc.php:281
 #, fuzzy
 msgid "Reset daily popular search count"
 msgstr "Buscas Populares por dia"
 
-#: admin.inc.php:261
+#: admin.inc.php:281
 msgid "Are you sure you want to reset the daily popular searches?"
 msgstr ""
 
-#: admin.inc.php:270
+#: admin.inc.php:290
 #, fuzzy
 msgid "Support the development"
 msgstr "Suporte e Desenvolvimento"
 
-#: admin.inc.php:278
+#: admin.inc.php:298
 msgid "Enter amount in USD: "
 msgstr ""
 
-#: admin.inc.php:282
+#: admin.inc.php:302
 msgid "Send your donation to the author of"
 msgstr ""
 
-#: admin.inc.php:293
+#: admin.inc.php:313
 msgid "Quick Links"
 msgstr ""
 
-#: admin.inc.php:295
+#: admin.inc.php:315
 #, fuzzy
 msgid "Better Search plugin page"
 msgstr "Melhor Pesquisa"
 
-#: admin.inc.php:296
-msgid "Other plugins"
+#: admin.inc.php:316
+msgid "My other plugins"
 msgstr ""
 
-#: admin.inc.php:297
+#: admin.inc.php:317
 msgid "Ajay's blog"
 msgstr ""
 
-#: admin.inc.php:298 better-search.php:1224
+#: admin.inc.php:318 better-search.php:1367
 msgid "Support"
 msgstr ""
 
-#: admin.inc.php:299
+#: admin.inc.php:319
 msgid "Reviews"
 msgstr ""
 
-#: admin.inc.php:303
-msgid "Recent developments"
-msgstr ""
+#: admin.inc.php:320
+#, fuzzy
+msgid "Better Search on GitHub"
+msgstr "Melhor Pesquisa"
 
-#: admin.inc.php:323
+#: admin.inc.php:340
 #, fuzzy
 msgid "Better Search"
 msgstr "Melhor Pesquisa"
 
-#: admin.inc.php:424 better-search.php:860
+#: admin.inc.php:441 better-search.php:904
 #, fuzzy
 msgid "Popular Searches"
 msgstr "Buscas Populares"
 
-#: admin.inc.php:425
+#: admin.inc.php:442
 #, fuzzy
 msgid "Daily Popular Searches"
 msgstr "Buscas Populares por dia"
@@ -308,21 +338,21 @@ msgstr "Buscas Populares por dia"
 msgid "BS TEMPLATE Search Results for: %s"
 msgstr "Resultados da Busca para:"
 
-#: better-search.php:74
+#: better-search.php:80
 #, fuzzy
 msgid "Search Results for: "
 msgstr "Resultados da Busca para:"
 
-#: better-search.php:153
-msgid "&nbsp;&nbsp;&nbsp;&nbsp; Posted on: "
+#: better-search.php:162 better-search.php:163
+msgid "Posted on: "
 msgstr ""
 
-#: better-search.php:165
+#: better-search.php:175
 #, fuzzy
 msgid "No results."
 msgstr "Sem resultados."
 
-#: better-search.php:170
+#: better-search.php:180
 #, fuzzy
 msgid ""
 "Please type in your search terms. Use descriptive words since this search is "
@@ -331,102 +361,102 @@ msgstr ""
 "Por favor use termos em sua pesquisa. Use palavras descritivas, dado que "
 "esta busca é inteligente."
 
-#: better-search.php:176
+#: better-search.php:186
 msgid "Powered by "
 msgstr ""
 
-#: better-search.php:353
+#: better-search.php:378
 #, php-format
 msgid ""
 "Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</"
 "strong>"
 msgstr ""
 
-#: better-search.php:358
+#: better-search.php:383
 #, php-format
 msgid "Page <strong>%1$s</strong> of <strong>%2$s</strong>"
 msgstr ""
 
-#: better-search.php:366
+#: better-search.php:393
 msgid "Results per-page"
 msgstr ""
 
-#: better-search.php:396
+#: better-search.php:425
 #, fuzzy
 msgid "Previous"
 msgstr "Anterior"
 
-#: better-search.php:413
+#: better-search.php:453
 #, fuzzy
 msgid "Next"
 msgstr "Próximo"
 
-#: better-search.php:427
+#: better-search.php:468
 #, fuzzy
 msgid "Relevance: "
 msgstr "Pontuação de Relevancia:"
 
-#: better-search.php:590
+#: better-search.php:640
 #, fuzzy
 msgid "No searches made yet"
 msgstr "Nenhuma pesquisa realizada"
 
-#: better-search.php:649
+#: better-search.php:695
 #, fuzzy
 msgid "Search Results for "
 msgstr "Resultados da Busca para"
 
-#: better-search.php:670
+#: better-search.php:714
 #, fuzzy
 msgid "Search for:"
 msgstr "Busca por:"
 
-#: better-search.php:672
+#: better-search.php:716
 #, fuzzy
 msgid "Search Again"
 msgstr "Busque novamente"
 
-#: better-search.php:808
+#: better-search.php:852
 #, fuzzy
 msgid "Display the popular searches"
 msgstr "Buscas Populares por dia"
 
-#: better-search.php:809
+#: better-search.php:853
 #, fuzzy
 msgid "Popular Searches [Better Search]"
 msgstr "Buscas Populares"
 
-#: better-search.php:818
+#: better-search.php:862
 msgid "Title"
 msgstr ""
 
-#: better-search.php:823
+#: better-search.php:867
 msgid "Overall"
 msgstr ""
 
-#: better-search.php:824
+#: better-search.php:868
 msgid "Custom time period (Enter below)"
 msgstr ""
 
-#: better-search.php:829
+#: better-search.php:873
 msgid "Range in number of days (applies only to custom option above)"
 msgstr ""
 
-#: better-search.php:891
+#: better-search.php:935
 #, fuzzy
 msgid "<h3>Popular Searches</h3>"
 msgstr "<h3>Buscas Populares</h3>"
 
-#: better-search.php:892
+#: better-search.php:936
 #, fuzzy
 msgid "<h3>Weekly Popular Searches</h3>"
 msgstr "<h3>Buscas Populares por Semana</h3>"
 
-#: better-search.php:1202
+#: better-search.php:1345
 msgid "Settings"
 msgstr ""
 
-#: better-search.php:1225
+#: better-search.php:1368
 msgid "Donate"
 msgstr ""
 

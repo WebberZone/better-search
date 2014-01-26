@@ -16,22 +16,22 @@ The default WordPress search is limited because it gives you results by date and
 
 <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search</a> replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find will find what they are looking for quicker than if you didn't have **Better Search** installed.
 
-Custom post type support means, visitors can search through your site for more than just posts.
+Better Search can search through not just posts, but also pages and other custom post types. Let your visitors find what they are looking for.
 
-The plugin is packed with options to allow you to easily customise the output. You can also fine tune the results by assigning a greater weith to either the title or the content.
-
-Better Search supports templates for perfect integration into your blog template. Template for Twenty Eleven theme included in the package.
+The plugin is packed with options to allow you to easily customise the output. You can also fine tune the results by assigning a greater weight to either the title or the content. Better Search supports templates for perfect integration into your blog template.
 
 Additionally, the plugin also tracks the searches and you to display a "search heatmap" of the most popular searches. Support for WordPress widgets will allow you to easily add this heatmap to your theme's sidebar or footer.
 
 
 = Features =
-* **Automatic**: Once activated, Better Search will automatic replace your default WordPress search with more relevant search results
-* **Relevance**: Search results sorted by relevance automatically sorted by relevance. You can also turn off relevancy based searching, in which results are sorted by date
-* **Control the results**: Fine tune results by changing the weighting of post title and post content. Turn on BOOLEAN search to override the default NATURAL LANGUAGE search of mySQL
+* **Automatic**: Once activated, Better Search will automatically replace your default WordPress search with more relevant search results
+* **Relevance**: Search results are automatically sorted by relevance. You can also turn off relevancy based searching, in which case, results are sorted by date
+* **Control the results**: Fine tune the results by changing the weighting of post title and post content. Turn on BOOLEAN search to override the default NATURAL LANGUAGE search of mySQL
 * **Popular searches**: Find out what visitors are searching for on your blog. Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap. Widget support for easy integration in your theme
 * **Customisation**: Support for a template file for perfect integration into your blog template. Alternatively, just input your own CSS styles in the *Custom Styles* tab in the Settings Page. Check the FAQ for more information
 * **Supports cache plugins**: Works with caching plugins like WP-Super-Cache and W3 Total Cache
+* **Profanity filter**: Customise the list of stop words that will automatically be filtered out of search queries
+* **Translation ready**: Better Search is translation ready. If you're interested in translating Better Search into your own language <a href="http://ajaydsouza.com/contact/">let me know</a>.
 
 
 == Upgrade Notice ==
@@ -138,16 +138,15 @@ Fixed: PHP Notices
 
 == Frequently Asked Questions ==
 
-If your question isn't listed here, please post a comment at the <a href="hhttp://wordpress.org/support/plugin/better-search">WordPress.org support forum</a>. I monitor the forums on an ongoing basis. If you're looking for more advanced paid support, please see <a href="http://ajaydsouza.com/support/">details here</a>.
+If your question isn't listed here, please open a new thread at the <a href="hhttp://wordpress.org/support/plugin/better-search">WordPress.org support forum</a>. I monitor the forums on an ongoing basis. If you're looking for email based support, please see <a href="http://ajaydsouza.com/support/">details here</a>.
 
 = Can I customize the output? =   
 
-All options can be customized within the Options page in WP-Admin itself
+Better Search has a huge set of options that help you customise the output or fine tune the results without leaving the comfort of your WordPress site. Goto **Settings > Better Search** to configure.
 
 The plugin also supports the use of template files within your theme. You can create a file called `better-search-template.php` in your theme's directory and the plugin will use it to display the results.
 
 Take a look at http://ajaydsouza.com/wordpress/plugins/better-search/bsearch-templates for use of custom templates and template tags supported by Better Search
-Additionally, I have included a simple template for WordPress Twenty Eleven theme that you can simply drop into the `twentyeleven` folder
 
 = Can you create a search template for my theme? =
 
@@ -155,3 +154,9 @@ Yes I can. However, there are no guarantee on the time frame for the same. Addit
 
 If you have already created a template that you would like to share with the WordPress Community, you can <a href="http://ajaydsouza.com/contact/">contact me</a> and I will add it into the package.
 
+= My search words are getting filtered or *How does the profanity filter work* =
+
+From v1.3.2, Better Search includes a very cool profanity filter using the script from <a href-"http://banbuilder.com/">Banbuilder</a>. You can customise which list of words you want to filter out from the Better Search settings page. Find the setting called "Filter these words:". The plugin will automatically strip out both partial and complete references of these words.
+You can turn the filter off by emptying the list. 
+
+Know of a better profanity filter? Suggest one in the <a href="hhttp://wordpress.org/support/plugin/better-search">forums</a>.
