@@ -30,6 +30,7 @@ function bsearch_options() {
 	$posts_types_inc = array_intersect($wp_post_types, $post_types);
 
 	if( (isset($_POST['bsearch_save']))&&( check_admin_referer('bsearch-plugin') ) ) {
+		$bsearch_settings['track_popular'] = (isset($_POST['track_popular']) ? true : false);
 		$bsearch_settings['title'] = wp_kses_post($_POST['title']);
 		$bsearch_settings['title_daily'] = wp_kses_post($_POST['title_daily']);
 		$bsearch_settings['daily_range'] = intval($_POST['daily_range']);
@@ -39,6 +40,7 @@ function bsearch_options() {
 		$bsearch_settings['show_credit'] = (isset($_POST['show_credit']) ? true : false);
 		
 		$bsearch_settings['include_heatmap'] = (isset($_POST['include_heatmap']) ? true : false);
+		$bsearch_settings['include_thumb'] = (isset($_POST['include_thumb']) ? true : false);
 		$bsearch_settings['heatmap_smallest'] = ($_POST['heatmap_smallest']);
 		$bsearch_settings['heatmap_largest'] = ($_POST['heatmap_largest']);
 		$bsearch_settings['heatmap_limit'] = ($_POST['heatmap_limit']);
@@ -50,11 +52,11 @@ function bsearch_options() {
 		$bsearch_settings['weight_content'] = intval($_POST['weight_content']);
 		$bsearch_settings['weight_title'] = intval($_POST['weight_title']);
 		$bsearch_settings['boolean_mode'] = (isset($_POST['boolean_mode']) ? true : false);
+		$bsearch_settings['badwords'] = wp_kses_post($_POST['badwords']);
 		
 		$bsearch_settings['excerpt_length'] = intval($_POST['excerpt_length']);
 		$bsearch_settings['link_new_window'] = (isset($_POST['link_new_window']) ? true : false);
 		$bsearch_settings['link_nofollow'] = (isset($_POST['link_nofollow']) ? true : false);
-		
 		
 		$bsearch_settings['custom_CSS'] = wp_kses_post($_POST['custom_CSS']);
 
@@ -136,6 +138,12 @@ function bsearch_options() {
 					  <p class="description"><?php _e('Disabling this option will no longer give relevancy based results.',BSEARCH_LOCAL_NAME); ?></p>
 					</td>
 				</tr>
+				<tr><th scope="row"><label for="track_popular"><?php _e('Enable search tracking?', BSEARCH_LOCAL_NAME); ?></label></th>
+					<td>
+					  <input type="checkbox" name="track_popular" id="track_popular" <?php if ($bsearch_settings['track_popular']) echo 'checked="checked"' ?> />
+					  <p class="description"><?php _e('If you turn this off, then the plugin will no longer track and display the popular search terms.',BSEARCH_LOCAL_NAME); ?></p>
+					</td>
+				</tr>
 				<tr><th scope="row"><label for="d_use_js"><?php _e('Bypass Cache for daily popular searches\' heatmap?', BSEARCH_LOCAL_NAME); ?></label></th>
 					<td>
 					  <input type="checkbox" name="d_use_js" id="d_use_js" <?php if ($bsearch_settings['d_use_js']) echo 'checked="checked"' ?> />
@@ -148,7 +156,7 @@ function bsearch_options() {
 					  <p class="description"><?php _e('A nofollow link to the plugin is added as an extra list item to the list of popular searches. Not mandatory, but thanks if you do it!',BSEARCH_LOCAL_NAME); ?></p>
 					</td>
 				</tr>
-				<tr style="background: #eee"><th scope="row" colspan="2"><?php _e('Fine tune the results',BSEARCH_LOCAL_NAME); ?></th>
+				<tr style="background: #eee"><th scope="row" colspan="2"><strong><?php _e('Fine tune the results',BSEARCH_LOCAL_NAME); ?></strong></th>
 				</tr>
 				<tr><th scope="row"><label for="weight_title"><?php _e('Weight of the title: ', BSEARCH_LOCAL_NAME); ?></label></th>
 					<td>
@@ -164,6 +172,12 @@ function bsearch_options() {
 					<td>
 					  <input type="checkbox" name="boolean_mode" id="boolean_mode" <?php if ($bsearch_settings['boolean_mode']) echo 'checked="checked"' ?> />
 					  <p class="description"><?php _e('Limits relevancy matches but removes several limitations of NATURAL LANGUAGE mode. <a href="https://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html" target="_blank">Check the mySQL docs for further information on BOOLEAN indices</a>',BSEARCH_LOCAL_NAME); ?></p>
+					</td>
+				</tr>
+				<tr><th scope="row"><label for="badwords"><?php _e('Filter these words:', BSEARCH_LOCAL_NAME); ?></label></th>
+					<td>
+					  <textarea name="badwords" id="badwords" rows="15" cols="50"><?php echo stripslashes( $bsearch_settings['badwords'] ); ?></textarea>
+					  <p class="description"><?php _e('Words in this list will be stripped out of the search results. Enter these as a comma-separated list.',BSEARCH_LOCAL_NAME); ?></p>
 					</td>
 				</tr>
 			</tbody>
@@ -191,7 +205,13 @@ function bsearch_options() {
 				<tr><th scope="row"><label for="link_nofollow"><?php _e('Add nofollow attribute to links in the list',BSEARCH_LOCAL_NAME); ?></label></th>
 					<td><input type="checkbox" name="link_nofollow" id="link_nofollow" <?php if ($bsearch_settings['link_nofollow']) echo 'checked="checked"' ?> /></td>
 				</tr>
-				<tr style="background: #eee"><th scope="row" colspan="2"><?php _e('Heatmap (Popular searches) Options:',BSEARCH_LOCAL_NAME); ?></th>
+				<tr><th scope="row"><label for="include_thumb"><?php _e('Include thumbnails in search results', BSEARCH_LOCAL_NAME); ?></label></th>
+					<td>
+					  <input type="checkbox" name="include_thumb" id="include_thumb" <?php if ($bsearch_settings['include_thumb']) echo 'checked="checked"' ?> />
+					  <p class="description"><?php _e('Displays the featured image (post thumbnail) wherever available',BSEARCH_LOCAL_NAME); ?></p>
+					</td>
+				</tr>
+				<tr style="background: #eee"><th scope="row" colspan="2"><strong><?php _e('Heatmap (Popular searches) Options:',BSEARCH_LOCAL_NAME); ?></strong></th>
 				</tr>
 				<tr><th scope="row"><label for="include_heatmap"><?php _e('Include heatmap on the search results:', BSEARCH_LOCAL_NAME); ?></label></th>
 					<td>
@@ -243,7 +263,7 @@ function bsearch_options() {
 			<tr><th scope="row" colspan="2"><?php _e('Custom CSS to add to header:',BSEARCH_LOCAL_NAME); ?></th>
 			</tr>
 			<tr><td scope="row" colspan="2"><textarea name="custom_CSS" id="custom_CSS" rows="15" cols="80"><?php echo stripslashes($bsearch_settings['custom_CSS']); ?></textarea>
-			<br /><em><?php _e('Do not include <code>style</code> tags. Check out the <a href="http://wordpress.org/extend/plugins/better-search/faq/" target="_blank">FAQ</a> for available CSS classes to style.',BSEARCH_LOCAL_NAME); ?></em></td></tr>
+			<p class="description"><?php _e('Do not include <code>style</code> tags. Check out the <a href="http://wordpress.org/extend/plugins/better-search/faq/" target="_blank">FAQ</a> for available CSS classes to style.',BSEARCH_LOCAL_NAME); ?></p></td></tr>
 			</table>		
 		</div> <!-- End tabbertab -->
 		</div> <!-- End tabber -->
@@ -293,15 +313,12 @@ function bsearch_options() {
 			<span class="title"><?php _e('Quick Links',BSEARCH_LOCAL_NAME) ?></span>				
 			<ul>
 				<li><a href="http://ajaydsouza.com/wordpress/plugins/better-search/"><?php _e('Better Search plugin page',BSEARCH_LOCAL_NAME) ?></a></li>
-				<li><a href="http://ajaydsouza.com/wordpress/plugins/"><?php _e('Other plugins',BSEARCH_LOCAL_NAME) ?></a></li>
+				<li><a href="http://ajaydsouza.com/wordpress/plugins/"><?php _e('My other plugins',BSEARCH_LOCAL_NAME) ?></a></li>
 				<li><a href="http://ajaydsouza.com/"><?php _e('Ajay\'s blog',BSEARCH_LOCAL_NAME) ?></a></li>
 				<li><a href="http://wordpress.org/support/plugin/better-search"><?php _e('Support',BSEARCH_LOCAL_NAME) ?></a></li>
 				<li><a href="http://wordpress.org/support/view/plugin-reviews/better-search"><?php _e('Reviews',BSEARCH_LOCAL_NAME) ?></a></li>
+				<li><a href="https://github.com/ajaydsouza/better-search"><?php _e('Better Search on GitHub',BSEARCH_LOCAL_NAME) ?></a></li>
 			</ul>
-		</div>
-		<div class="side-widget">
-			<span class="title"><?php _e('Recent developments',BSEARCH_LOCAL_NAME) ?></span>				
-			<?php require_once(ABSPATH . WPINC . '/class-simplepie.php'); wp_widget_rss_output('http://ajaydsouza.com/archives/category/wordpress/plugins/feed/', array('items' => 5, 'show_author' => 0, 'show_date' => 1)); ?>
 		</div>
 	</div> <!-- End aside -->
 
