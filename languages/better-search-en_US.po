@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-25 00:01-0000\n"
+"POT-Creation-Date: 2014-01-26 09:24-0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team:  <me@ajaydsouza.com>\n"
@@ -15,89 +15,99 @@ msgstr ""
 "X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: admin.inc.php:72
+#: admin.inc.php:74
 msgid "Options saved successfully."
 msgstr ""
 
-#: admin.inc.php:81
+#: admin.inc.php:83
 msgid "Options set to Default."
 msgstr ""
 
-#: admin.inc.php:87
+#: admin.inc.php:89
 msgid "Popular searches count reset"
 msgstr ""
 
-#: admin.inc.php:93
+#: admin.inc.php:95
 msgid "Daily popular searches count reset"
 msgstr ""
 
-#: admin.inc.php:108
+#: admin.inc.php:110
 msgid "General options"
 msgstr ""
 
-#: admin.inc.php:111
+#: admin.inc.php:113
 msgid "Number of Search Results per page: "
 msgstr ""
 
-#: admin.inc.php:114
+#: admin.inc.php:116
 msgid ""
 "This is the maximum number of search results that will be displayed per page "
 "by default"
 msgstr ""
 
-#: admin.inc.php:117
+#: admin.inc.php:119
 msgid "Post types to include in results (including custom post types)"
 msgstr ""
 
-#: admin.inc.php:128
+#: admin.inc.php:130
 msgid "Daily Popular should contain searches of how many days? "
 msgstr ""
 
-#: admin.inc.php:133
+#: admin.inc.php:135
 msgid "Enable mySQL FULLTEXT searching"
 msgstr ""
 
-#: admin.inc.php:136
+#: admin.inc.php:138
 msgid "Disabling this option will no longer give relevancy based results."
 msgstr ""
 
-#: admin.inc.php:139
+#: admin.inc.php:141
+msgid "Enable search tracking?"
+msgstr ""
+
+#: admin.inc.php:144
+msgid ""
+"If you turn this off, then the plugin will no longer track and display the "
+"popular search terms."
+msgstr ""
+
+#: admin.inc.php:147
 msgid "Bypass Cache for daily popular searches' heatmap?"
 msgstr ""
 
-#: admin.inc.php:142
+#: admin.inc.php:150
 msgid ""
 "This options uses JavaScript to load the post and can increase your page "
 "load time"
 msgstr ""
 
-#: admin.inc.php:145
+#: admin.inc.php:153
 msgid "Link to plugin homepage"
 msgstr ""
 
-#: admin.inc.php:148
+#: admin.inc.php:156
 msgid ""
 "A nofollow link to the plugin is added as an extra list item to the list of "
 "popular searches. Not mandatory, but thanks if you do it!"
 msgstr ""
 
-#: admin.inc.php:151
+#: admin.inc.php:159
 msgid "Fine tune the results"
 msgstr ""
 
-#: admin.inc.php:153
+#: admin.inc.php:161
 msgid "Weight of the title: "
 msgstr ""
 
-#: admin.inc.php:158
+#: admin.inc.php:166
 msgid "Weight of the content: "
 msgstr ""
 
-#: admin.inc.php:163
+#: admin.inc.php:171
 msgid "Activate BOOLEAN mode of FULLTEXT search:"
 msgstr ""
 
-#: admin.inc.php:166
+#: admin.inc.php:174
 msgid ""
 "Limits relevancy matches but removes several limitations of NATURAL LANGUAGE "
 "mode. <a href=\"https://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html"
@@ -105,166 +115,184 @@ msgid ""
 "indices</a>"
 msgstr ""
 
-#: admin.inc.php:173
-msgid "Output options"
-msgstr ""
-
-#: admin.inc.php:176
-msgid "Title of Overall Popular Searches: "
+#: admin.inc.php:177
+msgid "Filter these words:"
 msgstr ""
 
 #: admin.inc.php:180
-msgid "Title of Daily Popular Searches: "
+msgid ""
+"Words in this list will be stripped out of the search results. Enter these "
+"as a comma-separated list."
 msgstr ""
 
-#: admin.inc.php:184
-msgid "Length of excerpt (in words): "
+#: admin.inc.php:187
+msgid "Output options"
 msgstr ""
 
-#: admin.inc.php:188
-msgid "Open links in new window"
-msgstr ""
-
-#: admin.inc.php:191
-msgid "Add nofollow attribute to links in the list"
+#: admin.inc.php:190
+msgid "Title of Overall Popular Searches: "
 msgstr ""
 
 #: admin.inc.php:194
+msgid "Title of Daily Popular Searches: "
+msgstr ""
+
+#: admin.inc.php:198
+msgid "Length of excerpt (in words): "
+msgstr ""
+
+#: admin.inc.php:202
+msgid "Open links in new window"
+msgstr ""
+
+#: admin.inc.php:205
+msgid "Add nofollow attribute to links in the list"
+msgstr ""
+
+#: admin.inc.php:208
+msgid "Include thumbnails in search results"
+msgstr ""
+
+#: admin.inc.php:211
+msgid "Displays the featured image (post thumbnail) wherever available"
+msgstr ""
+
+#: admin.inc.php:214
 msgid "Heatmap (Popular searches) Options:"
 msgstr ""
 
-#: admin.inc.php:196
+#: admin.inc.php:216
 msgid "Include heatmap on the search results:"
 msgstr ""
 
-#: admin.inc.php:199
+#: admin.inc.php:219
 msgid ""
 "This option will display the heatmaps at the bottom of the search results "
 "page. Display popular searches to your visitors"
 msgstr ""
 
-#: admin.inc.php:202
+#: admin.inc.php:222
 msgid "Number of search terms to display: "
 msgstr ""
 
-#: admin.inc.php:207
+#: admin.inc.php:227
 msgid "Font size of least popular search term: "
 msgstr ""
 
-#: admin.inc.php:212
+#: admin.inc.php:232
 msgid "Font size of most popular search term: "
 msgstr ""
 
-#: admin.inc.php:217
+#: admin.inc.php:237
 msgid "Color of least popular search term: "
 msgstr ""
 
-#: admin.inc.php:222
+#: admin.inc.php:242
 msgid "Color of most popular search term: "
 msgstr ""
 
-#: admin.inc.php:227
+#: admin.inc.php:247
 msgid "Text to include before each search term in heatmap"
 msgstr ""
 
-#: admin.inc.php:232
+#: admin.inc.php:252
 msgid "Text to include after each search term in heatmap"
 msgstr ""
 
-#: admin.inc.php:241
+#: admin.inc.php:261
 msgid "Custom Styles"
 msgstr ""
 
-#: admin.inc.php:243
+#: admin.inc.php:263
 msgid "Custom CSS to add to header:"
 msgstr ""
 
-#: admin.inc.php:246
+#: admin.inc.php:266
 msgid ""
 "Do not include <code>style</code> tags. Check out the <a href=\"http://"
 "wordpress.org/extend/plugins/better-search/faq/\" target=\"_blank\">FAQ</a> "
 "for available CSS classes to style."
 msgstr ""
 
-#: admin.inc.php:253
+#: admin.inc.php:273
 msgid "Do you want to set options to Default?"
 msgstr ""
 
-#: admin.inc.php:255
+#: admin.inc.php:275
 msgid "Reset count"
 msgstr ""
 
-#: admin.inc.php:257
+#: admin.inc.php:277
 msgid ""
 "This cannot be reversed. Make sure that your database has been backed up "
 "before proceeding"
 msgstr ""
 
-#: admin.inc.php:260
+#: admin.inc.php:280
 msgid "Reset popular search count"
 msgstr ""
 
-#: admin.inc.php:260
+#: admin.inc.php:280
 msgid "Are you sure you want to reset the popular searches?"
 msgstr ""
 
-#: admin.inc.php:261
+#: admin.inc.php:281
 msgid "Reset daily popular search count"
 msgstr ""
 
-#: admin.inc.php:261
+#: admin.inc.php:281
 msgid "Are you sure you want to reset the daily popular searches?"
 msgstr ""
 
-#: admin.inc.php:270
+#: admin.inc.php:290
 msgid "Support the development"
 msgstr ""
 
-#: admin.inc.php:278
+#: admin.inc.php:298
 msgid "Enter amount in USD: "
 msgstr ""
 
-#: admin.inc.php:282
+#: admin.inc.php:302
 msgid "Send your donation to the author of"
 msgstr ""
 
-#: admin.inc.php:293
+#: admin.inc.php:313
 msgid "Quick Links"
 msgstr ""
 
-#: admin.inc.php:295
+#: admin.inc.php:315
 msgid "Better Search plugin page"
 msgstr ""
 
-#: admin.inc.php:296
-msgid "Other plugins"
+#: admin.inc.php:316
+msgid "My other plugins"
 msgstr ""
 
-#: admin.inc.php:297
+#: admin.inc.php:317
 msgid "Ajay's blog"
 msgstr ""
 
-#: admin.inc.php:298 better-search.php:1232
+#: admin.inc.php:318 better-search.php:1367
 msgid "Support"
 msgstr ""
 
-#: admin.inc.php:299
+#: admin.inc.php:319
 msgid "Reviews"
 msgstr ""
 
-#: admin.inc.php:303
-msgid "Recent developments"
+#: admin.inc.php:320
+msgid "Better Search on GitHub"
 msgstr ""
 
-#: admin.inc.php:323
+#: admin.inc.php:340
 msgid "Better Search"
 msgstr ""
 
-#: admin.inc.php:424 better-search.php:868
+#: admin.inc.php:441 better-search.php:904
 msgid "Popular Searches"
 msgstr ""
 
-#: admin.inc.php:425
+#: admin.inc.php:442
 msgid "Daily Popular Searches"
 msgstr ""
 
@@ -277,104 +305,104 @@ msgstr ""
 msgid "Search Results for: "
 msgstr ""
 
-#: better-search.php:162
-msgid "&nbsp;&nbsp;&nbsp;&nbsp; Posted on: "
+#: better-search.php:162 better-search.php:163
+msgid "Posted on: "
 msgstr ""
 
-#: better-search.php:174
+#: better-search.php:175
 msgid "No results."
 msgstr ""
 
-#: better-search.php:179
+#: better-search.php:180
 msgid ""
 "Please type in your search terms. Use descriptive words since this search is "
 "intelligent."
 msgstr ""
 
-#: better-search.php:185
+#: better-search.php:186
 msgid "Powered by "
 msgstr ""
 
-#: better-search.php:361
+#: better-search.php:378
 #, php-format
 msgid ""
 "Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</"
 "strong>"
 msgstr ""
 
-#: better-search.php:366
+#: better-search.php:383
 #, php-format
 msgid "Page <strong>%1$s</strong> of <strong>%2$s</strong>"
 msgstr ""
 
-#: better-search.php:374
+#: better-search.php:393
 msgid "Results per-page"
 msgstr ""
 
-#: better-search.php:404
+#: better-search.php:425
 msgid "Previous"
 msgstr ""
 
-#: better-search.php:421
+#: better-search.php:453
 msgid "Next"
 msgstr ""
 
-#: better-search.php:435
+#: better-search.php:468
 msgid "Relevance: "
 msgstr ""
 
-#: better-search.php:598
+#: better-search.php:640
 msgid "No searches made yet"
 msgstr ""
 
-#: better-search.php:657
+#: better-search.php:695
 msgid "Search Results for "
 msgstr ""
 
-#: better-search.php:678
+#: better-search.php:714
 msgid "Search for:"
 msgstr ""
 
-#: better-search.php:680
+#: better-search.php:716
 msgid "Search Again"
 msgstr ""
 
-#: better-search.php:816
+#: better-search.php:852
 msgid "Display the popular searches"
 msgstr ""
 
-#: better-search.php:817
+#: better-search.php:853
 msgid "Popular Searches [Better Search]"
 msgstr ""
 
-#: better-search.php:826
+#: better-search.php:862
 msgid "Title"
 msgstr ""
 
-#: better-search.php:831
+#: better-search.php:867
 msgid "Overall"
 msgstr ""
 
-#: better-search.php:832
+#: better-search.php:868
 msgid "Custom time period (Enter below)"
 msgstr ""
 
-#: better-search.php:837
+#: better-search.php:873
 msgid "Range in number of days (applies only to custom option above)"
 msgstr ""
 
-#: better-search.php:899
+#: better-search.php:935
 msgid "<h3>Popular Searches</h3>"
 msgstr ""
 
-#: better-search.php:900
+#: better-search.php:936
 msgid "<h3>Weekly Popular Searches</h3>"
 msgstr ""
 
-#: better-search.php:1210
+#: better-search.php:1345
 msgid "Settings"
 msgstr ""
 
-#: better-search.php:1233
+#: better-search.php:1368
 msgid "Donate"
 msgstr ""
