@@ -4,7 +4,7 @@ Contributors: Ajay
 Donate link: http://ajaydsouza.com/donate/
 Stable tag: trunk
 Requires at least: 3.1
-Tested up to: 3.7
+Tested up to: 3.9
 License: GPLv2 or later
 
 
