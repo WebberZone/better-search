@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Better Search
-Version:     1.3.1
+Version:     1.3.2
 Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
 Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience. 
 Author:      Ajay D'Souza
@@ -58,7 +58,7 @@ function bsearch_template_redirect() {
 
 	global $bsearch_settings;
 
-	$s = bsearch_clean_terms(apply_filters('the_search_query', get_search_query()));
+	$s = trim(bsearch_clean_terms(apply_filters('the_search_query', get_search_query())));
 	$limit = isset($_GET['limit']) ? intval($_GET['limit']) : $bsearch_settings['limit']; // Read from GET variable
 
 	add_action('wp_head', 'bsearch_head');
@@ -158,12 +158,13 @@ function get_bsearch_results($s = '',$limit) {
 				
 				$output .= '<h2><a href="'.get_permalink($search->ID).'" rel="bookmark">'.$post_title.'</a></h2>';
 				$output .= '<p>';
-				$output .= get_bsearch_score($search,$score,$topscore);
-				$before = __('&nbsp;&nbsp;&nbsp;&nbsp; Posted on: ', BSEARCH_LOCAL_NAME);
-				$output .= get_bsearch_date($search,$before);
+				$output .= '<span class="bsearch_score">'.get_bsearch_score($search,$score,$topscore).'</span>';
+				$before = __('Posted on: ', BSEARCH_LOCAL_NAME);
+				$output .= '<span class="bsearch_date">'.get_bsearch_date($search,__('Posted on: ', BSEARCH_LOCAL_NAME) ).'</span>';
 				$output .= '</p>';
 				$output .= '<p>';
-				$output .= get_bsearch_excerpt($search->ID,$bsearch_settings['excerpt_length']);	// This displays the post excerpt / creates it. Replace with $output .= $content; to use content instead of excerpt
+				if ($bsearch_settings['include_thumb']) $output .= '<p class="bsearch_thumb">'.get_the_post_thumbnail( $search->ID, 'thumbnail' ).'</p>';
+				$output .= '<span class="bsearch_excerpt">'.get_bsearch_excerpt($search->ID,$bsearch_settings['excerpt_length']).'</span>';	// This displays the post excerpt / creates it. Replace with $output .= $content; to use content instead of excerpt
 				$output .= '</p>';
 			} //end of foreach loop
 
@@ -252,48 +253,64 @@ function get_bsearch_matches($search_info,$bydate) {
 	
 	parse_str($bsearch_settings['post_types'],$post_types);	// Save post types in $post_types variable
 
-	$search_info = get_bsearch_terms('');
-	
-	// $exact is true for exact match, currently not used	
-	if (empty($exact)) {
-		$n = '';
-	} else {
-		$n = '%';
-	}
+	$n = '%';
 	
 	// if there are two items in $search_info, the string has been broken into separate terms that
 	// are listed at $search_info[1]. The cleaned-up version of $s is still at the zero index.
 	// This is when fulltext is disabled, and we search using LIKE
+	$search_info = get_bsearch_terms('');
+	
 	if (count($search_info) > 1) {
 		$search_terms = $search_info[1];
-		$sql = "SELECT ID FROM ".$wpdb->posts." WHERE (";
-		$sql .= "((post_title LIKE '".$n.$search_terms[0].$n."') OR (post_content LIKE '".$n.$search_terms[0].$n."'))";
+		$args = array(
+			$n.$search_terms[0].$n,
+			$n.$search_terms[0].$n,
+		);
+
+		$sql = "SELECT ID, 0 AS score FROM ".$wpdb->posts." WHERE (";
+		$sql .= "((post_title LIKE '%s') OR (post_content LIKE '%s'))";
 		for ( $i = 1; $i < count($search_terms); $i = $i + 1) {	
-			$sql .= " AND ((post_title LIKE '".$n.$search_terms[$i].$n."') OR (post_content LIKE '".$n.$search_terms[$i].$n."'))";
+			$sql .= " AND ((post_title LIKE '%s') OR (post_content LIKE '%s'))";
+			$args[] = $n.$search_terms[$i].$n;
+			$args[] = $n.$search_terms[$i].$n;
 		}
-		$sql .= " OR (post_title LIKE '".$n.$search_info[0].$n."') OR (post_content LIKE '".$n.$search_info[0].$n."')";
+		$sql .= " OR (post_title LIKE '%s') OR (post_content LIKE '%s')";
+
+		$args[] = $n.$search_info[0].$n;
+		$args[] = $n.$search_info[0].$n;
+
 		$sql .= ") AND post_status = 'publish' ";
 		$sql .= "AND ( ";
 		$multiple = false;
 		foreach ($post_types as $post_type) {
 			if ( $multiple ) $sql .= ' OR ';
-			$sql .= " post_type = '".$post_type."' ";
+			$sql .= " post_type = '%s' ";
 			$multiple = true;
+			$args[] = $post_type;	// Add the post types to the $args array
 		}
 		$sql .=" ) ";
 		$sql .= "ORDER BY post_date DESC ";
 	} else {
 		$boolean_mode = ($bsearch_settings['boolean_mode']) ? ' IN BOOLEAN MODE' : '';
+		$args = array(
+			$search_info[0],
+			$bsearch_settings['weight_title'],
+			$search_info[0],
+			$bsearch_settings['weight_content'],
+			$search_info[0],
+		);
+		
 		$sql = "SELECT ID, ";
-		$sql .= "(MATCH(post_title) AGAINST ('".$search_info[0]."'".$boolean_mode.")*".$bsearch_settings['weight_title'].") + ";
-		$sql .= "(MATCH(post_content) AGAINST ('".$search_info[0]."'".$boolean_mode.")*".$bsearch_settings['weight_content'].") ";
-		$sql .= "AS score FROM ".$wpdb->posts." WHERE MATCH (post_title,post_content) AGAINST ('".$search_info[0]."'".$boolean_mode.") AND post_status = 'publish' ";
+		$sql .= "(MATCH(post_title) AGAINST ('%s' ".$boolean_mode." ) * %d ) + ";
+		$sql .= "(MATCH(post_content) AGAINST ('%s' ".$boolean_mode.") * %d ) ";
+		$sql .= "AS score FROM ".$wpdb->posts." WHERE MATCH (post_title,post_content) AGAINST ('%s' ".$boolean_mode.") AND post_status = 'publish' ";
 		$sql .= "AND ( ";
 		$multiple = false;
 		foreach ($post_types as $post_type) {
 			if ( $multiple ) $sql .= ' OR ';
-			$sql .= " post_type = '".$post_type."' ";
+			$sql .= " post_type = '%s' ";
 			$multiple = true;
+			$args[] = $post_type;	// Add the post types to the $args array
 		}
 		$sql .=" ) ";
 		if ($bydate) {
@@ -303,7 +320,7 @@ function get_bsearch_matches($search_info,$bydate) {
 		}
 	}
 	
-	$matches[0] = $wpdb->get_results($sql);
+	$matches[0] = $wpdb->get_results($wpdb->prepare($sql, $args));
 	$matches[1] = ($sql);
 
 	// Use apply_filters, so that get_bsearch_* can be editted
@@ -365,14 +382,16 @@ function get_bsearch_header($s,$numrows,$limit) {
 	  <td width="50%" style="text-align:right">';
 	$output .= sprintf( __('Page <strong>%1$s</strong> of <strong>%2$s</strong>', BSEARCH_LOCAL_NAME), $current, $total );
 
+	$sencoded = urlencode($s);
+
 	$output .= '
 	  </td>
 	 </tr>
 	 <tr>
-	  <td align="left"></td>';
-	$output .= '<td align="right">';
+	  <td style="text-align:left"></td>';
+	$output .= '<td style="text-align:right">';
 	$output .= __('Results per-page', BSEARCH_LOCAL_NAME);
-	$output .= ': <a href="'.get_option('siteurl').'/?s='.$s.'&limit=10">10</a> | <a href="'.get_option('siteurl').'/?s='.$s.'&limit=20">20</a> | <a href="'.get_option('siteurl').'/?s='.$s.'&limit=50">50</a> | <a href="'.get_option('siteurl').'/?s='.$s.'&limit=100">100</a> 
+	$output .= ': <a href="'.home_url().'/?s='.$sencoded.'&limit=10">10</a> | <a href="'.home_url().'/?s='.$sencoded.'&limit=20">20</a> | <a href="'.home_url().'/?s='.$sencoded.'&limit=50">50</a> | <a href="'.home_url().'/?s='.$sencoded.'&limit=100">100</a>
 	  </td>
 	 </tr>
 	</table>';
@@ -397,27 +416,40 @@ function get_bsearch_footer($s,$numrows,$limit) {
 	$pages = intval($numrows/$limit); // Number of results pages.
 	if ($numrows % $limit) {$pages++;} // If remainder so add one page
 
-	$output =   '<p style="text-align:center">';
+	$s = urlencode($s);
+
+	$output =   '<p class="bsearch_footer">';
 	if ($page != 0) { // Don't show back link if current page is first page.
 		$back_page = $page - $limit;
-		$output .=  "<a href=\"".get_option('siteurl')."/?s=$s&limit=$limit&bpaged=$back_page\">&laquo; ";
+		$output .=  "<a href=\"".home_url()."/?s=$s&limit=$limit&bpaged=$back_page\">&laquo; ";
 		$output .=  __('Previous', BSEARCH_LOCAL_NAME);
 		$output .=  "</a>    \n";
 	}
 
+	$pagination_range = 4;			// Number of pagination elements
 	for ($i=1; $i <= $pages; $i++) // loop through each page and give link to it.
 	{
+		$current = ($match_range[0]/$limit) + 1; // Current page number.
+		if($i >= $current+$pagination_range && $i <$pages){
+			if($i == $current+$pagination_range){
+				$output .= '&hellip;&nbsp;';
+			}
+			continue;
+		}
+		if($i < $current-$pagination_range+1 && $i <$pages) {
+			continue;
+		}
 		$ppage = $limit*($i - 1);
 		if ($ppage == $page){
 		$output .=  ("<b>$i</b>\n");} // If current page don't give link, just text.
 		else{
-			$output .=  ("<a href=\"".get_option('siteurl')."/?s=$s&limit=$limit&bpaged=$ppage\">$i</a> \n");
+			$output .=  ("<a href=\"".home_url()."/?s=$s&limit=$limit&bpaged=$ppage\">$i</a> \n");
 		}
 	}
 
 	if (!((($page+$limit) / $limit) >= $pages) && $pages != 1) { // If last page don't give next link.
 		$next_page = $page + $limit;
-		$output .=  "    <a href=\"".get_option('siteurl')."/?s=$s&limit=$limit&bpaged=$next_page\">";
+		$output .=  "    <a href=\"".home_url()."/?s=$s&limit=$limit&bpaged=$next_page\">";
 		$output .=  __('Next', BSEARCH_LOCAL_NAME);
 		$output .=  " &raquo;</a>";
 	}
@@ -430,10 +462,11 @@ function get_bsearch_footer($s,$numrows,$limit) {
 // Function to get the score
 function get_bsearch_score($search,$score,$topscore) {
 
+	$output = '';
 	if ($score > 0) {
 		$score = $score * 100 / $topscore;
 		$output = __('Relevance: ', BSEARCH_LOCAL_NAME);
-		$output .= number_format($score,2).'%';
+		$output .= number_format($score,0).'% &nbsp;&nbsp;&nbsp;&nbsp; ';
 	}
 	// Use apply_filters, so that get_bsearch_* can be editted
 	return apply_filters('get_bsearch_score',$output);
@@ -515,26 +548,35 @@ function get_bsearch_heatmap($daily=false, $smallest=10, $largest=20, $unit="pt"
 	$output = '';
 	
 	if(!$daily) {
-		$query = "SELECT searchvar, cntaccess FROM ".$table_name." WHERE accessedid IN (SELECT accessedid FROM ".$table_name." WHERE searchvar <> '' ORDER BY cntaccess DESC, searchvar ASC) ORDER by accessedid LIMIT ".$limit;
+		$args = array(
+			$limit,
+		);
+	
+		$sql = "SELECT searchvar, cntaccess FROM ".$table_name." WHERE accessedid IN (SELECT accessedid FROM ".$table_name." WHERE searchvar <> '' ORDER BY cntaccess DESC, searchvar ASC) ORDER by accessedid LIMIT %d";
 	} else {
 		if (is_null($daily_range)) $daily_range = $bsearch_settings['daily_range'];
 		$daily_range = $daily_range. ' DAY';
 		$current_date = $wpdb->get_var("SELECT DATE_ADD(DATE_SUB(CURDATE(), INTERVAL ".$daily_range."), INTERVAL 1 DAY) ");
 	
-		$query = "
+		$args = array(
+			$current_date,
+			$limit,
+		);
+	
+		$sql = "
 			SELECT DISTINCT wp1.searchvar, wp2.sumCount
 			FROM ".$table_name." wp1,
 					(SELECT searchvar, SUM(cntaccess) as sumCount
 					FROM ".$table_name."
-					WHERE dp_date >= '".$current_date."' 
+					WHERE dp_date >= '%d' 
 					GROUP BY searchvar
-					ORDER BY sumCount DESC LIMIT ".$limit.") wp2
+					ORDER BY sumCount DESC LIMIT %d) wp2
 					WHERE wp1.searchvar = wp2.searchvar
 			ORDER by wp1.searchvar ASC
 		";
 	}
 
-	$results = $wpdb->get_results($query);
+	$results = $wpdb->get_results($wpdb->prepare($sql, $args));
 	
 	if ($results) {
 		foreach ($results as $result) {
@@ -571,7 +613,7 @@ function get_bsearch_heatmap($daily=false, $smallest=10, $largest=20, $unit="pt"
 		foreach ($results as $result) {
 			if(!$daily) $cntaccess = $result->cntaccess; else $cntaccess = $result->sumCount;
 			$textsearchvar = esc_attr($result->searchvar);
-			$url  = get_option('siteurl').'/?s='.$textsearchvar;
+			$url  = home_url().'/?s='.$textsearchvar;
 			$fraction = ($cntaccess - $min);
 			$fontsize = $smallest + ($fontstep * $fraction);
 			$color = "";
@@ -631,7 +673,7 @@ function bsearch_head()
 	$limit = (isset($_GET['limit'])) ? intval($_GET['limit']) : $bsearch_settings['limit']; // Read from GET variable
 	$bpaged = (isset($_GET['bpaged'])) ? intval($_GET['bpaged']) : 0; // Read from GET variable
 
-	if (!$bpaged) echo bsearch_increment_counter($s);	// Increment the count if we are on the first page of the results
+	if (!$bpaged && $bsearch_settings['track_popular']) echo bsearch_increment_counter($s);	// Increment the count if we are on the first page of the results
 
 	// Add custom CSS to header
 	if ( ($bsearch_custom_CSS != '') && is_search() ) {
@@ -649,15 +691,9 @@ function bsearch_head()
 function bsearch_title($title)
 {
 	$s = bsearch_clean_terms(apply_filters('the_search_query', get_search_query()));
-	if (isset($s))
-	{
-		// change status code to 200 OK since /search/ returns status code 404
-//		@header("HTTP/1.1 200 OK",1);
-//		@header("Status: 200 OK", 1);
+	if (isset($s)) {
 		if ($s == '') return $s; else return __('Search Results for ', BSEARCH_LOCAL_NAME). '&quot;' . $s.'&quot; | ';
-	}
-	else
-	{
+	} else {
 		return $title;
 	}
 }
@@ -909,11 +945,15 @@ function bsearch_default_options() {
 	$custom_CSS = '
 	#bsearchform { margin: 20px; padding: 20px; }
 	#heatmap { margin: 20px; padding: 20px; border: 1px dashed #ccc }
-	.bsearch_results_page { width:90%; margin: 20px; padding: 20px; }
+	.bsearch_results_page { max-width:90%; margin: 20px; padding: 20px; }
+	.bsearch_footer { text-align: center; }
 	';
+	
+	$badwords = array( 'anal', 'anus', 'ass', 'bastard', 'beastiality', 'bestiality', 'bewb', 'bitch', 'blow', 'blumpkin', 'boob', 'cawk', 'cock', 'choad', 'cooter', 'cornhole', 'cum', 'cunt', 'dick', 'dildo', 'dong', 'dyke', 'douche', 'fag', 'faggot', 'fart', 'foreskin', 'fuck', 'fuk', 'gangbang', 'gook', 'handjob', 'hell', 'homo', 'honkey', 'humping', 'jiz', 'jizz', 'kike', 'kunt', 'labia', 'muff', 'nigger', 'nutsack', 'pen1s', 'penis', 'piss', 'poon', 'poop', 'punani', 'pussy', 'queef', 'queer', 'quim', 'rimjob', 'rape', 'rectal', 'rectum', 'semen', 'sex', 'shit', 'slut', 'spick', 'spoo', 'spooge', 'taint', 'titty', 'titties', 'twat', 'vag', 'vagina', 'vulva', 'wank', 'whore', );
 
 	$bsearch_settings = 	Array (
 						'show_credit' => false,			// Add link to plugin page of my blog in top posts list
+						'track_popular' => true,			// Track the popular searches
 						'use_fulltext' => true,			// Full text searches
 						'd_use_js' => false,				// Use JavaScript for displaying Weekly Popular Searches
 						'title' => $title,				// Title of Search Heatmap
@@ -941,6 +981,9 @@ function bsearch_default_options() {
 						'link_nofollow' => true,			// Includes rel="nofollow" to links in heatmap
 						
 						'include_heatmap' => false,		// Include heatmap of searches in the search page
+						'include_thumb' => false,		// Include thumbnail in search results
+						
+						'badwords' => implode(',', $badwords),		// Bad words filter
 						);
 	return $bsearch_settings;
 }
@@ -1112,9 +1155,15 @@ add_action('init', 'init_bsearch', 1);
  * @return string
  */
 function bsearch_clean_terms($val) {
-	$val = esc_attr($val);
-	$val = bsearch_RemoveXSS($val);
-	$val = bsearch_quote_smart($val);
+	global $bsearch_settings;
+	
+	$badwords = array_map('trim',explode(",",$bsearch_settings['badwords']));
+	//$val = esc_attr($val);
+	//$val = bsearch_RemoveXSS($val);
+	//$val = bsearch_quote_smart($val);
+	$val = wp_kses_post($val);
+	$val_censored = bsearch_censorString($val, $badwords, ' ');
+	$val = $val_censored['clean'];
 	return $val;
 }
 
@@ -1187,6 +1236,92 @@ function bsearch_quote_smart($value)
 		$value = mysql_real_escape_string($value);
 	}
 	return $value;
+}
+
+/**
+ *  Generates a random string.
+ *  @param        string          $chars        Chars that can be used.
+ *  @param        int             $len          Length of the output string.
+ *  string
+ */
+function bsearch_randCensor($chars, $len) {
+	
+	mt_srand(); // useful for < PHP4.2
+	$lastChar = strlen($chars) - 1;
+	$randOld = -1;
+	$out = '';
+	
+	// create $len chars
+	for ($i = $len; $i > 0; $i--) {
+		// generate random char - it must be different from previously generated
+		while (($randNew = mt_rand(0, $lastChar)) === $randOld) { }
+		$randOld = $randNew;
+		$out .= $chars[$randNew];
+	}
+	
+	return $out;
+	
+}
+
+
+/**
+ *  Apply censorship to $string, replacing $badwords with $censorChar.
+ *  @param        string          $string        String to be censored.
+ *  @param        string[int]     $badwords      Array of badwords.
+ *  @param        string          $censorChar    String which replaces bad words. If it's more than 1-char long,
+ *                                               a random string will be generated from these chars. Default: '*'
+ *  string[string]
+ */
+function bsearch_censorString($string, $badwords, $censorChar = '*') {  
+              
+		$leet_replace = array();
+		$leet_replace['a']= '(a|a\.|a\-|4|@|Á|á|À|Â|à|Â|â|Ä|ä|Ã|ã|Å|å|α|Δ|Λ|λ)';
+		$leet_replace['b']= '(b|b\.|b\-|8|\|3|ß|Β|β)';
+		$leet_replace['c']= '(c|c\.|c\-|Ç|ç|¢|€|<|\(|{|©)';
+		$leet_replace['d']= '(d|d\.|d\-|&part;|\|\)|Þ|þ|Ð|ð)';
+		$leet_replace['e']= '(e|e\.|e\-|3|€|È|è|É|é|Ê|ê|∑)';
+		$leet_replace['f']= '(f|f\.|f\-|ƒ)';
+		$leet_replace['g']= '(g|g\.|g\-|6|9)';
+		$leet_replace['h']= '(h|h\.|h\-|Η)';
+		$leet_replace['i']= '(i|i\.|i\-|!|\||\]\[|]|1|∫|Ì|Í|Î|Ï|ì|í|î|ï)';
+		$leet_replace['j']= '(j|j\.|j\-)';
+		$leet_replace['k']= '(k|k\.|k\-|Κ|κ)';
+		$leet_replace['l']= '(l|1\.|l\-|!|\||\]\[|]|£|∫|Ì|Í|Î|Ï)';
+		$leet_replace['m']= '(m|m\.|m\-)';
+		$leet_replace['n']= '(n|n\.|n\-|η|Ν|Π)';
+		$leet_replace['o']= '(o|o\.|o\-|0|Ο|ο|Φ|¤|°|ø)';
+		$leet_replace['p']= '(p|p\.|p\-|ρ|Ρ|¶|þ)';
+		$leet_replace['q']= '(q|q\.|q\-)';
+		$leet_replace['r']= '(r|r\.|r\-|®)';
+		$leet_replace['s']= '(s|s\.|s\-|5|\$|§)';
+		$leet_replace['t']= '(t|t\.|t\-|Τ|τ)';
+		$leet_replace['u']= '(u|u\.|u\-|υ|µ)';
+		$leet_replace['v']= '(v|v\.|v\-|υ|ν)';
+		$leet_replace['w']= '(w|w\.|w\-|ω|ψ|Ψ)';
+		$leet_replace['x']= '(x|x\.|x\-|Χ|χ)';
+		$leet_replace['y']= '(y|y\.|y\-|¥|γ|ÿ|ý|Ÿ|Ý)';
+		$leet_replace['z']= '(z|z\.|z\-|Ζ)';
+     
+        $words = explode(" ", $string);
+        
+		// is $censorChar a single char?
+        $isOneChar = (strlen($censorChar) === 1);
+		
+        for ($x=0; $x<count($badwords); $x++) {
+
+        	$replacement[$x] = $isOneChar
+                ? str_repeat($censorChar,strlen($badwords[$x]))
+                : bsearch_randCensor($censorChar,strlen($badwords[$x]));
+			
+        	$badwords[$x] =  '/'.str_ireplace(array_keys($leet_replace),array_values($leet_replace), $badwords[$x]).'/i';
+        }
+        
+        $newstring = array();
+        $newstring['orig'] = html_entity_decode($string);
+        $newstring['clean'] =  preg_replace($badwords,$replacement, $newstring['orig']);    
+        
+        return $newstring;
+           
 }
 
 /*********************************************************************
