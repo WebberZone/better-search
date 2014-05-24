@@ -37,7 +37,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 == Upgrade Notice ==
 
 = 1.3.3 =
-Bug fixes
+New admin interface, reformatted code, Bug fixes
 
 
 == Changelog ==
@@ -45,6 +45,7 @@ Bug fixes
 = 1.3.3 =
 * New: Responsive admin interface
 * Fixed: Widget initialisation
+* Modified; Reformatted code to follow WordPress PHP Standards
 
 = 1.3.2 =
 * New: Profanity filter. Courtesy <a href="http://banbuilder.com/">Banbuilders</a>
