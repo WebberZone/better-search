@@ -4,7 +4,7 @@ Contributors: Ajay
 Donate link: http://ajaydsouza.com/donate/
 Stable tag: trunk
 Requires at least: 3.1
-Tested up to: 3.9
+Tested up to: 4.0
 License: GPLv2 or later
 
 
@@ -36,11 +36,14 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 
 == Upgrade Notice ==
 
-= 1.3.2 =
-Bug fixes, better pagination, profanity filter, thumbnails 
- 
+= 1.3.3 =
+Bug fixes
+
 
 == Changelog ==
+
+= 1.3.3 =
+* Fixed: Widget initialisation
 
 = 1.3.2 =
 * New: Profanity filter. Courtesy <a href="http://banbuilder.com/">Banbuilders</a>
@@ -48,13 +51,13 @@ Bug fixes, better pagination, profanity filter, thumbnails
 * New: Option to include the thumbnails in the search results
 * Modified: Search results now have better pagination. This is especially good when you have lots of search results - Thanks to J Norton for this feature
 * Modified: Plugin should now return results even if the search word is less than 4 characters
-* Fixed: Bug fixes - Thanks to Rich for some of the fixes 
+* Fixed: Bug fixes - Thanks to Rich for some of the fixes
 
 = 1.3.1 =
 Fixed: PHP Notices
 
 = 1.3 =
-* Modified: Revamp of admin interface of the plugin 
+* Modified: Revamp of admin interface of the plugin
 * Added: New option to activate BOOLEAN mode of mySQL FULLTEXT searching. <a href="https://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html" target="_blank">Check the mySQL docs for further information on this</a>
 * Added: Custom post type support. Now choose what visitors are allowed to search
 * Added: Links in the search heatmap are no-follow by default. You can turn this off in the Settings page
@@ -78,13 +81,13 @@ Fixed: PHP Notices
 = 1.1.7 =
 * Two new fulltext indexes added... the first step to better control on search results
 
-= 1.1.6 = 
+= 1.1.6 =
 * Bug fixed in display of daily search heatmap
 
 = 1.1.5 =
 * Fixed a bug
 
-= 1.1.4 = 
+= 1.1.4 =
 * Fixed a bug
 
 = 1.1.3 =
@@ -121,7 +124,7 @@ Fixed: PHP Notices
 
 2. Extract the contents of better-search.zip to wp-content/plugins/ folder. You should get a folder called better-search.
 
-3. Activate the Plugin in WP-Admin. 
+3. Activate the Plugin in WP-Admin.
 
 4. Goto **Settings > Better Search** to configure
 
@@ -140,7 +143,7 @@ Fixed: PHP Notices
 
 If your question isn't listed here, please open a new thread at the <a href="hhttp://wordpress.org/support/plugin/better-search">WordPress.org support forum</a>. I monitor the forums on an ongoing basis. If you're looking for email based support, please see <a href="http://ajaydsouza.com/support/">details here</a>.
 
-= Can I customize the output? =   
+= Can I customize the output? =
 
 Better Search has a huge set of options that help you customise the output or fine tune the results without leaving the comfort of your WordPress site. Goto **Settings > Better Search** to configure.
 
@@ -157,6 +160,6 @@ If you have already created a template that you would like to share with the Wor
 = My search words are getting filtered or *How does the profanity filter work* =
 
 From v1.3.2, Better Search includes a very cool profanity filter using the script from <a href-"http://banbuilder.com/">Banbuilder</a>. You can customise which list of words you want to filter out from the Better Search settings page. Find the setting called "Filter these words:". The plugin will automatically strip out both partial and complete references of these words.
-You can turn the filter off by emptying the list. 
+You can turn the filter off by emptying the list.
 
 Know of a better profanity filter? Suggest one in the <a href="hhttp://wordpress.org/support/plugin/better-search">forums</a>.
