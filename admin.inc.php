@@ -1,23 +1,20 @@
 <?php
-/**********************************************************************
-*					Admin Page										*
-*********************************************************************/
-if (!defined('ABSPATH')) die("Aren't you supposed to come here via WP-Admin?");
+/**
+ * Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
+ *
+ * @package BSearch
+ */
 
-if (!defined('BSEARCH_LOCAL_NAME')) define('BSEARCH_LOCAL_NAME', 'better-search');
-
-// Guess the location
-$bsearch_path = plugin_dir_path(__FILE__);
-$bsearch_url = plugins_url().'/'.plugin_basename(dirname(__FILE__));
+if ( ! defined('ABSPATH') ) die( "Aren't you supposed to come here via WP-Admin?" );
 
 /**
  * Better Search options.
- * 
+ *
  * @access public
  * @return void
  */
 function bsearch_options() {
-	
+
 	global $wpdb;
     $poststable = $wpdb->posts;
 
@@ -38,7 +35,7 @@ function bsearch_options() {
 		$bsearch_settings['use_fulltext'] = (isset($_POST['use_fulltext']) ? true : false);
 		$bsearch_settings['d_use_js'] = (isset($_POST['d_use_js']) ? true : false);
 		$bsearch_settings['show_credit'] = (isset($_POST['show_credit']) ? true : false);
-		
+
 		$bsearch_settings['include_heatmap'] = (isset($_POST['include_heatmap']) ? true : false);
 		$bsearch_settings['include_thumb'] = (isset($_POST['include_thumb']) ? true : false);
 		$bsearch_settings['heatmap_smallest'] = ($_POST['heatmap_smallest']);
@@ -53,11 +50,11 @@ function bsearch_options() {
 		$bsearch_settings['weight_title'] = intval($_POST['weight_title']);
 		$bsearch_settings['boolean_mode'] = (isset($_POST['boolean_mode']) ? true : false);
 		$bsearch_settings['badwords'] = wp_kses_post($_POST['badwords']);
-		
+
 		$bsearch_settings['excerpt_length'] = intval($_POST['excerpt_length']);
 		$bsearch_settings['link_new_window'] = (isset($_POST['link_new_window']) ? true : false);
 		$bsearch_settings['link_nofollow'] = (isset($_POST['link_nofollow']) ? true : false);
-		
+
 		$bsearch_settings['custom_CSS'] = wp_kses_post($_POST['custom_CSS']);
 
 		// Update post types
@@ -70,16 +67,16 @@ function bsearch_options() {
 		$posts_types_inc = array_intersect($wp_post_types, $post_types);
 
 		update_option('ald_bsearch_settings', $bsearch_settings);
-		
+
 		$str = '<div id="message" class="updated fade"><p>'. __('Options saved successfully.', BSEARCH_LOCAL_NAME) .'</p></div>';
 		echo $str;
 	}
-	
+
 	if( (isset($_POST['bsearch_default']))&&( check_admin_referer('bsearch-plugin') ) ) {
 		delete_option('ald_bsearch_settings');
 		$bsearch_settings = bsearch_default_options();
 		update_option('ald_bsearch_settings', $bsearch_settings);
-		
+
 		$str = '<div id="message" class="updated fade"><p>'. __('Options set to Default.', BSEARCH_LOCAL_NAME) .'</p></div>';
 		echo $str;
 	}
@@ -99,15 +96,14 @@ function bsearch_options() {
 ?>
 
 <div class="wrap">
-  <?php screen_icon(); ?> <h2>Better Search</h2>
-
-  <div id="wrapper">
-	<div id="section">
+	<h2>Better Search</h2>
+	<div id="poststuff">
+	<div id="post-body" class="metabox-holder columns-2">
+	<div id="post-body-content">
 	  <form method="post" id="bsearch_options" name="bsearch_options" onsubmit="return checkForm()">
-	    <fieldset class="options">
-		<div class="tabber">
-		<div class="tabbertab" id="bsearch_genoptions">
-		<h3><?php _e('General options',BSEARCH_LOCAL_NAME); ?></h3>
+	    <div id="genopdiv" class="postbox closed"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
+	      <h3 class='hndle'><span><?php _e( 'General options', BSEARCH_LOCAL_NAME ); ?></span></h3>
+	      <div class="inside">
 			<table class="form-table">
 			<tbody>
 				<tr><th scope="row"><label for="limit"><?php _e('Number of Search Results per page: ', BSEARCH_LOCAL_NAME); ?></label></th>
@@ -182,9 +178,11 @@ function bsearch_options() {
 				</tr>
 			</tbody>
 			</table>
-		</div> <!-- End tabbertab -->
-		<div class="tabbertab" id="bsearch_opoptions">
-		<h3><?php _e('Output options',BSEARCH_LOCAL_NAME); ?></h3>
+	      </div>
+	    </div>
+	    <div id="outputopdiv" class="postbox closed"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
+	      <h3 class='hndle'><span><?php _e( 'Output options', BSEARCH_LOCAL_NAME ); ?></span></h3>
+	      <div class="inside">
 			<table class="form-table">
 			<tbody>
 				<tr><th scope="row"><label for="title"><?php _e('Title of Overall Popular Searches: ',BSEARCH_LOCAL_NAME); ?></label></th>
@@ -256,81 +254,117 @@ function bsearch_options() {
 				</tr>
 			</tbody>
 			</table>
-		</div> <!-- End tabbertab -->
-		<div class="tabbertab" id="bsearch_customstyles">
-		<h3><?php _e('Custom Styles',BSEARCH_LOCAL_NAME); ?></h3>
+	      </div>
+	    </div>
+	    <div id="customcssdiv" class="postbox closed"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
+	      <h3 class='hndle'><span><?php _e( 'Custom CSS', BSEARCH_LOCAL_NAME ); ?></span></h3>
+	      <div class="inside">
 			<table class="form-table">
 			<tr><th scope="row" colspan="2"><?php _e('Custom CSS to add to header:',BSEARCH_LOCAL_NAME); ?></th>
 			</tr>
 			<tr><td scope="row" colspan="2"><textarea name="custom_CSS" id="custom_CSS" rows="15" cols="80"><?php echo stripslashes($bsearch_settings['custom_CSS']); ?></textarea>
 			<p class="description"><?php _e('Do not include <code>style</code> tags. Check out the <a href="http://wordpress.org/extend/plugins/better-search/faq/" target="_blank">FAQ</a> for available CSS classes to style.',BSEARCH_LOCAL_NAME); ?></p></td></tr>
-			</table>		
-		</div> <!-- End tabbertab -->
-		</div> <!-- End tabber -->
-
-	    <p>
-	      <input type="submit" name="bsearch_save" id="bsearch_save" value="Save Options" class="button button-primary" />
-	      <input name="bsearch_default" type="submit" id="bsearch_default" value="Default Options" class="button button-secondary" onclick="if (!confirm('<?php _e('Do you want to set options to Default?', BSEARCH_LOCAL_NAME); ?>')) return false;" />
-	    </p>
-	    <h3><?php _e('Reset count',BSEARCH_LOCAL_NAME); ?></h3>
-	    <p class="description">
-	      <?php _e('This cannot be reversed. Make sure that your database has been backed up before proceeding',BSEARCH_LOCAL_NAME); ?>
-	    </p>
-	    <p>
-	      <input name="bsearch_trunc_all" type="submit" id="bsearch_trunc_all" value="<?php _e('Reset popular search count', BSEARCH_LOCAL_NAME); ?>" class="button button-secondary" onclick="if (!confirm('<?php _e('Are you sure you want to reset the popular searches?',BSEARCH_LOCAL_NAME); ?>')) return false;" />
-	      <input name="bsearch_trunc_daily" type="submit" id="bsearch_trunc_daily" value="<?php _e('Reset daily popular search count', BSEARCH_LOCAL_NAME); ?>" class="button button-secondary" onclick="if (!confirm('<?php _e('Are you sure you want to reset the daily popular searches?',BSEARCH_LOCAL_NAME); ?>')) return false;" />
-	    </p>
-	    </fieldset>
-		<?php wp_nonce_field('bsearch-plugin'); ?>
+			</table>
+	      </div>
+	    </div>
+		<p>
+		  <input type="submit" name="bsearch_save" id="bsearch_save" value="<?php _e( 'Save Options', BSEARCH_LOCAL_NAME ); ?>" class="button button-primary" />
+		  <input type="submit" name="bsearch_default" id="bsearch_default" value="<?php _e( 'Default Options', BSEARCH_LOCAL_NAME ); ?>" class="button button-secondary" onclick="if (!confirm('<?php _e( "Do you want to set options to Default?", BSEARCH_LOCAL_NAME ); ?>')) return false;" />
+		</p>
+		<?php wp_nonce_field( 'bsearch-plugin' ); ?>
 	  </form>
-	</div> <!-- End section -->
-	
-	<div id="aside">
-		<div class="side-widget">
-			<span class="title"><?php _e('Support the development',BSEARCH_LOCAL_NAME) ?></span>
-			<div id="donate-form">
-				<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-				<input type="hidden" name="cmd" value="_xclick">
-				<input type="hidden" name="business" value="donate@ajaydsouza.com">
-				<input type="hidden" name="lc" value="IN">
-				<input type="hidden" name="item_name" value="Donation for Better Search">
-				<input type="hidden" name="item_number" value="bsearch">
-				<strong><?php _e('Enter amount in USD: ',BSEARCH_LOCAL_NAME) ?></strong> <input name="amount" value="10.00" size="6" type="text"><br />
-				<input type="hidden" name="currency_code" value="USD">
-				<input type="hidden" name="button_subtype" value="services">
-				<input type="hidden" name="bn" value="PP-BuyNowBF:btn_donate_LG.gif:NonHosted">
-				<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="<?php _e('Send your donation to the author of',BSEARCH_LOCAL_NAME) ?> Better Search" title="<?php _e('Send your donation to the author of',BSEARCH_LOCAL_NAME) ?> Better Search">
-				<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-				</form>
-			</div>
+
+	  <form method="post" id="bsearch_reset_options" name="bsearch_reset_options" onsubmit="return checkForm()">
+	    <div id="resetopdiv" class="postbox closed"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
+	      <h3 class='hndle'><span><?php _e( 'Reset count', BSEARCH_LOCAL_NAME ); ?></span></h3>
+	      <div class="inside">
+		    <p class="description">
+		      <?php _e( 'This cannot be reversed. Make sure that your database has been backed up before proceeding', BSEARCH_LOCAL_NAME ); ?>
+		    </p>
+		    <p>
+		      <input name="bsearch_trunc_all" type="submit" id="bsearch_trunc_all" value="<?php _e( 'Reset Popular Searches', BSEARCH_LOCAL_NAME ); ?>" class="button button-secondary" onclick="if (!confirm('<?php _e( "Are you sure you want to reset the popular posts?", BSEARCH_LOCAL_NAME ); ?>')) return false;" />
+		      <input name="bsearch_trunc_daily" type="submit" id="bsearch_trunc_daily" value="<?php _e( 'Reset Daily Popular Searches', BSEARCH_LOCAL_NAME ); ?>" class="button button-secondary" onclick="if (!confirm('<?php _e( "Are you sure you want to reset the daily popular posts?", BSEARCH_LOCAL_NAME ); ?>')) return false;" />
+		    </p>
+	      </div>
+	    </div>
+		<?php wp_nonce_field( 'bsearch-plugin' ); ?>
+	  </form>
+
+	</div><!-- /post-body-content -->
+	<div id="postbox-container-1" class="postbox-container">
+	  <div id="side-sortables" class="meta-box-sortables ui-sortable">
+		  <?php bsearch_admin_side(); ?>
+	  </div><!-- /side-sortables -->
+	</div><!-- /postbox-container-1 -->
+	</div><!-- /post-body -->
+	<br class="clear" />
+	</div><!-- /poststuff -->
+</div><!-- /wrap -->
+
+<?php
+}
+
+/**
+ * Function to generate the right sidebar of the Settings and Admin popular posts pages.
+ *
+ * @access public
+ * @return void
+ */
+function bsearch_admin_side() {
+?>
+    <div id="donatediv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
+      <h3 class='hndle'><span><?php _e( 'Support the development', BSEARCH_LOCAL_NAME ); ?></span></h3>
+      <div class="inside">
+		<div id="donate-form">
+			<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+			<input type="hidden" name="cmd" value="_xclick">
+			<input type="hidden" name="business" value="donate@ajaydsouza.com">
+			<input type="hidden" name="lc" value="IN">
+			<input type="hidden" name="item_name" value="<?php _e( 'Donation for Better Search', BSEARCH_LOCAL_NAME ); ?>">
+			<input type="hidden" name="item_number" value="bsearch_admin">
+			<strong><?php _e( 'Enter amount in USD: ', BSEARCH_LOCAL_NAME ); ?></strong> <input name="amount" value="10.00" size="6" type="text"><br />
+			<input type="hidden" name="currency_code" value="USD">
+			<input type="hidden" name="button_subtype" value="services">
+			<input type="hidden" name="bn" value="PP-BuyNowBF:btn_donate_LG.gif:NonHosted">
+			<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="<?php _e( 'Send your donation to the author of Better Search', BSEARCH_LOCAL_NAME ); ?>">
+			<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+			</form>
 		</div>
-		<div class="side-widget">
+      </div>
+    </div>
+    <div id="followdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
+      <h3 class='hndle'><span><?php _e( 'Follow me', BSEARCH_LOCAL_NAME ); ?></span></h3>
+      <div class="inside">
+		<div id="follow-us">
 			<iframe src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fajaydsouzacom&amp;width=292&amp;height=62&amp;colorscheme=light&amp;show_faces=false&amp;border_color&amp;stream=false&amp;header=true&amp;appId=113175385243" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:292px; height:62px;" allowTransparency="true"></iframe>
 			<div style="text-align:center"><a href="https://twitter.com/ajaydsouza" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @ajaydsouza</a>
 			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
 		</div>
-		<div class="side-widget">
-			<span class="title"><?php _e('Quick Links',BSEARCH_LOCAL_NAME) ?></span>				
+      </div>
+    </div>
+    <div id="qlinksdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
+      <h3 class='hndle'><span><?php _e( 'Quick links', BSEARCH_LOCAL_NAME ); ?></span></h3>
+      <div class="inside">
+        <div id="quick-links">
 			<ul>
-				<li><a href="http://ajaydsouza.com/wordpress/plugins/better-search/"><?php _e('Better Search plugin page',BSEARCH_LOCAL_NAME) ?></a></li>
-				<li><a href="http://ajaydsouza.com/wordpress/plugins/"><?php _e('My other plugins',BSEARCH_LOCAL_NAME) ?></a></li>
-				<li><a href="http://ajaydsouza.com/"><?php _e('Ajay\'s blog',BSEARCH_LOCAL_NAME) ?></a></li>
-				<li><a href="http://wordpress.org/support/plugin/better-search"><?php _e('Support',BSEARCH_LOCAL_NAME) ?></a></li>
-				<li><a href="http://wordpress.org/support/view/plugin-reviews/better-search"><?php _e('Reviews',BSEARCH_LOCAL_NAME) ?></a></li>
-				<li><a href="https://github.com/ajaydsouza/better-search"><?php _e('Better Search on GitHub',BSEARCH_LOCAL_NAME) ?></a></li>
+				<li><a href="http://ajaydsouza.com/wordpress/plugins/better-search/"><?php _e( 'Better Search plugin page', BSEARCH_LOCAL_NAME ); ?></a></li>
+				<li><a href="http://ajaydsouza.com/wordpress/plugins/"><?php _e( 'Other plugins', BSEARCH_LOCAL_NAME ); ?></a></li>
+				<li><a href="http://ajaydsouza.com/"><?php _e( "Ajay's blog", BSEARCH_LOCAL_NAME ); ?></a></li>
+				<li><a href="https://wordpress.org/plugins/better-search/faq/"><?php _e( 'FAQ', BSEARCH_LOCAL_NAME ); ?></a></li>
+				<li><a href="http://wordpress.org/support/plugin/better-search"><?php _e( 'Support', BSEARCH_LOCAL_NAME ); ?></a></li>
+				<li><a href="https://wordpress.org/support/view/plugin-reviews/better-search"><?php _e( 'Reviews', BSEARCH_LOCAL_NAME ); ?></a></li>
 			</ul>
-		</div>
-	</div> <!-- End aside -->
-
-</div> <!-- Close wrapper -->
+        </div>
+      </div>
+    </div>
 
 <?php
-
 }
+
 
 /**
  * Add menu item in WP-Admin.
- * 
+ *
  * @access public
  * @return void
  */
@@ -343,36 +377,100 @@ function bsearch_adminmenu() {
 }
 add_action('admin_menu', 'bsearch_adminmenu');
 
+
 /**
  * Add CSS and JS to the admin head.
- * 
+ *
  * @access public
  * @return void
  */
 function bsearch_adminhead() {
 	global $bsearch_url;
 
+	wp_enqueue_script( 'common' );
+	wp_enqueue_script( 'wp-lists' );
+	wp_enqueue_script( 'postbox' );
 ?>
-	<link rel="stylesheet" type="text/css" href="<?php echo $bsearch_url ?>/wick/wick.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo $bsearch_url ?>/admin-styles.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo $bsearch_url ?>/tabber/tabber.css" />
-	<script type="text/javascript" language="JavaScript">
-		function checkForm() {
-			answer = true;
-			if (siw && siw.selectingSomething)
-				answer = false;
-			return answer;
-		}//
+	<style type="text/css">
+	.postbox .handlediv:before {
+		right:12px;
+		font:400 20px/1 dashicons;
+		speak:none;
+		display:inline-block;
+		top:0;
+		position:relative;
+		-webkit-font-smoothing:antialiased;
+		-moz-osx-font-smoothing:grayscale;
+		text-decoration:none!important;
+		content:'\f142';
+		padding:8px 10px;
+	}
+	.postbox.closed .handlediv:before {
+		content: '\f140';
+	}
+	.wrap h2:before {
+	    content: "\f179";
+	    display: inline-block;
+	    -webkit-font-smoothing: antialiased;
+	    font: normal 29px/1 'dashicons';
+	    vertical-align: middle;
+	    margin-right: 0.3em;
+	}
+	</style>
+
+	<script type="text/javascript">
+		//<![CDATA[
+		jQuery(document).ready( function($) {
+			// close postboxes that should be closed
+			$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
+			// postboxes setup
+			postboxes.add_postbox_toggles('bsearch_options');
+		});
+		//]]>
 	</script>
-	<script type="text/javascript" src="<?php echo $bsearch_url ?>/wick/sample_data.js.php"></script>
+
+	<script type="text/javascript" language="JavaScript">
+		//<![CDATA[
+		function checkForm() {
+		answer = true;
+		if (siw && siw.selectingSomething)
+			answer = false;
+		return answer;
+		}//
+		//]]>
+	</script>
+
+	<link rel="stylesheet" type="text/css" href="<?php echo $bsearch_url ?>/wick/wick.css" />
+	<script type="text/javascript" language="JavaScript">
+		//<![CDATA[
+		<?php
+		function wick_data() {
+			global $wpdb;
+
+			$categories = get_categories( 'hide_empty=0' );
+			$str = 'collection = [';
+			foreach ( $categories as $cat ) {
+				$str .= "'" . $cat->slug . "',";
+			}
+			$str = substr( $str, 0, -1 );	// Remove trailing comma
+			$str .= '];';
+
+			echo $str;
+		}
+		wick_data();
+		?>
+		//]]>
+	</script>
+
 	<script type="text/javascript" src="<?php echo $bsearch_url ?>/wick/wick.js"></script>
-	<script type="text/javascript" src="<?php echo $bsearch_url ?>/tabber/tabber-minimized.js"></script>
 	<script type="text/javascript" src="<?php echo $bsearch_url ?>/jscolor/jscolor.js"></script>
-<?php }
+<?php
+}
+
 
 /**
  * Function to clean the database.
- * 
+ *
  * @access public
  * @param bool $daily (default: true)
  * @return void
@@ -388,7 +486,7 @@ function bsearch_trunc_count($daily=true) {
 
 /**
  * Dashboard for Better Search.
- * 
+ *
  * @access public
  * @return void
  */
@@ -404,13 +502,13 @@ function bsearch_pop_dashboard() {
 	$after = $bsearch_settings['heatmap_after'];
 
 	echo get_bsearch_heatmap(false, $smallest, $largest, $unit, $cold, $hot, $before, $after, '', $limit);
-	
+
 	if ($bsearch_settings['show_credit']) echo '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
 }
 
 /**
  * Dashboard for Daily Better Search.
- * 
+ *
  * @access public
  * @return void
  */
@@ -426,13 +524,13 @@ function bsearch_pop_daily_dashboard() {
 	$after = $bsearch_settings['heatmap_after'];
 
 	echo get_bsearch_heatmap(true, $smallest, $largest, $unit, $cold, $hot, $before, $after, '', $limit);
-	
+
 	if ($bsearch_settings['show_credit']) echo '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
 }
- 
+
 /**
  * Add the dashboard widgets.
- * 
+ *
  * @access public
  * @return void
  */
@@ -446,7 +544,7 @@ add_action('wp_dashboard_setup', 'bsearch_pop_dashboard_setup');
 
 /**
  * Better Search plugin notice.
- * 
+ *
  * @access public
  * @param mixed $plugin
  * @return void

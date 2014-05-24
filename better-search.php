@@ -1,12 +1,25 @@
 <?php
-/*
-Plugin Name: Better Search
-Version:     1.3.2.1
-Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
-Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
-Author:      Ajay D'Souza
-Author URI:  http://ajaydsouza.com/
-*/
+/**
+ * The file responsible for starting the Single Post Meta Manager plugin
+ *
+ * The Single Post Meta Manager is a plugin that displays the post meta data
+ * associated with a given post. This particular file is responsible for
+ * including the necessary dependencies and starting the plugin.
+ *
+ * @package BSearch
+ *
+ * @wordpress-plugin
+ * Plugin Name: Better Search
+ * Version:     1.3.2.1
+ * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
+ * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
+ * Author:      Ajay D'Souza
+ * Author URI:  http://ajaydsouza.com/
+ * Text Domain:	better-search
+ * License:		GPL-2.0+
+ * License URI:	http://www.gnu.org/licenses/gpl-2.0.txt
+ * Domain Path:	/languages
+ */
 
 if (!defined('ABSPATH')) die("Aren't you supposed to come here via WP-Admin?");
 
