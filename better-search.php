@@ -124,13 +124,13 @@ function bsearch_template_redirect() {
 		echo '<h2>';
 		echo strip_tags( $bsearch_settings['title_daily'] );
 		echo '</h2>';
-		echo get_bsearch_heatmap( true );	// Overall heatmap
+		echo get_bsearch_heatmap( 'daily=1' );	// Overall heatmap
 		echo '</div>';	// Close class="heatmap_daily"
 		echo '<div class="heatmap_overall">';
 		echo '<h2>';
 		echo strip_tags( $bsearch_settings['title'] );
 		echo '</h2>';
-		echo get_bsearch_heatmap( false );	// Overall heatmap
+		echo get_bsearch_heatmap( 'daily=0' );	// Overall heatmap
 		echo '</div>';	// Close class="heatmap_overall"
 		echo '<div style="clear:both">&nbsp;</div>';
 		echo '</div>';
@@ -580,23 +580,33 @@ function get_bsearch_excerpt( $id, $excerpt_length = 0, $use_excerpt = true ) {
 
 
 /**
- * Search Heatmap.
+ * Get the Search Heatmap.
  *
- * @param bool $daily (default: false)
- * @param int $smallest (default: 10)
- * @param int $largest (default: 20)
- * @param string $unit (default: "pt")
- * @param string $cold (default: "ccc")
- * @param string $hot (default: "000")
- * @param string $before (default: '')
- * @param string $after (default: '&nbsp;')
- * @param string $exclude (default: '')
- * @param string $limit (default: '30')
- * @param boolean $daily_range (default: null)
+ * @access public
+ * @param array|string $args Heatmap Parameters
  * @return string
  */
-function get_bsearch_heatmap( $daily=false, $smallest=10, $largest=20, $unit="pt", $cold="ccc", $hot="000", $before='', $after='&nbsp;', $exclude='', $limit='30', $daily_range = null ) {
-	global $wpdb,$bsearch_url, $bsearch_settings;
+function get_bsearch_heatmap( $args = array() ) {
+	global $wpdb, $bsearch_url, $bsearch_settings;
+
+	$defaults = array(
+		'daily' => FALSE,
+		'smallest' => intval( $bsearch_settings['heatmap_smallest'] ),
+		'largest' => intval( $bsearch_settings['heatmap_largest'] ),
+		'unit' => $bsearch_settings['heatmap_unit'],
+		'cold' => $bsearch_settings['heatmap_cold'],
+		'hot' => $bsearch_settings['heatmap_hot'],
+		'before' => $bsearch_settings['heatmap_before'],
+		'after' => $bsearch_settings['heatmap_after'],
+		'heatmap_limit' => intval( $bsearch_settings['heatmap_limit'] ),
+		'daily_range' => intval( $bsearch_settings['daily_range'] ),
+	);
+
+	// Parse incomming $args into an array and merge it with $defaults
+	$args = wp_parse_args( $args, $defaults );
+
+	// OPTIONAL: Declare each item in $args as its own variable i.e. $type, $before.
+	extract( $args, EXTR_SKIP );
 
 	$table_name = $wpdb->prefix . "bsearch";
 
@@ -607,20 +617,18 @@ function get_bsearch_heatmap( $daily=false, $smallest=10, $largest=20, $unit="pt
 
 	if ( ! $daily ) {
 		$args = array(
-			$limit,
+			$heatmap_limit,
 		);
 
 		$sql = "SELECT searchvar, cntaccess FROM {$table_name} WHERE accessedid IN (SELECT accessedid FROM {$table_name} WHERE searchvar <> '' ORDER BY cntaccess DESC, searchvar ASC) ORDER by accessedid LIMIT %d";
 	} else {
-		if ( is_null( $daily_range ) ) {
-			$daily_range = $bsearch_settings['daily_range'];
-		}
-		$daily_range = $daily_range . ' DAY';
-		$current_date = $wpdb->get_var( "SELECT DATE_ADD(DATE_SUB(CURDATE(), INTERVAL {$daily_range}), INTERVAL 1 DAY) ");
+		$current_time = current_time( 'timestamp', 0 );
+		$current_time = $current_time - ( $daily_range - 1 ) * 3600 * 24;
+		$current_date = date( 'Y-m-j', $current_time );
 
 		$args = array(
 			$current_date,
-			$limit,
+			$heatmap_limit,
 		);
 
 		$sql = "
@@ -628,7 +636,7 @@ function get_bsearch_heatmap( $daily=false, $smallest=10, $largest=20, $unit="pt
 			FROM {$table_name} wp1,
 					(SELECT searchvar, SUM(cntaccess) as sumCount
 					FROM {$table_name}
-					WHERE dp_date >= '%d'
+					WHERE dp_date >= '%s'
 					GROUP BY searchvar
 					ORDER BY sumCount DESC LIMIT %d) wp2
 					WHERE wp1.searchvar = wp2.searchvar
@@ -715,7 +723,7 @@ function get_bsearch_heatmap( $daily=false, $smallest=10, $largest=20, $unit="pt
 		$output = __( 'No searches made yet', BSEARCH_LOCAL_NAME );
 	}
 
-	return apply_filters('get_bsearch_heatmap',$output);
+	return apply_filters( 'get_bsearch_heatmap', $output );
 }
 
 
@@ -839,15 +847,6 @@ function get_bsearch_title( $text_only = true ) {
 function get_bsearch_pop_daily() {
 
 	global $bsearch_settings;
-	$limit = $bsearch_settings['heatmap_limit'];
-	$largest = intval($bsearch_settings['heatmap_largest']);
-	$smallest = intval($bsearch_settings['heatmap_smallest']);
-	$hot = $bsearch_settings['heatmap_hot'];
-	$cold = $bsearch_settings['heatmap_cold'];
-	$unit = $bsearch_settings['heatmap_unit'];
-	$before = $bsearch_settings['heatmap_before'];
-	$after = $bsearch_settings['heatmap_after'];
-	$daily_range = $bsearch_settings['daily_range'];
 
 	$output = '';
 
@@ -856,7 +855,11 @@ function get_bsearch_pop_daily() {
 	} else {
 		$output .= '<div class="bsearch_heatmap">';
 		$output .= $bsearch_settings['title_daily'];
-		$output .= '<div text-align:center>' . get_bsearch_heatmap( true, $smallest, $largest, $unit, $cold, $hot, $before, $after, '',$limit,$daily_range ) . '</div>';
+		$output .= '<div text-align:center>';
+		$output .= get_bsearch_heatmap( array(
+			'daily' => 1,
+		) );
+		$output .= '</div>';
 		if ( $bsearch_settings['show_credit'] ) {
 			$output .= '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
 		}
@@ -882,22 +885,18 @@ function the_pop_searches_daily() {
  * @return $string
  */
 function get_bsearch_pop() {
+
 	global $bsearch_settings;
-	$limit = $bsearch_settings['heatmap_limit'];
-	$largest = intval( $bsearch_settings['heatmap_largest'] );
-	$smallest = intval( $bsearch_settings['heatmap_smallest'] );
-	$hot = $bsearch_settings['heatmap_hot'];
-	$cold = $bsearch_settings['heatmap_cold'];
-	$unit = $bsearch_settings['heatmap_unit'];
-	$before = $bsearch_settings['heatmap_before'];
-	$after = $bsearch_settings['heatmap_after'];
-	$daily_range = $bsearch_settings['daily_range'];
 
 	$output = '';
 
 	$output .= '<div class="bsearch_heatmap">';
 	$output .= $bsearch_settings['title'];
-	$output .= '<div text-align:center>' . get_bsearch_heatmap( false, $smallest, $largest, $unit, $cold, $hot, $before, $after, '',$limit,$daily_range ) . '</div>';
+	$output .= '<div text-align:center>';
+	$output .= get_bsearch_heatmap( array(
+		'daily' => 0,
+	) );
+	$output .= '</div>';
 	if ( $bsearch_settings['show_credit'] ) {
 		$output .= '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
 	}
@@ -942,7 +941,7 @@ class BSearch_Widget extends WP_Widget {
 	 * @param array $instance Previously saved values from database.
 	 */
 	function form( $instance ) {
-		$title = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : 0;
+		$title = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
 		$daily = isset( $instance['title'] ) ? esc_attr( $instance['daily'] ) : 'overall';
 		$daily_range = isset( $instance['daily_range'] ) ? esc_attr( $instance['daily_range'] ) : '';
 		?>
@@ -993,19 +992,10 @@ class BSearch_Widget extends WP_Widget {
 	 * @param array $instance Saved values from database.
 	 */
 	function widget( $args, $instance ) {
-		global $wpdb, $bsearch_url;
+		global $wpdb, $bsearch_url, $bsearch_settings;
 
 		extract( $args, EXTR_SKIP );
 
-		global $bsearch_settings;
-		$limit = $bsearch_settings['heatmap_limit'];
-		$largest = intval( $bsearch_settings['heatmap_largest'] );
-		$smallest = intval( $bsearch_settings['heatmap_smallest'] );
-		$hot = $bsearch_settings['heatmap_hot'];
-		$cold = $bsearch_settings['heatmap_cold'];
-		$unit = $bsearch_settings['heatmap_unit'];
-		$before = $bsearch_settings['heatmap_before'];
-		$after = $bsearch_settings['heatmap_after'];
 		$daily_range = $instance['daily_range'];
 
 		if ( empty( $daily_range ) ) {
@@ -1013,22 +1003,26 @@ class BSearch_Widget extends WP_Widget {
 		}
 
 		$title = apply_filters( 'widget_title', $instance['title'] );
+
 		if ( empty( $title ) ) {
 			$title = ( $bsearch_settings['title'] ) ? strip_tags( $bsearch_settings['title'] ) : __( 'Popular Searches', BSEARCH_LOCAL_NAME );
 		}
 		$daily = $instance['daily'];
-		$daily = ( $daily == "overall" ) ? true : false;
 
 		echo $before_widget;
 		echo $before_title . $title . $after_title;
 
-		if ( $daily ) {
-			echo get_bsearch_heatmap( false, $smallest, $largest, $unit, $cold, $hot, $before, $after, '', $limit,$daily_range );
+		if ( 'overall' == $daily ) {
+			echo get_bsearch_heatmap( array(
+				'daily' => 0,
+			) );
 		} else {
 			if ( $bsearch_settings['d_use_js'] ) {
 				echo '<script type="text/javascript" src="'.$bsearch_url.'/better-search-daily.js.php?widget=1"></script>';
 			} else {
-				echo get_bsearch_heatmap( true, $smallest, $largest, $unit, $cold, $hot, $before, $after, '', $limit,$daily_range );
+				echo get_bsearch_heatmap( array(
+					'daily' => 1,
+				) );
 			}
 		}
 		if ( $bsearch_settings['show_credit'] ) {
