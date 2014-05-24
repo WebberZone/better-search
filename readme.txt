@@ -37,15 +37,17 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 == Upgrade Notice ==
 
 = 1.3.3 =
-New admin interface, reformatted code, Bug fixes
+New admin interface; modified `get_bsearch_heatmap`; reformatted code; Bug fixes;
+Check the Changelog for details
 
 
 == Changelog ==
 
 = 1.3.3 =
 * New: Responsive admin interface
+* Modified: Modified `get_bsearch_heatmap` to accept an array of parameters. If you're using this function, please note the modified usage in the FAQ
 * Fixed: Widget initialisation
-* Modified; Reformatted code to follow WordPress PHP Standards
+* Modified: Reformatted code to follow WordPress PHP Standards
 
 = 1.3.2 =
 * New: Profanity filter. Courtesy <a href="http://banbuilder.com/">Banbuilders</a>
@@ -165,3 +167,31 @@ From v1.3.2, Better Search includes a very cool profanity filter using the scrip
 You can turn the filter off by emptying the list.
 
 Know of a better profanity filter? Suggest one in the <a href="hhttp://wordpress.org/support/plugin/better-search">forums</a>.
+
+= Functions =
+
+**get_bsearch_heatmap**
+
+Returns a formatted heatmap of popular searches. You can use this function in your search template or anywhere in your WordPress theme pages.
+
+Example Usage:
+
+`
+<?php if function_exists( 'get_bsearch_heatmap' ) {
+	$args = array(
+		'daily' => FALSE,
+		'smallest' => '10',			// Heatmap - Smallest Font Size
+		'largest' => '20',			// Heatmap - Largest Font Size
+		'unit' => 'pt',				// Heatmap - We'll use pt for font size
+		'cold' => 'ccc',			// Heatmap - cold searches
+		'hot' => '000',				// Heatmap - hot searches
+		'before' => '',				// Heatmap - Display before each search term
+		'after' => '&nbsp;',		// Heatmap - Display after each search term
+		'heatmap_limit' => '30',	// Heatmap - Maximum number of searches to display in heatmap
+		'daily_range' => '7',		// Daily Popular will contain posts of how many days?
+	);
+
+	echo get_bsearch_heatmap( $args );
+}
+
+`

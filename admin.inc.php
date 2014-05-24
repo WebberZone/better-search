@@ -488,16 +488,9 @@ function bsearch_trunc_count( $daily = true ) {
 function bsearch_pop_dashboard() {
 	global $bsearch_settings;
 
-	$limit = $bsearch_settings['heatmap_limit'];
-	$largest = intval($bsearch_settings['heatmap_largest']);
-	$smallest = intval($bsearch_settings['heatmap_smallest']);
-	$hot = $bsearch_settings['heatmap_hot'];
-	$cold = $bsearch_settings['heatmap_cold'];
-	$unit = $bsearch_settings['heatmap_unit'];
-	$before = $bsearch_settings['heatmap_before'];
-	$after = $bsearch_settings['heatmap_after'];
-
-	echo get_bsearch_heatmap( false, $smallest, $largest, $unit, $cold, $hot, $before, $after, '', $limit );
+	echo get_bsearch_heatmap( array(
+		'daily' => 0,
+	) );
 
 	if ( $bsearch_settings['show_credit'] ) {
 		echo '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
@@ -510,17 +503,11 @@ function bsearch_pop_dashboard() {
  *
  */
 function bsearch_pop_daily_dashboard() {
-	$bsearch_settings = bsearch_read_options();
-	$limit = $bsearch_settings['heatmap_limit'];
-	$largest = intval($bsearch_settings['heatmap_largest']);
-	$smallest = intval($bsearch_settings['heatmap_smallest']);
-	$hot = $bsearch_settings['heatmap_hot'];
-	$cold = $bsearch_settings['heatmap_cold'];
-	$unit = $bsearch_settings['heatmap_unit'];
-	$before = $bsearch_settings['heatmap_before'];
-	$after = $bsearch_settings['heatmap_after'];
+	global $bsearch_settings;
 
-	echo get_bsearch_heatmap( true, $smallest, $largest, $unit, $cold, $hot, $before, $after, '', $limit );
+	echo get_bsearch_heatmap( array(
+		'daily' => 1,
+	) );
 
 	if ( $bsearch_settings['show_credit'] ) {
 		echo '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
