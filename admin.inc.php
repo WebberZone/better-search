@@ -39,6 +39,9 @@ function bsearch_options() {
 		$bsearch_settings['d_use_js'] = isset( $_POST['d_use_js'] ) ? true : false;
 		$bsearch_settings['show_credit'] = isset( $_POST['show_credit'] ) ? true : false;
 
+		$bsearch_settings['track_admins'] = isset( $_POST['track_admins']) ? true : false;
+		$bsearch_settings['track_editors'] = isset( $_POST['track_editors']) ? true : false;
+
 		$bsearch_settings['include_heatmap'] = isset( $_POST['include_heatmap'] ) ? true : false;
 		$bsearch_settings['include_thumb'] = isset( $_POST['include_thumb'] ) ? true : false;
 		$bsearch_settings['heatmap_smallest'] = $_POST['heatmap_smallest'];
@@ -150,6 +153,16 @@ function bsearch_options() {
 					  <input type="checkbox" name="d_use_js" id="d_use_js" <?php if ( $bsearch_settings['d_use_js'] ) echo 'checked="checked"' ?> />
 					  <p class="description"><?php _e( 'This options uses JavaScript to load the post and can increase your page load time', BSEARCH_LOCAL_NAME ); ?></p>
 					</td>
+				</tr>
+				<tr><th scope="row"><label for="track_admins"><?php _e( 'Track visits of admins?', BSEARCH_LOCAL_NAME ); ?></label></th>
+				  <td><input type="checkbox" name="track_admins" id="track_admins" <?php if ( $bsearch_settings['track_admins'] ) echo 'checked="checked"' ?> />
+				    <p class="description"><?php _e( 'Disabling this option will stop admin visits being tracked.', BSEARCH_LOCAL_NAME ); ?></p>
+				  </td>
+				</tr>
+				<tr><th scope="row"><label for="track_editors"><?php _e( 'Track visits of Editors?', BSEARCH_LOCAL_NAME ); ?></label></th>
+				  <td><input type="checkbox" name="track_editors" id="track_editors" <?php if ( $bsearch_settings['track_editors'] ) echo 'checked="checked"' ?> />
+				    <p class="description"><?php _e( 'Disabling this option will stop editor visits being tracked.', BSEARCH_LOCAL_NAME ); ?></p>
+				  </td>
 				</tr>
 				<tr><th scope="row"><label for="show_credit"><?php _e( 'Link to plugin homepage', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td>

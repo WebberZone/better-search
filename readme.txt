@@ -37,7 +37,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 == Upgrade Notice ==
 
 = 1.3.3 =
-New admin interface; modified `get_bsearch_heatmap`; reformatted code; Bug fixes;
+New admin interface; modified `get_bsearch_heatmap`; reformatted code; track admins & editors; Bug fixes;
 Check the Changelog for details
 
 
@@ -46,6 +46,7 @@ Check the Changelog for details
 = 1.3.3 =
 * New: Responsive admin interface
 * Modified: Modified `get_bsearch_heatmap` to accept an array of parameters. If you're using this function, please note the modified usage in the FAQ
+* New: Option to turn off tracking searches of Admins and Editors
 * Fixed: Widget initialisation
 * Modified: Reformatted code to follow WordPress PHP Standards
 
