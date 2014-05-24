@@ -734,8 +734,21 @@ function get_bsearch_heatmap( $args = array() ) {
  * @return string
  */
 function bsearch_increment_counter( $search_query ) {
-	global $bsearch_url;
-	$output = '<script type="text/javascript" src="' . $bsearch_url . '/better-search-addcount.js.php?bsearch_id=' . $search_query . '"></script>';
+	global $bsearch_url, $bsearch_settings;
+
+	$output = '';
+
+	$current_user = wp_get_current_user();
+	$current_user_admin = ( current_user_can( 'manage_options' ) ) ? true : false;	// Is the current user an admin?
+	$current_user_editor = ( ( current_user_can( 'edit_others_posts' ) ) && ( ! current_user_can( 'manage_options' ) ) ) ? true : false;	// Is the current user pure editor?
+
+	$include_code = true;
+	if ( ( $current_user_admin ) && ( ! $bsearch_settings['track_admins'] ) ) $include_code = false;
+	if ( ( $current_user_editor ) && ( ! $bsearch_settings['track_editors'] ) ) $include_code = false;
+
+	if ( $include_code ) {
+		$output = '<script type="text/javascript" src="' . $bsearch_url . '/better-search-addcount.js.php?bsearch_id=' . $search_query . '"></script>';
+	}
 	return $output;
 }
 
@@ -1079,6 +1092,9 @@ function bsearch_default_options() {
 		'title_daily' => $title_daily,	// Title of Daily Search Heatmap
 		'limit' => '10',					// Search results per page
 		'daily_range' => '7',				// Daily Popular will contain posts of how many days?
+
+		'track_admins' => true,			// Track Admin searches
+		'track_editors' => true,			// Track Admin searches
 
 		'heatmap_smallest' => '10',		// Heatmap - Smallest Font Size
 		'heatmap_largest' => '20',		// Heatmap - Largest Font Size
