@@ -43,6 +43,7 @@ Bug fixes
 == Changelog ==
 
 = 1.3.3 =
+* New: Responsive admin interface
 * Fixed: Widget initialisation
 
 = 1.3.2 =
