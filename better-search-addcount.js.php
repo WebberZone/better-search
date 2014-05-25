@@ -28,7 +28,7 @@ function bsearch_inc_count() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . "bsearch";
 	$table_name_daily = $wpdb->prefix . "bsearch_daily";
-	
+
 	$s = wp_kses($_GET['bsearch_id'],array());
 
 	if($s != '') {
@@ -44,7 +44,7 @@ function bsearch_inc_count() {
 			$wpdb->query("INSERT INTO $table_name (searchvar, cntaccess) VALUES('$s', '1')");
 		}
 		// Now update daily count
-		$current_date = $wpdb->get_var("SELECT CURDATE() ");
+		$current_date = gmdate( 'Y-m-d', ( time() + ( get_option( 'gmt_offset' ) * 3600 ) ) );
 
 		$results = $wpdb->get_results("SELECT searchvar, cntaccess, dp_date FROM $table_name_daily WHERE searchvar = '$s' AND dp_date = '$current_date' ");
 		$test = 0;
