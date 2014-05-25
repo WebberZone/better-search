@@ -1,6 +1,12 @@
 <?php
-//"better-search-addcount.js.php" Add count to database
-Header("content-type: application/x-javascript");
+/**
+ * Increments the count on the search terms
+ *
+ * @package BSearch
+ */
+
+// This makes the browser treat this file as a javascript
+Header( "content-type: application/x-javascript" );
 
 // Force a short-init since we just need core WP, not the entire framework stack
 //define( 'SHORTINIT', true );
@@ -11,7 +17,7 @@ $wp_load_path = dirname( dirname( dirname( __FILE__ ) ) );
 $wp_load_filename = '/wp-load.php';
 
 // Check if the file exists in the root or one level up
-if( !file_exists( $wp_load_path . $wp_load_filename ) ) {
+if( ! file_exists( $wp_load_path . $wp_load_filename ) ) {
     // Just in case the user may have placed wp-config.php one more level up from the root
     $wp_load_filename = dirname( $wp_load_path ) . $wp_load_filename;
 }
@@ -22,42 +28,52 @@ require( $wp_load_filename );
 global $wpdb;
 
 
-// Ajax Increment Counter
-bsearch_inc_count();
+/**
+ * Increment the counter using Ajax.
+ *
+ */
 function bsearch_inc_count() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . "bsearch";
 	$table_name_daily = $wpdb->prefix . "bsearch_daily";
+	$str = '';
 
-	$s = wp_kses($_GET['bsearch_id'],array());
+	$search_query = wp_kses( $_GET['bsearch_id'], array() );
 
-	if($s != '') {
-		$results = $wpdb->get_results("SELECT searchvar, cntaccess FROM $table_name WHERE searchvar = '$s' LIMIT 1");
+	if ( '' != $search_query ) {
+		$results = $wpdb->get_results( $wpdb->prepare( "SELECT searchvar, cntaccess FROM $table_name WHERE searchvar = '%s' LIMIT 1", $search_query ) );
 		$test = 0;
-		if ($results) {
-			foreach ($results as $result) {
-				$wpdb->query("UPDATE $table_name SET cntaccess = cntaccess + 1 WHERE searchvar = '$result->searchvar'");
+		if ( $results ) {
+			foreach ( $results as $result ) {
+				$tt = $wpdb->query( $wpdb->prepare( "UPDATE $table_name SET cntaccess = cntaccess + 1 WHERE searchvar = '%s'", $result->searchvar ) );
+				$str .= ( $tt === FALSE ) ? 'e_' : 's_' . $tt;
 				$test = 1;
 			}
 		}
-		if ($test == 0) {
-			$wpdb->query("INSERT INTO $table_name (searchvar, cntaccess) VALUES('$s', '1')");
+		if ( 0 == $test ) {
+			$tt = $wpdb->query( $wpdb->prepare( "INSERT INTO $table_name (searchvar, cntaccess) VALUES('%s', '1')", $search_query ) );
+			$str .= ( $tt === FALSE ) ? 'e_' : 's_' . $tt;
 		}
+
 		// Now update daily count
 		$current_date = gmdate( 'Y-m-d', ( time() + ( get_option( 'gmt_offset' ) * 3600 ) ) );
 
-		$results = $wpdb->get_results("SELECT searchvar, cntaccess, dp_date FROM $table_name_daily WHERE searchvar = '$s' AND dp_date = '$current_date' ");
+		$results = $wpdb->get_results( $wpdb->prepare( "SELECT searchvar, cntaccess, dp_date FROM $table_name_daily WHERE searchvar = '%s' AND dp_date = '%s' ", $search_query, $current_date ) );
 		$test = 0;
 		if ($results) {
 			foreach ($results as $result) {
-				$wpdb->query("UPDATE $table_name_daily SET cntaccess = cntaccess + 1 WHERE searchvar = '$result->searchvar' AND dp_date = '$current_date' ");
+				$ttd = $wpdb->query( $wpdb->prepare( "UPDATE $table_name_daily SET cntaccess = cntaccess + 1 WHERE searchvar = '%s' AND dp_date = '%s' ", $result->searchvar, $current_date ) );
+				$str .= ( $ttd === FALSE ) ? '_e' : '_s' . $ttd;
 				$test = 1;
 			}
 		}
-		if ($test == 0) {
-			$wpdb->query("INSERT INTO $table_name_daily (searchvar, cntaccess, dp_date) VALUES('$s', '1', '$current_date' )");
+		if ( 0 == $test ) {
+			$ttd = $wpdb->query( $wpdb->prepare( "INSERT INTO $table_name_daily (searchvar, cntaccess, dp_date) VALUES('%s', '1', '%s' )", $search_query, $current_date ) );
+			$str .= ( $ttd === FALSE ) ? '_e' : '_s' . $ttd;
 		}
 	}
+	echo '<!-- ' . $str . ' -->';
 }
+bsearch_inc_count();
 
 ?>
