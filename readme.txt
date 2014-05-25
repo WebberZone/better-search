@@ -25,6 +25,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 
 = Features =
 * **Automatic**: Once activated, Better Search will automatically replace your default WordPress search with more relevant search results
+* **seamless integrations**: From v1.3.3, you can activate seamless integration which will output the search results perfectly integrated into your theme without the need for custom search templates
 * **Relevance**: Search results are automatically sorted by relevance. You can also turn off relevancy based searching, in which case, results are sorted by date
 * **Control the results**: Fine tune the results by changing the weighting of post title and post content. Turn on BOOLEAN search to override the default NATURAL LANGUAGE search of mySQL
 * **Popular searches**: Find out what visitors are searching for on your blog. Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap. Widget support for easy integration in your theme
