@@ -144,7 +144,10 @@ Fixed: PHP Notices
 
 1. Options in WP-Admin - General options
 2. Options in WP-Admin - Output options
-3. Options in WP-Admin - Custom Styles
+3. Options in WP-Admin - Custom CSS
+4. Options in WP-Admin - Reset count
+5. Better Search widget
+
 
 == Frequently Asked Questions ==
 
