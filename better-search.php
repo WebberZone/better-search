@@ -79,6 +79,11 @@ function bsearch_template_redirect() {
 
     global $wp_query, $bsearch_settings;
 
+	// If seamless integration mode is activated; return
+    if ( $bsearch_settings['seamless'] ) {
+	    return;
+    }
+
     // if we have a 404 status
     if ( $wp_query->is_404 ) {
         // set status of 404 to false
@@ -179,7 +184,7 @@ function get_bsearch_results( $search_query = '', $limit ) {
 	}
 
 	$match_range = get_bsearch_range( $numrows, $limit );
-	$searches = array_slice( $searches, $match_range[0], $match_range[1]-$match_range[0]+1 );	// Extract the elements for the page from the complete results array
+	$searches = array_slice( $searches, $match_range[0], $match_range[1] - $match_range[0] + 1 );	// Extract the elements for the page from the complete results array
 
 	$output = '';
 
@@ -754,7 +759,7 @@ function bsearch_increment_counter( $search_query ) {
 
 
 /**
- * Insert styles into WordPress Head.
+ * Insert styles into WordPress Head. Filters `wp_head`.
  *
  * @return string
  */
@@ -780,7 +785,7 @@ function bsearch_head() {
 
 
 /**
- * Change page title.
+ * Change page title. Filters `wp_title`.
  *
  * @param string $title
  * @return string
@@ -927,6 +932,94 @@ function the_pop_searches() {
 	echo get_bsearch_pop();
 }
 
+
+/**
+ * Modify search results page with results from Better Search. Filters posts_where.
+ *
+ * @param object $query
+ */
+function bsearch_where_clause( $where ) {
+	global $wp_query, $wpdb, $bsearch_settings;
+
+	if ( $wp_query->is_search && $bsearch_settings['seamless'] ) {
+		$search_ids = bsearch_clause_prepare();
+
+		if ( '' != $search_ids ) {
+			$where = " AND {$wpdb->posts}.ID IN ({$search_ids}) ";
+		}
+	}
+	return $where;
+}
+add_filter( 'posts_where' , 'bsearch_where_clause' );
+
+
+/**
+ * Modify search results page with results from Better Search. Filters posts_orderby.
+ *
+ * @param object $query
+ */
+function bsearch_orderby_clause( $orderby ) {
+	global $wp_query, $wpdb, $bsearch_settings;
+
+	if ( $wp_query->is_search && $bsearch_settings['seamless'] ) {
+		$search_ids = bsearch_clause_prepare();
+
+		if ( '' != $search_ids ) {
+			$orderby = " FIELD( {$wpdb->posts}.ID, {$search_ids} ) ";
+		}
+	}
+	return $orderby;
+}
+add_filter( 'posts_orderby' , 'bsearch_orderby_clause' );
+
+
+/**
+ * Fetches the search results for the current search query and returns a comma separated string of IDs.
+ *
+ * @access public
+ * @return string Blank string or comma separated string of search results' IDs
+ */
+function bsearch_clause_prepare() {
+	global $wp_query, $wpdb;
+
+	$search_ids = '';
+
+	if ( $wp_query->is_search ) {
+		$search_query = trim( bsearch_clean_terms( apply_filters( 'the_search_query', get_search_query() ) ) );
+		$search_query_transient = substr( 'bs_' . preg_replace( '/[^A-Za-z0-9\-]/', '', str_replace( " ", "", $search_query ) ), 0, 40 );	// Name of the transient limited to 40 chars
+
+		$matches = get_transient( $search_query_transient );
+
+		if ( ! $matches ) {
+			$matches = get_bsearch_matches( $search_query, 0 );		// Fetch the search results for the search term stored in $search_query
+			set_transient( $search_query_transient, $matches, 3600 );
+		}
+
+		$searches = $matches[0];		// 0 index contains the search results always
+
+		if ( $searches ) {
+			$search_ids = implode(',', wp_list_pluck( $searches, 'ID' ) );
+		}
+	}
+	return $search_ids;
+}
+
+
+/**
+ * Add counter increment to wp_head only if seamless mode is turned on.
+ *
+ * @access public
+ * @return void
+ */
+function bsearch_clause_head() {
+	global $wp_query, $bsearch_settings;
+
+	if ( $wp_query->is_search && $bsearch_settings['seamless'] && ! is_paged() ) {
+		$search_query = trim( bsearch_clean_terms( apply_filters( 'the_search_query', get_search_query() ) ) );
+		echo bsearch_increment_counter( $search_query );
+	}
+}
+add_action( 'wp_head', 'bsearch_clause_head' );
 
 /**
  * Create a Wordpress Widget for Popular search terms.
@@ -1084,6 +1177,7 @@ function bsearch_default_options() {
 	$badwords = array( 'anal', 'anus', 'ass', 'bastard', 'beastiality', 'bestiality', 'bewb', 'bitch', 'blow', 'blumpkin', 'boob', 'cawk', 'cock', 'choad', 'cooter', 'cornhole', 'cum', 'cunt', 'dick', 'dildo', 'dong', 'dyke', 'douche', 'fag', 'faggot', 'fart', 'foreskin', 'fuck', 'fuk', 'gangbang', 'gook', 'handjob', 'homo', 'honkey', 'humping', 'jiz', 'jizz', 'kike', 'kunt', 'labia', 'muff', 'nigger', 'nutsack', 'pen1s', 'penis', 'piss', 'poon', 'poop', 'punani', 'pussy', 'queef', 'queer', 'quim', 'rimjob', 'rape', 'rectal', 'rectum', 'semen', 'sex', 'shit', 'slut', 'spick', 'spoo', 'spooge', 'taint', 'titty', 'titties', 'twat', 'vag', 'vagina', 'vulva', 'wank', 'whore', );
 
 	$bsearch_settings = array(
+		'seamless' => false,			// Seamless integration mode
 		'show_credit' => false,			// Add link to plugin page of my blog in top posts list
 		'track_popular' => true,			// Track the popular searches
 		'use_fulltext' => true,			// Full text searches

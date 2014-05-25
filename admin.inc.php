@@ -31,6 +31,8 @@ function bsearch_options() {
 	if( ( isset( $_POST['bsearch_save'] ) ) && ( check_admin_referer('bsearch-plugin') ) ) {
 
 		$bsearch_settings['track_popular'] = isset( $_POST['track_popular'] ) ? true : false;
+		$bsearch_settings['seamless'] = isset( $_POST['seamless'] ) ? true : false;
+
 		$bsearch_settings['title'] = wp_kses_post( $_POST['title'] );
 		$bsearch_settings['title_daily'] = wp_kses_post( $_POST['title_daily'] );
 		$bsearch_settings['daily_range'] = intval( $_POST['daily_range'] );
@@ -112,6 +114,28 @@ function bsearch_options() {
 	      <div class="inside">
 			<table class="form-table">
 			<tbody>
+				<tr><th scope="row"><label for="track_popular"><?php _e( 'Enable search tracking?', BSEARCH_LOCAL_NAME ); ?></label></th>
+					<td>
+					  <input type="checkbox" name="track_popular" id="track_popular" <?php if ( $bsearch_settings['track_popular'] ) echo 'checked="checked"' ?> />
+					  <p class="description"><?php _e( 'If you turn this off, then the plugin will no longer track and display the popular search terms.', BSEARCH_LOCAL_NAME ); ?></p>
+					</td>
+				</tr>
+				<tr><th scope="row"><label for="seamless"><?php _e( 'Enable seamless integration?', BSEARCH_LOCAL_NAME ); ?></label></th>
+					<td>
+					  <input type="checkbox" name="seamless" id="seamless" <?php if ( $bsearch_settings['seamless'] ) echo 'checked="checked"' ?> />
+					  <p class="description"><?php _e( "Enabling this option will make the plugin return the search results just how your theme intended to be. This will ignore better-search-template.php. It will continue to display the search results sorted by relevance, although it won't display the percentage relevance.", BSEARCH_LOCAL_NAME ); ?></p>
+					</td>
+				</tr>
+				<tr><th scope="row"><label for="track_admins"><?php _e( 'Track visits of admins?', BSEARCH_LOCAL_NAME ); ?></label></th>
+				  <td><input type="checkbox" name="track_admins" id="track_admins" <?php if ( $bsearch_settings['track_admins'] ) echo 'checked="checked"' ?> />
+				    <p class="description"><?php _e( 'Disabling this option will stop admin visits being tracked.', BSEARCH_LOCAL_NAME ); ?></p>
+				  </td>
+				</tr>
+				<tr><th scope="row"><label for="track_editors"><?php _e( 'Track visits of Editors?', BSEARCH_LOCAL_NAME ); ?></label></th>
+				  <td><input type="checkbox" name="track_editors" id="track_editors" <?php if ( $bsearch_settings['track_editors'] ) echo 'checked="checked"' ?> />
+				    <p class="description"><?php _e( 'Disabling this option will stop editor visits being tracked.', BSEARCH_LOCAL_NAME ); ?></p>
+				  </td>
+				</tr>
 				<tr><th scope="row"><label for="limit"><?php _e( 'Number of Search Results per page: ', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td>
 					  <input type="textbox" name="limit" id="limit" value="<?php echo stripslashes( $bsearch_settings['limit'] ); ?>">
@@ -142,27 +166,11 @@ function bsearch_options() {
 					  <p class="description"><?php _e( 'Disabling this option will no longer give relevancy based results.', BSEARCH_LOCAL_NAME ); ?></p>
 					</td>
 				</tr>
-				<tr><th scope="row"><label for="track_popular"><?php _e( 'Enable search tracking?', BSEARCH_LOCAL_NAME ); ?></label></th>
-					<td>
-					  <input type="checkbox" name="track_popular" id="track_popular" <?php if ( $bsearch_settings['track_popular'] ) echo 'checked="checked"' ?> />
-					  <p class="description"><?php _e( 'If you turn this off, then the plugin will no longer track and display the popular search terms.', BSEARCH_LOCAL_NAME ); ?></p>
-					</td>
-				</tr>
 				<tr><th scope="row"><label for="d_use_js"><?php _e( 'Bypass Cache for daily popular searches\' heatmap?', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td>
 					  <input type="checkbox" name="d_use_js" id="d_use_js" <?php if ( $bsearch_settings['d_use_js'] ) echo 'checked="checked"' ?> />
 					  <p class="description"><?php _e( 'This options uses JavaScript to load the post and can increase your page load time', BSEARCH_LOCAL_NAME ); ?></p>
 					</td>
-				</tr>
-				<tr><th scope="row"><label for="track_admins"><?php _e( 'Track visits of admins?', BSEARCH_LOCAL_NAME ); ?></label></th>
-				  <td><input type="checkbox" name="track_admins" id="track_admins" <?php if ( $bsearch_settings['track_admins'] ) echo 'checked="checked"' ?> />
-				    <p class="description"><?php _e( 'Disabling this option will stop admin visits being tracked.', BSEARCH_LOCAL_NAME ); ?></p>
-				  </td>
-				</tr>
-				<tr><th scope="row"><label for="track_editors"><?php _e( 'Track visits of Editors?', BSEARCH_LOCAL_NAME ); ?></label></th>
-				  <td><input type="checkbox" name="track_editors" id="track_editors" <?php if ( $bsearch_settings['track_editors'] ) echo 'checked="checked"' ?> />
-				    <p class="description"><?php _e( 'Disabling this option will stop editor visits being tracked.', BSEARCH_LOCAL_NAME ); ?></p>
-				  </td>
 				</tr>
 				<tr><th scope="row"><label for="show_credit"><?php _e( 'Link to plugin homepage', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td>

@@ -37,7 +37,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 == Upgrade Notice ==
 
 = 1.3.3 =
-New admin interface; modified `get_bsearch_heatmap`; reformatted code; track admins & editors; Bug fixes;
+New seamless integration; New admin interface; modified `get_bsearch_heatmap`; code cleanup;
 Check the Changelog for details
 
 
@@ -45,6 +45,7 @@ Check the Changelog for details
 
 = 1.3.3 =
 * New: Responsive admin interface
+* New: Seamless integration mode. With this enabled, you can benefit from relevant search results displayed how your theme intended it to be!
 * Modified: Modified `get_bsearch_heatmap` to accept an array of parameters. If you're using this function, please note the modified usage in the FAQ
 * New: Option to turn off tracking searches of Admins and Editors
 * Fixed: Widget initialisation
