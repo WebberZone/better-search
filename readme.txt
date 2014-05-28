@@ -37,12 +37,16 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 
 == Upgrade Notice ==
 
-= 1.3.3 =
-New seamless integration; New admin interface; modified `get_bsearch_heatmap`; code cleanup;
+= 1.3.3.1 =
+Fixed class for header row on search results page; Fixed rocketscript loading
 Check the Changelog for details
 
 
 == Changelog ==
+
+= 1.3.3.1 =
+* Modified: Tracking script now set to bypass <a href="https://support.cloudflare.com/hc/en-us/articles/200168056-What-does-Rocket-Loader-do-">Rocket Loader</a>
+* Fixed: Class of header row on search results page. You can now add your custom styles to `bsearch_nav_row1` and `bsearch_nav_row2`
 
 = 1.3.3 =
 * New: Responsive admin interface

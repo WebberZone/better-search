@@ -443,7 +443,7 @@ function get_bsearch_header( $search_query, $numrows, $limit ) {
 	$output .= '
 	  </td>
 	 </tr>
-	 <tr class="bsearch_nav_row1">
+	 <tr class="bsearch_nav_row2">
 	  <td style="text-align:left"></td>';
 	$output .= '<td style="text-align:right">';
 	$output .= __( 'Results per-page', BSEARCH_LOCAL_NAME );
@@ -752,7 +752,7 @@ function bsearch_increment_counter( $search_query ) {
 	if ( ( $current_user_editor ) && ( ! $bsearch_settings['track_editors'] ) ) $include_code = false;
 
 	if ( $include_code ) {
-		$output = '<script type="text/javascript" src="' . $bsearch_url . '/better-search-addcount.js.php?bsearch_id=' . $search_query . '"></script>';
+		$output = '<script type="text/javascript" data-cfasync="false" src="' . $bsearch_url . '/better-search-addcount.js.php?bsearch_id=' . $search_query . '"></script>';
 	}
 	return $output;
 }
