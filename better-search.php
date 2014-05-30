@@ -781,6 +781,12 @@ function bsearch_head() {
 	if ( ( '' != $bsearch_custom_CSS ) && is_search() ) {
 		echo '<style type="text/css">' . $bsearch_custom_CSS . '</style>';
 	}
+
+	// Add noindex to search results page
+	if ( $bsearch_settings['meta_noindex'] ) {
+		echo '<meta name="robots" content="noindex,follow" />';
+	}
+
 }
 
 
@@ -1014,10 +1020,18 @@ function bsearch_clause_prepare() {
 function bsearch_clause_head() {
 	global $wp_query, $bsearch_settings;
 
+	$output = '';
+
 	if ( $wp_query->is_search && $bsearch_settings['seamless'] && ! is_paged() ) {
 		$search_query = trim( bsearch_clean_terms( apply_filters( 'the_search_query', get_search_query() ) ) );
-		echo bsearch_increment_counter( $search_query );
+		$output .= bsearch_increment_counter( $search_query );
 	}
+
+	if ( $wp_query->is_search && $bsearch_settings['meta_noindex'] ) {
+		$output .= '<meta name="robots" content="noindex,follow" />';
+	}
+
+	echo $output;
 }
 add_action( 'wp_head', 'bsearch_clause_head' );
 
@@ -1207,7 +1221,8 @@ function bsearch_default_options() {
 		'post_types' => $post_types,		// WordPress custom post types
 		'excerpt_length' => '50',		// Length of characters
 		'link_new_window' => false,			// Open link in new window - Includes target="_blank" to links
-		'link_nofollow' => true,			// Includes rel="nofollow" to links in heatmap
+		'link_nofollow' => true,		// Includes rel="nofollow" to links in heatmap
+		'meta_noindex' => true,			// Add noindex,follow meta tag to head
 
 		'include_heatmap' => false,		// Include heatmap of searches in the search page
 		'include_thumb' => false,		// Include thumbnail in search results

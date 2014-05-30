@@ -62,6 +62,7 @@ function bsearch_options() {
 		$bsearch_settings['excerpt_length'] = intval( $_POST['excerpt_length'] );
 		$bsearch_settings['link_new_window'] = isset( $_POST['link_new_window'] ) ? true : false;
 		$bsearch_settings['link_nofollow'] = isset( $_POST['link_nofollow'] ) ? true : false;
+		$bsearch_settings['meta_noindex'] = isset( $_POST['meta_noindex'] ) ? true : false;
 
 		$bsearch_settings['custom_CSS'] = wp_kses_post( $_POST['custom_CSS'] );
 
@@ -228,6 +229,9 @@ function bsearch_options() {
 				</tr>
 				<tr><th scope="row"><label for="link_nofollow"><?php _e( 'Add nofollow attribute to links in the list', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td><input type="checkbox" name="link_nofollow" id="link_nofollow" <?php if ( $bsearch_settings['link_nofollow'] ) echo 'checked="checked"' ?> /></td>
+				</tr>
+				<tr><th scope="row"><label for="meta_noindex"><?php _e( 'Add noindex,follow meta tag to the header', BSEARCH_LOCAL_NAME ); ?></label></th>
+					<td><input type="checkbox" name="meta_noindex" id="meta_noindex" <?php if ( $bsearch_settings['meta_noindex'] ) echo 'checked="checked"' ?> /></td>
 				</tr>
 				<tr><th scope="row"><label for="include_thumb"><?php _e( 'Include thumbnails in search results', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td>
