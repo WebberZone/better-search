@@ -1,10 +1,9 @@
 <?php
 /**
- * The file responsible for starting the Single Post Meta Manager plugin
+ * Better Search replaces the default WordPress search with a better search that gives contextual results sorted by relevance
  *
- * The Single Post Meta Manager is a plugin that displays the post meta data
- * associated with a given post. This particular file is responsible for
- * including the necessary dependencies and starting the plugin.
+ * Better Search is a plugin that will replace the default WordPress search page
+ * with highly relevant search results improving your visitors search experience.
  *
  * @package BSearch
  *
