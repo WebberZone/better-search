@@ -9,7 +9,7 @@
  *
  * @wordpress-plugin
  * Plugin Name: Better Search
- * Version:     1.3.3
+ * Version:     1.3.3.1
  * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
  * Author:      Ajay D'Souza
