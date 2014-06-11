@@ -674,12 +674,14 @@ function get_bsearch_heatmap( $args = array() ) {
 
 		// Calculate colors
 		if ( $hot != $cold ) {
+			$hotdec = bsearch_html2rgb( $hot );
+			$colddec = bsearch_html2rgb( $cold );
 			for ( $i = 0; $i < 3; $i++ ) {
-				$coldval[] = hexdec( $cold[ $i ] );
-				$hotval[] = hexdec( $hot[ $i ] );
-				$colorspread[] = hexdec( $hot[ $i ] ) - hexdec( $cold[ $i ] );
-				if ( 0!= $spread ) {
-					$colorstep[] = ( hexdec( $hot[ $i ] ) - hexdec( $cold[ $i ] ) ) / $spread;
+				$coldval[] = $colddec[ $i ];
+				$hotval[] = $hotdec[ $i ];
+				$colorspread[] = $hotdec[ $i ] - $colddec[ $i ];
+				if ( 0 != $spread ) {
+					$colorstep[] = ( $hotdec[ $i ] - $colddec[ $i ] ) / $spread;
 				} else {
 					$colorstep[] = 0;
 				}
@@ -1474,6 +1476,76 @@ function bsearch_censor_string( $string, $badwords, $censorChar = '*' ) {
 
 	return $newstring;
 
+}
+
+
+/**
+ * Convert Hexadecimal colour code to RGB.
+ *
+ * @param string $color Hexadecimal colour
+ * @return array Array containing RGB colour code
+ */
+function bsearch_html2rgb( $color ) {
+
+	if ( $color[0] == '#' ) {
+		$color = substr( $color, 1 );
+	}
+
+	if ( strlen( $color ) == 6 ) {
+		list( $r, $g, $b ) = array(
+			$color[0] . $color[1],
+			$color[2] . $color[3],
+			$color[4] . $color[5]
+		);
+	} elseif ( strlen( $color ) == 3 ) {
+		list( $r, $g, $b ) = array(
+			$color[0] . $color[0],
+			$color[1] . $color[1],
+			$color[2] . $color[2]
+		);
+	} else {
+		return false;
+	}
+
+	$r = hexdec( $r );
+	$g = hexdec( $g );
+	$b = hexdec( $b );
+
+	return array( $r, $g, $b );
+}
+
+
+/**
+ * Function to convert RGB colour code to Hexadecimal.
+ *
+ * @param int|string|array $r Red colour or array of RGB values
+ * @param int|string $g (default: -1) Green colour
+ * @param int|string $b (default: -1) Green colour
+ * @return void
+ */
+function bsearch_rgb2html($r, $g = -1, $b = -1, $padhash = false ) {
+
+    if ( is_array( $r ) && sizeof( $r ) == 3 ) {	// If $r is an array, extract the RGB values
+		list( $r, $g, $b ) = $r;
+	}
+
+    $r = intval( $r );
+    $g = intval( $g );
+    $b = intval( $b );
+
+    $r = dechex( $r < 0 ? 0 : ( $r > 255 ? 255 : $r ) );
+    $g = dechex( $g < 0 ? 0 : ( $g > 255 ? 255 : $g ) );
+    $b = dechex( $b < 0 ? 0 : ( $b > 255 ? 255 : $b ) );
+
+    $color = ( strlen ( $r ) < 2 ? '0' : '' ) . $r;
+    $color .= ( strlen( $g ) < 2 ? '0' : '' ) . $g;
+    $color .= ( strlen( $b ) < 2 ? '0' : '' ) . $b;
+
+    if ( $padhash ) {
+	    $color = '#' . $color;
+    }
+
+    return $color;
 }
 
 

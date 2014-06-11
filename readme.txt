@@ -38,7 +38,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 == Upgrade Notice ==
 
 = 1.3.3.1 =
-Fixed class for header row on search results page; Fixed rocketscript loading; noindex,nofollow mea tag;
+Fixed class for header row on search results page; Fixed rocketscript loading; new noindex,nofollow mea tag; fixed widget heatmap
 Check the Changelog for details
 
 
@@ -48,6 +48,7 @@ Check the Changelog for details
 * New: Option to add `noindex,nofollow` meta tag to the header
 * Modified: Tracking script now set to bypass <a href="https://support.cloudflare.com/hc/en-us/articles/200168056-What-does-Rocket-Loader-do-">Rocket Loader</a>
 * Fixed: Class of header row on search results page. You can now add your custom styles to `bsearch_nav_row1` and `bsearch_nav_row2`
+* Fixed: Widget search heatmap colours were not loaded properly
 
 = 1.3.3 =
 * New: Responsive admin interface
