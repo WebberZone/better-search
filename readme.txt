@@ -38,7 +38,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 == Upgrade Notice ==
 
 = 1.3.4 =
-Fixed class for header row on search results page; Fixed rocketscript loading; new noindex,nofollow mea tag; fixed widget heatmap
+Fixed class for header row on search results page; Fixed rocketscript loading; new noindex,nofollow meta tag; fixed widget heatmap
 Check the Changelog for details
 
 
