@@ -100,11 +100,19 @@ function bsearch_template_redirect() {
 	add_action( 'wp_head', 'bsearch_head' );
 	add_filter( 'wp_title', 'bsearch_title' );
 
-	// If there is a template file then we use it
-	$exists = file_exists( get_stylesheet_directory() . '/better-search-template.php' );
-	if ( $exists ) {
-		include_once( get_stylesheet_directory() . '/better-search-template.php' );
-		exit;
+	// If there is a template file within the parent or child theme then we use it
+	$priority_template_lookup = array(
+		get_stylesheet_directory() . '/better-search-template.php',
+		get_template_directory() . '/better-search-template.php'
+	);
+
+	foreach( $priority_template_lookup as $exists ) {
+
+		if( file_exists( $exists ) ) {
+
+			include_once( $exists );
+			exit;
+		}
 	}
 
 	// Create a template here if there is a template
