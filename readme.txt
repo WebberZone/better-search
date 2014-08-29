@@ -37,12 +37,15 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 
 == Upgrade Notice ==
 
-= 1.3.4 =
-Fixed class for header row on search results page; Fixed rocketscript loading; new noindex,nofollow meta tag; fixed widget heatmap
+= 1.3.5 =
+Bug fixes;
 Check the Changelog for details
 
 
 == Changelog ==
+
+= 1.3.5 =
+* Fixed: Seamless mode interfered with the Media search in the Admin
 
 = 1.3.4 =
 * New: Option to add `noindex,nofollow` meta tag to the header
