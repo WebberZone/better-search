@@ -1393,9 +1393,9 @@ function bsearch_clean_terms( $val ) {
 
 	$badwords = array_map( 'trim', explode( ",", $bsearch_settings['badwords'] ) );
 
-	$val = wp_kses_post( $val );
 	$val_censored = bsearch_censor_string( $val, $badwords, ' ' );	// No more bad words
 	$val = $val_censored['clean'];
+	$val = wp_kses_post( $val );
 	return $val;
 }
 
@@ -1479,7 +1479,7 @@ function bsearch_censor_string( $string, $badwords, $censorChar = '*' ) {
 	}
 
 	$newstring = array();
-	$newstring['orig'] = html_entity_decode( $string );
+	$newstring['orig'] = ( $string );
 	$newstring['clean'] = preg_replace( $badwords, $replacement, $newstring['orig'] );
 
 	return $newstring;

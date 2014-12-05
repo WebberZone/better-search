@@ -38,7 +38,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 == Upgrade Notice ==
 
 = 1.3.5 =
-Bug fixes;
+Fixed Reflective XSS vulnerability; other bug fixes;
 Check the Changelog for details
 
 
@@ -46,6 +46,7 @@ Check the Changelog for details
 
 = 1.3.5 =
 * Fixed: Seamless mode interfered with the Media search in the Admin
+* Fixed: Potential Reflective XSS vulnerability
 
 = 1.3.4 =
 * New: Option to add `noindex,nofollow` meta tag to the header
