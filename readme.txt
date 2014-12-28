@@ -1,10 +1,10 @@
 === Better Search ===
-Tags: search, Better Search, related search, search results, heatmap, popular searches, top searches, relevance
+Tags: search, Better Search, related search, relevant search, search results, heatmap, popular searches, top searches, relevance
 Contributors: Ajay
 Donate link: http://ajaydsouza.com/donate/
 Stable tag: trunk
 Requires at least: 3.1
-Tested up to: 4.0
+Tested up to: 4.2
 License: GPLv2 or later
 
 
@@ -37,12 +37,15 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 
 == Upgrade Notice ==
 
-= 1.3.5 =
-Fixed Reflective XSS vulnerability; other bug fixes;
+= 1.3.6 =
+Fixes missing wick files in Settings page 404 error;
 Check the Changelog for details
 
 
 == Changelog ==
+
+= 1.3.6 =
+Fixes missing wick files in Settings page 404 error
 
 = 1.3.5 =
 * Fixed: Seamless mode interfered with the Media search in the Admin
