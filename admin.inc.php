@@ -110,7 +110,7 @@ function bsearch_options() {
 	<div id="post-body" class="metabox-holder columns-2">
 	<div id="post-body-content">
 	  <form method="post" id="bsearch_options" name="bsearch_options" onsubmit="return checkForm()">
-	    <div id="genopdiv" class="postbox closed"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
+	    <div id="genopdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
 	      <h3 class='hndle'><span><?php _e( 'General options', BSEARCH_LOCAL_NAME ); ?></span></h3>
 	      <div class="inside">
 			<table class="form-table">
@@ -207,7 +207,7 @@ function bsearch_options() {
 			</table>
 	      </div>
 	    </div>
-	    <div id="outputopdiv" class="postbox closed"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
+	    <div id="outputopdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
 	      <h3 class='hndle'><span><?php _e( 'Output options', BSEARCH_LOCAL_NAME ); ?></span></h3>
 	      <div class="inside">
 			<table class="form-table">
@@ -286,7 +286,7 @@ function bsearch_options() {
 			</table>
 	      </div>
 	    </div>
-	    <div id="customcssdiv" class="postbox closed"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
+	    <div id="customcssdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
 	      <h3 class='hndle'><span><?php _e( 'Custom CSS', BSEARCH_LOCAL_NAME ); ?></span></h3>
 	      <div class="inside">
 			<table class="form-table">
@@ -305,7 +305,7 @@ function bsearch_options() {
 	  </form>
 
 	  <form method="post" id="bsearch_reset_options" name="bsearch_reset_options" onsubmit="return checkForm()">
-	    <div id="resetopdiv" class="postbox closed"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
+	    <div id="resetopdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
 	      <h3 class='hndle'><span><?php _e( 'Reset count', BSEARCH_LOCAL_NAME ); ?></span></h3>
 	      <div class="inside">
 		    <p class="description">
@@ -464,29 +464,6 @@ function bsearch_adminhead() {
 		//]]>
 	</script>
 
-	<link rel="stylesheet" type="text/css" href="<?php echo $bsearch_url ?>/wick/wick.css" />
-	<script type="text/javascript" language="JavaScript">
-		//<![CDATA[
-		<?php
-		function wick_data() {
-			global $wpdb;
-
-			$categories = get_categories( 'hide_empty=0' );
-			$str = 'collection = [';
-			foreach ( $categories as $cat ) {
-				$str .= "'" . $cat->slug . "',";
-			}
-			$str = substr( $str, 0, -1 );	// Remove trailing comma
-			$str .= '];';
-
-			echo $str;
-		}
-		wick_data();
-		?>
-		//]]>
-	</script>
-
-	<script type="text/javascript" src="<?php echo $bsearch_url ?>/wick/wick.js"></script>
 	<script type="text/javascript" src="<?php echo $bsearch_url ?>/jscolor/jscolor.js"></script>
 <?php
 }
