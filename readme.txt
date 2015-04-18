@@ -39,7 +39,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 == Upgrade Notice ==
 
 = 1.4 =
-Highlight search results;
+Highlight search results; bug fixes;
 Check the Changelog for details
 
 
@@ -47,6 +47,7 @@ Check the Changelog for details
 
 = 1.4 =
 * New: Option to highlight search results. If missing, add: <code>.bsearch_highlight { background:#ffc; }</code> under Custom Styles
+* Fixed: Seamless mode would overwrite all queries, even those outside the loop
 
 = 1.3.6 =
 * Fixes missing wick files in Settings page 404 error

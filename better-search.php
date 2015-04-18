@@ -9,7 +9,7 @@
  *
  * @wordpress-plugin
  * Plugin Name: Better Search
- * Version:     1.3.6
+ * Version:     1.4-beta20150518
  * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
  * Author:      Ajay D'Souza
@@ -969,10 +969,10 @@ function the_pop_searches() {
  *
  * @param object $query
  */
-function bsearch_where_clause( $where ) {
-	global $wp_query, $wpdb, $bsearch_settings;
+function bsearch_where_clause( $where, $query ) {
+	global $wpdb, $bsearch_settings;
 
-	if ( $wp_query->is_search && $bsearch_settings['seamless'] && !is_admin() ) {
+	if ( $query->is_search() && $bsearch_settings['seamless'] && ! is_admin() && $query->is_main_query() ) {
 		$search_ids = bsearch_clause_prepare();
 
 		if ( '' != $search_ids ) {
@@ -981,7 +981,7 @@ function bsearch_where_clause( $where ) {
 	}
 	return $where;
 }
-add_filter( 'posts_where' , 'bsearch_where_clause' );
+add_filter( 'posts_where' , 'bsearch_where_clause', 10, 2 );
 
 
 /**
@@ -989,10 +989,10 @@ add_filter( 'posts_where' , 'bsearch_where_clause' );
  *
  * @param object $query
  */
-function bsearch_orderby_clause( $orderby ) {
-	global $wp_query, $wpdb, $bsearch_settings;
+function bsearch_orderby_clause( $orderby, $query ) {
+	global $wpdb, $bsearch_settings;
 
-	if ( $wp_query->is_search && $bsearch_settings['seamless'] && !is_admin() ) {
+	if ( $query->is_search() && $bsearch_settings['seamless'] && ! is_admin() && $query->is_main_query() ) {
 		$search_ids = bsearch_clause_prepare();
 
 		if ( '' != $search_ids ) {
@@ -1001,7 +1001,7 @@ function bsearch_orderby_clause( $orderby ) {
 	}
 	return $orderby;
 }
-add_filter( 'posts_orderby' , 'bsearch_orderby_clause' );
+add_filter( 'posts_orderby' , 'bsearch_orderby_clause', 10, 2 );
 
 
 /**
@@ -1073,7 +1073,7 @@ add_action( 'wp_head', 'bsearch_clause_head' );
 
 
 /**
- * Filters the_content.
+ * Highlight the search term
  *
  * @param	string	$content	Post content
  * @return 	string	Post Content
@@ -1081,7 +1081,7 @@ add_action( 'wp_head', 'bsearch_clause_head' );
 function bsearch_content( $content ) {
 	global $bsearch_settings, $wp_query;
 
-	if ( $wp_query->is_search && $bsearch_settings['seamless'] && !is_admin() ) {
+	if ( $wp_query->is_search() && $bsearch_settings['seamless'] && ! is_admin() && in_the_loop() ) {
 		$search_query = trim( bsearch_clean_terms( apply_filters( 'the_search_query', get_search_query() ) ) );
 
 		$search_query = preg_quote( $search_query, '/' );
@@ -1094,6 +1094,7 @@ function bsearch_content( $content ) {
 }
 add_filter( 'the_content', 'bsearch_content' );
 add_filter( 'get_the_excerpt', 'bsearch_content' );
+add_filter( 'the_title', 'bsearch_content' );
 
 
 /**
