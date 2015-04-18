@@ -200,22 +200,38 @@ function get_bsearch_results( $search_query = '', $limit ) {
 		if ( $searches ) {
 			$output .= get_bsearch_header( $search_query, $numrows, $limit );
 
+			$search_query = preg_quote( $search_query, '/' );
+			$keys = explode( " ", $search_query );
+
 			foreach ( $searches as $search ) {
 				$score = $search->score;
 				$search = get_post( $search->ID );
 				$post_title = get_the_title( $search->ID );
 
+				/* Highlight the search terms in the title */
+				$post_title  = preg_replace( '/(' . implode( '|', $keys ) . ')/iu', '<span class="bsearch_highlight">$1</span>', $post_title );
+
 				$output .= '<h2><a href="' . get_permalink( $search->ID ).'" rel="bookmark">' . $post_title . '</a></h2>';
+
 				$output .= '<p>';
 				$output .= '<span class="bsearch_score">' . get_bsearch_score( $search, $score, $topscore ) . '</span>';
+
 				$before = __( 'Posted on: ', BSEARCH_LOCAL_NAME );
+
 				$output .= '<span class="bsearch_date">' . get_bsearch_date( $search, __( 'Posted on: ', BSEARCH_LOCAL_NAME ) ) . '</span>';
 				$output .= '</p>';
+
 				$output .= '<p>';
 				if ( $bsearch_settings['include_thumb']) {
 					$output .= '<p class="bsearch_thumb">' . get_the_post_thumbnail( $search->ID, 'thumbnail' ) . '</p>';
 				}
-				$output .= '<span class="bsearch_excerpt">' . get_bsearch_excerpt( $search->ID, $bsearch_settings['excerpt_length'] ) . '</span>';	// This displays the post excerpt / creates it. Replace with $output .= $content; to use content instead of excerpt
+
+				/* Highlight the search terms in the excerpt */
+				$excerpt = get_bsearch_excerpt( $search->ID, $bsearch_settings['excerpt_length'] );
+				$excerpt = preg_replace( '/(' . implode( '|', $keys ) . ')/iu', '<span class="bsearch_highlight">$1</span>', $excerpt );
+
+				$output .= '<span class="bsearch_excerpt">' . $excerpt . '</span>';
+
 				$output .= '</p>';
 			} //end of foreach loop
 
@@ -1028,21 +1044,57 @@ function bsearch_clause_prepare() {
  */
 function bsearch_clause_head() {
 	global $wp_query, $bsearch_settings;
+	$bsearch_custom_CSS = stripslashes( $bsearch_settings['custom_CSS'] );
 
 	$output = '';
 
-	if ( $wp_query->is_search && $bsearch_settings['seamless'] && ! is_paged() ) {
-		$search_query = trim( bsearch_clean_terms( apply_filters( 'the_search_query', get_search_query() ) ) );
-		$output .= bsearch_increment_counter( $search_query );
-	}
+	if ( $wp_query->is_search ) {
 
-	if ( $wp_query->is_search && $bsearch_settings['meta_noindex'] ) {
-		$output .= '<meta name="robots" content="noindex,follow" />';
+		if ( $bsearch_settings['seamless'] && ! is_paged() ) {
+			$search_query = trim( bsearch_clean_terms( apply_filters( 'the_search_query', get_search_query() ) ) );
+			$output .= bsearch_increment_counter( $search_query );
+		}
+
+		if ( $bsearch_settings['meta_noindex'] ) {
+			$output .= '<meta name="robots" content="noindex,follow" />';
+		}
+
+		// Add custom CSS to header
+		if ( '' != $bsearch_custom_CSS ) {
+			echo '<style type="text/css">' . $bsearch_custom_CSS . '</style>';
+		}
+
 	}
 
 	echo $output;
 }
 add_action( 'wp_head', 'bsearch_clause_head' );
+
+
+
+/**
+ * Filters the_content.
+ *
+ * @param	string	$content	Post content
+ * @return 	string	Post Content
+ */
+function bsearch_content( $content ) {
+	global $bsearch_settings, $wp_query;
+
+	if ( $wp_query->is_search && $bsearch_settings['seamless'] && !is_admin() ) {
+		$search_query = trim( bsearch_clean_terms( apply_filters( 'the_search_query', get_search_query() ) ) );
+
+		$search_query = preg_quote( $search_query, '/' );
+		$keys = explode( " ", $search_query );
+
+		$content = preg_replace( '/(' . implode( '|', $keys ) . ')/iu', '<span class="bsearch_highlight">$1</span>', $content );
+	}
+
+	return apply_filters( 'bsearch_content', $content );
+}
+add_filter( 'the_content', 'bsearch_content' );
+add_filter( 'get_the_excerpt', 'bsearch_content' );
+
 
 /**
  * Create a Wordpress Widget for Popular search terms.
@@ -1195,6 +1247,7 @@ function bsearch_default_options() {
 	#heatmap { margin: 20px; padding: 20px; border: 1px dashed #ccc }
 	.bsearch_results_page { max-width:90%; margin: 20px; padding: 20px; }
 	.bsearch_footer { text-align: center; }
+	.bsearch_highlight { background:#ffc; }
 	';
 
 	$badwords = array( 'anal', 'anus', 'ass', 'bastard', 'beastiality', 'bestiality', 'bewb', 'bitch', 'blow', 'blumpkin', 'boob', 'cawk', 'cock', 'choad', 'cooter', 'cornhole', 'cum', 'cunt', 'dick', 'dildo', 'dong', 'dyke', 'douche', 'fag', 'faggot', 'fart', 'foreskin', 'fuck', 'fuk', 'gangbang', 'gook', 'handjob', 'homo', 'honkey', 'humping', 'jiz', 'jizz', 'kike', 'kunt', 'labia', 'muff', 'nigger', 'nutsack', 'pen1s', 'penis', 'piss', 'poon', 'poop', 'porn', 'punani', 'pussy', 'queef', 'queer', 'quim', 'rimjob', 'rape', 'rectal', 'rectum', 'semen', 'sex', 'shit', 'slut', 'spick', 'spoo', 'spooge', 'taint', 'titty', 'titties', 'twat', 'vag', 'vagina', 'vulva', 'wank', 'whore', );
@@ -1235,8 +1288,9 @@ function bsearch_default_options() {
 
 		'include_heatmap' => false,		// Include heatmap of searches in the search page
 		'include_thumb' => false,		// Include thumbnail in search results
+		'highlight' => false,			// Highlight search terms
 
-		'badwords' => implode(',', $badwords),		// Bad words filter
+		'badwords' => implode( ',', $badwords ),		// Bad words filter
 	);
 	return $bsearch_settings;
 }
