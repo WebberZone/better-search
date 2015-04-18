@@ -45,7 +45,6 @@ function bsearch_options() {
 		$bsearch_settings['track_editors'] = isset( $_POST['track_editors']) ? true : false;
 
 		$bsearch_settings['include_heatmap'] = isset( $_POST['include_heatmap'] ) ? true : false;
-		$bsearch_settings['include_thumb'] = isset( $_POST['include_thumb'] ) ? true : false;
 		$bsearch_settings['heatmap_smallest'] = $_POST['heatmap_smallest'];
 		$bsearch_settings['heatmap_largest'] = $_POST['heatmap_largest'];
 		$bsearch_settings['heatmap_limit'] = $_POST['heatmap_limit'];
@@ -53,6 +52,9 @@ function bsearch_options() {
 		$bsearch_settings['heatmap_hot'] = $_POST['heatmap_hot'];
 		$bsearch_settings['heatmap_before'] = $_POST['heatmap_before'];
 		$bsearch_settings['heatmap_after'] = $_POST['heatmap_after'];
+
+		$bsearch_settings['include_thumb'] = isset( $_POST['include_thumb'] ) ? true : false;
+		$bsearch_settings['highlight'] = isset( $_POST['highlight'] ) ? true : false;
 
 		$bsearch_settings['weight_content'] = intval( $_POST['weight_content'] );
 		$bsearch_settings['weight_title'] = intval( $_POST['weight_title'] );
@@ -237,6 +239,15 @@ function bsearch_options() {
 					<td>
 					  <input type="checkbox" name="include_thumb" id="include_thumb" <?php if ( $bsearch_settings['include_thumb'] ) echo 'checked="checked"' ?> />
 					  <p class="description"><?php _e( 'Displays the featured image (post thumbnail) wherever available', BSEARCH_LOCAL_NAME ); ?></p>
+					</td>
+				</tr>
+				<tr><th scope="row"><label for="highlight"><?php _e( 'Highlight search terms', BSEARCH_LOCAL_NAME ); ?></label></th>
+					<td>
+					  <input type="checkbox" name="highlight" id="highlight" <?php if ( $bsearch_settings['highlight'] ) echo 'checked="checked"' ?> />
+					  <p class="description">
+					  	<?php _e( 'If enabled, the search terms are wrapped with the class <code>bsearch_highlight</code>. If it is missing, please add this under custom styles box below:', BSEARCH_LOCAL_NAME ); ?><br />
+					  	 <code>.bsearch_highlight { background:#ffc; }</code>
+					  </p>
 					</td>
 				</tr>
 				<tr style="background: #eee"><th scope="row" colspan="2"><strong><?php _e( 'Heatmap (Popular searches) Options:', BSEARCH_LOCAL_NAME ); ?></strong></th>

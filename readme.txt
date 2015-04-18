@@ -28,6 +28,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 * **Seamless integration**: From v1.3.3, you can activate seamless integration which will output the search results perfectly integrated into your theme without the need for custom search templates
 * **Relevance**: Search results are automatically sorted by relevance. You can also turn off relevancy based searching, in which case, results are sorted by date
 * **Control the results**: Fine tune the results by changing the weighting of post title and post content. Turn on BOOLEAN search to override the default NATURAL LANGUAGE search of mySQL
+* **Highlight**: Highlight the search terms in the results
 * **Popular searches**: Find out what visitors are searching for on your blog. Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap. Widget support for easy integration in your theme
 * **Customisation**: Support for a template file for perfect integration into your blog template. Alternatively, just input your own CSS styles in the *Custom Styles* tab in the Settings Page. Check the FAQ for more information
 * **Supports cache plugins**: Works with caching plugins like WP-Super-Cache and W3 Total Cache
@@ -37,15 +38,18 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 
 == Upgrade Notice ==
 
-= 1.3.6 =
-Fixes missing wick files in Settings page 404 error;
+= 1.4 =
+Highlight search results;
 Check the Changelog for details
 
 
 == Changelog ==
 
+= 1.4 =
+* New: Option to highlight search results. If missing, add: <code>.bsearch_highlight { background:#ffc; }</code> under Custom Styles
+
 = 1.3.6 =
-Fixes missing wick files in Settings page 404 error
+* Fixes missing wick files in Settings page 404 error
 
 = 1.3.5 =
 * Fixed: Seamless mode interfered with the Media search in the Admin
