@@ -6,18 +6,24 @@
  * with highly relevant search results improving your visitors search experience.
  *
  * @package BSearch
+ * @author    Ajay D'Souza <me@ajaydsouza.com>
+ * @license   GPL-2.0+
+ * @link      http://ajaydsouza.com
+ * @copyright 2009-2015 Ajay D'Souza
+ *
  *
  * @wordpress-plugin
  * Plugin Name: Better Search
- * Version:     1.4-beta20150518
  * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
+ * Version:     1.4-beta20150519
  * Author:      Ajay D'Souza
  * Author URI:  http://ajaydsouza.com/
  * Text Domain:	better-search
  * License:		GPL-2.0+
  * License URI:	http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path:	/languages
+ * GitHub Plugin URI: https://github.com/ajaydsouza/better-search/
  */
 
 // If this file is called directly, then abort execution.
@@ -25,29 +31,57 @@ if ( ! defined( 'WPINC' ) ) {
 	die( "Aren't you supposed to come here via WP-Admin?" );
 }
 
+
 /**
  * Holds the filesystem directory path
+ *
+ * @since	1.3.3
  */
 define( 'ALD_BSEARCH_DIR', dirname( __FILE__ ) );
 
+
 /**
  * Localisation name
+ *
+ * @since	1.3.3
  */
 define( 'BSEARCH_LOCAL_NAME', 'better-search' );
 
-// Set the global variables for Better Search path and URL
+/**
+ * Holds the filesystem directory path (with trailing slash) for Better Search
+ *
+ * @since	1.0
+ *
+ * @var string
+ */
 $bsearch_path = plugin_dir_path( __FILE__ );
+
+
+/**
+ * Holds the URL for Better Search folder
+ *
+ * @since	1.0
+ *
+ * @var string
+ */
 $bsearch_url = plugins_url() . '/' . plugin_basename( dirname( __FILE__ ) );
 
 
 /**
- * $bsearch_db_version is the current database version of bsearch
+ * Global variable holding the current database version of Better Search
+ *
+ * @since	1.0
+ *
+ * @var string
  */
 global $bsearch_db_version;
 $bsearch_db_version = "1.0";
 
+
 /**
  * Declare $bsearch_settings global so that it can be accessed in every function
+ *
+ * @since	1.3
  */
 global $bsearch_settings;
 $bsearch_settings = bsearch_read_options();
@@ -56,7 +90,7 @@ $bsearch_settings = bsearch_read_options();
 /**
  * Function to load translation files.
  *
- * @return void
+ * @since	1.3.3
  */
 function bsearch_lang_init() {
 	load_plugin_textdomain( BSEARCH_LOCAL_NAME, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
@@ -69,6 +103,8 @@ add_action( 'init', 'bsearch_lang_init' );
  *
  * First checks if the theme contains a search template and uses that
  * If search template is missing, generates the results below
+ *
+ * @since	1.0
  */
 function bsearch_template_redirect() {
 	// not a search page; don't do anything and return
@@ -94,16 +130,21 @@ function bsearch_template_redirect() {
 	@header( "HTTP/1.1 200 OK", 1 );
 	@header( "Status: 200 OK", 1 );
 
-	$search_query = trim( bsearch_clean_terms( apply_filters( 'the_search_query', get_search_query() ) ) );
+	$search_query = get_bsearch_query();
+
 	$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : $bsearch_settings['limit']; // Read from GET variable
 
+ 	// Added necessary code to the head
 	add_action( 'wp_head', 'bsearch_head' );
+
+ 	// Set thw title
 	add_filter( 'wp_title', 'bsearch_title' );
 
 	// If there is a template file within the parent or child theme then we use it
 	$priority_template_lookup = array(
 		get_stylesheet_directory() . '/better-search-template.php',
-		get_template_directory() . '/better-search-template.php'
+		get_template_directory() . '/better-search-template.php',
+		plugin_dir_path( __FILE__ ) . 'templates/template.php',
 	);
 
 	foreach( $priority_template_lookup as $exists ) {
@@ -112,48 +153,10 @@ function bsearch_template_redirect() {
 
 			include_once( $exists );
 			exit;
+
 		}
+
 	}
-
-	// Create a template here if there is a template
-	get_header();
-
-	echo '<div id="content" class="bsearch_results_page">';
-	echo get_bsearch_form( $search_query );
-
-	echo '<div id="bsearchresults"><h1 class="page-title">';
-	echo __( 'Search Results for: ', BSEARCH_LOCAL_NAME ). '<span>' . $search_query . '</span>' ;
-	echo '</h1>';
-
-	echo get_bsearch_results( $search_query, $limit );
-
-	echo '</div>';	// Close id="bsearchresults"
-	echo get_bsearch_form( $search_query );
-
-	if ( $bsearch_settings['include_heatmap'] ) {
-		echo '<div id="heatmap">';
-		echo '<div class="heatmap_daily">';
-		echo '<h2>';
-		echo strip_tags( $bsearch_settings['title_daily'] );
-		echo '</h2>';
-		echo get_bsearch_heatmap( 'daily=1' );	// Overall heatmap
-		echo '</div>';	// Close class="heatmap_daily"
-		echo '<div class="heatmap_overall">';
-		echo '<h2>';
-		echo strip_tags( $bsearch_settings['title'] );
-		echo '</h2>';
-		echo get_bsearch_heatmap( 'daily=0' );	// Overall heatmap
-		echo '</div>';	// Close class="heatmap_overall"
-		echo '<div style="clear:both">&nbsp;</div>';
-		echo '</div>';
-	}
-
-	echo '</div>';	// Close id="content"
-
-	//get_sidebar();
-
-	get_footer();
-	exit;
 }
 add_action( 'template_redirect', 'bsearch_template_redirect', 1 );
 
@@ -161,9 +164,11 @@ add_action( 'template_redirect', 'bsearch_template_redirect', 1 );
 /**
  * Gets the search results
  *
- * @param string $search_query Search term
- * @param int|string $limit Maximum number of search results
- * @return string Search results
+ * @since	1.2
+ *
+ * @param	string		$search_query	Search term
+ * @param	int|string	$limit			Maximum number of search results
+ * @return	string		Search results
  */
 function get_bsearch_results( $search_query = '', $limit ) {
 	global $wpdb, $bsearch_settings;
@@ -209,7 +214,9 @@ function get_bsearch_results( $search_query = '', $limit ) {
 				$post_title = get_the_title( $search->ID );
 
 				/* Highlight the search terms in the title */
-				$post_title  = preg_replace( '/(' . implode( '|', $keys ) . ')/iu', '<span class="bsearch_highlight">$1</span>', $post_title );
+				if ( $bsearch_settings['highlight'] ) {
+					$post_title  = preg_replace( '/(' . implode( '|', $keys ) . ')/iu', '<span class="bsearch_highlight">$1</span>', $post_title );
+				}
 
 				$output .= '<h2><a href="' . get_permalink( $search->ID ).'" rel="bookmark">' . $post_title . '</a></h2>';
 
@@ -226,9 +233,12 @@ function get_bsearch_results( $search_query = '', $limit ) {
 					$output .= '<p class="bsearch_thumb">' . get_the_post_thumbnail( $search->ID, 'thumbnail' ) . '</p>';
 				}
 
-				/* Highlight the search terms in the excerpt */
 				$excerpt = get_bsearch_excerpt( $search->ID, $bsearch_settings['excerpt_length'] );
-				$excerpt = preg_replace( '/(' . implode( '|', $keys ) . ')/iu', '<span class="bsearch_highlight">$1</span>', $excerpt );
+
+				/* Highlight the search terms in the excerpt */
+				if ( $bsearch_settings['highlight'] ) {
+					$excerpt = preg_replace( '/(' . implode( '|', $keys ) . ')/iu', '<span class="bsearch_highlight">$1</span>', $excerpt );
+				}
 
 				$output .= '<span class="bsearch_excerpt">' . $excerpt . '</span>';
 
@@ -259,10 +269,30 @@ function get_bsearch_results( $search_query = '', $limit ) {
 
 
 /**
+ * Fetch the search query for Better Search.
+ *
+ * @since	1.4
+ *
+ * @return	string	Better Search query
+ */
+function get_bsearch_query() {
+
+	$search_query = bsearch_clean_terms(
+		apply_filters( 'the_search_query', get_search_query() )
+	);
+
+	return apply_filters( 'get_bsearch_query', $search_query );
+
+}
+
+
+/**
  * returns an array with the cleaned-up search string at the zero index and possibly a list of terms in the second.
  *
- * @param mixed $search_query The search term
- * @return array Cleaned up search string
+ * @since	1.2
+ *
+ * @param	mixed	$search_query	The search term
+ * @return	array	Cleaned up search string
  */
 function get_bsearch_terms( $search_query = '' ) {
 	global $bsearch_settings;
@@ -310,9 +340,11 @@ function get_bsearch_terms( $search_query = '' ) {
 /**
  * Get the matches for the search term.
  *
- * @param mixed $search_info Search terms array
- * @param mixed $bydate Sort by date?
- * @return array Search results
+ * @since	1.2
+ *
+ * @param	mixed	$search_info	Search terms array
+ * @param	mixed	$bydate			Sort by date?
+ * @return	array	Search results
  */
 function get_bsearch_matches( $search_info, $bydate ) {
 	global $wpdb, $bsearch_settings;
@@ -402,9 +434,11 @@ function get_bsearch_matches( $search_info, $bydate ) {
 /**
  * returns an array with the first and last indices to be displayed on the page.
  *
- * @param int $numrows
- * @param int $limit
- * @return array First and last indices to be displayed on the page
+ * @since	1.2
+ *
+ * @param	int		$numrows
+ * @param 	int		$limit
+ * @return	array	First and last indices to be displayed on the page
  */
 function get_bsearch_range( $numrows, $limit ) {
 	global $bsearch_settings;
@@ -425,10 +459,12 @@ function get_bsearch_range( $numrows, $limit ) {
 /**
  * Function to return the header links of the results page.
  *
- * @param string $search_query Search string
- * @param int $numrows Total number of results
- * @param int $limit Results per page
- * @return string Header table of results pages
+ * @since	1.2
+ *
+ * @param	string	$search_query	Search string
+ * @param	int		$numrows 		Total number of results
+ * @param	int 	$limit 			Results per page
+ * @return	string	Formatted header table of search results pages
  */
 function get_bsearch_header( $search_query, $numrows, $limit ) {
 
@@ -482,10 +518,12 @@ function get_bsearch_header( $search_query, $numrows, $limit ) {
 /**
  * Function to return the footer links of the results page.
  *
- * @param string $search_query
- * @param int $numrows
- * @param int $limit
- * @return string
+ * @since	1.2
+ *
+ * @param	string $search_query
+ * @param	int $numrows
+ * @param	int $limit
+ * @return	string	Formatted footer of search results pages
  */
 function get_bsearch_footer( $search_query, $numrows, $limit ) {
 
@@ -542,10 +580,12 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 /**
  * Function to convert the mySQL score to percentage.
  *
- * @param object $search Search result object
- * @param int $score Score for the search result
- * @param int $topscore Score for the most relevant search result
- * @return int Score converted to percentage
+ * @since	1.2
+ *
+ * @param	object	$search		Search result object
+ * @param	int 	$score 		Score for the search result
+ * @param	int 	$topscore 	Score for the most relevant search result
+ * @return	int 	Score converted to percentage
  */
 function get_bsearch_score( $search, $score, $topscore ) {
 
@@ -563,11 +603,13 @@ function get_bsearch_score( $search, $score, $topscore ) {
 /**
  * Function to get post date.
  *
- * @param object $search Search result object
- * @param string $before Added before the date
- * @param string $after Added after the date
- * @param string $format Date format
- * @return string Formatted date string
+ * @since	1.2
+ *
+ * @param 	object 	$search 	Search result object
+ * @param 	string 	$before 	Added before the date
+ * @param 	string 	$after 		Added after the date
+ * @param 	string 	$format 	Date format
+ * @return 	string 	Formatted date string
  */
 function get_bsearch_date( $search, $before = '', $after = '', $format = '' ) {
 	if ( ! $format ) {
@@ -583,10 +625,11 @@ function get_bsearch_date( $search, $before = '', $after = '', $format = '' ) {
 /**
  * Function to create an excerpt for the post.
  *
- * @access public
- * @param int $id Post ID
- * @param int|string $excerpt_length Length of the excerpt in words
- * @return string Excerpt
+ * @since	1.2
+ *
+ * @param	int 		$id				Post ID
+ * @param	int|string	$excerpt_length	Length of the excerpt in words
+ * @return	string 		Excerpt
  */
 function get_bsearch_excerpt( $id, $excerpt_length = 0, $use_excerpt = true ) {
 	$content = $excerpt = '';
@@ -610,9 +653,10 @@ function get_bsearch_excerpt( $id, $excerpt_length = 0, $use_excerpt = true ) {
 /**
  * Get the Search Heatmap.
  *
- * @access public
- * @param array|string $args Heatmap Parameters
- * @return string
+ * @since	1.2
+ *
+ * @param	array|string	$args	Heatmap Parameters
+ * @return	string	Search heatmap
  */
 function get_bsearch_heatmap( $args = array() ) {
 	global $wpdb, $bsearch_url, $bsearch_settings;
@@ -760,8 +804,10 @@ function get_bsearch_heatmap( $args = array() ) {
 /**
  * Function to update search count.
  *
- * @param string $search_query
- * @return string
+ * @since	1.0
+ *
+ * @param	string	$search_query	Search query
+ * @return	string	Search tracker code
  */
 function bsearch_increment_counter( $search_query ) {
 	global $bsearch_url, $bsearch_settings;
@@ -786,7 +832,8 @@ function bsearch_increment_counter( $search_query ) {
 /**
  * Insert styles into WordPress Head. Filters `wp_head`.
  *
- * @return string
+ * @since	1.0
+ *
  */
 function bsearch_head() {
 
@@ -818,8 +865,10 @@ function bsearch_head() {
 /**
  * Change page title. Filters `wp_title`.
  *
- * @param string $title
- * @return string
+ * @since	1.0
+ *
+ * @param	string	$title
+ * @return	string	Title of the page
  */
 function bsearch_title( $title ) {
 
@@ -840,8 +889,10 @@ function bsearch_title( $title ) {
 /**
  * Function to fetch search form.
  *
- * @param string $search_query
- * @return string
+ * @since	1.1
+ *
+ * @param 	string 	$search_query	Search query
+ * @return 	string	Search form
  */
 function get_bsearch_form( $search_query ) {
 
@@ -861,8 +912,10 @@ function get_bsearch_form( $search_query ) {
 /**
  * Function to retrieve Daily Popular Searches Title.
  *
- * @param bool $text_only (default: true)
- * @return string
+ * @since	1.1
+ *
+ * @param	bool	$text_only	With or without tags?
+ * @return	string	Title of Daily Popular searches
  */
 function get_bsearch_title_daily( $text_only = true ) {
 
@@ -876,8 +929,10 @@ function get_bsearch_title_daily( $text_only = true ) {
 /**
  * Function to retrieve Overall Popular Searches Title.
  *
- * @param bool $text_only (default: true)
- * @return string
+ * @since	1.1
+ *
+ * @param	bool	$text_only	With or without tags?
+ * @return	string	Title of Overall Popular searches
  */
 function get_bsearch_title( $text_only = true ) {
 
@@ -891,7 +946,9 @@ function get_bsearch_title( $text_only = true ) {
 /**
  * Manual Daily Better Search Heatmap.
  *
- * @return string
+ * @since	1.0
+ *
+ * @return	string	Daily search heatmap
  */
 function get_bsearch_pop_daily() {
 
@@ -922,6 +979,8 @@ function get_bsearch_pop_daily() {
 /**
  * Echo daily popular searches.
  *
+ * @since	1.0
+ *
  */
 function the_pop_searches_daily() {
 	echo get_bsearch_pop_daily();
@@ -931,7 +990,9 @@ function the_pop_searches_daily() {
 /**
  * Manual Overall Better Search Heatmap.
  *
- * @return $string
+ * @since	1.0
+ *
+ * @return	$string	Popular searches heatmap
  */
 function get_bsearch_pop() {
 
@@ -958,6 +1019,8 @@ function get_bsearch_pop() {
 /**
  * Echo popular searches list.
  *
+ * @since	1.0
+ *
  */
 function the_pop_searches() {
 	echo get_bsearch_pop();
@@ -967,7 +1030,11 @@ function the_pop_searches() {
 /**
  * Modify search results page with results from Better Search. Filters posts_where.
  *
- * @param object $query
+ * @since	1.3.3
+ *
+ * @param	string	$where	WHERE clause of main query
+ * @param	object	$query	WordPress query
+ * @return	Formatted WHERE clause
  */
 function bsearch_where_clause( $where, $query ) {
 	global $wpdb, $bsearch_settings;
@@ -987,7 +1054,11 @@ add_filter( 'posts_where' , 'bsearch_where_clause', 10, 2 );
 /**
  * Modify search results page with results from Better Search. Filters posts_orderby.
  *
- * @param object $query
+ * @since	1.3.3
+ *
+ * @param	string	$orderby	ORDERBY clause of main query
+ * @param	object	$query		WordPress query
+ * @return	Formatted ORDERBY clause
  */
 function bsearch_orderby_clause( $orderby, $query ) {
 	global $wpdb, $bsearch_settings;
@@ -1007,8 +1078,9 @@ add_filter( 'posts_orderby' , 'bsearch_orderby_clause', 10, 2 );
 /**
  * Fetches the search results for the current search query and returns a comma separated string of IDs.
  *
- * @access public
- * @return string Blank string or comma separated string of search results' IDs
+ * @since	1.3.3
+ *
+ * @return	string	Blank string or comma separated string of search results' IDs
  */
 function bsearch_clause_prepare() {
 	global $wp_query, $wpdb;
@@ -1037,10 +1109,11 @@ function bsearch_clause_prepare() {
 
 
 /**
- * Add counter increment to wp_head only if seamless mode is turned on.
+ * Clause to add code to wp_head
  *
- * @access public
- * @return void
+ * @since	1.3.3
+ *
+ * @return	string	HTML added to the wp_head
  */
 function bsearch_clause_head() {
 	global $wp_query, $bsearch_settings;
@@ -1075,6 +1148,8 @@ add_action( 'wp_head', 'bsearch_clause_head' );
 /**
  * Highlight the search term
  *
+ * @since	1.4
+ *
  * @param	string	$content	Post content
  * @return 	string	Post Content
  */
@@ -1099,6 +1174,8 @@ add_filter( 'the_title', 'bsearch_content' );
 
 /**
  * Create a Wordpress Widget for Popular search terms.
+ *
+ * @since	1.3.3
  *
  * @extends WP_Widget
  */
@@ -1147,6 +1224,7 @@ class BSearch_Widget extends WP_Widget {
 		<?php
 	} //ending form creation
 
+
 	/**
 	 * Sanitize widget form values as they are saved.
 	 *
@@ -1164,6 +1242,7 @@ class BSearch_Widget extends WP_Widget {
 		$instance['daily_range'] = strip_tags( $new_instance['daily_range'] );
 		return $instance;
 	} //ending update
+
 
 	/**
 	 * Front-end display of widget.
@@ -1220,6 +1299,8 @@ class BSearch_Widget extends WP_Widget {
 /**
  * Initialise Better Search Widgets.
  *
+ * @since	1.3.3
+ *
  */
 function bsearch_register_widget() {
 	register_widget('BSearch_Widget');
@@ -1230,7 +1311,9 @@ add_action( 'widgets_init', 'bsearch_register_widget', 1 );
 /**
  * Default options.
  *
- * @return array
+ * @since	1.0
+ *
+ * @return	array	Default options array
  */
 function bsearch_default_options() {
 	$title = __( '<h3>Popular Searches</h3>', BSEARCH_LOCAL_NAME );
@@ -1300,7 +1383,9 @@ function bsearch_default_options() {
 /**
  * Function to read options from the database.
  *
- * @return array
+ * @since	1.0
+ *
+ * @return	array	Better Search options array
  */
 function bsearch_read_options() {
 
@@ -1335,6 +1420,8 @@ function bsearch_read_options() {
 
 /**
  * Create tables to store pageviews.
+ *
+ * @since	1.0
  *
  */
 function bsearch_install() {
@@ -1440,8 +1527,10 @@ register_activation_hook( __FILE__, 'bsearch_install' );
 /**
  * Clean search string from XSS exploits.
  *
- * @param string $val
- * @return string
+ * @since	1.0
+ *
+ * @param	string	$val	Potentially unclean string
+ * @return	string	Cleaned string
  */
 function bsearch_clean_terms( $val ) {
 	global $bsearch_settings;
@@ -1456,10 +1545,13 @@ function bsearch_clean_terms( $val ) {
 
 
 /**
- *  Generates a random string.
- *  @param string $chars Chars that can be used.
- *  @param int $len Length of the output string.
- *  @return string
+ * Generates a random string.
+ *
+ * @since	1.3.3
+ *
+ * @param	string	$chars	Chars that can be used.
+ * @param	int 	$len 	Length of the output string.
+ * @return	string	Random string
  */
 function bsearch_rand_censor( $chars, $len ) {
 
@@ -1482,12 +1574,14 @@ function bsearch_rand_censor( $chars, $len ) {
 
 
 /**
- *  Apply censorship to $string, replacing $badwords with $censorChar.
+ * Apply censorship to $string, replacing $badwords with $censorChar.
  *
- *  @param string $string String to be censored.
- *  @param string[int] $badwords Array of badwords.
- *  @param string $censorChar String which replaces bad words. If it's more than 1-char long, a random string will be generated from these chars. Default: '*'
- *  @return string[string]
+ * @since	1.3.3
+ *
+ * @param 	string	$string		String to be censored.
+ * @param 	array 	$badwords 	Array of badwords.
+ * @param 	string 	$censorChar	String which replaces bad words. If it's more than 1-char long, a random string will be generated from these chars. Default: '*'
+ * @return	string	Cleaned up string
  */
 function bsearch_censor_string( $string, $badwords, $censorChar = '*' ) {
 
@@ -1545,8 +1639,10 @@ function bsearch_censor_string( $string, $badwords, $censorChar = '*' ) {
 /**
  * Convert Hexadecimal colour code to RGB.
  *
- * @param string $color Hexadecimal colour
- * @return array Array containing RGB colour code
+ * @since	1.3.4
+ *
+ * @param	string	$color	Hexadecimal colour
+ * @return	array 	Array containing RGB colour code
  */
 function bsearch_html2rgb( $color ) {
 
@@ -1579,12 +1675,14 @@ function bsearch_html2rgb( $color ) {
 
 
 /**
- * Function to convert RGB colour code to Hexadecimal.
+ * Function to convert RGB color code to Hexadecimal.
  *
- * @param int|string|array $r Red colour or array of RGB values
- * @param int|string $g (default: -1) Green colour
- * @param int|string $b (default: -1) Green colour
- * @return void
+ * @since	1.3.4
+ *
+ * @param	int|string|array	$r	Red colour or array of RGB values
+ * @param	int|string 			$g	(default: -1) Green colour
+ * @param	int|string 			$b	(default: -1) Blue colour
+ * @return	string				HEX color code
  */
 function bsearch_rgb2html($r, $g = -1, $b = -1, $padhash = false ) {
 
@@ -1627,8 +1725,10 @@ if ( is_admin() || strstr( $_SERVER['PHP_SELF'], 'wp-admin/' ) ) {
 	/**
 	 * Adding WordPress plugin action links.
 	 *
-		 * @param array $links
-	 * @return array
+	 * @since	1.3
+	 *
+	 * @param	array	$links	Existing array of links
+	 * @return	array	Updated array
 	 */
 	function bsearch_plugin_actions_links( $links ) {
 
@@ -1642,12 +1742,15 @@ if ( is_admin() || strstr( $_SERVER['PHP_SELF'], 'wp-admin/' ) ) {
 	}
 	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'bsearch_plugin_actions_links' );
 
+
 	/**
 	 * Add meta links on Plugins page.
 	 *
-		 * @param array $links
-	 * @param string $file
-	 * @return void
+	 * @since	1.1.3
+	 *
+	 * @param	array	$links	Existing array of links
+	 * @param	string	$file	File
+	 * @return	array	Updated array
 	 */
 	function bsearch_plugin_actions( $links, $file ) {
 		static $plugin;
@@ -1662,12 +1765,7 @@ if ( is_admin() || strstr( $_SERVER['PHP_SELF'], 'wp-admin/' ) ) {
 		}
 		return $links;
 	}
-	global $wp_version;
-	if ( version_compare( $wp_version, '2.8alpha', '>' ) ) {
-		add_filter( 'plugin_row_meta', 'bsearch_plugin_actions', 10, 2 ); // only 2.8 and higher
-	} else {
-		add_filter( 'plugin_action_links', 'bsearch_plugin_actions', 10, 2 );
-	}
+	add_filter( 'plugin_row_meta', 'bsearch_plugin_actions', 10, 2 ); // only 2.8 and higher
 
 } // End admin.inc
 

@@ -13,22 +13,24 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Better Search options.
  *
+ * @since	1.0
+ *
  * @return void
  */
 function bsearch_options() {
 
 	global $wpdb;
-    $poststable = $wpdb->posts;
 
 	$bsearch_settings = bsearch_read_options();
 
+	// Parse post types
 	parse_str( $bsearch_settings['post_types'], $post_types );
 	$wp_post_types = get_post_types( array(
 		'public' => true,
 	) );
 	$posts_types_inc = array_intersect( $wp_post_types, $post_types );
 
-	if( ( isset( $_POST['bsearch_save'] ) ) && ( check_admin_referer('bsearch-plugin') ) ) {
+	if( ( isset( $_POST['bsearch_save'] ) ) && ( check_admin_referer( 'bsearch-plugin-settings' ) ) ) {
 
 		$bsearch_settings['track_popular'] = isset( $_POST['track_popular'] ) ? true : false;
 		$bsearch_settings['seamless'] = isset( $_POST['seamless'] ) ? true : false;
@@ -83,7 +85,7 @@ function bsearch_options() {
 		echo $str;
 	}
 
-	if ( ( isset( $_POST['bsearch_default'] ) ) && ( check_admin_referer('bsearch-plugin') ) ) {
+	if ( ( isset( $_POST['bsearch_default'] ) ) && ( check_admin_referer( 'bsearch-plugin-settings' ) ) ) {
 		delete_option( 'ald_bsearch_settings' );
 		$bsearch_settings = bsearch_default_options();
 		update_option( 'ald_bsearch_settings', $bsearch_settings );
@@ -92,13 +94,13 @@ function bsearch_options() {
 		echo $str;
 	}
 
-	if ( ( isset( $_POST['bsearch_trunc_all'] ) ) && ( check_admin_referer('bsearch-plugin') ) ) {
+	if ( ( isset( $_POST['bsearch_trunc_all'] ) ) && ( check_admin_referer( 'bsearch-plugin-settings' ) ) ) {
 		bsearch_trunc_count( false );
 		$str = '<div id="message" class="updated fade"><p>' . __( 'Popular searches count reset', BSEARCH_LOCAL_NAME ) . '</p></div>';
 		echo $str;
 	}
 
-	if ( ( isset( $_POST['bsearch_trunc_daily'] ) ) && ( check_admin_referer('bsearch-plugin') ) ) {
+	if ( ( isset( $_POST['bsearch_trunc_daily'] ) ) && ( check_admin_referer( 'bsearch-plugin-settings' ) ) ) {
 		bsearch_trunc_count( true );
 		$str = '<div id="message" class="updated fade"><p>' . __( 'Daily popular searches count reset', BSEARCH_LOCAL_NAME ) . '</p></div>';
 		echo $str;
@@ -107,11 +109,11 @@ function bsearch_options() {
 ?>
 
 <div class="wrap">
-	<h2>Better Search</h2>
+	<h2><?php _e( 'Better Search', BSEARCH_LOCAL_NAME ); ?></h2>
 	<div id="poststuff">
 	<div id="post-body" class="metabox-holder columns-2">
 	<div id="post-body-content">
-	  <form method="post" id="bsearch_options" name="bsearch_options" onsubmit="return checkForm()">
+	  <form method="post" id="bsearch_options" name="bsearch_options">
 	    <div id="genopdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
 	      <h3 class='hndle'><span><?php _e( 'General options', BSEARCH_LOCAL_NAME ); ?></span></h3>
 	      <div class="inside">
@@ -312,7 +314,7 @@ function bsearch_options() {
 		  <input type="submit" name="bsearch_save" id="bsearch_save" value="<?php _e( 'Save Options', BSEARCH_LOCAL_NAME ); ?>" class="button button-primary" />
 		  <input type="submit" name="bsearch_default" id="bsearch_default" value="<?php _e( 'Default Options', BSEARCH_LOCAL_NAME ); ?>" class="button button-secondary" onclick="if ( ! confirm( '<?php _e( "Do you want to set options to Default?", BSEARCH_LOCAL_NAME ); ?>' ) ) return false;" />
 		</p>
-		<?php wp_nonce_field( 'bsearch-plugin' ); ?>
+		<?php wp_nonce_field( 'bsearch-plugin-settings' ); ?>
 	  </form>
 
 	  <form method="post" id="bsearch_reset_options" name="bsearch_reset_options" onsubmit="return checkForm()">
@@ -328,7 +330,7 @@ function bsearch_options() {
 		    </p>
 	      </div>
 	    </div>
-		<?php wp_nonce_field( 'bsearch-plugin' ); ?>
+		<?php wp_nonce_field( 'bsearch-plugin-settings' ); ?>
 	  </form>
 
 	</div><!-- /post-body-content -->
@@ -405,6 +407,7 @@ function bsearch_admin_side() {
 /**
  * Add menu item in WP-Admin.
  *
+ * @since	1.0
  */
 function bsearch_adminmenu() {
 
@@ -417,7 +420,7 @@ add_action( 'admin_menu', 'bsearch_adminmenu' );
 /**
  * Add CSS and JS to the admin head.
  *
- * @return void
+ * @since	1.0
  */
 function bsearch_adminhead() {
 	global $bsearch_url;
@@ -483,7 +486,9 @@ function bsearch_adminhead() {
 /**
  * Function to clean the database.
  *
- * @param bool $daily (default: true)
+ * @since	1.0
+ *
+ * @param	bool	$daily	TRUE = Daily tables, FALSE = Overall tables
  */
 function bsearch_trunc_count( $daily = true ) {
 	global $wpdb;
@@ -497,6 +502,7 @@ function bsearch_trunc_count( $daily = true ) {
 /**
  * Dashboard for Better Search.
  *
+ * @since	1.0
  */
 function bsearch_pop_dashboard() {
 	global $bsearch_settings;
@@ -514,6 +520,7 @@ function bsearch_pop_dashboard() {
 /**
  * Dashboard for Daily Better Search.
  *
+ * @since	1.0
  */
 function bsearch_pop_daily_dashboard() {
 	global $bsearch_settings;
@@ -531,6 +538,7 @@ function bsearch_pop_daily_dashboard() {
 /**
  * Add the dashboard widgets.
  *
+ * @since	1.3.3
  */
 function bsearch_dashboard_setup() {
 	wp_add_dashboard_widget( 'bsearch_pop_dashboard', __( 'Popular Searches', BSEARCH_LOCAL_NAME ), 'bsearch_pop_dashboard' );
@@ -542,13 +550,17 @@ add_action( 'wp_dashboard_setup', 'bsearch_dashboard_setup' );
 /**
  * Better Search plugin notice.
  *
- * @param mixed $plugin
- * @return void
+ * @since	1.3.3
+ *
+ * @param	string	$plugin
  */
 function bsearch_plugin_notice( $plugin ) {
 	global $cache_enabled;
+
  	if ( $plugin == 'better-search/admin.inc.php' && ! $cache_enabled && function_exists( 'admin_url' ) ) {
+
 		echo '<td colspan="5" class="plugin-update">Better Search must be configured. Go to <a href="' . admin_url( 'options-general.php?page=bsearch_options' ) . '">the admin page</a> to enable and configure the plugin.</td>';
+
 	}
 }
 //add_action( 'after_plugin_row', 'bsearch_plugin_notice' );

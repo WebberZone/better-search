@@ -48,6 +48,7 @@ Check the Changelog for details
 = 1.4 =
 * New: Option to highlight search results. If missing, add: <code>.bsearch_highlight { background:#ffc; }</code> under Custom Styles
 * Fixed: Seamless mode would overwrite all queries, even those outside the loop
+* Modified: Major code cleanup
 
 = 1.3.6 =
 * Fixes missing wick files in Settings page 404 error
