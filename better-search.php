@@ -1081,7 +1081,7 @@ add_action( 'wp_head', 'bsearch_clause_head' );
 function bsearch_content( $content ) {
 	global $bsearch_settings, $wp_query;
 
-	if ( $wp_query->is_search() && $bsearch_settings['seamless'] && ! is_admin() && in_the_loop() ) {
+	if ( $wp_query->is_search() && $bsearch_settings['seamless'] && ! is_admin() && in_the_loop() && $bsearch_settings['highlight'] ) {
 		$search_query = trim( bsearch_clean_terms( apply_filters( 'the_search_query', get_search_query() ) ) );
 
 		$search_query = preg_quote( $search_query, '/' );
