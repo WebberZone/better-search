@@ -490,7 +490,7 @@ function bsearch_adminhead() {
 		//]]>
 	</script>
 
-	<script type="text/javascript" src="<?php echo $bsearch_url ?>/jscolor/jscolor.js"></script>
+	<script type="text/javascript" src="<?php echo $bsearch_url ?>/admin/jscolor/jscolor.js"></script>
 <?php
 }
 
