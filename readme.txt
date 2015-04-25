@@ -38,16 +38,17 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 
 == Upgrade Notice ==
 
-= 1.4 =
+= 1.4.0 =
 Highlight search results; Filterable search query; bug fixes;
 Check the Changelog for details
 
 
 == Changelog ==
 
-= 1.4 =
+= 1.4.0 =
 * New: Option to highlight search results. If missing, add: <code>.bsearch_highlight { background:#ffc; }</code> under Custom Styles
 * New: Fully filterable search query
+* New: Recreate Index button in the settings page
 * Fixed: Seamless mode would overwrite all queries, even those outside the loop
 * Modified: Major code cleanup
 
