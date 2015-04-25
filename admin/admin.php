@@ -14,8 +14,6 @@ if ( ! defined( 'WPINC' ) ) {
  * Better Search options.
  *
  * @since	1.0
- *
- * @return void
  */
 function bsearch_options() {
 
@@ -350,7 +348,7 @@ function bsearch_options() {
 /**
  * Function to generate the right sidebar of the Settings and Admin popular posts pages.
  *
- * @return void
+ * @since	1.3.3
  */
 function bsearch_admin_side() {
 ?>
@@ -564,5 +562,49 @@ function bsearch_plugin_notice( $plugin ) {
 	}
 }
 //add_action( 'after_plugin_row', 'bsearch_plugin_notice' );
+
+
+/**
+ * Adding WordPress plugin action links.
+ *
+ * @since	1.3
+ *
+ * @param	array	$links	Existing array of links
+ * @return	array	Updated array
+ */
+function bsearch_plugin_actions_links( $links ) {
+
+	return array_merge(
+		array(
+			'settings' => '<a href="' . admin_url( 'options-general.php?page=bsearch_options' ) . '">' . __( 'Settings', BSEARCH_LOCAL_NAME ) . '</a>'
+		),
+		$links
+	);
+
+}
+add_filter( 'plugin_action_links_' . plugin_basename( plugin_dir_path( __DIR__ ) . 'better-search.php' ), 'bsearch_plugin_actions_links' );
+
+
+/**
+ * Add meta links on Plugins page.
+ *
+ * @since	1.1.3
+ *
+ * @param	array	$links	Existing array of links
+ * @param	string	$file	File
+ * @return	array	Updated array
+ */
+function bsearch_plugin_actions( $links, $file ) {
+	$plugin = plugin_basename( plugin_dir_path( __DIR__ ) . 'better-search.php' );
+
+	/**** Add links ****/
+	if ( $file == $plugin ) {
+		$links[] = '<a href="https://wordpress.org/support/plugin/better-search">' . __( 'Support', BSEARCH_LOCAL_NAME ) . '</a>';
+		$links[] = '<a href="https://ajaydsouza.com/donate/">' . __( 'Donate', BSEARCH_LOCAL_NAME ) . '</a>';
+		$links[] = '<a href="https://github.com/ajaydsouza/better-search">' . __( 'Contribute', BSEARCH_LOCAL_NAME ) . '</a>';
+	}
+	return $links;
+}
+add_filter( 'plugin_row_meta', 'bsearch_plugin_actions', 10, 2 ); // only 2.8 and higher
 
 ?>

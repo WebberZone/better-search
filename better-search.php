@@ -16,7 +16,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     1.4-beta20150522
+ * Version:     1.4-beta20150524
  * Author:      Ajay D'Souza
  * Author URI:  http://ajaydsouza.com/
  * Text Domain:	better-search
@@ -931,7 +931,7 @@ function bsearch_increment_counter( $search_query ) {
 	}
 
 	if ( $include_code ) {
-		$output = '<script type="text/javascript" data-cfasync="false" src="' . $bsearch_url . '/better-search-addcount.js.php?bsearch_id=' . $search_query . '"></script>';
+		$output = '<script type="text/javascript" data-cfasync="false" src="' . $bsearch_url . '/includes/better-search-addcount.js.php?bsearch_id=' . $search_query . '"></script>';
 	}
 
 	/**
@@ -1103,12 +1103,12 @@ function get_bsearch_title( $text_only = true ) {
  */
 function get_bsearch_pop_daily() {
 
-	global $bsearch_settings;
+	global $bsearch_settings, $bsearch_url;
 
 	$output = '';
 
 	if ( $bsearch_settings['d_use_js'] ) {
-		$output .= '<script type="text/javascript" src="' . get_bloginfo( 'wpurl' ) . '/wp-content/plugins/better-search/better-search-daily.js.php?widget=1"></script>';
+		$output .= '<script type="text/javascript" src="' . $bsearch_url . '/includes/better-search-daily.js.php?widget=1"></script>';
 	} else {
 		$output .= '<div class="bsearch_heatmap">';
 		$output .= $bsearch_settings['title_daily'];
@@ -1501,7 +1501,7 @@ class BSearch_Widget extends WP_Widget {
 			) );
 		} else {
 			if ( $bsearch_settings['d_use_js'] ) {
-				echo '<script type="text/javascript" src="'.$bsearch_url.'/better-search-daily.js.php?widget=1"></script>';
+				echo '<script type="text/javascript" src="' . $bsearch_url . '/includes/better-search-daily.js.php?widget=1"></script>';
 			} else {
 				echo get_bsearch_heatmap( array(
 					'daily' => 1,
@@ -1760,257 +1760,30 @@ function bsearch_install() {
 register_activation_hook( __FILE__, 'bsearch_install' );
 
 
-/**
- * Clean search string from XSS exploits.
- *
- * @since	1.0
- *
- * @param	string	$val	Potentially unclean string
- * @return	string	Cleaned string
- */
-function bsearch_clean_terms( $val ) {
-	global $bsearch_settings;
 
-	$badwords = array_map( 'trim', explode( ",", $bsearch_settings['badwords'] ) );
+/*----------------------------------------------------------------------------*
+ * Dashboard and Administrative Functionality
+ *----------------------------------------------------------------------------*/
 
-	$val_censored = bsearch_censor_string( $val, $badwords, ' ' );	// No more bad words
-	$val = $val_censored['clean'];
-	$val = wp_kses_post( $val );
-
-	/**
-	 * Clean search string from XSS exploits.
-	 *
-	 * @since	1.4
-	 *
-	 * @param	string	$val	Cleaned string
-	 */
-	return apply_filters( 'bsearch_clean_terms', $val );
-}
-
-
-/**
- * Generates a random string.
- *
- * @since	1.3.3
- *
- * @param	string	$chars	Chars that can be used.
- * @param	int 	$len 	Length of the output string.
- * @return	string	Random string
- */
-function bsearch_rand_censor( $chars, $len ) {
-
-	mt_srand(); // useful for < PHP4.2
-	$lastChar = strlen( $chars ) - 1;
-	$randOld = -1;
-	$out = '';
-
-	// create $len chars
-	for ( $i = $len; $i > 0; $i-- ) {
-		// generate random char - it must be different from previously generated
-		while ( ( $randNew = mt_rand( 0, $lastChar ) ) === $randOld ) { }
-		$randOld = $randNew;
-		$out .= $chars[ $randNew ];
-	}
-
-	return $out;
-
-}
-
-
-/**
- * Apply censorship to $string, replacing $badwords with $censorChar.
- *
- * @since	1.3.3
- *
- * @param 	string	$string		String to be censored.
- * @param 	array 	$badwords 	Array of badwords.
- * @param 	string 	$censorChar	String which replaces bad words. If it's more than 1-char long, a random string will be generated from these chars. Default: '*'
- * @return	string	Cleaned up string
- */
-function bsearch_censor_string( $string, $badwords, $censorChar = '*' ) {
-
-	$leet_replace = array();
-	$leet_replace['a']= '(a|a\.|a\-|4|@|Á|á|À|Â|à|Â|â|Ä|ä|Ã|ã|Å|å|α|Δ|Λ|λ)';
-	$leet_replace['b']= '(b|b\.|b\-|8|\|3|ß|Β|β)';
-	$leet_replace['c']= '(c|c\.|c\-|Ç|ç|¢|€|<|\(|{|©)';
-	$leet_replace['d']= '(d|d\.|d\-|&part;|\|\)|Þ|þ|Ð|ð)';
-	$leet_replace['e']= '(e|e\.|e\-|3|€|È|è|É|é|Ê|ê|∑)';
-	$leet_replace['f']= '(f|f\.|f\-|ƒ)';
-	$leet_replace['g']= '(g|g\.|g\-|6|9)';
-	$leet_replace['h']= '(h|h\.|h\-|Η)';
-	$leet_replace['i']= '(i|i\.|i\-|!|\||\]\[|]|1|∫|Ì|Í|Î|Ï|ì|í|î|ï)';
-	$leet_replace['j']= '(j|j\.|j\-)';
-	$leet_replace['k']= '(k|k\.|k\-|Κ|κ)';
-	$leet_replace['l']= '(l|1\.|l\-|!|\||\]\[|]|£|∫|Ì|Í|Î|Ï)';
-	$leet_replace['m']= '(m|m\.|m\-)';
-	$leet_replace['n']= '(n|n\.|n\-|η|Ν|Π)';
-	$leet_replace['o']= '(o|o\.|o\-|0|Ο|ο|Φ|¤|°|ø)';
-	$leet_replace['p']= '(p|p\.|p\-|ρ|Ρ|¶|þ)';
-	$leet_replace['q']= '(q|q\.|q\-)';
-	$leet_replace['r']= '(r|r\.|r\-|®)';
-	$leet_replace['s']= '(s|s\.|s\-|5|\$|§)';
-	$leet_replace['t']= '(t|t\.|t\-|Τ|τ)';
-	$leet_replace['u']= '(u|u\.|u\-|υ|µ)';
-	$leet_replace['v']= '(v|v\.|v\-|υ|ν)';
-	$leet_replace['w']= '(w|w\.|w\-|ω|ψ|Ψ)';
-	$leet_replace['x']= '(x|x\.|x\-|Χ|χ)';
-	$leet_replace['y']= '(y|y\.|y\-|¥|γ|ÿ|ý|Ÿ|Ý)';
-	$leet_replace['z']= '(z|z\.|z\-|Ζ)';
-
-	$words = explode(" ", $string);
-
-	// is $censorChar a single char?
-	$isOneChar = ( strlen( $censorChar ) === 1 );
-
-	for ( $x=0; $x < count( $badwords ); $x++ ) {
-
-		$replacement[ $x ] = $isOneChar
-	        ? str_repeat( $censorChar, strlen( $badwords[ $x ] ) )
-	        : bsearch_rand_censor( $censorChar, strlen( $badwords[ $x ] ) );
-
-		$badwords[ $x ] =  '/' . str_ireplace( array_keys( $leet_replace ), array_values( $leet_replace ), $badwords[ $x ] ) . '/i';
-	}
-
-	$newstring = array();
-	$newstring['orig'] = ( $string );
-	$newstring['clean'] = preg_replace( $badwords, $replacement, $newstring['orig'] );
-
-	return $newstring;
-
-}
-
-
-/**
- * Convert Hexadecimal colour code to RGB.
- *
- * @since	1.3.4
- *
- * @param	string	$color	Hexadecimal colour
- * @return	array 	Array containing RGB colour code
- */
-function bsearch_html2rgb( $color ) {
-
-	if ( $color[0] == '#' ) {
-		$color = substr( $color, 1 );
-	}
-
-	if ( strlen( $color ) == 6 ) {
-		list( $r, $g, $b ) = array(
-			$color[0] . $color[1],
-			$color[2] . $color[3],
-			$color[4] . $color[5]
-		);
-	} elseif ( strlen( $color ) == 3 ) {
-		list( $r, $g, $b ) = array(
-			$color[0] . $color[0],
-			$color[1] . $color[1],
-			$color[2] . $color[2]
-		);
-	} else {
-		return false;
-	}
-
-	$r = hexdec( $r );
-	$g = hexdec( $g );
-	$b = hexdec( $b );
-
-	return array( $r, $g, $b );
-}
-
-
-/**
- * Function to convert RGB color code to Hexadecimal.
- *
- * @since	1.3.4
- *
- * @param	int|string|array	$r	Red colour or array of RGB values
- * @param	int|string 			$g	(default: -1) Green colour
- * @param	int|string 			$b	(default: -1) Blue colour
- * @return	string				HEX color code
- */
-function bsearch_rgb2html($r, $g = -1, $b = -1, $padhash = false ) {
-
-    if ( is_array( $r ) && sizeof( $r ) == 3 ) {	// If $r is an array, extract the RGB values
-		list( $r, $g, $b ) = $r;
-	}
-
-    $r = intval( $r );
-    $g = intval( $g );
-    $b = intval( $b );
-
-    $r = dechex( $r < 0 ? 0 : ( $r > 255 ? 255 : $r ) );
-    $g = dechex( $g < 0 ? 0 : ( $g > 255 ? 255 : $g ) );
-    $b = dechex( $b < 0 ? 0 : ( $b > 255 ? 255 : $b ) );
-
-    $color = ( strlen ( $r ) < 2 ? '0' : '' ) . $r;
-    $color .= ( strlen( $g ) < 2 ? '0' : '' ) . $g;
-    $color .= ( strlen( $b ) < 2 ? '0' : '' ) . $b;
-
-    if ( $padhash ) {
-	    $color = '#' . $color;
-    }
-
-    return $color;
-}
-
-
-/**
- *  Admin option
- *
- */
+// This function adds an Options page in WP Admin
 if ( is_admin() || strstr( $_SERVER['PHP_SELF'], 'wp-admin/' ) ) {
 
 	/**
 	 *  Load the admin pages if we're in the Admin.
 	 *
 	 */
-	require_once( plugin_dir_path( __FILE__ ) . '/admin.inc.php' );
-
-	/**
-	 * Adding WordPress plugin action links.
-	 *
-	 * @since	1.3
-	 *
-	 * @param	array	$links	Existing array of links
-	 * @return	array	Updated array
-	 */
-	function bsearch_plugin_actions_links( $links ) {
-
-		return array_merge(
-			array(
-				'settings' => '<a href="' . admin_url( 'options-general.php?page=bsearch_options' ) . '">' . __( 'Settings', BSEARCH_LOCAL_NAME ) . '</a>'
-			),
-			$links
-		);
-
-	}
-	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'bsearch_plugin_actions_links' );
-
-
-	/**
-	 * Add meta links on Plugins page.
-	 *
-	 * @since	1.1.3
-	 *
-	 * @param	array	$links	Existing array of links
-	 * @param	string	$file	File
-	 * @return	array	Updated array
-	 */
-	function bsearch_plugin_actions( $links, $file ) {
-		static $plugin;
-		if ( ! $plugin ) {
-			$plugin = plugin_basename( __FILE__ );
-		}
-
-		// create link
-		if ( $file == $plugin ) {
-			$links[] = '<a href="http://wordpress.org/support/plugin/better-search">' . __( 'Support', BSEARCH_LOCAL_NAME ) . '</a>';
-			$links[] = '<a href="http://ajaydsouza.com/donate/">' . __( 'Donate', BSEARCH_LOCAL_NAME ) . '</a>';
-		}
-		return $links;
-	}
-	add_filter( 'plugin_row_meta', 'bsearch_plugin_actions', 10, 2 ); // only 2.8 and higher
+	require_once( plugin_dir_path( __FILE__ ) . '/admin/admin.php' );
 
 } // End admin.inc
+
+/*----------------------------------------------------------------------------*
+ * Utility functions
+ *----------------------------------------------------------------------------*/
+
+	/**
+	 *  Utility functions.
+	 *
+	 */
+	require_once( plugin_dir_path( __FILE__ ) . 'includes/utilities.php' );
 
 ?>
