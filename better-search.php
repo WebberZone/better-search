@@ -16,7 +16,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     1.4-beta20150524
+ * Version:     1.4-beta20150525
  * Author:      Ajay D'Souza
  * Author URI:  http://ajaydsouza.com/
  * Text Domain:	better-search
@@ -326,6 +326,7 @@ function get_bsearch_terms( $search_query = '' ) {
 	// if we are using fulltext, turn it off unless there's a search word longer than three chars
 	// ideally we'd also check against stopwords here
 	$search_words = explode( ' ', $search_query );
+
 	if ( $use_fulltext ) {
 		$use_fulltext_proxy = false;
 		foreach( $search_words as $search_word ) {
@@ -369,8 +370,17 @@ function get_bsearch_terms( $search_query = '' ) {
  * @param	mixed	$bydate			Sort by date?
  * @return	array	Search results
  */
-function get_bsearch_matches( $search_info, $bydate ) {
+function get_bsearch_matches( $search_query, $bydate ) {
 	global $wpdb, $bsearch_settings;
+
+	// Initialise some variables
+	$fields = '';
+	$where = '';
+	$join = '';
+	$groupby = '';
+	$orderby = '';
+	$limits = '';
+	$match_fields = '';
 
 	parse_str( $bsearch_settings['post_types'], $post_types );	// Save post types in $post_types variable
 
@@ -379,85 +389,196 @@ function get_bsearch_matches( $search_info, $bydate ) {
 	// if there are two items in $search_info, the string has been broken into separate terms that
 	// are listed at $search_info[1]. The cleaned-up version of $search_query is still at the zero index.
 	// This is when fulltext is disabled, and we search using LIKE
-	$search_info = get_bsearch_terms();
+	$search_info = get_bsearch_terms( $search_query );
 
 	if ( count( $search_info ) > 1 ) {
+
 		$search_terms = $search_info[1];
-		$args = array(
+
+		// Fields to return
+		$fields = " ID, 0 AS score ";
+
+		// Create the WHERE Clause
+		$where = " AND ( ";
+		$where .= $wpdb->prepare(
+			" ((post_title LIKE '%s') OR (post_content LIKE '%s')) ",
 			$n . $search_terms[0] . $n,
-			$n . $search_terms[0] . $n,
+			$n . $search_terms[0] . $n
 		);
 
-		$sql = "SELECT ID, 0 AS score FROM " . $wpdb->posts . " WHERE (";
-		$sql .= "((post_title LIKE '%s') OR (post_content LIKE '%s'))";
 		for ( $i = 1; $i < count( $search_terms ); $i = $i + 1) {
-			$sql .= " AND ((post_title LIKE '%s') OR (post_content LIKE '%s'))";
-			$args[] = $n . $search_terms[ $i ] . $n;
-			$args[] = $n . $search_terms[ $i ] . $n;
+			$where .= $wpdb->prepare(
+				" AND ((post_title LIKE '%s') OR (post_content LIKE '%s')) ",
+				$n . $search_terms[ $i ] . $n,
+				$n . $search_terms[ $i ] . $n
+			);
 		}
-		$sql .= " OR (post_title LIKE '%s') OR (post_content LIKE '%s')";
 
-		$args[] = $n . $search_info[0] . $n;
-		$args[] = $n . $search_info[0] . $n;
+		$where .= $wpdb->prepare(
+			" OR (post_title LIKE '%s') OR (post_content LIKE '%s') ",
+			$n . $search_terms[0] . $n,
+			$n . $search_terms[0] . $n
+		);
 
-		$sql .= ") AND post_status = 'publish' ";
-		$sql .= "AND ( ";
+		$where .= " ) ";
 
-		$multiple = false;
-		foreach ( $post_types as $post_type ) {
-			if ( $multiple ) {
-				$sql .= ' OR ';
-			}
-			$sql .= " post_type = '%s' ";
-			$multiple = true;
-			$args[] = $post_type;	// Add the post types to the $args array
-		}
-		$sql .= " ) ";
-		$sql .= "ORDER BY post_date DESC ";
+		$where .= " AND post_status = 'publish' ";
+
+		// Array of post types
+		$where .= " AND $wpdb->posts.post_type IN ('" . join( "', '", $post_types ) . "') ";
+
+
+		// Create the ORDERBY Clause
+		$orderby = " post_date DESC ";
+
 	} else {
 		$boolean_mode = ( $bsearch_settings['boolean_mode'] ) ? ' IN BOOLEAN MODE' : '';
-		$args = array(
+
+		$field_args = array(
 			$search_info[0],
 			$bsearch_settings['weight_title'],
 			$search_info[0],
 			$bsearch_settings['weight_content'],
-			$search_info[0],
 		);
 
-		$sql = "SELECT ID, ";
-		$sql .= "(MATCH(post_title) AGAINST ('%s' {$boolean_mode} ) * %d ) + ";
-		$sql .= "(MATCH(post_content) AGAINST ('%s' {$boolean_mode} ) * %d ) ";
-		$sql .= "AS score FROM ".$wpdb->posts." WHERE MATCH (post_title,post_content) AGAINST ('%s' {$boolean_mode} ) AND post_status = 'publish' ";
-		$sql .= "AND ( ";
+		$fields = " ID";
 
-		$multiple = false;
-		foreach ( $post_types as $post_type ) {
-			if ( $multiple ) {
-				$sql .= ' OR ';
-			}
-			$sql .= " post_type = '%s' ";
-			$multiple = true;
-			$args[] = $post_type;	// Add the post types to the $args array
-		}
-		$sql .=" ) ";
+		// Create the base MATCH part of the FIELDS clause
+		$field_score = ", (MATCH(post_title) AGAINST ('%s' {$boolean_mode} ) * %d ) + ";
+		$field_score .= "(MATCH(post_content) AGAINST ('%s' {$boolean_mode} ) * %d ) ";
+		$field_score .= "AS score ";
+
+		$field_score = $wpdb->prepare( $field_score, $field_args );
+
+		/**
+		 * Filter the MATCH part of the FIELDS clause of the query.
+		 *
+		 * @since	1.4.0
+		 *
+		 * @param string   $field_score  	The MATCH section of the FIELDS clause of the query, i.e. score
+		 * @param string   $search_info[0]	Search query
+		 * @param int	   $bsearch_settings['weight_title']	Weight of title
+		 * @param int	   $bsearch_settings['weight_content']	Weight of content
+		 */
+		$field_score = apply_filters( 'bsearch_posts_match_field', $field_score, $search_info[0], $bsearch_settings['weight_title'], $bsearch_settings['weight_content'] );
+
+		$fields .= $field_score;
+
+		/**
+		 * Filter the SELECT clause of the query.
+		 *
+		 * @since	1.4.0
+		 *
+		 * @param string   $fields  		The SELECT clause of the query.
+		 * @param string   $search_info[0]	Search query
+		 */
+		$fields = apply_filters( 'bsearch_posts_fields', $fields, $search_info[0] );
+
+
+		// Construct the MATCH part of the WHERE clause
+		$match = " AND MATCH (post_title,post_content) AGAINST ('%s' {$boolean_mode} ) ";
+
+		$match = $wpdb->prepare( $match, $search_info[0] );
+
+		/**
+		 * Filter the MATCH clause of the query.
+		 *
+		 * @since	1.4.0
+		 *
+		 * @param string   $match  		The MATCH section of the WHERE clause of the query
+		 * @param string   $search_info[0]	Search query
+		 */
+		$match = apply_filters( 'bsearch_posts_match', $match, $search_info[0] );
+
+
+		// Construct the WHERE clause
+		$where = $match;
+
+		$where .= " AND post_status = 'publish' ";
+
+		// Array of post types
+		$where .= " AND $wpdb->posts.post_type IN ('" . join( "', '", $post_types ) . "') ";
+
+		/**
+		 * Filter the WHERE clause of the query.
+		 *
+		 * @since	1.4.0
+		 *
+		 * @param string   $where  		The WHERE clause of the query
+		 * @param string   $search_info[0]	Search query
+		 */
+		$where = apply_filters( 'bsearch_posts_where', $where, $search_info[0] );
+
+
+		// ORDER BY clause
 		if ( $bydate ) {
-			$sql .= "ORDER BY post_date DESC ";
+			$orderby = " post_date DESC ";
 		} else {
-			$sql .= "ORDER BY score DESC ";
+			$orderby = " score DESC ";
 		}
+
+		/**
+		 * Filter the ORDER BY clause of the query.
+		 *
+		 * @since	1.4.0
+		 *
+		 * @param string   $orderby  		The ORDER BY clause of the query
+		 * @param string   $search_info[0]	Search query
+		 */
+		$orderby = apply_filters( 'bsearch_posts_orderby', $orderby, $search_info[0] );
+
+		/**
+		 * Filter the GROUP BY clause of the query.
+		 *
+		 * @since	1.4.0
+		 *
+		 * @param string   $groupby  		The GROUP BY clause of the query
+		 * @param string   $search_info[0]	Search query
+		 */
+		$groupby = apply_filters( 'bsearch_posts_groupby', $groupby, $search_info[0] );
+
+		/**
+		 * Filter the JOIN clause of the query.
+		 *
+		 * @since	1.4.0
+		 *
+		 * @param string   $join  		The JOIN clause of the query
+		 * @param string   $search_info[0]	Search query
+		 */
+		$join = apply_filters( 'bsearch_posts_join', $join, $search_info[0] );
+
+		/**
+		 * Filter the JOIN clause of the query.
+		 *
+		 * @since	1.4.0
+		 *
+		 * @param string   $limits  		The JOIN clause of the query
+		 * @param string   $search_info[0]	Search query
+		 */
+		$limits = apply_filters( 'bsearch_posts_limits', $limits, $search_info[0] );
+
 	}
 
-	$matches[0] = $wpdb->get_results( $wpdb->prepare( $sql, $args ) );
-	$matches[1] = $sql;
+	if ( ! empty( $groupby ) ) {
+		$groupby = 'GROUP BY ' . $groupby;
+	}
+	if ( ! empty( $orderby ) ) {
+		$orderby = 'ORDER BY ' . $orderby;
+	}
+
+	$sql = "SELECT DISTINCT $fields FROM $wpdb->posts $join WHERE 1=1 $where $groupby $orderby $limits";
+
+	$matches[0] = $wpdb->get_results( $sql );
 
 	/**
-	 * Filter array holding the search results and corresponding SQL
+	 * Filter array holding the search results
 	 *
 	 * @since	1.2
 	 *
-	 * @param	array	$matches	Results at [0] and SQL at [1]
+	 * @param	object	$matches	Search results object
+	 * @param	array	$search_info	Search query
 	 */
-	return apply_filters( 'get_bsearch_matches', $matches );
+	return apply_filters( 'get_bsearch_matches', $matches, $search_info );
 }
 
 
