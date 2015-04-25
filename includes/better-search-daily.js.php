@@ -11,7 +11,7 @@ Header( "content-type: application/x-javascript" );
 //define( 'SHORTINIT', true );
 
 // Build the wp-load.php path from a plugin/theme
-$wp_load_path = dirname( dirname( dirname( __FILE__ ) ) );
+$wp_load_path = dirname( dirname( dirname( dirname( __FILE__ ) ) ) );
 // Require the wp-load.php file (which loads wp-config.php and bootstraps WordPress)
 $wp_load_filename = '/wp-load.php';
 
