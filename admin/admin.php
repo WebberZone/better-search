@@ -104,6 +104,19 @@ function bsearch_options() {
 		echo $str;
 	}
 
+	if ( ( isset( $_POST['bsearch_recreate'] ) ) && ( check_admin_referer( 'bsearch-plugin-settings' ) ) ) {
+		$wpdb->query( "ALTER TABLE " . $wpdb->posts . " DROP INDEX bsearch" );
+		$wpdb->query( "ALTER TABLE " . $wpdb->posts . " DROP INDEX bsearch_title" );
+		$wpdb->query( "ALTER TABLE " . $wpdb->posts . " DROP INDEX bsearch_content" );
+
+	    $wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch (post_title, post_content);' );
+	    $wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_title (post_title);' );
+	    $wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_content (post_content);' );
+
+		$str = '<div id="message" class="updated fade"><p>'. __( 'Index recreated', BSEARCH_LOCAL_NAME ) .'</p></div>';
+		echo $str;
+	}
+
 ?>
 
 <div class="wrap">
@@ -315,7 +328,7 @@ function bsearch_options() {
 		<?php wp_nonce_field( 'bsearch-plugin-settings' ); ?>
 	  </form>
 
-	  <form method="post" id="bsearch_reset_options" name="bsearch_reset_options" onsubmit="return checkForm()">
+	  <form method="post" id="bsearch_reset_options" name="bsearch_reset_options">
 	    <div id="resetopdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
 	      <h3 class='hndle'><span><?php _e( 'Reset count', BSEARCH_LOCAL_NAME ); ?></span></h3>
 	      <div class="inside">
@@ -325,7 +338,8 @@ function bsearch_options() {
 		    <p>
 		      <input name="bsearch_trunc_all" type="submit" id="bsearch_trunc_all" value="<?php _e( 'Reset Popular Searches', BSEARCH_LOCAL_NAME ); ?>" class="button button-secondary" onclick="if ( ! confirm( '<?php _e( "Are you sure you want to reset the popular posts?", BSEARCH_LOCAL_NAME ); ?>' ) ) return false;" />
 		      <input name="bsearch_trunc_daily" type="submit" id="bsearch_trunc_daily" value="<?php _e( 'Reset Daily Popular Searches', BSEARCH_LOCAL_NAME ); ?>" class="button button-secondary" onclick="if ( ! confirm( '<?php _e( "Are you sure you want to reset the daily popular posts?", BSEARCH_LOCAL_NAME ); ?>' ) ) return false;" />
-		    </p>
+			  <input name="bsearch_recreate" type="submit" id="bsearch_recreate" value="<?php _e( 'Recreate Index', BSEARCH_LOCAL_NAME ); ?>" class="button button-secondary" onclick="if (!confirm('<?php _e( "Are you sure you want to recreate the index?", BSEARCH_LOCAL_NAME ); ?>')) return false;" />
+		  	</p>
 	      </div>
 	    </div>
 		<?php wp_nonce_field( 'bsearch-plugin-settings' ); ?>
