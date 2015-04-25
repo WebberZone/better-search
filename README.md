@@ -36,7 +36,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 
 
 ## Screenshots
-![General Options](https://raw.github.com/ajaydsouza/better-search/master/screenshot-1.png)
+![General Options](https://raw.github.com/ajaydsouza/better-search/master/assets/screenshot-1.png)
 _Better Search settings page - General Options._
 
 For more screenshots visit the <a href="http://wordpress.org/plugins/better-search/screenshots/">WordPress plugin page</a>
