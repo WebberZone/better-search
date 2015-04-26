@@ -117,6 +117,11 @@ function bsearch_options() {
 		echo $str;
 	}
 
+	if ( ( isset( $_POST['bsearch_delete_transients'] ) ) && ( check_admin_referer( 'bsearch-plugin-settings' ) ) ) {
+		$wpdb->query( "DELETE FROM " . $wpdb->options . " WHERE option_name LIKE '_transient_bs_%'" );
+		$wpdb->query( "DELETE FROM " . $wpdb->options . " WHERE option_name LIKE '_transient_timeout_bs_%'" );
+	}
+
 ?>
 
 <div class="wrap">
@@ -338,7 +343,8 @@ function bsearch_options() {
 		    <p>
 		      <input name="bsearch_trunc_all" type="submit" id="bsearch_trunc_all" value="<?php _e( 'Reset Popular Searches', BSEARCH_LOCAL_NAME ); ?>" class="button button-secondary" onclick="if ( ! confirm( '<?php _e( "Are you sure you want to reset the popular posts?", BSEARCH_LOCAL_NAME ); ?>' ) ) return false;" />
 		      <input name="bsearch_trunc_daily" type="submit" id="bsearch_trunc_daily" value="<?php _e( 'Reset Daily Popular Searches', BSEARCH_LOCAL_NAME ); ?>" class="button button-secondary" onclick="if ( ! confirm( '<?php _e( "Are you sure you want to reset the daily popular posts?", BSEARCH_LOCAL_NAME ); ?>' ) ) return false;" />
-			  <input name="bsearch_recreate" type="submit" id="bsearch_recreate" value="<?php _e( 'Recreate Index', BSEARCH_LOCAL_NAME ); ?>" class="button button-secondary" onclick="if (!confirm('<?php _e( "Are you sure you want to recreate the index?", BSEARCH_LOCAL_NAME ); ?>')) return false;" />
+			  <input name="bsearch_recreate" type="submit" id="bsearch_recreate" value="<?php _e( 'Recreate Index', BSEARCH_LOCAL_NAME ); ?>" class="button button-secondary" onclick="if ( ! confirm('<?php _e( "Are you sure you want to recreate the index?", BSEARCH_LOCAL_NAME ); ?>') ) return false;" />
+			  <input name="bsearch_delete_transients" type="submit" id="bsearch_delete_transients" value="<?php _e( 'Delete transients', BSEARCH_LOCAL_NAME ); ?>" class="button button-secondary" onclick="if ( ! confirm('<?php _e( "Are you sure you want to delete all transients?", BSEARCH_LOCAL_NAME ); ?>' ) ) return false;" />
 		  	</p>
 	      </div>
 	    </div>
@@ -358,6 +364,7 @@ function bsearch_options() {
 
 <?php
 }
+
 
 /**
  * Function to generate the right sidebar of the Settings and Admin popular posts pages.
