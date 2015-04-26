@@ -38,7 +38,6 @@ function bsearch_options() {
 		$bsearch_settings['daily_range'] = intval( $_POST['daily_range'] );
 		$bsearch_settings['limit'] = intval( $_POST['limit'] );
 		$bsearch_settings['use_fulltext'] = isset( $_POST['use_fulltext'] ) ? true : false;
-		$bsearch_settings['d_use_js'] = isset( $_POST['d_use_js'] ) ? true : false;
 		$bsearch_settings['show_credit'] = isset( $_POST['show_credit'] ) ? true : false;
 
 		$bsearch_settings['track_admins'] = isset( $_POST['track_admins']) ? true : false;
@@ -185,12 +184,6 @@ function bsearch_options() {
 					<td>
 					  <input type="checkbox" name="use_fulltext" id="use_fulltext" <?php if ( $bsearch_settings['use_fulltext'] ) echo 'checked="checked"' ?> />
 					  <p class="description"><?php _e( 'Disabling this option will no longer give relevancy based results.', BSEARCH_LOCAL_NAME ); ?></p>
-					</td>
-				</tr>
-				<tr><th scope="row"><label for="d_use_js"><?php _e( 'Bypass Cache for daily popular searches\' heatmap?', BSEARCH_LOCAL_NAME ); ?></label></th>
-					<td>
-					  <input type="checkbox" name="d_use_js" id="d_use_js" <?php if ( $bsearch_settings['d_use_js'] ) echo 'checked="checked"' ?> />
-					  <p class="description"><?php _e( 'This options uses JavaScript to load the post and can increase your page load time', BSEARCH_LOCAL_NAME ); ?></p>
 					</td>
 				</tr>
 				<tr><th scope="row"><label for="show_credit"><?php _e( 'Link to plugin homepage', BSEARCH_LOCAL_NAME ); ?></label></th>

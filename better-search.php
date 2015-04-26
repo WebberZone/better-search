@@ -1228,21 +1228,20 @@ function get_bsearch_pop_daily() {
 
 	$output = '';
 
-	if ( $bsearch_settings['d_use_js'] ) {
-		$output .= '<script type="text/javascript" src="' . $bsearch_url . '/includes/better-search-daily.js.php?widget=1"></script>';
-	} else {
-		$output .= '<div class="bsearch_heatmap">';
-		$output .= $bsearch_settings['title_daily'];
-		$output .= '<div text-align:center>';
-		$output .= get_bsearch_heatmap( array(
-			'daily' => 1,
-		) );
-		$output .= '</div>';
-		if ( $bsearch_settings['show_credit'] ) {
-			$output .= '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
-		}
-		$output .= '</div>';
+	$output .= '<div class="bsearch_heatmap">';
+	$output .= $bsearch_settings['title_daily'];
+	$output .= '<div text-align:center>';
+
+	$output .= get_bsearch_heatmap( array(
+		'daily' => 1,
+	) );
+	$output .= '</div>';
+
+	if ( $bsearch_settings['show_credit'] ) {
+		$output .= '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
 	}
+
+	$output .= '</div>';
 
 	/**
 	 * Filters the daily search heatmap HTML
@@ -1622,14 +1621,10 @@ class BSearch_Widget extends WP_Widget {
 				'daily_range' => $daily_range,
 			) );
 		} else {
-			if ( $bsearch_settings['d_use_js'] ) {
-				echo '<script type="text/javascript" src="' . $bsearch_url . '/includes/better-search-daily.js.php?widget=1"></script>';
-			} else {
-				echo get_bsearch_heatmap( array(
-					'daily' => 1,
-					'daily_range' => $daily_range,
-				) );
-			}
+			echo get_bsearch_heatmap( array(
+				'daily' => 1,
+				'daily_range' => $daily_range,
+			) );
 		}
 		if ( $bsearch_settings['show_credit'] ) {
 			echo '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
@@ -1686,7 +1681,6 @@ function bsearch_default_options() {
 		'show_credit' => false,			// Add link to plugin page of my blog in top posts list
 		'track_popular' => true,			// Track the popular searches
 		'use_fulltext' => true,			// Full text searches
-		'd_use_js' => false,				// Use JavaScript for displaying Weekly Popular Searches
 		'title' => $title,				// Title of Search Heatmap
 		'title_daily' => $title_daily,	// Title of Daily Search Heatmap
 		'limit' => '10',					// Search results per page

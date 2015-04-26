@@ -50,6 +50,7 @@ Check the Changelog for details
 * New: Fully filterable search query
 * New: Recreate Index button in the settings page
 * New: Delete transients button in the settings page
+* Modified: Deprecated always dynamic heatmap option that bypassed cache
 * Fixed: Seamless mode would overwrite all queries, even those outside the loop
 * Fixed: WordPress widget settings
 * Modified: Major code cleanup
