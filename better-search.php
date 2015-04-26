@@ -16,7 +16,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     1.4-beta20150525
+ * Version:     1.4-beta20150526
  * Author:      Ajay D'Souza
  * Author URI:  http://ajaydsouza.com/
  * Text Domain:	better-search
@@ -1674,21 +1674,42 @@ function bsearch_default_options() {
 .bsearch_highlight { background:#ffc; }
 	';
 
-	$badwords = array( 'anal', 'anus', 'ass', 'bastard', 'beastiality', 'bestiality', 'bewb', 'bitch', 'blow', 'blumpkin', 'boob', 'cawk', 'cock', 'choad', 'cooter', 'cornhole', 'cum', 'cunt', 'dick', 'dildo', 'dong', 'dyke', 'douche', 'fag', 'faggot', 'fart', 'foreskin', 'fuck', 'fuk', 'gangbang', 'gook', 'handjob', 'homo', 'honkey', 'humping', 'jiz', 'jizz', 'kike', 'kunt', 'labia', 'muff', 'nigger', 'nutsack', 'pen1s', 'penis', 'piss', 'poon', 'poop', 'porn', 'punani', 'pussy', 'queef', 'queer', 'quim', 'rimjob', 'rape', 'rectal', 'rectum', 'semen', 'sex', 'shit', 'slut', 'spick', 'spoo', 'spooge', 'taint', 'titty', 'titties', 'twat', 'vag', 'vagina', 'vulva', 'wank', 'whore', );
+	$badwords = array( 'anal', 'anus', 'bastard', 'beastiality', 'bestiality', 'bewb', 'bitch', 'blow', 'blumpkin', 'boob', 'cawk', 'cock', 'choad', 'cooter', 'cornhole', 'cum', 'cunt', 'dick', 'dildo', 'dong', 'dyke', 'douche', 'fag', 'faggot', 'fart', 'foreskin', 'fuck', 'fuk', 'gangbang', 'gook', 'handjob', 'homo', 'honkey', 'humping', 'jiz', 'jizz', 'kike', 'kunt', 'labia', 'muff', 'nigger', 'nutsack', 'pen1s', 'penis', 'piss', 'poon', 'poop', 'porn', 'punani', 'pussy', 'queef', 'queer', 'quim', 'rimjob', 'rape', 'rectal', 'rectum', 'semen', 'sex', 'shit', 'slut', 'spick', 'spoo', 'spooge', 'taint', 'titty', 'titties', 'twat', 'vagina', 'vulva', 'wank', 'whore', );
 
 	$bsearch_settings = array(
-		'seamless' => false,			// Seamless integration mode
-		'show_credit' => false,			// Add link to plugin page of my blog in top posts list
-		'track_popular' => true,			// Track the popular searches
-		'use_fulltext' => true,			// Full text searches
-		'title' => $title,				// Title of Search Heatmap
-		'title_daily' => $title_daily,	// Title of Daily Search Heatmap
-		'limit' => '10',					// Search results per page
-		'daily_range' => '7',				// Daily Popular will contain posts of how many days?
 
+		/* General options */
+		'seamless' => false,			// Seamless integration mode
+		'track_popular' => true,			// Track the popular searches
 		'track_admins' => true,			// Track Admin searches
 		'track_editors' => true,			// Track Admin searches
+		'meta_noindex' => true,			// Add noindex,follow meta tag to head
+		'show_credit' => false,			// Add link to plugin page of my blog in top posts list
 
+		/* Search options */
+		'limit' => '10',					// Search results per page
+		'post_types' => $post_types,		// WordPress custom post types
+
+		'use_fulltext' => true,			// Full text searches
+		'weight_content' => '10',			// Weightage for content
+		'weight_title' => '1',			// Weightage for title
+		'boolean_mode' => false,		// Turn BOOLEAN mode on if true
+
+		'highlight' => false,			// Highlight search terms
+		'excerpt_length' => '50',		// Length of characters
+		'include_thumb' => false,		// Include thumbnail in search results
+		'link_new_window' => false,			// Open link in new window - Includes target="_blank" to links
+		'link_nofollow' => true,		// Includes rel="nofollow" to links in heatmap
+
+		'badwords' => implode( ',', $badwords ),		// Bad words filter
+
+		/* Heatmap options */
+		'include_heatmap' => false,		// Include heatmap of searches in the search page
+		'title' => $title,				// Title of Search Heatmap
+		'title_daily' => $title_daily,	// Title of Daily Search Heatmap
+		'daily_range' => '7',				// Daily Popular will contain posts of how many days?
+
+		'heatmap_limit' => '30',			// Heatmap - Maximum number of searches to display in heatmap
 		'heatmap_smallest' => '10',		// Heatmap - Smallest Font Size
 		'heatmap_largest' => '20',		// Heatmap - Largest Font Size
 		'heatmap_unit' => 'pt',			// Heatmap - We'll use pt for font size
@@ -1696,24 +1717,11 @@ function bsearch_default_options() {
 		'heatmap_hot' => '000',			// Heatmap - hot searches
 		'heatmap_before' => '',			// Heatmap - Display before each search term
 		'heatmap_after' => '&nbsp;',		// Heatmap - Display after each search term
-		'heatmap_limit' => '30',			// Heatmap - Maximum number of searches to display in heatmap
 
-		'weight_content' => '10',			// Weightage for content
-		'weight_title' => '1',			// Weightage for title
-		'boolean_mode' => false,		// Turn BOOLEAN mode on if true
 
+		/* Custom styles */
 		'custom_CSS' => $custom_CSS,			// Custom CSS
-		'post_types' => $post_types,		// WordPress custom post types
-		'excerpt_length' => '50',		// Length of characters
-		'link_new_window' => false,			// Open link in new window - Includes target="_blank" to links
-		'link_nofollow' => true,		// Includes rel="nofollow" to links in heatmap
-		'meta_noindex' => true,			// Add noindex,follow meta tag to head
 
-		'include_heatmap' => false,		// Include heatmap of searches in the search page
-		'include_thumb' => false,		// Include thumbnail in search results
-		'highlight' => false,			// Highlight search terms
-
-		'badwords' => implode( ',', $badwords ),		// Bad words filter
 	);
 
 	/**
