@@ -51,6 +51,7 @@ Check the Changelog for details
 * New: Recreate Index button in the settings page
 * New: Delete transients button in the settings page
 * Fixed: Seamless mode would overwrite all queries, even those outside the loop
+* Fixed: WordPress widget settings
 * Modified: Major code cleanup
 
 = 1.3.6 =

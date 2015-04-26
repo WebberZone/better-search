@@ -1611,7 +1611,7 @@ class BSearch_Widget extends WP_Widget {
 		if ( empty( $title ) ) {
 			$title = ( $bsearch_settings['title'] ) ? strip_tags( $bsearch_settings['title'] ) : __( 'Popular Searches', BSEARCH_LOCAL_NAME );
 		}
-		$daily = $instance['daily'];
+		$daily = isset( $instance['daily'] ) ? $instance['daily'] : 'overall';
 
 		echo $before_widget;
 		echo $before_title . $title . $after_title;
@@ -1619,6 +1619,7 @@ class BSearch_Widget extends WP_Widget {
 		if ( 'overall' == $daily ) {
 			echo get_bsearch_heatmap( array(
 				'daily' => 0,
+				'daily_range' => $daily_range,
 			) );
 		} else {
 			if ( $bsearch_settings['d_use_js'] ) {
@@ -1626,6 +1627,7 @@ class BSearch_Widget extends WP_Widget {
 			} else {
 				echo get_bsearch_heatmap( array(
 					'daily' => 1,
+					'daily_range' => $daily_range,
 				) );
 			}
 		}
