@@ -378,9 +378,39 @@ function get_bsearch_matches( $search_query, $bydate ) {
 	// This is when fulltext is disabled, and we search using LIKE
 	$search_info = get_bsearch_terms( $search_query );
 
-	$sql = bsearch_sql_prepare( $search_info, $bsearch_settings['boolean_mode'], $bydate );
+	// Get search transient
+	$search_query_transient = substr( 'bs_' . preg_replace( '/[^A-Za-z0-9\-]/', '', str_replace( " ", "", $search_query ) ), 0, 40 );	// Name of the transient limited to 40 chars
 
-	$results = $wpdb->get_results( $sql );
+	$matches = get_transient( $search_query_transient );
+
+	if ( $matches ) {
+
+		if ( isset( $matches['search_query'] ) ) {
+
+			if ( $matches['search_query'] == $search_query ) {
+				$results = $matches[0];
+
+				/**
+				 * Filter array holding the search results
+				 *
+				 * @since	1.2
+				 *
+				 * @param	object	$matches	Search results object
+				 * @param	array	$search_info	Search query
+				 */
+				return apply_filters( 'get_bsearch_matches', $matches, $search_info );
+
+			}
+
+		}
+	}
+
+	// If no transient is set
+	if ( ! isset( $results ) ) {
+		$sql = bsearch_sql_prepare( $search_info, $bsearch_settings['boolean_mode'], $bydate );
+
+		$results = $wpdb->get_results( $sql );
+	}
 
 	// If no results are found then force BOOLEAN mode
 	if ( ! $results ) {
@@ -410,14 +440,13 @@ function get_bsearch_matches( $search_query, $bydate ) {
 	}
 
 	$matches[0] = $results;
+	$matches['search_query'] = $search_query;
+
+	// Set search transient
+	set_transient( $search_query_transient, $matches, 7200 );
 
 	/**
-	 * Filter array holding the search results
-	 *
-	 * @since	1.2
-	 *
-	 * @param	object	$matches	Search results object
-	 * @param	array	$search_info	Search query
+	 * Described in better-search.php
 	 */
 	return apply_filters( 'get_bsearch_matches', $matches, $search_info );
 }
@@ -1457,14 +1486,7 @@ function bsearch_clause_prepare() {
 	if ( $wp_query->is_search ) {
 		$search_query = get_bsearch_query();
 
-		$search_query_transient = substr( 'bs_' . preg_replace( '/[^A-Za-z0-9\-]/', '', str_replace( " ", "", $search_query ) ), 0, 40 );	// Name of the transient limited to 40 chars
-
-		$matches = get_transient( $search_query_transient );
-
-		if ( ! $matches ) {
-			$matches = get_bsearch_matches( $search_query, 0 );		// Fetch the search results for the search term stored in $search_query
-			set_transient( $search_query_transient, $matches, 3600 );
-		}
+		$matches = get_bsearch_matches( $search_query, 0 );		// Fetch the search results for the search term stored in $search_query
 
 		$searches = $matches[0];		// 0 index contains the search results always
 

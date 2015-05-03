@@ -55,6 +55,7 @@ Check the Changelog for details
 * Modified: Deprecated always dynamic heatmap option that bypassed cache
 * Modified: Reorganised admin interface
 * Modified: Seamless mode is now the default mode
+* Modified: Better Search uses transients to catch results when not using seamless mode
 * Fixed: Seamless mode would overwrite all queries, even those outside the loop
 * Fixed: WordPress widget settings
 
