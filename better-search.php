@@ -366,11 +366,74 @@ function get_bsearch_terms( $search_query = '' ) {
  *
  * @since	1.2
  *
- * @param	mixed	$search_info	Search terms array
- * @param	mixed	$bydate			Sort by date?
+ * @param	string	$search_info	Search terms array
+ * @param	bool	$bydate			Sort by date?
  * @return	array	Search results
  */
 function get_bsearch_matches( $search_query, $bydate ) {
+	global $wpdb, $bsearch_settings;
+
+	// if there are two items in $search_info, the string has been broken into separate terms that
+	// are listed at $search_info[1]. The cleaned-up version of $search_query is still at the zero index.
+	// This is when fulltext is disabled, and we search using LIKE
+	$search_info = get_bsearch_terms( $search_query );
+
+	$sql = bsearch_sql_prepare( $search_info, $bsearch_settings['boolean_mode'], $bydate );
+
+	$results = $wpdb->get_results( $sql );
+
+	// If no results are found then force BOOLEAN mode
+	if ( ! $results ) {
+		$sql = bsearch_sql_prepare( $search_info, 1, $bydate );
+
+		$results = $wpdb->get_results( $sql );
+	}
+
+	// If no results are found then force LIKE mode
+	if ( ! $results ) {
+		// strip out all the fancy characters that fulltext would use
+		$search_query = addslashes_gpc( $search_query );
+		$search_query = preg_replace( '/, +/', ' ', $search_query );
+		$search_query = str_replace( ',', ' ', $search_query );
+		$search_query = str_replace( '"', ' ', $search_query );
+		$search_query = trim( $search_query );
+		$search_words = explode( ' ', $search_query );
+
+		$s_array[0] = $search_query;	// Save original query at [0]
+		$s_array[1] = $search_words;	// Save array of terms at [1]
+
+		$search_info = $s_array;
+
+		$sql = bsearch_sql_prepare( $search_info, 0, $bydate );
+
+		$results = $wpdb->get_results( $sql );
+	}
+
+	$matches[0] = $results;
+
+	/**
+	 * Filter array holding the search results
+	 *
+	 * @since	1.2
+	 *
+	 * @param	object	$matches	Search results object
+	 * @param	array	$search_info	Search query
+	 */
+	return apply_filters( 'get_bsearch_matches', $matches, $search_info );
+}
+
+
+/**
+ * returns an array with the first and last indices to be displayed on the page.
+ *
+ * @since	1.4
+ *
+ * @param	array	$search_info	Search query
+ * @param 	bool	$boolean_mode	Set BOOLEAN mode for FULLTEXT searching
+ * @param	bool	$bydate			Sort by date?
+ * @return	array	First and last indices to be displayed on the page
+ */
+function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 	global $wpdb, $bsearch_settings;
 
 	// Initialise some variables
@@ -385,11 +448,6 @@ function get_bsearch_matches( $search_query, $bydate ) {
 	parse_str( $bsearch_settings['post_types'], $post_types );	// Save post types in $post_types variable
 
 	$n = '%';
-
-	// if there are two items in $search_info, the string has been broken into separate terms that
-	// are listed at $search_info[1]. The cleaned-up version of $search_query is still at the zero index.
-	// This is when fulltext is disabled, and we search using LIKE
-	$search_info = get_bsearch_terms( $search_query );
 
 	if ( count( $search_info ) > 1 ) {
 
@@ -432,7 +490,8 @@ function get_bsearch_matches( $search_query, $bydate ) {
 		$orderby = " post_date DESC ";
 
 	} else {
-		$boolean_mode = ( $bsearch_settings['boolean_mode'] ) ? ' IN BOOLEAN MODE' : '';
+		// Set BOOLEAN Mode
+		$boolean_mode = ( $boolean_mode ) ? ' IN BOOLEAN MODE' : '';
 
 		$field_args = array(
 			$search_info[0],
@@ -497,7 +556,9 @@ function get_bsearch_matches( $search_query, $bydate ) {
 		$where .= " AND post_status = 'publish' ";
 
 		// Array of post types
-		$where .= " AND $wpdb->posts.post_type IN ('" . join( "', '", $post_types ) . "') ";
+		if ( $post_types ) {
+			$where .= " AND $wpdb->posts.post_type IN ('" . join( "', '", $post_types ) . "') ";
+		}
 
 		/**
 		 * Filter the WHERE clause of the query.
@@ -568,17 +629,18 @@ function get_bsearch_matches( $search_query, $bydate ) {
 
 	$sql = "SELECT DISTINCT $fields FROM $wpdb->posts $join WHERE 1=1 $where $groupby $orderby $limits";
 
-	$matches[0] = $wpdb->get_results( $sql );
 
 	/**
-	 * Filter array holding the search results
+	 * Filter MySQL string used to fetch results.
 	 *
-	 * @since	1.2
+	 * @since	1.3
 	 *
-	 * @param	object	$matches	Search results object
+	 * @param	string	$sql			MySQL string
 	 * @param	array	$search_info	Search query
+	 * @param 	bool	$boolean_mode	Set BOOLEAN mode for FULLTEXT searching
+	 * @param	bool	$bydate			Sort by date?
 	 */
-	return apply_filters( 'get_bsearch_matches', $matches, $search_info );
+	return apply_filters( 'bsearch_sql_prepare', $sql, $search_info, $boolean_mode, $bydate );
 }
 
 
@@ -1674,7 +1736,7 @@ function bsearch_default_options() {
 .bsearch_highlight { background:#ffc; }
 	';
 
-	$badwords = array( 'anal', 'anus', 'bastard', 'beastiality', 'bestiality', 'bewb', 'bitch', 'blow', 'blumpkin', 'boob', 'cawk', 'cock', 'choad', 'cooter', 'cornhole', 'cum', 'cunt', 'dick', 'dildo', 'dong', 'dyke', 'douche', 'fag', 'faggot', 'fart', 'foreskin', 'fuck', 'fuk', 'gangbang', 'gook', 'handjob', 'homo', 'honkey', 'humping', 'jiz', 'jizz', 'kike', 'kunt', 'labia', 'muff', 'nigger', 'nutsack', 'pen1s', 'penis', 'piss', 'poon', 'poop', 'porn', 'punani', 'pussy', 'queef', 'queer', 'quim', 'rimjob', 'rape', 'rectal', 'rectum', 'semen', 'sex', 'shit', 'slut', 'spick', 'spoo', 'spooge', 'taint', 'titty', 'titties', 'twat', 'vagina', 'vulva', 'wank', 'whore', );
+	$badwords = array( 'anal', 'anus', 'bastard', 'beastiality', 'bestiality', 'bewb', 'bitch', 'blow', 'blumpkin', 'boob', 'cawk', 'cock', 'choad', 'cooter', 'cornhole', 'cum', 'cunt', 'dick', 'dildo', 'dong', 'dyke', 'douche', 'fag', 'faggot', 'fart', 'foreskin', 'fuck', 'fuk', 'gangbang', 'gook', 'handjob', 'homo', 'honkey', 'humping', 'jiz', 'jizz', 'kike', 'kunt', 'labia', 'muff', 'nigger', 'nutsack', 'pen1s', 'penis', 'piss', 'poon', 'poop', 'porn', 'punani', 'pussy', 'queef', 'queer', 'quim', 'rimjob', 'rape', 'rectal', 'rectum', 'semen', 'shit', 'slut', 'spick', 'spoo', 'spooge', 'taint', 'titty', 'titties', 'twat', 'vagina', 'vulva', 'wank', 'whore', );
 
 	$bsearch_settings = array(
 
@@ -1818,7 +1880,9 @@ register_activation_hook( __FILE__, 'bsearch_install' );
 function bsearch_single_activate() {
 	global $wpdb, $bsearch_db_version;
 
-    // Create full text index
+	$bsearch_settings = bsearch_read_options();
+
+	// Create full text index
 	$wpdb->hide_errors();
     $wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ENGINE = MYISAM;' );
     $wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch (post_title, post_content);' );
