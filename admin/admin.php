@@ -233,6 +233,12 @@ function bsearch_options() {
 					 do_action( 'bsearch_admin_general_options_after', $bsearch_settings );
 				?>
 
+				<tr>
+					<td scope="row" colspan="2">
+						<input type="submit" name="bsearch_save" id="bsearch_genop_save" value="<?php _e( 'Save Options', BSEARCH_LOCAL_NAME ); ?>" class="button button-primary" />
+					</td>
+				</tr>
+
 			</tbody>
 			</table>
 	      </div>
@@ -355,6 +361,12 @@ function bsearch_options() {
 					 do_action( 'bsearch_admin_search_options_after', $bsearch_settings );
 				?>
 
+				<tr>
+					<td scope="row" colspan="2">
+						<input type="submit" name="bsearch_save" id="bsearch_searchop_save" value="<?php _e( 'Save Options', BSEARCH_LOCAL_NAME ); ?>" class="button button-primary" />
+					</td>
+				</tr>
+
 			</tbody>
 			</table>
 	      </div>
@@ -455,6 +467,12 @@ function bsearch_options() {
 					 do_action( 'bsearch_admin_heatmap_options_after', $bsearch_settings );
 				?>
 
+				<tr>
+					<td scope="row" colspan="2">
+						<input type="submit" name="bsearch_save" id="bsearch_hmop_save" value="<?php _e( 'Save Options', BSEARCH_LOCAL_NAME ); ?>" class="button button-primary" />
+					</td>
+				</tr>
+
 			</tbody>
 			</table>
 	      </div>
@@ -497,6 +515,12 @@ function bsearch_options() {
 					 */
 					 do_action( 'bsearch_admin_custom_styles_after', $bsearch_settings );
 				?>
+
+				<tr>
+					<td scope="row" colspan="2">
+						<input type="submit" name="bsearch_save" id="bsearch_cssop_save" value="<?php _e( 'Save Options', BSEARCH_LOCAL_NAME ); ?>" class="button button-primary" />
+					</td>
+				</tr>
 
 			</table>
 	      </div>
