@@ -51,6 +51,7 @@ Check the Changelog for details
 * New: Fully filterable search query
 * New: Recreate Index button in the settings page
 * New: Delete transients button in the settings page
+* Modified: Better Search will now try BOOLEAN MODE and non-FULLTEXT modes in case FULLTEXT search doesn't return any results
 * Modified: Deprecated always dynamic heatmap option that bypassed cache
 * Modified: Reorganised admin interface
 * Fixed: Seamless mode would overwrite all queries, even those outside the loop
