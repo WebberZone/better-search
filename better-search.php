@@ -1661,17 +1661,10 @@ class BSearch_Widget extends WP_Widget {
 
 		extract( $args, EXTR_SKIP );
 
-		$daily_range = $instance['daily_range'];
+		$daily_range = isset( $instance['daily_range'] ) ? $instance['daily_range'] : $bsearch_settings['daily_range'];
 
-		if ( empty( $daily_range ) ) {
-			$daily_range = $bsearch_settings['daily_range'];
-		}
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? strip_tags( $bsearch_settings['title'] ) : $instance['title'] );
 
-		$title = apply_filters( 'widget_title', $instance['title'] );
-
-		if ( empty( $title ) ) {
-			$title = ( $bsearch_settings['title'] ) ? strip_tags( $bsearch_settings['title'] ) : __( 'Popular Searches', BSEARCH_LOCAL_NAME );
-		}
 		$daily = isset( $instance['daily'] ) ? $instance['daily'] : 'overall';
 
 		echo $before_widget;
