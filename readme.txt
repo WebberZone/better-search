@@ -3,8 +3,8 @@ Tags: search, Better Search, related search, relevant search, search results, he
 Contributors: Ajay
 Donate link: http://ajaydsouza.com/donate/
 Stable tag: trunk
-Requires at least: 3.1
-Tested up to: 4.2
+Requires at least: 3.5
+Tested up to: 4.3
 License: GPLv2 or later
 
 
@@ -39,13 +39,14 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 == Upgrade Notice ==
 
 = 1.4.0 =
-Highlight search results; Filterable search query; bug fixes;
+Highlight search results; Filterable search query; multisite activation; bug fixes;
 Check the Changelog for details
 
 
 == Changelog ==
 
 = 1.4.0 =
+* New: Network Activate the plugin on WordPress Multisite
 * New: Option to highlight search results. If missing, add: <code>.bsearch_highlight { background:#ffc; }</code> under Custom Styles
 * New: Fully filterable search query
 * New: Recreate Index button in the settings page
