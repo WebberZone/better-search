@@ -16,7 +16,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     1.4-beta20150503
+ * Version:     1.4-beta20150504
  * Author:      Ajay D'Souza
  * Author URI:  http://ajaydsouza.com/
  * Text Domain:	better-search
@@ -1240,10 +1240,11 @@ function get_bsearch_form( $search_query ) {
 	if ( $search_query == '' ) {
 		$search_query = get_bsearch_query();
 	}
-	$form = '<div style="text-align:center"><form method="get" id="bsearchform" action="' . home_url() . '/" >
+
+	$form = '<div style="text-align:center"><form method="get" class="bsearchform" action="' . home_url() . '/" >
 	<label class="hidden" for="s">' . __( 'Search for:', BSEARCH_LOCAL_NAME ) . '</label>
-	<input type="text" value="' . $search_query . '" name="s" id="s" />
-	<input type="submit" id="searchsubmit" value="' . __( 'Search Again', BSEARCH_LOCAL_NAME ) . '" />
+	<input type="text" value="' . $search_query . '" name="s" class="s" />
+	<input type="submit" class="searchsubmit" value="' . __( 'Search Again', BSEARCH_LOCAL_NAME ) . '" />
 	</form></div>';
 
 	/**
