@@ -16,7 +16,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     1.4-beta20150526
+ * Version:     1.4-beta20150503
  * Author:      Ajay D'Souza
  * Author URI:  http://ajaydsouza.com/
  * Text Domain:	better-search
@@ -1745,12 +1745,7 @@ function bsearch_default_options() {
 function bsearch_read_options() {
 
 	// Upgrade table code
-	global $bsearch_db_version;
-	$installed_ver = get_option( "bsearch_db_version" );
-
-	if ( $installed_ver != $bsearch_db_version ) {
-		bsearch_install();
-	}
+	global $bsearch_db_version, $network_wide;;
 
 	$bsearch_settings_changed = false;
 
@@ -1781,19 +1776,54 @@ function bsearch_read_options() {
 
 
 /**
- * Create tables to store pageviews.
+ * Fired for each blog when the plugin is activated.
  *
  * @since	1.0
+ *
+ * @param    boolean    $network_wide    True if WPMU superadmin uses
+ *                                       "Network Activate" action, false if
+ *                                       WPMU is disabled or plugin is
+ *                                       activated on an individual blog.
  */
-function bsearch_install() {
+function bsearch_install( $network_wide ) {
+    global $wpdb;
+
+    if ( is_multisite() && $network_wide ) {
+
+        // Get all blogs in the network and activate plugin on each one
+        $blog_ids = $wpdb->get_col( "
+        	SELECT blog_id FROM $wpdb->blogs
+			WHERE archived = '0' AND spam = '0' AND deleted = '0'
+		" );
+        foreach ( $blog_ids as $blog_id ) {
+        	switch_to_blog( $blog_id );
+			bsearch_single_activate();
+        }
+
+        // Switch back to the current blog
+        restore_current_blog();
+
+    } else {
+        bsearch_single_activate();
+    }
+}
+register_activation_hook( __FILE__, 'bsearch_install' );
+
+
+/**
+ * Create tables to store pageviews.
+ *
+ * @since	1.4
+ */
+function bsearch_single_activate() {
 	global $wpdb, $bsearch_db_version;
 
     // Create full text index
 	$wpdb->hide_errors();
-    $wpdb->query( 'ALTER TABLE '.$wpdb->posts.' ENGINE = MYISAM;' );
-    $wpdb->query( 'ALTER TABLE '.$wpdb->posts.' ADD FULLTEXT bsearch (post_title, post_content);' );
-    $wpdb->query( 'ALTER TABLE '.$wpdb->posts.' ADD FULLTEXT bsearch_title (post_title);' );
-    $wpdb->query( 'ALTER TABLE '.$wpdb->posts.' ADD FULLTEXT bsearch_content (post_content);' );
+    $wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ENGINE = MYISAM;' );
+    $wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch (post_title, post_content);' );
+    $wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_title (post_title);' );
+    $wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_content (post_content);' );
     $wpdb->show_errors();
 
 	// Create the tables
@@ -1882,8 +1912,45 @@ function bsearch_install() {
 	}
 
 }
-register_activation_hook( __FILE__, 'bsearch_install' );
 
+
+/**
+ * Fired when a new site is activated with a WPMU environment.
+ *
+ * @since	1.4
+ *
+ * @param    int    $blog_id    ID of the new blog.
+ */
+function bsearch_activate_new_site( $blog_id ) {
+
+	if ( 1 !== did_action( 'wpmu_new_blog' ) ) {
+		return;
+	}
+
+	switch_to_blog( $blog_id );
+	bsearch_single_activate();
+	restore_current_blog();
+
+}
+add_action( 'wpmu_new_blog', 'bsearch_activate_new_site' );
+
+
+/**
+ * Fired when a site is deleted in a WPMU environment.
+ *
+ * @since	1.4
+ *
+ * @param    array    $tables    Tables in the blog.
+ */
+function bsearch_on_delete_blog( $tables ) {
+    global $wpdb;
+
+	$tables[] = $wpdb->prefix . "bsearch";
+	$tables[] = $wpdb->prefix . "bsearch_daily";
+
+    return $tables;
+}
+add_filter( 'wpmu_drop_tables', 'bsearch_on_delete_blog' );
 
 
 /*----------------------------------------------------------------------------*
