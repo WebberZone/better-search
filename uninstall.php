@@ -5,28 +5,55 @@
  * @package BSearch
  */
 
-// If uninstall not called from WordPress, then exit
-if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-	exit();
+// If this file is called directly, then abort execution.
+if ( ! defined( 'WPINC' ) ) {
+	die( "Aren't you supposed to come here via WP-Admin?" );
 }
 
 global $wpdb;
 
-// Delete Better Search table
-$table_name = $wpdb->prefix . "bsearch";
-$sql = "DROP TABLE $table_name";
-$wpdb->query( $sql );
+$bsearch_settings = get_option( 'ald_bsearch_settings' );
 
-// Delete Better Daily Search table
-$table_name = $wpdb->prefix . "bsearch_daily";
-$sql = "DROP TABLE $table_name";
-$wpdb->query( $sql );
+if ( ! is_multisite() ) {
 
-// Drop FULLTEXT index
-$wpdb->query( 'ALTER TABLE '.$wpdb->posts.' DROP INDEX bsearch ;' );
+	$wpdb->query( "DROP TABLE " . $wpdb->prefix . "bsearch" );
+	$wpdb->query( "DROP TABLE " . $wpdb->prefix . "bsearch_daily" );
 
-// Delete plugin options
-delete_option('ald_bsearch_settings');
-delete_option('bsearch_db_version');
+	delete_option( 'ald_bsearch_settings' );
 
+	$wpdb->query( "ALTER TABLE " . $wpdb->posts . " DROP INDEX bsearch" );
+	$wpdb->query( "ALTER TABLE " . $wpdb->posts . " DROP INDEX bsearch_title" );
+	$wpdb->query( "ALTER TABLE " . $wpdb->posts . " DROP INDEX bsearch_content" );
+
+	delete_option( 'bsearch_db_version' );
+
+} else {
+
+    // Get all blogs in the network and activate plugin on each one
+    $blog_ids = $wpdb->get_col( "
+    	SELECT blog_id FROM $wpdb->blogs
+		WHERE archived = '0' AND spam = '0' AND deleted = '0'
+	" );
+
+    foreach ( $blog_ids as $blog_id ) {
+
+    	switch_to_blog( $blog_id );
+
+		$wpdb->query( "DROP TABLE " . $wpdb->prefix . "bsearch" );
+		$wpdb->query( "DROP TABLE " . $wpdb->prefix . "bsearch_daily" );
+
+		delete_option( 'ald_bsearch_settings' );
+
+		$wpdb->query( "ALTER TABLE " . $wpdb->posts . " DROP INDEX bsearch" );
+		$wpdb->query( "ALTER TABLE " . $wpdb->posts . " DROP INDEX bsearch_title" );
+		$wpdb->query( "ALTER TABLE " . $wpdb->posts . " DROP INDEX bsearch_content" );
+
+		delete_option( 'bsearch_db_version' );
+
+	}
+
+    // Switch back to the current blog
+    restore_current_blog();
+
+}
 ?>
