@@ -54,9 +54,9 @@ Check the Changelog for details
 * Modified: Better Search will now try BOOLEAN MODE and non-FULLTEXT modes in case FULLTEXT search doesn't return any results
 * Modified: Deprecated always dynamic heatmap option that bypassed cache
 * Modified: Reorganised admin interface
+* Modified: Seamless mode is now the default mode
 * Fixed: Seamless mode would overwrite all queries, even those outside the loop
 * Fixed: WordPress widget settings
-* Modified: Major code cleanup
 
 = 1.3.6 =
 * Fixes missing wick files in Settings page 404 error
