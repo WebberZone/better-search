@@ -1741,26 +1741,26 @@ function bsearch_default_options() {
 	$bsearch_settings = array(
 
 		/* General options */
-		'seamless' => false,			// Seamless integration mode
-		'track_popular' => true,			// Track the popular searches
+		'seamless' => true,				// Seamless integration mode
+		'track_popular' => true,		// Track the popular searches
 		'track_admins' => true,			// Track Admin searches
-		'track_editors' => true,			// Track Admin searches
+		'track_editors' => true,		// Track Editor searches
 		'meta_noindex' => true,			// Add noindex,follow meta tag to head
 		'show_credit' => false,			// Add link to plugin page of my blog in top posts list
 
 		/* Search options */
-		'limit' => '10',					// Search results per page
-		'post_types' => $post_types,		// WordPress custom post types
+		'limit' => '10',				// Search results per page
+		'post_types' => $post_types,	// WordPress custom post types
 
 		'use_fulltext' => true,			// Full text searches
-		'weight_content' => '10',			// Weightage for content
+		'weight_content' => '10',		// Weightage for content
 		'weight_title' => '1',			// Weightage for title
 		'boolean_mode' => false,		// Turn BOOLEAN mode on if true
 
 		'highlight' => false,			// Highlight search terms
-		'excerpt_length' => '50',		// Length of characters
+		'excerpt_length' => '100',		// Length of excerpt in words
 		'include_thumb' => false,		// Include thumbnail in search results
-		'link_new_window' => false,			// Open link in new window - Includes target="_blank" to links
+		'link_new_window' => false,		// Open link in new window - Includes target="_blank" to links
 		'link_nofollow' => true,		// Includes rel="nofollow" to links in heatmap
 
 		'badwords' => implode( ',', $badwords ),		// Bad words filter
@@ -1769,20 +1769,20 @@ function bsearch_default_options() {
 		'include_heatmap' => false,		// Include heatmap of searches in the search page
 		'title' => $title,				// Title of Search Heatmap
 		'title_daily' => $title_daily,	// Title of Daily Search Heatmap
-		'daily_range' => '7',				// Daily Popular will contain posts of how many days?
+		'daily_range' => '7',			// Daily Popular will contain posts of how many days?
 
-		'heatmap_limit' => '30',			// Heatmap - Maximum number of searches to display in heatmap
+		'heatmap_limit' => '30',		// Heatmap - Maximum number of searches to display in heatmap
 		'heatmap_smallest' => '10',		// Heatmap - Smallest Font Size
 		'heatmap_largest' => '20',		// Heatmap - Largest Font Size
 		'heatmap_unit' => 'pt',			// Heatmap - We'll use pt for font size
-		'heatmap_cold' => 'ccc',			// Heatmap - cold searches
-		'heatmap_hot' => '000',			// Heatmap - hot searches
+		'heatmap_cold' => 'CCCCCC',		// Heatmap - cold searches
+		'heatmap_hot' => '000000',		// Heatmap - hot searches
 		'heatmap_before' => '',			// Heatmap - Display before each search term
-		'heatmap_after' => '&nbsp;',		// Heatmap - Display after each search term
+		'heatmap_after' => '&nbsp;',	// Heatmap - Display after each search term
 
 
 		/* Custom styles */
-		'custom_CSS' => $custom_CSS,			// Custom CSS
+		'custom_CSS' => $custom_CSS,	// Custom CSS
 
 	);
 
@@ -1807,7 +1807,7 @@ function bsearch_default_options() {
 function bsearch_read_options() {
 
 	// Upgrade table code
-	global $bsearch_db_version, $network_wide;;
+	global $bsearch_db_version, $network_wide;
 
 	$bsearch_settings_changed = false;
 
