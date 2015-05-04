@@ -16,7 +16,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     1.4-beta20150504
+ * Version:     2.0.0-beta20150504
  * Author:      Ajay D'Souza
  * Author URI:  http://ajaydsouza.com/
  * Text Domain:	better-search
@@ -280,7 +280,7 @@ function get_bsearch_results( $search_query = '', $limit ) {
 /**
  * Fetch the search query for Better Search.
  *
- * @since	1.4
+ * @since	2.0.0
  *
  * @return	string	Better Search query
  */
@@ -293,7 +293,7 @@ function get_bsearch_query() {
 	/**
 	 * Filter search terms string
 	 *
-	 * @since	1.4
+	 * @since	2.0.0
 	 *
 	 * @param	string	$search_query	Search query
 	 */
@@ -455,7 +455,7 @@ function get_bsearch_matches( $search_query, $bydate ) {
 /**
  * returns an array with the first and last indices to be displayed on the page.
  *
- * @since	1.4
+ * @since	2.0.0
  *
  * @param	array	$search_info	Search query
  * @param 	bool	$boolean_mode	Set BOOLEAN mode for FULLTEXT searching
@@ -541,7 +541,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		/**
 		 * Filter the MATCH part of the FIELDS clause of the query.
 		 *
-		 * @since	1.4.0
+		 * @since	2.0.0
 		 *
 		 * @param string   $field_score  	The MATCH section of the FIELDS clause of the query, i.e. score
 		 * @param string   $search_info[0]	Search query
@@ -555,7 +555,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		/**
 		 * Filter the SELECT clause of the query.
 		 *
-		 * @since	1.4.0
+		 * @since	2.0.0
 		 *
 		 * @param string   $fields  		The SELECT clause of the query.
 		 * @param string   $search_info[0]	Search query
@@ -571,7 +571,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		/**
 		 * Filter the MATCH clause of the query.
 		 *
-		 * @since	1.4.0
+		 * @since	2.0.0
 		 *
 		 * @param string   $match  		The MATCH section of the WHERE clause of the query
 		 * @param string   $search_info[0]	Search query
@@ -592,7 +592,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		/**
 		 * Filter the WHERE clause of the query.
 		 *
-		 * @since	1.4.0
+		 * @since	2.0.0
 		 *
 		 * @param string   $where  		The WHERE clause of the query
 		 * @param string   $search_info[0]	Search query
@@ -610,7 +610,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		/**
 		 * Filter the ORDER BY clause of the query.
 		 *
-		 * @since	1.4.0
+		 * @since	2.0.0
 		 *
 		 * @param string   $orderby  		The ORDER BY clause of the query
 		 * @param string   $search_info[0]	Search query
@@ -620,7 +620,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		/**
 		 * Filter the GROUP BY clause of the query.
 		 *
-		 * @since	1.4.0
+		 * @since	2.0.0
 		 *
 		 * @param string   $groupby  		The GROUP BY clause of the query
 		 * @param string   $search_info[0]	Search query
@@ -630,7 +630,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		/**
 		 * Filter the JOIN clause of the query.
 		 *
-		 * @since	1.4.0
+		 * @since	2.0.0
 		 *
 		 * @param string   $join  		The JOIN clause of the query
 		 * @param string   $search_info[0]	Search query
@@ -640,7 +640,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		/**
 		 * Filter the JOIN clause of the query.
 		 *
-		 * @since	1.4.0
+		 * @since	2.0.0
 		 *
 		 * @param string   $limits  		The JOIN clause of the query
 		 * @param string   $search_info[0]	Search query
@@ -1149,7 +1149,7 @@ function bsearch_increment_counter( $search_query ) {
 	/**
 	 * Filter the search tracker code
 	 *
-	 * @since	1.4
+	 * @since	2.0.0
 	 *
 	 * @param	string	$output			Formatted output string
 	 * @param	string	$search_query	Search query
@@ -1216,7 +1216,7 @@ function bsearch_title( $title ) {
 	/**
 	 * Filters the title of the page
 	 *
-	 * @since	1.4
+	 * @since	2.0.0
 	 *
 	 * @param	string	$bsearch_title	Title of the page set by Better Search
 	 * @param	string	$title			Original Title of the page
@@ -1429,7 +1429,7 @@ function bsearch_where_clause( $where, $query ) {
 	/**
 	 * Filters Better Search WHERE clause
 	 *
-	 * @since	1.4
+	 * @since	2.0.0
 	 *
 	 * @param	string	$where	WHERE clause of main query
 	 * @param	object	$query	WordPress query
@@ -1462,7 +1462,7 @@ function bsearch_orderby_clause( $orderby, $query ) {
 	/**
 	 * Filters Better Search ORDERBY clause
 	 *
-	 * @since	1.4
+	 * @since	2.0.0
 	 *
 	 * @param	string	$where	ORDERBY clause of main query
 	 * @param	object	$query	WordPress query
@@ -1499,7 +1499,7 @@ function bsearch_clause_prepare() {
 	/**
 	 * Filters the string of SEARCH IDs returned
 	 *
-	 * @since	1.4
+	 * @since	2.0.0
 	 *
 	 * @return	string	$search_ids	Blank string or comma separated string of search results' IDs
 	 */
@@ -1541,7 +1541,7 @@ function bsearch_clause_head() {
 	/**
 	 * Filters the output HTML added to wp_head
 	 *
-	 * @since	1.4
+	 * @since	2.0.0
 	 *
 	 * @return	string	$output	Output HTML added to wp_head
 	 */
@@ -1556,7 +1556,7 @@ add_action( 'wp_head', 'bsearch_clause_head' );
 /**
  * Highlight the search term
  *
- * @since	1.4
+ * @since	2.0.0
  *
  * @param	string	$content	Post content
  * @return 	string	Post Content
@@ -1659,7 +1659,7 @@ function bsearch_default_options() {
 	/**
 	 * Filters Default options for Better Search
 	 *
-	 * @since	1.4
+	 * @since	2.0.0
 	 *
 	 * @param	array	$bsearch_settings	Default options
 	 **/
@@ -1699,7 +1699,7 @@ function bsearch_read_options() {
 	/**
 	 * Filters options read from DB for Better Search
 	 *
-	 * @since	1.4
+	 * @since	2.0.0
 	 *
 	 * @param	array	$bsearch_settings	Read options
 	 **/
@@ -1745,7 +1745,7 @@ register_activation_hook( __FILE__, 'bsearch_install' );
 /**
  * Create tables to store pageviews.
  *
- * @since	1.4
+ * @since	2.0.0
  */
 function bsearch_single_activate() {
 	global $wpdb, $bsearch_db_version;
@@ -1851,7 +1851,7 @@ function bsearch_single_activate() {
 /**
  * Fired when a new site is activated with a WPMU environment.
  *
- * @since	1.4
+ * @since	2.0.0
  *
  * @param    int    $blog_id    ID of the new blog.
  */
@@ -1872,7 +1872,7 @@ add_action( 'wpmu_new_blog', 'bsearch_activate_new_site' );
 /**
  * Fired when a site is deleted in a WPMU environment.
  *
- * @since	1.4
+ * @since	2.0.0
  *
  * @param    array    $tables    Tables in the blog.
  */

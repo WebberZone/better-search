@@ -64,7 +64,7 @@ class BSearch_Widget extends WP_Widget {
 			/**
 			 * Fires after Better Search widget options.
 			 *
-			 * @since	1.4
+			 * @since	2.0.0
 			 *
 			 * @param	array	$instance	Widget options array
 			 */
@@ -94,7 +94,7 @@ class BSearch_Widget extends WP_Widget {
 		/**
 		 * Filters Update widget options array.
 		 *
-		 * @since	1.4
+		 * @since	2.0.0
 		 *
 		 * @param	array	$instance	Widget options array
 		 */
