@@ -30,7 +30,7 @@ function bsearch_clean_terms( $val ) {
 	/**
 	 * Clean search string from XSS exploits.
 	 *
-	 * @since	1.4
+	 * @since	2.0.0
 	 *
 	 * @param	string	$val	Cleaned string
 	 */

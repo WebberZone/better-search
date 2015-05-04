@@ -38,14 +38,14 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 
 == Upgrade Notice ==
 
-= 1.4.0 =
+= 2.0.0 =
 Highlight search results; Filterable search query; multisite support; bug fixes;
 Check the Changelog for details
 
 
 == Changelog ==
 
-= 1.4.0 =
+= 2.0.0 =
 * New: Network Activate and Deactivate the plugin on WordPress Multisite
 * New: Option to highlight search results. If missing, add: <code>.bsearch_highlight { background:#ffc; }</code> under Custom Styles
 * New: Fully filterable search query

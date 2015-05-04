@@ -138,7 +138,7 @@ function bsearch_options() {
 			/**
 			 * Fires before the navigation bar in the Settings page
 			 *
-			 * @since	1.4.0
+			 * @since	2.0.0
 			 */
 			do_action( 'bsearch_admin_nav_bar_before' )
 		?>
@@ -152,7 +152,7 @@ function bsearch_options() {
 			/**
 			 * Fires after the navigation bar in the Settings page
 			 *
-			 * @since	1.4.0
+			 * @since	2.0.0
 			 */
 			do_action( 'bsearch_admin_nav_bar_after' )
 		?>
@@ -173,7 +173,7 @@ function bsearch_options() {
 					/**
 					 * Fires before General options block.
 					 *
-					 * @since	1.4.0
+					 * @since	2.0.0
 					 *
 					 * @param	array	$bsearch_settings	Better Search settings array
 					 */
@@ -226,7 +226,7 @@ function bsearch_options() {
 					/**
 					 * Fires after General options block.
 					 *
-					 * @since	1.4.0
+					 * @since	2.0.0
 					 *
 					 * @param	array	$bsearch_settings	Better Search settings array
 					 */
@@ -254,7 +254,7 @@ function bsearch_options() {
 					/**
 					 * Fires before Search options block.
 					 *
-					 * @since	1.4.0
+					 * @since	2.0.0
 					 *
 					 * @param	array	$bsearch_settings	Better Search settings array
 					 */
@@ -354,7 +354,7 @@ function bsearch_options() {
 					/**
 					 * Fires after Search options block.
 					 *
-					 * @since	1.4.0
+					 * @since	2.0.0
 					 *
 					 * @param	array	$bsearch_settings	Better Search settings array
 					 */
@@ -382,7 +382,7 @@ function bsearch_options() {
 					/**
 					 * Fires before Heatmap options block.
 					 *
-					 * @since	1.4.0
+					 * @since	2.0.0
 					 *
 					 * @param	array	$bsearch_settings	Better Search settings array
 					 */
@@ -460,7 +460,7 @@ function bsearch_options() {
 					/**
 					 * Fires after Heatmap options block.
 					 *
-					 * @since	1.4.0
+					 * @since	2.0.0
 					 *
 					 * @param	array	$bsearch_settings	Better Search settings array
 					 */
@@ -487,7 +487,7 @@ function bsearch_options() {
 					/**
 					 * Fires before Custom styles options block.
 					 *
-					 * @since	1.4.0
+					 * @since	2.0.0
 					 *
 					 * @param	array	$bsearch_settings	Better Search settings array
 					 */
@@ -509,7 +509,7 @@ function bsearch_options() {
 					/**
 					 * Fires after Custom styles options block.
 					 *
-					 * @since	1.4.0
+					 * @since	2.0.0
 					 *
 					 * @param	array	$bsearch_settings	Better Search settings array
 					 */
@@ -530,7 +530,7 @@ function bsearch_options() {
 			/**
 			 * Fires after all the options are displayed. Allows a custom function to add a new option block.
 			 *
-			 * @since	1.4.0
+			 * @since	2.0.0
 			 */
 			do_action( 'bsearch_admin_more_options' )
 		?>
