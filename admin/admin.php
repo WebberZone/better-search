@@ -183,7 +183,7 @@ function bsearch_options() {
 				<tr><th scope="row"><label for="seamless"><?php _e( 'Enable seamless integration?', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td>
 						<input type="checkbox" name="seamless" id="seamless" <?php if ( $bsearch_settings['seamless'] ) echo 'checked="checked"' ?> />
-						<p class="description"><?php _e( "Enabling this option will make the plugin return the search results just how your theme intended to be. This will ignore better-search-template.php. It will continue to display the search results sorted by relevance, although it won't display the percentage relevance.", BSEARCH_LOCAL_NAME ); ?></p>
+						<p class="description"><?php _e( "Complete integration with your theme. Enabling this option will ignore better-search-template.php. It will continue to display the search results sorted by relevance, although it won't display the percentage relevance.", BSEARCH_LOCAL_NAME ); ?></p>
 					</td>
 				</tr>
 
@@ -208,7 +208,7 @@ function bsearch_options() {
 					</td>
 				</tr>
 
-				<tr><th scope="row"><label for="meta_noindex"><?php _e( 'Stop search engines from indexing search ressults pages', BSEARCH_LOCAL_NAME ); ?></label></th>
+				<tr><th scope="row"><label for="meta_noindex"><?php _e( 'Stop search engines from indexing search results pages', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td>
 						<input type="checkbox" name="meta_noindex" id="meta_noindex" <?php if ( $bsearch_settings['meta_noindex'] ) echo 'checked="checked"' ?> />
 						<p class="description"><?php _e( 'This is a recommended option to turn ON. Adds noindex,follow meta tag to the head of the page', BSEARCH_LOCAL_NAME ); ?></p>
@@ -283,19 +283,7 @@ function bsearch_options() {
 				<tr><th scope="row"><label for="use_fulltext"><?php _e( 'Enable mySQL FULLTEXT searching', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td>
 						<input type="checkbox" name="use_fulltext" id="use_fulltext" <?php if ( $bsearch_settings['use_fulltext'] ) echo 'checked="checked"' ?> />
-						<p class="description"><?php _e( 'Disabling this option will no longer give relevancy based results.', BSEARCH_LOCAL_NAME ); ?></p>
-					</td>
-				</tr>
-
-				<tr><th scope="row"><label for="weight_title"><?php _e( 'Weight of the title', BSEARCH_LOCAL_NAME ); ?></label></th>
-					<td>
-						<input type="textbox" name="weight_title" id="weight_title" value="<?php echo stripslashes( $bsearch_settings['weight_title'] ); ?>">
-					</td>
-				</tr>
-
-				<tr><th scope="row"><label for="weight_content"><?php _e( 'Weight of the content', BSEARCH_LOCAL_NAME ); ?></label></th>
-					<td>
-						<input type="textbox" name="weight_content" id="weight_content" value="<?php echo stripslashes( $bsearch_settings['weight_content'] ); ?>">
+						<p class="description"><?php _e( 'Disabling this option will no longer give relevancy based results', BSEARCH_LOCAL_NAME ); ?></p>
 					</td>
 				</tr>
 
@@ -306,12 +294,25 @@ function bsearch_options() {
 					</td>
 				</tr>
 
+				<tr><th scope="row"><label for="weight_title"><?php _e( 'Weight of the title', BSEARCH_LOCAL_NAME ); ?></label></th>
+					<td>
+						<input type="textbox" name="weight_title" id="weight_title" value="<?php echo stripslashes( $bsearch_settings['weight_title'] ); ?>">
+						<p class="description"><?php _e( 'Set this to a bigger number than the next option to prioritise the post title', BSEARCH_LOCAL_NAME ); ?></p>
+					</td>
+				</tr>
+
+				<tr><th scope="row"><label for="weight_content"><?php _e( 'Weight of the content', BSEARCH_LOCAL_NAME ); ?></label></th>
+					<td>
+						<input type="textbox" name="weight_content" id="weight_content" value="<?php echo stripslashes( $bsearch_settings['weight_content'] ); ?>">
+						<p class="description"><?php _e( 'Set this to a bigger number than the previous option to prioritise the post content', BSEARCH_LOCAL_NAME ); ?></p>
+					</td>
+				</tr>
 
 				<tr><th scope="row"><label for="highlight"><?php _e( 'Highlight search terms', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td>
 						<input type="checkbox" name="highlight" id="highlight" <?php if ( $bsearch_settings['highlight'] ) echo 'checked="checked"' ?> />
 						<p class="description">
-							<?php _e( 'If enabled, the search terms are wrapped with the class <code>bsearch_highlight</code>. If missing, please add this under custom styles box below', BSEARCH_LOCAL_NAME ); ?>:
+							<?php _e( 'If enabled, the search terms are wrapped with the class <code>bsearch_highlight</code>. You will also need to add this CSS code under custom styles box below', BSEARCH_LOCAL_NAME ); ?>:
 							<br />
 							<code>.bsearch_highlight { background:#ffc; }</code>
 						</p>
@@ -321,25 +322,23 @@ function bsearch_options() {
 				<tr><th scope="row"><label for="include_thumb"><?php _e( 'Include thumbnails in search results', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td>
 						<input type="checkbox" name="include_thumb" id="include_thumb" <?php if ( $bsearch_settings['include_thumb'] ) echo 'checked="checked"' ?> />
-						<p class="description"><?php _e( 'Displays the featured image (post thumbnail) wherever available', BSEARCH_LOCAL_NAME ); ?></p>
-					</td>
-				</tr>
+						<p class="description"><?php _e( 'Displays the featured image (post thumbnail) whenever available', BSEARCH_LOCAL_NAME ); ?></p>
 
-				<tr><th scope="row"><label for="link_new_window"><?php _e( 'Open links in new window', BSEARCH_LOCAL_NAME ); ?></label></th>
-					<td>
-						<input type="checkbox" name="link_new_window" id="link_new_window" <?php if ( $bsearch_settings['link_new_window'] ) echo 'checked="checked"' ?> />
-					</td>
-				</tr>
+						<?php if ( $bsearch_settings['seamless'] ) { ?>
+							<p class="description" style="color: #f00"><?php _e( 'This setting does not apply because Seamless mode is activated.', BSEARCH_LOCAL_NAME ); ?></p>
+						<?php } ?>
 
-				<tr><th scope="row"><label for="link_nofollow"><?php _e( 'Add nofollow attribute to links in the list', BSEARCH_LOCAL_NAME ); ?></label></th>
-					<td>
-						<input type="checkbox" name="link_nofollow" id="link_nofollow" <?php if ( $bsearch_settings['link_nofollow'] ) echo 'checked="checked"' ?> />
 					</td>
 				</tr>
 
 				<tr><th scope="row"><label for="excerpt_length"><?php _e( 'Length of excerpt (in words)', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td>
 						<input type="textbox" name="excerpt_length" id="excerpt_length" value="<?php echo stripslashes( $bsearch_settings['excerpt_length'] ); ?>" />
+
+						<?php if ( $bsearch_settings['seamless'] ) { ?>
+							<p class="description" style="color: #f00"><?php _e( 'This setting does not apply because Seamless mode is activated.', BSEARCH_LOCAL_NAME ); ?></p>
+						<?php } ?>
+
 					</td>
 				</tr>
 
@@ -393,6 +392,11 @@ function bsearch_options() {
 					<td>
 						<input type="checkbox" name="include_heatmap" id="include_heatmap" <?php if ( $bsearch_settings['include_heatmap'] ) echo 'checked="checked"' ?> />
 						<p class="description"><?php _e( 'This option will display the heatmaps at the bottom of the search results page. Display popular searches to your visitors', BSEARCH_LOCAL_NAME ); ?></p>
+
+						<?php if ( $bsearch_settings['seamless'] ) { ?>
+							<p class="description" style="color: #f00"><?php _e( 'This setting does not apply because Seamless mode is activated. You can use the Widget instead to display the popular searches', BSEARCH_LOCAL_NAME ); ?></p>
+						<?php } ?>
+
 					</td>
 				</tr>
 
@@ -453,6 +457,18 @@ function bsearch_options() {
 				<tr><th scope="row"><label for="heatmap_after"><?php _e( 'Text to include after each search term in heatmap', BSEARCH_LOCAL_NAME ); ?></label></th>
 					<td>
 						<input type="textbox" name="heatmap_after" id="heatmap_after" value="<?php echo stripslashes( $bsearch_settings['heatmap_after'] ); ?>">
+					</td>
+				</tr>
+
+				<tr><th scope="row"><label for="link_new_window"><?php _e( 'Open links in new window', BSEARCH_LOCAL_NAME ); ?></label></th>
+					<td>
+						<input type="checkbox" name="link_new_window" id="link_new_window" <?php if ( $bsearch_settings['link_new_window'] ) echo 'checked="checked"' ?> />
+					</td>
+				</tr>
+
+				<tr><th scope="row"><label for="link_nofollow"><?php _e( 'Add nofollow attribute to links', BSEARCH_LOCAL_NAME ); ?></label></th>
+					<td>
+						<input type="checkbox" name="link_nofollow" id="link_nofollow" <?php if ( $bsearch_settings['link_nofollow'] ) echo 'checked="checked"' ?> />
 					</td>
 				</tr>
 
@@ -546,7 +562,7 @@ function bsearch_options() {
 
 	  <form method="post" id="bsearch_reset_options" name="bsearch_reset_options">
 	    <div id="resetopdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', BSEARCH_LOCAL_NAME ); ?>"><br /></div>
-	      <h3 class='hndle'><span><?php _e( 'Reset count', BSEARCH_LOCAL_NAME ); ?></span></h3>
+	      <h3 class='hndle'><span><?php _e( 'Reset count and Maintenance', BSEARCH_LOCAL_NAME ); ?></span></h3>
 	      <div class="inside">
 		    <p class="description">
 		      <?php _e( 'This cannot be reversed. Make sure that your database has been backed up before proceeding', BSEARCH_LOCAL_NAME ); ?>
