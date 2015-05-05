@@ -12,13 +12,11 @@ Better Search replaces the default WordPress search with a better search that gi
 
 == Description ==
 
-The default WordPress search is limited because it gives you results by date and not by relevance.
-
 <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search</a> replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find will find what they are looking for quicker than if you didn't have **Better Search** installed.
 
 Better Search can search through not just posts, but also pages and other custom post types. Let your visitors find what they are looking for.
 
-The plugin is packed with options to allow you to easily customise the output. You can also fine tune the results by assigning a greater weight to either the title or the content. Better Search supports templates for perfect integration into your blog template.
+The plugin is packed with options to allow you to easily customise the output. You can also fine tune the results by assigning a greater weight to either the title or the content. The default mode is a seamless integration with your WordPress theme. And, for power users, Better Search supports templates for that extra something.
 
 Additionally, the plugin also tracks the searches and you to display a "search heatmap" of the most popular searches. Support for WordPress widgets will allow you to easily add this heatmap to your theme's sidebar or footer.
 
@@ -34,6 +32,11 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 * **Supports cache plugins**: Works with caching plugins like WP-Super-Cache and W3 Total Cache
 * **Profanity filter**: Customise the list of stop words that will automatically be filtered out of search queries
 * **Translation ready**: Better Search is translation ready. If you're interested in translating Better Search into your own language <a href="http://ajaydsouza.com/contact/">let me know</a>.
+
+
+= Contribute =
+Better Search is also available on Github at https://github.com/ajaydsouza/better-search
+So, if you've got some cool feature that you'd like to implement into the plugin or a bug you've been able to fix, consider forking the project and sending me a pull request.
 
 
 == Upgrade Notice ==
@@ -172,10 +175,11 @@ Fixed: PHP Notices
 == Screenshots ==
 
 1. Options in WP-Admin - General options
-2. Options in WP-Admin - Output options
-3. Options in WP-Admin - Custom CSS
-4. Options in WP-Admin - Reset count
-5. Better Search widget
+2. Options in WP-Admin - Search options
+3. Options in WP-Admin - Heatmap options
+4. Options in WP-Admin - Custom styles
+5. Options in WP-Admin - Reset count and Maintenance
+6. Better Search widget
 
 
 == Frequently Asked Questions ==
