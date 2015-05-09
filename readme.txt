@@ -48,7 +48,7 @@ Check the Changelog for details
 
 == Changelog ==
 
-= 2.1.0 =
+= 2.0.1 =
 * Fixed: Bug where highlighting search terms broke HTML in links
 
 = 2.0.0 =
