@@ -41,12 +41,15 @@ So, if you've got some cool feature that you'd like to implement into the plugin
 
 == Upgrade Notice ==
 
-= 2.0.0 =
+= 2.0.1 =
 Highlight search results; Filterable search query; multisite support; bug fixes;
 Check the Changelog for details
 
 
 == Changelog ==
+
+= 2.1.0 =
+* Fixed: Bug where highlighting search terms broke HTML in links
 
 = 2.0.0 =
 * New: Network Activate and Deactivate the plugin on WordPress Multisite
