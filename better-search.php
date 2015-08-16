@@ -16,7 +16,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     2.0.1
+ * Version:     2.1-beta20150816
  * Author:      Ajay D'Souza
  * Author URI:  http://ajaydsouza.com/
  * Text Domain:	better-search
@@ -589,17 +589,6 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 			$where .= " AND $wpdb->posts.post_type IN ('" . join( "', '", $post_types ) . "') ";
 		}
 
-		/**
-		 * Filter the WHERE clause of the query.
-		 *
-		 * @since	2.0.0
-		 *
-		 * @param string   $where  		The WHERE clause of the query
-		 * @param string   $search_info[0]	Search query
-		 */
-		$where = apply_filters( 'bsearch_posts_where', $where, $search_info[0] );
-
-
 		// ORDER BY clause
 		if ( $bydate ) {
 			$orderby = " post_date DESC ";
@@ -607,47 +596,57 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 			$orderby = " score DESC ";
 		}
 
-		/**
-		 * Filter the ORDER BY clause of the query.
-		 *
-		 * @since	2.0.0
-		 *
-		 * @param string   $orderby  		The ORDER BY clause of the query
-		 * @param string   $search_info[0]	Search query
-		 */
-		$orderby = apply_filters( 'bsearch_posts_orderby', $orderby, $search_info[0] );
-
-		/**
-		 * Filter the GROUP BY clause of the query.
-		 *
-		 * @since	2.0.0
-		 *
-		 * @param string   $groupby  		The GROUP BY clause of the query
-		 * @param string   $search_info[0]	Search query
-		 */
-		$groupby = apply_filters( 'bsearch_posts_groupby', $groupby, $search_info[0] );
-
-		/**
-		 * Filter the JOIN clause of the query.
-		 *
-		 * @since	2.0.0
-		 *
-		 * @param string   $join  		The JOIN clause of the query
-		 * @param string   $search_info[0]	Search query
-		 */
-		$join = apply_filters( 'bsearch_posts_join', $join, $search_info[0] );
-
-		/**
-		 * Filter the JOIN clause of the query.
-		 *
-		 * @since	2.0.0
-		 *
-		 * @param string   $limits  		The JOIN clause of the query
-		 * @param string   $search_info[0]	Search query
-		 */
-		$limits = apply_filters( 'bsearch_posts_limits', $limits, $search_info[0] );
-
 	}
+
+	/**
+	 * Filter the WHERE clause of the query.
+	 *
+	 * @since	2.0.0
+	 *
+	 * @param string   $where  		The WHERE clause of the query
+	 * @param string   $search_info[0]	Search query
+	 */
+	$where = apply_filters( 'bsearch_posts_where', $where, $search_info[0] );
+
+	/**
+	 * Filter the ORDER BY clause of the query.
+	 *
+	 * @since	2.0.0
+	 *
+	 * @param string   $orderby  		The ORDER BY clause of the query
+	 * @param string   $search_info[0]	Search query
+	 */
+	$orderby = apply_filters( 'bsearch_posts_orderby', $orderby, $search_info[0] );
+
+	/**
+	 * Filter the GROUP BY clause of the query.
+	 *
+	 * @since	2.0.0
+	 *
+	 * @param string   $groupby  		The GROUP BY clause of the query
+	 * @param string   $search_info[0]	Search query
+	 */
+	$groupby = apply_filters( 'bsearch_posts_groupby', $groupby, $search_info[0] );
+
+	/**
+	 * Filter the JOIN clause of the query.
+	 *
+	 * @since	2.0.0
+	 *
+	 * @param string   $join  		The JOIN clause of the query
+	 * @param string   $search_info[0]	Search query
+	 */
+	$join = apply_filters( 'bsearch_posts_join', $join, $search_info[0] );
+
+	/**
+	 * Filter the JOIN clause of the query.
+	 *
+	 * @since	2.0.0
+	 *
+	 * @param string   $limits  		The JOIN clause of the query
+	 * @param string   $search_info[0]	Search query
+	 */
+	$limits = apply_filters( 'bsearch_posts_limits', $limits, $search_info[0] );
 
 	if ( ! empty( $groupby ) ) {
 		$groupby = 'GROUP BY ' . $groupby;
