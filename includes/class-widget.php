@@ -26,8 +26,8 @@ class BSearch_Widget extends WP_Widget {
 	function __construct() {
 		parent::__construct(
 			'widget_bsearch_pop', // Base ID
-			__( 'Popular Searches [Better Search]', BSEARCH_LOCAL_NAME ), // Name
-			array( 'description' => __( 'Display the popular searches', BSEARCH_LOCAL_NAME ), ) // Args
+			__( 'Popular Searches [Better Search]', 'better-search' ), // Name
+			array( 'description' => __( 'Display the popular searches', 'better-search' ), ) // Args
 		);
 	}
 
@@ -45,18 +45,18 @@ class BSearch_Widget extends WP_Widget {
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>">
-				<?php _e( 'Title', BSEARCH_LOCAL_NAME ); ?>: <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+				<?php _e( 'Title', 'better-search' ); ?>: <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
 			</label>
 		</p>
 		<p>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'daily' ); ?>" name="<?php echo $this->get_field_name( 'daily' ); ?>">
-				<option value="overall" <?php if ( $daily == 'overall' ) echo 'selected="selected"' ?>><?php _e( 'Overall', BSEARCH_LOCAL_NAME ); ?></option>
-				<option value="daily" <?php if ( $daily == 'daily' ) echo 'selected="selected"' ?>><?php _e( 'Custom time period (Enter below)', BSEARCH_LOCAL_NAME ); ?></option>
+				<option value="overall" <?php if ( $daily == 'overall' ) echo 'selected="selected"' ?>><?php _e( 'Overall', 'better-search' ); ?></option>
+				<option value="daily" <?php if ( $daily == 'daily' ) echo 'selected="selected"' ?>><?php _e( 'Custom time period (Enter below)', 'better-search' ); ?></option>
 			</select>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'daily_range' ); ?>">
-				<?php _e( 'Range in number of days (applies only to custom option above)', BSEARCH_LOCAL_NAME ); ?>: <input class="widefat" id="<?php echo $this->get_field_id( 'daily_range' ); ?>" name="<?php echo $this->get_field_name( 'daily_range' ); ?>" type="text" value="<?php echo esc_attr( $daily_range ); ?>" />
+				<?php _e( 'Range in number of days (applies only to custom option above)', 'better-search' ); ?>: <input class="widefat" id="<?php echo $this->get_field_id( 'daily_range' ); ?>" name="<?php echo $this->get_field_name( 'daily_range' ); ?>" type="text" value="<?php echo esc_attr( $daily_range ); ?>" />
 			</label>
 		</p>
 

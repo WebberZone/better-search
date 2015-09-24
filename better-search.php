@@ -33,31 +33,6 @@ if ( ! defined( 'WPINC' ) ) {
 
 
 /**
- * Holds the filesystem directory path
- *
- * @since	1.3.3
- */
-define( 'ALD_BSEARCH_DIR', dirname( __FILE__ ) );
-
-
-/**
- * Localisation name
- *
- * @since	1.3.3
- */
-define( 'BSEARCH_LOCAL_NAME', 'better-search' );
-
-/**
- * Holds the filesystem directory path (with trailing slash) for Better Search
- *
- * @since	1.0
- *
- * @var string
- */
-$bsearch_path = plugin_dir_path( __FILE__ );
-
-
-/**
  * Holds the URL for Better Search folder
  *
  * @since	1.0
@@ -93,7 +68,7 @@ $bsearch_settings = bsearch_read_options();
  * @since	1.3.3
  */
 function bsearch_lang_init() {
-	load_plugin_textdomain( BSEARCH_LOCAL_NAME, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	load_plugin_textdomain( 'better-search', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 add_action( 'init', 'bsearch_lang_init' );
 
@@ -223,9 +198,9 @@ function get_bsearch_results( $search_query = '', $limit ) {
 				$output .= '<p>';
 				$output .= '<span class="bsearch_score">' . get_bsearch_score( $search, $score, $topscore ) . '</span>';
 
-				$before = __( 'Posted on: ', BSEARCH_LOCAL_NAME );
+				$before = __( 'Posted on: ', 'better-search' );
 
-				$output .= '<span class="bsearch_date">' . get_bsearch_date( $search, __( 'Posted on: ', BSEARCH_LOCAL_NAME ) ) . '</span>';
+				$output .= '<span class="bsearch_date">' . get_bsearch_date( $search, __( 'Posted on: ', 'better-search' ) ) . '</span>';
 				$output .= '</p>';
 
 				$output .= '<p>';
@@ -249,18 +224,18 @@ function get_bsearch_results( $search_query = '', $limit ) {
 
 		} else {
 			$output .= '<p>';
-			$output .= __( 'No results.', BSEARCH_LOCAL_NAME );
+			$output .= __( 'No results.', 'better-search' );
 			$output .= '</p>';
 		}
 	} else {
 		$output .= '<p>';
-		$output .= __( 'Please type in your search terms. Use descriptive words since this search is intelligent.', BSEARCH_LOCAL_NAME );
+		$output .= __( 'Please type in your search terms. Use descriptive words since this search is intelligent.', 'better-search' );
 		$output .= '</p>';
 	}
 
 	if ( $bsearch_settings['show_credit'] ) {
 		$output .= '<hr /><p style="text-align:center">';
-		$output .= __( 'Powered by ', BSEARCH_LOCAL_NAME );
+		$output .= __( 'Powered by ', 'better-search' );
 		$output .= '<a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></p>';
 	}
 
@@ -740,12 +715,12 @@ function get_bsearch_header( $search_query, $numrows, $limit ) {
 	$output .= '<table width="100%" border="0" class="bsearch_nav">
 	 <tr class="bsearch_nav_row1">
 	  <td width="50%" style="text-align:left">';
-	$output .= sprintf( __( 'Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</strong>', BSEARCH_LOCAL_NAME ), $first, $last, $numrows );
+	$output .= sprintf( __( 'Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</strong>', 'better-search' ), $first, $last, $numrows );
 
 	$output .= '
 	  </td>
 	  <td width="50%" style="text-align:right">';
-	$output .= sprintf( __( 'Page <strong>%1$s</strong> of <strong>%2$s</strong>', BSEARCH_LOCAL_NAME ), $current, $total );
+	$output .= sprintf( __( 'Page <strong>%1$s</strong> of <strong>%2$s</strong>', 'better-search' ), $current, $total );
 
 	$sencoded = urlencode( $search_query );
 
@@ -755,7 +730,7 @@ function get_bsearch_header( $search_query, $numrows, $limit ) {
 	 <tr class="bsearch_nav_row2">
 	  <td style="text-align:left"></td>';
 	$output .= '<td style="text-align:right">';
-	$output .= __( 'Results per-page', BSEARCH_LOCAL_NAME );
+	$output .= __( 'Results per-page', 'better-search' );
 	$output .= ': <a href="' . home_url() . '/?s=' . $sencoded . '&limit=10">10</a> | <a href="' . home_url() . '/?s=' . $sencoded . '&limit=20">20</a> | <a href="' . home_url() . '/?s=' . $sencoded . '&limit=50">50</a> | <a href="' . home_url() . '/?s=' . $sencoded . '&limit=100">100</a>
 	  </td>
 	 </tr>
@@ -800,7 +775,7 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 	if ( 0 != $page ) { // Don't show back link if current page is first page.
 		$back_page = $page - $limit;
 		$output .=  "<a href=\"" . home_url() . "/?s=$search_query&limit=$limit&bpaged=$back_page\">&laquo; ";
-		$output .=  __( 'Previous', BSEARCH_LOCAL_NAME );
+		$output .=  __( 'Previous', 'better-search' );
 		$output .=  "</a>    \n";
 	}
 
@@ -828,7 +803,7 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 	if ( ! ( ( ( $page + $limit ) / $limit ) >= $pages ) && $pages != 1 ) { // If last page don't give next link.
 		$next_page = $page + $limit;
 		$output .=  "    <a href=\"" . home_url() . "/?s=$search_query&limit=$limit&bpaged=$next_page\">";
-		$output .=  __( 'Next', BSEARCH_LOCAL_NAME );
+		$output .=  __( 'Next', 'better-search' );
 		$output .=  " &raquo;</a>";
 	}
 	$output .=   '</p>';
@@ -863,7 +838,7 @@ function get_bsearch_score( $search, $score, $topscore ) {
 
 	if ( $score > 0 ) {
 		$score = $score * 100 / $topscore;
-		$output = __( 'Relevance: ', BSEARCH_LOCAL_NAME );
+		$output = __( 'Relevance: ', 'better-search' );
 		$output .= number_format_i18n( $score, 0 ) . '% &nbsp;&nbsp;&nbsp;&nbsp; ';
 	}
 
@@ -1086,7 +1061,7 @@ function get_bsearch_heatmap( $args = array() ) {
 			$style .= '"';
 
 			$output .= $before . '<a href="' . $url . '" title="';
-			$output .= sprintf( _n( 'Search for %1$s (%2$s search)', 'Search for %1$s (%2$s searches)', $cntaccess, BSEARCH_LOCAL_NAME ), $textsearchvar, $cntaccess );
+			$output .= sprintf( _n( 'Search for %1$s (%2$s search)', 'Search for %1$s (%2$s searches)', $cntaccess, 'better-search' ), $textsearchvar, $cntaccess );
 			$output .= '" '.$style;
 			if ( $bsearch_settings['link_nofollow'] ) {
 				$output .= ' rel="nofollow" ';
@@ -1097,7 +1072,7 @@ function get_bsearch_heatmap( $args = array() ) {
 			$output .= '>' . $textsearchvar . '</a>' . $after . ' ';
 		}
 	} else {
-		$output = __( 'No searches made yet', BSEARCH_LOCAL_NAME );
+		$output = __( 'No searches made yet', 'better-search' );
 	}
 
 	/**
@@ -1207,7 +1182,7 @@ function bsearch_title( $title ) {
 
 	if ( isset( $search_query ) ) {
 
-		$bsearch_title = sprintf( __( 'Search Results for "%s" | %s', BSEARCH_LOCAL_NAME ), $search_query, $title );
+		$bsearch_title = sprintf( __( 'Search Results for "%s" | %s', 'better-search' ), $search_query, $title );
 
 	}
 
@@ -1241,9 +1216,9 @@ function get_bsearch_form( $search_query ) {
 	}
 
 	$form = '<div style="text-align:center"><form method="get" class="bsearchform" action="' . home_url() . '/" >
-	<label class="hidden" for="s">' . __( 'Search for:', BSEARCH_LOCAL_NAME ) . '</label>
+	<label class="hidden" for="s">' . __( 'Search for:', 'better-search' ) . '</label>
 	<input type="text" value="' . $search_query . '" name="s" class="s" />
-	<input type="submit" class="searchsubmit" value="' . __( 'Search Again', BSEARCH_LOCAL_NAME ) . '" />
+	<input type="submit" class="searchsubmit" value="' . __( 'Search Again', 'better-search' ) . '" />
 	</form></div>';
 
 	/**
@@ -1589,8 +1564,8 @@ add_filter( 'the_title', 'bsearch_content' );
  * @return	array	Default options array
  */
 function bsearch_default_options() {
-	$title = __( '<h3>Popular Searches</h3>', BSEARCH_LOCAL_NAME );
-	$title_daily = __( '<h3>Weekly Popular Searches</h3>', BSEARCH_LOCAL_NAME );
+	$title = __( '<h3>Popular Searches</h3>', 'better-search' );
+	$title_daily = __( '<h3>Weekly Popular Searches</h3>', 'better-search' );
 
 	// get relevant post types
 	$args = array (

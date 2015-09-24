@@ -28,7 +28,7 @@
 
 		<div id="bsearchresults">
 			<h1 class="page-title">
-				<?php echo __( 'Search Results for: ', BSEARCH_LOCAL_NAME ); ?>
+				<?php echo __( 'Search Results for: ', 'better-search' ); ?>
 				<span>
 					<?php echo $search_query; ?>
 				</span>
