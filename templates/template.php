@@ -6,16 +6,16 @@
  */
 
 	/* Set the search query if it is missing */
- 	if ( ! isset( $bsearch_settings ) ) {
-		global $bsearch_settings;
-	}
+if ( ! isset( $bsearch_settings ) ) {
+	global $bsearch_settings;
+}
 
 	$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : $bsearch_settings['limit']; // Read from GET variable
 
 	/* Set the search query if it is missing */
- 	if ( ! isset( $search_query ) ) {
-		$search_query = get_bsearch_query();
-	}
+if ( ! isset( $search_query ) ) {
+	$search_query = get_bsearch_query();
+}
 
 	// Get Header
 	get_header();
@@ -67,8 +67,7 @@
 
 <?php
 	// Get the sidebar
-	//get_sidebar();
-
+	// get_sidebar();
 	// Get the footer
 	get_footer();
 

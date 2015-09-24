@@ -27,7 +27,7 @@ class BSearch_Widget extends WP_Widget {
 		parent::__construct(
 			'widget_bsearch_pop', // Base ID
 			__( 'Popular Searches [Better Search]', 'better-search' ), // Name
-			array( 'description' => __( 'Display the popular searches', 'better-search' ), ) // Args
+			array( 'description' => __( 'Display the popular searches', 'better-search' ) ) // Args
 		);
 	}
 
@@ -50,8 +50,8 @@ class BSearch_Widget extends WP_Widget {
 		</p>
 		<p>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'daily' ); ?>" name="<?php echo $this->get_field_name( 'daily' ); ?>">
-				<option value="overall" <?php if ( $daily == 'overall' ) echo 'selected="selected"' ?>><?php _e( 'Overall', 'better-search' ); ?></option>
-				<option value="daily" <?php if ( $daily == 'daily' ) echo 'selected="selected"' ?>><?php _e( 'Custom time period (Enter below)', 'better-search' ); ?></option>
+				<option value="overall" <?php if ( $daily == 'overall' ) { echo 'selected="selected"'; } ?>><?php _e( 'Overall', 'better-search' ); ?></option>
+				<option value="daily" <?php if ( $daily == 'daily' ) { echo 'selected="selected"'; } ?>><?php _e( 'Custom time period (Enter below)', 'better-search' ); ?></option>
 			</select>
 		</p>
 		<p>
@@ -149,7 +149,6 @@ class BSearch_Widget extends WP_Widget {
  * Initialise Better Search Widgets.
  *
  * @since	1.3.3
- *
  */
 function bsearch_register_widget() {
 	register_widget( 'BSearch_Widget' );
