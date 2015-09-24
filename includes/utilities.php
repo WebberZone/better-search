@@ -203,4 +203,3 @@ function bsearch_rgb2html($r, $g = -1, $b = -1, $padhash = false ) {
     return $color;
 }
 
-?>

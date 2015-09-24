@@ -78,4 +78,4 @@ function bsearch_inc_count() {
 }
 bsearch_inc_count();
 
-?>
+
