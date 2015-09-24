@@ -157,4 +157,3 @@ function bsearch_register_widget() {
 add_action( 'widgets_init', 'bsearch_register_widget', 1 );
 
 
-?>

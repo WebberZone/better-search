@@ -58,4 +58,4 @@ function bsearch_daily_searches() {
 	echo "document.write('" . $output . "')";
 }
 bsearch_daily_searches();
-?>
+
