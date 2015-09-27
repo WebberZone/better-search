@@ -2,7 +2,7 @@
 /**
  * Increments the count on the search terms
  *
- * @package BSearch
+ * @package Better_Search
  */
 
 // This makes the browser treat this file as a javascript

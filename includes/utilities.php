@@ -2,7 +2,7 @@
 /**
  * Utlity functions used by Better Search
  *
- * @package BSearch
+ * @package Better_Search
  */
 
 // If this file is called directly, then abort execution.

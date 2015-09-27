@@ -2,7 +2,7 @@
 /**
  * Generates the settings page in the Admin
  *
- * @package BSearch
+ * @package Better_Search
  */
 
 // If this file is called directly, then abort execution.

@@ -2,7 +2,7 @@
 /**
  * Display Daily Popular Search terms.
  *
- * @package BSearch
+ * @package Better_Search
  */
 
 Header( 'content-type: application/x-javascript' );

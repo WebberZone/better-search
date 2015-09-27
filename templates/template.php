@@ -2,7 +2,7 @@
 /**
  * Default template when there is no template in the theme folder
  *
- * @package BSearch
+ * @package Better_Search
  */
 
 	/* Set the search query if it is missing */
