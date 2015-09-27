@@ -5,7 +5,7 @@
  * Better Search is a plugin that will replace the default WordPress search page
  * with highly relevant search results improving your visitors search experience.
  *
- * @package BSearch
+ * @package Better_Search
  * @author    Ajay D'Souza <me@ajaydsouza.com>
  * @license   GPL-2.0+
  * @link      http://ajaydsouza.com

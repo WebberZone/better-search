@@ -2,7 +2,7 @@
 /**
  * Fired when the plugin is uninstalled
  *
- * @package BSearch
+ * @package Better_Search
  */
 
 // If this file is called directly, then abort execution.
