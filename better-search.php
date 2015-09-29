@@ -117,7 +117,7 @@ function get_bsearch_results( $search_query = '', $limit ) {
 			$output .= get_bsearch_header( $search_query, $numrows, $limit );
 
 			$search_query = preg_quote( $search_query, '/' );
-			$keys = explode( " ", $search_query );
+			$keys = explode( ' ', $search_query );
 
 			foreach ( $searches as $search ) {
 				$score = $search->score;
@@ -140,7 +140,7 @@ function get_bsearch_results( $search_query = '', $limit ) {
 				$output .= '</p>';
 
 				$output .= '<p>';
-				if ( $bsearch_settings['include_thumb']) {
+				if ( $bsearch_settings['include_thumb'] ) {
 					$output .= '<p class="bsearch_thumb">' . get_the_post_thumbnail( $search->ID, 'thumbnail' ) . '</p>';
 				}
 
@@ -218,7 +218,7 @@ function get_bsearch_query() {
  *
  * @since	1.2
  *
- * @param	mixed	$search_query	The search term
+ * @param	mixed $search_query   The search term
  * @return	array	Cleaned up search string
  */
 function get_bsearch_terms( $search_query = '' ) {
@@ -233,14 +233,13 @@ function get_bsearch_terms( $search_query = '' ) {
 
 	// if use_fulltext is false OR if all the words are shorter than four chars, add the array of search terms.
 	// Currently this will disable match ranking and won't be quote-savvy.
-
 	// if we are using fulltext, turn it off unless there's a search word longer than three chars
 	// ideally we'd also check against stopwords here
 	$search_words = explode( ' ', $search_query );
 
 	if ( $use_fulltext ) {
 		$use_fulltext_proxy = false;
-		foreach( $search_words as $search_word ) {
+		foreach ( $search_words as $search_word ) {
 			if ( strlen( $search_word ) > 3 ) {
 				$use_fulltext_proxy = true;
 			}
@@ -277,8 +276,8 @@ function get_bsearch_terms( $search_query = '' ) {
  *
  * @since	1.2
  *
- * @param	string	$search_info	Search terms array
- * @param	bool	$bydate			Sort by date?
+ * @param	string $search_info    Search terms array
+ * @param	bool   $bydate         Sort by date?
  * @return	array	Search results
  */
 function get_bsearch_matches( $search_query, $bydate ) {
@@ -290,7 +289,7 @@ function get_bsearch_matches( $search_query, $bydate ) {
 	$search_info = get_bsearch_terms( $search_query );
 
 	// Get search transient
-	$search_query_transient = substr( 'bs_' . preg_replace( '/[^A-Za-z0-9\-]/', '', str_replace( " ", "", $search_query ) ), 0, 40 );	// Name of the transient limited to 40 chars
+	$search_query_transient = substr( 'bs_' . preg_replace( '/[^A-Za-z0-9\-]/', '', str_replace( ' ', '', $search_query ) ), 0, 40 );	// Name of the transient limited to 40 chars
 
 	$matches = get_transient( $search_query_transient );
 
@@ -312,7 +311,6 @@ function get_bsearch_matches( $search_query, $bydate ) {
 				return apply_filters( 'get_bsearch_matches', $matches, $search_info );
 
 			}
-
 		}
 	}
 
@@ -368,8 +366,8 @@ function get_bsearch_matches( $search_query, $bydate ) {
  *
  * @since	1.2
  *
- * @param	int		$numrows	Total results
- * @param 	int		$limit		Results per page
+ * @param	int $numrows    Total results
+ * @param 	int $limit      Results per page
  * @return	array	First and last indices to be displayed on the page
  */
 function get_bsearch_range( $numrows, $limit ) {
@@ -408,10 +406,10 @@ function bsearch_default_options() {
 	$title = __( '<h3>Popular Searches</h3>', 'better-search' );
 	$title_daily = __( '<h3>Weekly Popular Searches</h3>', 'better-search' );
 
-	// get relevant post types
-	$args = array (
+	// Get relevant post types.
+	$args = array(
 		'public' => true,
-		'_builtin' => true
+		'_builtin' => true,
 	);
 	$post_types	= http_build_query( get_post_types( $args ), '', '&' );
 
@@ -423,7 +421,79 @@ function bsearch_default_options() {
 .bsearch_highlight { background:#ffc; }
 	';
 
-	$badwords = array( 'anal', 'anus', 'bastard', 'beastiality', 'bestiality', 'bewb', 'bitch', 'blow', 'blumpkin', 'boob', 'cawk', 'cock', 'choad', 'cooter', 'cornhole', 'cum', 'cunt', 'dick', 'dildo', 'dong', 'dyke', 'douche', 'fag', 'faggot', 'fart', 'foreskin', 'fuck', 'fuk', 'gangbang', 'gook', 'handjob', 'homo', 'honkey', 'humping', 'jiz', 'jizz', 'kike', 'kunt', 'labia', 'muff', 'nigger', 'nutsack', 'pen1s', 'penis', 'piss', 'poon', 'poop', 'porn', 'punani', 'pussy', 'queef', 'queer', 'quim', 'rimjob', 'rape', 'rectal', 'rectum', 'semen', 'shit', 'slut', 'spick', 'spoo', 'spooge', 'taint', 'titty', 'titties', 'twat', 'vagina', 'vulva', 'wank', 'whore', );
+	$badwords = array(
+	'anal',
+	'anus',
+	'bastard',
+	'beastiality',
+	'bestiality',
+	'bewb',
+	'bitch',
+	'blow',
+	'blumpkin',
+	'boob',
+	'cawk',
+	'cock',
+	'choad',
+	'cooter',
+	'cornhole',
+	'cum',
+	'cunt',
+	'dick',
+	'dildo',
+	'dong',
+	'dyke',
+	'douche',
+	'fag',
+	'faggot',
+	'fart',
+	'foreskin',
+	'fuck',
+	'fuk',
+	'gangbang',
+	'gook',
+	'handjob',
+	'homo',
+	'honkey',
+	'humping',
+	'jiz',
+	'jizz',
+	'kike',
+	'kunt',
+	'labia',
+	'muff',
+	'nigger',
+	'nutsack',
+	'pen1s',
+	'penis',
+	'piss',
+	'poon',
+	'poop',
+	'porn',
+	'punani',
+	'pussy',
+	'queef',
+	'queer',
+	'quim',
+	'rimjob',
+	'rape',
+	'rectal',
+	'rectum',
+	'semen',
+	'shit',
+	'slut',
+	'spick',
+	'spoo',
+	'spooge',
+	'taint',
+	'titty',
+	'titties',
+	'twat',
+	'vagina',
+	'vulva',
+	'wank',
+	'whore',
+	);
 
 	$bsearch_settings = array(
 
@@ -467,20 +537,19 @@ function bsearch_default_options() {
 		'heatmap_before' => '',			// Heatmap - Display before each search term
 		'heatmap_after' => '&nbsp;',	// Heatmap - Display after each search term
 
-
 		/* Custom styles */
 		'custom_CSS' => $custom_CSS,	// Custom CSS
 
 	);
 
-	/**
-	 * Filters Default options for Better Search
+	/*
+	 * Filters default options for Better Search
 	 *
 	 * @since	2.0.0
 	 *
-	 * @param	array	$bsearch_settings	Default options
-	 **/
-	return apply_filters( 'bsearch_default_options', $bsearch_settings);
+	 * @param	array	$bsearch_settings	default options
+	 */
+	return apply_filters( 'bsearch_default_options', $bsearch_settings )
 }
 
 
@@ -519,8 +588,8 @@ function bsearch_read_options() {
 	 * @since	2.0.0
 	 *
 	 * @param	array	$bsearch_settings	Read options
-	 **/
-	return apply_filters( 'bsearch_read_options', $bsearch_settings);
+	 */
+	return apply_filters( 'bsearch_read_options', $bsearch_settings );
 }
 
 
@@ -529,37 +598,38 @@ function bsearch_read_options() {
  *
  * @since	1.0
  *
- * @param    boolean    $network_wide    True if WPMU superadmin uses
- *                                       "Network Activate" action, false if
- *                                       WPMU is disabled or plugin is
- *                                       activated on an individual blog.
+ * @param    boolean $network_wide    True if WPMU superadmin uses
+ *                                    "Network Activate" action, false if
+ *                                    WPMU is disabled or plugin is
+ *                                    activated on an individual blog.
  */
 function bsearch_install( $network_wide ) {
-    global $wpdb;
+	global $wpdb;
 
-    if ( is_multisite() && $network_wide ) {
+	if ( is_multisite() && $network_wide ) {
 
-        // Get all blogs in the network and activate plugin on each one
-        $blog_ids = $wpdb->get_col( "
+		// Get all blogs in the network and activate plugin on each one
+		$blog_ids = $wpdb->get_col( "
         	SELECT blog_id FROM $wpdb->blogs
 			WHERE archived = '0' AND spam = '0' AND deleted = '0'
 		" );
-        foreach ( $blog_ids as $blog_id ) {
-        	switch_to_blog( $blog_id );
+		foreach ( $blog_ids as $blog_id ) {
+			switch_to_blog( $blog_id );
 			bsearch_single_activate();
-        }
+		}
 
-        // Switch back to the current blog
-        restore_current_blog();
+		// Switch back to the current blog
+		restore_current_blog();
 
-    } else {
-        bsearch_single_activate();
-    }
+	} else {
+		bsearch_single_activate();
+	}
 }
 register_activation_hook( __FILE__, 'bsearch_install' );
 
 
-/*----------------------------------------------------------------------------*
+/*
+ * ----------------------------------------------------------------------------*
  * Include files
  *----------------------------------------------------------------------------*/
 
@@ -574,14 +644,14 @@ register_activation_hook( __FILE__, 'bsearch_install' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/modules/class-widget.php' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/modules/heatmap.php' );
 
-/*----------------------------------------------------------------------------*
+/*
+ *----------------------------------------------------------------------------*
  * Dashboard and Administrative Functionality
  *----------------------------------------------------------------------------*/
 if ( is_admin() ) {
 
 	/**
 	 *  Load the admin pages if we're in the Admin.
-	 *
 	 */
 	require_once( plugin_dir_path( __FILE__ ) . '/admin/admin.php' );
 
