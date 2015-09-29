@@ -549,7 +549,7 @@ function bsearch_default_options() {
 	 *
 	 * @param	array	$bsearch_settings	default options
 	 */
-	return apply_filters( 'bsearch_default_options', $bsearch_settings )
+	return apply_filters( 'bsearch_default_options', $bsearch_settings );
 }
 
 
