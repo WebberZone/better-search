@@ -34,7 +34,6 @@ function bsearch_clause_head() {
 		if ( '' != $bsearch_custom_CSS ) {
 			$output .= '<style type="text/css">' . $bsearch_custom_CSS . '</style>';
 		}
-
 	}
 
 	/**
@@ -57,7 +56,7 @@ add_action( 'wp_head', 'bsearch_clause_head' );
  *
  * @since	2.0.0
  *
- * @param	string	$content	Post content
+ * @param	string $content    Post content
  * @return 	string	Post Content
  */
 function bsearch_content( $content ) {
@@ -67,9 +66,9 @@ function bsearch_content( $content ) {
 		$search_query = get_bsearch_query();
 
 		$search_query = preg_quote( $search_query, '/' );
-		$keys = explode( " ", $search_query );
+		$keys = explode( ' ', $search_query );
 
-		$regEx = "/(?!<[^>]*?>)(". implode( '|', $keys ) . ")(?![^<]*?>)/iu";
+		$regEx = '/(?!<[^>]*?>)('. implode( '|', $keys ) . ')(?![^<]*?>)/iu';
 		$content  = preg_replace( $regEx, '<span class="bsearch_highlight">$1</span>', $content );
 
 	}
