@@ -89,6 +89,15 @@ if ( ! defined( 'WPINC' ) ) {
                     </td>
                 </tr>
 
+				<tr>
+					<th scope="row"><label for="cache"><?php _e( 'Enable cache:', 'better-search' ); ?></label></th>
+					<td>
+						<p><input type="checkbox" name="cache" id="cache" <?php if ( $bsearch_settings['cache'] ) { echo 'checked="checked"'; } ?> /></p>
+						<p class="description"><?php _e( 'If activated, Top 10 will use the Transients API to cache the popular posts output for 1 hour.', 'better-search' ); ?></p>
+						<p><input type="button" name="cache_clear" id="cache_clear"  value="<?php _e( 'Clear cache', 'better-search' ); ?>" class="button-secondary" onclick="return clearCache();" /></p>
+					</td>
+				</tr>
+
 				<tr><th scope="row"><label for="meta_noindex"><?php _e( 'Stop search engines from indexing search results pages', 'better-search' ); ?></label></th>
                     <td>
 						<input type="checkbox" name="meta_noindex" id="meta_noindex" <?php if ( $bsearch_settings['meta_noindex'] ) { echo 'checked="checked"'; } ?> />
@@ -452,7 +461,6 @@ if ( ! defined( 'WPINC' ) ) {
 		      <input name="bsearch_trunc_all" type="submit" id="bsearch_trunc_all" value="<?php _e( 'Reset Popular Searches', 'better-search' ); ?>" class="button button-secondary" onclick="if ( ! confirm( '<?php _e( 'Are you sure you want to reset the popular posts?', 'better-search' ); ?>' ) ) return false;" />
 		      <input name="bsearch_trunc_daily" type="submit" id="bsearch_trunc_daily" value="<?php _e( 'Reset Daily Popular Searches', 'better-search' ); ?>" class="button button-secondary" onclick="if ( ! confirm( '<?php _e( 'Are you sure you want to reset the daily popular posts?', 'better-search' ); ?>' ) ) return false;" />
 			  <input name="bsearch_recreate" type="submit" id="bsearch_recreate" value="<?php _e( 'Recreate Index', 'better-search' ); ?>" class="button button-secondary" onclick="if ( ! confirm('<?php _e( 'Are you sure you want to recreate the index?', 'better-search' ); ?>') ) return false;" />
-			  <input name="bsearch_delete_transients" type="submit" id="bsearch_delete_transients" value="<?php _e( 'Delete transients', 'better-search' ); ?>" class="button button-secondary" onclick="if ( ! confirm('<?php _e( 'Are you sure you want to delete all transients?', 'better-search' ); ?>' ) ) return false;" />
             </p>
           </div>
         </div>

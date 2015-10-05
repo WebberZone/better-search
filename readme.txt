@@ -49,7 +49,12 @@ Check the Changelog for details
 == Changelog ==
 
 = 2.1.0 =
-* Modified: Query filters now work for the LIKE search as well
+
+* Features:
+	* Cache enable/disable option + Clear cache button. Replaces "Delete transients"
+
+* Enhancements:
+	* Query filters now work for the LIKE search as well
 
 = 2.0.1 =
 * Fixed: Bug where highlighting search terms broke HTML in links
