@@ -35,6 +35,7 @@ function bsearch_options() {
 		$bsearch_settings['track_popular'] = isset( $_POST['track_popular'] ) ? true : false;
 		$bsearch_settings['track_admins'] = isset( $_POST['track_admins'] ) ? true : false;
 		$bsearch_settings['track_editors'] = isset( $_POST['track_editors'] ) ? true : false;
+		$bsearch_settings['cache'] = isset( $_POST['cache'] ) ? true : false;
 
 		$bsearch_settings['meta_noindex'] = isset( $_POST['meta_noindex'] ) ? true : false;
 
@@ -85,7 +86,9 @@ function bsearch_options() {
 
 		update_option( 'ald_bsearch_settings', $bsearch_settings );
 
-		$str = '<div id="message" class="updated fade"><p>'. __( 'Options saved successfully.', 'better-search' ) .'</p></div>';
+		bsearch_cache_delete();
+
+		$str = '<div id="message" class="updated fade"><p>'. __( 'Options saved successfully. If enabled, cache has been cleared.', 'better-search' ) .'</p></div>';
 		echo $str;
 	}
 
@@ -121,11 +124,6 @@ function bsearch_options() {
 
 		$str = '<div id="message" class="updated fade"><p>'. __( 'Index recreated', 'better-search' ) .'</p></div>';
 		echo $str;
-	}
-
-	if ( ( isset( $_POST['bsearch_delete_transients'] ) ) && ( check_admin_referer( 'bsearch-plugin-settings' ) ) ) {
-		$wpdb->query( 'DELETE FROM ' . $wpdb->options . " WHERE option_name LIKE '_transient_bs_%'" );
-		$wpdb->query( 'DELETE FROM ' . $wpdb->options . " WHERE option_name LIKE '_transient_timeout_bs_%'" );
 	}
 
 	require_once( 'main-view.php' );
@@ -261,6 +259,14 @@ function bsearch_adminhead() {
             answer = false;
         return answer;
         }//
+
+		function clearCache() {
+			/**** since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php ****/
+			jQuery.post(ajaxurl, {action: 'bsearch_clear_cache'}, function(response, textStatus, jqXHR) {
+				alert( response.message );
+			}, 'json');
+		}
+
         //]]>
     </script>
 
@@ -392,4 +398,22 @@ function bsearch_plugin_actions( $links, $file ) {
 	return $links;
 }
 add_filter( 'plugin_row_meta', 'bsearch_plugin_actions', 10, 2 ); // only 2.8 and higher
+
+
+/**
+ * Function to clear the Cache with Ajax.
+ *
+ * @since	2.2.0
+ */
+function bsearch_ajax_clearcache() {
+
+	bsearch_cache_delete();
+
+	exit( json_encode( array(
+		'success' => 1,
+		'message' => __( 'Better Search cache has been cleared', 'better-search' ),
+	) ) );
+}
+add_action( 'wp_ajax_bsearch_clear_cache', 'bsearch_ajax_clearcache' );
+
 

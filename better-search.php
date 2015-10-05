@@ -15,7 +15,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     2.1-beta20150929
+ * Version:     2.1-beta20151005
  * Author:      Ajay D'Souza
  * Author URI:  http://ajaydsouza.com/
  * Text Domain:	better-search
@@ -351,8 +351,10 @@ function get_bsearch_matches( $search_query, $bydate ) {
 	$matches[0] = $results;
 	$matches['search_query'] = $search_query;
 
-	// Set search transient
-	set_transient( $search_query_transient, $matches, 7200 );
+	if ( $bsearch_settings['cache'] ) {
+		// Set search transient
+		set_transient( $search_query_transient, $matches, 7200 );
+	}
 
 	/**
 	 * Described in better-search.php
@@ -502,6 +504,7 @@ function bsearch_default_options() {
 		'track_popular' => true,		// Track the popular searches
 		'track_admins' => true,			// Track Admin searches
 		'track_editors' => true,		// Track Editor searches
+		'cache' => true,				// Enable Cache
 		'meta_noindex' => true,			// Add noindex,follow meta tag to head
 		'show_credit' => false,			// Add link to plugin page of my blog in top posts list
 
@@ -640,6 +643,7 @@ register_activation_hook( __FILE__, 'bsearch_install' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/template-redirect.php' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/tracker.php' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/utilities.php' );
+	require_once( plugin_dir_path( __FILE__ ) . 'includes/cache.php' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/modules/seamless.php' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/modules/class-widget.php' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/modules/heatmap.php' );
