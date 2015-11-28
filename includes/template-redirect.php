@@ -1,6 +1,6 @@
 <?php
 /**
- * Template functions used by Better Search
+ * Redirect function
  *
  * @package Better_Search
  */
