@@ -3,7 +3,7 @@ Tags: search, Better Search, related search, relevant search, search results, he
 Contributors: Ajay
 Donate link: http://ajaydsouza.com/donate/
 Stable tag: trunk
-Requires at least: 3.5
+Requires at least: 3.9
 Tested up to: 4.4
 License: GPLv2 or later
 
