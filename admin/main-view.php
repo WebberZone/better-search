@@ -93,7 +93,7 @@ if ( ! defined( 'WPINC' ) ) {
 					<th scope="row"><label for="cache"><?php _e( 'Enable cache:', 'better-search' ); ?></label></th>
 					<td>
 						<p><input type="checkbox" name="cache" id="cache" <?php if ( $bsearch_settings['cache'] ) { echo 'checked="checked"'; } ?> /></p>
-						<p class="description"><?php _e( 'If activated, Top 10 will use the Transients API to cache the popular posts output for 1 hour.', 'better-search' ); ?></p>
+						<p class="description"><?php _e( 'If activated, Better Search will use the Transients API to cache the popular posts output for 1 hour.', 'better-search' ); ?></p>
 						<p><input type="button" name="cache_clear" id="cache_clear"  value="<?php _e( 'Clear cache', 'better-search' ); ?>" class="button-secondary" onclick="return clearCache();" /></p>
 					</td>
 				</tr>
@@ -101,7 +101,7 @@ if ( ! defined( 'WPINC' ) ) {
 				<tr><th scope="row"><label for="meta_noindex"><?php _e( 'Stop search engines from indexing search results pages', 'better-search' ); ?></label></th>
                     <td>
 						<input type="checkbox" name="meta_noindex" id="meta_noindex" <?php if ( $bsearch_settings['meta_noindex'] ) { echo 'checked="checked"'; } ?> />
-						<p class="description"><?php _e( 'This is a recommended option to turn ON. Adds noindex,follow meta tag to the head of the page', 'better-search' ); ?></p>
+						<p class="description"><?php _e( 'This is a recommended option to turn ON. Adds <code>noindex,follow</code> meta tag to the head of the page', 'better-search' ); ?></p>
                     </td>
                 </tr>
 
