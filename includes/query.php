@@ -63,7 +63,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 
 		$where .= ' ) ';
 
-		$where .= " AND post_status = 'publish' ";
+		$where .= " AND (post_status = 'publish' OR post_status = 'inherit')";
 
 		// Array of post types
 		$where .= " AND $wpdb->posts.post_type IN ('" . join( "', '", $post_types ) . "') ";
@@ -133,7 +133,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		// Construct the WHERE clause
 		$where = $match;
 
-		$where .= " AND post_status = 'publish' ";
+		$where .= " AND (post_status = 'publish' OR post_status = 'inherit')";
 
 		// Array of post types
 		if ( $post_types ) {
