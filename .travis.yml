@@ -4,7 +4,7 @@ sudo: false
 
 matrix:
   include:
-    - pho: '7.0'
+    - php: '7.0'
       env: WP_VERSION=latest WP_MULTISITE=0
     - php: '7.0'
       env: WP_VERSION=latest WP_MULTISITE=1
