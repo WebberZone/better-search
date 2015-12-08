@@ -289,7 +289,9 @@ function get_bsearch_matches( $search_query, $bydate ) {
 	$search_info = get_bsearch_terms( $search_query );
 
 	// Get search transient
-	$search_query_transient = substr( 'bs_' . preg_replace( '/[^A-Za-z0-9\-]/', '', str_replace( ' ', '', $search_query ) ), 0, 40 );	// Name of the transient limited to 40 chars
+	$search_query_transient = 'bs_' . preg_replace( '/[^A-Za-z0-9\-]/', '', str_replace( ' ', '', $search_query ) );
+	$search_query_transient = apply_filters( 'bsearch_transient_name', $search_query_transient, $search_query );
+	$search_query_transient = substr( $search_query_transient, 0, 40 );	// Name of the transient limited to 40 chars
 
 	$matches = get_transient( $search_query_transient );
 
