@@ -214,11 +214,11 @@ function get_bsearch_query() {
 
 
 /**
- * returns an array with the cleaned-up search string at the zero index and possibly a list of terms in the second.
+ * Returns an array with the cleaned-up search string at the zero index and possibly a list of terms in the second.
  *
  * @since	1.2
  *
- * @param	mixed $search_query   The search term
+ * @param	mixed $search_query   The search term.
  * @return	array	Cleaned up search string
  */
 function get_bsearch_terms( $search_query = '' ) {
@@ -231,10 +231,12 @@ function get_bsearch_terms( $search_query = '' ) {
 
 	$use_fulltext = $bsearch_settings['use_fulltext'];
 
-	// if use_fulltext is false OR if all the words are shorter than four chars, add the array of search terms.
-	// Currently this will disable match ranking and won't be quote-savvy.
-	// if we are using fulltext, turn it off unless there's a search word longer than three chars
-	// ideally we'd also check against stopwords here
+	/**
+		If use_fulltext is false OR if all the words are shorter than four chars, add the array of search terms.
+		Currently this will disable match ranking and won't be quote-savvy.
+		If we are using fulltext, turn it off unless there's a search word longer than three chars
+		ideally we'd also check against stopwords here
+	*/
 	$search_words = explode( ' ', $search_query );
 
 	if ( $use_fulltext ) {
@@ -567,7 +569,7 @@ function bsearch_default_options() {
  */
 function bsearch_read_options() {
 
-	// Upgrade table code
+	// Upgrade table code.
 	global $bsearch_db_version, $network_wide;
 
 	$bsearch_settings_changed = false;
@@ -575,7 +577,7 @@ function bsearch_read_options() {
 	$defaults = bsearch_default_options();
 
 	$bsearch_settings = array_map( 'stripslashes', (array) get_option( 'ald_bsearch_settings' ) );
-	unset( $bsearch_settings[0] ); // produced by the (array) casting when there's nothing in the DB
+	unset( $bsearch_settings[0] ); // Produced by the (array) casting when there's nothing in the DB.
 
 	foreach ( $defaults as $k => $v ) {
 		if ( ! isset( $bsearch_settings[ $k ] ) ) {
@@ -583,7 +585,7 @@ function bsearch_read_options() {
 			$bsearch_settings_changed = true;
 		}
 	}
-	if ( $bsearch_settings_changed == true ) {
+	if ( true == $bsearch_settings_changed ) {
 		update_option( 'ald_bsearch_settings', $bsearch_settings );
 	}
 
@@ -613,7 +615,7 @@ function bsearch_install( $network_wide ) {
 
 	if ( is_multisite() && $network_wide ) {
 
-		// Get all blogs in the network and activate plugin on each one
+		// Get all blogs in the network and activate plugin on each one.
 		$blog_ids = $wpdb->get_col( "
         	SELECT blog_id FROM $wpdb->blogs
 			WHERE archived = '0' AND spam = '0' AND deleted = '0'
@@ -623,7 +625,7 @@ function bsearch_install( $network_wide ) {
 			bsearch_single_activate();
 		}
 
-		// Switch back to the current blog
+		// Switch back to the current blog.
 		restore_current_blog();
 
 	} else {
@@ -636,7 +638,8 @@ register_activation_hook( __FILE__, 'bsearch_install' );
 /*
  * ----------------------------------------------------------------------------*
  * Include files
- *----------------------------------------------------------------------------*/
+ *----------------------------------------------------------------------------
+ */
 
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/activation.php' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/wp-filters.php' );
@@ -653,7 +656,8 @@ register_activation_hook( __FILE__, 'bsearch_install' );
 /*
  *----------------------------------------------------------------------------*
  * Dashboard and Administrative Functionality
- *----------------------------------------------------------------------------*/
+ *----------------------------------------------------------------------------
+ */
 if ( is_admin() ) {
 
 	/**
