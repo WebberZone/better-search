@@ -23,7 +23,19 @@ function bsearch_clean_terms( $val ) {
 
 	$badwords = array_map( 'trim', explode( ',', $bsearch_settings['badwords'] ) );
 
-	$val_censored = bsearch_censor_string( $val, $badwords, ' ' );	// No more bad words
+	$censorChar = ' ';
+
+	/**
+	 * Allow the censored character to be replaced.
+	 *
+	 * @since	2.1.0
+	 *
+	 * @param	string	$censorChar	Censored character
+	 * @param	string	$val		Raw search string
+	 */
+	$censorChar = apply_filters( 'bsearch_censor_char', $censorChar, $val );
+
+	$val_censored = bsearch_censor_string( $val, $badwords, $censorChar );	// No more bad words
 	$val = $val_censored['clean'];
 	$val = wp_kses_post( $val );
 
