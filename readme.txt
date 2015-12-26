@@ -39,126 +39,14 @@ Better Search is also available on Github at https://github.com/ajaydsouza/bette
 So, if you've got some cool feature that you'd like to implement into the plugin or a bug you've been able to fix, consider forking the project and sending me a pull request.
 
 
-== Upgrade Notice ==
+== Screenshots ==
 
-= 2.0.1 =
-Highlight search results; Filterable search query; multisite support; bug fixes;
-Check the Changelog for details
-
-
-== Changelog ==
-
-= 2.1.0 =
-
-* Features:
-	* Cache enable/disable option + Clear cache button. Replaces "Delete transients"
-
-* Enhancements:
-	* Query filters now work for the LIKE search as well
-	* New filter to override the censor character (currently a space) e.g. usage at https://gist.github.com/ajaydsouza/f23f35704431485c6922
-
-= 2.0.1 =
-* Fixed: Bug where highlighting search terms broke HTML in links
-
-= 2.0.0 =
-* New: Network Activate and Deactivate the plugin on WordPress Multisite
-* New: Option to highlight search results. If missing, add: <code>.bsearch_highlight { background:#ffc; }</code> under Custom Styles
-* New: Fully filterable search query
-* New: Recreate Index button in the settings page
-* New: Delete transients button in the settings page
-* Modified: Better Search will now try BOOLEAN MODE and non-FULLTEXT modes in case FULLTEXT search doesn't return any results
-* Modified: Deprecated always dynamic heatmap option that bypassed cache
-* Modified: Reorganised admin interface
-* Modified: Seamless mode is now the default mode
-* Modified: Better Search uses transients to catch results when not using seamless mode
-* Modified: Search form uses `class` instead of `id`
-* Fixed: Seamless mode would overwrite all queries, even those outside the loop
-* Fixed: WordPress widget settings
-
-= 1.3.6 =
-* Fixes missing wick files in Settings page 404 error
-
-= 1.3.5 =
-* Fixed: Seamless mode interfered with the Media search in the Admin
-* Fixed: Potential Reflective XSS vulnerability
-
-= 1.3.4 =
-* New: Option to add `noindex,nofollow` meta tag to the header
-* Modified: Tracking script now set to bypass <a href="https://support.cloudflare.com/hc/en-us/articles/200168056-What-does-Rocket-Loader-do-">Rocket Loader</a>
-* Fixed: Class of header row on search results page. You can now add your custom styles to `bsearch_nav_row1` and `bsearch_nav_row2`
-* Fixed: Widget search heatmap colours were not loaded properly
-
-= 1.3.3 =
-* New: Responsive admin interface
-* New: Seamless integration mode. With this enabled, you can benefit from relevant search results displayed how your theme intended it to be!
-* Modified: Modified `get_bsearch_heatmap` to accept an array of parameters. If you're using this function, please note the modified usage in the FAQ
-* New: Option to turn off tracking searches of Admins and Editors
-* Fixed: Widget initialisation
-* Modified: Reformatted code to follow WordPress PHP Standards
-
-= 1.3.2 =
-* New: Profanity filter. Courtesy <a href="http://banbuilder.com/">Banbuilders</a>
-* New: Option to turn of the search results tracking. Ideal if you don't care about the popular search terms on your blog
-* New: Option to include the thumbnails in the search results
-* Modified: Search results now have better pagination. This is especially good when you have lots of search results - Thanks to J Norton for this feature
-* Modified: Plugin should now return results even if the search word is less than 4 characters
-* Fixed: Bug fixes - Thanks to Rich for some of the fixes
-
-= 1.3.1 =
-Fixed: PHP Notices
-
-= 1.3 =
-* Modified: Revamp of admin interface of the plugin
-* Added: New option to activate BOOLEAN mode of mySQL FULLTEXT searching. <a href="https://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html" target="_blank">Check the mySQL docs for further information on this</a>
-* Added: Custom post type support. Now choose what visitors are allowed to search
-* Added: Links in the search heatmap are no-follow by default. You can turn this off in the Settings page
-* Added: Option to make make heatmap links to open in a new window
-* Added: Option to turn off the display of the heatmap on the results page
-* Added: New CSS classes for heatmaps on the search results page - `heatmap_daily` and `heatmap_overall`
-* Fixed: Possible cross-site request forgery issue in the Settings page
-
-= 1.2.1 =
-* Fixed: "Missing argument" error for heatmaps
-
-= 1.2 =
-* New: Updates for better search template compatibility. New template included in this release
-* Modified: Relevance score is now displayed as a percentage
-* Fixed: Daily search terms were not being cleared
-* Modified: Default search colours for the heatmap are grey and black instead of blue and red
-* Modified: Plugin will not add a link to <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search homepage</a> by default
-* Modified: New WordPress widget to display the popular searches in your sidebar
-* New: New template file based on Twenty Eleven WordPress theme
-
-= 1.1.7 =
-* Two new fulltext indexes added... the first step to better control on search results
-
-= 1.1.6 =
-* Bug fixed in display of daily search heatmap
-
-= 1.1.5 =
-* Fixed a bug
-
-= 1.1.4 =
-* Fixed a bug
-
-= 1.1.3 =
-* Critical Fix: Possible security hole
-
-= 1.1.2 =
-* Fixed: Searches not tracked when not using template
-
-= 1.1.1 =
-* Fixed: Certain search terms didn't work
-
-= 1.1 =
-* Plugin now allows use of template file. Create a file `better-search-template.php` in your themes folder.
-* Pages are also included in the results. You can turn it off in options
-* Drafts are no longer included in results
-* WordPress Title rewritten
-* Added support for localization.
-
-= 1.0 =
-* Release
+1. Options in WP-Admin - General options
+2. Options in WP-Admin - Search options
+3. Options in WP-Admin - Heatmap options
+4. Options in WP-Admin - Custom styles
+5. Options in WP-Admin - Reset count and Maintenance
+6. Better Search widget
 
 
 == Installation ==
@@ -182,16 +70,6 @@ Fixed: PHP Notices
 5. Goto **Appearance > Widgets** to add the Popular Searches sidebar widgets to your theme
 
 6. Optionally visit the **Custom Styles** tab to add any custom CSS styles. These are added to `wp_head` on the pages where the posts are displayed
-
-
-== Screenshots ==
-
-1. Options in WP-Admin - General options
-2. Options in WP-Admin - Search options
-3. Options in WP-Admin - Heatmap options
-4. Options in WP-Admin - Custom styles
-5. Options in WP-Admin - Reset count and Maintenance
-6. Better Search widget
 
 
 == Frequently Asked Questions ==
@@ -246,3 +124,47 @@ Example Usage:
 }
 
 `
+
+== Changelog ==
+
+= 2.1.0 =
+* Features:
+	* Cache enable/disable option + Clear cache button. Replaces "Delete transients"
+
+* Enhancements:
+	* Query filters now work for the LIKE search as well
+	* New filter to override the censor character (currently a space) e.g. usage at https://gist.github.com/ajaydsouza/f23f35704431485c6922
+
+= 2.0.1 =
+* Bug fixes:
+	* Bug where highlighting search terms broke HTML in links
+
+= 2.0.0 =
+* Features:
+	* Network Activate and Deactivate the plugin on WordPress Multisite
+	* Option to highlight search results. If missing, add: <code>.bsearch_highlight { background:#ffc; }</code> under Custom Styles
+	* Fully filterable search query
+	* Recreate Index button in the settings page
+	* Delete transients button in the settings page
+
+* Enhancements:
+	* Better Search will now try BOOLEAN MODE and non-FULLTEXT modes in case FULLTEXT search doesn't return any results
+	* Deprecated always dynamic heatmap option that bypassed cache
+	* Reorganised admin interface
+	* Seamless mode is now the default mode
+	* Better Search uses transients to catch results when not using seamless mode
+	* Search form uses `class` instead of `id`
+
+* Bug fixes:
+	* Seamless mode would overwrite all queries, even those outside the loop
+	* WordPress widget settings
+
+For previous changelog entries, please refer to the separate changelog.txt file
+
+
+== Upgrade Notice ==
+
+= 2.0.1 =
+Highlight search results; Filterable search query; multisite support; bug fixes;
+Check the Changelog for details
+

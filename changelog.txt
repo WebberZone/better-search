@@ -1,0 +1,125 @@
+This file holds the archive of changelog entries
+
+= 1.3.6 =
+* Bug fixes:
+	* Fixes missing wick files in Settings page 404 error
+
+= 1.3.5 =
+* Bug fixes:
+	* Seamless mode interfered with the Media search in the Admin
+	* Potential Reflective XSS vulnerability
+
+= 1.3.4 =
+* Features:
+	* Option to add `noindex,nofollow` meta tag to the header
+
+* Enhancements:
+	* Tracking script now set to bypass <a href="https://support.cloudflare.com/hc/en-us/articles/200168056-What-does-Rocket-Loader-do-">Rocket Loader</a>
+
+* Bug fixes:
+	* Class of header row on search results page. You can now add your custom styles to `bsearch_nav_row1` and `bsearch_nav_row2`
+	* Widget search heatmap colours were not loaded properly
+
+= 1.3.3 =
+* Features:
+	* Responsive admin interface
+	* Seamless integration mode. With this enabled, you can benefit from relevant search results displayed how your theme intended it to be!
+	* Option to turn off tracking searches of Admins and Editors
+
+* Enhancements:
+	* Modified `get_bsearch_heatmap` to accept an array of parameters. If you're using this function, please note the modified usage in the FAQ
+	* Reformatted code to follow WordPress PHP Standards
+
+* Bug fixes:
+	* Widget initialisation
+
+= 1.3.2 =
+* Features:
+	* Profanity filter. Courtesy <a href="http://banbuilder.com/">Banbuilders</a>
+	* Option to turn of the search results tracking. Ideal if you don't care about the popular search terms on your blog
+	* Option to include the thumbnails in the search results
+
+* Enhancements:
+	* Search results now have better pagination. This is especially good when you have lots of search results - Thanks to J Norton for this feature
+	* Plugin should now return results even if the search word is less than 4 characters
+
+* Bug fixes:
+	* Bug fixes - Thanks to Rich for some of the fixes
+
+= 1.3.1 =
+
+* Bug fixes:
+	* PHP Notices
+
+= 1.3 =
+* Features:
+	* New option to activate BOOLEAN mode of mySQL FULLTEXT searching. <a href="https://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html" target="_blank">Check the mySQL docs for further information on this</a>
+	* Custom post type support. Now choose what visitors are allowed to search
+	* Links in the search heatmap are no-follow by default. You can turn this off in the Settings page
+	* Option to make make heatmap links to open in a new window
+	* Option to turn off the display of the heatmap on the results page
+	* New CSS classes for heatmaps on the search results page - `heatmap_daily` and `heatmap_overall`
+
+* Enhancements:
+	* Revamp of admin interface of the plugin
+
+* Bug fixes:
+	* Possible cross-site request forgery issue in the Settings page
+
+= 1.2.1 =
+* Bug fixes:
+	* "Missing argument" error for heatmaps
+
+= 1.2 =
+* Features:
+	* Updates for better search template compatibility. New template included in this release
+	* New template file based on Twenty Eleven WordPress theme
+
+* Enhancements:
+	* Relevance score is now displayed as a percentage
+	* Default search colours for the heatmap are grey and black instead of blue and red
+	* Plugin will not add a link to <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search homepage</a> by default
+	* New WordPress widget to display the popular searches in your sidebar
+
+* Bug fixes:
+	* Daily search terms were not being cleared
+
+= 1.1.7 =
+* Enhancements:
+	* Two new fulltext indexes added... the first step to better control on search results
+
+= 1.1.6 =
+* Bug fixes:
+	* Bug fixed in display of daily search heatmap
+
+= 1.1.5 =
+* Bug fixes:
+	* Fixed a bug
+
+= 1.1.4 =
+* Bug fixes:
+* Fixed a bug
+
+= 1.1.3 =
+* Bug fixes:
+	* Critical Fix: Possible security hole
+
+= 1.1.2 =
+* Bug fixes:
+	* Searches not tracked when not using template
+
+= 1.1.1 =
+* Bug fixes:
+	* Certain search terms didn't work
+
+= 1.1 =
+* Enhancements:
+	* Plugin now allows use of template file. Create a file `better-search-template.php` in your themes folder.
+	* Pages are also included in the results. You can turn it off in options
+	* Drafts are no longer included in results
+	* WordPress Title rewritten
+	* Added support for localization.
+
+= 1.0 =
+* Release
+
