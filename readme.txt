@@ -55,6 +55,7 @@ Check the Changelog for details
 
 * Enhancements:
 	* Query filters now work for the LIKE search as well
+	* New filter to override the censor character (currently a space) e.g. usage at https://gist.github.com/ajaydsouza/f23f35704431485c6922
 
 = 2.0.1 =
 * Fixed: Bug where highlighting search terms broke HTML in links
