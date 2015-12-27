@@ -131,6 +131,7 @@ Example Usage:
 * Features:
 	* Cache enable/disable option + Clear cache button. Replaces "Delete transients"
 	* Search form widget. Find it under Appearances > Widgets or in the Customizer
+	* Heatmap search widget: Display the popular searches heatmap using `[bsearch_heatmap]`
 
 * Enhancements:
 	* Query filters now work for the LIKE search as well

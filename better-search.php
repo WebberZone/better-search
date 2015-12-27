@@ -652,6 +652,7 @@ register_activation_hook( __FILE__, 'bsearch_install' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/modules/seamless.php' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/modules/class-widget.php' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/modules/heatmap.php' );
+	require_once( plugin_dir_path( __FILE__ ) . 'includes/modules/shortcode.php' );
 
 /*
  *----------------------------------------------------------------------------*
