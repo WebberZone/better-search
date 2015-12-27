@@ -113,16 +113,14 @@ class BSearch_Widget extends WP_Widget {
 	function widget( $args, $instance ) {
 		global $wpdb, $bsearch_url, $bsearch_settings;
 
-		extract( $args, EXTR_SKIP );
-
 		$daily_range = isset( $instance['daily_range'] ) ? $instance['daily_range'] : $bsearch_settings['daily_range'];
 
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? strip_tags( $bsearch_settings['title'] ) : $instance['title'] );
 
 		$daily = isset( $instance['daily'] ) ? $instance['daily'] : 'overall';
 
-		echo $before_widget;
-		echo $before_title . $title . $after_title;
+		echo $args['before_widget'];
+		echo $args['before_title'] . $title . $args['after_title'];
 
 		if ( 'overall' == $daily ) {
 			echo get_bsearch_heatmap( array(
@@ -139,7 +137,7 @@ class BSearch_Widget extends WP_Widget {
 			echo '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
 		}
 
-		echo $after_widget;
+		echo $args['after_widget'];
 
 	} //ending function widget
 }

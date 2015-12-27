@@ -38,30 +38,27 @@ function get_bsearch_heatmap( $args = array() ) {
 	// Parse incomming $args into an array and merge it with $defaults
 	$args = wp_parse_args( $args, $defaults );
 
-	// OPTIONAL: Declare each item in $args as its own variable i.e. $type, $before.
-	extract( $args, EXTR_SKIP );
-
 	$table_name = $wpdb->prefix . 'bsearch';
 
-	if ( $daily ) {
+	if ( $args['daily'] ) {
 		$table_name .= '_daily';	// If we're viewing daily posts, set this to true
 	}
 	$output = '';
 
-	if ( ! $daily ) {
-		$args = array(
-			$heatmap_limit,
+	if ( ! $args['daily'] ) {
+		$sargs = array(
+			$args['heatmap_limit'],
 		);
 
 		$sql = "SELECT searchvar, cntaccess FROM {$table_name} WHERE accessedid IN (SELECT accessedid FROM {$table_name} WHERE searchvar <> '' ORDER BY cntaccess DESC, searchvar ASC) ORDER by accessedid LIMIT %d";
 	} else {
 		$current_time = current_time( 'timestamp', 0 );
-		$current_time = $current_time - ( $daily_range - 1 ) * 3600 * 24;
+		$current_time = $current_time - ( $args['daily_range'] - 1 ) * 3600 * 24;
 		$current_date = date_i18n( 'Y-m-j', $current_time );
 
-		$args = array(
+		$sargs = array(
 			$current_date,
-			$heatmap_limit,
+			$args['heatmap_limit'],
 		);
 
 		$sql = "
@@ -77,11 +74,11 @@ function get_bsearch_heatmap( $args = array() ) {
 		";
 	}
 
-	$results = $wpdb->get_results( $wpdb->prepare( $sql, $args ) );
+	$results = $wpdb->get_results( $wpdb->prepare( $sql, $sargs ) );
 
 	if ( $results ) {
 		foreach ( $results as $result ) {
-			if ( ! $daily ) {
+			if ( ! $args['daily'] ) {
 				$cntaccesss[] = $result->cntaccess;
 			} else {
 				$cntaccesss[] = $result->sumCount;
@@ -92,8 +89,8 @@ function get_bsearch_heatmap( $args = array() ) {
 		$spread = $max - $min;
 
 		// Calculate various font sizes
-		if ( $largest != $smallest ) {
-			$fontspread = $largest - $smallest;
+		if ( $args['largest'] != $args['smallest'] ) {
+			$fontspread = $args['largest'] - $args['smallest'];
 			if ( 0 != $spread ) {
 				$fontstep = $fontspread / $spread;
 			} else {
@@ -102,9 +99,9 @@ function get_bsearch_heatmap( $args = array() ) {
 		}
 
 		// Calculate colors
-		if ( $hot != $cold ) {
-			$hotdec = bsearch_html2rgb( $hot );
-			$colddec = bsearch_html2rgb( $cold );
+		if ( $args['hot'] != $args['cold'] ) {
+			$hotdec = bsearch_html2rgb( $args['hot'] );
+			$colddec = bsearch_html2rgb( $args['cold'] );
 			for ( $i = 0; $i < 3; $i++ ) {
 				$coldval[] = $colddec[ $i ];
 				$hotval[] = $hotdec[ $i ];
@@ -118,7 +115,7 @@ function get_bsearch_heatmap( $args = array() ) {
 		}
 
 		foreach ( $results as $result ) {
-			if ( ! $daily ) {
+			if ( ! $args['daily'] ) {
 				$cntaccess = $result->cntaccess;
 			} else {
 				$cntaccess = $result->sumCount;
@@ -127,7 +124,7 @@ function get_bsearch_heatmap( $args = array() ) {
 			$textsearchvar = esc_attr( $result->searchvar );
 			$url  = home_url() . '/?s=' . $textsearchvar;
 			$fraction = $cntaccess - $min;
-			$fontsize = $smallest + $fontstep * $fraction;
+			$fontsize = $args['smallest'] + $fontstep * $fraction;
 
 			$color = '';
 
@@ -135,15 +132,15 @@ function get_bsearch_heatmap( $args = array() ) {
 				$color .= dechex( $coldval[ $i ] + ( $colorstep[ $i ] * $fraction ) );
 			}
 			$style = 'style="';
-			if ( $largest != $smallest ) {
-				$style .= 'font-size:' . round( $fontsize ) . $unit . ';';
+			if ( $args['largest'] != $args['smallest'] ) {
+				$style .= 'font-size:' . round( $fontsize ) . $args['unit'] . ';';
 			}
-			if ( $hot != $cold ) {
+			if ( $args['hot'] != $args['cold'] ) {
 				$style .= 'color:#' . $color . ';';
 			}
 			$style .= '"';
 
-			$output .= $before . '<a href="' . $url . '" title="';
+			$output .= $args['before'] . '<a href="' . $url . '" title="';
 			$output .= sprintf( _n( 'Search for %1$s (%2$s search)', 'Search for %1$s (%2$s searches)', $cntaccess, 'better-search' ), $textsearchvar, $cntaccess );
 			$output .= '" '.$style;
 			if ( $bsearch_settings['link_nofollow'] ) {
@@ -152,7 +149,7 @@ function get_bsearch_heatmap( $args = array() ) {
 			if ( $bsearch_settings['link_new_window'] ) {
 				$output .= ' target="_blank" ';
 			}
-			$output .= '>' . $textsearchvar . '</a>' . $after . ' ';
+			$output .= '>' . $textsearchvar . '</a>' . $args['after'] . ' ';
 		}
 	} else {
 		$output = __( 'No searches made yet', 'better-search' );
