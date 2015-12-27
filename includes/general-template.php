@@ -271,7 +271,7 @@ function get_bsearch_form( $search_query ) {
 	<div style="text-align:center"><form method="get" class="bsearchform" action="' . home_url() . '/" >
 	<label class="hidden" for="s">' . __( 'Search for:', 'better-search' ) . '</label>
 	<input type="text" value="' . $search_query . '" name="s" class="s" />
-	<input type="submit" class="searchsubmit" value="' . __( 'Search Again', 'better-search' ) . '" />
+	<input type="submit" class="searchsubmit" value="' . __( 'Search', 'better-search' ) . '" />
 	</form></div>
 	';
 

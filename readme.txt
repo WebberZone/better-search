@@ -130,6 +130,7 @@ Example Usage:
 = 2.1.0 =
 * Features:
 	* Cache enable/disable option + Clear cache button. Replaces "Delete transients"
+	* Search form widget. Find it under Appearances > Widgets or in the Customizer
 
 * Enhancements:
 	* Query filters now work for the LIKE search as well
