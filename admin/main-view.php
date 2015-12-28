@@ -93,7 +93,7 @@ if ( ! defined( 'WPINC' ) ) {
 					<th scope="row"><label for="cache"><?php _e( 'Enable cache:', 'better-search' ); ?></label></th>
 					<td>
 						<p><input type="checkbox" name="cache" id="cache" <?php if ( $bsearch_settings['cache'] ) { echo 'checked="checked"'; } ?> /></p>
-						<p class="description"><?php _e( 'If activated, Better Search will use the Transients API to cache the popular posts output for 1 hour.', 'better-search' ); ?></p>
+						<p class="description"><?php _e( 'If activated, Better Search will use the Transients API to cache the search results for 1 hour.', 'better-search' ); ?></p>
 						<p><input type="button" name="cache_clear" id="cache_clear"  value="<?php _e( 'Clear cache', 'better-search' ); ?>" class="button-secondary" onclick="return clearCache();" /></p>
 					</td>
 				</tr>
