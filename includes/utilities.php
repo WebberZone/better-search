@@ -53,6 +53,7 @@ function bsearch_clean_terms( $val ) {
 	 */
 	return apply_filters( 'bsearch_clean_terms', $val );
 }
+add_filter( 'get_search_query', 'bsearch_clean_terms' );
 
 
 /**
