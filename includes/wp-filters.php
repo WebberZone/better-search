@@ -66,7 +66,7 @@ function bsearch_content( $content ) {
 		$search_query = get_bsearch_query();
 
 		$search_query = preg_quote( $search_query, '/' );
-		$keys = explode( ' ', $search_query );
+		$keys = explode( ' ', str_replace( array( "'", "\"", "&quot;" ), "", $search_query ) );
 
 		$regEx = '/(?!<[^>]*?>)('. implode( '|', $keys ) . ')(?![^<]*?>)/iu';
 		$content  = preg_replace( $regEx, '<span class="bsearch_highlight">$1</span>', $content );
