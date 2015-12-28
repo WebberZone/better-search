@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-28 20:12+0000\n"
+"POT-Creation-Date: 2015-12-28 23:47+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team: me@ajaydsouza.com\n"
@@ -194,8 +194,8 @@ msgstr ""
 
 #: admin/main-view.php:96
 msgid ""
-"If activated, Better Search will use the Transients API to cache the popular "
-"posts output for 1 hour."
+"If activated, Better Search will use the Transients API to cache the search "
+"results for 1 hour."
 msgstr ""
 
 #: admin/main-view.php:97
