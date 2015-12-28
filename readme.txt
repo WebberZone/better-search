@@ -136,6 +136,10 @@ Example Usage:
 * Enhancements:
 	* Query filters now work for the LIKE search as well
 	* New filter to override the censor character (currently a space) e.g. usage at https://gist.github.com/ajaydsouza/f23f35704431485c6922
+	* Banned terms will now filter the main search query and will no longer display the search term even in seamless mode
+
+* Bug fixes:
+	* Highlighting now works when the search term has double or single quotes
 
 = 2.0.1 =
 * Bug fixes:
