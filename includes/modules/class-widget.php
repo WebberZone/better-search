@@ -134,7 +134,7 @@ class BSearch_Widget extends WP_Widget {
 			) );
 		}
 		if ( $bsearch_settings['show_credit'] ) {
-			echo '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
+			echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
 		}
 
 		echo $args['after_widget'];
