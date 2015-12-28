@@ -2,17 +2,17 @@
 
 __Requires:__ 3.9
 
-__Tested up to:__ 4.4
+__Tested up to:__ 4.5
 
 __License:__ [GPL-2.0+](http://www.gnu.org/licenses/gpl-2.0.html)
 
-__Plugin page:__ <a href="https://webberzone.com/plugins/better-search/">Better Search</a>
+__Plugin page:__ [Better Search](https://webberzone.com/plugins/better-search/)
 
 Better Search replaces the default WordPress search with a better search that gives contextual results sorted by relevance
 
 ## Description
 
-<a href="https://webberzone.com/plugins/better-search/">Better Search</a> replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find will find what they are looking for quicker than if you didn't have **Better Search** installed.
+[Better Search](https://webberzone.com/plugins/better-search/) replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find will find what they are looking for quicker than if you didn't have **Better Search** installed.
 
 Better Search can search through not just posts, but also pages and other custom post types. Let your visitors find what they are looking for.
 
@@ -23,24 +23,32 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 ### Features
 
 * **Automatic**: Once activated, Better Search will automatically replace your default WordPress search with more relevant search results
-* **Seamless integration**: From v1.3.3, you can activate seamless integration which will output the search results perfectly integrated into your theme without the need for custom search templates
+* **Seamless integration**: Search results are perfectly integrated into your theme without the need for custom search templates
 * **Relevance**: Search results are automatically sorted by relevance. You can also turn off relevancy based searching, in which case, results are sorted by date
 * **Control the results**: Fine tune the results by changing the weighting of post title and post content. Turn on BOOLEAN search to override the default NATURAL LANGUAGE search of mySQL
 * **Popular searches**: Find out what visitors are searching for on your blog. Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap. Widget support for easy integration in your theme
 * **Customisation**: Support for a template file for perfect integration into your blog template. Alternatively, just input your own CSS styles in the *Custom Styles* tab in the Settings Page. Check the FAQ for more information
 * **Supports cache plugins**: Works with caching plugins like WP-Super-Cache and W3 Total Cache
 * **Profanity filter**: Customise the list of stop words that will automatically be filtered out of search queries
-* **Translation ready**: Better Search is translation ready. If you're interested in translating Better Search into your own language <a href="https://webberzone.com/contact/">let me know</a>.
+* **Translation ready**: Better Search is translation ready
 
 
 ## Screenshots
 ![General Options](https://raw.github.com/ajaydsouza/better-search/master/assets/screenshot-1.png)
 _Better Search settings page - General Options._
 
-For more screenshots visit the <a href="http://wordpress.org/plugins/better-search/screenshots/">WordPress plugin page</a>
+For more screenshots visit the [WordPress.org screenshots page](http://wordpress.org/plugins/better-search/screenshots/)
 
 ## Installation
 
+### WordPress install (the easy way)
+1. Navigate to Plugins within your WordPress Admin Area
+
+2. Click "Add new" and in the search box enter "Better Search"
+
+3. Find the plugin in the list (usually the first result) and click "Install Now"
+
+### Manual install
 1. Download the plugin
 
 2. Extract the contents of better-search.zip to wp-content/plugins/ folder. You should get a folder called better-search.
@@ -54,6 +62,6 @@ Alternatively, search for **Better Search** from Plugins &raquo; Add New within 
 
 ## Frequently Asked Questions
 
-Check out the <a href="http://wordpress.org/plugins/better-search/faq/">FAQ on the plugin page</a> for a detailed list of questions and answers
+Check out the [FAQ on the plugin page](http://wordpress.org/plugins/better-search/faq/) for a detailed list of questions and answers
 
-If your question isn't listed there, please create a new post in the <a href="http://wordpress.org/support/plugin/better-search">WordPress.org support forum</a>. I monitor the forums on an ongoing basis. If you're looking for more advanced _paid_ support, please see <a href="https://webberzone.com/support/">details here</a>.
+If your question isn't listed there, please create a new post in the [WordPress.org support forum](http://wordpress.org/support/plugin/better-search). I monitor the forums on an ongoing basis. If you're looking for more advanced _paid_ support, please see [details here](https://webberzone.com/support/).
