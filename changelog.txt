@@ -78,7 +78,7 @@ This file holds the archive of changelog entries
 * Enhancements:
 	* Relevance score is now displayed as a percentage
 	* Default search colours for the heatmap are grey and black instead of blue and red
-	* Plugin will not add a link to <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search homepage</a> by default
+	* Plugin will not add a link to <a href="https://webberzone.com/plugins/better-search/">Better Search homepage</a> by default
 	* New WordPress widget to display the popular searches in your sidebar
 
 * Bug fixes:

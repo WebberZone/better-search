@@ -8,16 +8,16 @@
  * @package Better_Search
  * @author    Ajay D'Souza <me@ajaydsouza.com>
  * @license   GPL-2.0+
- * @link      http://ajaydsouza.com
- * @copyright 2009-2015 Ajay D'Souza
+ * @link      https://webberzone.com
+ * @copyright 2009-2016 Ajay D'Souza
  *
  * @wordpress-plugin
  * Plugin Name: Better Search
- * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
+ * Plugin URI:  https://webberzone.com/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
  * Version:     2.1-beta20151227
  * Author:      Ajay D'Souza
- * Author URI:  http://ajaydsouza.com/
+ * Author URI:  https://webberzone.com/
  * Text Domain:	better-search
  * License:		GPL-2.0+
  * License URI:	http://www.gnu.org/licenses/gpl-2.0.txt
@@ -172,7 +172,7 @@ function get_bsearch_results( $search_query = '', $limit ) {
 	if ( $bsearch_settings['show_credit'] ) {
 		$output .= '<hr /><p style="text-align:center">';
 		$output .= __( 'Powered by ', 'better-search' );
-		$output .= '<a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></p>';
+		$output .= '<a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></p>';
 	}
 
 	/**

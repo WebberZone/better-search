@@ -1,7 +1,7 @@
 === Better Search ===
 Tags: search, Better Search, related search, relevant search, search results, heatmap, popular searches, top searches, relevance
 Contributors: Ajay
-Donate link: http://ajaydsouza.com/donate/
+Donate link: https://ajaydsouza.com/donate/
 Stable tag: trunk
 Requires at least: 3.9
 Tested up to: 4.4
@@ -12,7 +12,7 @@ Better Search replaces the default WordPress search with a better search that gi
 
 == Description ==
 
-<a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search</a> replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find will find what they are looking for quicker than if you didn't have **Better Search** installed.
+<a href="https://webberzone.com/plugins/better-search/">Better Search</a> replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find will find what they are looking for quicker than if you didn't have **Better Search** installed.
 
 Better Search can search through not just posts, but also pages and other custom post types. Let your visitors find what they are looking for.
 
@@ -31,7 +31,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 * **Customisation**: Support for a template file for perfect integration into your blog template. Alternatively, just input your own CSS styles in the *Custom Styles* tab in the Settings Page. Check the FAQ for more information
 * **Supports cache plugins**: Works with caching plugins like WP-Super-Cache and W3 Total Cache
 * **Profanity filter**: Customise the list of stop words that will automatically be filtered out of search queries
-* **Translation ready**: Better Search is translation ready. If you're interested in translating Better Search into your own language <a href="http://ajaydsouza.com/contact/">let me know</a>.
+* **Translation ready**: Better Search is translation ready. If you're interested in translating Better Search into your own language <a href="https://webberzone.com/contact/">let me know</a>.
 
 
 = Contribute =
@@ -74,7 +74,7 @@ So, if you've got some cool feature that you'd like to implement into the plugin
 
 == Frequently Asked Questions ==
 
-If your question isn't listed here, please open a new thread at the <a href="hhttp://wordpress.org/support/plugin/better-search">WordPress.org support forum</a>. I monitor the forums on an ongoing basis. If you're looking for email based support, please see <a href="http://ajaydsouza.com/support/">details here</a>.
+If your question isn't listed here, please open a new thread at the <a href="hhttp://wordpress.org/support/plugin/better-search">WordPress.org support forum</a>. I monitor the forums on an ongoing basis. If you're looking for email based support, please see <a href="https://webberzone.com/support/">details here</a>.
 
 = Can I customize the output? =
 
@@ -82,13 +82,13 @@ Better Search has a huge set of options that help you customise the output or fi
 
 The plugin also supports the use of template files within your theme. You can create a file called `better-search-template.php` in your theme's directory and the plugin will use it to display the results.
 
-Take a look at http://ajaydsouza.com/wordpress/plugins/better-search/bsearch-templates for use of custom templates and template tags supported by Better Search
+Take a look at https://webberzone.com/plugins/better-search/bsearch-templates for use of custom templates and template tags supported by Better Search
 
 = Can you create a search template for my theme? =
 
 Yes I can. However, there are no guarantee on the time frame for the same. Additionally, if I am unable to access the theme for testing, e.g. with paid premium themes, I won't be able to create this template.
 
-If you have already created a template that you would like to share with the WordPress Community, you can <a href="http://ajaydsouza.com/contact/">contact me</a> and I will add it into the package.
+If you have already created a template that you would like to share with the WordPress Community, you can <a href="https://webberzone.com/contact/">contact me</a> and I will add it into the package.
 
 = My search words are getting filtered or *How does the profanity filter work* =
 

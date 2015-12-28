@@ -161,11 +161,25 @@ function bsearch_admin_side() {
     <div id="followdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', 'better-search' ); ?>"><br /></div>
       <h3 class='hndle'><span><?php _e( 'Follow me', 'better-search' ); ?></span></h3>
       <div class="inside">
-        <div id="follow-us">
-            <iframe src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fajaydsouzacom&amp;width=292&amp;height=62&amp;colorscheme=light&amp;show_faces=false&amp;border_color&amp;stream=false&amp;header=true&amp;appId=113175385243" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:292px; height:62px;" allowTransparency="true"></iframe>
-            <div style="text-align:center"><a href="https://twitter.com/ajaydsouza" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @ajaydsouza</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
-        </div>
+		<div id="twitter">
+			<div style="text-align:center"><a href="https://twitter.com/WebberZoneWP" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @WebberZoneWP</a>
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
+		</div>
+		<div id="facebook">
+			<div id="fb-root"></div>
+			<script>
+			//<![CDATA[
+				(function(d, s, id) {
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (d.getElementById(id)) return;
+				js = d.createElement(s); js.id = id;
+				js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=458036114376706";
+				fjs.parentNode.insertBefore(js, fjs);
+				}(document, 'script', 'facebook-jssdk'));
+			//]]>
+			</script>
+			<div class="fb-page" data-href="https://www.facebook.com/WebberZone" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false" data-show-posts="false"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/WebberZone"><a href="https://www.facebook.com/WebberZone">WebberZone</a></blockquote></div></div>
+		</div>
       </div>
     </div>
     <div id="qlinksdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', 'better-search' ); ?>"><br /></div>
@@ -173,9 +187,9 @@ function bsearch_admin_side() {
       <div class="inside">
         <div id="quick-links">
             <ul>
-				<li><a href="http://ajaydsouza.com/wordpress/plugins/better-search/"><?php _e( 'Better Search plugin page', 'better-search' ); ?></a></li>
-				<li><a href="http://ajaydsouza.com/wordpress/plugins/"><?php _e( 'Other plugins', 'better-search' ); ?></a></li>
-				<li><a href="http://ajaydsouza.com/"><?php _e( "Ajay's blog", 'better-search' ); ?></a></li>
+				<li><a href="https://webberzone.com/plugins/better-search/"><?php _e( 'Better Search plugin page', 'better-search' ); ?></a></li>
+				<li><a href="https://webberzone.com/plugins/"><?php _e( 'Other plugins', 'better-search' ); ?></a></li>
+				<li><a href="https://ajaydsouza.com/"><?php _e( "Ajay's blog", 'better-search' ); ?></a></li>
 				<li><a href="https://wordpress.org/plugins/better-search/faq/"><?php _e( 'FAQ', 'better-search' ); ?></a></li>
 				<li><a href="http://wordpress.org/support/plugin/better-search"><?php _e( 'Support', 'better-search' ); ?></a></li>
 				<li><a href="https://wordpress.org/support/view/plugin-reviews/better-search"><?php _e( 'Reviews', 'better-search' ); ?></a></li>
@@ -304,7 +318,7 @@ function bsearch_pop_dashboard() {
 	) );
 
 	if ( $bsearch_settings['show_credit'] ) {
-		echo '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
+		echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
 	}
 }
 
@@ -322,7 +336,7 @@ function bsearch_pop_daily_dashboard() {
 	) );
 
 	if ( $bsearch_settings['show_credit'] ) {
-		echo '<br /><small>Powered by <a href="http://ajaydsouza.com/wordpress/plugins/better-search/">Better Search plugin</a></small>';
+		echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
 	}
 }
 
