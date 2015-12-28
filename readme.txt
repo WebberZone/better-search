@@ -1,10 +1,10 @@
 === Better Search ===
-Tags: search, Better Search, related search, relevant search, search results, heatmap, popular searches, top searches, relevance
-Contributors: Ajay
+Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
+Contributors: webberzone, Ajay
 Donate link: https://ajaydsouza.com/donate/
 Stable tag: trunk
 Requires at least: 3.9
-Tested up to: 4.4
+Tested up to: 4.5
 License: GPLv2 or later
 
 
@@ -12,7 +12,7 @@ Better Search replaces the default WordPress search with a better search that gi
 
 == Description ==
 
-<a href="https://webberzone.com/plugins/better-search/">Better Search</a> replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find will find what they are looking for quicker than if you didn't have **Better Search** installed.
+[Better Search](https://webberzone.com/plugins/better-search/) replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find will find what they are looking for quicker than if you didn't have **Better Search** installed.
 
 Better Search can search through not just posts, but also pages and other custom post types. Let your visitors find what they are looking for.
 
@@ -20,29 +20,27 @@ The plugin is packed with options to allow you to easily customise the output. Y
 
 Additionally, the plugin also tracks the searches and you to display a "search heatmap" of the most popular searches. Support for WordPress widgets will allow you to easily add this heatmap to your theme's sidebar or footer.
 
-
 = Features =
 * **Automatic**: Once activated, Better Search will automatically replace your default WordPress search with more relevant search results
-* **Seamless integration**: From v1.3.3, you can activate seamless integration which will output the search results perfectly integrated into your theme without the need for custom search templates
+* **Seamless integration**: Search results are perfectly integrated into your theme without the need for custom search templates
 * **Relevance**: Search results are automatically sorted by relevance. You can also turn off relevancy based searching, in which case, results are sorted by date
 * **Control the results**: Fine tune the results by changing the weighting of post title and post content. Turn on BOOLEAN search to override the default NATURAL LANGUAGE search of mySQL
-* **Highlight**: Highlight the search terms in the results
-* **Popular searches**: Find out what visitors are searching for on your blog. Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap. Widget support for easy integration in your theme
+* **Popular searches**: Find out what visitors are searching for on your blog. Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap. Widget support for easy integration in your theme as well as a shortcode [[bsearch_heatmap]]
 * **Customisation**: Support for a template file for perfect integration into your blog template. Alternatively, just input your own CSS styles in the *Custom Styles* tab in the Settings Page. Check the FAQ for more information
 * **Supports cache plugins**: Works with caching plugins like WP-Super-Cache and W3 Total Cache
 * **Profanity filter**: Customise the list of stop words that will automatically be filtered out of search queries
-* **Translation ready**: Better Search is translation ready. If you're interested in translating Better Search into your own language <a href="https://webberzone.com/contact/">let me know</a>.
+* **Translation ready**: Better Search is translation ready
 
 
 = Contribute =
-Better Search is also available on Github at https://github.com/ajaydsouza/better-search
+Better Search is also available on [Github](https://github.com/ajaydsouza/better-search)
 So, if you've got some cool feature that you'd like to implement into the plugin or a bug you've been able to fix, consider forking the project and sending me a pull request.
 
 
 == Screenshots ==
 
 1. Options in WP-Admin - General options
-2. Options in WP-Admin - Search options
+2. Options in WP-Admin - Search results options
 3. Options in WP-Admin - Heatmap options
 4. Options in WP-Admin - Custom styles
 5. Options in WP-Admin - Reset count and Maintenance
@@ -54,7 +52,7 @@ So, if you've got some cool feature that you'd like to implement into the plugin
 = WordPress install =
 1. Navigate to Plugins within your WordPress Admin Area
 
-2. Click "Add new" and in the search box enter "Better Search" and select "Keyword" from the dropdown
+2. Click "Add new" and in the search box enter "Better Search"
 
 3. Find the plugin in the list (usually the first result) and click "Install Now"
 
@@ -74,7 +72,7 @@ So, if you've got some cool feature that you'd like to implement into the plugin
 
 == Frequently Asked Questions ==
 
-If your question isn't listed here, please open a new thread at the <a href="hhttp://wordpress.org/support/plugin/better-search">WordPress.org support forum</a>. I monitor the forums on an ongoing basis. If you're looking for email based support, please see <a href="https://webberzone.com/support/">details here</a>.
+If your question isn't listed there, please create a new post in the [WordPress.org support forum](http://wordpress.org/support/plugin/better-search). I monitor the forums on an ongoing basis. If you're looking for more advanced _paid_ support, please see [details here](https://webberzone.com/support/).
 
 = Can I customize the output? =
 
@@ -82,20 +80,12 @@ Better Search has a huge set of options that help you customise the output or fi
 
 The plugin also supports the use of template files within your theme. You can create a file called `better-search-template.php` in your theme's directory and the plugin will use it to display the results.
 
-Take a look at https://webberzone.com/plugins/better-search/bsearch-templates for use of custom templates and template tags supported by Better Search
-
-= Can you create a search template for my theme? =
-
-Yes I can. However, there are no guarantee on the time frame for the same. Additionally, if I am unable to access the theme for testing, e.g. with paid premium themes, I won't be able to create this template.
-
-If you have already created a template that you would like to share with the WordPress Community, you can <a href="https://webberzone.com/contact/">contact me</a> and I will add it into the package.
-
 = My search words are getting filtered or *How does the profanity filter work* =
 
-From v1.3.2, Better Search includes a very cool profanity filter using the script from <a href-"http://banbuilder.com/">Banbuilder</a>. You can customise which list of words you want to filter out from the Better Search settings page. Find the setting called "Filter these words:". The plugin will automatically strip out both partial and complete references of these words.
+Better Search includes a very cool profanity filter using the script from <a href-"http://banbuilder.com/">Banbuilder</a>. You can customise which list of words you want to filter out from the Better Search settings page. Find the setting called "Filter these words:". The plugin will automatically strip out both partial and complete references of these words.
 You can turn the filter off by emptying the list.
 
-Know of a better profanity filter? Suggest one in the <a href="hhttp://wordpress.org/support/plugin/better-search">forums</a>.
+Know of a better profanity filter? Suggest one in the [forums](http://wordpress.org/support/plugin/better-search).
 
 = Functions =
 
@@ -170,7 +160,7 @@ For previous changelog entries, please refer to the separate changelog.txt file
 
 == Upgrade Notice ==
 
-= 2.0.1 =
-Highlight search results; Filterable search query; multisite support; bug fixes;
+= 2.1.0 =
+* New features and bug fixes. Upgrade highly recommended. Please do verify your settings after the upgrade.
 Check the Changelog for details
 
