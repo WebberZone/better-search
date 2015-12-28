@@ -21,6 +21,8 @@ if ( ! defined( 'WPINC' ) ) {
 function bsearch_clean_terms( $val ) {
 	global $bsearch_settings;
 
+	$val = stripslashes( urldecode( $val ) );
+
 	$badwords = array_map( 'trim', explode( ',', $bsearch_settings['badwords'] ) );
 
 	$censorChar = ' ';
@@ -37,6 +39,9 @@ function bsearch_clean_terms( $val ) {
 
 	$val_censored = bsearch_censor_string( $val, $badwords, $censorChar );	// No more bad words
 	$val = $val_censored['clean'];
+
+	$val = addslashes_gpc( $val );
+
 	$val = wp_kses_post( $val );
 
 	/**

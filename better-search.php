@@ -15,7 +15,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  http://ajaydsouza.com/wordpress/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     2.1-beta20151226
+ * Version:     2.1-beta20151227
  * Author:      Ajay D'Souza
  * Author URI:  http://ajaydsouza.com/
  * Text Domain:	better-search
@@ -117,7 +117,7 @@ function get_bsearch_results( $search_query = '', $limit ) {
 			$output .= get_bsearch_header( $search_query, $numrows, $limit );
 
 			$search_query = preg_quote( $search_query, '/' );
-			$keys = explode( ' ', $search_query );
+			$keys = explode( ' ', str_replace( array( "'", "\"", "&quot;" ), "", $search_query ) );
 
 			foreach ( $searches as $search ) {
 				$score = $search->score;
@@ -292,6 +292,15 @@ function get_bsearch_matches( $search_query, $bydate ) {
 
 	// Get search transient
 	$search_query_transient = 'bs_' . preg_replace( '/[^A-Za-z0-9\-]/', '', str_replace( ' ', '', $search_query ) );
+
+	/**
+	 * Filter name of the search transient
+	 *
+	 * @since	2.1.0
+	 *
+	 * @param	string	$search_query_transient	Transient name
+	 * @param	array	$search_query	Search query
+	 */
 	$search_query_transient = apply_filters( 'bsearch_transient_name', $search_query_transient, $search_query );
 	$search_query_transient = substr( $search_query_transient, 0, 40 );	// Name of the transient limited to 40 chars
 
