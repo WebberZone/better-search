@@ -81,7 +81,7 @@ add_action( 'plugins_loaded', 'bsearch_lang_init' );
  * @param	int|string $limit			Maximum number of search results.
  * @return	string     Search results
  */
-function get_bsearch_results( $search_query = '', $limit ) {
+function get_bsearch_results( $search_query = '', $limit = '' ) {
 	global $wpdb, $bsearch_settings;
 
 	if ( ! ( $limit ) ) {
