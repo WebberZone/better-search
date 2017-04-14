@@ -15,7 +15,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  https://webberzone.com/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     2.1.0
+ * Version:     2.1.1-beta1
  * Author:      Ajay D'Souza
  * Author URI:  https://webberzone.com/
  * Text Domain:	better-search
@@ -117,7 +117,7 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 			$output .= get_bsearch_header( $search_query, $numrows, $limit );
 
 			$search_query = preg_quote( $search_query, '/' );
-			$keys = explode( ' ', str_replace( array( "'", "\"", "&quot;" ), "", $search_query ) );
+			$keys = explode( ' ', str_replace( array( "'", "\"", "&quot;", "\+", "\-" ), "", $search_query ) );
 
 			foreach ( $searches as $search ) {
 				$score = $search->score;
@@ -126,7 +126,7 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 
 				/* Highlight the search terms in the title */
 				if ( $bsearch_settings['highlight'] ) {
-					$post_title  = preg_replace( '/(' . implode( '|', $keys ) . ')/iu', '<span class="bsearch_highlight">$1</span>', $post_title );
+					$post_title  = preg_replace( '/(?!<[^>]*?>)('. implode( '|', $keys ) . ')(?![^<]*?>)/iu', '<span class="bsearch_highlight">$1</span>', $post_title );
 				}
 
 				$output .= '<h2><a href="' . get_permalink( $search->ID ).'" rel="bookmark">' . $post_title . '</a></h2>';
@@ -148,7 +148,7 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 
 				/* Highlight the search terms in the excerpt */
 				if ( $bsearch_settings['highlight'] ) {
-					$excerpt = preg_replace( '/(' . implode( '|', $keys ) . ')/iu', '<span class="bsearch_highlight">$1</span>', $excerpt );
+					$excerpt  = preg_replace( '/(?!<[^>]*?>)('. implode( '|', $keys ) . ')(?![^<]*?>)/iu', '<span class="bsearch_highlight">$1</span>', $excerpt );
 				}
 
 				$output .= '<span class="bsearch_excerpt">' . $excerpt . '</span>';
