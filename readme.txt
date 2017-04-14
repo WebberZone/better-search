@@ -117,6 +117,11 @@ Example Usage:
 
 == Changelog ==
 
+= 2.1.1 =
+
+* Bug fixes:
+	* Sanitisation doesn't strip out + and -
+
 = 2.1.0 =
 * Features:
 	* Cache enable/disable option + Clear cache button. Replaces "Delete transients"
