@@ -21,7 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
 function bsearch_clean_terms( $val ) {
 	global $bsearch_settings;
 
-	$val = stripslashes( urldecode( $val ) );
+	$val = stripslashes( rawurldecode( $val ) );
 
 	$badwords = array_map( 'trim', explode( ',', $bsearch_settings['badwords'] ) );
 
