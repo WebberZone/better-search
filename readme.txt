@@ -121,6 +121,7 @@ Example Usage:
 
 * Bug fixes:
 	* Sanitisation doesn't strip out + and -
+	* Highlight works properly when using quotations, plus or minus
 
 = 2.1.0 =
 * Features:
