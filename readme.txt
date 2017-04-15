@@ -3,8 +3,8 @@ Tags: search, Better Search, related search, relevant search, search results, co
 Contributors: webberzone, Ajay
 Donate link: https://ajaydsouza.com/donate/
 Stable tag: trunk
-Requires at least: 3.9
-Tested up to: 4.5
+Requires at least: 4.0
+Tested up to: 4.7.3
 License: GPLv2 or later
 
 
