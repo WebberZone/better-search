@@ -12,7 +12,7 @@ Better Search replaces the default WordPress search with a better search that gi
 
 ## Description
 
-[Better Search](https://webberzone.com/plugins/better-search/) replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find will find what they are looking for quicker than if you didn't have **Better Search** installed.
+[Better Search](https://webberzone.com/plugins/better-search/) replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find what they are looking for quicker than if you didn't have **Better Search** installed.
 
 Better Search can search through not just posts, but also pages and other custom post types. Let your visitors find what they are looking for.
 
