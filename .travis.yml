@@ -1,52 +1,76 @@
-language: php
-
 sudo: false
 
+language: php
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+
+branches:
+  only:
+    - master
+
+cache:
+  - composer
+  - $HOME/.composer/cache
+
 matrix:
+  fast_finish: true
   include:
-    - php: '7.0'
-      env: WP_VERSION=latest WP_MULTISITE=0
-    - php: '7.1'
-      env: WP_VERSION=latest WP_MULTISITE=1
-    - php: '5.6'
-      env: WP_VERSION=latest WP_MULTISITE=0
-    - php: '5.6'
-      env: WP_VERSION=latest WP_MULTISITE=1
-    - php: '5.5'
+    - php: 5.6
+      env: SNIFF=1
+    - php: 7.1
       env: WP_VERSION=latest
-    - php: 'hhvm'
+    - php: 7.1
+      env: WP_VERSION=latest WP_MULTISITE=1
+    - php: 7.0
       env: WP_VERSION=latest
-    - php: '5.6'
-      env: WP_VERSION=4.0
-    - php: '5.5'
-      env: WP_VERSION=4.0
-    - php: '5.4'
-      env: WP_VERSION=4.0
-    - php: 'hhvm'
-      env: WP_VERSION=4.0 WP_MULTISITE=1
-    - php: '5.3'
-      env: WP_VERSION=4.0
+    - php: 5.6
+      env: WP_VERSION=4.1
+    - php: 5.6
+      env: WP_VERSION=latest
+    - php: 5.6
+      env: WP_VERSION=trunk
+    - php: 5.6
+      env: WP_VERSION=latest WP_MULTISITE=1
+
+  allow_failures:
+    # Allow failures for unstable builds.
+    - php: nightly
+    - env: WP_VERSION=master
+    - env: SNIFF=1
 
 before_script:
-  - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - export PHPCS_DIR=/tmp/phpcs
+  - export SNIFFS_DIR=/tmp/sniffs
+  - export PATH="$HOME/.composer/vendor/bin:$PHPCS_DIR/bin:$PATH"
   - |
-    if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then
-      composer global require "phpunit/phpunit=5.7.*"
-    else
-      composer global require "phpunit/phpunit=4.8.*"
+    if [[ ! -z "$WP_VERSION" ]] ; then
+      bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+      if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then
+        composer global require "phpunit/phpunit=5.7.*"
+      else
+        composer global require "phpunit/phpunit=4.8.*"
+      fi
     fi
+  # Install WordPress Coding Standards.
+  - if [[ "$SNIFF" == "1" ]]; then composer global require wp-coding-standards/wpcs; fi
+  # Install PHP Compatibility sniffs.
+  - if [[ "$SNIFF" == "1" ]]; then git clone -b master https://github.com/wimg/PHPCompatibility.git $SNIFFS_DIR/PHPCompatibility; fi
+  # Set install path for PHPCS sniffs.
+  - if [[ "$SNIFF" == "1" ]]; then phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs,$SNIFFS_DIR,$SNIFFS_DIR/PHPCompatibility; fi
+  - if [[ "$SNIFF" == "1" ]]; then phpcs -i; fi
+  # After CodeSniffer install you should refresh your path.
+  - if [[ "$SNIFF" == "1" ]]; then phpenv rehash; fi
 
 script:
-- if [[ $TRAVIS_PHP_VERSION != 'hhvm' && ( $TRAVIS_PHP_VERSION != '5.5'|| $WP_VERSION != 'latest'
-  || $WP_MULTISITE != '0' ) ]]; then phpenv config-rm xdebug.ini; fi
-- if [[ $TRAVIS_PHP_VERSION = '5.5' && $WP_VERSION = 'latest' && $WP_MULTISITE = '0'
-  ]]; then phpunit --coverage-clover=coverage.clover; else phpunit; fi
-
-after_script:
-- if [[ $TRAVIS_PHP_VERSION = '5.5' && $WP_VERSION = 'latest' && $WP_MULTISITE = '0'
-  ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi
-- if [[ $TRAVIS_PHP_VERSION = '5.5' && $WP_VERSION = 'latest' && $WP_MULTISITE = '0'
-  ]]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover;
-  fi
+  - |
+    if [[ ! -z "$WP_VERSION" ]] ; then
+      phpunit
+    fi
+  - |
+    if [[ "$SNIFF" == "1" ]] ; then
+      phpcs -p -v -s --standard=phpcs.ruleset.xml $(find . -name '*.php')
+    fi
 
