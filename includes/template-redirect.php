@@ -11,7 +11,7 @@
  * First checks if the theme contains a search template and uses that
  * If search template is missing, generates the results below
  *
- * @since	1.0
+ * @since   1.0
  */
 function bsearch_template_redirect() {
 	// not a search page; don't do anything and return
@@ -23,13 +23,13 @@ function bsearch_template_redirect() {
 
 	// If seamless integration mode is activated; return
 	if ( $bsearch_settings['seamless'] ) {
-	    return;
+		return;
 	}
 
 	// if we have a 404 status
 	if ( $wp_query->is_404 ) {
 		// set status of 404 to false
-		$wp_query->is_404 = false;
+		$wp_query->is_404     = false;
 		$wp_query->is_archive = true;
 	}
 
@@ -58,7 +58,7 @@ function bsearch_template_redirect() {
 
 		if ( file_exists( $exists ) ) {
 
-			include_once( $exists );
+			include_once $exists;
 			exit;
 
 		}
@@ -70,7 +70,7 @@ add_action( 'template_redirect', 'bsearch_template_redirect', 1 );
 /**
  * Insert styles into WordPress Head. Filters `wp_head`.
  *
- * @since	1.0
+ * @since   1.0
  */
 function bsearch_head() {
 
@@ -79,11 +79,11 @@ function bsearch_head() {
 
 	$search_query = get_bsearch_query();
 
-	$limit = ( isset( $_GET['limit'] ) ) ? intval( $_GET['limit'] ) : $bsearch_settings['limit']; // Read from GET variable
+	$limit  = ( isset( $_GET['limit'] ) ) ? intval( $_GET['limit'] ) : $bsearch_settings['limit']; // Read from GET variable
 	$bpaged = ( isset( $_GET['bpaged'] ) ) ? intval( $_GET['bpaged'] ) : 0; // Read from GET variable
 
 	if ( ! $bpaged && $bsearch_settings['track_popular'] ) {
-		echo bsearch_increment_counter( $search_query );	// Increment the count if we are on the first page of the results
+		echo bsearch_increment_counter( $search_query );    // Increment the count if we are on the first page of the results
 	}
 
 	// Add custom CSS to header
@@ -102,10 +102,10 @@ function bsearch_head() {
 /**
  * Change page title. Filters `wp_title`.
  *
- * @since	1.0
+ * @since   1.0
  *
- * @param	string $title
- * @return	string	Title of the page
+ * @param   string $title
+ * @return  string  Title of the page
  */
 function bsearch_title( $title ) {
 
@@ -117,18 +117,18 @@ function bsearch_title( $title ) {
 
 	if ( isset( $search_query ) ) {
 
-		$bsearch_title = sprintf( __( 'Search Results for "%s" | %s', 'better-search' ), $search_query, $title );
+		$bsearch_title = sprintf( __( 'Search Results for "%1$s" | %2$s', 'better-search' ), $search_query, $title );
 
 	}
 
 	/**
 	 * Filters the title of the page
 	 *
-	 * @since	2.0.0
+	 * @since   2.0.0
 	 *
-	 * @param	string	$bsearch_title	Title of the page set by Better Search
-	 * @param	string	$title			Original Title of the page
-	 * @param	string	$search_query	Search query
+	 * @param   string  $bsearch_title  Title of the page set by Better Search
+	 * @param   string  $title          Original Title of the page
+	 * @param   string  $search_query   Search query
 	 */
 	return apply_filters( 'bsearch_title', $bsearch_title, $title, $search_query );
 

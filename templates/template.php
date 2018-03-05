@@ -61,7 +61,7 @@ if ( ! isset( $search_query ) ) {
 				<div style="clear:both">&nbsp;</div>
 			</div>
 
-		<?php endif;	?>
+		<?php endif; ?>
 
 	</div>	<!-- Close id="content" -->
 

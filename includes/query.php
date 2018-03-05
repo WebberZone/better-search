@@ -9,26 +9,26 @@
 /**
  * returns an array with the first and last indices to be displayed on the page.
  *
- * @since	2.0.0
+ * @since   2.0.0
  *
- * @param	array $search_info    Search query
- * @param 	bool  $boolean_mode   Set BOOLEAN mode for FULLTEXT searching
- * @param	bool  $bydate         Sort by date?
- * @return	array	First and last indices to be displayed on the page
+ * @param   array $search_info    Search query
+ * @param   bool  $boolean_mode   Set BOOLEAN mode for FULLTEXT searching
+ * @param   bool  $bydate         Sort by date?
+ * @return  array   First and last indices to be displayed on the page
  */
 function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 	global $wpdb, $bsearch_settings;
 
 	// Initialise some variables
-	$fields = '';
-	$where = '';
-	$join = '';
-	$groupby = '';
-	$orderby = '';
-	$limits = '';
+	$fields       = '';
+	$where        = '';
+	$join         = '';
+	$groupby      = '';
+	$orderby      = '';
+	$limits       = '';
 	$match_fields = '';
 
-	parse_str( $bsearch_settings['post_types'], $post_types );	// Save post types in $post_types variable
+	parse_str( $bsearch_settings['post_types'], $post_types );  // Save post types in $post_types variable
 
 	$n = '%';
 
@@ -40,7 +40,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		$fields = ' ID, 0 AS score ';
 
 		// Create the WHERE Clause
-		$where = ' AND ( ';
+		$where  = ' AND ( ';
 		$where .= $wpdb->prepare(
 			" ((post_title LIKE '%s') OR (post_content LIKE '%s')) ",
 			$n . $search_terms[0] . $n,
@@ -85,7 +85,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		$fields = ' ID';
 
 		// Create the base MATCH part of the FIELDS clause
-		$field_score = ", (MATCH(post_title) AGAINST ('%s' {$boolean_mode} ) * %d ) + ";
+		$field_score  = ", (MATCH(post_title) AGAINST ('%s' {$boolean_mode} ) * %d ) + ";
 		$field_score .= "(MATCH(post_content) AGAINST ('%s' {$boolean_mode} ) * %d ) ";
 		$field_score .= 'AS score ';
 
@@ -94,12 +94,12 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		/**
 		 * Filter the MATCH part of the FIELDS clause of the query.
 		 *
-		 * @since	2.0.0
+		 * @since   2.0.0
 		 *
-		 * @param string   $field_score  	The MATCH section of the FIELDS clause of the query, i.e. score
-		 * @param string   $search_info[0]	Search query
-		 * @param int	   $bsearch_settings['weight_title']	Weight of title
-		 * @param int	   $bsearch_settings['weight_content']	Weight of content
+		 * @param string   $field_score     The MATCH section of the FIELDS clause of the query, i.e. score
+		 * @param string   $search_info[0]  Search query
+		 * @param int      $bsearch_settings['weight_title']    Weight of title
+		 * @param int      $bsearch_settings['weight_content']  Weight of content
 		 */
 		$field_score = apply_filters( 'bsearch_posts_match_field', $field_score, $search_info[0], $bsearch_settings['weight_title'], $bsearch_settings['weight_content'] );
 
@@ -108,10 +108,10 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		/**
 		 * Filter the SELECT clause of the query.
 		 *
-		 * @since	2.0.0
+		 * @since   2.0.0
 		 *
-		 * @param string   $fields  		The SELECT clause of the query.
-		 * @param string   $search_info[0]	Search query
+		 * @param string   $fields          The SELECT clause of the query.
+		 * @param string   $search_info[0]  Search query
 		 */
 		$fields = apply_filters( 'bsearch_posts_fields', $fields, $search_info[0] );
 
@@ -123,10 +123,10 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		/**
 		 * Filter the MATCH clause of the query.
 		 *
-		 * @since	2.0.0
+		 * @since   2.0.0
 		 *
-		 * @param string   $match  		The MATCH section of the WHERE clause of the query
-		 * @param string   $search_info[0]	Search query
+		 * @param string   $match       The MATCH section of the WHERE clause of the query
+		 * @param string   $search_info[0]  Search query
 		 */
 		$match = apply_filters( 'bsearch_posts_match', $match, $search_info[0] );
 
@@ -151,50 +151,50 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 	/**
 	 * Filter the WHERE clause of the query.
 	 *
-	 * @since	2.0.0
+	 * @since   2.0.0
 	 *
-	 * @param string   $where  		The WHERE clause of the query
-	 * @param string   $search_info[0]	Search query
+	 * @param string   $where       The WHERE clause of the query
+	 * @param string   $search_info[0]  Search query
 	 */
 	$where = apply_filters( 'bsearch_posts_where', $where, $search_info[0] );
 
 	/**
 	 * Filter the ORDER BY clause of the query.
 	 *
-	 * @since	2.0.0
+	 * @since   2.0.0
 	 *
-	 * @param string   $orderby  		The ORDER BY clause of the query
-	 * @param string   $search_info[0]	Search query
+	 * @param string   $orderby         The ORDER BY clause of the query
+	 * @param string   $search_info[0]  Search query
 	 */
 	$orderby = apply_filters( 'bsearch_posts_orderby', $orderby, $search_info[0] );
 
 	/**
 	 * Filter the GROUP BY clause of the query.
 	 *
-	 * @since	2.0.0
+	 * @since   2.0.0
 	 *
-	 * @param string   $groupby  		The GROUP BY clause of the query
-	 * @param string   $search_info[0]	Search query
+	 * @param string   $groupby         The GROUP BY clause of the query
+	 * @param string   $search_info[0]  Search query
 	 */
 	$groupby = apply_filters( 'bsearch_posts_groupby', $groupby, $search_info[0] );
 
 	/**
 	 * Filter the JOIN clause of the query.
 	 *
-	 * @since	2.0.0
+	 * @since   2.0.0
 	 *
-	 * @param string   $join  		The JOIN clause of the query
-	 * @param string   $search_info[0]	Search query
+	 * @param string   $join        The JOIN clause of the query
+	 * @param string   $search_info[0]  Search query
 	 */
 	$join = apply_filters( 'bsearch_posts_join', $join, $search_info[0] );
 
 	/**
 	 * Filter the JOIN clause of the query.
 	 *
-	 * @since	2.0.0
+	 * @since   2.0.0
 	 *
-	 * @param string   $limits  		The JOIN clause of the query
-	 * @param string   $search_info[0]	Search query
+	 * @param string   $limits          The JOIN clause of the query
+	 * @param string   $search_info[0]  Search query
 	 */
 	$limits = apply_filters( 'bsearch_posts_limits', $limits, $search_info[0] );
 
@@ -210,12 +210,12 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 	/**
 	 * Filter MySQL string used to fetch results.
 	 *
-	 * @since	1.3
+	 * @since   1.3
 	 *
-	 * @param	string	$sql			MySQL string
-	 * @param	array	$search_info	Search query
-	 * @param 	bool	$boolean_mode	Set BOOLEAN mode for FULLTEXT searching
-	 * @param	bool	$bydate			Sort by date?
+	 * @param   string  $sql            MySQL string
+	 * @param   array   $search_info    Search query
+	 * @param   bool    $boolean_mode   Set BOOLEAN mode for FULLTEXT searching
+	 * @param   bool    $bydate         Sort by date?
 	 */
 	return apply_filters( 'bsearch_sql_prepare', $sql, $search_info, $boolean_mode, $bydate );
 }

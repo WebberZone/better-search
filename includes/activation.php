@@ -9,7 +9,7 @@
 /**
  * Create tables to store pageviews.
  *
- * @since	2.0.0
+ * @since   2.0.0
  */
 function bsearch_single_activate() {
 	global $wpdb, $bsearch_db_version;
@@ -25,7 +25,7 @@ function bsearch_single_activate() {
 	$wpdb->show_errors();
 
 	// Create the tables
-	$table_name = $wpdb->prefix . 'bsearch';
+	$table_name       = $wpdb->prefix . 'bsearch';
 	$table_name_daily = $wpdb->prefix . 'bsearch_daily';
 
 	if ( $wpdb->get_var( "show tables like '$table_name'" ) != $table_name ) {
@@ -37,7 +37,7 @@ function bsearch_single_activate() {
             PRIMARY KEY  (accessedid)
         );';
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
@@ -57,7 +57,7 @@ function bsearch_single_activate() {
             PRIMARY KEY  (accessedid)
         );';
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
@@ -79,12 +79,12 @@ function bsearch_single_activate() {
             PRIMARY KEY  (accessedid)
         );';
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
-		$wpdb->query( 'ALTER '.$table_name.' DROP INDEX IDX_searhvar ' );
-		$wpdb->query( 'CREATE INDEX IDX_searhvar ON '.$table_name.' (searchvar)' );
+		$wpdb->query( 'ALTER ' . $table_name . ' DROP INDEX IDX_searhvar ' );
+		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name . ' (searchvar)' );
 		$wpdb->show_errors();
 
 		$sql = "DROP TABLE $table_name_daily";
@@ -98,7 +98,7 @@ function bsearch_single_activate() {
             PRIMARY KEY  (accessedid)
         );';
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
@@ -115,7 +115,7 @@ function bsearch_single_activate() {
 /**
  * Fired when a new site is activated with a WPMU environment.
  *
- * @since	2.0.0
+ * @since   2.0.0
  *
  * @param    int $blog_id    ID of the new blog.
  */
@@ -136,7 +136,7 @@ add_action( 'wpmu_new_blog', 'bsearch_activate_new_site' );
 /**
  * Fired when a site is deleted in a WPMU environment.
  *
- * @since	2.0.0
+ * @since   2.0.0
  *
  * @param    array $tables    Tables in the blog.
  */
