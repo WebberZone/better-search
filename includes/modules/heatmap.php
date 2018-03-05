@@ -14,25 +14,25 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Get the Search Heatmap.
  *
- * @since	1.2
+ * @since   1.2
  *
- * @param	array|string $args   Heatmap Parameters
- * @return	string	Search heatmap
+ * @param   array|string $args   Heatmap Parameters
+ * @return  string  Search heatmap
  */
 function get_bsearch_heatmap( $args = array() ) {
 	global $wpdb, $bsearch_url, $bsearch_settings;
 
 	$defaults = array(
-		'daily' => false,
-		'smallest' => intval( $bsearch_settings['heatmap_smallest'] ),
-		'largest' => intval( $bsearch_settings['heatmap_largest'] ),
-		'unit' => $bsearch_settings['heatmap_unit'],
-		'cold' => $bsearch_settings['heatmap_cold'],
-		'hot' => $bsearch_settings['heatmap_hot'],
-		'before' => $bsearch_settings['heatmap_before'],
-		'after' => $bsearch_settings['heatmap_after'],
+		'daily'         => false,
+		'smallest'      => intval( $bsearch_settings['heatmap_smallest'] ),
+		'largest'       => intval( $bsearch_settings['heatmap_largest'] ),
+		'unit'          => $bsearch_settings['heatmap_unit'],
+		'cold'          => $bsearch_settings['heatmap_cold'],
+		'hot'           => $bsearch_settings['heatmap_hot'],
+		'before'        => $bsearch_settings['heatmap_before'],
+		'after'         => $bsearch_settings['heatmap_after'],
 		'heatmap_limit' => intval( $bsearch_settings['heatmap_limit'] ),
-		'daily_range' => intval( $bsearch_settings['daily_range'] ),
+		'daily_range'   => intval( $bsearch_settings['daily_range'] ),
 	);
 
 	// Parse incomming $args into an array and merge it with $defaults
@@ -41,7 +41,7 @@ function get_bsearch_heatmap( $args = array() ) {
 	$table_name = $wpdb->prefix . 'bsearch';
 
 	if ( $args['daily'] ) {
-		$table_name .= '_daily';	// If we're viewing daily posts, set this to true
+		$table_name .= '_daily';    // If we're viewing daily posts, set this to true
 	}
 	$output = '';
 
@@ -84,8 +84,8 @@ function get_bsearch_heatmap( $args = array() ) {
 				$cntaccesss[] = $result->sumCount;
 			}
 		}
-		$min = min( $cntaccesss );
-		$max = max( $cntaccesss );
+		$min    = min( $cntaccesss );
+		$max    = max( $cntaccesss );
 		$spread = $max - $min;
 
 		// Calculate various font sizes
@@ -100,11 +100,11 @@ function get_bsearch_heatmap( $args = array() ) {
 
 		// Calculate colors
 		if ( $args['hot'] != $args['cold'] ) {
-			$hotdec = bsearch_html2rgb( $args['hot'] );
+			$hotdec  = bsearch_html2rgb( $args['hot'] );
 			$colddec = bsearch_html2rgb( $args['cold'] );
 			for ( $i = 0; $i < 3; $i++ ) {
-				$coldval[] = $colddec[ $i ];
-				$hotval[] = $hotdec[ $i ];
+				$coldval[]     = $colddec[ $i ];
+				$hotval[]      = $hotdec[ $i ];
 				$colorspread[] = $hotdec[ $i ] - $colddec[ $i ];
 				if ( 0 != $spread ) {
 					$colorstep[] = ( $hotdec[ $i ] - $colddec[ $i ] ) / $spread;
@@ -122,9 +122,9 @@ function get_bsearch_heatmap( $args = array() ) {
 			}
 
 			$textsearchvar = esc_attr( $result->searchvar );
-			$url  = home_url() . '/?s=' . $textsearchvar;
-			$fraction = $cntaccess - $min;
-			$fontsize = $args['smallest'] + $fontstep * $fraction;
+			$url           = home_url() . '/?s=' . $textsearchvar;
+			$fraction      = $cntaccess - $min;
+			$fontsize      = $args['smallest'] + $fontstep * $fraction;
 
 			$color = '';
 
@@ -142,7 +142,7 @@ function get_bsearch_heatmap( $args = array() ) {
 
 			$output .= $args['before'] . '<a href="' . $url . '" title="';
 			$output .= sprintf( _n( 'Search for %1$s (%2$s search)', 'Search for %1$s (%2$s searches)', $cntaccess, 'better-search' ), $textsearchvar, $cntaccess );
-			$output .= '" '.$style;
+			$output .= '" ' . $style;
 			if ( $bsearch_settings['link_nofollow'] ) {
 				$output .= ' rel="nofollow" ';
 			}
@@ -158,10 +158,10 @@ function get_bsearch_heatmap( $args = array() ) {
 	/**
 	 * Filter formatted string with the search heatmap
 	 *
-	 * @since	1.2
+	 * @since   1.2
 	 *
-	 * @param	string			$output		Formatted excerpt
-	 * @param	string|array 	$args		Arguments
+	 * @param   string          $output     Formatted excerpt
+	 * @param   string|array    $args       Arguments
 	 */
 	return apply_filters( 'get_bsearch_heatmap', $output, $args );
 }
@@ -170,9 +170,9 @@ function get_bsearch_heatmap( $args = array() ) {
 /**
  * Manual Daily Better Search Heatmap.
  *
- * @since	1.0
+ * @since   1.0
  *
- * @return	string	Daily search heatmap
+ * @return  string  Daily search heatmap
  */
 function get_bsearch_pop_daily() {
 
@@ -184,9 +184,11 @@ function get_bsearch_pop_daily() {
 	$output .= $bsearch_settings['title_daily'];
 	$output .= '<div text-align:center>';
 
-	$output .= get_bsearch_heatmap( array(
-		'daily' => 1,
-	) );
+	$output .= get_bsearch_heatmap(
+		array(
+			'daily' => 1,
+		)
+	);
 	$output .= '</div>';
 
 	if ( $bsearch_settings['show_credit'] ) {
@@ -198,9 +200,9 @@ function get_bsearch_pop_daily() {
 	/**
 	 * Filters the daily search heatmap HTML
 	 *
-	 * @since	1.2
+	 * @since   1.2
 	 *
-	 * @param	string	$output	Daily search heatmap HTML
+	 * @param   string  $output Daily search heatmap HTML
 	 */
 	return apply_filters( 'get_bsearch_pop_daily', $output );
 }
@@ -209,7 +211,7 @@ function get_bsearch_pop_daily() {
 /**
  * Echo daily popular searches.
  *
- * @since	1.0
+ * @since   1.0
  */
 function the_pop_searches_daily() {
 	echo get_bsearch_pop_daily();
@@ -218,9 +220,9 @@ function the_pop_searches_daily() {
 /**
  * Manual Overall Better Search Heatmap.
  *
- * @since	1.0
+ * @since   1.0
  *
- * @return	$string	Popular searches heatmap
+ * @return  $string Popular searches heatmap
  */
 function get_bsearch_pop() {
 
@@ -232,9 +234,11 @@ function get_bsearch_pop() {
 	$output .= $bsearch_settings['title'];
 	$output .= '<div text-align:center>';
 
-	$output .= get_bsearch_heatmap( array(
-		'daily' => 0,
-	) );
+	$output .= get_bsearch_heatmap(
+		array(
+			'daily' => 0,
+		)
+	);
 	$output .= '</div>';
 
 	if ( $bsearch_settings['show_credit'] ) {
@@ -246,9 +250,9 @@ function get_bsearch_pop() {
 	/**
 	 * Filters the overall popular searches heatmap HTML
 	 *
-	 * @since	1.2
+	 * @since   1.2
 	 *
-	 * @param	string	$output	Daily search heatmap HTML
+	 * @param   string  $output Daily search heatmap HTML
 	 */
 	return apply_filters( 'get_bsearch_pop', $output );
 }
@@ -257,7 +261,7 @@ function get_bsearch_pop() {
 /**
  * Echo popular searches list.
  *
- * @since	1.0
+ * @since   1.0
  */
 function the_pop_searches() {
 	echo get_bsearch_pop();

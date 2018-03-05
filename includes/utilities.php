@@ -13,10 +13,10 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Clean search string from XSS exploits.
  *
- * @since	1.0
+ * @since   1.0
  *
- * @param	string $val    Potentially unclean string
- * @return	string	Cleaned string
+ * @param   string $val    Potentially unclean string
+ * @return  string  Cleaned string
  */
 function bsearch_clean_terms( $val ) {
 	global $bsearch_settings;
@@ -30,15 +30,15 @@ function bsearch_clean_terms( $val ) {
 	/**
 	 * Allow the censored character to be replaced.
 	 *
-	 * @since	2.1.0
+	 * @since   2.1.0
 	 *
-	 * @param	string	$censorChar	Censored character
-	 * @param	string	$val		Raw search string
+	 * @param   string  $censorChar Censored character
+	 * @param   string  $val        Raw search string
 	 */
 	$censorChar = apply_filters( 'bsearch_censor_char', $censorChar, $val );
 
-	$val_censored = bsearch_censor_string( $val, $badwords, $censorChar );	// No more bad words
-	$val = $val_censored['clean'];
+	$val_censored = bsearch_censor_string( $val, $badwords, $censorChar );  // No more bad words
+	$val          = $val_censored['clean'];
 
 	$val = addslashes_gpc( $val );
 
@@ -47,9 +47,9 @@ function bsearch_clean_terms( $val ) {
 	/**
 	 * Clean search string from XSS exploits.
 	 *
-	 * @since	2.0.0
+	 * @since   2.0.0
 	 *
-	 * @param	string	$val	Cleaned string
+	 * @param   string  $val    Cleaned string
 	 */
 	return apply_filters( 'bsearch_clean_terms', $val );
 }
@@ -59,25 +59,26 @@ add_filter( 'get_search_query', 'bsearch_clean_terms' );
 /**
  * Generates a random string.
  *
- * @since	1.3.3
+ * @since   1.3.3
  *
- * @param	string $chars  Chars that can be used.
- * @param	int    $len    Length of the output string.
- * @return	string	Random string
+ * @param   string $chars  Chars that can be used.
+ * @param   int    $len    Length of the output string.
+ * @return  string  Random string
  */
 function bsearch_rand_censor( $chars, $len ) {
 
 	mt_srand(); // useful for < PHP4.2
 	$lastChar = strlen( $chars ) - 1;
-	$randOld = -1;
-	$out = '';
+	$randOld  = -1;
+	$out      = '';
 
 	// create $len chars
 	for ( $i = $len; $i > 0; $i-- ) {
 		// generate random char - it must be different from previously generated
-		while ( ( $randNew = mt_rand( 0, $lastChar ) ) === $randOld ) { }
+		while ( ( $randNew = mt_rand( 0, $lastChar ) ) === $randOld ) {
+		}
 		$randOld = $randNew;
-		$out .= $chars[ $randNew ];
+		$out    .= $chars[ $randNew ];
 	}
 
 	return $out;
@@ -88,16 +89,16 @@ function bsearch_rand_censor( $chars, $len ) {
 /**
  * Apply censorship to $string, replacing $badwords with $censorChar.
  *
- * @since	1.3.3
+ * @since   1.3.3
  *
- * @param 	string $string     String to be censored.
- * @param 	array  $badwords   Array of badwords.
- * @param 	string $censorChar String which replaces bad words. If it's more than 1-char long, a random string will be generated from these chars. Default: '*'
- * @return	string	Cleaned up string
+ * @param   string $string     String to be censored.
+ * @param   array  $badwords   Array of badwords.
+ * @param   string $censorChar String which replaces bad words. If it's more than 1-char long, a random string will be generated from these chars. Default: '*'
+ * @return  string  Cleaned up string
  */
 function bsearch_censor_string( $string, $badwords, $censorChar = '*' ) {
 
-	$leet_replace = array();
+	$leet_replace      = array();
 	$leet_replace['a'] = '(a|a\.|a\-|4|@|Á|á|À|Â|à|Â|â|Ä|ä|Ã|ã|Å|å|α|Δ|Λ|λ)';
 	$leet_replace['b'] = '(b|b\.|b\-|8|\|3|ß|Β|β)';
 	$leet_replace['c'] = '(c|c\.|c\-|Ç|ç|¢|€|<|\(|{|©)';
@@ -133,14 +134,14 @@ function bsearch_censor_string( $string, $badwords, $censorChar = '*' ) {
 	for ( $x = 0; $x < count( $badwords ); $x++ ) {
 
 		$replacement[ $x ] = $isOneChar
-	        ? str_repeat( $censorChar, strlen( $badwords[ $x ] ) )
-	        : bsearch_rand_censor( $censorChar, strlen( $badwords[ $x ] ) );
+			? str_repeat( $censorChar, strlen( $badwords[ $x ] ) )
+			: bsearch_rand_censor( $censorChar, strlen( $badwords[ $x ] ) );
 
 		$badwords[ $x ] = '/' . str_ireplace( array_keys( $leet_replace ), array_values( $leet_replace ), $badwords[ $x ] ) . '/i';
 	}
 
-	$newstring = array();
-	$newstring['orig'] = ( $string );
+	$newstring          = array();
+	$newstring['orig']  = ( $string );
 	$newstring['clean'] = preg_replace( $badwords, $replacement, $newstring['orig'] );
 
 	return $newstring;
@@ -151,10 +152,10 @@ function bsearch_censor_string( $string, $badwords, $censorChar = '*' ) {
 /**
  * Convert Hexadecimal colour code to RGB.
  *
- * @since	1.3.4
+ * @since   1.3.4
  *
- * @param	string $color  Hexadecimal colour
- * @return	array 	Array containing RGB colour code
+ * @param   string $color  Hexadecimal colour
+ * @return  array   Array containing RGB colour code
  */
 function bsearch_html2rgb( $color ) {
 
@@ -189,16 +190,16 @@ function bsearch_html2rgb( $color ) {
 /**
  * Function to convert RGB color code to Hexadecimal.
  *
- * @since	1.3.4
+ * @since   1.3.4
  *
- * @param	int|string|array $r  Red colour or array of RGB values
- * @param	int|string       $g  (default: -1) Green colour
- * @param	int|string       $b  (default: -1) Blue colour
- * @return	string				HEX color code
+ * @param   int|string|array $r  Red colour or array of RGB values
+ * @param   int|string       $g  (default: -1) Green colour
+ * @param   int|string       $b  (default: -1) Blue colour
+ * @return  string              HEX color code
  */
 function bsearch_rgb2html( $r, $g = -1, $b = -1, $padhash = false ) {
 
-	if ( is_array( $r ) && sizeof( $r ) == 3 ) {	// If $r is an array, extract the RGB values
+	if ( is_array( $r ) && sizeof( $r ) == 3 ) {    // If $r is an array, extract the RGB values
 		list( $r, $g, $b ) = $r;
 	}
 
@@ -210,12 +211,12 @@ function bsearch_rgb2html( $r, $g = -1, $b = -1, $padhash = false ) {
 	$g = dechex( $g < 0 ? 0 : ( $g > 255 ? 255 : $g ) );
 	$b = dechex( $b < 0 ? 0 : ( $b > 255 ? 255 : $b ) );
 
-	$color = ( strlen( $r ) < 2 ? '0' : '' ) . $r;
+	$color  = ( strlen( $r ) < 2 ? '0' : '' ) . $r;
 	$color .= ( strlen( $g ) < 2 ? '0' : '' ) . $g;
 	$color .= ( strlen( $b ) < 2 ? '0' : '' ) . $b;
 
 	if ( $padhash ) {
-	    $color = '#' . $color;
+		$color = '#' . $color;
 	}
 
 	return $color;

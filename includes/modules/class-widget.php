@@ -12,9 +12,9 @@ if ( ! defined( 'WPINC' ) ) {
 
 
 /**
- * Create a Wordpress Widget for Popular search terms.
+ * Create a WordPress Widget for Popular search terms.
  *
- * @since	1.3.3
+ * @since   1.3.3
  *
  * @extends WP_Widget
  */
@@ -39,8 +39,8 @@ class BSearch_Widget extends WP_Widget {
 	 * @param array $instance Previously saved values from database.
 	 */
 	function form( $instance ) {
-		$title = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
-		$daily = isset( $instance['title'] ) ? esc_attr( $instance['daily'] ) : 'overall';
+		$title       = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
+		$daily       = isset( $instance['title'] ) ? esc_attr( $instance['daily'] ) : 'overall';
 		$daily_range = isset( $instance['daily_range'] ) ? esc_attr( $instance['daily_range'] ) : '';
 		?>
 		<p>
@@ -50,8 +50,18 @@ class BSearch_Widget extends WP_Widget {
 		</p>
 		<p>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'daily' ); ?>" name="<?php echo $this->get_field_name( 'daily' ); ?>">
-				<option value="overall" <?php if ( $daily == 'overall' ) { echo 'selected="selected"'; } ?>><?php _e( 'Overall', 'better-search' ); ?></option>
-				<option value="daily" <?php if ( $daily == 'daily' ) { echo 'selected="selected"'; } ?>><?php _e( 'Custom time period (Enter below)', 'better-search' ); ?></option>
+				<option value="overall" 
+				<?php
+				if ( $daily == 'overall' ) {
+					echo 'selected="selected"'; }
+?>
+><?php _e( 'Overall', 'better-search' ); ?></option>
+				<option value="daily" 
+				<?php
+				if ( $daily == 'daily' ) {
+					echo 'selected="selected"'; }
+?>
+><?php _e( 'Custom time period (Enter below)', 'better-search' ); ?></option>
 			</select>
 		</p>
 		<p>
@@ -64,9 +74,9 @@ class BSearch_Widget extends WP_Widget {
 			/**
 			 * Fires after Better Search widget options.
 			 *
-			 * @since	2.0.0
+			 * @since   2.0.0
 			 *
-			 * @param	array	$instance	Widget options array
+			 * @param   array   $instance   Widget options array
 			 */
 			do_action( 'bsearch_widget_options_after', $instance );
 		?>
@@ -86,19 +96,19 @@ class BSearch_Widget extends WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	function update( $new_instance, $old_instance ) {
-		$instance = $old_instance;
-		$instance['title'] = strip_tags( $new_instance['title'] );
-		$instance['daily'] = strip_tags( $new_instance['daily'] );
+		$instance                = $old_instance;
+		$instance['title']       = strip_tags( $new_instance['title'] );
+		$instance['daily']       = strip_tags( $new_instance['daily'] );
 		$instance['daily_range'] = strip_tags( $new_instance['daily_range'] );
 
 		/**
 		 * Filters Update widget options array.
 		 *
-		 * @since	2.0.0
+		 * @since   2.0.0
 		 *
-		 * @param	array	$instance	Widget options array
+		 * @param   array   $instance   Widget options array
 		 */
-		return apply_filters( 'bsearch_widget_options_update' , $instance );
+		return apply_filters( 'bsearch_widget_options_update', $instance );
 	} //ending update
 
 
@@ -123,15 +133,19 @@ class BSearch_Widget extends WP_Widget {
 		echo $args['before_title'] . $title . $args['after_title'];
 
 		if ( 'overall' == $daily ) {
-			echo get_bsearch_heatmap( array(
-				'daily' => 0,
-				'daily_range' => $daily_range,
-			) );
+			echo get_bsearch_heatmap(
+				array(
+					'daily'       => 0,
+					'daily_range' => $daily_range,
+				)
+			);
 		} else {
-			echo get_bsearch_heatmap( array(
-				'daily' => 1,
-				'daily_range' => $daily_range,
-			) );
+			echo get_bsearch_heatmap(
+				array(
+					'daily'       => 1,
+					'daily_range' => $daily_range,
+				)
+			);
 		}
 		if ( $bsearch_settings['show_credit'] ) {
 			echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
@@ -152,20 +166,20 @@ class BSearch_Search_Box extends WP_Widget {
 		parent::__construct(
 			'bsearch_search_box', // Base ID
 			__( 'Search Form [Better Search]', 'better-search' ), // Name
-			array( 'description' => __( 'Search Form', 'better-search' ), ) // Args
+			array( 'description' => __( 'Search Form', 'better-search' ) ) // Args
 		);
 	}
 
 	/**
 	 * Outputs the content of the widget
 	 *
-	 * @param	array	$args
-	 * @param 	array	$instance
+	 * @param   array $args
+	 * @param   array $instance
 	 */
 	public function widget( $args, $instance ) {
 		echo $args['before_widget'];
 		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
+			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
 		}
 		get_search_form();
 		echo $args['after_widget'];
@@ -193,17 +207,17 @@ class BSearch_Search_Box extends WP_Widget {
 	 * @param array $old_instance The previous options
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance = array();
+		$instance          = array();
 		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
 
 		/**
 		 * Filters Update widget options array for the Search box.
 		 *
-		 * @since	2.1.0
+		 * @since   2.1.0
 		 *
-		 * @param	array	$instance	Widget options array
+		 * @param   array   $instance   Widget options array
 		 */
-		return apply_filters( 'bsearch_search_widget_options_update' , $instance );
+		return apply_filters( 'bsearch_search_widget_options_update', $instance );
 	}
 }
 
@@ -211,7 +225,7 @@ class BSearch_Search_Box extends WP_Widget {
 /**
  * Initialise Better Search Widgets.
  *
- * @since	1.3.3
+ * @since   1.3.3
  */
 function bsearch_register_widget() {
 	register_widget( 'BSearch_Widget' );

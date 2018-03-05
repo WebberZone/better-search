@@ -9,9 +9,9 @@
 /**
  * Clause to add code to wp_head
  *
- * @since	1.3.3
+ * @since   1.3.3
  *
- * @return	string	HTML added to the wp_head
+ * @return  string  HTML added to the wp_head
  */
 function bsearch_clause_head() {
 	global $wp_query, $bsearch_settings;
@@ -23,7 +23,7 @@ function bsearch_clause_head() {
 
 		if ( $bsearch_settings['seamless'] && ! is_paged() ) {
 			$search_query = get_bsearch_query();
-			$output .= bsearch_increment_counter( $search_query );
+			$output      .= bsearch_increment_counter( $search_query );
 		}
 
 		if ( $bsearch_settings['meta_noindex'] ) {
@@ -39,9 +39,9 @@ function bsearch_clause_head() {
 	/**
 	 * Filters the output HTML added to wp_head
 	 *
-	 * @since	2.0.0
+	 * @since   2.0.0
 	 *
-	 * @return	string	$output	Output HTML added to wp_head
+	 * @return  string  $output Output HTML added to wp_head
 	 */
 	$output = apply_filters( 'bsearch_clause_head', $output );
 
@@ -54,10 +54,10 @@ add_action( 'wp_head', 'bsearch_clause_head' );
 /**
  * Highlight the search term
  *
- * @since	2.0.0
+ * @since   2.0.0
  *
- * @param	string $content    Post content
- * @return 	string	Post Content
+ * @param   string $content    Post content
+ * @return  string  Post Content
  */
 function bsearch_content( $content ) {
 	global $bsearch_settings, $wp_query;
@@ -66,10 +66,10 @@ function bsearch_content( $content ) {
 		$search_query = get_bsearch_query();
 
 		$search_query = preg_quote( $search_query, '/' );
-		$keys = explode( ' ', str_replace( array( "'", "\"", "&quot;", "\+", "\-" ), "", $search_query ) );
+		$keys         = explode( ' ', str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $search_query ) );
 
-		$regEx = '/(?!<[^>]*?>)('. implode( '|', $keys ) . ')(?![^<]*?>)/iu';
-		$content  = preg_replace( $regEx, '<span class="bsearch_highlight">$1</span>', $content );
+		$regEx   = '/(?!<[^>]*?>)(' . implode( '|', $keys ) . ')(?![^<]*?>)/iu';
+		$content = preg_replace( $regEx, '<span class="bsearch_highlight">$1</span>', $content );
 
 	}
 

@@ -20,7 +20,7 @@ if ( ! file_exists( $wp_load_path . $wp_load_filename ) ) {
 	$wp_load_filename = dirname( $wp_load_path ) . $wp_load_filename;
 }
 // Require the wp-config.php file
-require( $wp_load_filename );
+require $wp_load_filename;
 
 
 /**
@@ -43,9 +43,11 @@ function bsearch_daily_searches() {
 	}
 
 	$output .= '<div text-align:center>';
-	$output .= get_bsearch_heatmap( array(
-		'daily' => 1,
-	) );
+	$output .= get_bsearch_heatmap(
+		array(
+			'daily' => 1,
+		)
+	);
 	$output .= '</div>';
 
 	if ( $bsearch_settings['show_credit'] ) {

@@ -9,19 +9,19 @@
 /**
  * Function to update search count.
  *
- * @since	1.0
+ * @since   1.0
  *
- * @param	string $search_query   Search query
- * @return	string	Search tracker code
+ * @param   string $search_query   Search query
+ * @return  string  Search tracker code
  */
 function bsearch_increment_counter( $search_query ) {
 	global $bsearch_url, $bsearch_settings;
 
 	$output = '';
 
-	$current_user = wp_get_current_user();
-	$current_user_admin = ( current_user_can( 'manage_options' ) ) ? true : false;	// Is the current user an admin?
-	$current_user_editor = ( ( current_user_can( 'edit_others_posts' ) ) && ( ! current_user_can( 'manage_options' ) ) ) ? true : false;	// Is the current user pure editor?
+	$current_user        = wp_get_current_user();
+	$current_user_admin  = ( current_user_can( 'manage_options' ) ) ? true : false;  // Is the current user an admin?
+	$current_user_editor = ( ( current_user_can( 'edit_others_posts' ) ) && ( ! current_user_can( 'manage_options' ) ) ) ? true : false;    // Is the current user pure editor?
 
 	$include_code = true;
 
@@ -42,10 +42,10 @@ function bsearch_increment_counter( $search_query ) {
 	/**
 	 * Filter the search tracker code
 	 *
-	 * @since	2.0.0
+	 * @since   2.0.0
 	 *
-	 * @param	string	$output			Formatted output string
-	 * @param	string	$search_query	Search query
+	 * @param   string  $output         Formatted output string
+	 * @param   string  $search_query   Search query
 	 */
 	return apply_filters( 'bsearch_increment_counter', $output, $search_query );
 }
