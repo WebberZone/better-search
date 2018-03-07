@@ -1,4 +1,5 @@
-engines:
+version: "2"
+plugins:
   phpcodesniffer:
     enabled: true
     config:
@@ -9,10 +10,7 @@ engines:
         enabled: false
       Squiz Commenting InlineComment SpacingBefore:
         enabled: false
-ratings:
-  paths:
-  - "**.php"
-exclude_paths:
-- tests/
-- bin/
-- vendor/
+exclude_patterns:
+- "tests/"
+- "bin/"
+- "vendor/"
