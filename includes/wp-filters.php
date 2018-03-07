@@ -5,13 +5,10 @@
  * @package Better_Search
  */
 
-
 /**
- * Clause to add code to wp_head
+ * Echoes the code to wp_head
  *
  * @since   1.3.3
- *
- * @return  string  HTML added to the wp_head
  */
 function bsearch_clause_head() {
 	global $wp_query, $bsearch_settings;
@@ -30,7 +27,7 @@ function bsearch_clause_head() {
 			$output .= '<meta name="robots" content="noindex,follow" />';
 		}
 
-		// Add custom CSS to header
+		// Add custom CSS to header.
 		if ( '' != $bsearch_custom_CSS ) {
 			$output .= '<style type="text/css">' . $bsearch_custom_CSS . '</style>';
 		}
@@ -56,7 +53,7 @@ add_action( 'wp_head', 'bsearch_clause_head' );
  *
  * @since   2.0.0
  *
- * @param   string $content    Post content
+ * @param   string $content    Post content.
  * @return  string  Post Content
  */
 function bsearch_content( $content ) {

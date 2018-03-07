@@ -15,7 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @since   1.0
  *
- * @param   string $val    Potentially unclean string
+ * @param   string $val    Potentially unclean string.
  * @return  string  Cleaned string
  */
 function bsearch_clean_terms( $val ) {
@@ -37,7 +37,7 @@ function bsearch_clean_terms( $val ) {
 	 */
 	$censorChar = apply_filters( 'bsearch_censor_char', $censorChar, $val );
 
-	$val_censored = bsearch_censor_string( $val, $badwords, $censorChar );  // No more bad words
+	$val_censored = bsearch_censor_string( $val, $badwords, $censorChar );  // No more bad words.
 	$val          = $val_censored['clean'];
 
 	$val = addslashes_gpc( $val );
@@ -67,14 +67,14 @@ add_filter( 'get_search_query', 'bsearch_clean_terms' );
  */
 function bsearch_rand_censor( $chars, $len ) {
 
-	mt_srand(); // useful for < PHP4.2
+	mt_srand(); // useful for < PHP4.2.
 	$lastChar = strlen( $chars ) - 1;
 	$randOld  = -1;
 	$out      = '';
 
-	// create $len chars
+	// Create $len chars.
 	for ( $i = $len; $i > 0; $i-- ) {
-		// generate random char - it must be different from previously generated
+		// Generate random char - it must be different from previously generated.
 		while ( ( $randNew = mt_rand( 0, $lastChar ) ) === $randOld ) {
 		}
 		$randOld = $randNew;
@@ -93,7 +93,7 @@ function bsearch_rand_censor( $chars, $len ) {
  *
  * @param   string $string     String to be censored.
  * @param   array  $badwords   Array of badwords.
- * @param   string $censorChar String which replaces bad words. If it's more than 1-char long, a random string will be generated from these chars. Default: '*'
+ * @param   string $censorChar String which replaces bad words. If it's more than 1-char long, a random string will be generated from these chars. Default: '*'.
  * @return  string  Cleaned up string
  */
 function bsearch_censor_string( $string, $badwords, $censorChar = '*' ) {
@@ -154,22 +154,22 @@ function bsearch_censor_string( $string, $badwords, $censorChar = '*' ) {
  *
  * @since   1.3.4
  *
- * @param   string $color  Hexadecimal colour
+ * @param   string $color  Hexadecimal colour.
  * @return  array   Array containing RGB colour code
  */
 function bsearch_html2rgb( $color ) {
 
-	if ( $color[0] == '#' ) {
+	if ( '#' === $color[0] ) {
 		$color = substr( $color, 1 );
 	}
 
-	if ( strlen( $color ) == 6 ) {
+	if ( 6 == strlen( $color ) ) {
 		list( $r, $g, $b ) = array(
 			$color[0] . $color[1],
 			$color[2] . $color[3],
 			$color[4] . $color[5],
 		);
-	} elseif ( strlen( $color ) == 3 ) {
+	} elseif ( 3 == strlen( $color ) ) {
 		list( $r, $g, $b ) = array(
 			$color[0] . $color[0],
 			$color[1] . $color[1],
@@ -192,14 +192,15 @@ function bsearch_html2rgb( $color ) {
  *
  * @since   1.3.4
  *
- * @param   int|string|array $r  Red colour or array of RGB values
- * @param   int|string       $g  (default: -1) Green colour
- * @param   int|string       $b  (default: -1) Blue colour
+ * @param   int|string|array $r  Red colour or array of RGB values.
+ * @param   int|string       $g  (default: -1) Green colour.
+ * @param   int|string       $b  (default: -1) Blue colour.
+ * @param   bool             $padhash Pad # when returning.
  * @return  string              HEX color code
  */
 function bsearch_rgb2html( $r, $g = -1, $b = -1, $padhash = false ) {
 
-	if ( is_array( $r ) && sizeof( $r ) == 3 ) {    // If $r is an array, extract the RGB values
+	if ( is_array( $r ) && count( $r ) == 3 ) {    // If $r is an array, extract the RGB values.
 		list( $r, $g, $b ) = $r;
 	}
 

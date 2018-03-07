@@ -5,7 +5,6 @@
  * @package Better_Search
  */
 
-
 /**
  * Delete the Better Search cache.
  */

@@ -23,11 +23,11 @@ class BSearch_Widget extends WP_Widget {
 	/**
 	 * Register widget with WordPress.
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct(
-			'widget_bsearch_pop', // Base ID
-			__( 'Popular Searches [Better Search]', 'better-search' ), // Name
-			array( 'description' => __( 'Display the popular searches', 'better-search' ) ) // Args
+			'widget_bsearch_pop', // Base ID.
+			__( 'Popular Searches [Better Search]', 'better-search' ), // Name.
+			array( 'description' => __( 'Display the popular searches', 'better-search' ) ) // Args.
 		);
 	}
 
@@ -38,7 +38,7 @@ class BSearch_Widget extends WP_Widget {
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-	function form( $instance ) {
+	public function form( $instance ) {
 		$title       = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
 		$daily       = isset( $instance['title'] ) ? esc_attr( $instance['daily'] ) : 'overall';
 		$daily_range = isset( $instance['daily_range'] ) ? esc_attr( $instance['daily_range'] ) : '';
@@ -50,15 +50,15 @@ class BSearch_Widget extends WP_Widget {
 		</p>
 		<p>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'daily' ); ?>" name="<?php echo $this->get_field_name( 'daily' ); ?>">
-				<option value="overall" 
+				<option value="overall"
 				<?php
-				if ( $daily == 'overall' ) {
+				if ( 'overall' === $daily ) {
 					echo 'selected="selected"'; }
 ?>
 ><?php _e( 'Overall', 'better-search' ); ?></option>
-				<option value="daily" 
+				<option value="daily"
 				<?php
-				if ( $daily == 'daily' ) {
+				if ( 'daily' === $daily ) {
 					echo 'selected="selected"'; }
 ?>
 ><?php _e( 'Custom time period (Enter below)', 'better-search' ); ?></option>
@@ -90,12 +90,12 @@ class BSearch_Widget extends WP_Widget {
 	 *
 	 * @see WP_Widget::update()
 	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
+	 * @param array $new_instance New settings for this instance as input by the user via
+	 *                            WP_Widget::form().
+	 * @param array $old_instance Old settings for this instance.
+	 * @return array Settings to save.
 	 */
-	function update( $new_instance, $old_instance ) {
+	public function update( $new_instance, $old_instance ) {
 		$instance                = $old_instance;
 		$instance['title']       = strip_tags( $new_instance['title'] );
 		$instance['daily']       = strip_tags( $new_instance['daily'] );
@@ -117,10 +117,11 @@ class BSearch_Widget extends WP_Widget {
 	 *
 	 * @see WP_Widget::widget()
 	 *
-	 * @param array $args Widget arguments.
-	 * @param array $instance Saved values from database.
+	 * @param array $args     Display arguments including 'before_title', 'after_title',
+	 *                        'before_widget', and 'after_widget'.
+	 * @param array $instance The settings for the particular instance of the widget.
 	 */
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		global $wpdb, $bsearch_url, $bsearch_settings;
 
 		$daily_range = isset( $instance['daily_range'] ) ? $instance['daily_range'] : $bsearch_settings['daily_range'];
@@ -132,7 +133,7 @@ class BSearch_Widget extends WP_Widget {
 		echo $args['before_widget'];
 		echo $args['before_title'] . $title . $args['after_title'];
 
-		if ( 'overall' == $daily ) {
+		if ( 'overall' === $daily ) {
 			echo get_bsearch_heatmap(
 				array(
 					'daily'       => 0,
@@ -157,6 +158,13 @@ class BSearch_Widget extends WP_Widget {
 }
 
 
+/**
+ * Create a WordPress Widget with the search box.
+ *
+ * @since   1.3.3
+ *
+ * @extends WP_Widget
+ */
 class BSearch_Search_Box extends WP_Widget {
 
 	/**
@@ -164,17 +172,20 @@ class BSearch_Search_Box extends WP_Widget {
 	 */
 	public function __construct() {
 		parent::__construct(
-			'bsearch_search_box', // Base ID
-			__( 'Search Form [Better Search]', 'better-search' ), // Name
-			array( 'description' => __( 'Search Form', 'better-search' ) ) // Args
+			'bsearch_search_box', // Base ID.
+			__( 'Search Form [Better Search]', 'better-search' ), // Name.
+			array( 'description' => __( 'Search Form', 'better-search' ) ) // Args.
 		);
 	}
 
 	/**
 	 * Outputs the content of the widget
 	 *
-	 * @param   array $args
-	 * @param   array $instance
+	 * @see WP_Widget::widget()
+	 *
+	 * @param array $args     Display arguments including 'before_title', 'after_title',
+	 *                        'before_widget', and 'after_widget'.
+	 * @param array $instance The settings for the particular instance of the widget.
 	 */
 	public function widget( $args, $instance ) {
 		echo $args['before_widget'];
@@ -188,7 +199,9 @@ class BSearch_Search_Box extends WP_Widget {
 	/**
 	 * Outputs the options form on admin
 	 *
-	 * @param array $instance The widget options
+	 * @see WP_Widget::form()
+	 *
+	 * @param array $instance The settings for the particular instance of the widget.
 	 */
 	public function form( $instance ) {
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : __( 'Search', 'better-search' );
@@ -203,8 +216,12 @@ class BSearch_Search_Box extends WP_Widget {
 	/**
 	 * Processing widget options on save
 	 *
-	 * @param array $new_instance The new options
-	 * @param array $old_instance The previous options
+	 * @see WP_Widget::update()
+	 *
+	 * @param array $new_instance New settings for this instance as input by the user via
+	 *                            WP_Widget::form().
+	 * @param array $old_instance Old settings for this instance.
+	 * @return array Settings to save.
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance          = array();

@@ -21,7 +21,7 @@ function bsearch_options() {
 
 	$bsearch_settings = bsearch_read_options();
 
-	// Parse post types
+	// Parse post types.
 	parse_str( $bsearch_settings['post_types'], $post_types );
 	$wp_post_types   = get_post_types(
 		array(
@@ -51,7 +51,7 @@ function bsearch_options() {
 		$bsearch_settings['weight_title']   = intval( $_POST['weight_title'] );
 		$bsearch_settings['boolean_mode']   = isset( $_POST['boolean_mode'] ) ? true : false;
 
-		// Update post types
+		// Update post types.
 		$wp_post_types                  = get_post_types(
 			array(
 				'public' => true,
@@ -143,63 +143,63 @@ function bsearch_options() {
 function bsearch_admin_side() {
 ?>
 	<div id="donatediv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', 'better-search' ); ?>"><br /></div>
-	  <h3 class='hndle'><span><?php _e( 'Support the development', 'better-search' ); ?></span></h3>
-	  <div class="inside">
-		<div id="donate-form">
-			<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-				<input type="hidden" name="cmd" value="_xclick">
-				<input type="hidden" name="business" value="donate@ajaydsouza.com">
-				<input type="hidden" name="lc" value="IN">
-				<input type="hidden" name="item_name" value="<?php _e( 'Donation for Better Search', 'better-search' ); ?>">
-				<input type="hidden" name="item_number" value="bsearch_admin">
-				<strong><?php _e( 'Enter amount in USD', 'better-search' ); ?></strong>: <input name="amount" value="10.00" size="6" type="text"><br />
-				<input type="hidden" name="currency_code" value="USD">
-				<input type="hidden" name="button_subtype" value="services">
-				<input type="hidden" name="bn" value="PP-BuyNowBF:btn_donate_LG.gif:NonHosted">
-				<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="<?php _e( 'Send your donation to the author of Better Search', 'better-search' ); ?>">
-				<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-			</form>
+		<h3 class='hndle'><span><?php _e( 'Support the development', 'better-search' ); ?></span></h3>
+		<div class="inside">
+			<div id="donate-form">
+				<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+					<input type="hidden" name="cmd" value="_xclick">
+					<input type="hidden" name="business" value="donate@ajaydsouza.com">
+					<input type="hidden" name="lc" value="IN">
+					<input type="hidden" name="item_name" value="<?php _e( 'Donation for Better Search', 'better-search' ); ?>">
+					<input type="hidden" name="item_number" value="bsearch_admin">
+					<strong><?php _e( 'Enter amount in USD', 'better-search' ); ?></strong>: <input name="amount" value="10.00" size="6" type="text"><br />
+					<input type="hidden" name="currency_code" value="USD">
+					<input type="hidden" name="button_subtype" value="services">
+					<input type="hidden" name="bn" value="PP-BuyNowBF:btn_donate_LG.gif:NonHosted">
+					<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="<?php _e( 'Send your donation to the author of Better Search', 'better-search' ); ?>">
+					<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+				</form>
+			</div>
 		</div>
-	  </div>
 	</div>
 	<div id="followdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', 'better-search' ); ?>"><br /></div>
-	  <h3 class='hndle'><span><?php _e( 'Follow me', 'better-search' ); ?></span></h3>
-	  <div class="inside">
-		<div id="twitter">
-			<div style="text-align:center"><a href="https://twitter.com/WebberZoneWP" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @WebberZoneWP</a>
-			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
+		<h3 class='hndle'><span><?php _e( 'Follow me', 'better-search' ); ?></span></h3>
+		<div class="inside">
+			<div id="twitter">
+				<div style="text-align:center"><a href="https://twitter.com/WebberZoneWP" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @WebberZoneWP</a>
+				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
+			</div>
+			<div id="facebook">
+				<div id="fb-root"></div>
+				<script>
+				//<![CDATA[
+					(function(d, s, id) {
+					var js, fjs = d.getElementsByTagName(s)[0];
+					if (d.getElementById(id)) return;
+					js = d.createElement(s); js.id = id;
+					js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=458036114376706";
+					fjs.parentNode.insertBefore(js, fjs);
+					}(document, 'script', 'facebook-jssdk'));
+				//]]>
+				</script>
+				<div class="fb-page" data-href="https://www.facebook.com/WebberZone" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false" data-show-posts="false"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/WebberZone"><a href="https://www.facebook.com/WebberZone">WebberZone</a></blockquote></div></div>
+			</div>
 		</div>
-		<div id="facebook">
-			<div id="fb-root"></div>
-			<script>
-			//<![CDATA[
-				(function(d, s, id) {
-				var js, fjs = d.getElementsByTagName(s)[0];
-				if (d.getElementById(id)) return;
-				js = d.createElement(s); js.id = id;
-				js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=458036114376706";
-				fjs.parentNode.insertBefore(js, fjs);
-				}(document, 'script', 'facebook-jssdk'));
-			//]]>
-			</script>
-			<div class="fb-page" data-href="https://www.facebook.com/WebberZone" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false" data-show-posts="false"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/WebberZone"><a href="https://www.facebook.com/WebberZone">WebberZone</a></blockquote></div></div>
-		</div>
-	  </div>
 	</div>
 	<div id="qlinksdiv" class="postbox"><div class="handlediv" title="<?php _e( 'Click to toggle', 'better-search' ); ?>"><br /></div>
-	  <h3 class='hndle'><span><?php _e( 'Quick links', 'better-search' ); ?></span></h3>
-	  <div class="inside">
-		<div id="quick-links">
-			<ul>
-				<li><a href="https://webberzone.com/plugins/better-search/"><?php _e( 'Better Search plugin page', 'better-search' ); ?></a></li>
-				<li><a href="https://webberzone.com/plugins/"><?php _e( 'Other plugins', 'better-search' ); ?></a></li>
-				<li><a href="https://ajaydsouza.com/"><?php _e( "Ajay's blog", 'better-search' ); ?></a></li>
-				<li><a href="https://wordpress.org/plugins/better-search/faq/"><?php _e( 'FAQ', 'better-search' ); ?></a></li>
-				<li><a href="http://wordpress.org/support/plugin/better-search"><?php _e( 'Support', 'better-search' ); ?></a></li>
-				<li><a href="https://wordpress.org/support/view/plugin-reviews/better-search"><?php _e( 'Reviews', 'better-search' ); ?></a></li>
-			</ul>
+		<h3 class='hndle'><span><?php _e( 'Quick links', 'better-search' ); ?></span></h3>
+		<div class="inside">
+			<div id="quick-links">
+				<ul>
+					<li><a href="https://webberzone.com/plugins/better-search/"><?php _e( 'Better Search plugin page', 'better-search' ); ?></a></li>
+					<li><a href="https://webberzone.com/plugins/"><?php _e( 'Other plugins', 'better-search' ); ?></a></li>
+					<li><a href="https://ajaydsouza.com/"><?php _e( "Ajay's blog", 'better-search' ); ?></a></li>
+					<li><a href="https://wordpress.org/plugins/better-search/faq/"><?php _e( 'FAQ', 'better-search' ); ?></a></li>
+					<li><a href="http://wordpress.org/support/plugin/better-search"><?php _e( 'Support', 'better-search' ); ?></a></li>
+					<li><a href="https://wordpress.org/support/view/plugin-reviews/better-search"><?php _e( 'Reviews', 'better-search' ); ?></a></li>
+				</ul>
+			</div>
 		</div>
-	  </div>
 	</div>
 
 <?php
@@ -298,14 +298,14 @@ function bsearch_adminhead() {
  *
  * @since   1.0
  *
- * @param   bool $daily  TRUE = Daily tables, FALSE = Overall tables
+ * @param   bool $daily  TRUE = Daily tables, FALSE = Overall tables.
  */
 function bsearch_trunc_count( $daily = true ) {
 	global $wpdb;
 	$table_name = ( $daily ) ? $wpdb->prefix . 'bsearch_daily' : $wpdb->prefix . 'bsearch';
 
 	$sql = "TRUNCATE TABLE $table_name";
-	$wpdb->query( $sql );
+	$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
 }
 
 
@@ -362,28 +362,11 @@ add_action( 'wp_dashboard_setup', 'bsearch_dashboard_setup' );
 
 
 /**
- * Better Search plugin notice.
- *
- * @since   1.3.3
- *
- * @param   string $plugin
- */
-function bsearch_plugin_notice( $plugin ) {
-	global $cache_enabled;
-
-	if ( $plugin == 'better-search/admin.inc.php' && ! $cache_enabled && function_exists( 'admin_url' ) ) {
-
-		echo '<td colspan="5" class="plugin-update">Better Search must be configured. Go to <a href="' . admin_url( 'options-general.php?page=bsearch_options' ) . '">the admin page</a> to enable and configure the plugin.</td>';
-
-	}
-}
-// add_action( 'after_plugin_row', 'bsearch_plugin_notice' );
-/**
  * Adding WordPress plugin action links.
  *
  * @since   1.3
  *
- * @param   array $links  Existing array of links
+ * @param   array $links  Existing array of links.
  * @return  array   Updated array
  */
 function bsearch_plugin_actions_links( $links ) {
@@ -404,14 +387,14 @@ add_filter( 'plugin_action_links_' . plugin_basename( plugin_dir_path( __DIR__ )
  *
  * @since   1.1.3
  *
- * @param   array  $links  Existing array of links
- * @param   string $file   File
+ * @param   array  $links  Existing array of links.
+ * @param   string $file   File.
  * @return  array   Updated array
  */
 function bsearch_plugin_actions( $links, $file ) {
 	$plugin = plugin_basename( plugin_dir_path( __DIR__ ) . 'better-search.php' );
 
-	/**** Add links */
+	// Add links.
 	if ( $file == $plugin ) {
 		$links[] = '<a href="https://wordpress.org/support/plugin/better-search">' . __( 'Support', 'better-search' ) . '</a>';
 		$links[] = '<a href="https://ajaydsouza.com/donate/">' . __( 'Donate', 'better-search' ) . '</a>';
@@ -419,7 +402,7 @@ function bsearch_plugin_actions( $links, $file ) {
 	}
 	return $links;
 }
-add_filter( 'plugin_row_meta', 'bsearch_plugin_actions', 10, 2 ); // only 2.8 and higher
+add_filter( 'plugin_row_meta', 'bsearch_plugin_actions', 10, 2 );
 
 
 /**
@@ -432,7 +415,7 @@ function bsearch_ajax_clearcache() {
 	bsearch_cache_delete();
 
 	exit(
-		json_encode(
+		wp_json_encode(
 			array(
 				'success' => 1,
 				'message' => __( 'Better Search cache has been cleared', 'better-search' ),

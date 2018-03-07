@@ -29,7 +29,7 @@ if ( ! is_multisite() ) {
 
 } else {
 
-	// Get all blogs in the network and activate plugin on each one
+	// Get all blogs in the network and activate plugin on each one.
 	$blog_ids = $wpdb->get_col(
 		"
         SELECT blog_id FROM $wpdb->blogs
@@ -54,7 +54,7 @@ if ( ! is_multisite() ) {
 
 	}
 
-	// Switch back to the current blog
+	// Switch back to the current blog.
 	restore_current_blog();
 
 }

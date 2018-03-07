@@ -16,7 +16,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @since   1.2
  *
- * @param   array|string $args   Heatmap Parameters
+ * @param   array|string $args   Heatmap Parameters.
  * @return  string  Search heatmap
  */
 function get_bsearch_heatmap( $args = array() ) {
@@ -35,13 +35,13 @@ function get_bsearch_heatmap( $args = array() ) {
 		'daily_range'   => intval( $bsearch_settings['daily_range'] ),
 	);
 
-	// Parse incomming $args into an array and merge it with $defaults
+	// Parse incomming $args into an array and merge it with $defaults.
 	$args = wp_parse_args( $args, $defaults );
 
 	$table_name = $wpdb->prefix . 'bsearch';
 
 	if ( $args['daily'] ) {
-		$table_name .= '_daily';    // If we're viewing daily posts, set this to true
+		$table_name .= '_daily';    // If we are viewing daily posts, set this to true.
 	}
 	$output = '';
 
@@ -74,7 +74,7 @@ function get_bsearch_heatmap( $args = array() ) {
 		";
 	}
 
-	$results = $wpdb->get_results( $wpdb->prepare( $sql, $sargs ) );
+	$results = $wpdb->get_results( $wpdb->prepare( $sql, $sargs ) ); // WPCS: unprepared SQL ok.
 
 	if ( $results ) {
 		foreach ( $results as $result ) {
@@ -88,7 +88,7 @@ function get_bsearch_heatmap( $args = array() ) {
 		$max    = max( $cntaccesss );
 		$spread = $max - $min;
 
-		// Calculate various font sizes
+		// Calculate various font sizes.
 		if ( $args['largest'] != $args['smallest'] ) {
 			$fontspread = $args['largest'] - $args['smallest'];
 			if ( 0 != $spread ) {
@@ -98,7 +98,7 @@ function get_bsearch_heatmap( $args = array() ) {
 			}
 		}
 
-		// Calculate colors
+		// Calculate colors.
 		if ( $args['hot'] != $args['cold'] ) {
 			$hotdec  = bsearch_html2rgb( $args['hot'] );
 			$colddec = bsearch_html2rgb( $args['cold'] );
@@ -141,6 +141,7 @@ function get_bsearch_heatmap( $args = array() ) {
 			$style .= '"';
 
 			$output .= $args['before'] . '<a href="' . $url . '" title="';
+			/* translators: 1: Search term, 2: Number of searches */
 			$output .= sprintf( _n( 'Search for %1$s (%2$s search)', 'Search for %1$s (%2$s searches)', $cntaccess, 'better-search' ), $textsearchvar, $cntaccess );
 			$output .= '" ' . $style;
 			if ( $bsearch_settings['link_nofollow'] ) {
