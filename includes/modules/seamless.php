@@ -5,14 +5,13 @@
  * @package Better_Search
  */
 
-
 /**
  * Modify search results page with results from Better Search. Filters posts_where.
  *
  * @since   1.3.3
  *
- * @param   string $where  WHERE clause of main query
- * @param   object $query  WordPress query
+ * @param   string $where  WHERE clause of main query.
+ * @param   object $query  WordPress query.
  * @return  Formatted WHERE clause
  */
 function bsearch_where_clause( $where, $query ) {
@@ -44,8 +43,8 @@ add_filter( 'posts_where', 'bsearch_where_clause', 10, 2 );
  *
  * @since   1.3.3
  *
- * @param   string $orderby    ORDERBY clause of main query
- * @param   object $query      WordPress query
+ * @param   string $orderby    ORDERBY clause of main query.
+ * @param   object $query      WordPress query.
  * @return  Formatted ORDERBY clause
  */
 function bsearch_orderby_clause( $orderby, $query ) {
@@ -87,7 +86,7 @@ function bsearch_clause_prepare() {
 	if ( $wp_query->is_search ) {
 		$search_query = get_bsearch_query();
 
-		$matches = get_bsearch_matches( $search_query, 0 );     // Fetch the search results for the search term stored in $search_query
+		$matches = get_bsearch_matches( $search_query, 0 );     // Fetch the search results for the search term stored in $search_query.
 
 		$searches = $matches[0];        // 0 index contains the search results always
 

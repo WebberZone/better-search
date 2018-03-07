@@ -252,7 +252,7 @@ function get_bsearch_terms( $search_query = '' ) {
 	}
 
 	if ( ! $use_fulltext ) {
-		// strip out all the fancy characters that fulltext would use
+		// Strip out all the fancy characters that fulltext would use.
 		$search_query = addslashes_gpc( $search_query );
 		$search_query = preg_replace( '/, +/', ' ', $search_query );
 		$search_query = str_replace( ',', ' ', $search_query );
@@ -260,8 +260,8 @@ function get_bsearch_terms( $search_query = '' ) {
 		$search_query = trim( $search_query );
 		$search_words = explode( ' ', $search_query );
 
-		$s_array[0] = $search_query;    // Save original query at [0]
-		$s_array[1] = $search_words;    // Save array of terms at [1]
+		$s_array[0] = $search_query;    // Save original query at [0].
+		$s_array[1] = $search_words;    // Save array of terms at [1].
 	}
 
 	/**
@@ -280,8 +280,8 @@ function get_bsearch_terms( $search_query = '' ) {
  *
  * @since   1.2
  *
- * @param   string $search_info    Search terms array
- * @param   bool   $bydate         Sort by date?
+ * @param   string $search_query    Search terms array.
+ * @param   bool   $bydate         Sort by date flag.
  * @return  array   Search results
  */
 function get_bsearch_matches( $search_query, $bydate ) {
@@ -289,10 +289,10 @@ function get_bsearch_matches( $search_query, $bydate ) {
 
 	// if there are two items in $search_info, the string has been broken into separate terms that
 	// are listed at $search_info[1]. The cleaned-up version of $search_query is still at the zero index.
-	// This is when fulltext is disabled, and we search using LIKE
+	// This is when fulltext is disabled, and we search using LIKE.
 	$search_info = get_bsearch_terms( $search_query );
 
-	// Get search transient
+	// Get search transient.
 	$search_query_transient = 'bs_' . preg_replace( '/[^A-Za-z0-9\-]/', '', str_replace( ' ', '', $search_query ) );
 
 	/**
@@ -304,7 +304,7 @@ function get_bsearch_matches( $search_query, $bydate ) {
 	 * @param   array   $search_query   Search query
 	 */
 	$search_query_transient = apply_filters( 'bsearch_transient_name', $search_query_transient, $search_query );
-	$search_query_transient = substr( $search_query_transient, 0, 40 ); // Name of the transient limited to 40 chars
+	$search_query_transient = substr( $search_query_transient, 0, 40 ); // Name of the transient limited to 40 chars.
 
 	$matches = get_transient( $search_query_transient );
 
@@ -329,23 +329,23 @@ function get_bsearch_matches( $search_query, $bydate ) {
 		}
 	}
 
-	// If no transient is set
+	// If no transient is set.
 	if ( ! isset( $results ) ) {
 		$sql = bsearch_sql_prepare( $search_info, $bsearch_settings['boolean_mode'], $bydate );
 
-		$results = $wpdb->get_results( $sql );
+		$results = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
 	}
 
-	// If no results are found then force BOOLEAN mode
+	// If no results are found then force BOOLEAN mode.
 	if ( ! $results ) {
 		$sql = bsearch_sql_prepare( $search_info, 1, $bydate );
 
-		$results = $wpdb->get_results( $sql );
+		$results = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
 	}
 
-	// If no results are found then force LIKE mode
+	// If no results are found then force LIKE mode.
 	if ( ! $results ) {
-		// strip out all the fancy characters that fulltext would use
+		// Strip out all the fancy characters that fulltext would use.
 		$search_query = addslashes_gpc( $search_query );
 		$search_query = preg_replace( '/, +/', ' ', $search_query );
 		$search_query = str_replace( ',', ' ', $search_query );
@@ -353,21 +353,21 @@ function get_bsearch_matches( $search_query, $bydate ) {
 		$search_query = trim( $search_query );
 		$search_words = explode( ' ', $search_query );
 
-		$s_array[0] = $search_query;    // Save original query at [0]
-		$s_array[1] = $search_words;    // Save array of terms at [1]
+		$s_array[0] = $search_query;    // Save original query at [0].
+		$s_array[1] = $search_words;    // Save array of terms at [1].
 
 		$search_info = $s_array;
 
 		$sql = bsearch_sql_prepare( $search_info, 0, $bydate );
 
-		$results = $wpdb->get_results( $sql );
+		$results = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
 	}
 
 	$matches[0]              = $results;
 	$matches['search_query'] = $search_query;
 
 	if ( $bsearch_settings['cache'] ) {
-		// Set search transient
+		// Set search transient.
 		set_transient( $search_query_transient, $matches, 7200 );
 	}
 
@@ -379,21 +379,21 @@ function get_bsearch_matches( $search_query, $bydate ) {
 
 
 /**
- * returns an array with the first and last indices to be displayed on the page.
+ * Returns an array with the first and last indices to be displayed on the page.
  *
  * @since   1.2
  *
- * @param   int $numrows    Total results
- * @param   int $limit      Results per page
+ * @param   int $numrows    Total results.
+ * @param   int $limit      Results per page.
  * @return  array   First and last indices to be displayed on the page
  */
 function get_bsearch_range( $numrows, $limit ) {
 	global $bsearch_settings;
 
 	if ( ! ( $limit ) ) {
-		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : $bsearch_settings['limit']; // Read from GET variable
+		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : $bsearch_settings['limit']; // Read from GET variable.
 	}
-	$page = isset( $_GET['bpaged'] ) ? intval( bsearch_clean_terms( $_GET['bpaged'] ) ) : 0; // Read from GET variable
+	$page = isset( $_GET['bpaged'] ) ? intval( bsearch_clean_terms( $_GET['bpaged'] ) ) : 0; // Read from GET variable.
 
 	$last = min( $page + $limit - 1, $numrows - 1 );
 
@@ -515,48 +515,48 @@ function bsearch_default_options() {
 	$bsearch_settings = array(
 
 		/* General options */
-		'seamless'         => true,             // Seamless integration mode
-		'track_popular'    => true,        // Track the popular searches
-		'track_admins'     => true,         // Track Admin searches
-		'track_editors'    => true,        // Track Editor searches
-		'cache'            => true,                // Enable Cache
-		'meta_noindex'     => true,         // Add noindex,follow meta tag to head
-		'show_credit'      => false,         // Add link to plugin page of my blog in top posts list
+		'seamless'         => true,             // Seamless integration mode.
+		'track_popular'    => true,        // Track the popular searches.
+		'track_admins'     => true,         // Track Admin searches.
+		'track_editors'    => true,        // Track Editor searches.
+		'cache'            => true,                // Enable Cache.
+		'meta_noindex'     => true,         // Add noindex,follow meta tag to head.
+		'show_credit'      => false,         // Add link to plugin page of my blog in top posts list.
 
 		/* Search options */
-		'limit'            => '10',                // Search results per page
-		'post_types'       => $post_types,    // WordPress custom post types
+		'limit'            => '10',                // Search results per page.
+		'post_types'       => $post_types,    // WordPress custom post types.
 
-		'use_fulltext'     => true,         // Full text searches
-		'weight_content'   => '10',       // Weightage for content
-		'weight_title'     => '1',          // Weightage for title
-		'boolean_mode'     => false,        // Turn BOOLEAN mode on if true
+		'use_fulltext'     => true,         // Full text searches.
+		'weight_content'   => '10',       // Weightage for content.
+		'weight_title'     => '1',          // Weightage for title.
+		'boolean_mode'     => false,        // Turn BOOLEAN mode on if true.
 
-		'highlight'        => false,           // Highlight search terms
-		'excerpt_length'   => '100',      // Length of excerpt in words
-		'include_thumb'    => false,       // Include thumbnail in search results
-		'link_new_window'  => false,     // Open link in new window - Includes target="_blank" to links
-		'link_nofollow'    => true,        // Includes rel="nofollow" to links in heatmap
+		'highlight'        => false,           // Highlight search terms.
+		'excerpt_length'   => '100',      // Length of excerpt in words.
+		'include_thumb'    => false,       // Include thumbnail in search results.
+		'link_new_window'  => false,     // Open link in new window - Includes target="_blank" to links.
+		'link_nofollow'    => true,        // Includes rel="nofollow" to links in heatmap.
 
-		'badwords'         => implode( ',', $badwords ),        // Bad words filter
+		'badwords'         => implode( ',', $badwords ),        // Bad words filter.
 
 		/* Heatmap options */
-		'include_heatmap'  => false,     // Include heatmap of searches in the search page
-		'title'            => $title,              // Title of Search Heatmap
-		'title_daily'      => $title_daily,  // Title of Daily Search Heatmap
+		'include_heatmap'  => false,     // Include heatmap of searches in the search page.
+		'title'            => $title,              // Title of Search Heatmap.
+		'title_daily'      => $title_daily,  // Title of Daily Search Heatmap.
 		'daily_range'      => '7',           // Daily Popular will contain posts of how many days?
 
-		'heatmap_limit'    => '30',        // Heatmap - Maximum number of searches to display in heatmap
-		'heatmap_smallest' => '10',     // Heatmap - Smallest Font Size
-		'heatmap_largest'  => '20',      // Heatmap - Largest Font Size
-		'heatmap_unit'     => 'pt',         // Heatmap - We'll use pt for font size
-		'heatmap_cold'     => 'CCCCCC',     // Heatmap - cold searches
-		'heatmap_hot'      => '000000',      // Heatmap - hot searches
-		'heatmap_before'   => '',         // Heatmap - Display before each search term
-		'heatmap_after'    => '&nbsp;',    // Heatmap - Display after each search term
+		'heatmap_limit'    => '30',        // Heatmap - Maximum number of searches to display in heatmap.
+		'heatmap_smallest' => '10',     // Heatmap - Smallest Font Size.
+		'heatmap_largest'  => '20',      // Heatmap - Largest Font Size.
+		'heatmap_unit'     => 'pt',         // Heatmap - We'll use pt for font size.
+		'heatmap_cold'     => 'CCCCCC',     // Heatmap - cold searches.
+		'heatmap_hot'      => '000000',      // Heatmap - hot searches.
+		'heatmap_before'   => '',         // Heatmap - Display before each search term.
+		'heatmap_after'    => '&nbsp;',    // Heatmap - Display after each search term.
 
 		/* Custom styles */
-		'custom_CSS'       => $custom_CSS,    // Custom CSS
+		'custom_CSS'       => $custom_CSS,    // Custom CSS.
 
 	);
 

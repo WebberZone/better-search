@@ -5,6 +5,12 @@
  * @package Better_Search
  */
 
+/**
+ * Get the Better Search heatmap
+ *
+ * @param array $atts Heatmap attributes.
+ * @return string HTML output of the heatmap
+ */
 function bsearch_heatmap_func( $atts ) {
 	global $wpdb, $bsearch_url, $bsearch_settings;
 

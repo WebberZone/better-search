@@ -5,21 +5,20 @@
  * @package Better_Search
  */
 
-
 /**
- * returns an array with the first and last indices to be displayed on the page.
+ * Returns an array with the first and last indices to be displayed on the page.
  *
  * @since   2.0.0
  *
- * @param   array $search_info    Search query
- * @param   bool  $boolean_mode   Set BOOLEAN mode for FULLTEXT searching
- * @param   bool  $bydate         Sort by date?
+ * @param   array $search_info    Search query.
+ * @param   bool  $boolean_mode   Set BOOLEAN mode for FULLTEXT searching.
+ * @param   bool  $bydate         Sort by date.
  * @return  array   First and last indices to be displayed on the page
  */
 function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 	global $wpdb, $bsearch_settings;
 
-	// Initialise some variables
+	// Initialise some variables.
 	$fields       = '';
 	$where        = '';
 	$join         = '';
@@ -28,35 +27,36 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 	$limits       = '';
 	$match_fields = '';
 
-	parse_str( $bsearch_settings['post_types'], $post_types );  // Save post types in $post_types variable
+	parse_str( $bsearch_settings['post_types'], $post_types );  // Save post types in $post_types variable.
 
 	$n = '%';
 
 	if ( count( $search_info ) > 1 ) {
 
-		$search_terms = $search_info[1];
+		$search_terms    = $search_info[1];
+		$no_search_terms = count( $search_terms );
 
-		// Fields to return
+		// Fields to return.
 		$fields = ' ID, 0 AS score ';
 
-		// Create the WHERE Clause
+		// Create the WHERE Clause.
 		$where  = ' AND ( ';
 		$where .= $wpdb->prepare(
-			" ((post_title LIKE '%s') OR (post_content LIKE '%s')) ",
+			' ((post_title LIKE %s) OR (post_content LIKE %s)) ',
 			$n . $search_terms[0] . $n,
 			$n . $search_terms[0] . $n
 		);
 
-		for ( $i = 1; $i < count( $search_terms ); $i = $i + 1 ) {
+		for ( $i = 1; $i < $no_search_terms; $i++ ) {
 			$where .= $wpdb->prepare(
-				" AND ((post_title LIKE '%s') OR (post_content LIKE '%s')) ",
+				' AND ((post_title LIKE %s) OR (post_content LIKE %s)) ',
 				$n . $search_terms[ $i ] . $n,
 				$n . $search_terms[ $i ] . $n
 			);
 		}
 
 		$where .= $wpdb->prepare(
-			" OR (post_title LIKE '%s') OR (post_content LIKE '%s') ",
+			' OR (post_title LIKE %s) OR (post_content LIKE %s) ',
 			$n . $search_terms[0] . $n,
 			$n . $search_terms[0] . $n
 		);
@@ -65,14 +65,14 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 
 		$where .= " AND (post_status = 'publish' OR post_status = 'inherit')";
 
-		// Array of post types
+		// Array of post types.
 		$where .= " AND $wpdb->posts.post_type IN ('" . join( "', '", $post_types ) . "') ";
 
-		// Create the ORDERBY Clause
+		// Create the ORDERBY Clause.
 		$orderby = ' post_date DESC ';
 
 	} else {
-		// Set BOOLEAN Mode
+		// Set BOOLEAN Mode.
 		$boolean_mode = ( $boolean_mode ) ? ' IN BOOLEAN MODE' : '';
 
 		$field_args = array(
@@ -84,12 +84,12 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 
 		$fields = ' ID';
 
-		// Create the base MATCH part of the FIELDS clause
+		// Create the base MATCH part of the FIELDS clause.
 		$field_score  = ", (MATCH(post_title) AGAINST ('%s' {$boolean_mode} ) * %d ) + ";
 		$field_score .= "(MATCH(post_content) AGAINST ('%s' {$boolean_mode} ) * %d ) ";
 		$field_score .= 'AS score ';
 
-		$field_score = $wpdb->prepare( $field_score, $field_args );
+		$field_score = $wpdb->prepare( $field_score, $field_args ); // WPCS: unprepared SQL ok.
 
 		/**
 		 * Filter the MATCH part of the FIELDS clause of the query.
@@ -115,10 +115,10 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		 */
 		$fields = apply_filters( 'bsearch_posts_fields', $fields, $search_info[0] );
 
-		// Construct the MATCH part of the WHERE clause
+		// Construct the MATCH part of the WHERE clause.
 		$match = " AND MATCH (post_title,post_content) AGAINST ('%s' {$boolean_mode} ) ";
 
-		$match = $wpdb->prepare( $match, $search_info[0] );
+		$match = $wpdb->prepare( $match, $search_info[0] ); // WPCS: unprepared SQL ok.
 
 		/**
 		 * Filter the MATCH clause of the query.
@@ -130,17 +130,17 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		 */
 		$match = apply_filters( 'bsearch_posts_match', $match, $search_info[0] );
 
-		// Construct the WHERE clause
+		// Construct the WHERE clause.
 		$where = $match;
 
 		$where .= " AND (post_status = 'publish' OR post_status = 'inherit')";
 
-		// Array of post types
+		// Array of post types.
 		if ( $post_types ) {
 			$where .= " AND $wpdb->posts.post_type IN ('" . join( "', '", $post_types ) . "') ";
 		}
 
-		// ORDER BY clause
+		// ORDER BY clause.
 		if ( $bydate ) {
 			$orderby = ' post_date DESC ';
 		} else {

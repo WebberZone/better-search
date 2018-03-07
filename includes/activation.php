@@ -5,7 +5,6 @@
  * @package Better_Search
  */
 
-
 /**
  * Create tables to store pageviews.
  *
@@ -16,19 +15,19 @@ function bsearch_single_activate() {
 
 	$bsearch_settings = bsearch_read_options();
 
-	// Create full text index
+	// Create full text index.
 	$wpdb->hide_errors();
-	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ENGINE = MYISAM;' );
+	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ENGINE = MYISAM;' ); // WPCS: unprepared SQL ok.
 	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch (post_title, post_content);' );
 	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_title (post_title);' );
 	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_content (post_content);' );
 	$wpdb->show_errors();
 
-	// Create the tables
+	// Create the tables.
 	$table_name       = $wpdb->prefix . 'bsearch';
 	$table_name_daily = $wpdb->prefix . 'bsearch_daily';
 
-	if ( $wpdb->get_var( "show tables like '$table_name'" ) != $table_name ) {
+	if ( $wpdb->get_var( "show tables like '$table_name'" ) != $table_name ) { // WPCS: unprepared SQL ok.
 
 		$sql = 'CREATE TABLE ' . $table_name . ' (
             accessedid int NOT NULL AUTO_INCREMENT,
@@ -41,13 +40,13 @@ function bsearch_single_activate() {
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
-		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name . ' (searchvar)' );
+		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name . ' (searchvar)' ); // WPCS: unprepared SQL ok.
 		$wpdb->show_errors();
 
 		add_option( 'bsearch_db_version', $bsearch_db_version );
 	}
 
-	if ( $wpdb->get_var( "show tables like '$table_name_daily'" ) != $table_name_daily ) {
+	if ( $wpdb->get_var( "show tables like '$table_name_daily'" ) != $table_name_daily ) { // WPCS: unprepared SQL ok.
 
 		$sql = 'CREATE TABLE ' . $table_name_daily . ' (
             accessedid int NOT NULL AUTO_INCREMENT,
@@ -61,13 +60,13 @@ function bsearch_single_activate() {
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
-		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name_daily . ' (searchvar)' );
+		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name_daily . ' (searchvar)' ); // WPCS: unprepared SQL ok.
 		$wpdb->show_errors();
 
 		add_option( 'bsearch_db_version', $bsearch_db_version );
 	}
 
-	// Upgrade table code
+	// Upgrade table code.
 	$installed_ver = get_option( 'bsearch_db_version' );
 
 	if ( $installed_ver != $bsearch_db_version ) {
@@ -83,12 +82,12 @@ function bsearch_single_activate() {
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
-		$wpdb->query( 'ALTER ' . $table_name . ' DROP INDEX IDX_searhvar ' );
-		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name . ' (searchvar)' );
+		$wpdb->query( 'ALTER ' . $table_name . ' DROP INDEX IDX_searhvar ' ); // WPCS: unprepared SQL ok.
+		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name . ' (searchvar)' ); // WPCS: unprepared SQL ok.
 		$wpdb->show_errors();
 
 		$sql = "DROP TABLE $table_name_daily";
-		$wpdb->query( $sql );
+		$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
 
 		$sql = 'CREATE TABLE ' . $table_name_daily . ' (
             accessedid int NOT NULL AUTO_INCREMENT,
@@ -102,8 +101,8 @@ function bsearch_single_activate() {
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
-		$wpdb->query( 'ALTER ' . $table_name_daily . ' DROP INDEX IDX_searhvar ' );
-		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name_daily . ' (searchvar)' );
+		$wpdb->query( 'ALTER ' . $table_name_daily . ' DROP INDEX IDX_searhvar ' ); // WPCS: unprepared SQL ok.
+		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name_daily . ' (searchvar)' ); // WPCS: unprepared SQL ok.
 		$wpdb->show_errors();
 
 		update_option( 'bsearch_db_version', $bsearch_db_version );

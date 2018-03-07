@@ -5,15 +5,14 @@
  * @package Better_Search
  */
 
-
 /**
  * Function to return the header links of the results page.
  *
  * @since   1.2
  *
- * @param   string $search_query   Search string
- * @param   int    $numrows        Total number of results
- * @param   int    $limit          Results per page
+ * @param   string $search_query   Search string.
+ * @param   int    $numrows        Total number of results.
+ * @param   int    $limit          Results per page.
  * @return  string  Formatted header table of search results pages
  */
 function get_bsearch_header( $search_query, $numrows, $limit ) {
@@ -24,17 +23,17 @@ function get_bsearch_header( $search_query, $numrows, $limit ) {
 	$pages = intval( $numrows / $limit ); // Number of results pages.
 
 	if ( $numrows % $limit ) {
-		$pages++;   // If remainder so add one page
+		$pages++;   // If remainder so add one page.
 	}
 
-	if ( ( $pages < 1 ) || ( $pages == 0 ) ) {
+	if ( ( $pages < 1 ) || ( 0 == $pages ) ) {
 		$total = 1; // If $pages is less than one or equal to 0, total pages is 1.
 	} else {
 		$total = $pages;    // Else total pages is $pages value.
 	}
 
-	$first   = $match_range[0] + 1;   // the first result on the page (Starts with 0)
-	$last    = $match_range[1] + 1;    // the last result on the page (Starts with 0)
+	$first   = $match_range[0] + 1;   // The first result on the page (Starts with 0).
+	$last    = $match_range[1] + 1;    // The last result on the page (Starts with 0).
 	$current = ( $match_range[0] / $limit ) + 1; // Current page number.
 
 	$output .= '<table width="100%" border="0" class="bsearch_nav">
@@ -80,9 +79,9 @@ function get_bsearch_header( $search_query, $numrows, $limit ) {
  *
  * @since   1.2
  *
- * @param   string $search_query   Search string
- * @param   int    $numrows        Total results
- * @param   int    $limit          Results per page
+ * @param   string $search_query   Search string.
+ * @param   int    $numrows        Total results.
+ * @param   int    $limit          Results per page.
  * @return  string  Formatted footer of search results pages
  */
 function get_bsearch_footer( $search_query, $numrows, $limit ) {
@@ -91,7 +90,7 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 	$page        = $match_range[0];
 	$pages       = intval( $numrows / $limit ); // Number of results pages.
 	if ( $numrows % $limit ) {
-		$pages++;   // If remainder so add one page
+		$pages++;   // If remainder so add one page.
 	}
 
 	$search_query = urlencode( $search_query );
@@ -104,7 +103,7 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 		$output   .= "</a>    \n";
 	}
 
-	$pagination_range = 4;          // Number of pagination elements
+	$pagination_range = 4;          // Number of pagination elements.
 
 	for ( $i = 1; $i <= $pages; $i++ ) { // loop through each page and give link to it.
 		$current = ( $match_range[0] / $limit ) + 1; // Current page number.
@@ -125,7 +124,7 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 		}
 	}
 
-	if ( ! ( ( ( $page + $limit ) / $limit ) >= $pages ) && $pages != 1 ) { // If last page don't give next link.
+	if ( ! ( ( ( $page + $limit ) / $limit ) >= $pages ) && 1 != $pages ) { // If last page don't give next link.
 		$next_page = $page + $limit;
 		$output   .= '    <a href="' . home_url() . "/?s=$search_query&limit=$limit&bpaged=$next_page\">";
 		$output   .= __( 'Next', 'better-search' );
@@ -152,9 +151,9 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
  *
  * @since   1.2
  *
- * @param   object $search     Search result object
- * @param   int    $score      Score for the search result
- * @param   int    $topscore   Score for the most relevant search result
+ * @param   object $search     Search result object.
+ * @param   int    $score      Score for the search result.
+ * @param   int    $topscore   Score for the most relevant search result.
  * @return  int     Score converted to percentage
  */
 function get_bsearch_score( $search, $score, $topscore ) {
@@ -186,10 +185,10 @@ function get_bsearch_score( $search, $score, $topscore ) {
  *
  * @since   1.2
  *
- * @param   object $search     Search result object
- * @param   string $before     Added before the date
- * @param   string $after      Added after the date
- * @param   string $format     Date format
+ * @param   object $search     Search result object.
+ * @param   string $before     Added before the date.
+ * @param   string $after      Added after the date.
+ * @param   string $format     Date format.
  * @return  string  Formatted date string
  */
 function get_bsearch_date( $search, $before = '', $after = '', $format = '' ) {
@@ -219,13 +218,14 @@ function get_bsearch_date( $search, $before = '', $after = '', $format = '' ) {
  *
  * @since   1.2
  *
- * @param   int        $id             Post ID
- * @param   int|string $excerpt_length Length of the excerpt in words
- * @param   bool       $use_excerpt    Use post excerpt or content?
+ * @param   int        $id             Post ID.
+ * @param   int|string $excerpt_length Length of the excerpt in words.
+ * @param   bool       $use_excerpt    Use post excerpt or content.
  * @return  string      Excerpt
  */
 function get_bsearch_excerpt( $id, $excerpt_length = 0, $use_excerpt = true ) {
-	$content = $excerpt = '';
+	$content = '';
+	$excerpt = '';
 	if ( $use_excerpt ) {
 		$content = get_post( $id )->post_excerpt;
 	}
@@ -258,12 +258,12 @@ function get_bsearch_excerpt( $id, $excerpt_length = 0, $use_excerpt = true ) {
  *
  * @since   1.1
  *
- * @param   string $search_query   Search query
+ * @param   string $search_query   Search query.
  * @return  string  Search form
  */
 function get_bsearch_form( $search_query ) {
 
-	if ( $search_query == '' ) {
+	if ( '' === $search_query ) {
 		$search_query = get_bsearch_query();
 	}
 
@@ -292,8 +292,8 @@ function get_bsearch_form( $search_query ) {
  *
  * @since   1.1
  *
- * @param   bool $text_only  With or without tags?
- * @return  string  Title of Daily Popular searches
+ * @param   bool $text_only  With or without tags.
+ * @return  string  Title of Daily Popular searches.
  */
 function get_bsearch_title_daily( $text_only = true ) {
 
@@ -316,7 +316,7 @@ function get_bsearch_title_daily( $text_only = true ) {
  *
  * @since   1.1
  *
- * @param   bool $text_only  With or without tags?
+ * @param   bool $text_only  With or without tags.
  * @return  string  Title of Overall Popular searches
  */
 function get_bsearch_title( $text_only = true ) {

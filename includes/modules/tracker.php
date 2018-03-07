@@ -5,13 +5,12 @@
  * @package Better_Search
  */
 
-
 /**
  * Function to update search count.
  *
  * @since   1.0
  *
- * @param   string $search_query   Search query
+ * @param   string $search_query   Search query.
  * @return  string  Search tracker code
  */
 function bsearch_increment_counter( $search_query ) {
@@ -25,12 +24,12 @@ function bsearch_increment_counter( $search_query ) {
 
 	$include_code = true;
 
-	// If user is an admin
+	// If user is an admin.
 	if ( ( $current_user_admin ) && ( ! $bsearch_settings['track_admins'] ) ) {
 		$include_code = false;
 	}
 
-	// If user is an editor
+	// If user is an editor.
 	if ( ( $current_user_editor ) && ( ! $bsearch_settings['track_editors'] ) ) {
 		$include_code = false;
 	}

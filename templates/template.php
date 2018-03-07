@@ -5,20 +5,20 @@
  * @package Better_Search
  */
 
-	/* Set the search query if it is missing */
+/* Set the search query if it is missing */
 if ( ! isset( $bsearch_settings ) ) {
 	global $bsearch_settings;
 }
 
-	$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : $bsearch_settings['limit']; // Read from GET variable
+$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : $bsearch_settings['limit']; // Read from GET variable.
 
-	/* Set the search query if it is missing */
+/* Set the search query if it is missing */
 if ( ! isset( $search_query ) ) {
 	$search_query = get_bsearch_query();
 }
 
-	// Get Header
-	get_header();
+// Get Header.
+get_header();
 
 ?>
 
@@ -66,8 +66,8 @@ if ( ! isset( $search_query ) ) {
 	</div>	<!-- Close id="content" -->
 
 <?php
-	// Get the sidebar
+	// Get the sidebar.
 	// get_sidebar();
-	// Get the footer
+	// Get the footer.
 	get_footer();
 
