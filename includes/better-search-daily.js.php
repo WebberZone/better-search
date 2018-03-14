@@ -34,7 +34,7 @@ function bsearch_daily_searches() {
 
 	$is_widget = intval( $_GET['widget'] );
 
-	$bsearch_settings = bsearch_read_options();
+	$bsearch_settings = bsearch_get_settings();
 
 	$output = '';
 

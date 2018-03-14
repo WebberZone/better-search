@@ -12,20 +12,20 @@
  * @return string HTML output of the heatmap
  */
 function bsearch_heatmap_func( $atts ) {
-	global $wpdb, $bsearch_url, $bsearch_settings;
+	global $wpdb, $bsearch_url;
 
 	$atts = shortcode_atts(
 		array(
 			'daily'         => false,
-			'smallest'      => intval( $bsearch_settings['heatmap_smallest'] ),
-			'largest'       => intval( $bsearch_settings['heatmap_largest'] ),
-			'unit'          => $bsearch_settings['heatmap_unit'],
-			'cold'          => $bsearch_settings['heatmap_cold'],
-			'hot'           => $bsearch_settings['heatmap_hot'],
-			'before'        => $bsearch_settings['heatmap_before'],
-			'after'         => $bsearch_settings['heatmap_after'],
-			'heatmap_limit' => intval( $bsearch_settings['heatmap_limit'] ),
-			'daily_range'   => intval( $bsearch_settings['daily_range'] ),
+			'smallest'      => intval( bsearch_get_option( 'heatmap_smallest' ) ),
+			'largest'       => intval( bsearch_get_option( 'heatmap_largest' ) ),
+			'unit'          => bsearch_get_option( 'heatmap_unit' ),
+			'cold'          => bsearch_get_option( 'heatmap_cold' ),
+			'hot'           => bsearch_get_option( 'heatmap_hot' ),
+			'before'        => bsearch_get_option( 'heatmap_before' ),
+			'after'         => bsearch_get_option( 'heatmap_after' ),
+			'heatmap_limit' => intval( bsearch_get_option( 'heatmap_limit' ) ),
+			'daily_range'   => intval( bsearch_get_option( 'daily_range' ) ),
 		), $atts, 'bsearch_heatmap'
 	);
 

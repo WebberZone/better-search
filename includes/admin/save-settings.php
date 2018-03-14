@@ -315,30 +315,6 @@ add_filter( 'bsearch_settings_sanitize', 'bsearch_sanitize_exclude_cat' );
 
 
 /**
- * Enable/disable Better Search cron on save.
- *
- * @since 2.2.0
- *
- * @param  array $settings Settings array.
- * @return string  $settings  Sanitizied settings array.
- */
-function bsearch_sanitize_cron( $settings ) {
-
-	$settings['cron_hour'] = min( 23, absint( $settings['cron_hour'] ) );
-	$settings['cron_min']  = min( 59, absint( $settings['cron_min'] ) );
-
-	if ( ! empty( $settings['cron_on'] ) ) {
-		bsearch_enable_run( $settings['cron_hour'], $settings['cron_min'], $settings['cron_recurrence'] );
-	} else {
-		bsearch_disable_run();
-	}
-
-	return $settings;
-}
-add_filter( 'bsearch_settings_sanitize', 'bsearch_sanitize_cron' );
-
-
-/**
  * Delete cache when saving settings.
  *
  * @since 2.2.0
