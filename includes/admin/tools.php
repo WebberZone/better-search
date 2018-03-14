@@ -24,6 +24,14 @@ if ( ! defined( 'WPINC' ) ) {
  */
 function bsearch_tools_page() {
 
+	global $wpdb;
+
+	/* Recreate index */
+	if ( ( isset( $_POST['bsearch_recreate'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
+		bsearch_recreate_index();
+		add_settings_error( 'bsearch-notices', '', esc_html__( 'FULLTEXT index has been recreated', 'better-search' ), 'error' );
+	}
+
 	/* Truncate overall posts table */
 	if ( ( isset( $_POST['bsearch_trunc_all'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
 		bsearch_trunc_count( false );
@@ -61,6 +69,23 @@ function bsearch_tools_page() {
 				</p>
 				<p class="description">
 					<?php esc_html_e( 'Clear the Better Search cache. This will also be cleared automatically when you save the settings page.', 'better-search' ); ?>
+				</p>
+
+				<h2 style="padding-left:0px"><?php esc_html_e( 'Recreate FULLTEXT index', 'better-search' ); ?></h2>
+				<p>
+					<input name="bsearch_recreate" type="submit" id="bsearch_recreate" value="<?php esc_attr_e( 'Recreate Index', 'better-search' ); ?>" class="button button-secondary" onclick="if ( ! confirm('<?php esc_attr_e( 'Are you sure you want to recreate the index?', 'better-search' ); ?>') ) return false;" />
+				</p>
+				<p class="description">
+					<?php esc_html_e( 'Recreate the FULLTEXT index that Better Search uses to get the relevant search results. This might take a lot of time to regenerate if you have a lot of posts.', 'better-search' ); ?>
+				</p>
+				<p class="description"><?php esc_html_e( 'If the Recreate Index button fails, please run the following queries in phpMyAdmin or Adminer', 'contextual-related-posts' ); ?></p>
+				<p>
+					<code>ALTER TABLE <?php esc_attr_e( $wpdb->posts ); ?> DROP INDEX bsearch_related;</code><br />
+					<code>ALTER TABLE <?php esc_attr_e( $wpdb->posts ); ?> DROP INDEX bsearch_related_title;</code><br />
+					<code>ALTER TABLE <?php esc_attr_e( $wpdb->posts ); ?> DROP INDEX bsearch_related_content;</code><br />
+					<code>ALTER TABLE <?php esc_attr_e( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related (post_title, post_content);</code><br />
+					<code>ALTER TABLE <?php esc_attr_e( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_title (post_title);</code><br />
+					<code>ALTER TABLE <?php esc_attr_e( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_content (post_content);</code><br />
 				</p>
 
 				<h2 style="padding-left:0px"><?php esc_html_e( 'Reset database', 'better-search' ); ?></h2>
@@ -125,6 +150,8 @@ function bsearch_trunc_count( $daily = true ) {
  * @since   2.2.0
  */
 function bsearch_recreate_index() {
+
+	global $wpdb;
 
 	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch' );
 	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch_title' );
