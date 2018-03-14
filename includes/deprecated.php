@@ -23,7 +23,7 @@ function bsearch_default_options() {
 	);
 	$post_types = http_build_query( get_post_types( $args ), '', '&' );
 
-	$custom_CSS = '
+	$custom_css = '
 #bsearchform { margin: 20px; padding: 20px; }
 #heatmap { margin: 20px; padding: 20px; border: 1px dashed #ccc }
 .bsearch_results_page { max-width:90%; margin: 20px; padding: 20px; }
@@ -149,7 +149,7 @@ function bsearch_default_options() {
 		'heatmap_after'    => '&nbsp;',    // Heatmap - Display after each search term.
 
 		/* Custom styles */
-		'custom_CSS'       => $custom_CSS,    // Custom CSS.
+		'custom_CSS'       => $custom_css,    // Custom CSS.
 
 	);
 

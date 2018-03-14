@@ -12,7 +12,7 @@
  */
 function bsearch_clause_head() {
 	global $wp_query, $bsearch_settings;
-	$bsearch_custom_CSS = stripslashes( $bsearch_settings['custom_CSS'] );
+	$bsearch_custom_css = stripslashes( $bsearch_settings['custom_css'] );
 
 	$output = '';
 
@@ -28,8 +28,8 @@ function bsearch_clause_head() {
 		}
 
 		// Add custom CSS to header.
-		if ( '' != $bsearch_custom_CSS ) {
-			$output .= '<style type="text/css">' . $bsearch_custom_CSS . '</style>';
+		if ( '' != $bsearch_custom_css ) {
+			$output .= '<style type="text/css">' . $bsearch_custom_css . '</style>';
 		}
 	}
 
