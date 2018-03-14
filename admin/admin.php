@@ -118,15 +118,9 @@ function bsearch_options() {
 	}
 
 	if ( ( isset( $_POST['bsearch_recreate'] ) ) && ( check_admin_referer( 'bsearch-plugin-settings' ) ) ) {
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch' );
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch_title' );
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch_content' );
+		bsearch_recreate_index();
 
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch (post_title, post_content);' );
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_title (post_title);' );
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_content (post_content);' );
-
-		$str = '<div id="message" class="updated fade"><p>' . __( 'Index recreated', 'better-search' ) . '</p></div>';
+		$str = '<div id="message" class="updated fade"><p>' . esc_html__( 'Index recreated', 'better-search' ) . '</p></div>';
 		echo $str;
 	}
 
@@ -294,74 +288,6 @@ function bsearch_adminhead() {
 
 
 /**
- * Function to clean the database.
- *
- * @since   1.0
- *
- * @param   bool $daily  TRUE = Daily tables, FALSE = Overall tables.
- */
-function bsearch_trunc_count( $daily = true ) {
-	global $wpdb;
-	$table_name = ( $daily ) ? $wpdb->prefix . 'bsearch_daily' : $wpdb->prefix . 'bsearch';
-
-	$sql = "TRUNCATE TABLE $table_name";
-	$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
-}
-
-
-/**
- * Dashboard for Better Search.
- *
- * @since   1.0
- */
-function bsearch_pop_dashboard() {
-	global $bsearch_settings;
-
-	echo get_bsearch_heatmap(
-		array(
-			'daily' => 0,
-		)
-	);
-
-	if ( $bsearch_settings['show_credit'] ) {
-		echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
-	}
-}
-
-
-/**
- * Dashboard for Daily Better Search.
- *
- * @since   1.0
- */
-function bsearch_pop_daily_dashboard() {
-	global $bsearch_settings;
-
-	echo get_bsearch_heatmap(
-		array(
-			'daily' => 1,
-		)
-	);
-
-	if ( $bsearch_settings['show_credit'] ) {
-		echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
-	}
-}
-
-
-/**
- * Add the dashboard widgets.
- *
- * @since   1.3.3
- */
-function bsearch_dashboard_setup() {
-	wp_add_dashboard_widget( 'bsearch_pop_dashboard', __( 'Popular Searches', 'better-search' ), 'bsearch_pop_dashboard' );
-	wp_add_dashboard_widget( 'bsearch_pop_daily_dashboard', __( 'Daily Popular Searches', 'better-search' ), 'bsearch_pop_daily_dashboard' );
-}
-add_action( 'wp_dashboard_setup', 'bsearch_dashboard_setup' );
-
-
-/**
  * Adding WordPress plugin action links.
  *
  * @since   1.3
@@ -403,26 +329,4 @@ function bsearch_plugin_actions( $links, $file ) {
 	return $links;
 }
 add_filter( 'plugin_row_meta', 'bsearch_plugin_actions', 10, 2 );
-
-
-/**
- * Function to clear the Cache with Ajax.
- *
- * @since   2.2.0
- */
-function bsearch_ajax_clearcache() {
-
-	bsearch_cache_delete();
-
-	exit(
-		wp_json_encode(
-			array(
-				'success' => 1,
-				'message' => __( 'Better Search cache has been cleared', 'better-search' ),
-			)
-		)
-	);
-}
-add_action( 'wp_ajax_bsearch_clear_cache', 'bsearch_ajax_clearcache' );
-
 
