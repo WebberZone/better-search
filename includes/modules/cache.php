@@ -17,3 +17,23 @@ function bsearch_cache_delete() {
 }
 
 
+/**
+ * Function to clear the Better Search Cache with Ajax.
+ *
+ * @since   2.2.0
+ */
+function bsearch_ajax_clearcache() {
+
+	bsearch_cache_delete();
+
+	exit(
+		wp_json_encode(
+			array(
+				'success' => 1,
+				'message' => __( 'Better Search cache has been cleared', 'better-search' ),
+			)
+		)
+	);
+}
+add_action( 'wp_ajax_bsearch_clear_cache', 'bsearch_ajax_clearcache' );
+

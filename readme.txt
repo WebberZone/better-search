@@ -117,6 +117,11 @@ Example Usage:
 
 == Changelog ==
 
+= 2.2.0 =
+
+* Enhancements:
+	* Admin interface now uses the Settings API - Please double check your settings. You can delete the old settings using the Tools sub-menu
+
 = 2.1.1 =
 
 * Bug fixes:
