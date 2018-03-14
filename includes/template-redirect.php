@@ -75,7 +75,7 @@ add_action( 'template_redirect', 'bsearch_template_redirect', 1 );
 function bsearch_head() {
 
 	global $bsearch_settings;
-	$bsearch_custom_CSS = stripslashes( $bsearch_settings['custom_CSS'] );
+	$bsearch_custom_css = stripslashes( $bsearch_settings['custom_css'] );
 
 	$search_query = get_bsearch_query();
 
@@ -87,8 +87,8 @@ function bsearch_head() {
 	}
 
 	// Add custom CSS to header.
-	if ( ( '' != $bsearch_custom_CSS ) && is_search() ) {
-		echo '<style type="text/css">' . $bsearch_custom_CSS . '</style>';
+	if ( ( '' != $bsearch_custom_css ) && is_search() ) {
+		echo '<style type="text/css">' . $bsearch_custom_css . '</style>';
 	}
 
 	// Add noindex to search results page.
