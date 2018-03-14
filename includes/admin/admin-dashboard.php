@@ -20,7 +20,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since   1.0
  */
 function bsearch_pop_dashboard() {
-	global $bsearch_settings;
 
 	echo get_bsearch_heatmap(
 		array(
@@ -28,7 +27,7 @@ function bsearch_pop_dashboard() {
 		)
 	);
 
-	if ( $bsearch_settings['show_credit'] ) {
+	if ( bsearch_get_option( 'show_credit' ) ) {
 		echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
 	}
 }
@@ -40,7 +39,6 @@ function bsearch_pop_dashboard() {
  * @since   1.0
  */
 function bsearch_pop_daily_dashboard() {
-	global $bsearch_settings;
 
 	echo get_bsearch_heatmap(
 		array(
@@ -48,7 +46,7 @@ function bsearch_pop_daily_dashboard() {
 		)
 	);
 
-	if ( $bsearch_settings['show_credit'] ) {
+	if ( bsearch_get_option( 'show_credit' ) ) {
 		echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
 	}
 }

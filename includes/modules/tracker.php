@@ -14,7 +14,7 @@
  * @return  string  Search tracker code
  */
 function bsearch_increment_counter( $search_query ) {
-	global $bsearch_url, $bsearch_settings;
+	global $bsearch_url;
 
 	$output = '';
 
@@ -25,12 +25,12 @@ function bsearch_increment_counter( $search_query ) {
 	$include_code = true;
 
 	// If user is an admin.
-	if ( ( $current_user_admin ) && ( ! $bsearch_settings['track_admins'] ) ) {
+	if ( ( $current_user_admin ) && ( ! bsearch_get_option( 'track_admins' ) ) ) {
 		$include_code = false;
 	}
 
 	// If user is an editor.
-	if ( ( $current_user_editor ) && ( ! $bsearch_settings['track_editors'] ) ) {
+	if ( ( $current_user_editor ) && ( ! bsearch_get_option( 'track_editors' ) ) ) {
 		$include_code = false;
 	}
 

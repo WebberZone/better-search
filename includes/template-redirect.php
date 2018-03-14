@@ -19,10 +19,10 @@ function bsearch_template_redirect() {
 		return;
 	}
 
-	global $wp_query, $bsearch_settings;
+	global $wp_query;
 
 	// If seamless integration mode is activated; return.
-	if ( $bsearch_settings['seamless'] ) {
+	if ( bsearch_get_option( 'seamless' ) ) {
 		return;
 	}
 
@@ -39,7 +39,7 @@ function bsearch_template_redirect() {
 
 	$search_query = get_bsearch_query();
 
-	$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : $bsearch_settings['limit']; // Read from GET variable.
+	$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // Read from GET variable.
 
 	// Added necessary code to the head.
 	add_action( 'wp_head', 'bsearch_head' );
@@ -74,15 +74,14 @@ add_action( 'template_redirect', 'bsearch_template_redirect', 1 );
  */
 function bsearch_head() {
 
-	global $bsearch_settings;
-	$bsearch_custom_css = stripslashes( $bsearch_settings['custom_css'] );
+	$bsearch_custom_css = stripslashes( bsearch_get_option( 'custom_css' ) );
 
 	$search_query = get_bsearch_query();
 
-	$limit  = ( isset( $_GET['limit'] ) ) ? intval( $_GET['limit'] ) : $bsearch_settings['limit']; // Read from GET variable.
+	$limit  = ( isset( $_GET['limit'] ) ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // Read from GET variable.
 	$bpaged = ( isset( $_GET['bpaged'] ) ) ? intval( $_GET['bpaged'] ) : 0; // Read from GET variable.
 
-	if ( ! $bpaged && $bsearch_settings['track_popular'] ) {
+	if ( ! $bpaged && bsearch_get_option( 'track_popular' ) ) {
 		echo bsearch_increment_counter( $search_query );    // Increment the count if we are on the first page of the results.
 	}
 
@@ -92,7 +91,7 @@ function bsearch_head() {
 	}
 
 	// Add noindex to search results page.
-	if ( $bsearch_settings['meta_noindex'] ) {
+	if ( bsearch_get_option( 'meta_noindex' ) ) {
 		echo '<meta name="robots" content="noindex,follow" />';
 	}
 

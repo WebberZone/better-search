@@ -20,10 +20,10 @@ if ( ! defined( 'WPINC' ) ) {
  * @return  string     Search results
  */
 function get_bsearch_results( $search_query = '', $limit = '' ) {
-	global $wpdb, $bsearch_settings;
+	global $wpdb;
 
 	if ( ! ( $limit ) ) {
-		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : $bsearch_settings['limit']; // Read from GET variable.
+		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // Read from GET variable.
 	}
 
 	$bydate = isset( $_GET['bydate'] ) ? intval( $_GET['bydate'] ) : 0;     // Order by date or by score?
@@ -63,7 +63,7 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 				$post_title = get_the_title( $search->ID );
 
 				/* Highlight the search terms in the title */
-				if ( $bsearch_settings['highlight'] ) {
+				if ( bsearch_get_option( 'highlight' ) ) {
 					$post_title = preg_replace( '/(?!<[^>]*?>)(' . implode( '|', $keys ) . ')(?![^<]*?>)/iu', '<span class="bsearch_highlight">$1</span>', $post_title );
 				}
 
@@ -78,14 +78,14 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 				$output .= '</p>';
 
 				$output .= '<p>';
-				if ( $bsearch_settings['include_thumb'] ) {
+				if ( bsearch_get_option( 'include_thumb' ) ) {
 					$output .= '<p class="bsearch_thumb">' . get_the_post_thumbnail( $search->ID, 'thumbnail' ) . '</p>';
 				}
 
-				$excerpt = get_bsearch_excerpt( $search->ID, $bsearch_settings['excerpt_length'] );
+				$excerpt = get_bsearch_excerpt( $search->ID, bsearch_get_option( 'excerpt_length' ) );
 
 				/* Highlight the search terms in the excerpt */
-				if ( $bsearch_settings['highlight'] ) {
+				if ( bsearch_get_option( 'highlight' ) ) {
 					$excerpt = preg_replace( '/(?!<[^>]*?>)(' . implode( '|', $keys ) . ')(?![^<]*?>)/iu', '<span class="bsearch_highlight">$1</span>', $excerpt );
 				}
 
@@ -107,7 +107,7 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 		$output .= '</p>';
 	}
 
-	if ( $bsearch_settings['show_credit'] ) {
+	if ( bsearch_get_option( 'show_credit' ) ) {
 		$output .= '<hr /><p style="text-align:center">';
 		$output .= __( 'Powered by ', 'better-search' );
 		$output .= '<a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></p>';
@@ -162,14 +162,13 @@ function get_bsearch_query() {
  * @return  array   Cleaned up search string
  */
 function get_bsearch_terms( $search_query = '' ) {
-	global $bsearch_settings;
 
 	if ( ( '' == $search_query ) || empty( $search_query ) ) {
 		$search_query = get_bsearch_query();
 	}
 	$s_array[0] = $search_query;
 
-	$use_fulltext = $bsearch_settings['use_fulltext'];
+	$use_fulltext = bsearch_get_option( 'use_fulltext' );
 
 	/**
 		If use_fulltext is false OR if all the words are shorter than four chars, add the array of search terms.
@@ -223,7 +222,7 @@ function get_bsearch_terms( $search_query = '' ) {
  * @return  array   Search results
  */
 function get_bsearch_matches( $search_query, $bydate ) {
-	global $wpdb, $bsearch_settings;
+	global $wpdb;
 
 	// if there are two items in $search_info, the string has been broken into separate terms that
 	// are listed at $search_info[1]. The cleaned-up version of $search_query is still at the zero index.
@@ -269,7 +268,7 @@ function get_bsearch_matches( $search_query, $bydate ) {
 
 	// If no transient is set.
 	if ( ! isset( $results ) ) {
-		$sql = bsearch_sql_prepare( $search_info, $bsearch_settings['boolean_mode'], $bydate );
+		$sql = bsearch_sql_prepare( $search_info, bsearch_get_option( 'boolean_mode' ), $bydate );
 
 		$results = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
 	}
@@ -304,7 +303,7 @@ function get_bsearch_matches( $search_query, $bydate ) {
 	$matches[0]              = $results;
 	$matches['search_query'] = $search_query;
 
-	if ( $bsearch_settings['cache'] ) {
+	if ( bsearch_get_option( 'cache' ) ) {
 		// Set search transient.
 		set_transient( $search_query_transient, $matches, 7200 );
 	}
@@ -326,10 +325,9 @@ function get_bsearch_matches( $search_query, $bydate ) {
  * @return  array   First and last indices to be displayed on the page
  */
 function get_bsearch_range( $numrows, $limit ) {
-	global $bsearch_settings;
 
 	if ( ! ( $limit ) ) {
-		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : $bsearch_settings['limit']; // Read from GET variable.
+		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // Read from GET variable.
 	}
 	$page = isset( $_GET['bpaged'] ) ? intval( bsearch_clean_terms( $_GET['bpaged'] ) ) : 0; // Read from GET variable.
 

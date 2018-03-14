@@ -16,7 +16,7 @@
  * @return  array   First and last indices to be displayed on the page
  */
 function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
-	global $wpdb, $bsearch_settings;
+	global $wpdb;
 
 	// Initialise some variables.
 	$fields       = '';
@@ -27,7 +27,25 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 	$limits       = '';
 	$match_fields = '';
 
-	parse_str( $bsearch_settings['post_types'], $post_types );  // Save post types in $post_types variable.
+	// If post_types is empty or contains a query string then use parse_str else consider it comma-separated.
+	$post_types_from_db = bsearch_get_option( 'post_types' );
+
+	if ( ! empty( $post_types_from_db ) && is_array( $post_types_from_db ) ) {
+		$post_types = $post_types_from_db;
+	} elseif ( ! empty( $post_types_from_db ) && false === strpos( $post_types_from_db, '=' ) ) {
+		$post_types = explode( ',', $post_types_from_db );
+	} else {
+		parse_str( $post_types_from_db, $post_types );  // Save post types in $post_types variable.
+	}
+
+	// If post_types is empty or if we want all the post types.
+	if ( empty( $post_types ) || 'all' === $post_types_from_db ) {
+		$post_types = get_post_types(
+			array(
+				'public' => true,
+			)
+		);
+	}
 
 	$n = '%';
 
@@ -72,14 +90,17 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		$orderby = ' post_date DESC ';
 
 	} else {
+		$weight_title   = bsearch_get_option( 'weight_title' );
+		$weight_content = bsearch_get_option( 'weight_content' );
+
 		// Set BOOLEAN Mode.
 		$boolean_mode = ( $boolean_mode ) ? ' IN BOOLEAN MODE' : '';
 
 		$field_args = array(
 			$search_info[0],
-			$bsearch_settings['weight_title'],
+			$weight_title,
 			$search_info[0],
-			$bsearch_settings['weight_content'],
+			$weight_content,
 		);
 
 		$fields = ' ID';
@@ -98,10 +119,10 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		 *
 		 * @param string   $field_score     The MATCH section of the FIELDS clause of the query, i.e. score
 		 * @param string   $search_info[0]  Search query
-		 * @param int      $bsearch_settings['weight_title']    Weight of title
-		 * @param int      $bsearch_settings['weight_content']  Weight of content
+		 * @param int      $weight_title    Weight of title
+		 * @param int      $weight_content  Weight of content
 		 */
-		$field_score = apply_filters( 'bsearch_posts_match_field', $field_score, $search_info[0], $bsearch_settings['weight_title'], $bsearch_settings['weight_content'] );
+		$field_score = apply_filters( 'bsearch_posts_match_field', $field_score, $search_info[0], $weight_title, $weight_content );
 
 		$fields .= $field_score;
 
