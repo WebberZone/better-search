@@ -80,12 +80,12 @@ function bsearch_tools_page() {
 				</p>
 				<p class="description"><?php esc_html_e( 'If the Recreate Index button fails, please run the following queries in phpMyAdmin or Adminer', 'contextual-related-posts' ); ?></p>
 				<p>
-					<code>ALTER TABLE <?php esc_attr_e( $wpdb->posts ); ?> DROP INDEX bsearch_related;</code><br />
-					<code>ALTER TABLE <?php esc_attr_e( $wpdb->posts ); ?> DROP INDEX bsearch_related_title;</code><br />
-					<code>ALTER TABLE <?php esc_attr_e( $wpdb->posts ); ?> DROP INDEX bsearch_related_content;</code><br />
-					<code>ALTER TABLE <?php esc_attr_e( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related (post_title, post_content);</code><br />
-					<code>ALTER TABLE <?php esc_attr_e( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_title (post_title);</code><br />
-					<code>ALTER TABLE <?php esc_attr_e( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_content (post_content);</code><br />
+					<code>ALTER TABLE <?php echo( $wpdb->posts ); ?> DROP INDEX bsearch_related;</code><br />
+					<code>ALTER TABLE <?php echo( $wpdb->posts ); ?> DROP INDEX bsearch_related_title;</code><br />
+					<code>ALTER TABLE <?php echo( $wpdb->posts ); ?> DROP INDEX bsearch_related_content;</code><br />
+					<code>ALTER TABLE <?php echo( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related (post_title, post_content);</code><br />
+					<code>ALTER TABLE <?php echo( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_title (post_title);</code><br />
+					<code>ALTER TABLE <?php echo( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_content (post_content);</code><br />
 				</p>
 
 				<h2 style="padding-left:0px"><?php esc_html_e( 'Reset database', 'better-search' ); ?></h2>

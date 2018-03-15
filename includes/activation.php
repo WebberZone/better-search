@@ -64,7 +64,7 @@ function bsearch_single_activate() {
 	$table_name       = $wpdb->prefix . 'bsearch';
 	$table_name_daily = $wpdb->prefix . 'bsearch_daily';
 
-	if ( $wpdb->get_var( "show tables like '$table_name'" ) != $table_name ) { // WPCS: unprepared SQL ok.
+	if ( $wpdb->get_var( "show tables like '$table_name'" ) !== $table_name ) { // WPCS: unprepared SQL ok.
 
 		$sql = 'CREATE TABLE ' . $table_name . ' (
             accessedid int NOT NULL AUTO_INCREMENT,
@@ -83,7 +83,7 @@ function bsearch_single_activate() {
 		add_option( 'bsearch_db_version', $bsearch_db_version );
 	}
 
-	if ( $wpdb->get_var( "show tables like '$table_name_daily'" ) != $table_name_daily ) { // WPCS: unprepared SQL ok.
+	if ( $wpdb->get_var( "show tables like '$table_name_daily'" ) !== $table_name_daily ) { // WPCS: unprepared SQL ok.
 
 		$sql = 'CREATE TABLE ' . $table_name_daily . ' (
             accessedid int NOT NULL AUTO_INCREMENT,
@@ -106,7 +106,7 @@ function bsearch_single_activate() {
 	// Upgrade table code.
 	$installed_ver = get_option( 'bsearch_db_version' );
 
-	if ( $installed_ver != $bsearch_db_version ) {
+	if ( $installed_ver != $bsearch_db_version ) { // WPCS: loose comparison ok.
 
 		$sql = 'CREATE TABLE ' . $table_name . ' (
             accessedid int NOT NULL AUTO_INCREMENT,
