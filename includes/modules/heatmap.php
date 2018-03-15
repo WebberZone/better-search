@@ -20,7 +20,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @return  string  Search heatmap
  */
 function get_bsearch_heatmap( $args = array() ) {
-	global $wpdb, $bsearch_url;
+	global $wpdb;
 
 	$defaults = array(
 		'daily'         => false,
@@ -176,8 +176,6 @@ function get_bsearch_heatmap( $args = array() ) {
  * @return  string  Daily search heatmap
  */
 function get_bsearch_pop_daily() {
-
-	global $bsearch_url;
 
 	$output = '';
 

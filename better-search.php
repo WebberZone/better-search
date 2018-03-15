@@ -64,16 +64,6 @@ if ( ! defined( 'BETTER_SEARCH_PLUGIN_FILE' ) ) {
 }
 
 /**
- * Holds the URL for Better Search folder
- *
- * @since   1.0
- *
- * @var string
- */
-$bsearch_url = plugins_url() . '/' . plugin_basename( dirname( __FILE__ ) );
-
-
-/**
  * Global variable holding the current database version of Better Search
  *
  * @since   1.0

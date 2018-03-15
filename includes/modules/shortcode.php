@@ -12,7 +12,7 @@
  * @return string HTML output of the heatmap
  */
 function bsearch_heatmap_func( $atts ) {
-	global $wpdb, $bsearch_url;
+	global $wpdb;
 
 	$atts = shortcode_atts(
 		array(

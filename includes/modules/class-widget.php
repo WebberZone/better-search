@@ -122,7 +122,7 @@ class BSearch_Widget extends WP_Widget {
 	 * @param array $instance The settings for the particular instance of the widget.
 	 */
 	public function widget( $args, $instance ) {
-		global $wpdb, $bsearch_url;
+		global $wpdb;
 
 		$daily_range = isset( $instance['daily_range'] ) ? $instance['daily_range'] : bsearch_get_option( 'daily_range' );
 
