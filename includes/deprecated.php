@@ -6,6 +6,18 @@
  */
 
 /**
+ * Holds the URL for Better Search folder
+ *
+ * @since   1.0
+ *
+ * @deprecated 2.2.0
+ *
+ * @var string
+ */
+$bsearch_url = plugins_url() . '/' . plugin_basename( dirname( __FILE__ ) );
+
+
+/**
  * Default options.
  *
  * @since   1.0
