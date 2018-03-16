@@ -67,7 +67,7 @@ function bsearch_get_registered_settings() {
 					'name'    => esc_html__( 'Stop search engines from indexing search results pages', 'better-search' ),
 					'desc'    => esc_html__( 'This is a recommended option to turn ON. Adds noindex,follow meta tag to the head of the page', 'better-search' ),
 					'type'    => 'checkbox',
-					'options' => false,
+					'options' => true,
 				),
 				'show_credit'   => array(
 					'id'      => 'show_credit',
