@@ -13,17 +13,17 @@
  *
  * @since   1.0
  */
-function bsearch_template_redirect() {
+function bsearch_template_redirect( $template ) {
 	// Not a search page; don't do anything and return.
 	if ( ( stripos( $_SERVER['REQUEST_URI'], '?s=' ) === false ) && ( stripos( $_SERVER['REQUEST_URI'], '/search/' ) === false ) && ( ! is_search() ) ) {
-		return;
+		return $template;
 	}
 
 	global $wp_query;
 
 	// If seamless integration mode is activated; return.
 	if ( bsearch_get_option( 'seamless' ) ) {
-		return;
+		return $template;
 	}
 
 	// If we have a 404 status.
@@ -44,7 +44,7 @@ function bsearch_template_redirect() {
 	// Added necessary code to the head.
 	add_action( 'wp_head', 'bsearch_head' );
 
-	// Set thw title.
+	// Set the title.
 	add_filter( 'wp_title', 'bsearch_title' );
 
 	// If there is a template file within the parent or child theme then we use it.
@@ -58,13 +58,14 @@ function bsearch_template_redirect() {
 
 		if ( file_exists( $exists ) ) {
 
-			include_once $exists;
-			exit;
+			return $exists;
 
 		}
 	}
+
+	return $template;
 }
-add_action( 'template_redirect', 'bsearch_template_redirect', 1 );
+add_action( 'template_include', 'bsearch_template_redirect', 1 );
 
 
 /**
