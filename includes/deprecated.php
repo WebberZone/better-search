@@ -25,6 +25,9 @@ $bsearch_url = plugins_url() . '/' . plugin_basename( dirname( __FILE__ ) );
  * @return  array   Default options array
  */
 function bsearch_default_options() {
+
+	_deprecated_function( __FUNCTION__, '2.2.0' );
+
 	$title       = __( '<h3>Popular Searches</h3>', 'better-search' );
 	$title_daily = __( '<h3>Weekly Popular Searches</h3>', 'better-search' );
 
@@ -185,34 +188,8 @@ function bsearch_default_options() {
  */
 function bsearch_read_options() {
 
-	// Upgrade table code.
-	global $bsearch_db_version, $network_wide;
+	_deprecated_function( __FUNCTION__, '2.2.0', 'bsearch_get_settings()' );
 
-	$bsearch_settings_changed = false;
-
-	$defaults = bsearch_default_options();
-
-	$bsearch_settings = array_map( 'stripslashes', (array) get_option( 'ald_bsearch_settings' ) );
-	unset( $bsearch_settings[0] ); // Produced by the (array) casting when there's nothing in the DB.
-
-	foreach ( $defaults as $k => $v ) {
-		if ( ! isset( $bsearch_settings[ $k ] ) ) {
-			$bsearch_settings[ $k ]   = $v;
-			$bsearch_settings_changed = true;
-		}
-	}
-	if ( true == $bsearch_settings_changed ) {
-		update_option( 'ald_bsearch_settings', $bsearch_settings );
-	}
-
-	/**
-	 * Filters options read from DB for Better Search
-	 *
-	 * @since   2.0.0
-	 *
-	 * @param   array   $bsearch_settings   Read options
-	 */
-	return apply_filters( 'bsearch_read_options', $bsearch_settings );
+	return bsearch_get_settings();
 }
-
 
