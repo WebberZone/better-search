@@ -4,7 +4,7 @@ Contributors: webberzone, Ajay
 Donate link: https://ajaydsouza.com/donate/
 Stable tag: trunk
 Requires at least: 4.0
-Tested up to: 4.7.3
+Tested up to: 4.9
 License: GPLv2 or later
 
 
@@ -121,6 +121,9 @@ Example Usage:
 
 * Enhancements:
 	* Admin interface now uses the Settings API - Please double check your settings. You can delete the old settings using the Tools sub-menu
+
+* Deprecated:
+	* $bsearch_url, bsearch_default_options(), bsearch_read_options()
 
 = 2.1.1 =
 
