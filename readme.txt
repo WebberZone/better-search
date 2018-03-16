@@ -121,6 +121,7 @@ Example Usage:
 
 * Enhancements:
 	* Admin interface now uses the Settings API - Please double check your settings. You can delete the old settings using the Tools sub-menu
+	* Use `template_include` instead of `template_redirect`
 
 * Deprecated:
 	* $bsearch_url, bsearch_default_options(), bsearch_read_options()
