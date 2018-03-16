@@ -15,9 +15,9 @@
  * @return  Formatted WHERE clause
  */
 function bsearch_where_clause( $where, $query ) {
-	global $wpdb, $bsearch_settings;
+	global $wpdb;
 
-	if ( $query->is_search() && $bsearch_settings['seamless'] && ! is_admin() && $query->is_main_query() ) {
+	if ( $query->is_search() && bsearch_get_option( 'seamless' ) && ! is_admin() && $query->is_main_query() ) {
 		$search_ids = bsearch_clause_prepare();
 
 		if ( '' != $search_ids ) {
@@ -48,9 +48,9 @@ add_filter( 'posts_where', 'bsearch_where_clause', 10, 2 );
  * @return  Formatted ORDERBY clause
  */
 function bsearch_orderby_clause( $orderby, $query ) {
-	global $wpdb, $bsearch_settings;
+	global $wpdb;
 
-	if ( $query->is_search() && $bsearch_settings['seamless'] && ! is_admin() && $query->is_main_query() ) {
+	if ( $query->is_search() && bsearch_get_option( 'seamless' ) && ! is_admin() && $query->is_main_query() ) {
 		$search_ids = bsearch_clause_prepare();
 
 		if ( '' != $search_ids ) {

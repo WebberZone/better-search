@@ -297,8 +297,7 @@ function get_bsearch_form( $search_query ) {
  */
 function get_bsearch_title_daily( $text_only = true ) {
 
-	global $bsearch_settings;
-	$title = ( $text_only ) ? strip_tags( $bsearch_settings['title_daily'] ) : $bsearch_settings['title_daily'];
+	$title = ( $text_only ) ? strip_tags( bsearch_get_option( 'title_daily' ) ) : bsearch_get_option( 'title_daily' );
 
 	/**
 	 * Filters the title of the widget
@@ -321,8 +320,7 @@ function get_bsearch_title_daily( $text_only = true ) {
  */
 function get_bsearch_title( $text_only = true ) {
 
-	global $bsearch_settings;
-	$title = ( $text_only ) ? strip_tags( $bsearch_settings['title'] ) : $bsearch_settings['title'];
+	$title = ( $text_only ) ? strip_tags( bsearch_get_option( 'title' ) ) : bsearch_get_option( 'title' );
 
 	/**
 	 * Filters the title of the widget

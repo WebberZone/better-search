@@ -20,19 +20,19 @@ if ( ! defined( 'WPINC' ) ) {
  * @return  string  Search heatmap
  */
 function get_bsearch_heatmap( $args = array() ) {
-	global $wpdb, $bsearch_url, $bsearch_settings;
+	global $wpdb;
 
 	$defaults = array(
 		'daily'         => false,
-		'smallest'      => intval( $bsearch_settings['heatmap_smallest'] ),
-		'largest'       => intval( $bsearch_settings['heatmap_largest'] ),
-		'unit'          => $bsearch_settings['heatmap_unit'],
-		'cold'          => $bsearch_settings['heatmap_cold'],
-		'hot'           => $bsearch_settings['heatmap_hot'],
-		'before'        => $bsearch_settings['heatmap_before'],
-		'after'         => $bsearch_settings['heatmap_after'],
-		'heatmap_limit' => intval( $bsearch_settings['heatmap_limit'] ),
-		'daily_range'   => intval( $bsearch_settings['daily_range'] ),
+		'smallest'      => intval( bsearch_get_option( 'heatmap_smallest' ) ),
+		'largest'       => intval( bsearch_get_option( 'heatmap_largest' ) ),
+		'unit'          => bsearch_get_option( 'heatmap_unit' ),
+		'cold'          => bsearch_get_option( 'heatmap_cold' ),
+		'hot'           => bsearch_get_option( 'heatmap_hot' ),
+		'before'        => bsearch_get_option( 'heatmap_before' ),
+		'after'         => bsearch_get_option( 'heatmap_after' ),
+		'heatmap_limit' => intval( bsearch_get_option( 'heatmap_limit' ) ),
+		'daily_range'   => intval( bsearch_get_option( 'daily_range' ) ),
 	);
 
 	// Parse incomming $args into an array and merge it with $defaults.
@@ -144,10 +144,10 @@ function get_bsearch_heatmap( $args = array() ) {
 			/* translators: 1: Search term, 2: Number of searches */
 			$output .= sprintf( _n( 'Search for %1$s (%2$s search)', 'Search for %1$s (%2$s searches)', $cntaccess, 'better-search' ), $textsearchvar, $cntaccess );
 			$output .= '" ' . $style;
-			if ( $bsearch_settings['link_nofollow'] ) {
+			if ( bsearch_get_option( 'link_nofollow' ) ) {
 				$output .= ' rel="nofollow" ';
 			}
-			if ( $bsearch_settings['link_new_window'] ) {
+			if ( bsearch_get_option( 'link_new_window' ) ) {
 				$output .= ' target="_blank" ';
 			}
 			$output .= '>' . $textsearchvar . '</a>' . $args['after'] . ' ';
@@ -177,12 +177,10 @@ function get_bsearch_heatmap( $args = array() ) {
  */
 function get_bsearch_pop_daily() {
 
-	global $bsearch_settings, $bsearch_url;
-
 	$output = '';
 
 	$output .= '<div class="bsearch_heatmap">';
-	$output .= $bsearch_settings['title_daily'];
+	$output .= bsearch_get_option( 'title_daily' );
 	$output .= '<div text-align:center>';
 
 	$output .= get_bsearch_heatmap(
@@ -192,7 +190,7 @@ function get_bsearch_pop_daily() {
 	);
 	$output .= '</div>';
 
-	if ( $bsearch_settings['show_credit'] ) {
+	if ( bsearch_get_option( 'show_credit' ) ) {
 		$output .= '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
 	}
 
@@ -227,12 +225,10 @@ function the_pop_searches_daily() {
  */
 function get_bsearch_pop() {
 
-	global $bsearch_settings;
-
 	$output = '';
 
 	$output .= '<div class="bsearch_heatmap">';
-	$output .= $bsearch_settings['title'];
+	$output .= bsearch_get_option( 'title' );
 	$output .= '<div text-align:center>';
 
 	$output .= get_bsearch_heatmap(
@@ -242,7 +238,7 @@ function get_bsearch_pop() {
 	);
 	$output .= '</div>';
 
-	if ( $bsearch_settings['show_credit'] ) {
+	if ( bsearch_get_option( 'show_credit' ) ) {
 		$output .= '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
 	}
 

@@ -14,7 +14,6 @@
  * @return  string  Search tracker code
  */
 function bsearch_increment_counter( $search_query ) {
-	global $bsearch_url, $bsearch_settings;
 
 	$output = '';
 
@@ -25,17 +24,17 @@ function bsearch_increment_counter( $search_query ) {
 	$include_code = true;
 
 	// If user is an admin.
-	if ( ( $current_user_admin ) && ( ! $bsearch_settings['track_admins'] ) ) {
+	if ( ( $current_user_admin ) && ( ! bsearch_get_option( 'track_admins' ) ) ) {
 		$include_code = false;
 	}
 
 	// If user is an editor.
-	if ( ( $current_user_editor ) && ( ! $bsearch_settings['track_editors'] ) ) {
+	if ( ( $current_user_editor ) && ( ! bsearch_get_option( 'track_editors' ) ) ) {
 		$include_code = false;
 	}
 
 	if ( $include_code ) {
-		$output = '<script type="text/javascript" data-cfasync="false" src="' . $bsearch_url . '/includes/better-search-addcount.js.php?bsearch_id=' . $search_query . '"></script>';
+		$output = '<script type="text/javascript" data-cfasync="false" src="' . BETTER_SEARCH_PLUGIN_URL . 'includes/better-search-addcount.js.php?bsearch_id=' . $search_query . '"></script>';
 	}
 
 	/**
