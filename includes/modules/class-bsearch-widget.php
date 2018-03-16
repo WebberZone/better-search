@@ -122,11 +122,11 @@ class BSearch_Widget extends WP_Widget {
 	 * @param array $instance The settings for the particular instance of the widget.
 	 */
 	public function widget( $args, $instance ) {
-		global $wpdb, $bsearch_url, $bsearch_settings;
+		global $wpdb;
 
-		$daily_range = isset( $instance['daily_range'] ) ? $instance['daily_range'] : $bsearch_settings['daily_range'];
+		$daily_range = isset( $instance['daily_range'] ) ? $instance['daily_range'] : bsearch_get_option( 'daily_range' );
 
-		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? strip_tags( $bsearch_settings['title'] ) : $instance['title'] );
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? strip_tags( bsearch_get_option( 'title' ) ) : $instance['title'] );
 
 		$daily = isset( $instance['daily'] ) ? $instance['daily'] : 'overall';
 
@@ -148,7 +148,7 @@ class BSearch_Widget extends WP_Widget {
 				)
 			);
 		}
-		if ( $bsearch_settings['show_credit'] ) {
+		if ( bsearch_get_option( 'show_credit' ) ) {
 			echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
 		}
 

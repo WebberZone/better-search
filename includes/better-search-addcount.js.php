@@ -40,7 +40,7 @@ function bsearch_inc_count() {
 
 	$search_query = wp_kses( $_GET['bsearch_id'], array() );
 
-	if ( '' != $search_query ) {
+	if ( '' !== $search_query ) {
 		$results = $wpdb->get_results( $wpdb->prepare( "SELECT searchvar, cntaccess FROM $table_name WHERE searchvar = %s LIMIT 1 ", $search_query ) ); // WPCS: unprepared SQL ok.
 		$test    = 0;
 		if ( $results ) {
@@ -50,7 +50,7 @@ function bsearch_inc_count() {
 				$test = 1;
 			}
 		}
-		if ( 0 == $test ) {
+		if ( 0 === $test ) {
 			$tt   = $wpdb->query( $wpdb->prepare( "INSERT INTO $table_name (searchvar, cntaccess) VALUES( %s, '1') ", $search_query ) ); // WPCS: unprepared SQL ok.
 			$str .= ( false === $tt ) ? 'e_' : 's_' . $tt;
 		}
@@ -67,7 +67,7 @@ function bsearch_inc_count() {
 				$test = 1;
 			}
 		}
-		if ( 0 == $test ) {
+		if ( 0 === $test ) {
 			$ttd  = $wpdb->query( $wpdb->prepare( "INSERT INTO $table_name_daily (searchvar, cntaccess, dp_date) VALUES( %s, '1', %s )", $search_query, $current_date ) ); // WPCS: unprepared SQL ok.
 			$str .= ( false === $ttd ) ? '_e' : '_s' . $ttd;
 		}

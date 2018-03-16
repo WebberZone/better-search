@@ -11,25 +11,25 @@
  * @since   1.3.3
  */
 function bsearch_clause_head() {
-	global $wp_query, $bsearch_settings;
-	$bsearch_custom_CSS = stripslashes( $bsearch_settings['custom_CSS'] );
+	global $wp_query;
+	$bsearch_custom_css = stripslashes( bsearch_get_option( 'custom_css' ) );
 
 	$output = '';
 
 	if ( $wp_query->is_search ) {
 
-		if ( $bsearch_settings['seamless'] && ! is_paged() ) {
+		if ( bsearch_get_option( 'seamless' ) && ! is_paged() ) {
 			$search_query = get_bsearch_query();
 			$output      .= bsearch_increment_counter( $search_query );
 		}
 
-		if ( $bsearch_settings['meta_noindex'] ) {
+		if ( bsearch_get_option( 'meta_noindex' ) ) {
 			$output .= '<meta name="robots" content="noindex,follow" />';
 		}
 
 		// Add custom CSS to header.
-		if ( '' != $bsearch_custom_CSS ) {
-			$output .= '<style type="text/css">' . $bsearch_custom_CSS . '</style>';
+		if ( '' != $bsearch_custom_css ) {
+			$output .= '<style type="text/css">' . $bsearch_custom_css . '</style>';
 		}
 	}
 
@@ -57,16 +57,16 @@ add_action( 'wp_head', 'bsearch_clause_head' );
  * @return  string  Post Content
  */
 function bsearch_content( $content ) {
-	global $bsearch_settings, $wp_query;
+	global $wp_query;
 
-	if ( $wp_query->is_search() && $bsearch_settings['seamless'] && ! is_admin() && in_the_loop() && $bsearch_settings['highlight'] ) {
+	if ( $wp_query->is_search() && bsearch_get_option( 'seamless' ) && ! is_admin() && in_the_loop() && bsearch_get_option( 'highlight' ) ) {
 		$search_query = get_bsearch_query();
 
 		$search_query = preg_quote( $search_query, '/' );
 		$keys         = explode( ' ', str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $search_query ) );
 
-		$regEx   = '/(?!<[^>]*?>)(' . implode( '|', $keys ) . ')(?![^<]*?>)/iu';
-		$content = preg_replace( $regEx, '<span class="bsearch_highlight">$1</span>', $content );
+		$reg_ex  = '/(?!<[^>]*?>)(' . implode( '|', $keys ) . ')(?![^<]*?>)/iu';
+		$content = preg_replace( $reg_ex, '<span class="bsearch_highlight">$1</span>', $content );
 
 	}
 
