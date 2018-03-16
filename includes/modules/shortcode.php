@@ -6,13 +6,14 @@
  */
 
 /**
- * Get the Better Search heatmap
+ * Shortcode to get the Better Search heatmap.
+ *
+ * @since 2.1.0
  *
  * @param array $atts Heatmap attributes.
  * @return string HTML output of the heatmap
  */
 function bsearch_heatmap_func( $atts ) {
-	global $wpdb;
 
 	$atts = shortcode_atts(
 		array(
@@ -33,3 +34,18 @@ function bsearch_heatmap_func( $atts ) {
 
 }
 add_shortcode( 'bsearch_heatmap', 'bsearch_heatmap_func' );
+
+/**
+ * Shortcode to get the Better Search form
+ *
+ * @since 2.2.0
+ *
+ * @param array $atts Search form attributes.
+ * @return string HTML output of the search form
+ */
+function bsearch_search_form_func( $atts ) {
+
+	return get_bsearch_form( '' );
+
+}
+add_shortcode( 'bsearch_form', 'bsearch_search_form_func' );

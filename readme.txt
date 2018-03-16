@@ -121,6 +121,7 @@ Example Usage:
 
 * Enhancements:
 	* Admin interface now uses the Settings API - Please double check your settings. You can delete the old settings using the Tools sub-menu
+	* New shortcode `bsearch_form` to display the Better Search custom search form
 	* Use `template_include` instead of `template_redirect`
 
 * Deprecated:
