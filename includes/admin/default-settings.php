@@ -103,6 +103,13 @@ function bsearch_get_registered_settings() {
 					'type'    => 'checkbox',
 					'options' => false,
 				),
+				'exclude_post_ids'        => array(
+					'id'      => 'exclude_post_ids',
+					'name'    => esc_html__( 'Exclude post IDs', 'better-search' ),
+					'desc'    => esc_html__( 'Enter a comma separated list of post/page/custom post type IDs e.g. 188,1024,50', 'better-search' ),
+					'type'    => 'numbercsv',
+					'options' => '',
+				),
 				'use_fulltext'            => array(
 					'id'      => 'use_fulltext',
 					'name'    => esc_html__( 'Enable mySQL FULLTEXT searching', 'better-search' ),

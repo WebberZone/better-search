@@ -23,5 +23,27 @@ function bsearch_exclude_protected( $where ) {
 
 	return $where;
 }
-add_filter( 'bsearch_posts_where', 'bsearch_exclude_protected', 11 );
+add_filter( 'bsearch_posts_where', 'bsearch_exclude_protected' );
+
+
+/**
+ * Function to exclude post IDs.
+ *
+ * @since 2.2.0
+ *
+ * @param string $where WHERE clause.
+ * @return string Updated WHERE clause
+ */
+function bsearch_exclude_post_ids( $where ) {
+	global $wpdb;
+
+	$exclude_post_ids = bsearch_get_option( 'exclude_post_ids' );
+
+	if ( ! empty( bsearch_get_option( 'exclude_post_ids' ) ) ) {
+		$where .= " AND {$wpdb->posts}.ID NOT IN ({$exclude_post_ids}) ";
+	}
+
+	return $where;
+}
+add_filter( 'bsearch_posts_where', 'bsearch_exclude_post_ids' );
 
