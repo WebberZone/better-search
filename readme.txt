@@ -121,6 +121,7 @@ Example Usage:
 
 * Features:
 	* New option to exclude password protected posts from the results
+	* New option to exclude post/page or custom post type IDs from the results
 
 * Enhancements:
 	* Admin interface now uses the Settings API - Please double check your settings. You can delete the old settings using the Tools sub-menu
