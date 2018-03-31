@@ -81,7 +81,7 @@ function bsearch_get_registered_settings() {
 		/*** Search settings */
 		'search'  => apply_filters(
 			'bsearch_settings_search', array(
-				'limit'          => array(
+				'limit'                   => array(
 					'id'      => 'limit',
 					'name'    => esc_html__( 'Number of Search Results per page', 'better-search' ),
 					'desc'    => esc_html__( 'This is the maximum number of search results that will be displayed per page by default', 'better-search' ),
@@ -89,21 +89,28 @@ function bsearch_get_registered_settings() {
 					'options' => '10',
 					'size'    => 'small',
 				),
-				'post_types'     => array(
+				'post_types'              => array(
 					'id'      => 'post_types',
 					'name'    => esc_html__( 'Post types to include', 'better-search' ),
 					'desc'    => esc_html__( 'Select which post types you want to include in the search results', 'better-search' ),
 					'type'    => 'posttypes',
 					'options' => 'post,page',
 				),
-				'use_fulltext'   => array(
+				'exclude_protected_posts' => array(
+					'id'      => 'exclude_protected_posts',
+					'name'    => esc_html__( 'Exclude password protected posts', 'better-search' ),
+					'desc'    => esc_html__( 'Enabling this option will remove password protected posts from the search results', 'better-search' ),
+					'type'    => 'checkbox',
+					'options' => false,
+				),
+				'use_fulltext'            => array(
 					'id'      => 'use_fulltext',
 					'name'    => esc_html__( 'Enable mySQL FULLTEXT searching', 'better-search' ),
 					'desc'    => esc_html__( 'Disabling this option will no longer give relevancy based results', 'better-search' ),
 					'type'    => 'checkbox',
 					'options' => true,
 				),
-				'boolean_mode'   => array(
+				'boolean_mode'            => array(
 					'id'      => 'boolean_mode',
 					'name'    => esc_html__( 'Activate BOOLEAN mode', 'better-search' ),
 					/* translators: 1: Opening anchor tag, 2: Closing anchor tag, */
@@ -111,7 +118,7 @@ function bsearch_get_registered_settings() {
 					'type'    => 'checkbox',
 					'options' => false,
 				),
-				'weight_title'   => array(
+				'weight_title'            => array(
 					'id'      => 'weight_title',
 					'name'    => esc_html__( 'Weight of the title', 'better-search' ),
 					'desc'    => esc_html__( 'Set this to a bigger number than the next option to prioritise the post title', 'better-search' ),
@@ -119,7 +126,7 @@ function bsearch_get_registered_settings() {
 					'options' => '10',
 					'size'    => 'small',
 				),
-				'weight_content' => array(
+				'weight_content'          => array(
 					'id'      => 'weight_content',
 					'name'    => esc_html__( 'Weight of the post content', 'better-search' ),
 					'desc'    => esc_html__( 'Set this to a bigger number than the previous option to prioritise the post content', 'better-search' ),
@@ -127,21 +134,21 @@ function bsearch_get_registered_settings() {
 					'options' => '1',
 					'size'    => 'small',
 				),
-				'highlight'      => array(
+				'highlight'               => array(
 					'id'      => 'highlight',
 					'name'    => esc_html__( 'Highlight search terms', 'better-search' ),
 					'desc'    => esc_html__( 'If enabled, the search terms are wrapped with the class <code>bsearch_highlight</code>. You will also need to add this CSS code under custom styles box below.', 'better-search' ),
 					'type'    => 'checkbox',
 					'options' => false,
 				),
-				'include_thumb'  => array(
+				'include_thumb'           => array(
 					'id'      => 'include_thumb',
 					'name'    => esc_html__( 'Include thumbnails in search results', 'better-search' ),
 					'desc'    => esc_html__( 'Displays the featured image (post thumbnail) whenever available. This setting does not apply when Seamless mode is activated.', 'better-search' ),
 					'type'    => 'checkbox',
 					'options' => false,
 				),
-				'excerpt_length' => array(
+				'excerpt_length'          => array(
 					'id'      => 'excerpt_length',
 					'name'    => esc_html__( 'Length of excerpt (in words)', 'better-search' ),
 					'desc'    => esc_html__( 'This setting does not apply when Seamless mode is activated.', 'better-search' ),
@@ -149,7 +156,7 @@ function bsearch_get_registered_settings() {
 					'options' => '100',
 					'size'    => 'small',
 				),
-				'badwords'       => array(
+				'badwords'                => array(
 					'id'      => 'badwords',
 					'name'    => esc_html__( 'Filter these words', 'better-search' ),
 					'desc'    => esc_html__( 'Words in this list will be stripped out of the search results. Enter these as a comma-separated list.', 'better-search' ),
