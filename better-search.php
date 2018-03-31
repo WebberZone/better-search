@@ -129,6 +129,7 @@ function bsearch_get_settings() {
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/seamless.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/class-bsearch-widget.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/heatmap.php';
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/exclusions.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/shortcode.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/deprecated.php';
 

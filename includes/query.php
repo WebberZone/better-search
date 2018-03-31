@@ -240,5 +240,3 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 	 */
 	return apply_filters( 'bsearch_sql_prepare', $sql, $search_info, $boolean_mode, $bydate );
 }
-
-

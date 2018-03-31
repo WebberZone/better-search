@@ -119,6 +119,9 @@ Example Usage:
 
 = 2.2.0 =
 
+* Features:
+	* New option to exclude password protected posts from the results
+
 * Enhancements:
 	* Admin interface now uses the Settings API - Please double check your settings. You can delete the old settings using the Tools sub-menu
 	* New shortcode `bsearch_form` to display the Better Search custom search form
