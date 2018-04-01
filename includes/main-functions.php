@@ -163,7 +163,7 @@ function get_bsearch_query() {
  */
 function get_bsearch_terms( $search_query = '' ) {
 
-	if ( ( '' == $search_query ) || empty( $search_query ) ) {
+	if ( empty( $search_query ) ) {
 		$search_query = get_bsearch_query();
 	}
 	$s_array[0] = $search_query;
