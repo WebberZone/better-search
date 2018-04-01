@@ -127,9 +127,10 @@ Example Usage:
 	* Admin interface now uses the Settings API - Please double check your settings. You can delete the old settings using the Tools sub-menu
 	* New shortcode `bsearch_form` to display the Better Search custom search form
 	* Use `template_include` instead of `template_redirect`
+	* Seamless mode now uses Better Search queries directly instead of passing post IDs
 
 * Deprecated:
-	* $bsearch_url, bsearch_default_options(), bsearch_read_options()
+	* $bsearch_url, bsearch_default_options(), bsearch_read_options(), bsearch_clause_prepare()
 
 = 2.1.1 =
 

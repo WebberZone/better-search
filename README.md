@@ -1,8 +1,8 @@
-# Better Search - Supercharge your WordPress search results!
+# Better Search - Supercharge your WordPress search results
 
 __Requires:__ 4.0
 
-__Tested up to:__ 4.7.3
+__Tested up to:__ 4.9
 
 __License:__ [GPL-2.0+](http://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -32,8 +32,8 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 * **Profanity filter**: Customise the list of stop words that will automatically be filtered out of search queries
 * **Translation ready**: Better Search is translation ready
 
-
 ## Screenshots
+
 ![General Options](https://raw.github.com/ajaydsouza/better-search/master/assets/screenshot-1.png)
 _Better Search settings page - General Options._
 
@@ -42,6 +42,7 @@ For more screenshots visit the [WordPress.org screenshots page](http://wordpress
 ## Installation
 
 ### WordPress install (the easy way)
+
 1. Navigate to Plugins within your WordPress Admin Area
 
 2. Click "Add new" and in the search box enter "Better Search"
@@ -49,16 +50,16 @@ For more screenshots visit the [WordPress.org screenshots page](http://wordpress
 3. Find the plugin in the list (usually the first result) and click "Install Now"
 
 ### Manual install
+
 1. Download the plugin
 
 2. Extract the contents of better-search.zip to wp-content/plugins/ folder. You should get a folder called better-search.
 
-3. Activate the Plugin in WP-Admin. 
+3. Activate the Plugin in WP-Admin.
 
 4. Go to **Better Search** to configure
 
 Alternatively, search for **Better Search** from Plugins &raquo; Add New within your WordPress admin.
-
 
 ## Frequently Asked Questions
 
