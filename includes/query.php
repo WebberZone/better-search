@@ -101,7 +101,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
  * @param array  $args Array of arguments.
  * @return string MATCH field
  */
-function bsearch_posts_match_field( $search_query, $args ) {
+function bsearch_posts_match_field( $search_query, $args = array() ) {
 	global $wpdb;
 
 	$weight_title   = bsearch_get_option( 'weight_title' );
@@ -151,7 +151,7 @@ function bsearch_posts_match_field( $search_query, $args ) {
  * @param  array  $args Array of arguments.
  * @return string Fields clause
  */
-function bsearch_posts_fields( $search_query, $args ) {
+function bsearch_posts_fields( $search_query, $args = array() ) {
 	global $wpdb;
 
 	$fields = ' ID';
@@ -171,6 +171,7 @@ function bsearch_posts_fields( $search_query, $args ) {
 
 }
 
+
 /**
  * Get the MATCH clause for the Better Search WHERE clause.
  *
@@ -180,7 +181,7 @@ function bsearch_posts_fields( $search_query, $args ) {
  * @param  array  $args Array of arguments.
  * @return string MATCH clause
  */
-function bsearch_posts_match( $search_query, $args ) {
+function bsearch_posts_match( $search_query, $args = array() ) {
 	global $wpdb;
 
 	$boolean_mode = $args['boolean_mode'];
@@ -203,6 +204,7 @@ function bsearch_posts_match( $search_query, $args ) {
 
 }
 
+
 /**
  * Get the WHERE clause.
  *
@@ -212,7 +214,7 @@ function bsearch_posts_match( $search_query, $args ) {
  * @param  array $args Array of arguments.
  * @return string WHERE clause
  */
-function bsearch_posts_where( $search_info, $args ) {
+function bsearch_posts_where( $search_info, $args = array() ) {
 	global $wpdb;
 
 	$n = '%';
@@ -271,6 +273,7 @@ function bsearch_posts_where( $search_info, $args ) {
 
 }
 
+
 /**
  * Get the ORDERBY clause.
  *
@@ -280,7 +283,7 @@ function bsearch_posts_where( $search_info, $args ) {
  * @param  array  $args Array of arguments.
  * @return string ORDERBY clause
  */
-function bsearch_posts_orderby( $search_query, $args ) {
+function bsearch_posts_orderby( $search_query, $args = array() ) {
 
 	// ORDER BY clause.
 	if ( $args['bydate'] || ! $args['use_fulltext'] ) {
@@ -311,7 +314,7 @@ function bsearch_posts_orderby( $search_query, $args ) {
  * @param  array  $args Array of arguments.
  * @return string GROUPBY clause
  */
-function bsearch_posts_groupby( $search_query, $args ) {
+function bsearch_posts_groupby( $search_query, $args = array() ) {
 
 	$groupby = '';
 
@@ -337,7 +340,7 @@ function bsearch_posts_groupby( $search_query, $args ) {
  * @param  array  $args Array of arguments.
  * @return string JOIN clause
  */
-function bsearch_posts_join( $search_query, $args ) {
+function bsearch_posts_join( $search_query, $args = array() ) {
 
 	$join = '';
 
@@ -363,7 +366,7 @@ function bsearch_posts_join( $search_query, $args ) {
  * @param  array  $args Array of arguments.
  * @return string LIMITS clause
  */
-function bsearch_posts_limits( $search_query, $args ) {
+function bsearch_posts_limits( $search_query, $args = array() ) {
 
 	$limits = '';
 
