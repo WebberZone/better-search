@@ -193,3 +193,42 @@ function bsearch_read_options() {
 	return bsearch_get_settings();
 }
 
+
+/**
+ * Fetches the search results for the current search query and returns a comma separated string of IDs.
+ *
+ * @since   1.3.3
+ *
+ * @deprecated 2.2.0
+ *
+ * @return  string  Blank string or comma separated string of search results' IDs
+ */
+function bsearch_clause_prepare() {
+	global $wp_query, $wpdb;
+
+	_deprecated_function( __FUNCTION__, '2.2.0' );
+
+	$search_ids = '';
+
+	if ( $wp_query->is_search ) {
+		$search_query = get_bsearch_query();
+
+		$matches = get_bsearch_matches( $search_query, 0 );     // Fetch the search results for the search term stored in $search_query.
+
+		$searches = $matches[0];        // 0 index contains the search results always
+
+		if ( $searches ) {
+			$search_ids = implode( ',', wp_list_pluck( $searches, 'ID' ) );
+		}
+	}
+
+	/**
+	 * Filters the string of SEARCH IDs returned
+	 *
+	 * @since   2.0.0
+	 *
+	 * @return  string  $search_ids Blank string or comma separated string of search results' IDs
+	 */
+	return apply_filters( 'bsearch_clause_prepare', $search_ids );
+}
+
