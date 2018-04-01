@@ -26,25 +26,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 	$orderby = '';
 	$limits  = '';
 
-	// If post_types is empty or contains a query string then use parse_str else consider it comma-separated.
-	$post_types_from_db = bsearch_get_option( 'post_types' );
-
-	if ( ! empty( $post_types_from_db ) && is_array( $post_types_from_db ) ) {
-		$post_types = $post_types_from_db;
-	} elseif ( ! empty( $post_types_from_db ) && false === strpos( $post_types_from_db, '=' ) ) {
-		$post_types = explode( ',', $post_types_from_db );
-	} else {
-		parse_str( $post_types_from_db, $post_types );  // Save post types in $post_types variable.
-	}
-
-	// If post_types is empty or if we want all the post types.
-	if ( empty( $post_types ) || 'all' === $post_types_from_db ) {
-		$post_types = get_post_types(
-			array(
-				'public' => true,
-			)
-		);
-	}
+	$post_types = bsearch_post_types();
 
 	// Create a FULLTEXT clause only if there is no second element of the $search_info array. Use LIKE otherwise.
 	$use_fulltext = count( $search_info ) > 1 ? false : true;
@@ -154,6 +136,9 @@ function bsearch_posts_match_field( $search_query, $args = array() ) {
 function bsearch_posts_fields( $search_query, $args = array() ) {
 	global $wpdb;
 
+	// Parse incomming $args into an array and merge it with $defaults.
+	$args = wp_parse_args( $args, bsearch_query_default_args() );
+
 	$fields = ' ID';
 
 	$fields .= bsearch_posts_match_field( $search_query, $args );
@@ -183,6 +168,9 @@ function bsearch_posts_fields( $search_query, $args = array() ) {
  */
 function bsearch_posts_match( $search_query, $args = array() ) {
 	global $wpdb;
+
+	// Parse incomming $args into an array and merge it with $defaults.
+	$args = wp_parse_args( $args, bsearch_query_default_args() );
 
 	$boolean_mode = $args['boolean_mode'];
 
@@ -216,6 +204,9 @@ function bsearch_posts_match( $search_query, $args = array() ) {
  */
 function bsearch_posts_where( $search_info, $args = array() ) {
 	global $wpdb;
+
+	// Parse incomming $args into an array and merge it with $defaults.
+	$args = wp_parse_args( $args, bsearch_query_default_args() );
 
 	$n = '%';
 
@@ -285,6 +276,9 @@ function bsearch_posts_where( $search_info, $args = array() ) {
  */
 function bsearch_posts_orderby( $search_query, $args = array() ) {
 
+	// Parse incomming $args into an array and merge it with $defaults.
+	$args = wp_parse_args( $args, bsearch_query_default_args() );
+
 	// ORDER BY clause.
 	if ( $args['bydate'] || ! $args['use_fulltext'] ) {
 		$orderby = ' post_date DESC ';
@@ -316,6 +310,9 @@ function bsearch_posts_orderby( $search_query, $args = array() ) {
  */
 function bsearch_posts_groupby( $search_query, $args = array() ) {
 
+	// Parse incomming $args into an array and merge it with $defaults.
+	$args = wp_parse_args( $args, bsearch_query_default_args() );
+
 	$groupby = '';
 
 	/**
@@ -341,6 +338,9 @@ function bsearch_posts_groupby( $search_query, $args = array() ) {
  * @return string JOIN clause
  */
 function bsearch_posts_join( $search_query, $args = array() ) {
+
+	// Parse incomming $args into an array and merge it with $defaults.
+	$args = wp_parse_args( $args, bsearch_query_default_args() );
 
 	$join = '';
 
@@ -368,6 +368,9 @@ function bsearch_posts_join( $search_query, $args = array() ) {
  */
 function bsearch_posts_limits( $search_query, $args = array() ) {
 
+	// Parse incomming $args into an array and merge it with $defaults.
+	$args = wp_parse_args( $args, bsearch_query_default_args() );
+
 	$limits = '';
 
 	/**
@@ -380,4 +383,67 @@ function bsearch_posts_limits( $search_query, $args = array() ) {
 	 * @param array    $args         Array of arguments
 	 */
 	return apply_filters( 'bsearch_posts_limits', $limits, $search_query, $args );
+}
+
+
+/**
+ * Get default query arguments.
+ *
+ * @return array Default quesry arguments
+ */
+function bsearch_query_default_args() {
+
+	// if there are two items in $search_info, the string has been broken into separate terms that
+	// are listed at $search_info[1]. The cleaned-up version of $search_query is still at the zero index.
+	// This is when fulltext is disabled, and we search using LIKE.
+	$search_info = get_bsearch_terms();
+
+	// Create a FULLTEXT clause only if there is no second element of the $search_info array. Use LIKE otherwise.
+	$use_fulltext = count( $search_info ) > 1 ? false : true;
+
+	$post_types = bsearch_post_types();
+
+	$args = array(
+		'use_fulltext' => $use_fulltext,
+		'boolean_mode' => bsearch_get_option( 'boolean_mode' ) ? ' IN BOOLEAN MODE' : '',
+		'bydate'       => 0,
+		'post_types'   => bsearch_post_types(),
+	);
+
+	/**
+	 * Filter default query arguments.
+	 *
+	 * @return array Default quesry arguments
+	 */
+	return apply_filters( 'bsearch_query_default_args', $args );
+}
+
+
+/**
+ * Get the Better Search post types.
+ *
+ * @return array Post types
+ */
+function bsearch_post_types() {
+	// If post_types is empty or contains a query string then use parse_str else consider it comma-separated.
+	$post_types_from_db = bsearch_get_option( 'post_types' );
+
+	if ( ! empty( $post_types_from_db ) && is_array( $post_types_from_db ) ) {
+		$post_types = $post_types_from_db;
+	} elseif ( ! empty( $post_types_from_db ) && false === strpos( $post_types_from_db, '=' ) ) {
+		$post_types = explode( ',', $post_types_from_db );
+	} else {
+		parse_str( $post_types_from_db, $post_types );  // Save post types in $post_types variable.
+	}
+
+	// If post_types is empty or if we want all the post types.
+	if ( empty( $post_types ) || 'all' === $post_types_from_db ) {
+		$post_types = get_post_types(
+			array(
+				'public' => true,
+			)
+		);
+	}
+
+	return $post_types;
 }
