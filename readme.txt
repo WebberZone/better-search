@@ -43,7 +43,7 @@ So, if you've got some cool feature that you'd like to implement into the plugin
 2. Options in WP-Admin - Search results options
 3. Options in WP-Admin - Heatmap options
 4. Options in WP-Admin - Custom styles
-5. Options in WP-Admin - Reset count and Maintenance
+5. Options in WP-Admin - Tools
 6. Better Search widget
 
 
