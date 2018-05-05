@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-28 23:47+0000\n"
+"POT-Creation-Date: 2018-05-05 14:27+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team: WebberZone <plugins@webberzone.com>\n"
@@ -12,528 +12,268 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: __;_e;_c;__ngettext\n"
 "X-Poedit-Basepath: ..\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 2.0.7\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: admin/admin.php:91
-msgid "Options saved successfully. If enabled, cache has been cleared."
-msgstr ""
-
-#: admin/admin.php:100
-msgid "Options set to Default."
-msgstr ""
-
-#: admin/admin.php:106
-msgid "Popular searches count reset"
-msgstr ""
-
-#: admin/admin.php:112
-msgid "Daily popular searches count reset"
-msgstr ""
-
-#: admin/admin.php:125
-msgid "Index recreated"
-msgstr ""
-
-#: admin/admin.php:141 admin/admin.php:161 admin/admin.php:185
-#: admin/main-view.php:47 admin/main-view.php:137 admin/main-view.php:264
-#: admin/main-view.php:387 admin/main-view.php:454
-msgid "Click to toggle"
-msgstr ""
-
-#: admin/admin.php:142
-msgid "Support the development"
-msgstr ""
-
-#: admin/admin.php:149
-msgid "Donation for Better Search"
-msgstr ""
-
-#: admin/admin.php:151
-msgid "Enter amount in USD"
-msgstr ""
-
-#: admin/admin.php:155
-msgid "Send your donation to the author of Better Search"
-msgstr ""
-
-#: admin/admin.php:162
-msgid "Follow me"
-msgstr ""
-
-#: admin/admin.php:186
-msgid "Quick links"
-msgstr ""
-
-#: admin/admin.php:190
-msgid "Better Search plugin page"
-msgstr ""
-
-#: admin/admin.php:191
-msgid "Other plugins"
-msgstr ""
-
-#: admin/admin.php:192
-msgid "Ajay's blog"
-msgstr ""
-
-#: admin/admin.php:193
-msgid "FAQ"
-msgstr ""
-
-#: admin/admin.php:194 admin/admin.php:408
-msgid "Support"
-msgstr ""
-
-#: admin/admin.php:195
-msgid "Reviews"
-msgstr ""
-
-#: admin/admin.php:212 admin/main-view.php:15
-msgid "Better Search"
-msgstr ""
-
-#: admin/admin.php:350
+#: includes/admin/admin-dashboard.php:61
 msgid "Popular Searches"
 msgstr ""
 
-#: admin/admin.php:351
+#: includes/admin/admin-dashboard.php:62
 msgid "Daily Popular Searches"
 msgstr ""
 
-#: admin/admin.php:385
+#: includes/admin/admin.php:219
+#, php-format
+msgid ""
+"Thank you for using <a href=\"%1$s\" target=\"_blank\">Better Search</a>! "
+"Please <a href=\"%2$s\" target=\"_blank\">rate us</a> on <a href=\"%2$s\" "
+"target=\"_blank\">WordPress.org</a>"
+msgstr ""
+
+#: includes/admin/admin.php:247
 msgid "Settings"
 msgstr ""
 
-#: admin/admin.php:409
+#: includes/admin/admin.php:269
+msgid "Support"
+msgstr ""
+
+#: includes/admin/admin.php:270
 msgid "Donate"
 msgstr ""
 
-#: admin/admin.php:410
+#: includes/admin/admin.php:271
 msgid "Contribute"
 msgstr ""
 
-#: admin/admin.php:428
-msgid "Better Search cache has been cleared"
-msgstr ""
-
-#: admin/main-view.php:27 admin/main-view.php:48
-msgid "General options"
-msgstr ""
-
-#: admin/main-view.php:28
-msgid "Search options"
-msgstr ""
-
-#: admin/main-view.php:29 admin/main-view.php:265
-msgid "Heatmap options"
-msgstr ""
-
-#: admin/main-view.php:30
-msgid "Custom styles"
-msgstr ""
-
-#: admin/main-view.php:64
-msgid "Enable seamless integration?"
-msgstr ""
-
-#: admin/main-view.php:67
+#: includes/admin/help-tab.php:35 includes/admin/help-tab.php:106
+#, php-format
 msgid ""
-"Complete integration with your theme. Enabling this option will ignore "
-"better-search-template.php. It will continue to display the search results "
-"sorted by relevance, although it won't display the percentage relevance."
+"For more information or how to get support visit the <a href=\"%1$s"
+"\">WebberZone support site</a>."
 msgstr ""
 
-#: admin/main-view.php:71
-msgid "Enable search tracking?"
-msgstr ""
-
-#: admin/main-view.php:74
+#: includes/admin/help-tab.php:37 includes/admin/help-tab.php:108
+#, php-format
 msgid ""
-"If you turn this off, then the plugin will no longer track and display the "
-"popular search terms."
+"Support queries should be posted in the <a href=\"%1$s\">WordPress.org "
+"support forums</a>."
 msgstr ""
 
-#: admin/main-view.php:78
-msgid "Track visits of admins?"
-msgstr ""
-
-#: admin/main-view.php:81
-msgid "Disabling this option will stop admin visits being tracked."
-msgstr ""
-
-#: admin/main-view.php:85
-msgid "Track visits of Editors?"
-msgstr ""
-
-#: admin/main-view.php:88
-msgid "Disabling this option will stop editor visits being tracked."
-msgstr ""
-
-#: admin/main-view.php:93
-msgid "Enable cache:"
-msgstr ""
-
-#: admin/main-view.php:96
+#: includes/admin/help-tab.php:40 includes/admin/help-tab.php:111
+#, php-format
 msgid ""
-"If activated, Better Search will use the Transients API to cache the search "
-"results for 1 hour."
+"<a href=\"%1$s\">Post an issue</a> on <a href=\"%2$s\">GitHub</a> (bug "
+"reports only)."
 msgstr ""
 
-#: admin/main-view.php:97
-msgid "Clear cache"
+#: includes/admin/help-tab.php:49 includes/admin/help-tab.php:120
+#: includes/admin/settings-page.php:125
+msgid "General"
 msgstr ""
 
-#: admin/main-view.php:101
-msgid "Stop search engines from indexing search results pages"
+#: includes/admin/help-tab.php:51
+msgid "This screen provides the basic settings for configuring Better Search."
 msgstr ""
 
-#: admin/main-view.php:104
+#: includes/admin/help-tab.php:52
 msgid ""
-"This is a recommended option to turn ON. Adds <code>noindex,follow</code> "
-"meta tag to the head of the page"
+"Enable tracking, seamless mode and the cache, configure basic tracker and "
+"uninstall settings."
 msgstr ""
 
-#: admin/main-view.php:108
-msgid "Link to plugin homepage"
+#: includes/admin/help-tab.php:59 includes/admin/settings-page.php:126
+#: includes/general-template.php:277
+#: includes/modules/class-bsearch-widget.php:207
+msgid "Search"
 msgstr ""
 
-#: admin/main-view.php:111
+#: includes/admin/help-tab.php:61
+msgid "This screen provides settings to tweak the search algorithm."
+msgstr ""
+
+#: includes/admin/help-tab.php:62
 msgid ""
-"A nofollow link to the plugin is added as an extra list item to the list of "
-"popular searches. Not mandatory, but thanks if you do it!"
+"Configure number of search results, enable FULLTEXT and BOOLEAN mode, tweak "
+"the weight of title and content and block words."
 msgstr ""
 
-#: admin/main-view.php:128 admin/main-view.php:255 admin/main-view.php:378
-#: admin/main-view.php:427 admin/main-view.php:445
-msgid "Save Options"
+#: includes/admin/help-tab.php:69 includes/admin/settings-page.php:127
+msgid "Heatmap"
 msgstr ""
 
-#: admin/main-view.php:138
-msgid "Search result options"
-msgstr ""
-
-#: admin/main-view.php:154
-msgid "Number of Search Results per page"
-msgstr ""
-
-#: admin/main-view.php:157
+#: includes/admin/help-tab.php:71
 msgid ""
-"This is the maximum number of search results that will be displayed per page "
-"by default"
+"This screen provides settings to tweak the output of the search heatmap to "
+"display popular searches."
 msgstr ""
 
-#: admin/main-view.php:161
-msgid "Post types to include in results (including custom post types)"
-msgstr ""
-
-#: admin/main-view.php:173
-msgid "Enable mySQL FULLTEXT searching"
-msgstr ""
-
-#: admin/main-view.php:176
-msgid "Disabling this option will no longer give relevancy based results"
-msgstr ""
-
-#: admin/main-view.php:180
-msgid "Activate BOOLEAN mode of FULLTEXT search"
-msgstr ""
-
-#: admin/main-view.php:183
+#: includes/admin/help-tab.php:72
 msgid ""
-"Limits relevancy matches but removes several limitations of NATURAL LANGUAGE "
-"mode. <a href=\"https://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html"
-"\" target=\"_blank\">Check the mySQL docs for further information on BOOLEAN "
-"indices</a>"
+"Configure title of the searches, period of trending searches, color and font "
+"sizes of the heatmap."
 msgstr ""
 
-#: admin/main-view.php:187
-msgid "Weight of the title"
+#: includes/admin/help-tab.php:79 includes/admin/settings-page.php:128
+msgid "Styles"
 msgstr ""
 
-#: admin/main-view.php:190
+#: includes/admin/help-tab.php:81
 msgid ""
-"Set this to a bigger number than the next option to prioritise the post title"
+"This screen provides options to control the look and feel of the search page."
 msgstr ""
 
-#: admin/main-view.php:194
-msgid "Weight of the content"
-msgstr ""
-
-#: admin/main-view.php:197
+#: includes/admin/help-tab.php:82
 msgid ""
-"Set this to a bigger number than the previous option to prioritise the post "
-"content"
+"Choose for default set of styles or add your own custom CSS to tweak the "
+"display of the search results page."
 msgstr ""
 
-#: admin/main-view.php:201
-msgid "Highlight search terms"
-msgstr ""
-
-#: admin/main-view.php:205
+#: includes/admin/help-tab.php:122
 msgid ""
-"If enabled, the search terms are wrapped with the class "
-"<code>bsearch_highlight</code>. You will also need to add this CSS code "
-"under custom styles box below"
+"This screen provides some tools that help maintain certain features of "
+"Better Search."
 msgstr ""
 
-#: admin/main-view.php:212
-msgid "Include thumbnails in search results"
-msgstr ""
-
-#: admin/main-view.php:215
-msgid "Displays the featured image (post thumbnail) whenever available"
-msgstr ""
-
-#: admin/main-view.php:218 admin/main-view.php:229
-msgid "This setting does not apply because Seamless mode is activated."
-msgstr ""
-
-#: admin/main-view.php:224
-msgid "Length of excerpt (in words)"
-msgstr ""
-
-#: admin/main-view.php:235
-msgid "Filter these words"
-msgstr ""
-
-#: admin/main-view.php:238
+#: includes/admin/help-tab.php:123
 msgid ""
-"Words in this list will be stripped out of the search results. Enter these "
-"as a comma-separated list."
+"Clear the cache, reset the popular posts tables plus some miscellaneous "
+"fixes for older versions of Better Search."
 msgstr ""
 
-#: admin/main-view.php:281
-msgid "Include heatmap on the search results"
-msgstr ""
-
-#: admin/main-view.php:284
+#: includes/admin/save-settings.php:51
 msgid ""
-"This option will display the heatmaps at the bottom of the search results "
-"page. Display popular searches to your visitors"
+"Settings have been reset to their default values. Reload this page to view "
+"the updated settings"
 msgstr ""
 
-#: admin/main-view.php:287
-msgid ""
-"This setting does not apply because Seamless mode is activated. You can use "
-"the Widget instead to display the popular searches"
+#: includes/admin/save-settings.php:119
+msgid "Settings updated."
 msgstr ""
 
-#: admin/main-view.php:293
-msgid "Title of Overall Popular Searches"
+#: includes/admin/settings-page.php:70
+msgid "Save Changes"
 msgstr ""
 
-#: admin/main-view.php:299
-msgid "Title of Daily Popular Searches"
+#: includes/admin/settings-page.php:79
+msgid "Do you really want to reset all these settings to their default values?"
 msgstr ""
 
-#: admin/main-view.php:305
-msgid "Daily Popular should contain searches of how many days?"
+#: includes/admin/settings-page.php:81
+msgid "Reset all settings"
 msgstr ""
 
-#: admin/main-view.php:311
-msgid "Number of search terms to display"
-msgstr ""
-
-#: admin/main-view.php:317
-msgid "Font size of least popular search term"
-msgstr ""
-
-#: admin/main-view.php:323
-msgid "Font size of most popular search term"
-msgstr ""
-
-#: admin/main-view.php:329
-msgid "Color of least popular search term"
-msgstr ""
-
-#: admin/main-view.php:335
-msgid "Color of most popular search term"
-msgstr ""
-
-#: admin/main-view.php:341
-msgid "Text to include before each search term in heatmap"
-msgstr ""
-
-#: admin/main-view.php:347
-msgid "Text to include after each search term in heatmap"
-msgstr ""
-
-#: admin/main-view.php:353
-msgid "Open links in new window"
-msgstr ""
-
-#: admin/main-view.php:359
-msgid "Add nofollow attribute to links"
-msgstr ""
-
-#: admin/main-view.php:388
-msgid "Custom CSS"
-msgstr ""
-
-#: admin/main-view.php:404
-msgid "Custom CSS to add to header"
-msgstr ""
-
-#: admin/main-view.php:410
-msgid ""
-"Do not include <code>style</code> tags. Check out the <a href=\"http://"
-"wordpress.org/extend/plugins/better-search/faq/\" target=\"_blank\">FAQ</a> "
-"for available CSS classes to style."
-msgstr ""
-
-#: admin/main-view.php:446
-msgid "Default Options"
-msgstr ""
-
-#: admin/main-view.php:446
-msgid "Do you want to set options to Default?"
-msgstr ""
-
-#: admin/main-view.php:455
-msgid "Reset count and Maintenance"
-msgstr ""
-
-#: admin/main-view.php:458
-msgid ""
-"This cannot be reversed. Make sure that your database has been backed up "
-"before proceeding"
-msgstr ""
-
-#: admin/main-view.php:461
-msgid "Reset Popular Searches"
-msgstr ""
-
-#: admin/main-view.php:461
-msgid "Are you sure you want to reset the popular posts?"
-msgstr ""
-
-#: admin/main-view.php:462
-msgid "Reset Daily Popular Searches"
-msgstr ""
-
-#: admin/main-view.php:462
-msgid "Are you sure you want to reset the daily popular posts?"
-msgstr ""
-
-#: admin/main-view.php:463
-msgid "Recreate Index"
-msgstr ""
-
-#: admin/main-view.php:463
-msgid "Are you sure you want to recreate the index?"
-msgstr ""
-
-#: better-search.php:137 better-search.php:139
-msgid "Posted on: "
-msgstr ""
-
-#: better-search.php:163
-msgid "No results."
-msgstr ""
-
-#: better-search.php:168
-msgid ""
-"Please type in your search terms. Use descriptive words since this search is "
-"intelligent."
-msgstr ""
-
-#: better-search.php:174
-msgid "Powered by "
-msgstr ""
-
-#: better-search.php:421
+#: includes/deprecated.php:31
 msgid "<h3>Popular Searches</h3>"
 msgstr ""
 
-#: better-search.php:422
+#: includes/deprecated.php:32
 msgid "<h3>Weekly Popular Searches</h3>"
 msgstr ""
 
-#: includes/general-template.php:43
+#: includes/general-template.php:44
 #, php-format
 msgid ""
 "Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</"
 "strong>"
 msgstr ""
 
-#: includes/general-template.php:48
+#: includes/general-template.php:50
 #, php-format
 msgid "Page <strong>%1$s</strong> of <strong>%2$s</strong>"
 msgstr ""
 
-#: includes/general-template.php:58
+#: includes/general-template.php:60
 msgid "Results per-page"
 msgstr ""
 
-#: includes/general-template.php:103
+#: includes/general-template.php:105
 msgid "Previous"
 msgstr ""
 
-#: includes/general-template.php:131
+#: includes/general-template.php:133
 msgid "Next"
 msgstr ""
 
-#: includes/general-template.php:166
+#: includes/general-template.php:168
 msgid "Relevance: "
 msgstr ""
 
-#: includes/general-template.php:272
+#: includes/general-template.php:275
 msgid "Search for:"
 msgstr ""
 
-#: includes/general-template.php:274 includes/modules/class-widget.php:180
-msgid "Search"
+#: includes/main-functions.php:75 includes/main-functions.php:77
+msgid "Posted on: "
 msgstr ""
 
-#: includes/modules/class-widget.php:29
+#: includes/main-functions.php:101
+msgid "No results."
+msgstr ""
+
+#: includes/main-functions.php:106
+msgid ""
+"Please type in your search terms. Use descriptive words since this search is "
+"intelligent."
+msgstr ""
+
+#: includes/main-functions.php:112
+msgid "Powered by "
+msgstr ""
+
+#: includes/modules/cache.php:33
+msgid "Better Search cache has been cleared"
+msgstr ""
+
+#: includes/modules/class-bsearch-widget.php:29
 msgid "Popular Searches [Better Search]"
 msgstr ""
 
-#: includes/modules/class-widget.php:30
+#: includes/modules/class-bsearch-widget.php:30
 msgid "Display the popular searches"
 msgstr ""
 
-#: includes/modules/class-widget.php:48
+#: includes/modules/class-bsearch-widget.php:48
 msgid "Title"
 msgstr ""
 
-#: includes/modules/class-widget.php:53
+#: includes/modules/class-bsearch-widget.php:58
 msgid "Overall"
 msgstr ""
 
-#: includes/modules/class-widget.php:54
+#: includes/modules/class-bsearch-widget.php:64
 msgid "Custom time period (Enter below)"
 msgstr ""
 
-#: includes/modules/class-widget.php:59
+#: includes/modules/class-bsearch-widget.php:69
 msgid "Range in number of days (applies only to custom option above)"
 msgstr ""
 
-#: includes/modules/class-widget.php:154
+#: includes/modules/class-bsearch-widget.php:176
 msgid "Search Form [Better Search]"
 msgstr ""
 
-#: includes/modules/class-widget.php:155
+#: includes/modules/class-bsearch-widget.php:177
 msgid "Search Form"
 msgstr ""
 
-#: includes/modules/class-widget.php:183
+#: includes/modules/class-bsearch-widget.php:210
 msgid "Title:"
 msgstr ""
 
-#: includes/modules/heatmap.php:155
+#: includes/modules/heatmap.php:156
 msgid "No searches made yet"
 msgstr ""
 
 #: includes/template-redirect.php:120
 #, php-format
-msgid "Search Results for \"%s\" | %s"
+msgid "Search Results for \"%1$s\" | %2$s"
 msgstr ""
 
-#: templates/better-search-template.php:18
+#: templates/better-search-template.php:20
 #, php-format
 msgid "BS TEMPLATE Search Results for: %s"
 msgstr ""
