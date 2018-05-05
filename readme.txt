@@ -33,7 +33,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 
 
 = Contribute =
-Better Search is also available on [Github](https://github.com/ajaydsouza/better-search)
+Better Search is also available on [Github](https://github.com/WebberZone/better-search)
 So, if you've got some cool feature that you'd like to implement into the plugin or a bug you've been able to fix, consider forking the project and sending me a pull request.
 
 

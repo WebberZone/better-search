@@ -22,7 +22,7 @@
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path: /languages
- * GitHub Plugin URI: https://github.com/ajaydsouza/better-search/
+ * GitHub Plugin URI: https://github.com/WebberZone/better-search/
  */
 
 // If this file is called directly, then abort execution.
