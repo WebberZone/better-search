@@ -266,7 +266,7 @@ function bsearch_textarea_callback( $args ) {
 		$value = isset( $args['options'] ) ? $args['options'] : '';
 	}
 
-	$html  = sprintf( '<textarea class="large-text" cols="50" rows="5" id="bsearch_settings[%1$s]" name="bsearch_settings[%1$s]">%2$s</textarea>', sanitize_key( $args['id'] ), esc_textarea( stripslashes( $value ) ) );
+	$html  = sprintf( '<textarea class="large-text" cols="50" rows="10" id="bsearch_settings[%1$s]" name="bsearch_settings[%1$s]">%2$s</textarea>', sanitize_key( $args['id'] ), esc_textarea( stripslashes( $value ) ) );
 	$html .= '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
 
 	/** This filter has been defined in settings-page.php */
