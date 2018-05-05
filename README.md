@@ -9,11 +9,11 @@ __Requires:__ 4.0
 
 __Tested up to:__ 4.9
 
-__License:__ [GPL-2.0+](http://www.gnu.org/licenses/gpl-2.0.html)
+__License:__ [GPL-2.0+](https://www.gnu.org/licenses/gpl-2.0.html)
 
-__Plugin page:__ [Better Search](https://webberzone.com/plugins/better-search/)
+__Plugin page:__ [Better Search](https://webberzone.com/plugins/better-search/) | [WordPress.org plugin page](https://wordpress.org/plugins/better-search/)
 
-Better Search replaces the default WordPress search with a better search that gives contextual results sorted by relevance
+Better Search replaces the default WordPress search with a better search engine that gives contextual results sorted by relevance
 
 ## Description
 
@@ -22,6 +22,8 @@ Better Search replaces the default WordPress search with a better search that gi
 Better Search can search through not just posts, but also pages and other custom post types. Let your visitors find what they are looking for.
 
 The plugin is packed with options to allow you to easily customise the output. You can also fine tune the results by assigning a greater weight to either the title or the content. The default mode is a seamless integration with your WordPress theme. And, for power users, Better Search supports templates for that extra something.
+
+And for even more advanced users, Better Search is packed with filters and actions that allow you to easily extend the plugin's feature set.
 
 Additionally, the plugin also tracks the searches and you to display a "search heatmap" of the most popular searches. Support for WordPress widgets will allow you to easily add this heatmap to your theme's sidebar or footer.
 
@@ -42,7 +44,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 ![General Options](https://raw.github.com/ajaydsouza/better-search/master/assets/screenshot-1.png)
 _Better Search settings page - General Options._
 
-For more screenshots visit the [WordPress.org screenshots page](http://wordpress.org/plugins/better-search/screenshots/)
+For more screenshots visit the [WordPress.org screenshots page](https://wordpress.org/plugins/better-search/screenshots/)
 
 ## Installation
 
@@ -68,6 +70,6 @@ Alternatively, search for **Better Search** from Plugins &raquo; Add New within 
 
 ## Frequently Asked Questions
 
-Check out the [FAQ on the plugin page](http://wordpress.org/plugins/better-search/faq/) for a detailed list of questions and answers
+Check out the [FAQ on the plugin page](https://wordpress.org/plugins/better-search/faq/) for a detailed list of questions and answers
 
-If your question isn't listed there, please create a new post in the [WordPress.org support forum](http://wordpress.org/support/plugin/better-search). I monitor the forums on an ongoing basis. If you're looking for more advanced _paid_ support, please see [details here](https://webberzone.com/support/).
+If your question isn't listed there, please create a new post in the [WordPress.org support forum](https://wordpress.org/support/plugin/better-search). I monitor the forums regularly. If you're looking for more advanced _paid_ support, please see [details here](https://webberzone.com/support/).
