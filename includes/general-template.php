@@ -26,7 +26,7 @@ function get_bsearch_header( $search_query, $numrows, $limit ) {
 		$pages++;   // If remainder so add one page.
 	}
 
-	if ( ( $pages < 1 ) || ( 0 == $pages ) ) {
+	if ( ( $pages < 1 ) || ( 0 == $pages ) ) { // WPCS: loose comparison ok.
 		$total = 1; // If $pages is less than one or equal to 0, total pages is 1.
 	} else {
 		$total = $pages;    // Else total pages is $pages value.
@@ -39,14 +39,17 @@ function get_bsearch_header( $search_query, $numrows, $limit ) {
 	$output .= '<table width="100%" border="0" class="bsearch_nav">
 	 <tr class="bsearch_nav_row1">
 	  <td width="50%" style="text-align:left">';
+
+	/* translators: 1: First, 2: Last, 3: Number of rows */
 	$output .= sprintf( __( 'Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</strong>', 'better-search' ), $first, $last, $numrows );
 
 	$output .= '
 	  </td>
 	  <td width="50%" style="text-align:right">';
+	/* translators: 1: Current page number, 2: Total pages */
 	$output .= sprintf( __( 'Page <strong>%1$s</strong> of <strong>%2$s</strong>', 'better-search' ), $current, $total );
 
-	$sencoded = urlencode( $search_query );
+	$sencoded = rawurlencode( $search_query );
 
 	$output .= '
 	  </td>
@@ -93,10 +96,10 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 		$pages++;   // If remainder so add one page.
 	}
 
-	$search_query = urlencode( $search_query );
+	$search_query = rawurlencode( $search_query );
 
 	$output = '<p class="bsearch_footer">';
-	if ( 0 != $page ) { // Don't show back link if current page is first page.
+	if ( 0 != $page ) { // WPCS: loose comparison ok.
 		$back_page = $page - $limit;
 		$output   .= '<a href="' . home_url() . "/?s=$search_query&limit=$limit&bpaged=$back_page\">&laquo; ";
 		$output   .= __( 'Previous', 'better-search' );
@@ -108,7 +111,7 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 	for ( $i = 1; $i <= $pages; $i++ ) { // loop through each page and give link to it.
 		$current = ( $match_range[0] / $limit ) + 1; // Current page number.
 		if ( $i >= $current + $pagination_range && $i < $pages ) {
-			if ( $i == $current + $pagination_range ) {
+			if ( $i == $current + $pagination_range ) { // WPCS: loose comparison ok.
 				$output .= '&hellip;&nbsp;';
 			}
 			continue;
@@ -117,14 +120,14 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 			continue;
 		}
 		$ppage = $limit * ( $i - 1 );
-		if ( $ppage == $page ) {
+		if ( $ppage == $page ) { // WPCS: loose comparison ok.
 			$output .= "<b>$i</b>\n";   // If current page don't give link, just text.
 		} else {
 			$output .= '<a href="' . home_url() . "/?s=$search_query&limit=$limit&bpaged=$ppage\">$i</a> \n";
 		}
 	}
 
-	if ( ! ( ( ( $page + $limit ) / $limit ) >= $pages ) && 1 != $pages ) { // If last page don't give next link.
+	if ( ! ( ( ( $page + $limit ) / $limit ) >= $pages ) && 1 != $pages ) { // WPCS: loose comparison ok.
 		$next_page = $page + $limit;
 		$output   .= '    <a href="' . home_url() . "/?s=$search_query&limit=$limit&bpaged=$next_page\">";
 		$output   .= __( 'Next', 'better-search' );
@@ -229,7 +232,7 @@ function get_bsearch_excerpt( $id, $excerpt_length = 0, $use_excerpt = true ) {
 	if ( $use_excerpt ) {
 		$content = get_post( $id )->post_excerpt;
 	}
-	if ( '' == $content ) {
+	if ( '' == $content ) { // WPCS: loose comparison ok.
 		$content = get_post( $id )->post_content;
 	}
 
