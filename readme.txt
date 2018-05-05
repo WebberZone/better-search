@@ -8,7 +8,7 @@ Tested up to: 4.9
 License: GPLv2 or later
 
 
-Better Search replaces the default WordPress search with a better search that gives contextual results sorted by relevance
+Better Search replaces the default WordPress search with a better search engine that gives contextual results sorted by relevance
 
 == Description ==
 
@@ -17,6 +17,8 @@ Better Search replaces the default WordPress search with a better search that gi
 Better Search can search through not just posts, but also pages and other custom post types. Let your visitors find what they are looking for.
 
 The plugin is packed with options to allow you to easily customise the output. You can also fine tune the results by assigning a greater weight to either the title or the content. The default mode is a seamless integration with your WordPress theme. And, for power users, Better Search supports templates for that extra something.
+
+And for even more advanced users, Better Search is packed with filters and actions that allow you to easily extend the plugin's feature set.
 
 Additionally, the plugin also tracks the searches and you to display a "search heatmap" of the most popular searches. Support for WordPress widgets will allow you to easily add this heatmap to your theme's sidebar or footer.
 
@@ -72,7 +74,7 @@ So, if you've got some cool feature that you'd like to implement into the plugin
 
 == Frequently Asked Questions ==
 
-If your question isn't listed there, please create a new post in the [WordPress.org support forum](http://wordpress.org/support/plugin/better-search). I monitor the forums on an ongoing basis. If you're looking for more advanced _paid_ support, please see [details here](https://webberzone.com/support/).
+If your question isn't listed there, please create a new post in the [WordPress.org support forum](https://wordpress.org/support/plugin/better-search). I monitor the forums regularly. If you're looking for more advanced _paid_ support, please see [details here](https://webberzone.com/support/).
 
 = Can I customize the output? =
 
@@ -82,38 +84,11 @@ The plugin also supports the use of template files within your theme. You can cr
 
 = My search words are getting filtered or *How does the profanity filter work* =
 
-Better Search includes a very cool profanity filter using the script from <a href-"http://banbuilder.com/">Banbuilder</a>. You can customise which list of words you want to filter out from the Better Search settings page. Find the setting called "Filter these words:". The plugin will automatically strip out both partial and complete references of these words.
+Better Search includes a very cool profanity filter using the script from [Banbuilder](https://banbuilder.com/). You can customise which list of words you want to filter out from the Better Search settings page. Find the setting called "Filter these words:". The plugin will automatically strip out both partial and complete references of these words.
 You can turn the filter off by emptying the list.
 
-Know of a better profanity filter? Suggest one in the [forums](http://wordpress.org/support/plugin/better-search).
+Know of a better profanity filter? Suggest one in the [forums](https://wordpress.org/support/plugin/better-search).
 
-= Functions =
-
-**get_bsearch_heatmap**
-
-Returns a formatted heatmap of popular searches. You can use this function in your search template or anywhere in your WordPress theme pages.
-
-Example Usage:
-
-`
-<?php if function_exists( 'get_bsearch_heatmap' ) {
-	$args = array(
-		'daily' => FALSE,
-		'smallest' => '10',			// Heatmap - Smallest Font Size
-		'largest' => '20',			// Heatmap - Largest Font Size
-		'unit' => 'pt',				// Heatmap - We'll use pt for font size
-		'cold' => 'ccc',			// Heatmap - cold searches
-		'hot' => '000',				// Heatmap - hot searches
-		'before' => '',				// Heatmap - Display before each search term
-		'after' => '&nbsp;',		// Heatmap - Display after each search term
-		'heatmap_limit' => '30',	// Heatmap - Maximum number of searches to display in heatmap
-		'daily_range' => '7',		// Daily Popular will contain posts of how many days?
-	);
-
-	echo get_bsearch_heatmap( $args );
-}
-
-`
 
 == Changelog ==
 
@@ -181,7 +156,6 @@ For previous changelog entries, please refer to the separate changelog.txt file
 
 == Upgrade Notice ==
 
-= 2.1.0 =
-* New features and bug fixes. Upgrade highly recommended. Please do verify your settings after the upgrade.
-Check the Changelog for details
+= 2.2.0 =
+* New settings interface. Please verify settings on upgrade. For details on the update check the changelog and release post on https://webberzone.com
 
