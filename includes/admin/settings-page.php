@@ -649,7 +649,8 @@ function bsearch_tags_search() {
 	}
 
 	$results = get_terms(
-		$taxonomy, array(
+		$taxonomy,
+		array(
 			'name__like' => $s,
 			'fields'     => 'names',
 			'hide_empty' => false,

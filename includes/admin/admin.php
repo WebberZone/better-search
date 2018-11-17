@@ -56,7 +56,7 @@ function bsearch_adminhead() {
 	wp_enqueue_script( 'plugin-install' );
 	wp_enqueue_script( 'jscolor', BETTER_SEARCH_PLUGIN_URL . 'includes/admin/jscolor/jscolor.js' );
 	add_thickbox();
-?>
+	?>
 	<script type="text/javascript">
 	//<![CDATA[
 		// Function to clear the cache.
@@ -198,7 +198,7 @@ function bsearch_adminhead() {
 
 	//]]>
 	</script>
-<?php
+	<?php
 }
 
 

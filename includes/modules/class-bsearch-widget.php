@@ -54,13 +54,13 @@ class BSearch_Widget extends WP_Widget {
 				<?php
 				if ( 'overall' === $daily ) {
 					echo 'selected="selected"'; }
-?>
+				?>
 ><?php _e( 'Overall', 'better-search' ); ?></option>
 				<option value="daily"
 				<?php
 				if ( 'daily' === $daily ) {
 					echo 'selected="selected"'; }
-?>
+				?>
 ><?php _e( 'Custom time period (Enter below)', 'better-search' ); ?></option>
 			</select>
 		</p>

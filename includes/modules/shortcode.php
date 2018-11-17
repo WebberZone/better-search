@@ -27,7 +27,9 @@ function bsearch_heatmap_func( $atts ) {
 			'after'         => bsearch_get_option( 'heatmap_after' ),
 			'heatmap_limit' => intval( bsearch_get_option( 'heatmap_limit' ) ),
 			'daily_range'   => intval( bsearch_get_option( 'daily_range' ) ),
-		), $atts, 'bsearch_heatmap'
+		),
+		$atts,
+		'bsearch_heatmap'
 	);
 
 	return get_bsearch_heatmap( $atts );

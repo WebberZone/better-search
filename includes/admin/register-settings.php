@@ -176,7 +176,8 @@ function bsearch_register_settings() {
 		foreach ( $settings as $setting ) {
 
 			$args = wp_parse_args(
-				$setting, array(
+				$setting,
+				array(
 					'section'          => $section,
 					'id'               => null,
 					'name'             => '',
