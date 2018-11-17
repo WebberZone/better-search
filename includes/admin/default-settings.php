@@ -26,7 +26,8 @@ function bsearch_get_registered_settings() {
 	$bsearch_settings = array(
 		/*** General settings */
 		'general' => apply_filters(
-			'bsearch_settings_general', array(
+			'bsearch_settings_general',
+			array(
 				'seamless'      => array(
 					'id'      => 'seamless',
 					'name'    => esc_html__( 'Enable seamless integration', 'better-search' ),
@@ -80,7 +81,8 @@ function bsearch_get_registered_settings() {
 		),
 		/*** Search settings */
 		'search'  => apply_filters(
-			'bsearch_settings_search', array(
+			'bsearch_settings_search',
+			array(
 				'limit'                   => array(
 					'id'      => 'limit',
 					'name'    => esc_html__( 'Number of Search Results per page', 'better-search' ),
@@ -174,7 +176,8 @@ function bsearch_get_registered_settings() {
 		),
 		/*** Heatmap settings */
 		'heatmap' => apply_filters(
-			'bsearch_settings_heatmap', array(
+			'bsearch_settings_heatmap',
+			array(
 				'include_heatmap'  => array(
 					'id'      => 'include_heatmap',
 					'name'    => esc_html__( 'Include heatmap on the search results', 'better-search' ),
@@ -278,7 +281,8 @@ function bsearch_get_registered_settings() {
 		),
 		/*** Styles settings */
 		'styles'  => apply_filters(
-			'bsearch_settings_styles', array(
+			'bsearch_settings_styles',
+			array(
 				'custom_css' => array(
 					'id'      => 'custom_css',
 					'name'    => esc_html__( 'Custom CSS', 'better-search' ),
