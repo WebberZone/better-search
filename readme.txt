@@ -156,6 +156,6 @@ For previous changelog entries, please refer to the separate changelog.txt file
 
 == Upgrade Notice ==
 
-= 2.2.0 =
-* New settings interface. Please verify settings on upgrade. For details on the update check the changelog and release post on https://webberzone.com
+= 2.2.1 =
+Bug fix release. For details on the update check the changelog and release post on https://webberzone.com
 
