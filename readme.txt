@@ -92,6 +92,11 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
+= 2.2.1 =
+
+* Bug fixes:
+	* Fixed "Fatal error: Can't use function return value in write context"
+
 = 2.2.0 =
 
 * Features:
