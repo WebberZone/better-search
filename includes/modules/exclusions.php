@@ -39,7 +39,7 @@ function bsearch_exclude_post_ids( $where ) {
 
 	$exclude_post_ids = bsearch_get_option( 'exclude_post_ids' );
 
-	if ( ! empty( bsearch_get_option( 'exclude_post_ids' ) ) ) {
+	if ( ! empty( $exclude_post_ids ) ) {
 		$where .= " AND {$wpdb->posts}.ID NOT IN ({$exclude_post_ids}) ";
 	}
 
