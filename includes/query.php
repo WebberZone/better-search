@@ -99,8 +99,8 @@ function bsearch_posts_match_field( $search_query, $args = array() ) {
 			$weight_content,
 		);
 
-		$field_score  = ", (MATCH(post_title) AGAINST ('%s' {$boolean_mode} ) * %d ) + ";
-		$field_score .= "(MATCH(post_content) AGAINST ('%s' {$boolean_mode} ) * %d ) ";
+		$field_score  = ", (MATCH({$wpdb->posts}.post_title) AGAINST ('%s' {$boolean_mode} ) * %d ) + ";
+		$field_score .= "(MATCH({$wpdb->posts}.post_content) AGAINST ('%s' {$boolean_mode} ) * %d ) ";
 		$field_score  = $wpdb->prepare( $field_score, $field_args ); // WPCS: unprepared SQL ok.
 	} else {
 		$field_score = ', 0 ';
@@ -175,7 +175,7 @@ function bsearch_posts_match( $search_query, $args = array() ) {
 	$boolean_mode = $args['boolean_mode'];
 
 	// Construct the MATCH part of the WHERE clause.
-	$match = " AND MATCH (post_title,post_content) AGAINST ('%s' {$boolean_mode} ) ";
+	$match = " AND MATCH ({$wpdb->posts}.post_title,{$wpdb->posts}.post_content) AGAINST ('%s' {$boolean_mode} ) ";
 
 	$match = $wpdb->prepare( $match, $search_query ); // WPCS: unprepared SQL ok.
 
@@ -218,21 +218,21 @@ function bsearch_posts_where( $search_info, $args = array() ) {
 		// Create the WHERE Clause.
 		$where  = ' AND ( ';
 		$where .= $wpdb->prepare(
-			' ((post_title LIKE %s) OR (post_content LIKE %s)) ',
+			' (({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s)) ',
 			$n . $search_terms[0] . $n,
 			$n . $search_terms[0] . $n
 		);
 
 		for ( $i = 1; $i < $no_search_terms; $i++ ) {
 			$where .= $wpdb->prepare(
-				' AND ((post_title LIKE %s) OR (post_content LIKE %s)) ',
+				' AND (({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s)) ',
 				$n . $search_terms[ $i ] . $n,
 				$n . $search_terms[ $i ] . $n
 			);
 		}
 
 		$where .= $wpdb->prepare(
-			' OR (post_title LIKE %s) OR (post_content LIKE %s) ',
+			' OR ({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s) ',
 			$n . $search_terms[0] . $n,
 			$n . $search_terms[0] . $n
 		);
@@ -244,7 +244,7 @@ function bsearch_posts_where( $search_info, $args = array() ) {
 		$where = bsearch_posts_match( $search_info[0], $args );
 	}
 
-	$where .= " AND (post_status = 'publish' OR post_status = 'inherit')";
+	$where .= " AND ({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'inherit')";
 
 	// Array of post types.
 	if ( $args['post_types'] ) {
