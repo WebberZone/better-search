@@ -24,19 +24,19 @@ function bsearch_clean_terms( $val ) {
 
 	$badwords = array_map( 'trim', explode( ',', bsearch_get_option( 'badwords' ) ) );
 
-	$censorChar = ' ';
+	$censor_char = ' ';
 
 	/**
 	 * Allow the censored character to be replaced.
 	 *
 	 * @since   2.1.0
 	 *
-	 * @param   string  $censorChar Censored character
+	 * @param   string  $censor_char Censored character
 	 * @param   string  $val        Raw search string
 	 */
-	$censorChar = apply_filters( 'bsearch_censor_char', $censorChar, $val );
+	$censor_char = apply_filters( 'bsearch_censor_char', $censor_char, $val );
 
-	$val_censored = bsearch_censor_string( $val, $badwords, $censorChar );  // No more bad words.
+	$val_censored = bsearch_censor_string( $val, $badwords, $censor_char );  // No more bad words.
 	$val          = $val_censored['clean'];
 
 	$val = addslashes_gpc( $val );
@@ -66,36 +66,26 @@ add_filter( 'get_search_query', 'bsearch_clean_terms' );
  */
 function bsearch_rand_censor( $chars, $len ) {
 
-	mt_srand(); // useful for < PHP4.2.
-	$lastChar = strlen( $chars ) - 1;
-	$randOld  = -1;
-	$out      = '';
-
-	// Create $len chars.
-	for ( $i = $len; $i > 0; $i-- ) {
-		// Generate random char - it must be different from previously generated.
-		while ( ( $randNew = mt_rand( 0, $lastChar ) ) === $randOld ) {
-		}
-		$randOld = $randNew;
-		$out    .= $chars[ $randNew ];
+	$output = '';
+	for ( $i = 0; $i < $len; $i++ ) {
+		$output .= substr( $chars, wp_rand( 0, strlen( $chars ) - 1 ), 1 );
 	}
 
-	return $out;
-
+	return $output;
 }
 
 
 /**
- * Apply censorship to $string, replacing $badwords with $censorChar.
+ * Apply censorship to $string, replacing $badwords with $censor_char.
  *
  * @since   1.3.3
  *
  * @param   string $string     String to be censored.
  * @param   array  $badwords   Array of badwords.
- * @param   string $censorChar String which replaces bad words. If it's more than 1-char long, a random string will be generated from these chars. Default: '*'.
+ * @param   string $censor_char String which replaces bad words. If it's more than 1-char long, a random string will be generated from these chars. Default: '*'.
  * @return  string  Cleaned up string
  */
-function bsearch_censor_string( $string, $badwords, $censorChar = '*' ) {
+function bsearch_censor_string( $string, $badwords, $censor_char = '*' ) {
 
 	$leet_replace      = array();
 	$leet_replace['a'] = '(a|a\.|a\-|4|@|Á|á|À|Â|à|Â|â|Ä|ä|Ã|ã|Å|å|α|Δ|Λ|λ)';
@@ -127,14 +117,17 @@ function bsearch_censor_string( $string, $badwords, $censorChar = '*' ) {
 
 	$words = explode( ' ', $string );
 
-	// is $censorChar a single char?
-	$isOneChar = ( strlen( $censorChar ) === 1 );
+	// is $censor_char a single char?
+	$is_one_char = ( strlen( $censor_char ) === 1 );
 
-	for ( $x = 0; $x < count( $badwords ); $x++ ) {
+	// Count the bad words.
+	$no_of_badwords = count( $badwords );
 
-		$replacement[ $x ] = $isOneChar
-			? str_repeat( $censorChar, strlen( $badwords[ $x ] ) )
-			: bsearch_rand_censor( $censorChar, strlen( $badwords[ $x ] ) );
+	for ( $x = 0; $x < $no_of_badwords; $x++ ) {
+
+		$replacement[ $x ] = $is_one_char
+			? str_repeat( $censor_char, strlen( $badwords[ $x ] ) )
+			: bsearch_rand_censor( $censor_char, strlen( $badwords[ $x ] ) );
 
 		$badwords[ $x ] = '/' . str_ireplace( array_keys( $leet_replace ), array_values( $leet_replace ), $badwords[ $x ] ) . '/i';
 	}
@@ -162,13 +155,13 @@ function bsearch_html2rgb( $color ) {
 		$color = substr( $color, 1 );
 	}
 
-	if ( 6 == strlen( $color ) ) {
+	if ( 6 === (int) strlen( $color ) ) {
 		list( $r, $g, $b ) = array(
 			$color[0] . $color[1],
 			$color[2] . $color[3],
 			$color[4] . $color[5],
 		);
-	} elseif ( 3 == strlen( $color ) ) {
+	} elseif ( 3 === (int) strlen( $color ) ) {
 		list( $r, $g, $b ) = array(
 			$color[0] . $color[0],
 			$color[1] . $color[1],
@@ -199,7 +192,7 @@ function bsearch_html2rgb( $color ) {
  */
 function bsearch_rgb2html( $r, $g = -1, $b = -1, $padhash = false ) {
 
-	if ( is_array( $r ) && count( $r ) == 3 ) {    // If $r is an array, extract the RGB values.
+	if ( is_array( $r ) && 3 === count( $r ) ) {    // If $r is an array, extract the RGB values.
 		list( $r, $g, $b ) = $r;
 	}
 
