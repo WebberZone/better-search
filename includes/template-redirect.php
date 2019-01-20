@@ -12,10 +12,14 @@
  * If search template is missing, generates the results below
  *
  * @since   1.0
+ *
+ * @param string $template Search template to use.
  */
 function bsearch_template_redirect( $template ) {
 	// Not a search page; don't do anything and return.
-	if ( ( stripos( $_SERVER['REQUEST_URI'], '?s=' ) === false ) && ( stripos( $_SERVER['REQUEST_URI'], '/search/' ) === false ) && ( ! is_search() ) ) {
+	if ( ( isset( $_SERVER['REQUEST_URI'] ) && stripos( wp_unslash( $_SERVER['REQUEST_URI'] ), '?s=' ) === false )  // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		&& ( isset( $_SERVER['REQUEST_URI'] ) && stripos( wp_unslash( $_SERVER['REQUEST_URI'] ), '/search/' ) === false )  // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		&& ( ! is_search() ) ) {
 		return $template;
 	}
 
@@ -34,12 +38,12 @@ function bsearch_template_redirect( $template ) {
 	}
 
 	// Change status code to 200 OK since /search/ returns status code 404.
-	@header( 'HTTP/1.1 200 OK', 1 );
-	@header( 'Status: 200 OK', 1 );
+	@header( 'HTTP/1.1 200 OK', 1 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+	@header( 'Status: 200 OK', 1 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
 	$search_query = get_bsearch_query();
 
-	$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // Read from GET variable.
+	$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	// Added necessary code to the head.
 	add_action( 'wp_head', 'bsearch_head' );
@@ -79,16 +83,17 @@ function bsearch_head() {
 
 	$search_query = get_bsearch_query();
 
-	$limit  = ( isset( $_GET['limit'] ) ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // Read from GET variable.
-	$bpaged = ( isset( $_GET['bpaged'] ) ) ? intval( $_GET['bpaged'] ) : 0; // Read from GET variable.
+	$limit  = ( isset( $_GET['limit'] ) ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$bpaged = ( isset( $_GET['bpaged'] ) ) ? intval( $_GET['bpaged'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	if ( ! $bpaged && bsearch_get_option( 'track_popular' ) ) {
-		echo bsearch_increment_counter( $search_query );    // Increment the count if we are on the first page of the results.
+		// Increment the count if we are on the first page of the results.
+		echo bsearch_increment_counter( $search_query ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	// Add custom CSS to header.
-	if ( ( '' != $bsearch_custom_css ) && is_search() ) {
-		echo '<style type="text/css">' . $bsearch_custom_css . '</style>';
+	if ( ( '' != $bsearch_custom_css ) && is_search() ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+		echo '<style type="text/css">' . $bsearch_custom_css . '</style>'; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	// Add noindex to search results page.
@@ -116,7 +121,7 @@ function bsearch_title( $title ) {
 	$search_query = get_bsearch_query();
 
 	if ( isset( $search_query ) ) {
-
+		/* translators: 1: search query, 2: title of the page */
 		$bsearch_title = sprintf( __( 'Search Results for "%1$s" | %2$s', 'better-search' ), $search_query, $title );
 
 	}

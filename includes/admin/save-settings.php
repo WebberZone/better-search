@@ -31,18 +31,18 @@ function bsearch_settings_sanitize( $input = array() ) {
 	global $bsearch_settings;
 
 	// This should be set if a form is submitted, so let's save it in the $referrer variable.
-	if ( empty( $_POST['_wp_http_referer'] ) ) { // WPCS: CSRF ok.
+	if ( empty( $_POST['_wp_http_referer'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		return $input;
 	}
 
-	parse_str( sanitize_text_field( wp_unslash( $_POST['_wp_http_referer'] ) ), $referrer ); // WPCS: CSRF ok.
+	parse_str( sanitize_text_field( wp_unslash( $_POST['_wp_http_referer'] ) ), $referrer ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 	// Get the various settings we've registered.
 	$settings       = bsearch_get_registered_settings();
 	$settings_types = bsearch_get_registered_settings_types();
 
 	// Check if we need to set to defaults.
-	$reset = isset( $_POST['settings_reset'] ); // WPCS: CSRF ok.
+	$reset = isset( $_POST['settings_reset'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 	if ( $reset ) {
 		bsearch_settings_reset();

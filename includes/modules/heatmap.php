@@ -74,7 +74,7 @@ function get_bsearch_heatmap( $args = array() ) {
 		";
 	}
 
-	$results = $wpdb->get_results( $wpdb->prepare( $sql, $sargs ) ); // WPCS: unprepared SQL ok.
+	$results = $wpdb->get_results( $wpdb->prepare( $sql, $sargs ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	if ( $results ) {
 		foreach ( $results as $result ) {
@@ -89,9 +89,9 @@ function get_bsearch_heatmap( $args = array() ) {
 		$spread = $max - $min;
 
 		// Calculate various font sizes.
-		if ( $args['largest'] != $args['smallest'] ) {
+		if ( $args['largest'] != $args['smallest'] ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 			$fontspread = $args['largest'] - $args['smallest'];
-			if ( 0 != $spread ) {
+			if ( 0 != $spread ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 				$fontstep = $fontspread / $spread;
 			} else {
 				$fontstep = 0;
@@ -99,14 +99,14 @@ function get_bsearch_heatmap( $args = array() ) {
 		}
 
 		// Calculate colors.
-		if ( $args['hot'] != $args['cold'] ) {
+		if ( $args['hot'] != $args['cold'] ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 			$hotdec  = bsearch_html2rgb( $args['hot'] );
 			$colddec = bsearch_html2rgb( $args['cold'] );
 			for ( $i = 0; $i < 3; $i++ ) {
 				$coldval[]     = $colddec[ $i ];
 				$hotval[]      = $hotdec[ $i ];
 				$colorspread[] = $hotdec[ $i ] - $colddec[ $i ];
-				if ( 0 != $spread ) {
+				if ( 0 != $spread ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 					$colorstep[] = ( $hotdec[ $i ] - $colddec[ $i ] ) / $spread;
 				} else {
 					$colorstep[] = 0;
@@ -132,10 +132,10 @@ function get_bsearch_heatmap( $args = array() ) {
 				$color .= dechex( $coldval[ $i ] + ( $colorstep[ $i ] * $fraction ) );
 			}
 			$style = 'style="';
-			if ( $args['largest'] != $args['smallest'] ) {
+			if ( $args['largest'] != $args['smallest'] ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 				$style .= 'font-size:' . round( $fontsize ) . $args['unit'] . ';';
 			}
-			if ( $args['hot'] != $args['cold'] ) {
+			if ( $args['hot'] != $args['cold'] ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 				$style .= 'color:#' . $color . ';';
 			}
 			$style .= '"';
@@ -213,7 +213,7 @@ function get_bsearch_pop_daily() {
  * @since   1.0
  */
 function the_pop_searches_daily() {
-	echo get_bsearch_pop_daily();
+	echo get_bsearch_pop_daily(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 /**
@@ -261,7 +261,7 @@ function get_bsearch_pop() {
  * @since   1.0
  */
 function the_pop_searches() {
-	echo get_bsearch_pop();
+	echo get_bsearch_pop(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 

@@ -28,7 +28,7 @@ function bsearch_clause_head() {
 		}
 
 		// Add custom CSS to header.
-		if ( '' != $bsearch_custom_css ) {
+		if ( '' != $bsearch_custom_css ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 			$output .= '<style type="text/css">' . $bsearch_custom_css . '</style>';
 		}
 	}
@@ -42,7 +42,7 @@ function bsearch_clause_head() {
 	 */
 	$output = apply_filters( 'bsearch_clause_head', $output );
 
-	echo $output;
+	echo $output; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action( 'wp_head', 'bsearch_clause_head' );
 

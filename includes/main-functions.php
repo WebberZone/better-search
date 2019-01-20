@@ -23,10 +23,11 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 	global $wpdb;
 
 	if ( ! ( $limit ) ) {
-		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // Read from GET variable.
+		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 
-	$bydate = isset( $_GET['bydate'] ) ? intval( $_GET['bydate'] ) : 0;     // Order by date or by score?
+	// Order by date or by score?
+	$bydate = isset( $_GET['bydate'] ) ? intval( $_GET['bydate'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	$topscore = 0;
 
@@ -50,7 +51,7 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 	$output = '';
 
 	/* Lets start printing the results */
-	if ( '' != $search_query ) {
+	if ( '' != $search_query ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		if ( $searches ) {
 			$output .= get_bsearch_header( $search_query, $numrows, $limit );
 
@@ -249,7 +250,7 @@ function get_bsearch_matches( $search_query, $bydate ) {
 
 		if ( isset( $matches['search_query'] ) ) {
 
-			if ( $matches['search_query'] == $search_query ) {
+			if ( $matches['search_query'] == $search_query ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 				$results = $matches[0];
 
 				/**
@@ -270,14 +271,14 @@ function get_bsearch_matches( $search_query, $bydate ) {
 	if ( ! isset( $results ) ) {
 		$sql = bsearch_sql_prepare( $search_info, bsearch_get_option( 'boolean_mode' ), $bydate );
 
-		$results = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
+		$results = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
 
 	// If no results are found then force BOOLEAN mode.
 	if ( ! $results ) {
 		$sql = bsearch_sql_prepare( $search_info, 1, $bydate );
 
-		$results = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
+		$results = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
 
 	// If no results are found then force LIKE mode.
@@ -297,7 +298,7 @@ function get_bsearch_matches( $search_query, $bydate ) {
 
 		$sql = bsearch_sql_prepare( $search_info, 0, $bydate );
 
-		$results = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
+		$results = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
 
 	$matches[0]              = $results;
@@ -327,9 +328,9 @@ function get_bsearch_matches( $search_query, $bydate ) {
 function get_bsearch_range( $numrows, $limit ) {
 
 	if ( ! ( $limit ) ) {
-		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // Read from GET variable.
+		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
-	$page = isset( $_GET['bpaged'] ) ? intval( bsearch_clean_terms( $_GET['bpaged'] ) ) : 0; // Read from GET variable.
+	$page = isset( $_GET['bpaged'] ) ? intval( wp_unslash( $_GET['bpaged'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	$last = min( $page + $limit - 1, $numrows - 1 );
 

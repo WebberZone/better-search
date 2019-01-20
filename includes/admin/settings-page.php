@@ -24,7 +24,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @return void
  */
 function bsearch_options_page() {
-	$active_tab = isset( $_GET['tab'] ) && array_key_exists( sanitize_key( wp_unslash( $_GET['tab'] ) ), bsearch_get_settings_sections() ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'general'; // WPCS: CSRF ok.
+	$active_tab = isset( $_GET['tab'] ) && array_key_exists( sanitize_key( wp_unslash( $_GET['tab'] ) ), bsearch_get_settings_sections() ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'general'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	ob_start();
 	?>
@@ -110,7 +110,7 @@ function bsearch_options_page() {
 	</div><!-- /.wrap -->
 
 	<?php
-	echo ob_get_clean(); // WPCS: XSS OK.
+	echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 /**
@@ -175,7 +175,7 @@ function bsearch_header_callback( $args ) {
 	 * @param string $html HTML string.
 	 * @param array  $args Arguments array.
 	 */
-	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // WPCS: XSS OK.
+	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -215,7 +215,7 @@ function bsearch_text_callback( $args ) {
 	$html .= '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
 
 	/** This filter has been defined in settings-page.php */
-	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // WPCS: XSS OK.
+	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -270,7 +270,7 @@ function bsearch_textarea_callback( $args ) {
 	$html .= '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
 
 	/** This filter has been defined in settings-page.php */
-	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // WPCS: XSS OK.
+	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -307,11 +307,11 @@ function bsearch_checkbox_callback( $args ) {
 
 	$html  = sprintf( '<input type="hidden" name="bsearch_settings[%1$s]" value="-1" />', sanitize_key( $args['id'] ) );
 	$html .= sprintf( '<input type="checkbox" id="bsearch_settings[%1$s]" name="bsearch_settings[%1$s]" value="1" %2$s />', sanitize_key( $args['id'] ), $checked );
-	$html .= ( $set <> $default ) ? '<em style="color:orange"> ' . esc_html__( 'Modified from default setting', 'better-search' ) . '</em>' : ''; // WPCS: loose comparison ok.
+	$html .= ( $set <> $default ) ? '<em style="color:orange"> ' . esc_html__( 'Modified from default setting', 'better-search' ) . '</em>' : ''; //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 	$html .= '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
 
 	/** This filter has been defined in settings-page.php */
-	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // WPCS: XSS OK.
+	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -347,7 +347,7 @@ function bsearch_multicheck_callback( $args ) {
 	}
 
 	/** This filter has been defined in settings-page.php */
-	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // WPCS: XSS OK.
+	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -381,7 +381,7 @@ function bsearch_radio_callback( $args ) {
 	$html .= '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
 
 	/** This filter has been defined in settings-page.php */
-	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // WPCS: XSS OK.
+	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -416,7 +416,7 @@ function bsearch_radiodesc_callback( $args ) {
 	$html .= '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
 
 	/** This filter has been defined in settings-page.php */
-	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // WPCS: XSS OK.
+	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -459,7 +459,7 @@ function bsearch_thumbsizes_callback( $args ) {
 	$html .= '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
 
 	/** This filter has been defined in settings-page.php */
-	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // WPCS: XSS OK.
+	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -492,7 +492,7 @@ function bsearch_number_callback( $args ) {
 	$html .= '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
 
 	/** This filter has been defined in settings-page.php */
-	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // WPCS: XSS OK.
+	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -531,7 +531,7 @@ function bsearch_select_callback( $args ) {
 	$html .= '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
 
 	/** This filter has been defined in settings-page.php */
-	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // WPCS: XSS OK.
+	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -549,7 +549,7 @@ function bsearch_descriptive_text_callback( $args ) {
 	$html = '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
 
 	/** This filter has been defined in settings-page.php */
-	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // WPCS: XSS OK.
+	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -598,7 +598,7 @@ function bsearch_posttypes_callback( $args ) {
 	$html .= '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
 
 	/** This filter has been defined in settings-page.php */
-	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // WPCS: XSS OK.
+	echo apply_filters( 'bsearch_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -611,7 +611,7 @@ function bsearch_posttypes_callback( $args ) {
  */
 function bsearch_tags_search() {
 
-	if ( ! isset( $_REQUEST['tax'] ) ) { // WPCS: CSRF ok.
+	if ( ! isset( $_REQUEST['tax'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		wp_die( 0 );
 	}
 
@@ -625,7 +625,7 @@ function bsearch_tags_search() {
 		wp_die( -1 );
 	}
 
-	$s = wp_unslash( $_REQUEST['q'] ); // WPCS: CSRF ok.
+	$s = isset( $_REQUEST['q'] ) ? wp_unslash( $_REQUEST['q'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	$comma = _x( ',', 'tag delimiter' );
 	if ( ',' !== $comma ) {

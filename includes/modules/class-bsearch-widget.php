@@ -44,29 +44,29 @@ class BSearch_Widget extends WP_Widget {
 		$daily_range = isset( $instance['daily_range'] ) ? esc_attr( $instance['daily_range'] ) : '';
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>">
-				<?php _e( 'Title', 'better-search' ); ?>: <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
+				<?php esc_attr_e( 'Title', 'better-search' ); ?>: <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
 			</label>
 		</p>
 		<p>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'daily' ); ?>" name="<?php echo $this->get_field_name( 'daily' ); ?>">
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'daily' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'daily' ) ); ?>">
 				<option value="overall"
 				<?php
 				if ( 'overall' === $daily ) {
 					echo 'selected="selected"'; }
 				?>
-><?php _e( 'Overall', 'better-search' ); ?></option>
+><?php esc_attr_e( 'Overall', 'better-search' ); ?></option>
 				<option value="daily"
 				<?php
 				if ( 'daily' === $daily ) {
 					echo 'selected="selected"'; }
 				?>
-><?php _e( 'Custom time period (Enter below)', 'better-search' ); ?></option>
+><?php esc_attr_e( 'Custom time period (Enter below)', 'better-search' ); ?></option>
 			</select>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'daily_range' ); ?>">
-				<?php _e( 'Range in number of days (applies only to custom option above)', 'better-search' ); ?>: <input class="widefat" id="<?php echo $this->get_field_id( 'daily_range' ); ?>" name="<?php echo $this->get_field_name( 'daily_range' ); ?>" type="text" value="<?php echo esc_attr( $daily_range ); ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'daily_range' ) ); ?>">
+				<?php esc_attr_e( 'Range in number of days (applies only to custom option above)', 'better-search' ); ?>: <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'daily_range' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'daily_range' ) ); ?>" type="text" value="<?php echo esc_attr( $daily_range ); ?>" />
 			</label>
 		</p>
 
@@ -130,18 +130,18 @@ class BSearch_Widget extends WP_Widget {
 
 		$daily = isset( $instance['daily'] ) ? $instance['daily'] : 'overall';
 
-		echo $args['before_widget'];
-		echo $args['before_title'] . $title . $args['after_title'];
+		echo $args['before_widget']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $args['before_title'] . $title . $args['after_title']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		if ( 'overall' === $daily ) {
-			echo get_bsearch_heatmap(
+			echo get_bsearch_heatmap( //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				array(
 					'daily'       => 0,
 					'daily_range' => $daily_range,
 				)
 			);
 		} else {
-			echo get_bsearch_heatmap(
+			echo get_bsearch_heatmap( //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				array(
 					'daily'       => 1,
 					'daily_range' => $daily_range,
@@ -152,7 +152,7 @@ class BSearch_Widget extends WP_Widget {
 			echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
 		}
 
-		echo $args['after_widget'];
+		echo $args['after_widget']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	} //ending function widget
 }
@@ -188,12 +188,12 @@ class BSearch_Search_Box extends WP_Widget {
 	 * @param array $instance The settings for the particular instance of the widget.
 	 */
 	public function widget( $args, $instance ) {
-		echo $args['before_widget'];
+		echo $args['before_widget']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
+			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		get_search_form();
-		echo $args['after_widget'];
+		echo $args['after_widget']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -207,8 +207,8 @@ class BSearch_Search_Box extends WP_Widget {
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : __( 'Search', 'better-search' );
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title:' ); ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
 		</p>
 		<?php
 	}
