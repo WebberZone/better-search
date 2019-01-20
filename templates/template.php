@@ -44,7 +44,7 @@ get_header();
 			<div id="heatmap">
 				<div class="heatmap_daily">
 					<h2>
-						<?php echo strip_tags( $bsearch_settings['title_daily'] ); ?>
+						<?php echo wp_strip_all_tags( $bsearch_settings['title_daily'] ); ?>
 					</h2>
 
 					<?php echo get_bsearch_heatmap( 'daily=1' ); ?>
@@ -52,7 +52,7 @@ get_header();
 
 				<div class="heatmap_overall">
 					<h2>
-						<?php echo strip_tags( $bsearch_settings['title'] ); ?>
+						<?php echo wp_strip_all_tags( $bsearch_settings['title'] ); ?>
 					</h2>
 
 					<?php echo get_bsearch_heatmap( 'daily=0' ); ?>

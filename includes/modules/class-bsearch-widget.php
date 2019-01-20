@@ -97,9 +97,9 @@ class BSearch_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance                = $old_instance;
-		$instance['title']       = strip_tags( $new_instance['title'] );
-		$instance['daily']       = strip_tags( $new_instance['daily'] );
-		$instance['daily_range'] = strip_tags( $new_instance['daily_range'] );
+		$instance['title']       = wp_strip_all_tags( $new_instance['title'] );
+		$instance['daily']       = wp_strip_all_tags( $new_instance['daily'] );
+		$instance['daily_range'] = wp_strip_all_tags( $new_instance['daily_range'] );
 
 		/**
 		 * Filters Update widget options array.
@@ -126,7 +126,7 @@ class BSearch_Widget extends WP_Widget {
 
 		$daily_range = isset( $instance['daily_range'] ) ? $instance['daily_range'] : bsearch_get_option( 'daily_range' );
 
-		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? strip_tags( bsearch_get_option( 'title' ) ) : $instance['title'] );
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? wp_strip_all_tags( bsearch_get_option( 'title' ) ) : $instance['title'] );
 
 		$daily = isset( $instance['daily'] ) ? $instance['daily'] : 'overall';
 
@@ -225,7 +225,7 @@ class BSearch_Search_Box extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance          = array();
-		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? wp_strip_all_tags( $new_instance['title'] ) : '';
 
 		/**
 		 * Filters Update widget options array for the Search box.
