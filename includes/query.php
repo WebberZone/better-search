@@ -101,7 +101,7 @@ function bsearch_posts_match_field( $search_query, $args = array() ) {
 
 		$field_score  = ", (MATCH({$wpdb->posts}.post_title) AGAINST ('%s' {$boolean_mode} ) * %d ) + ";
 		$field_score .= "(MATCH({$wpdb->posts}.post_content) AGAINST ('%s' {$boolean_mode} ) * %d ) ";
-		$field_score  = $wpdb->prepare( $field_score, $field_args ); // WPCS: unprepared SQL ok.
+		$field_score  = $wpdb->prepare( $field_score, $field_args ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	} else {
 		$field_score = ', 0 ';
 	}
@@ -177,7 +177,7 @@ function bsearch_posts_match( $search_query, $args = array() ) {
 	// Construct the MATCH part of the WHERE clause.
 	$match = " AND MATCH ({$wpdb->posts}.post_title,{$wpdb->posts}.post_content) AGAINST ('%s' {$boolean_mode} ) ";
 
-	$match = $wpdb->prepare( $match, $search_query ); // WPCS: unprepared SQL ok.
+	$match = $wpdb->prepare( $match, $search_query ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	/**
 	 * Filter the MATCH clause of the query.
@@ -218,21 +218,21 @@ function bsearch_posts_where( $search_info, $args = array() ) {
 		// Create the WHERE Clause.
 		$where  = ' AND ( ';
 		$where .= $wpdb->prepare(
-			' (({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s)) ',
+			" (({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s)) ",
 			$n . $search_terms[0] . $n,
 			$n . $search_terms[0] . $n
 		);
 
 		for ( $i = 1; $i < $no_search_terms; $i++ ) {
 			$where .= $wpdb->prepare(
-				' AND (({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s)) ',
+				" AND (({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s)) ",
 				$n . $search_terms[ $i ] . $n,
 				$n . $search_terms[ $i ] . $n
 			);
 		}
 
 		$where .= $wpdb->prepare(
-			' OR ({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s) ',
+			" OR ({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s) ",
 			$n . $search_terms[0] . $n,
 			$n . $search_terms[0] . $n
 		);
