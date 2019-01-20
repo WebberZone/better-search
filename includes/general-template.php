@@ -236,7 +236,7 @@ function get_bsearch_excerpt( $id, $excerpt_length = 0, $use_excerpt = true ) {
 		$content = get_post( $id )->post_content;
 	}
 
-	$output = strip_tags( strip_shortcodes( $content ) );
+	$output = wp_strip_all_tags( strip_shortcodes( $content ) );
 
 	if ( $excerpt_length > 0 ) {
 		$output = wp_trim_words( $output, $excerpt_length );
@@ -300,7 +300,7 @@ function get_bsearch_form( $search_query ) {
  */
 function get_bsearch_title_daily( $text_only = true ) {
 
-	$title = ( $text_only ) ? strip_tags( bsearch_get_option( 'title_daily' ) ) : bsearch_get_option( 'title_daily' );
+	$title = ( $text_only ) ? wp_strip_all_tags( bsearch_get_option( 'title_daily' ) ) : bsearch_get_option( 'title_daily' );
 
 	/**
 	 * Filters the title of the widget
@@ -323,7 +323,7 @@ function get_bsearch_title_daily( $text_only = true ) {
  */
 function get_bsearch_title( $text_only = true ) {
 
-	$title = ( $text_only ) ? strip_tags( bsearch_get_option( 'title' ) ) : bsearch_get_option( 'title' );
+	$title = ( $text_only ) ? wp_strip_all_tags( bsearch_get_option( 'title' ) ) : bsearch_get_option( 'title' );
 
 	/**
 	 * Filters the title of the widget
