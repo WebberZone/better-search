@@ -26,7 +26,7 @@ function get_bsearch_header( $search_query, $numrows, $limit ) {
 		$pages++;   // If remainder so add one page.
 	}
 
-	if ( ( $pages < 1 ) || ( 0 == $pages ) ) { // WPCS: loose comparison ok.
+	if ( ( $pages < 1 ) || ( 0 == $pages ) ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		$total = 1; // If $pages is less than one or equal to 0, total pages is 1.
 	} else {
 		$total = $pages;    // Else total pages is $pages value.
@@ -99,7 +99,7 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 	$search_query = rawurlencode( $search_query );
 
 	$output = '<p class="bsearch_footer">';
-	if ( 0 != $page ) { // WPCS: loose comparison ok.
+	if ( 0 != $page ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		$back_page = $page - $limit;
 		$output   .= '<a href="' . home_url() . "/?s=$search_query&limit=$limit&bpaged=$back_page\">&laquo; ";
 		$output   .= __( 'Previous', 'better-search' );
@@ -111,7 +111,7 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 	for ( $i = 1; $i <= $pages; $i++ ) { // loop through each page and give link to it.
 		$current = ( $match_range[0] / $limit ) + 1; // Current page number.
 		if ( $i >= $current + $pagination_range && $i < $pages ) {
-			if ( $i == $current + $pagination_range ) { // WPCS: loose comparison ok.
+			if ( $i == $current + $pagination_range ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 				$output .= '&hellip;&nbsp;';
 			}
 			continue;
@@ -120,14 +120,14 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 			continue;
 		}
 		$ppage = $limit * ( $i - 1 );
-		if ( $ppage == $page ) { // WPCS: loose comparison ok.
+		if ( $ppage == $page ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 			$output .= "<b>$i</b>\n";   // If current page don't give link, just text.
 		} else {
 			$output .= '<a href="' . home_url() . "/?s=$search_query&limit=$limit&bpaged=$ppage\">$i</a> \n";
 		}
 	}
 
-	if ( ! ( ( ( $page + $limit ) / $limit ) >= $pages ) && 1 != $pages ) { // WPCS: loose comparison ok.
+	if ( ! ( ( ( $page + $limit ) / $limit ) >= $pages ) && 1 != $pages ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		$next_page = $page + $limit;
 		$output   .= '    <a href="' . home_url() . "/?s=$search_query&limit=$limit&bpaged=$next_page\">";
 		$output   .= __( 'Next', 'better-search' );
@@ -232,7 +232,7 @@ function get_bsearch_excerpt( $id, $excerpt_length = 0, $use_excerpt = true ) {
 	if ( $use_excerpt ) {
 		$content = get_post( $id )->post_excerpt;
 	}
-	if ( '' == $content ) { // WPCS: loose comparison ok.
+	if ( '' == $content ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		$content = get_post( $id )->post_content;
 	}
 

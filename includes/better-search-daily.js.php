@@ -32,7 +32,7 @@ function bsearch_daily_searches() {
 	global $wpdb, $siteurl, $tableposts, $search_query;
 	$table_name = $wpdb->prefix . 'bsearch_daily';
 
-	$is_widget = intval( $_GET['widget'] );
+	$is_widget = isset( $_GET['widget'] ) ? intval( $_GET['widget'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	$bsearch_settings = bsearch_get_settings();
 
@@ -57,7 +57,7 @@ function bsearch_daily_searches() {
 	}
 	$output .= '</div>';
 
-	echo "document.write('" . $output . "')";
+	echo "document.write('" . $output . "')"; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 bsearch_daily_searches();
 

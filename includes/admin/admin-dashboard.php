@@ -21,7 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 function bsearch_pop_dashboard() {
 
-	echo get_bsearch_heatmap(
+	echo get_bsearch_heatmap( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		array(
 			'daily' => 0,
 		)
@@ -40,7 +40,7 @@ function bsearch_pop_dashboard() {
  */
 function bsearch_pop_daily_dashboard() {
 
-	echo get_bsearch_heatmap(
+	echo get_bsearch_heatmap( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		array(
 			'daily' => 1,
 		)

@@ -54,7 +54,7 @@ function bsearch_adminhead() {
 	wp_enqueue_script( 'jquery-ui-autocomplete' );
 	wp_enqueue_script( 'jquery-ui-tabs' );
 	wp_enqueue_script( 'plugin-install' );
-	wp_enqueue_script( 'jscolor', BETTER_SEARCH_PLUGIN_URL . 'includes/admin/jscolor/jscolor.js' );
+	wp_enqueue_script( 'jscolor', BETTER_SEARCH_PLUGIN_URL . 'includes/admin/jscolor/jscolor.js', array(), '1.0', true );
 	add_thickbox();
 	?>
 	<script type="text/javascript">
@@ -113,7 +113,7 @@ function bsearch_adminhead() {
 							$.ajax({
 								type: 'POST',
 								dataType: 'json',
-								url: '<?php echo admin_url( 'admin-ajax.php' ); ?>',
+								url: '<?php echo admin_url( 'admin-ajax.php' ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>',
 								data: {
 									action: 'bsearch_tag_search',
 									tax: taxonomy,
