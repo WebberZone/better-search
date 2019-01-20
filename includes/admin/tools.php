@@ -80,9 +80,9 @@ function bsearch_tools_page() {
 				</p>
 				<p class="description"><?php esc_html_e( 'If the Recreate Index button fails, please run the following queries in phpMyAdmin or Adminer', 'better-search' ); ?></p>
 				<p>
-					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch_related;</code>
-					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch_related_title;</code>
-					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch_related_content;</code>
+					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch;</code>
+					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch_title;</code>
+					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch_content;</code>
 					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related (post_title, post_content);</code>
 					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_title (post_title);</code>
 					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_content (post_content);</code>

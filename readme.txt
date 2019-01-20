@@ -97,6 +97,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 * Bug fixes:
 	* Fixed "Fatal error: Can't use function return value in write context"
 	* Specified table prefix to avoid conflicts
+	* Fixed code in Tools page for dropping index
 
 = 2.2.0 =
 
