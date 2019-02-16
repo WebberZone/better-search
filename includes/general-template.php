@@ -269,6 +269,7 @@ function get_bsearch_form( $search_query ) {
 	if ( '' === $search_query ) {
 		$search_query = get_bsearch_query();
 	}
+	$search_query = esc_attr( $search_query );
 
 	$form = '
 	<div style="text-align:center"><form method="get" class="bsearchform" action="' . home_url() . '/" >

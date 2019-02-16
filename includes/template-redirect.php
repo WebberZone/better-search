@@ -118,7 +118,7 @@ function bsearch_title( $title ) {
 		return $title;
 	}
 
-	$search_query = get_bsearch_query();
+	$search_query = get_bsearch_query( true );
 
 	if ( isset( $search_query ) ) {
 		/* translators: 1: search query, 2: title of the page */

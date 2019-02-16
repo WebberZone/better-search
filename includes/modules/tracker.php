@@ -34,7 +34,7 @@ function bsearch_increment_counter( $search_query ) {
 	}
 
 	if ( $include_code ) {
-		$output = '<script type="text/javascript" data-cfasync="false" src="' . BETTER_SEARCH_PLUGIN_URL . 'includes/better-search-addcount.js.php?bsearch_id=' . $search_query . '"></script>';
+		$output = '<script type="text/javascript" data-cfasync="false" src="' . BETTER_SEARCH_PLUGIN_URL . 'includes/better-search-addcount.js.php?bsearch_id=' . esc_attr( $search_query ) . '"></script>';
 	}
 
 	/**
