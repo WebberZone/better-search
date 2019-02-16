@@ -102,6 +102,7 @@ function bsearch_posts_match_field( $search_query, $args = array() ) {
 		$field_score  = ", (MATCH({$wpdb->posts}.post_title) AGAINST ('%s' {$boolean_mode} ) * %d ) + ";
 		$field_score .= "(MATCH({$wpdb->posts}.post_content) AGAINST ('%s' {$boolean_mode} ) * %d ) ";
 		$field_score  = $wpdb->prepare( $field_score, $field_args ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$field_score  = stripslashes( $field_score );
 	} else {
 		$field_score = ', 0 ';
 	}
@@ -178,6 +179,7 @@ function bsearch_posts_match( $search_query, $args = array() ) {
 	$match = " AND MATCH ({$wpdb->posts}.post_title,{$wpdb->posts}.post_content) AGAINST ('%s' {$boolean_mode} ) ";
 
 	$match = $wpdb->prepare( $match, $search_query ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$match = stripslashes( $match );
 
 	/**
 	 * Filter the MATCH clause of the query.

@@ -92,6 +92,11 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
+= 2.2.2 =
+
+* Bug fixes:
+	* Phrase searches and searches with double quotes should now work properly
+
 = 2.2.1 =
 
 * Bug fixes:

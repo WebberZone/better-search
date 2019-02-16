@@ -132,13 +132,15 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
  *
  * @since   2.0.0
  *
+ * @param bool $escaped Whether the result is escaped. Default false.
+ *                      Always escape this if you are going to display it.
  * @return  string  Better Search query
  */
-function get_bsearch_query() {
+function get_bsearch_query( $escaped = false ) {
 
 	$search_query = trim(
 		bsearch_clean_terms(
-			apply_filters( 'the_search_query', get_search_query() )
+			get_search_query( $escaped )
 		)
 	);
 
@@ -271,14 +273,14 @@ function get_bsearch_matches( $search_query, $bydate ) {
 	if ( ! isset( $results ) ) {
 		$sql = bsearch_sql_prepare( $search_info, bsearch_get_option( 'boolean_mode' ), $bydate );
 
-		$results = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$results = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	}
 
 	// If no results are found then force BOOLEAN mode.
 	if ( ! $results ) {
 		$sql = bsearch_sql_prepare( $search_info, 1, $bydate );
 
-		$results = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$results = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	}
 
 	// If no results are found then force LIKE mode.
@@ -298,7 +300,7 @@ function get_bsearch_matches( $search_query, $bydate ) {
 
 		$sql = bsearch_sql_prepare( $search_info, 0, $bydate );
 
-		$results = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$results = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	}
 
 	$matches[0]              = $results;

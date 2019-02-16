@@ -39,8 +39,6 @@ function bsearch_clean_terms( $val ) {
 	$val_censored = bsearch_censor_string( $val, $badwords, $censor_char );  // No more bad words.
 	$val          = $val_censored['clean'];
 
-	$val = addslashes_gpc( $val );
-
 	$val = wp_kses_post( $val );
 
 	/**
