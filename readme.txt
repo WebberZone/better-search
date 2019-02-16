@@ -96,6 +96,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 * Bug fixes:
 	* Phrase searches and searches with double quotes should now work properly
+	* Specified one instance of a missing table prefix to avoid conflicts
 
 = 2.2.1 =
 
