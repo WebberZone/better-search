@@ -140,7 +140,7 @@ function bsearch_posts_fields( $search_query, $args = array() ) {
 	// Parse incomming $args into an array and merge it with $defaults.
 	$args = wp_parse_args( $args, bsearch_query_default_args() );
 
-	$fields = ' ID';
+	$fields = " {$wpdb->posts}.ID as ID";
 
 	$fields .= bsearch_posts_match_field( $search_query, $args );
 
