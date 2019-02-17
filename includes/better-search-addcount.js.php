@@ -41,34 +41,34 @@ function bsearch_inc_count() {
 	$search_query = isset( $_GET['bsearch_id'] ) ? wp_kses( wp_unslash( $_GET['bsearch_id'] ), array() ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	if ( '' !== $search_query ) {
-		$results = $wpdb->get_results( $wpdb->prepare( "SELECT searchvar, cntaccess FROM $table_name WHERE searchvar = %s LIMIT 1 ", $search_query ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$results = $wpdb->get_results( $wpdb->prepare( "SELECT searchvar, cntaccess FROM $table_name WHERE searchvar = %s LIMIT 1 ", $search_query ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 		$test    = 0;
 		if ( $results ) {
 			foreach ( $results as $result ) {
-				$tt   = $wpdb->query( $wpdb->prepare( "UPDATE $table_name SET cntaccess = cntaccess + 1 WHERE searchvar = %s ", $result->searchvar ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$tt   = $wpdb->query( $wpdb->prepare( "UPDATE $table_name SET cntaccess = cntaccess + 1 WHERE searchvar = %s ", $result->searchvar ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 				$str .= ( false === $tt ) ? 'e_' : 's_' . $tt;
 				$test = 1;
 			}
 		}
 		if ( 0 === $test ) {
-			$tt   = $wpdb->query( $wpdb->prepare( "INSERT INTO $table_name (searchvar, cntaccess) VALUES( %s, '1') ", $search_query ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$tt   = $wpdb->query( $wpdb->prepare( "INSERT INTO $table_name (searchvar, cntaccess) VALUES( %s, '1') ", $search_query ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			$str .= ( false === $tt ) ? 'e_' : 's_' . $tt;
 		}
 
 		// Now update daily count.
 		$current_date = gmdate( 'Y-m-d', ( time() + ( get_option( 'gmt_offset' ) * 3600 ) ) );
 
-		$results = $wpdb->get_results( $wpdb->prepare( "SELECT searchvar, cntaccess, dp_date FROM $table_name_daily WHERE searchvar = %s AND dp_date = %s ", $search_query, $current_date ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$results = $wpdb->get_results( $wpdb->prepare( "SELECT searchvar, cntaccess, dp_date FROM $table_name_daily WHERE searchvar = %s AND dp_date = %s ", $search_query, $current_date ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 		$test    = 0;
 		if ( $results ) {
 			foreach ( $results as $result ) {
-				$ttd  = $wpdb->query( $wpdb->prepare( "UPDATE $table_name_daily SET cntaccess = cntaccess + 1 WHERE searchvar = %s AND dp_date = %s ", $result->searchvar, $current_date ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$ttd  = $wpdb->query( $wpdb->prepare( "UPDATE $table_name_daily SET cntaccess = cntaccess + 1 WHERE searchvar = %s AND dp_date = %s ", $result->searchvar, $current_date ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 				$str .= ( false === $ttd ) ? '_e' : '_s' . $ttd;
 				$test = 1;
 			}
 		}
 		if ( 0 === $test ) {
-			$ttd  = $wpdb->query( $wpdb->prepare( "INSERT INTO $table_name_daily (searchvar, cntaccess, dp_date) VALUES( %s, '1', %s )", $search_query, $current_date ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$ttd  = $wpdb->query( $wpdb->prepare( "INSERT INTO $table_name_daily (searchvar, cntaccess, dp_date) VALUES( %s, '1', %s )", $search_query, $current_date ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			$str .= ( false === $ttd ) ? '_e' : '_s' . $ttd;
 		}
 	}
