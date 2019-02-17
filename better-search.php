@@ -15,7 +15,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  https://webberzone.com/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     2.2.2-beta1
+ * Version:     2.2.2
  * Author:      Ajay D'Souza
  * Author URI:  https://webberzone.com/
  * Text Domain: better-search
@@ -150,5 +150,5 @@ if ( is_admin() ) {
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/admin/tools.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/admin/admin-dashboard.php';
 
-} // End admin.inc
+}
 

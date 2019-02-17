@@ -4,7 +4,7 @@ Contributors: webberzone, Ajay
 Donate link: https://ajaydsouza.com/donate/
 Stable tag: trunk
 Requires at least: 4.5
-Tested up to: 5.0
+Tested up to: 5.1
 License: GPLv2 or later
 
 
@@ -169,6 +169,6 @@ For previous changelog entries, please refer to the separate changelog.txt file
 
 == Upgrade Notice ==
 
-= 2.2.1 =
+= 2.2.2 =
 Bug fix release. For details on the update check the changelog and release post on https://webberzone.com
 
