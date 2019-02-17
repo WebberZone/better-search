@@ -7,13 +7,13 @@
  * @since Twenty Eleven 1.0
  */
 
-$s = bsearch_clean_terms( apply_filters( 'the_search_query', get_search_query() ) );
+$search_query = bsearch_clean_terms( apply_filters( 'the_search_query', get_search_query() ) );
 get_header(); ?>
 
 	<section id="primary">
 		<div id="content" role="main">
 			<?php
-			$form = get_bsearch_form( $s );
+			$form = get_bsearch_form( $search_query );
 			echo $form;
 			?>
 			<header class="page-header">
@@ -22,7 +22,7 @@ get_header(); ?>
 				</h1>
 			</header>
 
-			<?php echo get_bsearch_results( $s, $limit ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php echo get_bsearch_results( $search_query, $limit ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			<?php echo $form; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div><!-- #content -->
 	</section><!-- #primary -->
