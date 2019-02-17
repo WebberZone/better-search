@@ -21,7 +21,7 @@ function bsearch_install( $network_wide ) {
 	if ( is_multisite() && $network_wide ) {
 
 		// Get all blogs in the network and activate plugin on each one.
-		$blog_ids = $wpdb->get_col(
+		$blog_ids = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			"
         	SELECT blog_id FROM $wpdb->blogs
 			WHERE archived = '0' AND spam = '0' AND deleted = '0'
@@ -54,17 +54,16 @@ function bsearch_single_activate() {
 
 	// Create full text index.
 	$wpdb->hide_errors();
-	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ENGINE = MYISAM;' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch (post_title, post_content);' );
-	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_title (post_title);' );
-	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_content (post_content);' );
+	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch (post_title, post_content);' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
+	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_title (post_title);' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
+	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_content (post_content);' );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
 	$wpdb->show_errors();
 
 	// Create the tables.
 	$table_name       = $wpdb->prefix . 'bsearch';
 	$table_name_daily = $wpdb->prefix . 'bsearch_daily';
 
-	if ( $wpdb->get_var( "show tables like '$table_name'" ) !== $table_name ) { // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( $wpdb->get_var( "show tables like '$table_name'" ) !== $table_name ) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 
 		$sql = 'CREATE TABLE ' . $table_name . ' (
             accessedid int NOT NULL AUTO_INCREMENT,
@@ -77,13 +76,13 @@ function bsearch_single_activate() {
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
-		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name . ' (searchvar)' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name . ' (searchvar)' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
 		$wpdb->show_errors();
 
 		add_option( 'bsearch_db_version', $bsearch_db_version );
 	}
 
-	if ( $wpdb->get_var( "show tables like '$table_name_daily'" ) !== $table_name_daily ) { // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( $wpdb->get_var( "show tables like '$table_name_daily'" ) !== $table_name_daily ) {  // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 
 		$sql = 'CREATE TABLE ' . $table_name_daily . ' (
             accessedid int NOT NULL AUTO_INCREMENT,
@@ -97,7 +96,7 @@ function bsearch_single_activate() {
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
-		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name_daily . ' (searchvar)' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name_daily . ' (searchvar)' );  // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
 		$wpdb->show_errors();
 
 		add_option( 'bsearch_db_version', $bsearch_db_version );
@@ -119,12 +118,12 @@ function bsearch_single_activate() {
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
-		$wpdb->query( 'ALTER ' . $table_name . ' DROP INDEX IDX_searhvar ' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name . ' (searchvar)' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'ALTER ' . $table_name . ' DROP INDEX IDX_searhvar ' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name . ' (searchvar)' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
 		$wpdb->show_errors();
 
 		$sql = "DROP TABLE $table_name_daily";
-		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
 
 		$sql = 'CREATE TABLE ' . $table_name_daily . ' (
             accessedid int NOT NULL AUTO_INCREMENT,
@@ -138,8 +137,8 @@ function bsearch_single_activate() {
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
-		$wpdb->query( 'ALTER ' . $table_name_daily . ' DROP INDEX IDX_searhvar ' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name_daily . ' (searchvar)' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'ALTER ' . $table_name_daily . ' DROP INDEX IDX_searhvar ' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name_daily . ' (searchvar)' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
 		$wpdb->show_errors();
 
 		update_option( 'bsearch_db_version', $bsearch_db_version );
