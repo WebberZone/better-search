@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-20 17:35+0000\n"
+"POT-Creation-Date: 2019-02-17 14:10+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team: WebberZone <plugins@webberzone.com>\n"
@@ -86,7 +86,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/help-tab.php:59 includes/admin/settings-page.php:126
-#: includes/general-template.php:277
+#: includes/general-template.php:278
 #: includes/modules/class-bsearch-widget.php:207
 msgid "Search"
 msgstr ""
@@ -202,7 +202,7 @@ msgstr ""
 msgid "Relevance: "
 msgstr ""
 
-#: includes/general-template.php:275
+#: includes/general-template.php:276
 msgid "Search for:"
 msgstr ""
 
@@ -253,9 +253,9 @@ msgstr ""
 msgid "Search Results for \"%1$s\" | %2$s"
 msgstr ""
 
-#: templates/better-search-template.php:20
+#: templates/better-search-template.php:21
 #, php-format
-msgid "BS TEMPLATE Search Results for: %s"
+msgid "Better Search TEMPLATE Search Results for: %s"
 msgstr ""
 
 #: templates/template.php:31
