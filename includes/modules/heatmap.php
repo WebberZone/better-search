@@ -62,26 +62,26 @@ function get_bsearch_heatmap( $args = array() ) {
 		);
 
 		$sql = "
-			SELECT DISTINCT wp1.searchvar, wp2.sumCount
+			SELECT DISTINCT wp1.searchvar, wp2.sum_count
 			FROM {$table_name} wp1,
-					(SELECT searchvar, SUM(cntaccess) as sumCount
+					(SELECT searchvar, SUM(cntaccess) as sum_count
 					FROM {$table_name}
 					WHERE dp_date >= '%s'
 					GROUP BY searchvar
-					ORDER BY sumCount DESC LIMIT %d) wp2
+					ORDER BY sum_count DESC LIMIT %d) wp2
 					WHERE wp1.searchvar = wp2.searchvar
 			ORDER by wp1.searchvar ASC
 		";
 	}
 
-	$results = $wpdb->get_results( $wpdb->prepare( $sql, $sargs ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$results = $wpdb->get_results( $wpdb->prepare( $sql, $sargs ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
 	if ( $results ) {
 		foreach ( $results as $result ) {
 			if ( ! $args['daily'] ) {
 				$cntaccesss[] = $result->cntaccess;
 			} else {
-				$cntaccesss[] = $result->sumCount;
+				$cntaccesss[] = $result->sum_count;
 			}
 		}
 		$min    = min( $cntaccesss );
@@ -118,7 +118,7 @@ function get_bsearch_heatmap( $args = array() ) {
 			if ( ! $args['daily'] ) {
 				$cntaccess = $result->cntaccess;
 			} else {
-				$cntaccess = $result->sumCount;
+				$cntaccess = $result->sum_count;
 			}
 
 			$textsearchvar = esc_attr( $result->searchvar );
