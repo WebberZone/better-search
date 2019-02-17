@@ -625,7 +625,7 @@ function bsearch_tags_search() {
 		wp_die( -1 );
 	}
 
-	$s = isset( $_REQUEST['q'] ) ? wp_unslash( $_REQUEST['q'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$s = isset( $_REQUEST['q'] ) ? wp_unslash( $_REQUEST['q'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Recommended
 
 	$comma = _x( ',', 'tag delimiter' );
 	if ( ',' !== $comma ) {

@@ -17,11 +17,13 @@ get_header(); ?>
 			echo $form;
 			?>
 			<header class="page-header">
-				<h1 class="page-title"><?php printf( __( 'BS TEMPLATE Search Results for: %s', 'twentyeleven' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
+				<h1 class="page-title">
+					<?php printf( __( 'Better Search TEMPLATE Search Results for: %s', 'twentyeleven' ), '<span>' . get_search_query() . '</span>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</h1>
 			</header>
 
-			<?php echo get_bsearch_results( $s, $limit ); ?>
-			<?php echo $form; ?>
+			<?php echo get_bsearch_results( $s, $limit ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php echo $form; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div><!-- #content -->
 	</section><!-- #primary -->
 
