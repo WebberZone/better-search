@@ -19,7 +19,7 @@ function bsearch_where_clause( $where, $query ) {
 
 	if ( $query->is_search() && bsearch_get_option( 'seamless' ) && ! is_admin() && $query->is_main_query() ) {
 		$search_info = get_bsearch_terms();
-		$where       = bsearch_posts_where( $search_info );
+		$where       .= bsearch_posts_where( $search_info );
 	}
 
 	/**
