@@ -92,6 +92,11 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
+= 2.2.3 =
+
+* Bug fix:
+	* Fixed security issue. Reported by [Ryan Dewhurst](https://wpvulndb.com/vulnerabilities/9236)
+
 = 2.2.2 =
 
 * Bug fixes:
