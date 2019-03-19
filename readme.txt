@@ -96,6 +96,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 * Bug fix:
 	* Fixed security issue. Reported by [Ryan Dewhurst](https://wpvulndb.com/vulnerabilities/9236)
+	* WHERE clause is not replaced in seamless mode
 
 = 2.2.2 =
 
