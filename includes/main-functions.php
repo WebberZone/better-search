@@ -132,11 +132,11 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
  *
  * @since   2.0.0
  *
- * @param bool $escaped Whether the result is escaped. Default false.
+ * @param bool $escaped Whether the result is escaped. Default true.
  *                      Always escape this if you are going to display it.
  * @return  string  Better Search query
  */
-function get_bsearch_query( $escaped = false ) {
+function get_bsearch_query( $escaped = true ) {
 
 	$search_query = trim(
 		bsearch_clean_terms(
