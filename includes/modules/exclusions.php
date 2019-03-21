@@ -6,6 +6,11 @@
  * @subpackage Better_Search/Exclusions
  */
 
+// If this file is called directly, then abort execution.
+if ( ! defined( 'WPINC' ) ) {
+	die( "Aren't you supposed to come here via WP-Admin?" );
+}
+
 /**
  * Function to exclude protected posts.
  *
