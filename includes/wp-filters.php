@@ -18,11 +18,6 @@ function bsearch_clause_head() {
 
 	if ( $wp_query->is_search ) {
 
-		if ( bsearch_get_option( 'seamless' ) && ! is_paged() ) {
-			$search_query = get_bsearch_query();
-			$output      .= bsearch_increment_counter( $search_query );
-		}
-
 		if ( bsearch_get_option( 'meta_noindex' ) ) {
 			$output .= '<meta name="robots" content="noindex,follow" />';
 		}
