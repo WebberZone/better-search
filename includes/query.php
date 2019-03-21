@@ -5,6 +5,11 @@
  * @package Better_Search
  */
 
+// If this file is called directly, then abort execution.
+if ( ! defined( 'WPINC' ) ) {
+	die( "Aren't you supposed to come here via WP-Admin?" );
+}
+
 /**
  * Returns an array with the first and last indices to be displayed on the page.
  *
