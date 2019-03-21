@@ -232,3 +232,30 @@ function bsearch_clause_prepare() {
 	return apply_filters( 'bsearch_clause_prepare', $search_ids );
 }
 
+
+/**
+ * Function to update search count.
+ *
+ * @since   1.0
+ * @deprecated 2.2.4
+ *
+ * @param   string $search_query   Search query.
+ * @return  string  Search tracker code
+ */
+function bsearch_increment_counter( $search_query ) {
+
+	_deprecated_function( __FUNCTION__, '2.2.4' );
+
+	$output = '';
+
+	/**
+	 * Filter the search tracker code
+	 *
+	 * @since   2.0.0
+	 *
+	 * @param   string  $output         Formatted output string
+	 * @param   string  $search_query   Search query
+	 */
+	return apply_filters( 'bsearch_increment_counter', $output, $search_query );
+}
+

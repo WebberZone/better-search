@@ -83,14 +83,6 @@ function bsearch_head() {
 
 	$search_query = get_bsearch_query();
 
-	$limit  = ( isset( $_GET['limit'] ) ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$bpaged = ( isset( $_GET['bpaged'] ) ) ? intval( $_GET['bpaged'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-	if ( ! $bpaged && bsearch_get_option( 'track_popular' ) ) {
-		// Increment the count if we are on the first page of the results.
-		echo bsearch_increment_counter( $search_query ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	}
-
 	// Add custom CSS to header.
 	if ( ( '' != $bsearch_custom_css ) && is_search() ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		echo '<style type="text/css">' . $bsearch_custom_css . '</style>'; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
