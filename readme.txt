@@ -92,6 +92,11 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
+= 2.2.4 =
+
+* Features:
+	* Searches are now tracked using Query Variables
+
 = 2.2.3 =
 
 * Bug fix:
@@ -175,6 +180,6 @@ For previous changelog entries, please refer to the separate changelog.txt file
 
 == Upgrade Notice ==
 
-= 2.2.2 =
-Bug fix release. For details on the update check the changelog and release post on https://webberzone.com
-
+= 2.2.4 =
+Security fix and change of tracker.
+For details on the update check the changelog and release post on https://webberzone.com
