@@ -7,6 +7,11 @@
  * @since Twenty Eleven 1.0
  */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 $search_query = bsearch_clean_terms( apply_filters( 'the_search_query', get_search_query() ) );
 get_header(); ?>
 

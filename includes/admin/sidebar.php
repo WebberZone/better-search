@@ -9,6 +9,12 @@
  * @subpackage Admin/Footer
  */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+
 ?>
 <div class="postbox-container">
 	<div id="donatediv" class="postbox meta-box-sortables">
