@@ -5,6 +5,11 @@
  * @package Better_Search
  */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /* Set the search query if it is missing */
 if ( ! isset( $bsearch_settings ) ) {
 	global $bsearch_settings;
