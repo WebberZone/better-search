@@ -92,6 +92,11 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
+= 2.3.0 =
+
+* Bug fixes:
+	* WHERE clause will be the same with Seamless mode ON or OFF
+
 = 2.2.4 =
 
 * Features:

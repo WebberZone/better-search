@@ -24,7 +24,9 @@ function bsearch_where_clause( $where, $query ) {
 
 	if ( $query->is_search() && bsearch_get_option( 'seamless' ) && ! is_admin() && $query->is_main_query() ) {
 		$search_info = get_bsearch_terms();
-		$where      .= bsearch_posts_where( $search_info );
+
+		// Replace the WHERE clause with our own.
+		$where = bsearch_posts_where( $search_info );
 	}
 
 	/**
@@ -37,7 +39,7 @@ function bsearch_where_clause( $where, $query ) {
 	 */
 	return apply_filters( 'bsearch_where_clause', $where, $query );
 }
-add_filter( 'posts_where', 'bsearch_where_clause', 10, 2 );
+add_filter( 'posts_where', 'bsearch_where_clause', 9, 2 );
 
 
 /**
