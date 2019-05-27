@@ -143,6 +143,13 @@ function bsearch_get_registered_settings() {
 					'options' => '1',
 					'size'    => 'small',
 				),
+				'aggressive_search'       => array(
+					'id'      => 'aggressive_search',
+					'name'    => esc_html__( 'Aggressive search', 'better-search' ),
+					'desc'    => esc_html__( 'Enable this to search using BOOLEAN mode ON and/or using LIKE in case no results are found for the search term. This only applies if Seamless mode is disabled.', 'better-search' ),
+					'type'    => 'checkbox',
+					'options' => false,
+				),
 				'highlight'               => array(
 					'id'      => 'highlight',
 					'name'    => esc_html__( 'Highlight search terms', 'better-search' ),
