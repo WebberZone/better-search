@@ -269,7 +269,8 @@ function get_bsearch_matches( $search_query, $bydate ) {
 		}
 	}
 
-	$boolean_mode = bsearch_get_option( 'boolean_mode' );
+	$boolean_mode      = bsearch_get_option( 'boolean_mode' );
+	$aggressive_search = bsearch_get_option( 'aggressive_search' );
 
 	// If no transient is set.
 	if ( ! isset( $results ) ) {
@@ -279,14 +280,14 @@ function get_bsearch_matches( $search_query, $bydate ) {
 	}
 
 	// If no results are found then force BOOLEAN mode only if this isn't ON before.
-	if ( ! $results && ! $boolean_mode ) {
+	if ( ! $results && ! $boolean_mode && $aggressive_search ) {
 		$sql = bsearch_sql_prepare( $search_info, 1, $bydate );
 
 		$results = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	}
 
 	// If no results are found then force LIKE mode.
-	if ( ! $results ) {
+	if ( ! $results && $aggressive_search ) {
 		// Strip out all the fancy characters that fulltext would use.
 		$search_query = addslashes_gpc( $search_query );
 		$search_query = preg_replace( '/, +/', ' ', $search_query );

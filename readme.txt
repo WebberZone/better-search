@@ -94,9 +94,12 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 = 2.3.0 =
 
+* Features:
+	* New option to disable aggressive searching when no results are found
+
 * Bug fixes:
 	* WHERE clause will be the same with Seamless mode ON or OFF
-	* The plugin will only force BOOLEAN mode f no results are found and this wasn't already enabled
+	* The plugin will only force BOOLEAN mode if no results are found and this wasn't already enabled
 
 = 2.2.4 =
 
