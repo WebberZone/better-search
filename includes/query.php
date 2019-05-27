@@ -94,7 +94,6 @@ function bsearch_posts_match_field( $search_query, $args = array() ) {
 	$weight_title   = bsearch_get_option( 'weight_title' );
 	$weight_content = bsearch_get_option( 'weight_content' );
 	$boolean_mode   = $args['boolean_mode'];
-
 	$search_query   = str_replace( '&quot;', '"', $search_query );
 
 	// Create the base MATCH part of the FIELDS clause.
@@ -182,7 +181,7 @@ function bsearch_posts_match( $search_query, $args = array() ) {
 
 	$boolean_mode = $args['boolean_mode'];
 
-	$search_query   = str_replace( '&quot;', '"', $search_query );
+	$search_query = str_replace( '&quot;', '"', $search_query );
 
 	// Construct the MATCH part of the WHERE clause.
 	$match = " AND MATCH ({$wpdb->posts}.post_title,{$wpdb->posts}.post_content) AGAINST ('%s' {$boolean_mode} ) ";
