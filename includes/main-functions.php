@@ -20,7 +20,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @return  string     Search results
  */
 function get_bsearch_results( $search_query = '', $limit = '' ) {
-	global $wpdb;
 
 	if ( ! ( $limit ) ) {
 		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -35,12 +34,8 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 	$searches = $matches[0];    // 0 index contains the search results always.
 
 	if ( $searches ) {
-		foreach ( $searches as $search ) {
-			if ( $topscore < $search->score ) {
-				$topscore = $search->score;
-			}
-		}
-		$numrows = count( $searches );
+		$topscore = max( wp_list_pluck( (array) $searches, 'score' ) );
+		$numrows  = count( $searches );
 	} else {
 		$numrows = 1;
 	}
@@ -68,17 +63,20 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 					$post_title = preg_replace( '/(?!<[^>]*?>)(' . implode( '|', $keys ) . ')(?![^<]*?>)/iu', '<span class="bsearch_highlight">$1</span>', $post_title );
 				}
 
-				$output .= '<h2><a href="' . get_permalink( $search->ID ) . '" rel="bookmark">' . $post_title . '</a></h2>';
+				$output .= '<article id="post-' . $search->ID . '" ';
+				$output .= 'class="' . join( ' ', get_post_class( 'bsearch-post', $search->ID ) ) . '"';
+				$output .= '>';
 
-				$output .= '<p>';
-				$output .= '<span class="bsearch_score">' . get_bsearch_score( $search, $score, $topscore ) . '</span>';
+				$output .= '<header class="bsearch-entry-header">';
 
-				$before = __( 'Posted on: ', 'better-search' );
+				$output .= sprintf( '<h2 class="bsearch-entry-title"><a href="%1$s" rel="bookmark">%2$s</a></h2>', esc_url( get_permalink( $search->ID ) ), $post_title );
 
-				$output .= '<span class="bsearch_date">' . get_bsearch_date( $search, __( 'Posted on: ', 'better-search' ) ) . '</span>';
-				$output .= '</p>';
+				$output .= sprintf( '<p><span class="bsearch_score">%1$s</span> &nbsp;&nbsp;&nbsp;&nbsp; <span class="bsearch_date">%2$s</span></p>', get_bsearch_score( $search, $score, $topscore ), get_bsearch_date( $search, __( 'Posted on: ', 'better-search' ) ) );
 
-				$output .= '<p>';
+				$output .= '</header>';
+
+				$output .= '<div class="bsearch-entry-content">';
+
 				if ( bsearch_get_option( 'include_thumb' ) ) {
 					$output .= '<p class="bsearch_thumb">' . get_the_post_thumbnail( $search->ID, 'thumbnail' ) . '</p>';
 				}
@@ -90,9 +88,10 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 					$excerpt = preg_replace( '/(?!<[^>]*?>)(' . implode( '|', $keys ) . ')(?![^<]*?>)/iu', '<span class="bsearch_highlight">$1</span>', $excerpt );
 				}
 
-				$output .= '<span class="bsearch_excerpt">' . $excerpt . '</span>';
+				$output .= sprintf( '<p class="bsearch_excerpt">%1$s</p>', $excerpt );
 
-				$output .= '</p>';
+				$output .= '</div>';
+				$output .= '</article>';
 			} //end of foreach loop
 
 			$output .= get_bsearch_footer( $search_query, $numrows, $limit );
