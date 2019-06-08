@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-17 14:10+0000\n"
+"POT-Creation-Date: 2019-06-08 11:30+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team: WebberZone <plugins@webberzone.com>\n"
@@ -87,7 +87,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/help-tab.php:59 includes/admin/settings-page.php:126
-#: includes/general-template.php:278
+#: includes/general-template.php:283
 #: includes/modules/class-bsearch-widget.php:207
 msgid "Search"
 msgstr ""
@@ -167,65 +167,65 @@ msgstr ""
 msgid "Reset all settings"
 msgstr ""
 
-#: includes/deprecated.php:31
+#: includes/deprecated.php:36
 msgid "<h3>Popular Searches</h3>"
 msgstr ""
 
-#: includes/deprecated.php:32
+#: includes/deprecated.php:37
 msgid "<h3>Weekly Popular Searches</h3>"
 msgstr ""
 
-#: includes/general-template.php:44
+#: includes/general-template.php:49
 #, php-format
 msgid ""
 "Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</"
 "strong>"
 msgstr ""
 
-#: includes/general-template.php:50
+#: includes/general-template.php:55
 #, php-format
 msgid "Page <strong>%1$s</strong> of <strong>%2$s</strong>"
 msgstr ""
 
-#: includes/general-template.php:60
+#: includes/general-template.php:65
 msgid "Results per-page"
 msgstr ""
 
-#: includes/general-template.php:105
+#: includes/general-template.php:110
 msgid "Previous"
 msgstr ""
 
-#: includes/general-template.php:133
+#: includes/general-template.php:138
 msgid "Next"
 msgstr ""
 
-#: includes/general-template.php:168
+#: includes/general-template.php:173
 msgid "Relevance: "
 msgstr ""
 
-#: includes/general-template.php:276
+#: includes/general-template.php:281
 msgid "Search for:"
 msgstr ""
 
-#: includes/main-functions.php:76 includes/main-functions.php:78
+#: includes/main-functions.php:74
 msgid "Posted on: "
 msgstr ""
 
-#: includes/main-functions.php:102
+#: includes/main-functions.php:101
 msgid "No results."
 msgstr ""
 
-#: includes/main-functions.php:107
+#: includes/main-functions.php:106
 msgid ""
 "Please type in your search terms. Use descriptive words since this search is "
 "intelligent."
 msgstr ""
 
-#: includes/main-functions.php:113
+#: includes/main-functions.php:112
 msgid "Powered by "
 msgstr ""
 
-#: includes/modules/cache.php:33
+#: includes/modules/cache.php:38
 msgid "Better Search cache has been cleared"
 msgstr ""
 
@@ -249,16 +249,16 @@ msgstr ""
 msgid "No searches made yet"
 msgstr ""
 
-#: includes/template-redirect.php:125
+#: includes/template-redirect.php:122
 #, php-format
 msgid "Search Results for \"%1$s\" | %2$s"
 msgstr ""
 
-#: templates/better-search-template.php:21
+#: templates/better-search-template.php:26
 #, php-format
 msgid "Better Search TEMPLATE Search Results for: %s"
 msgstr ""
 
-#: templates/template.php:31
+#: templates/template.php:36
 msgid "Search Results for: "
 msgstr ""
