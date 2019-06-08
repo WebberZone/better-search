@@ -111,6 +111,6 @@ For previous changelog entries, please refer to the separate changelog.txt file
 
 == Upgrade Notice ==
 
-= 2.2.4 =
-Security fix and change of tracker.
+= 2.3.0 =
+New options and bug fixes.
 For details on the update check the changelog and release post on https://webberzone.com
