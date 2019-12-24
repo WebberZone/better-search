@@ -95,7 +95,8 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 = 2.4.0 =
 
 * Features:
-	* New interface in the admin area to view popular searches. You can also delete the search results from this page.
+	* New interface in the admin area to view popular searches. You can also delete the search results from this page
+	* New setting *Number format count* under General to turn on/off the number formating of the search count
 
 = 2.3.0 =
 

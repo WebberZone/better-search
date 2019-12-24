@@ -200,7 +200,7 @@ class Better_Search_Statistics_Table extends WP_List_Table {
 		switch ( $column_name ) {
 			case 'total_count':
 			case 'daily_count':
-				return number_format_i18n( absint( $item[ $column_name ] ) );
+				return bsearch_number_format_i18n( absint( $item[ $column_name ] ) );
 			default:
 				// Show the whole array for troubleshooting purposes.
 				return print_r( $item, true );  //phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r

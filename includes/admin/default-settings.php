@@ -28,49 +28,56 @@ function bsearch_get_registered_settings() {
 		'general' => apply_filters(
 			'bsearch_settings_general',
 			array(
-				'seamless'      => array(
+				'seamless'            => array(
 					'id'      => 'seamless',
 					'name'    => esc_html__( 'Enable seamless integration', 'better-search' ),
 					'desc'    => esc_html__( "Complete integration with your theme. Enabling this option will ignore better-search-template.php. It will continue to display the search results sorted by relevance, although it won't display the percentage relevance.", 'better-search' ),
 					'type'    => 'checkbox',
 					'options' => true,
 				),
-				'track_popular' => array(
+				'track_popular'       => array(
 					'id'      => 'track_popular',
 					'name'    => esc_html__( 'Enable search tracking', 'better-search' ),
 					'desc'    => esc_html__( 'If you turn this off, then the plugin will no longer track and display the popular search terms.', 'better-search' ),
 					'type'    => 'checkbox',
 					'options' => true,
 				),
-				'track_admins'  => array(
+				'track_admins'        => array(
 					'id'      => 'track_admins',
 					'name'    => esc_html__( 'Track admin searches', 'better-search' ),
 					'desc'    => esc_html__( 'Disabling this option will stop searches made by admins from being tracked.', 'better-search' ),
 					'type'    => 'checkbox',
 					'options' => true,
 				),
-				'track_editors' => array(
+				'track_editors'       => array(
 					'id'      => 'track_editors',
 					'name'    => esc_html__( 'Track editor user group searches', 'better-search' ),
 					'desc'    => esc_html__( 'Disabling this option will stop searches made by editors from being tracked.', 'better-search' ),
 					'type'    => 'checkbox',
 					'options' => true,
 				),
-				'cache'         => array(
+				'cache'               => array(
 					'id'      => 'cache',
 					'name'    => esc_html__( 'Enable cache', 'better-search' ),
 					'desc'    => esc_html__( 'If activated, Better Search will use the Transients API to cache the search results for 1 hour.', 'better-search' ),
 					'type'    => 'checkbox',
 					'options' => true,
 				),
-				'meta_noindex'  => array(
+				'meta_noindex'        => array(
 					'id'      => 'meta_noindex',
 					'name'    => esc_html__( 'Stop search engines from indexing search results pages', 'better-search' ),
 					'desc'    => esc_html__( 'This is a recommended option to turn ON. Adds noindex,follow meta tag to the head of the page', 'better-search' ),
 					'type'    => 'checkbox',
 					'options' => true,
 				),
-				'show_credit'   => array(
+				'number_format_count' => array(
+					'id'      => 'number_format_count',
+					'name'    => esc_html__( 'Number format count', 'better-search' ),
+					'desc'    => esc_html__( 'Activating this option will convert the search counts into a number format based on the locale', 'better-search' ),
+					'type'    => 'checkbox',
+					'options' => true,
+				),
+				'show_credit'         => array(
 					'id'      => 'show_credit',
 					'name'    => esc_html__( 'Link to Better Search plugin page', 'better-search' ),
 					'desc'    => esc_html__( 'A nofollow link to the plugin is added as an extra list item to the list of popular searches. Not mandatory, but thanks if you do it!', 'better-search' ),
