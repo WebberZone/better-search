@@ -4,7 +4,7 @@ Contributors: webberzone, Ajay
 Donate link: https://ajaydsouza.com/donate/
 Stable tag: trunk
 Requires at least: 4.7
-Tested up to: 5.2
+Tested up to: 5.3
 License: GPLv2 or later
 
 
@@ -92,9 +92,14 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
+= 2.4.0 =
+
+* Features:
+	* New interface in the admin area to view popular searches. You can also delete the search results from this page.
+
 = 2.3.0 =
 
-Release post: [https://wzn.io/2WU0QUq](https://wzn.io/2WU0QUq)
+Release post: [https://webberzone.com/blog/better-search-v2-3-0/](https://webberzone.com/blog/better-search-v2-3-0/)
 
 * Features:
 	* New option to disable aggressive searching when no results are found
