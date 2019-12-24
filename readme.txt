@@ -98,6 +98,9 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 	* New interface in the admin area to view popular searches. You can also delete the search results from this page
 	* New setting *Number format count* under General to turn on/off the number formating of the search count
 
+* Bug fixes:
+	* Options with checkboxes that haven't been saved in the database should display correctly
+
 = 2.3.0 =
 
 Release post: [https://webberzone.com/blog/better-search-v2-3-0/](https://webberzone.com/blog/better-search-v2-3-0/)

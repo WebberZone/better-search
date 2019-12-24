@@ -301,9 +301,9 @@ function bsearch_checkbox_callback( $args ) {
 	// First, we read the options collection.
 	global $bsearch_settings;
 
-	$checked = ! empty( $bsearch_settings[ $args['id'] ] ) ? checked( 1, $bsearch_settings[ $args['id'] ], false ) : '';
+	$checked = isset( $bsearch_settings[ $args['id'] ] ) ? checked( 1, $bsearch_settings[ $args['id'] ], false ) : checked( 1, bsearch_get_option( $args['id'] ), false );
 	$default = isset( $args['options'] ) ? $args['options'] : '';
-	$set     = isset( $bsearch_settings[ $args['id'] ] ) ? $bsearch_settings[ $args['id'] ] : '';
+	$set     = isset( $bsearch_settings[ $args['id'] ] ) ? $bsearch_settings[ $args['id'] ] : bsearch_get_option( $args['id'] );
 
 	$html  = sprintf( '<input type="hidden" name="bsearch_settings[%1$s]" value="-1" />', sanitize_key( $args['id'] ) );
 	$html .= sprintf( '<input type="checkbox" id="bsearch_settings[%1$s]" name="bsearch_settings[%1$s]" value="1" %2$s />', sanitize_key( $args['id'] ), $checked );
@@ -615,7 +615,7 @@ function bsearch_tags_search() {
 		wp_die( 0 );
 	}
 
-	$taxonomy = sanitize_key( $_REQUEST['tax'] );
+	$taxonomy = sanitize_key( $_REQUEST['tax'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$tax      = get_taxonomy( $taxonomy );
 	if ( ! $tax ) {
 		wp_die( 0 );
