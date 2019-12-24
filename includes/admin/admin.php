@@ -25,7 +25,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @return void
  */
 function bsearch_add_admin_pages_links() {
-	global $bsearch_settings_page, $bsearch_settings_tools_help;
+	global $bsearch_settings_page, $bsearch_settings_tools_help, $bsearch_settings_popular_posts, $bsearch_settings_popular_posts_daily;
+
 
 	$bsearch_settings_page = add_menu_page( esc_html__( 'Better Search Settings', 'better-search' ), esc_html__( 'Better Search', 'better-search' ), 'manage_options', 'bsearch_options_page', 'bsearch_options_page', 'dashicons-search' );
 	add_action( "load-$bsearch_settings_page", 'bsearch_settings_help' ); // Load the settings contextual help.
@@ -34,6 +35,18 @@ function bsearch_add_admin_pages_links() {
 	$plugin_page = add_submenu_page( 'bsearch_options_page', esc_html__( 'Better Search Settings', 'better-search' ), esc_html__( 'Settings', 'better-search' ), 'manage_options', 'bsearch_options_page', 'bsearch_options_page' );
 	add_action( 'admin_head-' . $plugin_page, 'bsearch_adminhead' );
 
+	// Initialise Top 10 Statistics pages.
+	$bsearch_stats_screen = new Better_Search_Statistics();
+
+	$bsearch_settings_popular_posts = add_submenu_page( 'bsearch_options_page', __( 'Better Search Popular Searches', 'top-10' ), __( 'Popular Searches', 'top-10' ), 'manage_options', 'bsearch_popular_searches', array( $bsearch_stats_screen, 'plugin_settings_page' ) );
+	add_action( "load-$bsearch_settings_popular_posts", array( $bsearch_stats_screen, 'screen_option' ) );
+	add_action( 'admin_head-' . $bsearch_settings_popular_posts, 'bsearch_adminhead' );
+
+	$bsearch_settings_popular_posts_daily = add_submenu_page( 'bsearch_options_page', __( 'Better Search Daily Popular Searches', 'top-10' ), __( 'Daily Popular Searches', 'top-10' ), 'manage_options', 'bsearch_popular_searches&orderby=daily_count&order=desc', array( $bsearch_stats_screen, 'plugin_settings_page' ) );
+	add_action( "load-$bsearch_settings_popular_posts_daily", array( $bsearch_stats_screen, 'screen_option' ) );
+	add_action( 'admin_head-' . $bsearch_settings_popular_posts_daily, 'bsearch_adminhead' );
+
+	// Add links to Tools pages.
 	$bsearch_settings_tools_help = add_submenu_page( 'bsearch_options_page', esc_html__( 'Better Search Tools', 'better-search' ), esc_html__( 'Tools', 'better-search' ), 'manage_options', 'bsearch_tools_page', 'bsearch_tools_page' );
 	add_action( "load-$bsearch_settings_tools_help", 'bsearch_settings_tools_help' );
 	add_action( 'admin_head-' . $bsearch_settings_tools_help, 'bsearch_adminhead' );
@@ -49,13 +62,26 @@ add_action( 'admin_menu', 'bsearch_add_admin_pages_links' );
  * @return void
  */
 function bsearch_adminhead() {
+	global $bsearch_settings_popular_posts, $bsearch_settings_popular_posts_daily;
 
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'jquery-ui-autocomplete' );
 	wp_enqueue_script( 'jquery-ui-tabs' );
 	wp_enqueue_script( 'plugin-install' );
+	wp_enqueue_script( 'jquery-ui-datepicker' );
 	wp_enqueue_script( 'jscolor', BETTER_SEARCH_PLUGIN_URL . 'includes/admin/jscolor/jscolor.js', array(), '1.0', true );
 	add_thickbox();
+	$screen = get_current_screen();
+
+	if ( $screen->id === $bsearch_settings_popular_posts || $screen->id === $bsearch_settings_popular_posts_daily ) {
+		wp_enqueue_style(
+			'bsearch-admin-ui-css',
+			plugins_url( 'includes/admin/css/better-search-admin.min.css', BETTER_SEARCH_PLUGIN_FILE ),
+			false,
+			'1.0',
+			false
+		);
+	}
 	?>
 	<script type="text/javascript">
 	//<![CDATA[
@@ -178,9 +204,15 @@ function bsearch_adminhead() {
 				}
 			}
 
-			$( "input[name='submit']" ).click( function() {
+			$( "input[name='submit']" ).click(formNotModified);
+			$( "input[id='search-submit']" ).click(formNotModified);
+			$( "input[id='doaction']" ).click(formNotModified);
+			$( "input[id='doaction2']" ).click(formNotModified);
+			$( "input[name='filter_action']" ).click(formNotModified);
+
+			function formNotModified() {
 				formmodified = 0;
-			});
+			}
 
 			$( function() {
 				$( "#post-body-content" ).tabs({
@@ -193,6 +225,40 @@ function bsearch_adminhead() {
 					}
 				});
 			});
+
+			// Datepicker.
+			$( function() {
+				var dateFormat = 'dd M yy',
+				from = $( "#datepicker-from" )
+					.datepicker({
+						changeMonth: true,
+						maxDate: 0,
+						dateFormat: dateFormat
+					})
+					.on( "change", function() {
+						to.datepicker( "option", "minDate", getDate( this ) );
+					}),
+				to = $( "#datepicker-to" )
+					.datepicker({
+						changeMonth: true,
+						maxDate: 0,
+						dateFormat: dateFormat
+					})
+					.on( "change", function() {
+						from.datepicker( "option", "maxDate", getDate( this ) );
+					});
+
+				function getDate( element ) {
+					var date;
+					try {
+						date = $.datepicker.parseDate( dateFormat, element.value );
+					} catch( error ) {
+						date = null;
+					}
+
+					return date;
+				}
+			} );
 
 		});
 

@@ -213,3 +213,33 @@ function bsearch_rgb2html( $r, $g = -1, $b = -1, $padhash = false ) {
 	return $color;
 }
 
+/**
+ * Retrieve the from date for the query
+ *
+ * @since 2.4.0
+ *
+ * @param string $time        A date/time string.
+ * @param int    $daily_range Daily range.
+ * @return string From date
+ */
+function bsearch_get_from_date( $time = null, $daily_range = null ) {
+
+	$current_time = isset( $time ) ? strtotime( $time ) : strtotime( current_time( 'mysql' ) );
+	$daily_range  = isset( $daily_range ) ? $daily_range : bsearch_get_option( 'daily_range' );
+
+	$from_date = $current_time - ( max( 0, ( $daily_range - 1 ) ) * DAY_IN_SECONDS );
+	$from_date = gmdate( 'Y-m-d', $from_date );
+
+	/**
+	 * Retrieve the from date for the query
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param string $from_date   From date.
+	 * @param string $time        A date/time string.
+	 * @param int    $daily_range Daily range.
+	 */
+	return apply_filters( 'bsearch_get_from_date', $from_date, $time, $daily_range );
+}
+
+
