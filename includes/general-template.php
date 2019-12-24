@@ -171,7 +171,7 @@ function get_bsearch_score( $search, $score, $topscore ) {
 	if ( $score > 0 ) {
 		$score   = $score * 100 / $topscore;
 		$output  = __( 'Relevance: ', 'better-search' );
-		$output .= number_format_i18n( $score, 0 ) . '%';
+		$output .= bsearch_number_format_i18n( $score, 0 ) . '%';
 	}
 
 	/**
