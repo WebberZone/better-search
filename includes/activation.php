@@ -55,7 +55,7 @@ register_activation_hook( BETTER_SEARCH_PLUGIN_FILE, 'bsearch_install' );
 function bsearch_single_activate() {
 	global $wpdb, $bsearch_db_version;
 
-	$bsearch_settings = bsearch_read_options();
+	$bsearch_settings = bsearch_get_settings();
 
 	// Create full text index.
 	$wpdb->hide_errors();

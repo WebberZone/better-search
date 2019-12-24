@@ -100,6 +100,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 * Bug fixes:
 	* Options with checkboxes that haven't been saved in the database should display correctly
+	* Fixed `bsearch_read_options is deprecated` message on activation
 
 = 2.3.0 =
 
