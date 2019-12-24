@@ -242,3 +242,32 @@ function bsearch_get_from_date( $time = null, $daily_range = null ) {
 	return apply_filters( 'bsearch_get_from_date', $from_date, $time, $daily_range );
 }
 
+
+/**
+ * Convert float number to format based on the locale if number_format_count is true.
+ *
+ * @since 2.4.0
+ *
+ * @param float $number   The number to convert based on locale.
+ * @param int   $decimals Optional. Precision of the number of decimal places. Default 0.
+ * @return string Converted number in string format.
+ */
+function bsearch_number_format_i18n( $number, $decimals = 0 ) {
+
+	$formatted = $number;
+
+	if ( bsearch_get_option( 'number_format_count' ) ) {
+		$formatted = number_format_i18n( $number );
+	}
+
+	/**
+	 * Filters the number formatted based on the locale.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param string $formatted Converted number in string format.
+	 * @param float  $number    The number to convert based on locale.
+	 * @param int    $decimals  Precision of the number of decimal places.
+	 */
+	return apply_filters( 'bsearch_number_format_i18n', $formatted, $number, $decimals );
+}
