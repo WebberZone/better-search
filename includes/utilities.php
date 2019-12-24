@@ -20,7 +20,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 function bsearch_clean_terms( $val ) {
 
-	$val = stripslashes( rawurldecode( $val ) );
+	$val = rawurldecode( $val );
 
 	$badwords = array_map( 'trim', explode( ',', bsearch_get_option( 'badwords' ) ) );
 
@@ -241,5 +241,4 @@ function bsearch_get_from_date( $time = null, $daily_range = null ) {
 	 */
 	return apply_filters( 'bsearch_get_from_date', $from_date, $time, $daily_range );
 }
-
 
