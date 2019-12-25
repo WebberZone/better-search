@@ -9,7 +9,7 @@
  * @author    Ajay D'Souza <me@ajaydsouza.com>
  * @license   GPL-2.0+
  * @link      https://webberzone.com
- * @copyright 2009-2019 Ajay D'Souza
+ * @copyright 2009-2020 Ajay D'Souza
  *
  * @wordpress-plugin
  * Plugin Name: Better Search
@@ -131,6 +131,7 @@ function bsearch_get_settings() {
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/heatmap.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/exclusions.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/shortcode.php';
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/taxonomies.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/deprecated.php';
 
 /*

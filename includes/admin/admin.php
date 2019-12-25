@@ -27,7 +27,6 @@ if ( ! defined( 'WPINC' ) ) {
 function bsearch_add_admin_pages_links() {
 	global $bsearch_settings_page, $bsearch_settings_tools_help, $bsearch_settings_popular_posts, $bsearch_settings_popular_posts_daily;
 
-
 	$bsearch_settings_page = add_menu_page( esc_html__( 'Better Search Settings', 'better-search' ), esc_html__( 'Better Search', 'better-search' ), 'manage_options', 'bsearch_options_page', 'bsearch_options_page', 'dashicons-search' );
 	add_action( "load-$bsearch_settings_page", 'bsearch_settings_help' ); // Load the settings contextual help.
 	add_action( "admin_head-$bsearch_settings_page", 'bsearch_adminhead' ); // Load the admin head.
