@@ -119,6 +119,26 @@ function bsearch_get_registered_settings() {
 					'type'    => 'numbercsv',
 					'options' => '',
 				),
+				'exclude_cat_slugs'       => array(
+					'id'               => 'exclude_cat_slugs',
+					'name'             => esc_html__( 'Exclude Categories', 'better-search' ),
+					'desc'             => esc_html__( 'Comma separated list of category slugs. The field above has an autocomplete so simply start typing in the starting letters and it will prompt you with options. Does not support custom taxonomies.', 'better-search' ),
+					'type'             => 'csv',
+					'options'          => '',
+					'size'             => 'large',
+					'field_class'      => 'category_autocomplete',
+					'field_attributes' => array(
+						'data-wp-taxonomy' => 'category',
+					),
+				),
+				'exclude_categories'      => array(
+					'id'       => 'exclude_categories',
+					'name'     => esc_html__( 'Exclude category IDs', 'better-search' ),
+					'desc'     => esc_html__( 'This is a readonly field that is automatically populated based on the above input when the settings are saved. These might differ from the IDs visible in the Categories page which use the term_id. Top 10 uses the term_taxonomy_id which is unique to this taxonomy.', 'better-search' ),
+					'type'     => 'text',
+					'options'  => '',
+					'readonly' => true,
+				),
 				'use_fulltext'            => array(
 					'id'      => 'use_fulltext',
 					'name'    => esc_html__( 'Enable mySQL FULLTEXT searching', 'better-search' ),

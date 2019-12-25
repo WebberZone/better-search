@@ -290,15 +290,10 @@ function bsearch_sanitize_exclude_cat( $settings ) {
 
 	if ( ! empty( $settings['exclude_cat_slugs'] ) ) {
 
-		$exclude_cat_slugs = explode( ',', $settings['exclude_cat_slugs'] );
+		$exclude_cat_slugs = array_unique( explode( ',', $settings['exclude_cat_slugs'] ) );
 
 		foreach ( $exclude_cat_slugs as $cat_name ) {
 			$cat = get_term_by( 'name', $cat_name, 'category' );
-
-			// Fall back to slugs since that was the default format before v2.4.0.
-			if ( false === $cat ) {
-				$cat = get_term_by( 'slug', $cat_name, 'category' );
-			}
 			if ( isset( $cat->term_taxonomy_id ) ) {
 				$exclude_categories[]       = $cat->term_taxonomy_id;
 				$exclude_categories_slugs[] = $cat->name;
