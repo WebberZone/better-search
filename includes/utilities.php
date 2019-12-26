@@ -16,9 +16,13 @@ if ( ! defined( 'WPINC' ) ) {
  * @since   1.0
  *
  * @param   string $val    Potentially unclean string.
- * @return  string  Cleaned string
+ * @return  string  Cleaned string if successful or empty string on use of banned word
  */
 function bsearch_clean_terms( $val ) {
+	global $bsearch_error;
+
+	// instantiate WP_Error class.
+	$bsearch_error = new WP_Error();
 
 	$val = rawurldecode( $val );
 
@@ -37,8 +41,15 @@ function bsearch_clean_terms( $val ) {
 	$censor_char = apply_filters( 'bsearch_censor_char', $censor_char, $val );
 
 	$val_censored = bsearch_censor_string( $val, $badwords, $censor_char );  // No more bad words.
-	$val          = $val_censored['clean'];
 
+	if ( $val_censored['clean'] !== $val_censored['orig'] ) {
+		$bsearch_error->add( 'bsearch_banned', __( 'Your search query consists banned words. Please remove these and try again.', 'better-search' ) );
+		if ( bsearch_get_option( 'banned_stop_search' ) ) {
+			return '';
+		}
+	}
+
+	$val = $val_censored['clean'];
 	$val = wp_kses_post( $val );
 
 	/**
@@ -50,7 +61,6 @@ function bsearch_clean_terms( $val ) {
 	 */
 	return apply_filters( 'bsearch_clean_terms', $val );
 }
-add_filter( 'get_search_query', 'bsearch_clean_terms' );
 
 
 /**

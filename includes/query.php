@@ -213,7 +213,11 @@ function bsearch_posts_match( $search_query, $args = array() ) {
  * @return string WHERE clause
  */
 function bsearch_posts_where( $search_info, $args = array() ) {
-	global $wpdb;
+	global $wpdb, $bsearch_error;
+
+	if ( is_wp_error( $bsearch_error ) && bsearch_get_option( 'banned_stop_search' ) ) {
+		return ' AND 1=0 ';
+	}
 
 	// Parse incomming $args into an array and merge it with $defaults.
 	$args = wp_parse_args( $args, bsearch_query_default_args() );

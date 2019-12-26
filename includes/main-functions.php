@@ -20,6 +20,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @return  string     Search results
  */
 function get_bsearch_results( $search_query = '', $limit = '' ) {
+	global $bsearch_error;
 
 	if ( ! ( $limit ) ) {
 		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -103,7 +104,13 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 		}
 	} else {
 		$output .= '<p>';
-		$output .= __( 'Please type in your search terms. Use descriptive words since this search is intelligent.', 'better-search' );
+		if ( is_wp_error( $bsearch_error ) && bsearch_get_option( 'banned_stop_search' ) ) {
+			foreach ( $bsearch_error->get_error_messages() as $error ) {
+				$output .= $error . '<br/>';
+			}
+		} else {
+			$output .= __( 'Please type in your search terms. Use descriptive words since this search is intelligent.', 'better-search' );
+		}
 		$output .= '</p>';
 	}
 
@@ -224,12 +231,19 @@ function get_bsearch_terms( $search_query = '' ) {
  * @return  array   Search results
  */
 function get_bsearch_matches( $search_query, $bydate ) {
-	global $wpdb;
+	global $wpdb, $bsearch_error;
 
 	// if there are two items in $search_info, the string has been broken into separate terms that
 	// are listed at $search_info[1]. The cleaned-up version of $search_query is still at the zero index.
 	// This is when fulltext is disabled, and we search using LIKE.
 	$search_info = get_bsearch_terms( $search_query );
+
+	if ( is_wp_error( $bsearch_error ) && bsearch_get_option( 'banned_stop_search' ) ) {
+		$matches[0]              = array();
+		$matches['search_query'] = $search_query;
+
+		return $matches;
+	}
 
 	// Get search transient.
 	$search_query_transient = 'bs_' . preg_replace( '/[^A-Za-z0-9\-]/', '', str_replace( ' ', '', $search_query ) );
