@@ -75,7 +75,7 @@ class Better_Search_Statistics {
 		}
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Better Search Popular Posts', 'better-search' ); ?></h1>
+			<h1><?php esc_html_e( 'Better Search Popular Searches', 'better-search' ); ?></h1>
 
 			<div id="poststuff">
 				<div id="post-body" class="metabox-holder columns-2">
