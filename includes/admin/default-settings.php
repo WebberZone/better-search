@@ -206,6 +206,13 @@ function bsearch_get_registered_settings() {
 					'type'    => 'textarea',
 					'options' => implode( ',', bsearch_get_badwords() ),
 				),
+				'banned_whole_words'      => array(
+					'id'      => 'banned_whole_words',
+					'name'    => esc_html__( 'Filter whole words only', 'better-search' ),
+					'desc'    => esc_html__( 'When activated, only whole words in the search query are filtered. Partial words are ignored. e.g. grow will not ban grown or grower.', 'better-search' ),
+					'type'    => 'checkbox',
+					'options' => false,
+				),
 				'banned_stop_search'      => array(
 					'id'      => 'banned_stop_search',
 					'name'    => esc_html__( 'Stop query on banned words filter', 'better-search' ),

@@ -40,7 +40,7 @@ function bsearch_clean_terms( $val ) {
 	 */
 	$censor_char = apply_filters( 'bsearch_censor_char', $censor_char, $val );
 
-	$val_censored = bsearch_censor_string( $val, $badwords, $censor_char );  // No more bad words.
+	$val_censored = bsearch_censor_string( $val, $badwords, $censor_char, bsearch_get_option( 'banned_whole_words' ) );  // No more bad words.
 
 	if ( $val_censored['clean'] !== $val_censored['orig'] ) {
 		$bsearch_error->add( 'bsearch_banned', __( 'Your search query consists banned words. Please remove these and try again.', 'better-search' ) );
@@ -88,12 +88,13 @@ function bsearch_rand_censor( $chars, $len ) {
  *
  * @since   1.3.3
  *
- * @param   string $string     String to be censored.
- * @param   array  $badwords   Array of badwords.
- * @param   string $censor_char String which replaces bad words. If it's more than 1-char long, a random string will be generated from these chars. Default: '*'.
- * @return  string  Cleaned up string
+ * @param  string $string      String to be censored.
+ * @param  array  $badwords    Array of badwords.
+ * @param  string $censor_char String which replaces bad words. If it's more than 1-char long, a random string will be generated from these chars. Default: '*'.
+ * @param  bool   $whole_words Filter whole worlds only.
+ * @return string Cleaned up string
  */
-function bsearch_censor_string( $string, $badwords, $censor_char = '*' ) {
+function bsearch_censor_string( $string, $badwords, $censor_char = '*', $whole_words = false ) {
 
 	$leet_replace      = array();
 	$leet_replace['a'] = '(a|a\.|a\-|4|@|Á|á|À|Â|à|Â|â|Ä|ä|Ã|ã|Å|å|α|Δ|Λ|λ)';
@@ -123,10 +124,15 @@ function bsearch_censor_string( $string, $badwords, $censor_char = '*' ) {
 	$leet_replace['y'] = '(y|y\.|y\-|¥|γ|ÿ|ý|Ÿ|Ý)';
 	$leet_replace['z'] = '(z|z\.|z\-|Ζ)';
 
-	$words = explode( ' ', $string );
-
 	// is $censor_char a single char?
 	$is_one_char = ( strlen( $censor_char ) === 1 );
+
+	// Add boundary filter for whole words.
+	if ( $whole_words ) {
+		$boundary = '\b';
+	} else {
+		$boundary = '';
+	}
 
 	// Count the bad words.
 	$no_of_badwords = count( $badwords );
@@ -137,11 +143,11 @@ function bsearch_censor_string( $string, $badwords, $censor_char = '*' ) {
 			? str_repeat( $censor_char, strlen( $badwords[ $x ] ) )
 			: bsearch_rand_censor( $censor_char, strlen( $badwords[ $x ] ) );
 
-		$badwords[ $x ] = '/' . str_ireplace( array_keys( $leet_replace ), array_values( $leet_replace ), $badwords[ $x ] ) . '/i';
+		$badwords[ $x ] = '/' . $boundary . str_ireplace( array_keys( $leet_replace ), array_values( $leet_replace ), $badwords[ $x ] ) . $boundary . '/i';
 	}
 
 	$newstring          = array();
-	$newstring['orig']  = ( $string );
+	$newstring['orig']  = $string;
 	$newstring['clean'] = preg_replace( $badwords, $replacement, $newstring['orig'] );
 
 	return $newstring;
