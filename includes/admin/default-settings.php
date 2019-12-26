@@ -206,6 +206,13 @@ function bsearch_get_registered_settings() {
 					'type'    => 'textarea',
 					'options' => implode( ',', bsearch_get_badwords() ),
 				),
+				'banned_stop_search'      => array(
+					'id'      => 'banned_stop_search',
+					'name'    => esc_html__( 'Stop query on banned words filter', 'better-search' ),
+					'desc'    => esc_html__( 'When activated, this option will return no results if the search query includes any of the words in the box above. If you have seamless mode off, Better Search will display an error message. With seamless mode on, this will give a Nothing found message. You can customize it by editing your theme.', 'better-search' ),
+					'type'    => 'checkbox',
+					'options' => false,
+				),
 			)
 		),
 		/*** Heatmap settings */
@@ -401,7 +408,6 @@ function bsearch_get_badwords() {
 		'punani',
 		'pussy',
 		'queef',
-		'queer',
 		'quim',
 		'rimjob',
 		'rape',

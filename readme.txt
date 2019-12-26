@@ -97,7 +97,8 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 * Features:
 	* New interface in the admin area to view popular searches. You can also delete the search results from this page
 	* New setting *Number format count* under General to turn on/off the number formating of the search count
-	* New setting *Exclude Categories* to exclude posts that belong to certain categories
+	* New setting *Exclude Categories* under Search to exclude posts that belong to certain categories
+	* New setting *Stop query on banned words filter* under Search to stop searching if the search query contains any word from the banned list i.e. "Filter these words" setting. If you have seamless mode off, Better Search will display an error message. With seamless mode on, this will give a Nothing found message. You can customize it by editing your theme
 
 * Bug fixes:
 	* Options with checkboxes that haven't been saved in the database should display correctly
