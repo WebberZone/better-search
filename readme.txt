@@ -47,6 +47,7 @@ So, if you've got some cool feature that you'd like to implement into the plugin
 4. Options in WP-Admin - Custom styles
 5. Options in WP-Admin - Tools
 6. Better Search widget
+7. Better Search Popular Searches table in Admin
 
 
 == Installation ==
