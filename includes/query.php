@@ -215,7 +215,7 @@ function bsearch_posts_match( $search_query, $args = array() ) {
 function bsearch_posts_where( $search_info, $args = array() ) {
 	global $wpdb, $bsearch_error;
 
-	if ( is_wp_error( $bsearch_error ) && bsearch_get_option( 'banned_stop_search' ) ) {
+	if ( '' !== $bsearch_error->get_error_message( 'bsearch_banned' ) && bsearch_get_option( 'banned_stop_search' ) ) {
 		return ' AND 1=0 ';
 	}
 

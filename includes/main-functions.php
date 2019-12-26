@@ -104,7 +104,7 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 		}
 	} else {
 		$output .= '<p>';
-		if ( is_wp_error( $bsearch_error ) && bsearch_get_option( 'banned_stop_search' ) ) {
+		if ( '' !== $bsearch_error->get_error_message( 'bsearch_banned' ) && bsearch_get_option( 'banned_stop_search' ) ) {
 			foreach ( $bsearch_error->get_error_messages() as $error ) {
 				$output .= $error . '<br/>';
 			}
@@ -238,7 +238,7 @@ function get_bsearch_matches( $search_query, $bydate ) {
 	// This is when fulltext is disabled, and we search using LIKE.
 	$search_info = get_bsearch_terms( $search_query );
 
-	if ( is_wp_error( $bsearch_error ) && bsearch_get_option( 'banned_stop_search' ) ) {
+	if ( '' !== $bsearch_error->get_error_message( 'bsearch_banned' ) && bsearch_get_option( 'banned_stop_search' ) ) {
 		$matches[0]              = array();
 		$matches['search_query'] = $search_query;
 
