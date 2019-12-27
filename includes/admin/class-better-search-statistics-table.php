@@ -242,7 +242,7 @@ class Better_Search_Statistics_Table extends WP_List_Table {
 			'<a href="%2$s">%1$s</a>%3$s',
 			esc_attr( $item['title'] ),
 			home_url() . '/?s=' . esc_attr( $item['title'] ),
-			$this->row_actions( $actions ),
+			$this->row_actions( $actions )
 		);
 
 	}
