@@ -127,6 +127,6 @@ For previous changelog entries, please refer to the separate changelog.txt file
 
 == Upgrade Notice ==
 
-= 2.3.0 =
-New options and bug fixes.
+= 2.4.0 =
+New admin interface to view the popular searches, improvements to the banned words filter, etc.
 For details on the update check the changelog and release post on https://webberzone.com
