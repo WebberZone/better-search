@@ -95,6 +95,9 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 = 2.5.0 =
 
+* Enhancements:
+	* Admin scripts are no longer loaded into the head - but using a separate JavaScript file
+
 * Bug fixes:
 	* Fixed notices in PHP 7.4 when viewing popular searches listings
 
