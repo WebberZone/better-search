@@ -93,6 +93,11 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
+= 2.5.0 =
+
+* Bug fixes:
+	* Fixed notices in PHP 7.4 when viewing popular searches listings
+
 = 2.4.0 =
 
 Release post: [https://webberzone.com/blog/better-search-v2-4-0/](https://webberzone.com/blog/better-search-v2-4-0/)
