@@ -56,8 +56,14 @@ class Better_Search_Statistics_Table extends WP_List_Table {
 
 		global $wpdb;
 
-		$from_date = bsearch_get_from_date( $args['search-date-filter-from'], 1 );
-		$to_date   = bsearch_get_from_date( $args['search-date-filter-to'], 1 );
+		$from_date = bsearch_get_from_date(
+			isset( $args['search-date-filter-from'] ) ? $args['search-date-filter-from'] : null,
+			1
+		);
+		$to_date   = bsearch_get_from_date(
+			isset( $args['search-date-filter-to'] ) ? $args['search-date-filter-to'] : null,
+			1
+		);
 
 		/* Start creating the SQL */
 		$table_name_daily = $wpdb->prefix . 'bsearch_daily AS bsd';
