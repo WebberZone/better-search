@@ -52,7 +52,7 @@ function get_bsearch_heatmap( $args = array() ) {
 
 		$sql = "SELECT searchvar, cntaccess FROM {$table_name} WHERE accessedid IN (SELECT accessedid FROM {$table_name} WHERE searchvar <> '' ORDER BY cntaccess DESC, searchvar ASC) ORDER by accessedid LIMIT %d";
 	} else {
-		$current_time = current_time( 'timestamp', 0 );
+		$current_time = strtotime( current_time( 'mysql' ) );
 		$current_time = $current_time - ( $args['daily_range'] - 1 ) * 3600 * 24;
 		$current_date = date_i18n( 'Y-m-j', $current_time );
 
