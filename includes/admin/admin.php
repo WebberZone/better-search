@@ -144,6 +144,16 @@ function bsearch_load_admin_scripts( $hook ) {
 		add_thickbox();
 		wp_enqueue_script( 'jscolor', BETTER_SEARCH_PLUGIN_URL . 'includes/admin/jscolor/jscolor.js', array(), '1.0', true );
 
+		wp_enqueue_code_editor(
+			array(
+				'type'       => 'text/html',
+				'codemirror' => array(
+					'indentUnit' => 2,
+					'tabSize'    => 2,
+				),
+			)
+		);
+
 	}
 
 	// Only enqueue the styles if this is a popular posts page.
