@@ -133,7 +133,7 @@ function bsearch_load_admin_scripts( $hook ) {
 
 	global $bsearch_settings_page, $bsearch_settings_tools_help, $bsearch_settings_popular_searches, $bsearch_settings_popular_searches_daily;
 
-	wp_register_script( 'better-search-admin-js', BETTER_SEARCH_PLUGIN_URL . 'includes/admin/js/admin-scripts.min.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-datepicker' ), '1.0', true );
+	wp_register_script( 'better-search-admin-js', BETTER_SEARCH_PLUGIN_URL . 'includes/admin/js/admin-scripts.min.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wp-color-picker' ), '1.0', true );
 	wp_register_script( 'better-search-suggest-js', BETTER_SEARCH_PLUGIN_URL . 'includes/admin/js/better-search-suggest.min.js', array( 'jquery', 'jquery-ui-autocomplete' ), '1.0', true );
 
 	if ( in_array( $hook, array( $bsearch_settings_page, $bsearch_settings_tools_help, $bsearch_settings_popular_searches, $bsearch_settings_popular_searches_daily ), true ) ) {
@@ -142,7 +142,7 @@ function bsearch_load_admin_scripts( $hook ) {
 		wp_enqueue_script( 'better-search-suggest-js' );
 		wp_enqueue_script( 'plugin-install' );
 		add_thickbox();
-		wp_enqueue_script( 'jscolor', BETTER_SEARCH_PLUGIN_URL . 'includes/admin/jscolor/jscolor.js', array(), '1.0', true );
+		wp_enqueue_style( 'wp-color-picker' );
 
 		wp_enqueue_code_editor(
 			array(
