@@ -287,3 +287,63 @@ function bsearch_number_format_i18n( $number, $decimals = 0 ) {
 	 */
 	return apply_filters( 'bsearch_number_format_i18n', $formatted, $number, $decimals );
 }
+
+/**
+ * Convert a string to CSV.
+ *
+ * @since 2.5.0
+ *
+ * @param string $array Input string.
+ * @param string $delimiter Delimiter.
+ * @param string $enclosure Enclosure.
+ * @param string $terminator Terminating string.
+ * @return string CSV string.
+ */
+function bsearch_str_putcsv( $array, $delimiter = ',', $enclosure = '"', $terminator = "\n" ) {
+	// First convert associative array to numeric indexed array.
+	$work_array = array();
+	foreach ( $array as $key => $value ) {
+		$work_array[] = $value;
+	}
+
+	$string     = '';
+	$array_size = count( $work_array );
+
+	for ( $i = 0; $i < $array_size; $i++ ) {
+		// Nested array, process nest item.
+		if ( is_array( $work_array[ $i ] ) ) {
+			$string .= str_putcsv( $work_array[ $i ], $delimiter, $enclosure, $terminator );
+		} else {
+			switch ( gettype( $work_array[ $i ] ) ) {
+				// Manually set some strings.
+				case 'NULL':
+					$sp_format = '';
+					break;
+				case 'boolean':
+					$sp_format = ( true === $work_array[ $i ] ) ? 'true' : 'false';
+					break;
+				// Make sure sprintf has a good datatype to work with.
+				case 'integer':
+					$sp_format = '%i';
+					break;
+				case 'double':
+					$sp_format = '%0.2f';
+					break;
+				case 'string':
+					$sp_format        = '%s';
+					$work_array[ $i ] = str_replace( "$enclosure", "$enclosure$enclosure", $work_array[ $i ] );
+					break;
+				// Unknown or invalid items for a csv - note: the datatype of array is already handled above, assuming the data is nested.
+				case 'object':
+				case 'resource':
+				default:
+					$sp_format = '';
+					break;
+			}
+			$string .= sprintf( '%2$s' . $sp_format . '%2$s', $work_array[ $i ], $enclosure );
+			$string .= ( $i < ( $array_size - 1 ) ) ? $delimiter : $terminator;
+		}
+	}
+
+	return $string;
+}

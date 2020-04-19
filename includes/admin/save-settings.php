@@ -290,7 +290,7 @@ function bsearch_sanitize_exclude_cat( $settings ) {
 
 	if ( ! empty( $settings['exclude_cat_slugs'] ) ) {
 
-		$exclude_cat_slugs = array_unique( explode( ',', $settings['exclude_cat_slugs'] ) );
+		$exclude_cat_slugs = array_unique( str_getcsv( $settings['exclude_cat_slugs'] ) );
 
 		foreach ( $exclude_cat_slugs as $cat_name ) {
 			$cat = get_term_by( 'name', $cat_name, 'category' );
@@ -300,7 +300,7 @@ function bsearch_sanitize_exclude_cat( $settings ) {
 			}
 		}
 		$settings['exclude_categories'] = isset( $exclude_categories ) ? join( ',', $exclude_categories ) : '';
-		$settings['exclude_cat_slugs']  = isset( $exclude_categories_slugs ) ? join( ',', $exclude_categories_slugs ) : '';
+		$settings['exclude_cat_slugs']  = isset( $exclude_categories_slugs ) ? bsearch_str_putcsv( $exclude_categories_slugs ) : '';
 
 	}
 
