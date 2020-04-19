@@ -31,7 +31,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Holds the filesystem directory path (with trailing slash) for Top 10
+ * Holds the filesystem directory path (with trailing slash) for Better Search
  *
  * @since 2.2.0
  *
@@ -42,7 +42,7 @@ if ( ! defined( 'BETTER_SEARCH_PLUGIN_DIR' ) ) {
 }
 
 /**
- * Holds the filesystem directory path (with trailing slash) for Top 10
+ * Holds the filesystem directory path (with trailing slash) for Better Search
  *
  * @since 2.2.0
  *
@@ -53,7 +53,7 @@ if ( ! defined( 'BETTER_SEARCH_PLUGIN_URL' ) ) {
 }
 
 /**
- * Holds the filesystem directory path (with trailing slash) for Top 10
+ * Holds the filesystem directory path (with trailing slash) for Better Search
  *
  * @since 2.2.0
  *
@@ -90,7 +90,7 @@ $bsearch_settings = bsearch_get_settings();
  *
  * @since  2.2.0
  *
- * @return array Top 10 settings
+ * @return array Better Search settings
  */
 function bsearch_get_settings() {
 

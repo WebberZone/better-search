@@ -66,7 +66,7 @@ function bsearch_enqueue_scripts() {
 		);
 
 		/**
-		 * Filter the localize script arguments for the Top 10 tracker.
+		 * Filter the localize script arguments for the Better Search tracker.
 		 *
 		 * @since 2.2.4
 		 */
@@ -88,7 +88,7 @@ add_action( 'wp_enqueue_scripts', 'bsearch_enqueue_scripts' );
  * @since   2.2.4
  *
  * @param   array $vars   Query variables array.
- * @return  array Query variables array with Top 10 parameters appended
+ * @return  array Query variables array with Better Search parameters appended
  */
 function bsearch_query_vars( $vars ) {
 	// Add these to the list of queryvars that WP gathers.
@@ -99,7 +99,7 @@ function bsearch_query_vars( $vars ) {
 	 *
 	 * @since   2.2.4
 	 *
-	 * @param array $vars Updated Query variables array with Top 10 queries added.
+	 * @param array $vars Updated Query variables array with Better Search queries added.
 	 */
 	return apply_filters( 'bsearch_query_vars', $vars );
 }
@@ -207,5 +207,4 @@ function bsearch_update_count( $search_query ) {
 	 */
 	return apply_filters( 'bsearch_update_count', $str, $search_query );
 }
-
 
