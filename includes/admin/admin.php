@@ -32,7 +32,7 @@ function bsearch_add_admin_pages_links() {
 
 	$plugin_page = add_submenu_page( 'bsearch_options_page', esc_html__( 'Better Search Settings', 'better-search' ), esc_html__( 'Settings', 'better-search' ), 'manage_options', 'bsearch_options_page', 'bsearch_options_page' );
 
-	// Initialise Top 10 Statistics pages.
+	// Initialise Better Search Statistics pages.
 	$bsearch_stats_screen = new Better_Search_Statistics();
 
 	$bsearch_settings_popular_searches = add_submenu_page( 'bsearch_options_page', __( 'Better Search Popular Searches', 'better-search' ), __( 'Popular Searches', 'better-search' ), 'manage_options', 'bsearch_popular_searches', array( $bsearch_stats_screen, 'plugin_settings_page' ) );

@@ -134,7 +134,7 @@ function bsearch_get_registered_settings() {
 				'exclude_categories'      => array(
 					'id'       => 'exclude_categories',
 					'name'     => esc_html__( 'Exclude category IDs', 'better-search' ),
-					'desc'     => esc_html__( 'This is a readonly field that is automatically populated based on the above input when the settings are saved. These might differ from the IDs visible in the Categories page which use the term_id. Top 10 uses the term_taxonomy_id which is unique to this taxonomy.', 'better-search' ),
+					'desc'     => esc_html__( 'This is a readonly field that is automatically populated based on the above input when the settings are saved. These might differ from the IDs visible in the Categories page which use the term_id. Better Search uses the term_taxonomy_id which is unique to this taxonomy.', 'better-search' ),
 					'type'     => 'text',
 					'options'  => '',
 					'readonly' => true,
