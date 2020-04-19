@@ -335,7 +335,7 @@ function bsearch_get_registered_settings() {
 					'id'          => 'custom_css',
 					'name'        => esc_html__( 'Custom CSS', 'better-search' ),
 					/* translators: 1: Opening a tag, 2: Closing a tag, 3: Opening code tage, 4. Closing code tag. */
-					'desc'        => sprintf( esc_html__( 'Do not include %3$sstyle%4$s tags. Check out the %1$sFAQ%2$s for available CSS classes to style.', 'better-search' ), '<a href="' . esc_url( 'http://wordpress.org/plugins/better-search/faq/' ) . '" target="_blank">', '</a>', '<code>', '</code>' ),
+					'desc'        => sprintf( esc_html__( 'Do not include %3$sstyle%4$s tags. Check out the %1$sFAQ%2$s for available CSS classes to style.', 'better-search' ), '<a href="' . esc_url( 'https://wordpress.org/plugins/better-search/faq/' ) . '" target="_blank">', '</a>', '<code>', '</code>' ),
 					'type'        => 'css',
 					'options'     => bsearch_get_custom_css(),
 					'field_class' => 'codemirror_css',
