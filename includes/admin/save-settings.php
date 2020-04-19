@@ -135,8 +135,8 @@ function bsearch_settings_sanitize( $input = array() ) {
  *
  * @since 2.2.0
  *
- * @param  array $value The field value.
- * @return string  $value  Sanitized value
+ * @param  string $value The field value.
+ * @return string Sanitized value
  */
 function bsearch_sanitize_text_field( $value ) {
 	return bsearch_sanitize_textarea_field( $value );
@@ -149,8 +149,8 @@ add_filter( 'bsearch_settings_sanitize_text', 'bsearch_sanitize_text_field' );
  *
  * @since 2.2.0
  *
- * @param  array $value The field value.
- * @return string  $value  Sanitized value
+ * @param  string $value The field value.
+ * @return string Sanitized number.
  */
 function bsearch_sanitize_number_field( $value ) {
 	return filter_var( $value, FILTER_SANITIZE_NUMBER_INT );
@@ -163,8 +163,8 @@ add_filter( 'bsearch_settings_sanitize_number', 'bsearch_sanitize_number_field' 
  *
  * @since 2.2.0
  *
- * @param  array $value The field value.
- * @return string  $value  Sanitized value
+ * @param  string $value The field value.
+ * @return string Comma separated list.
  */
 function bsearch_sanitize_csv_field( $value ) {
 
@@ -178,8 +178,8 @@ add_filter( 'bsearch_settings_sanitize_csv', 'bsearch_sanitize_csv_field' );
  *
  * @since 2.2.0
  *
- * @param  array $value The field value.
- * @return string  $value  Sanitized value
+ * @param  string $value The field value.
+ * @return string Comma separated list of numbers.
  */
 function bsearch_sanitize_numbercsv_field( $value ) {
 
@@ -193,8 +193,8 @@ add_filter( 'bsearch_settings_sanitize_numbercsv', 'bsearch_sanitize_numbercsv_f
  *
  * @since 2.2.0
  *
- * @param  array $value The field value.
- * @return string  $value  Sanitized value
+ * @param  string $value The field value.
+ * @return string Sanitized value
  */
 function bsearch_sanitize_textarea_field( $value ) {
 
@@ -249,8 +249,8 @@ add_filter( 'bsearch_settings_sanitize_textarea', 'bsearch_sanitize_textarea_fie
  *
  * @since 2.2.0
  *
- * @param  array $value The field value.
- * @return string|int  $value  Sanitized value
+ * @param  string $value The field value.
+ * @return int 0 or 1 if checkbox is false or true.
  */
 function bsearch_sanitize_checkbox_field( $value ) {
 
@@ -266,8 +266,8 @@ add_filter( 'bsearch_settings_sanitize_checkbox', 'bsearch_sanitize_checkbox_fie
  *
  * @since 2.2.0
  *
- * @param  array $value The field value.
- * @return string  $value  Sanitized value
+ * @param  string $value The field value.
+ * @return string Comma separated list of post types.
  */
 function bsearch_sanitize_posttypes_field( $value ) {
 
@@ -279,12 +279,41 @@ add_filter( 'bsearch_settings_sanitize_posttypes', 'bsearch_sanitize_posttypes_f
 
 
 /**
+ * Sanitize color fields
+ *
+ * @since 2.5.0
+ *
+ * @param  string $value The field value.
+ * @return string Hexadecimal colour value.
+ */
+function bsearch_sanitize_color_field( $value ) {
+
+	$color = str_replace( '#', '', $value );
+	if ( strlen( $color ) === 3 ) {
+		$color = $color . $color;
+	}
+
+	if ( strlen( $color ) > 6 ) {
+		$color = substr( $color, 0, 6 );
+	}
+
+	if ( preg_match( '/^[a-f0-9]{6}$/i', $color ) ) {
+		$color = '#' . $color;
+	} else {
+		$color = '#000000';
+	}
+	return $color;
+}
+add_filter( 'bsearch_settings_sanitize_color', 'bsearch_sanitize_color_field' );
+
+
+/**
  * Sanitize exclude_cat_slugs to save a new entry of exclude_categories
  *
  * @since 2.2.0
  *
  * @param  array $settings Settings array.
- * @return string  $settings  Sanitizied settings array.
+ * @return array Sanitizied settings array.
  */
 function bsearch_sanitize_exclude_cat( $settings ) {
 
@@ -315,7 +344,7 @@ add_filter( 'bsearch_settings_sanitize', 'bsearch_sanitize_exclude_cat' );
  * @since 2.2.0
  *
  * @param  array $settings Settings array.
- * @return string  $settings  Sanitizied settings array.
+ * @return array Sanitizied settings array.
  */
 function bsearch_sanitize_cache( $settings ) {
 
@@ -325,3 +354,4 @@ function bsearch_sanitize_cache( $settings ) {
 	return $settings;
 }
 add_filter( 'bsearch_settings_sanitize', 'bsearch_sanitize_cache' );
+

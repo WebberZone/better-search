@@ -127,4 +127,9 @@ jQuery(document).ready(function($) {
 		}
 	});
 
+	// Initialise ColorPicker
+	$( '.color-field' ).each( function ( i, element ) {
+		$( element ).wpColorPicker();
+	});
+
 });

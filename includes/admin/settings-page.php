@@ -248,6 +248,20 @@ function bsearch_numbercsv_callback( $args ) {
 
 
 /**
+ * Display color fields.
+ *
+ * @since 2.5.0
+ *
+ * @param array $args Array of arguments.
+ * @return void
+ */
+function bsearch_color_callback( $args ) {
+
+	bsearch_text_callback( $args );
+}
+
+
+/**
  * Display textarea.
  *
  * @since 2.2.0
