@@ -232,7 +232,7 @@ function get_bsearch_pop_daily() {
 	$output .= '</div>';
 
 	if ( bsearch_get_option( 'show_credit' ) ) {
-		$output .= '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
+		$output .= bsearch_get_credit_link();
 	}
 
 	$output .= '</div>';
@@ -280,7 +280,7 @@ function get_bsearch_pop() {
 	$output .= '</div>';
 
 	if ( bsearch_get_option( 'show_credit' ) ) {
-		$output .= '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
+		$output .= bsearch_get_credit_link();
 	}
 
 	$output .= '</div>';

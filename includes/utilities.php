@@ -347,3 +347,20 @@ function bsearch_str_putcsv( $array, $delimiter = ',', $enclosure = '"', $termin
 
 	return $string;
 }
+
+/**
+ * Get the link to Better Search homepage.
+ *
+ * @since 2.5.0
+ *
+ * @return string HTML markup.
+ */
+function bsearch_get_credit_link() {
+
+	$output = '<div class="bsearch_credit" style="text-align:center;border-top:1px dotted #000;display:block;margin-top:5px;"><small>';
+
+	/* translators: 1: Opening a tag and Better Search, 2: Closing a tag. */
+	$output .= sprintf( __( 'Powered by %1$s plugin%2$s', 'better-search' ), '<a href="https://webberzone.com/plugins/better-search/" rel="nofollow">Better Search', '</a></small></div>' );
+
+	return $output;
+}

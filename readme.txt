@@ -102,6 +102,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 * Bug fixes:
 	* Fixed notices in PHP 7.4 when viewing popular searches listings
+	* Link to Better Search plugin page was not nofollow
 
 = 2.4.0 =
 
