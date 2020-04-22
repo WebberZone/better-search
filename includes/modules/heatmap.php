@@ -38,43 +38,9 @@ function get_bsearch_heatmap( $args = array() ) {
 	// Parse incomming $args into an array and merge it with $defaults.
 	$args = wp_parse_args( $args, $defaults );
 
-	$table_name = $wpdb->prefix . 'bsearch';
-
-	if ( $args['daily'] ) {
-		$table_name .= '_daily';    // If we are viewing daily posts, set this to true.
-	}
 	$output = '';
 
-	if ( ! $args['daily'] ) {
-		$sargs = array(
-			$args['heatmap_limit'],
-		);
-
-		$sql = "SELECT searchvar, cntaccess FROM {$table_name} WHERE accessedid IN (SELECT accessedid FROM {$table_name} WHERE searchvar <> '' ORDER BY cntaccess DESC, searchvar ASC) ORDER by accessedid LIMIT %d";
-	} else {
-		$current_time = strtotime( current_time( 'mysql' ) );
-		$current_time = $current_time - ( $args['daily_range'] - 1 ) * 3600 * 24;
-		$current_date = date_i18n( 'Y-m-j', $current_time );
-
-		$sargs = array(
-			$current_date,
-			$args['heatmap_limit'],
-		);
-
-		$sql = "
-			SELECT DISTINCT wp1.searchvar, wp2.sum_count
-			FROM {$table_name} wp1,
-					(SELECT searchvar, SUM(cntaccess) as sum_count
-					FROM {$table_name}
-					WHERE dp_date >= '%s'
-					GROUP BY searchvar
-					ORDER BY sum_count DESC LIMIT %d) wp2
-					WHERE wp1.searchvar = wp2.searchvar
-			ORDER by wp1.searchvar ASC
-		";
-	}
-
-	$results = $wpdb->get_results( $wpdb->prepare( $sql, $sargs ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+	$results = get_bsearch_heatmap_counts( $args );
 
 	if ( $results ) {
 		foreach ( $results as $result ) {
@@ -165,6 +131,81 @@ function get_bsearch_heatmap( $args = array() ) {
 	 * @param   string|array    $args       Arguments
 	 */
 	return apply_filters( 'get_bsearch_heatmap', $output, $args );
+}
+
+
+/**
+ * Get the Search Heatmap terms.
+ *
+ * @since 2.5.0
+ *
+ * @param  array|string $args Heatmap Parameters.
+ * @return array              Array of heatmap terms.
+ */
+function get_bsearch_heatmap_counts( $args = array() ) {
+	global $wpdb;
+
+	$defaults = array(
+		'daily'         => false,
+		'heatmap_limit' => intval( bsearch_get_option( 'heatmap_limit' ) ),
+		'daily_range'   => intval( bsearch_get_option( 'daily_range' ) ),
+	);
+
+	// Parse incomming $args into an array and merge it with $defaults.
+	$args = wp_parse_args( $args, $defaults );
+
+	$table_name = $wpdb->prefix . 'bsearch';
+
+	if ( $args['daily'] ) {
+		$table_name .= '_daily';    // If we are viewing daily posts, set this to true.
+	}
+
+	if ( ! $args['daily'] ) {
+		$sargs = array(
+			$args['heatmap_limit'],
+		);
+
+		$sql = "
+			SELECT searchvar, cntaccess
+			FROM {$table_name} WHERE accessedid IN
+				(SELECT accessedid
+				FROM {$table_name}
+				WHERE searchvar <> ''
+				ORDER BY cntaccess DESC, searchvar ASC)
+			ORDER by accessedid LIMIT %d
+		";
+	} else {
+		$current_date = bsearch_get_from_date( null, $args['daily_range'] );
+
+		$sargs = array(
+			$current_date,
+			$args['heatmap_limit'],
+		);
+
+		$sql = "
+			SELECT DISTINCT wp1.searchvar, wp2.sum_count
+			FROM {$table_name} wp1,
+				(SELECT searchvar, SUM(cntaccess) as sum_count
+				FROM {$table_name}
+				WHERE dp_date >= '%s'
+				GROUP BY searchvar
+				ORDER BY sum_count DESC LIMIT %d) wp2
+				WHERE wp1.searchvar = wp2.searchvar
+			ORDER by wp1.searchvar ASC
+		";
+	}
+
+	$results = $wpdb->get_results( $wpdb->prepare( $sql, $sargs ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+
+	/**
+	 * Filter formatted string with the search heatmap
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param array $results Array of search terms.
+	 * @param array $args    Array of arguments.
+	 */
+	return apply_filters( 'get_bsearch_heatmap_counts', $results, $args );
 }
 
 
