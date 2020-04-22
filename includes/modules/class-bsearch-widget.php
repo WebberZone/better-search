@@ -149,7 +149,7 @@ class BSearch_Widget extends WP_Widget {
 			);
 		}
 		if ( bsearch_get_option( 'show_credit' ) ) {
-			echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
+			echo bsearch_get_credit_link(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		echo $args['after_widget']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

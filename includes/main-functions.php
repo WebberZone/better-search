@@ -115,9 +115,7 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 	}
 
 	if ( bsearch_get_option( 'show_credit' ) ) {
-		$output .= '<hr /><p style="text-align:center">';
-		$output .= __( 'Powered by ', 'better-search' );
-		$output .= '<a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></p>';
+		$output .= bsearch_get_credit_link();
 	}
 
 	/**

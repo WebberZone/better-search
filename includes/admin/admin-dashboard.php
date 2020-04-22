@@ -27,9 +27,7 @@ function bsearch_pop_dashboard() {
 		)
 	);
 
-	if ( bsearch_get_option( 'show_credit' ) ) {
-		echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
-	}
+	echo bsearch_get_credit_link(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -46,9 +44,7 @@ function bsearch_pop_daily_dashboard() {
 		)
 	);
 
-	if ( bsearch_get_option( 'show_credit' ) ) {
-		echo '<br /><small>Powered by <a href="https://webberzone.com/plugins/better-search/">Better Search plugin</a></small>';
-	}
+	echo bsearch_get_credit_link(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
