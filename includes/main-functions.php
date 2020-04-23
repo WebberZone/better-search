@@ -61,7 +61,7 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 
 				/* Highlight the search terms in the title */
 				if ( bsearch_get_option( 'highlight' ) ) {
-					$post_title = preg_replace( '/(?!<[^>]*?>)(' . implode( '|', $keys ) . ')(?![^<]*?>)/iu', '<span class="bsearch_highlight">$1</span>', $post_title );
+					$post_title = bsearch_highlight( $post_title, $keys );
 				}
 
 				$output .= '<article id="post-' . $search->ID . '" ';
@@ -86,7 +86,7 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 
 				/* Highlight the search terms in the excerpt */
 				if ( bsearch_get_option( 'highlight' ) ) {
-					$excerpt = preg_replace( '/(?!<[^>]*?>)(' . implode( '|', $keys ) . ')(?![^<]*?>)/iu', '<span class="bsearch_highlight">$1</span>', $excerpt );
+					$excerpt = bsearch_highlight( $excerpt, $keys );
 				}
 
 				$output .= sprintf( '<p class="bsearch_excerpt">%1$s</p>', $excerpt );

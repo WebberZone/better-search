@@ -364,3 +364,22 @@ function bsearch_get_credit_link() {
 
 	return $output;
 }
+
+
+/**
+ * Add a wrapper class bsearch_highlight to terms which an be styled using CSS.
+ *
+ * @since 2.5.0
+ *
+ * @param string $input Input string.
+ * @param array  $keys  Array of terms to highlight.
+ *
+ * @return string Highlighted string.
+ */
+function bsearch_highlight( $input, $keys ) {
+
+	$reg_ex = '/(?!<[^>]*?>)(' . implode( '|', $keys ) . ')(?![^<]*?>)/iu';
+	$output = preg_replace( $reg_ex, '<span class="bsearch_highlight">$1</span>', $input );
+
+	return $output;
+}
