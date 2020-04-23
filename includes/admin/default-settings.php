@@ -286,7 +286,7 @@ function bsearch_get_registered_settings() {
 					'name'             => esc_html__( 'Color of least popular search term', 'better-search' ),
 					'desc'             => '',
 					'type'             => 'color',
-					'options'          => 'CCCCCC',
+					'options'          => '#cccccc',
 					'field_class'      => 'color-field',
 					'field_attributes' => array(
 						'data-default-color' => '#cccccc',
@@ -297,7 +297,7 @@ function bsearch_get_registered_settings() {
 					'name'             => esc_html__( 'Color of most popular search term', 'better-search' ),
 					'desc'             => '',
 					'type'             => 'color',
-					'options'          => '000000',
+					'options'          => '#000000',
 					'field_class'      => 'color-field',
 					'field_attributes' => array(
 						'data-default-color' => '#000000',

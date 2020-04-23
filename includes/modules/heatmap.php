@@ -24,15 +24,15 @@ function get_bsearch_heatmap( $args = array() ) {
 
 	$defaults = array(
 		'daily'         => false,
-		'smallest'      => intval( bsearch_get_option( 'heatmap_smallest' ) ),
-		'largest'       => intval( bsearch_get_option( 'heatmap_largest' ) ),
-		'unit'          => bsearch_get_option( 'heatmap_unit' ),
+		'smallest'      => absint( bsearch_get_option( 'heatmap_smallest' ) ),
+		'largest'       => absint( bsearch_get_option( 'heatmap_largest' ) ),
+		'unit'          => bsearch_get_option( 'heatmap_unit', 'pt' ),
 		'cold'          => bsearch_get_option( 'heatmap_cold' ),
 		'hot'           => bsearch_get_option( 'heatmap_hot' ),
 		'before'        => bsearch_get_option( 'heatmap_before' ),
 		'after'         => bsearch_get_option( 'heatmap_after' ),
-		'heatmap_limit' => intval( bsearch_get_option( 'heatmap_limit' ) ),
-		'daily_range'   => intval( bsearch_get_option( 'daily_range' ) ),
+		'heatmap_limit' => absint( bsearch_get_option( 'heatmap_limit' ) ),
+		'daily_range'   => absint( bsearch_get_option( 'daily_range' ) ),
 	);
 
 	// Parse incomming $args into an array and merge it with $defaults.
@@ -43,80 +43,106 @@ function get_bsearch_heatmap( $args = array() ) {
 	$results = get_bsearch_heatmap_counts( $args );
 
 	if ( $results ) {
-		foreach ( $results as $result ) {
-			if ( ! $args['daily'] ) {
-				$cntaccesss[] = $result->cntaccess;
-			} else {
-				$cntaccesss[] = $result->sum_count;
-			}
-		}
-		$min    = min( $cntaccesss );
-		$max    = max( $cntaccesss );
-		$spread = $max - $min;
+		$counts = wp_list_pluck( $results, 'count' );
+
+		$min    = min( $counts );
+		$max    = max( $counts );
+		$spread = absint( $max - $min );
 
 		// Calculate various font sizes.
-		if ( $args['largest'] != $args['smallest'] ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			$fontspread = $args['largest'] - $args['smallest'];
-			if ( 0 != $spread ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-				$fontstep = $fontspread / $spread;
-			} else {
-				$fontstep = 0;
-			}
+		$fontspread = $args['largest'] - $args['smallest'];
+		if ( 0 !== $spread ) {
+			$fontstep = $fontspread / $spread;
+		} else {
+			$fontstep = 0;
 		}
 
 		// Calculate colors.
-		if ( $args['hot'] != $args['cold'] ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			$hotdec  = bsearch_html2rgb( $args['hot'] );
-			$colddec = bsearch_html2rgb( $args['cold'] );
-			for ( $i = 0; $i < 3; $i++ ) {
-				$coldval[]     = $colddec[ $i ];
-				$hotval[]      = $hotdec[ $i ];
-				$colorspread[] = $hotdec[ $i ] - $colddec[ $i ];
-				if ( 0 != $spread ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-					$colorstep[] = ( $hotdec[ $i ] - $colddec[ $i ] ) / $spread;
-				} else {
-					$colorstep[] = 0;
-				}
+		$hotdec  = bsearch_html2rgb( $args['hot'] );
+		$colddec = bsearch_html2rgb( $args['cold'] );
+		for ( $i = 0; $i < 3; $i++ ) {
+			$coldval[]     = $colddec[ $i ];
+			$hotval[]      = $hotdec[ $i ];
+			$colorspread[] = $hotdec[ $i ] - $colddec[ $i ];
+			if ( 0 !== $spread ) {
+				$colorstep[] = ( $hotdec[ $i ] - $colddec[ $i ] ) / $spread;
+			} else {
+				$colorstep[] = 0;
 			}
 		}
 
 		foreach ( $results as $result ) {
-			if ( ! $args['daily'] ) {
-				$cntaccess = $result->cntaccess;
-			} else {
-				$cntaccess = $result->sum_count;
-			}
-
-			$textsearchvar = esc_attr( $result->searchvar );
-			$url           = home_url() . '/?s=' . $textsearchvar;
-			$fraction      = $cntaccess - $min;
-			$fontsize      = $args['smallest'] + $fontstep * $fraction;
+			$count     = $result->count;
+			$searchvar = esc_attr( $result->searchvar );
+			$url       = add_query_arg( array( 's' => $searchvar ), home_url( '/' ) );
+			$fraction  = $count - $min;
+			$fontsize  = $args['smallest'] + $fontstep * $fraction;
 
 			$color = '';
 
 			for ( $i = 0; $i < 3; $i++ ) {
 				$color .= dechex( $coldval[ $i ] + ( $colorstep[ $i ] * $fraction ) );
 			}
-			$style = 'style="';
-			if ( $args['largest'] != $args['smallest'] ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-				$style .= 'font-size:' . round( $fontsize ) . $args['unit'] . ';';
-			}
-			if ( $args['hot'] != $args['cold'] ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-				$style .= 'color:#' . $color . ';';
-			}
-			$style .= '"';
+			$style = sprintf( 'font-size:%1$s%2$s;color:#%3$s;', round( $fontsize ), $args['unit'], $color );
 
-			$output .= $args['before'] . '<a href="' . $url . '" title="';
-			/* translators: 1: Search term, 2: Number of searches */
-			$output .= sprintf( _n( 'Search for %1$s (%2$s search)', 'Search for %1$s (%2$s searches)', $cntaccess, 'better-search' ), $textsearchvar, $cntaccess );
-			$output .= '" ' . $style;
-			if ( bsearch_get_option( 'link_nofollow' ) ) {
-				$output .= ' rel="nofollow" ';
-			}
-			if ( bsearch_get_option( 'link_new_window' ) ) {
-				$output .= ' target="_blank" ';
-			}
-			$output .= '>' . $textsearchvar . '</a>' . $args['after'] . ' ';
+			/**
+			 * Filter the value of the style tag of heatmap links.
+			 *
+			 * @since 2.5.0
+			 *
+			 * @param string $style     Value of the style tag of the link.
+			 * @param string $searchvar Search term.
+			 * @param object $result    Search results object.
+			 */
+			$style = apply_filters( 'bsearch_heatmap_style', $style, $searchvar, $result );
+
+			$class = '';
+
+			/**
+			 * Filter the value of the class tag of heatmap links.
+			 *
+			 * @since 2.5.0
+			 *
+			 * @param string $style     Value of the class tag of the link.
+			 * @param string $searchvar Search term.
+			 * @param object $result    Search results object.
+			 */
+			$class = apply_filters( 'bsearch_heatmap_class', $class, $searchvar, $result );
+
+			$title = sprintf(
+				/* translators: 1: Search term, 2: Number of searches */
+				_n( 'Search for %1$s (%2$s search)', 'Search for %1$s (%2$s searches)', $count, 'better-search' ),
+				$searchvar,
+				$count
+			);
+
+			/**
+			 * Filter the value of the title tag of heatmap links.
+			 *
+			 * @since 2.5.0
+			 *
+			 * @param string $title     Value of the title tag of the link.
+			 * @param string $searchvar Search term.
+			 * @param int    $count     Count.
+			 * @param object $result    Search results object.
+			 */
+			$title = apply_filters( 'bsearch_heatmap_title', $title, $searchvar, $count, $result );
+
+			$rel    = ( bsearch_get_option( 'link_nofollow' ) ) ? 'rel="nofollow"' : '';
+			$target = ( bsearch_get_option( 'link_new_window' ) ) ? 'target="_blank"' : '';
+
+			$output .= $args['before'];
+			$output .= sprintf(
+				'<a href="%1$s" title="%2$s" style="%3$s" class="$4$s" %5$s %6$s>%7$s</a>',
+				esc_url( $url ),
+				esc_attr( $title ),
+				esc_attr( $style ),
+				esc_attr( $class ),
+				$rel,
+				$target,
+				$searchvar
+			);
+			$output .= $args['after'] . ' ';
 		}
 	} else {
 		$output = __( 'No searches made yet', 'better-search' );
@@ -166,7 +192,7 @@ function get_bsearch_heatmap_counts( $args = array() ) {
 		);
 
 		$sql = "
-			SELECT searchvar, cntaccess
+			SELECT searchvar, cntaccess as count
 			FROM {$table_name} WHERE accessedid IN
 				(SELECT accessedid
 				FROM {$table_name}
@@ -183,13 +209,13 @@ function get_bsearch_heatmap_counts( $args = array() ) {
 		);
 
 		$sql = "
-			SELECT DISTINCT wp1.searchvar, wp2.sum_count
+			SELECT DISTINCT wp1.searchvar, wp2.count
 			FROM {$table_name} wp1,
-				(SELECT searchvar, SUM(cntaccess) as sum_count
+				(SELECT searchvar, SUM(cntaccess) as count
 				FROM {$table_name}
 				WHERE dp_date >= '%s'
 				GROUP BY searchvar
-				ORDER BY sum_count DESC LIMIT %d) wp2
+				ORDER BY count DESC LIMIT %d) wp2
 				WHERE wp1.searchvar = wp2.searchvar
 			ORDER by wp1.searchvar ASC
 		";
