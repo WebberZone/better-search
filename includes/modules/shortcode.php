@@ -25,7 +25,7 @@ function bsearch_heatmap_func( $atts ) {
 			'daily'         => false,
 			'smallest'      => intval( bsearch_get_option( 'heatmap_smallest' ) ),
 			'largest'       => intval( bsearch_get_option( 'heatmap_largest' ) ),
-			'unit'          => bsearch_get_option( 'heatmap_unit' ),
+			'unit'          => bsearch_get_option( 'heatmap_unit', 'pt' ),
 			'cold'          => bsearch_get_option( 'heatmap_cold' ),
 			'hot'           => bsearch_get_option( 'heatmap_hot' ),
 			'before'        => bsearch_get_option( 'heatmap_before' ),
