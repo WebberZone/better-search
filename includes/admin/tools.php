@@ -294,3 +294,18 @@ function bsearch_process_settings_import() {
 }
 add_action( 'admin_init', 'bsearch_process_settings_import', 9 );
 
+
+/**
+ * Remove query variables.
+ *
+ * @since 2.5.0
+ *
+ * @param array $args Query arguments.
+ * @return array Query arguments.
+ */
+function bsearch_add_removable_arg( $args ) {
+	array_push( $args, 'settings_import' );
+	return $args;
+}
+
+add_filter( 'removable_query_args', 'bsearch_add_removable_arg' );
