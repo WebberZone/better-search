@@ -2,9 +2,9 @@
 Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Contributors: webberzone, Ajay
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: trunk
-Requires at least: 4.7
-Tested up to: 5.3
+Stable tag: 2.5.0
+Requires at least: 4.9
+Tested up to: 5.4
 License: GPLv2 or later
 
 
@@ -95,6 +95,8 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 = 2.5.0 =
 
+Release post: [https://webberzone.com/blog/better-search-v2-5-0/](https://webberzone.com/blog/better-search-v2-5-0/)
+
 * Features:
     * New section under Better Search &raquo; Tools to export and import settings. Best option if you'd like the same configuration across multiple WordPress sites
 
@@ -143,6 +145,5 @@ For previous changelog entries, please refer to the separate changelog.txt file
 
 == Upgrade Notice ==
 
-= 2.4.0 =
-New admin interface to view the popular searches, improvements to the banned words filter, etc.
-For details on the update check the changelog and release post on https://webberzone.com
+= 2.5.0 =
+Import/export settings, enhancements and bug fixes. For details on the update check the changelog and release post on https://webberzone.com
