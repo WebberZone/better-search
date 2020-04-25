@@ -56,6 +56,8 @@ function bsearch_single_activate() {
 	global $wpdb, $bsearch_db_version;
 
 	$bsearch_settings = bsearch_get_settings();
+	$charset_collate  = $wpdb->get_charset_collate();
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 	// Create full text index.
 	$wpdb->hide_errors();
@@ -70,41 +72,39 @@ function bsearch_single_activate() {
 
 	if ( $wpdb->get_var( "show tables like '$table_name'" ) !== $table_name ) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 
-		$sql = 'CREATE TABLE ' . $table_name . ' (
+		$sql = "CREATE TABLE {$table_name} (
             accessedid int NOT NULL AUTO_INCREMENT,
             searchvar VARCHAR(100) NOT NULL,
             cntaccess int NOT NULL,
             PRIMARY KEY  (accessedid)
-        );';
+        ) $charset_collate;";
 
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
 		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name . ' (searchvar)' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
 		$wpdb->show_errors();
 
-		add_option( 'bsearch_db_version', $bsearch_db_version );
+		update_option( 'bsearch_db_version', $bsearch_db_version );
 	}
 
 	if ( $wpdb->get_var( "show tables like '$table_name_daily'" ) !== $table_name_daily ) {  // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 
-		$sql = 'CREATE TABLE ' . $table_name_daily . ' (
+		$sql = "CREATE TABLE {$table_name_daily} (
             accessedid int NOT NULL AUTO_INCREMENT,
             searchvar VARCHAR(100) NOT NULL,
             cntaccess int NOT NULL,
             dp_date date NOT NULL,
             PRIMARY KEY  (accessedid)
-        );';
+		) $charset_collate;";
 
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
 		$wpdb->query( 'CREATE INDEX IDX_searhvar ON ' . $table_name_daily . ' (searchvar)' );  // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
 		$wpdb->show_errors();
 
-		add_option( 'bsearch_db_version', $bsearch_db_version );
+		update_option( 'bsearch_db_version', $bsearch_db_version );
 	}
 
 	// Upgrade table code.
@@ -112,14 +112,13 @@ function bsearch_single_activate() {
 
 	if ( $installed_ver != $bsearch_db_version ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 
-		$sql = 'CREATE TABLE ' . $table_name . ' (
+		$sql = "CREATE TABLE {$table_name} (
             accessedid int NOT NULL AUTO_INCREMENT,
             searchvar VARCHAR(100) NOT NULL,
             cntaccess int NOT NULL,
             PRIMARY KEY  (accessedid)
-        );';
+        ) $charset_collate;";
 
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
@@ -130,15 +129,14 @@ function bsearch_single_activate() {
 		$sql = "DROP TABLE $table_name_daily";
 		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange
 
-		$sql = 'CREATE TABLE ' . $table_name_daily . ' (
+		$sql = "CREATE TABLE {$table_name_daily} (
             accessedid int NOT NULL AUTO_INCREMENT,
             searchvar VARCHAR(100) NOT NULL,
             cntaccess int NOT NULL,
             dp_date date NOT NULL,
             PRIMARY KEY  (accessedid)
-        );';
+		) $charset_collate;";
 
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql );
 
 		$wpdb->hide_errors();
@@ -189,5 +187,4 @@ function bsearch_on_delete_blog( $tables ) {
 	return $tables;
 }
 add_filter( 'wpmu_drop_tables', 'bsearch_on_delete_blog' );
-
 
