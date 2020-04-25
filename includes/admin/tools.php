@@ -46,8 +46,14 @@ function bsearch_tools_page() {
 
 	/* Delete old settings */
 	if ( ( isset( $_POST['bsearch_delete_old_settings'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
-		delete_option( 'ald_bsearch_settings' );
-		add_settings_error( 'bsearch-notices', '', esc_html__( 'Old settings key has been deleted', 'better-search' ), 'error' );
+		$old_settings = get_option( 'ald_bsearch_settings' );
+
+		if ( empty( $old_settings ) ) {
+			add_settings_error( 'bsearch-notices', '', esc_html__( 'Old settings key does not exist', 'autoclose' ), 'error' );
+		} else {
+			delete_option( 'ald_bsearch_settings' );
+			add_settings_error( 'bsearch-notices', '', esc_html__( 'Old settings key has been deleted', 'autoclose' ), 'updated' );
+		}
 	}
 
 	/* Message for successful file import */
