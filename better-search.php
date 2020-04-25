@@ -123,6 +123,7 @@ function bsearch_get_settings() {
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/l10n.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/template-redirect.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/utilities.php';
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/media.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/wp-filters.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/tracker.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/cache.php';

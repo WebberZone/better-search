@@ -96,6 +96,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 = 2.5.0 =
 
 * Enhancements:
+	* If thumbnails are enabled on search results page with seamless mode off, the plugin will search for multiple option in addition to the post thumbnail
 	* Admin scripts are no longer loaded into the head - but using a separate JavaScript file
 	* Implemented CodeMirror to format custom styles box
 	* Replaced jscolor with WordPress color picker
