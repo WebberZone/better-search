@@ -23,15 +23,15 @@ function bsearch_heatmap_func( $atts ) {
 	$atts = shortcode_atts(
 		array(
 			'daily'         => false,
-			'smallest'      => intval( bsearch_get_option( 'heatmap_smallest' ) ),
-			'largest'       => intval( bsearch_get_option( 'heatmap_largest' ) ),
+			'smallest'      => absint( bsearch_get_option( 'heatmap_smallest' ) ),
+			'largest'       => absint( bsearch_get_option( 'heatmap_largest' ) ),
 			'unit'          => bsearch_get_option( 'heatmap_unit', 'pt' ),
 			'cold'          => bsearch_get_option( 'heatmap_cold' ),
 			'hot'           => bsearch_get_option( 'heatmap_hot' ),
 			'before'        => bsearch_get_option( 'heatmap_before' ),
 			'after'         => bsearch_get_option( 'heatmap_after' ),
-			'heatmap_limit' => intval( bsearch_get_option( 'heatmap_limit' ) ),
-			'daily_range'   => intval( bsearch_get_option( 'daily_range' ) ),
+			'heatmap_limit' => absint( bsearch_get_option( 'heatmap_limit' ) ),
+			'daily_range'   => absint( bsearch_get_option( 'daily_range' ) ),
 		),
 		$atts,
 		'bsearch_heatmap'
