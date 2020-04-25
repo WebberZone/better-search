@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-26 12:32+0530\n"
+"POT-Creation-Date: 2020-04-25 14:26+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team: WebberZone <plugins@webberzone.com>\n"
@@ -13,28 +13,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: __;_e;_c;__ngettext\n"
 "X-Poedit-Basepath: ..\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: includes/admin/admin-dashboard.php:61 includes/admin/admin.php:40
+#: includes/admin/admin-dashboard.php:57 includes/admin/admin.php:38
 msgid "Popular Searches"
 msgstr ""
 
-#: includes/admin/admin-dashboard.php:62 includes/admin/admin.php:44
+#: includes/admin/admin-dashboard.php:58 includes/admin/admin.php:41
 msgid "Daily Popular Searches"
 msgstr ""
 
-#: includes/admin/admin.php:40
+#: includes/admin/admin.php:38
 msgid "Better Search Popular Searches"
 msgstr ""
 
-#: includes/admin/admin.php:44
+#: includes/admin/admin.php:41
 msgid "Better Search Daily Popular Searches"
 msgstr ""
 
-#: includes/admin/admin.php:284
+#: includes/admin/admin.php:66
 #, php-format
 msgid ""
 "Thank you for using <a href=\"%1$s\" target=\"_blank\">Better Search</a>! "
@@ -42,19 +42,19 @@ msgid ""
 "target=\"_blank\">WordPress.org</a>"
 msgstr ""
 
-#: includes/admin/admin.php:312
+#: includes/admin/admin.php:94
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/admin.php:334
+#: includes/admin/admin.php:116
 msgid "Support"
 msgstr ""
 
-#: includes/admin/admin.php:335
+#: includes/admin/admin.php:117
 msgid "Donate"
 msgstr ""
 
-#: includes/admin/admin.php:336
+#: includes/admin/admin.php:118
 msgid "Contribute"
 msgstr ""
 
@@ -66,31 +66,31 @@ msgstr ""
 msgid "popular_searches"
 msgstr ""
 
-#: includes/admin/class-better-search-statistics-table.php:236
+#: includes/admin/class-better-search-statistics-table.php:242
 msgid "View"
 msgstr ""
 
-#: includes/admin/class-better-search-statistics-table.php:237
+#: includes/admin/class-better-search-statistics-table.php:243
 msgid "Delete"
 msgstr ""
 
-#: includes/admin/class-better-search-statistics-table.php:259
+#: includes/admin/class-better-search-statistics-table.php:265
 msgid "Search term"
 msgstr ""
 
-#: includes/admin/class-better-search-statistics-table.php:260
+#: includes/admin/class-better-search-statistics-table.php:266
 msgid "Total searches"
 msgstr ""
 
-#: includes/admin/class-better-search-statistics-table.php:261
+#: includes/admin/class-better-search-statistics-table.php:267
 msgid "Daily searches"
 msgstr ""
 
-#: includes/admin/class-better-search-statistics-table.php:295
+#: includes/admin/class-better-search-statistics-table.php:301
 msgid "Delete search term"
 msgstr ""
 
-#: includes/admin/class-better-search-statistics-table.php:384
+#: includes/admin/class-better-search-statistics-table.php:390
 msgid "Filter"
 msgstr ""
 
@@ -140,7 +140,7 @@ msgstr ""
 
 #: includes/admin/help-tab.php:59 includes/admin/settings-page.php:126
 #: includes/general-template.php:283
-#: includes/modules/class-bsearch-widget.php:207
+#: includes/modules/class-bsearch-search-box.php:60
 msgid "Search"
 msgstr ""
 
@@ -263,22 +263,26 @@ msgstr ""
 msgid "Posted on: "
 msgstr ""
 
-#: includes/main-functions.php:102
+#: includes/main-functions.php:112
 msgid "No results."
 msgstr ""
 
-#: includes/main-functions.php:112
+#: includes/main-functions.php:122
 msgid ""
 "Please type in your search terms. Use descriptive words since this search is "
 "intelligent."
 msgstr ""
 
-#: includes/main-functions.php:119
-msgid "Powered by "
-msgstr ""
-
 #: includes/modules/cache.php:38
 msgid "Better Search cache has been cleared"
+msgstr ""
+
+#: includes/modules/class-bsearch-search-box.php:29
+msgid "Search Form [Better Search]"
+msgstr ""
+
+#: includes/modules/class-bsearch-search-box.php:30
+msgid "Search Form"
 msgstr ""
 
 #: includes/modules/class-bsearch-widget.php:29
@@ -289,15 +293,7 @@ msgstr ""
 msgid "Display the popular searches"
 msgstr ""
 
-#: includes/modules/class-bsearch-widget.php:176
-msgid "Search Form [Better Search]"
-msgstr ""
-
-#: includes/modules/class-bsearch-widget.php:177
-msgid "Search Form"
-msgstr ""
-
-#: includes/modules/heatmap.php:156
+#: includes/modules/heatmap.php:148
 msgid "No searches made yet"
 msgstr ""
 
@@ -309,6 +305,11 @@ msgstr ""
 #: includes/utilities.php:46
 msgid ""
 "Your search query consists banned words. Please remove these and try again."
+msgstr ""
+
+#: includes/utilities.php:363
+#, php-format
+msgid "Powered by %1$s plugin%2$s"
 msgstr ""
 
 #: templates/better-search-template.php:26
