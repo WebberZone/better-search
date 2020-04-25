@@ -79,7 +79,17 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 				$output .= '<div class="bsearch-entry-content">';
 
 				if ( bsearch_get_option( 'include_thumb' ) ) {
-					$output .= '<p class="bsearch_thumb">' . get_the_post_thumbnail( $search->ID, 'thumbnail' ) . '</p>';
+					list( $thumb_width, $thumb_height ) = bsearch_get_thumb_size( 'thumbnail' );
+
+					$output .= '<p class="bsearch_thumb_wrapper">';
+					$output .= bsearch_get_the_post_thumbnail(
+						array(
+							'postid'       => $search,
+							'thumb_height' => $thumb_height,
+							'thumb_width'  => $thumb_width,
+						)
+					);
+					$output .= '</p>';
 				}
 
 				$excerpt = get_bsearch_excerpt( $search->ID, bsearch_get_option( 'excerpt_length' ) );
