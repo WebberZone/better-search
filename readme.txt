@@ -95,6 +95,9 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 = 2.5.0 =
 
+* Features:
+    * New section under Better Search &raquo; Tools to export and import settings. Best option if you'd like the same configuration across multiple WordPress sites
+
 * Enhancements:
 	* If thumbnails are enabled on search results page with seamless mode off, the plugin will search for multiple option in addition to the post thumbnail
 	* Admin scripts are no longer loaded into the head - but using a separate JavaScript file
