@@ -233,18 +233,26 @@ function get_bsearch_date( $search, $before = '', $after = '', $format = '' ) {
  */
 function get_bsearch_excerpt( $id, $excerpt_length = 0, $use_excerpt = true ) {
 	$content = '';
-	$excerpt = '';
-	if ( $use_excerpt ) {
-		$content = get_post( $id )->post_excerpt;
+
+	$post = get_post( $id );
+	if ( empty( $post ) ) {
+		return '';
 	}
-	if ( '' == $content ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		$content = get_post( $id )->post_content;
+	if ( $use_excerpt ) {
+		$content = $post->post_excerpt;
+	}
+	if ( empty( $content ) ) {
+		$content = $post->post_content;
 	}
 
 	$output = wp_strip_all_tags( strip_shortcodes( $content ) );
 
 	if ( $excerpt_length > 0 ) {
 		$output = wp_trim_words( $output, $excerpt_length );
+	}
+
+	if ( post_password_required( $post ) ) {
+		$output = __( 'There is no excerpt because this is a protected post.', 'better-search' );
 	}
 
 	/**
