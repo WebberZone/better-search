@@ -93,6 +93,14 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
+= 2.5.2 =
+
+Release post: [https://webberzone.com/blog/better-search-v2-5-0/](https://webberzone.com/blog/better-search-v2-5-0/)
+
+* Bug fixes:
+	* Custom CSS box would not save
+    * Password protected posts will no longer show the excerpt but a default message
+
 = 2.5.1 =
 
 Release post: [https://webberzone.com/blog/better-search-v2-5-0/](https://webberzone.com/blog/better-search-v2-5-0/)
