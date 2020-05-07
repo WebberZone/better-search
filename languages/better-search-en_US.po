@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-25 14:26+0100\n"
+"POT-Creation-Date: 2020-05-07 21:56+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team: WebberZone <plugins@webberzone.com>\n"
@@ -138,7 +138,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/help-tab.php:59 includes/admin/settings-page.php:126
-#: includes/general-template.php:283
+#: includes/general-template.php:291
 #: includes/modules/class-bsearch-search-box.php:60
 msgid "Search"
 msgstr ""
@@ -254,7 +254,11 @@ msgstr ""
 msgid "Relevance: "
 msgstr ""
 
-#: includes/general-template.php:281
+#: includes/general-template.php:255
+msgid "There is no excerpt because this is a protected post."
+msgstr ""
+
+#: includes/general-template.php:289
 msgid "Search for:"
 msgstr ""
 
