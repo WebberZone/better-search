@@ -60,7 +60,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 		$orderby = 'ORDER BY ' . $orderby;
 	}
 	if ( ! empty( $limits ) ) {
-		$orderby = 'LIMIT ' . $limits;
+		$limits = 'LIMIT ' . $limits;
 	}
 
 	$sql = "SELECT DISTINCT $fields FROM $wpdb->posts $join WHERE 1=1 $where $groupby $orderby $limits";
