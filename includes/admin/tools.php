@@ -122,7 +122,7 @@ function bsearch_tools_page() {
 					<?php submit_button( esc_html__( 'Export Settings', 'better-search' ), 'primary', 'bsearch_export_settings', false ); ?>
 				</p>
 
-				<?php wp_nonce_field( 'bsearch_export_setting_nonce', 'bsearch_export_setting_nonce' ); ?>
+				<?php wp_nonce_field( 'bsearch_export_settings_nonce', 'bsearch_export_settings_nonce' ); ?>
 			</form>
 
 			<form method="post" enctype="multipart/form-data">
@@ -220,7 +220,7 @@ function bsearch_process_settings_export() {
 		return;
 	}
 
-	if ( isset( $_POST['bsearch_export_settings_nonce'] ) && ! wp_verify_nonce( sanitize_key( $_POST['bsearch_export_settings_nonce'] ), 'bsearch_export_settings_nonce' ) ) {
+	if ( ! isset( $_POST['bsearch_export_settings_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['bsearch_export_settings_nonce'] ), 'bsearch_export_settings_nonce' ) ) {
 		return;
 	}
 
@@ -254,7 +254,7 @@ function bsearch_process_settings_import() {
 		return;
 	}
 
-	if ( isset( $_POST['bsearch_import_settings_nonce'] ) && ! wp_verify_nonce( sanitize_key( $_POST['bsearch_import_settings_nonce'] ), 'bsearch_import_settings_nonce' ) ) {
+	if ( ! isset( $_POST['bsearch_import_settings_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['bsearch_import_settings_nonce'] ), 'bsearch_import_settings_nonce' ) ) {
 		return;
 	}
 
