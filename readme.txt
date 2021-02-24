@@ -2,9 +2,10 @@
 Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Contributors: webberzone, Ajay
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 2.5.3
+Stable tag: 2.5.4
 Requires at least: 4.9
-Tested up to: 5.4
+Tested up to: 5.7
+Requires PHP: 5.6
 License: GPLv2 or later
 
 
@@ -93,9 +94,14 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
-= 2.5.3 =
+= 2.5.4 =
 
 Release post: [https://webberzone.com/blog/better-search-v2-5-0/](https://webberzone.com/blog/better-search-v2-5-0/)
+
+* Bug fixes:
+	* Resetting settings caused issues for the default styles and color fields
+
+= 2.5.3 =
 
 * Bug fixes:
 	* Security fix
