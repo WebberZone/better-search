@@ -117,7 +117,7 @@ function get_bsearch_footer( $search_query, $numrows, $limit ) {
 		$current = ( $match_range[0] / $limit ) + 1; // Current page number.
 		if ( $i >= $current + $pagination_range && $i < $pages ) {
 			if ( $i == $current + $pagination_range ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-				$output .= '&hellip;&nbsp;';
+				$output .= '<span class="bsearch_hellip">&hellip;&nbsp;</span>';
 			}
 			continue;
 		}
