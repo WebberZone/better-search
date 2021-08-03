@@ -41,7 +41,8 @@ jobs:
 
       # Check the code-style consistency of the PHP files.
       - name: Check PHP code style
-        run: |
-          vendor/bin/phpcs -pvs --report=checkstyle --standard=phpcs.ruleset.xml $(find . -name '*.php') | cs2pr --graceful-warnings
+        continue-on-error: true
+        run: vendor/bin/phpcs --report-full --report-checkstyle=./phpcs-report.xml
 
-
+      - name: Show PHPCS results in PR
+        run: cs2pr ./phpcs-report.xml
