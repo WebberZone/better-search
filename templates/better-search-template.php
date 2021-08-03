@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * The template for displaying Search Results pages.
  *
@@ -19,10 +19,11 @@ get_header(); ?>
 		<div id="content" role="main">
 			<?php
 			$form = get_bsearch_form( $search_query );
-			echo $form;
+			echo $form; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 			<header class="page-header">
 				<h1 class="page-title">
+					<?php /* translators: Search term. */ ?>
 					<?php printf( __( 'Better Search TEMPLATE Search Results for: %s', 'twentyeleven' ), '<span>' . get_search_query() . '</span>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</h1>
 			</header>
