@@ -1,5 +1,4 @@
-sudo: false
-dist: trusty
+dist: xenial
 language: php
 
 notifications:
@@ -15,33 +14,57 @@ cache:
   - composer
   - $HOME/.composer/cache
 
-env: WP_CLI=true
+# Test main supported versions of PHP against latest WP.
+php:
+  - "7.0"
+  - "7.1"
+  - "7.2"
+  - "7.3"
+  - "7.4"
 
-matrix:
+env:
+  - WP_VERSION=latest WP_MULTISITE=0
+
+jobs:
   fast_finish: true
   include:
-    - php: 7.0
-      env: SNIFF=1
-    - php: 7.2
-      env: WP_VERSION=latest
-    - php: 7.1
-      env: WP_VERSION=latest WP_MULTISITE=1
-    - php: 5.6
-      env: WP_VERSION=latest
-    - php: 5.6
-      env: WP_VERSION=4.1
-    - php: 7.3
-      env: WP_VERSION=latest
+    - name: "WP Nightly"
+      php: "7.4"
+      env: WP_VERSION=nightly WP_MULTISITE=0
+    - name: "Legacy"
+      php: "5.6"
+      env: WP_VERSION=4.9
+    - name: "Code Standards"
+      php: "7.4"
+      env: WP_VERSION=nightly WP_MULTISITE=0 SNIFF=1
 
   allow_failures:
     # Allow failures for unstable builds.
-    - php: nightly
-    - env: WP_VERSION=master
-    - env: SNIFF=1
+    - name: "Legacy"
+    - name: "WP Nightly"
+    - name: "Code Standards"
+    - php: "8.0"
+
+# Git clone depth
+# By default Travis CI clones repositories to a depth of 50 commits. Using a depth of 1 makes this step a bit faster.
+git:
+  depth: 1
+
+# Since Xenial services are not started by default, we need to instruct it below to start.
+services:
+  - mysql
 
 before_script:
   - export PHPCS_DIR=/tmp/phpcs
   - export SNIFFS_DIR=/tmp/sniffs
+
+  - |
+    # Remove Xdebug for a huge performance increase:
+    if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
+      phpenv config-rm xdebug.ini
+    else
+      echo "xdebug.ini does not exist"
+    fi
 
   - |
     # Export Composer's global bin dir to PATH, but not on PHP 5.2:
@@ -49,11 +72,12 @@ before_script:
     export PATH=`composer config --list --global | grep '\[home\]' | { read a; echo "${a#* }/vendor/bin:$PHPCS_DIR/bin:$PATH"; }`
 
   - |
+    # Install WP Test suite:
     if [[ ! -z "$WP_VERSION" ]] ; then
       bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 
     case "$TRAVIS_PHP_VERSION" in
-      7.4snapshot|7.3|7.2|7.1|nightly)
+      7.4|7.3|7.2|7.1|nightly)
         echo "Using PHPUnit 7.x"
         travis_retry composer global require "phpunit/phpunit:^7"
         ;;
@@ -78,6 +102,7 @@ before_script:
   - mysql --version
   - phpenv versions
   - php --version
+  - composer --version
 
   # Install PHP_CodeSniffer.
   - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
@@ -96,5 +121,6 @@ script:
     fi
   - |
     if [[ "$SNIFF" == "1" ]] ; then
+      echo "Running Code Sniffer."
       $PHPCS_DIR/bin/phpcs -p -v -s --standard=phpcs.ruleset.xml $(find . -name '*.php')
     fi
