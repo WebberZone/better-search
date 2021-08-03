@@ -12,8 +12,6 @@ if ( ! defined( 'WPINC' ) ) {
 
 global $wpdb;
 
-$bsearch_settings = get_option( 'ald_bsearch_settings' );
-
 if ( is_multisite() ) {
 
 	// Get all blogs in the network and activate plugin on each one.
@@ -46,6 +44,7 @@ function bsearch_delete_data() {
 	$wpdb->query( 'DROP TABLE ' . $wpdb->prefix . 'bsearch_daily' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
 
 	delete_option( 'ald_bsearch_settings' );
+	delete_option( 'bsearch_settings' );
 
 	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
 	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch_title' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
