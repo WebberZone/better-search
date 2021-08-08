@@ -3,7 +3,6 @@
 [![WordPress Plugin Version](https://img.shields.io/wordpress/plugin/v/better-search.svg?style=flat-square)](https://wordpress.org/plugins/better-search/)
 [![License](https://img.shields.io/badge/license-GPL_v2%2B-orange.svg?style=flat-square)](https://opensource.org/licenses/GPL-2.0)
 [![WordPress Tested](https://img.shields.io/wordpress/v/better-search.svg?style=flat-square)](https://wordpress.org/plugins/better-search/)
-[![Build Status](https://travis-ci.org/WebberZone/better-search.svg?branch=master)](https://travis-ci.org/WebberZone/better-search)
 
 __Requires:__ 4.9
 
