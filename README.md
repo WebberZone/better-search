@@ -4,9 +4,9 @@
 [![License](https://img.shields.io/badge/license-GPL_v2%2B-orange.svg?style=flat-square)](https://opensource.org/licenses/GPL-2.0)
 [![WordPress Tested](https://img.shields.io/wordpress/v/better-search.svg?style=flat-square)](https://wordpress.org/plugins/better-search/)
 
-__Requires:__ 4.9
+__Requires:__ 5.0
 
-__Tested up to:__ 5.7
+__Tested up to:__ 5.8
 
 __License:__ [GPL-2.0+](https://www.gnu.org/licenses/gpl-2.0.html)
 
