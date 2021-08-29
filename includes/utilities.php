@@ -273,7 +273,7 @@ function bsearch_number_format_i18n( $number, $decimals = 0 ) {
 	$formatted = $number;
 
 	if ( bsearch_get_option( 'number_format_count' ) ) {
-		$formatted = number_format_i18n( $number );
+		$formatted = number_format_i18n( $number, $decimals );
 	}
 
 	/**
@@ -293,7 +293,7 @@ function bsearch_number_format_i18n( $number, $decimals = 0 ) {
  *
  * @since 2.5.0
  *
- * @param string $array Input string.
+ * @param array  $array Input string.
  * @param string $delimiter Delimiter.
  * @param string $enclosure Enclosure.
  * @param string $terminator Terminating string.
@@ -312,7 +312,7 @@ function bsearch_str_putcsv( $array, $delimiter = ',', $enclosure = '"', $termin
 	for ( $i = 0; $i < $array_size; $i++ ) {
 		// Nested array, process nest item.
 		if ( is_array( $work_array[ $i ] ) ) {
-			$string .= str_putcsv( $work_array[ $i ], $delimiter, $enclosure, $terminator );
+			$string .= bsearch_str_putcsv( $work_array[ $i ], $delimiter, $enclosure, $terminator );
 		} else {
 			switch ( gettype( $work_array[ $i ] ) ) {
 				// Manually set some strings.
@@ -383,3 +383,37 @@ function bsearch_highlight( $input, $keys ) {
 
 	return $output;
 }
+
+
+/**
+ * Function to convert the mySQL score to percentage.
+ *
+ * @since 3.0.0
+ *
+ * @param  float $score    Score for the search result.
+ * @param  float $topscore Score for the most relevant search result.
+ * @return string Score converted to percentage
+ */
+function bsearch_score2percent( $score, $topscore ) {
+
+	$output = '';
+
+	if ( $score > 0 ) {
+		$score  = $score * 100 / $topscore;
+		$output = bsearch_number_format_i18n( $score, 0 ) . '%';
+	}
+
+	return $output;
+
+	/**
+	 * Filter search result score
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string $output Score converted to percentage.
+	 * @param  float $score    Score for the search result.
+	 * @param  float $topscore Score for the most relevant search result.
+	 */
+	return apply_filters( 'bsearch_score2percent', $output, $score, $topscore );
+}
+
