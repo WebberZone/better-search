@@ -58,7 +58,7 @@ add_action( 'wp_head', 'bsearch_clause_head' );
  */
 function bsearch_content( $content ) {
 
-	if ( ! is_admin() && in_the_loop() && is_search() && bsearch_get_option( 'seamless' ) && bsearch_get_option( 'highlight' ) ) {
+	if ( ! is_admin() && in_the_loop() && is_search() && bsearch_get_option( 'highlight' ) ) {
 		$search_query = get_bsearch_query();
 
 		$search_query = preg_quote( $search_query, '/' );
