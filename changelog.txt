@@ -1,5 +1,70 @@
 This file holds the archive of changelog entries
 
+= 2.5.3 =
+
+Release post: [https://webberzone.com/blog/better-search-v2-5-0/](https://webberzone.com/blog/better-search-v2-5-0/)
+
+* Bug fixes:
+	* Security fix
+	* Variable fix for LIMIT clause
+
+= 2.5.2 =
+
+* Bug fixes:
+    * Password protected posts will no longer show the excerpt but a default message
+
+= 2.5.1 =
+
+* Bug fixes:
+	* Custom CSS box would not save
+
+= 2.5.0 =
+
+* Features:
+    * New section under Better Search &raquo; Tools to export and import settings. Best option if you'd like the same configuration across multiple WordPress sites
+
+* Enhancements:
+	* If thumbnails are enabled on search results page with seamless mode off, the plugin will search for multiple option in addition to the post thumbnail
+	* Admin scripts are no longer loaded into the head - but using a separate JavaScript file
+	* Implemented CodeMirror to format custom styles box
+	* Replaced jscolor with WordPress color picker
+	* New filters to modify the style, class, title
+
+* Bug fixes:
+	* Fixed notices in PHP 7.4 when viewing popular searches listings
+	* Link to Better Search plugin page was not nofollow
+
+= 2.4.0 =
+
+Release post: [https://webberzone.com/blog/better-search-v2-4-0/](https://webberzone.com/blog/better-search-v2-4-0/)
+
+* Features:
+	* New interface in the admin area to view popular searches. You can also delete the search results from this page
+	* New setting *Number format count* under General to turn on/off the number formating of the search count
+	* New setting *Exclude Categories* under Search to exclude posts that belong to certain categories
+	* New setting *Stop query on banned words filter* under Search to stop searching if the search query contains any word from the banned list i.e. "Filter these words" setting. If you have seamless mode off, Better Search will display an error message. With seamless mode on, this will give a Nothing found message. You can customize it by editing your theme
+	* New setting *Filter whole words only* to only filter the full words from the banned list. When activated, partial words will no longer be blocked. You will need to update your banned words list to record more words that you would like filtered
+
+* Bug fixes:
+	* Options with checkboxes that haven't been saved in the database should display correctly
+	* Fixed `bsearch_read_options is deprecated` message on activation
+
+= 2.3.0 =
+
+Release post: [https://webberzone.com/blog/better-search-v2-3-0/](https://webberzone.com/blog/better-search-v2-3-0/)
+
+* Features:
+	* New option to disable aggressive searching when no results are found
+
+* Enhancements:
+	* HTML markup for the search results page when seamless mode is OFF has been rewritten with several new classes. [View example markup](https://gist.github.com/ajaydsouza/5f88766b9ea6cad3b032533383733813)
+
+* Bug fixes:
+	* WHERE clause will be the same with Seamless mode ON or OFF
+	* The plugin will only force BOOLEAN mode if no results are found and this wasn't already enabled
+
+For previous changelog entries, please refer to the separate changelog.txt file
+
 = 2.2.4 =
 
 * Features:
