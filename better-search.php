@@ -117,6 +117,8 @@ function bsearch_get_settings() {
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/admin/register-settings.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/admin/default-settings.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/activation.php';
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search.php';
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search-query.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/query.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/main-functions.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/general-template.php';
@@ -127,7 +129,6 @@ function bsearch_get_settings() {
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/wp-filters.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/tracker.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/cache.php';
-	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/seamless.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/class-bsearch-widget.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/class-bsearch-search-box.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/heatmap.php';
@@ -156,4 +157,3 @@ if ( is_admin() ) {
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/admin/class-better-search-statistics-table.php';
 
 }
-
