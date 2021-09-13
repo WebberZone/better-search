@@ -14,12 +14,16 @@ if ( ! defined( 'WPINC' ) ) {
  * Gets the search results.
  *
  * @since   1.2
+ * @deprecated 3.0.0
  *
  * @param   string     $search_query    Search term.
  * @param   int|string $limit           Maximum number of search results.
  * @return  string     Search results
  */
 function get_bsearch_results( $search_query = '', $limit = '' ) {
+
+	_deprecated_function( __FUNCTION__, '3.0.0' );
+
 	global $bsearch_error;
 
 	if ( ! ( $limit ) ) {
@@ -79,14 +83,11 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 				$output .= '<div class="bsearch-entry-content">';
 
 				if ( bsearch_get_option( 'include_thumb' ) ) {
-					list( $thumb_width, $thumb_height ) = bsearch_get_thumb_size( 'thumbnail' );
-
 					$output .= '<p class="bsearch_thumb_wrapper">';
 					$output .= bsearch_get_the_post_thumbnail(
 						array(
-							'postid'       => $search,
-							'thumb_height' => $thumb_height,
-							'thumb_width'  => $thumb_width,
+							'post' => $search,
+							'size' => 'thumbnail'
 						)
 					);
 					$output .= '</p>';
@@ -173,28 +174,36 @@ function get_bsearch_query( $escaped = true ) {
 /**
  * Returns an array with the cleaned-up search string at the zero index and possibly a list of terms in the second.
  *
- * @since   1.2
+ * @since 1.2
  *
- * @param   mixed $search_query   The search term.
- * @return  array   Cleaned up search string
+ * @param mixed $search_query   The search term.
+ * @param array $args {
+ *      Optional. Array or string of Query parameters.
+ *
+ *      @type bool $use_fulltext Use fulltext flag.
+ * }
+ * @return array Cleaned up search string. Search query is at [0], array of terms at [1], fulltext status at [2].
  */
-function get_bsearch_terms( $search_query = '' ) {
+function get_bsearch_terms( $search_query = '', $args = array() ) {
+
+	$defaults = array(
+		'use_fulltext' => bsearch_get_option( 'use_fulltext' ),
+	);
+	$args     = wp_parse_args( $args, $defaults );
 
 	if ( empty( $search_query ) ) {
 		$search_query = get_bsearch_query();
 	}
-	$s_array[0] = $search_query;
+	$search_words = array();
 
-	$use_fulltext = bsearch_get_option( 'use_fulltext' );
+	// Extract the search terms. We respect quotes.
+	$search_query = stripslashes( $search_query ); // Added slashes screw with quote grouping when done early, so done later.
+	if ( preg_match_all( '/".*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+/', $search_query, $matches ) ) {
+		$search_words = $matches[0];
+	}
+	$use_fulltext = $args['use_fulltext'];
 
-	/**
-		If use_fulltext is false OR if all the words are shorter than four chars, add the array of search terms.
-		Currently this will disable match ranking and won't be quote-savvy.
-		If we are using fulltext, turn it off unless there's a search word longer than three chars
-		ideally we'd also check against stopwords here
-	*/
-	$search_words = explode( ' ', $search_query );
-
+	// if search terms are less than 3 then turn fulltext off.
 	if ( $use_fulltext ) {
 		$use_fulltext_proxy = false;
 		foreach ( $search_words as $search_word ) {
@@ -205,25 +214,16 @@ function get_bsearch_terms( $search_query = '' ) {
 		$use_fulltext = $use_fulltext_proxy;
 	}
 
-	if ( ! $use_fulltext ) {
-		// Strip out all the fancy characters that fulltext would use.
-		$search_query = addslashes_gpc( $search_query );
-		$search_query = preg_replace( '/, +/', ' ', $search_query );
-		$search_query = str_replace( ',', ' ', $search_query );
-		$search_query = str_replace( '"', ' ', $search_query );
-		$search_query = trim( $search_query );
-		$search_words = explode( ' ', $search_query );
-
-		$s_array[0] = $search_query;    // Save original query at [0].
-		$s_array[1] = $search_words;    // Save array of terms at [1].
-	}
+	$s_array[0] = $search_query;    // Save original query at [0].
+	$s_array[1] = $search_words;    // Save array of terms at [1].
+	$s_array[2] = $use_fulltext;    // Save fulltext status at [2].
 
 	/**
 	 * Filter array holding the search query and terms
 	 *
-	 * @since   1.2
+	 * @since 1.2
 	 *
-	 * @param   array   $s_array    Original query is at [0] and array of terms at [1]
+	 * @param array $s_array Search query is at [0], array of terms at [1], fulltext status at [2]
 	 */
 	return apply_filters( 'get_bsearch_terms', $s_array );
 }
@@ -233,12 +233,16 @@ function get_bsearch_terms( $search_query = '' ) {
  * Get the matches for the search term.
  *
  * @since   1.2
+ * @deprecated 3.0.0
  *
  * @param   string $search_query    Search terms array.
  * @param   bool   $bydate         Sort by date flag.
  * @return  array   Search results
  */
 function get_bsearch_matches( $search_query, $bydate ) {
+
+	_deprecated_function( __FUNCTION__, '3.0.0' );
+
 	global $wpdb, $bsearch_error;
 
 	// if there are two items in $search_info, the string has been broken into separate terms that
@@ -332,7 +336,7 @@ function get_bsearch_matches( $search_query, $bydate ) {
 
 	if ( bsearch_get_option( 'cache' ) ) {
 		// Set search transient.
-		set_transient( $search_query_transient, $matches, 7200 );
+		set_transient( $search_query_transient, $matches, bsearch_get_option( 'cache_time' ) );
 	}
 
 	/**
@@ -346,12 +350,15 @@ function get_bsearch_matches( $search_query, $bydate ) {
  * Returns an array with the first and last indices to be displayed on the page.
  *
  * @since   1.2
+ * @deprecated 3.0.0
  *
  * @param   int $numrows    Total results.
  * @param   int $limit      Results per page.
  * @return  array   First and last indices to be displayed on the page
  */
 function get_bsearch_range( $numrows, $limit ) {
+
+	_deprecated_function( __FUNCTION__, '3.0.0' );
 
 	if ( ! ( $limit ) ) {
 		$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended

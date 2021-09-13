@@ -11,213 +11,53 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Function to return the header links of the results page.
+ * Display the Better Search post excerpt.
  *
- * @since   1.2
+ * @since 3.0.0
  *
- * @param   string $search_query   Search string.
- * @param   int    $numrows        Total number of results.
- * @param   int    $limit          Results per page.
- * @return  string  Formatted header table of search results pages
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type string  $before      HTML output before the date.
+ *     @type string  $after       HTML output after the date.
+ *     @type bool    $echo        Echo or return?
+ *     @type WP_Post $post        Post ID or WP_Post object. Default current post.
+ *     @type string  $format      PHP date format. Defaults to the 'date_format' option.
+ *     @type bool    $use_excerpt Use the excerpt or create it from post content.
+ * }
+ * @return void|string Void if 'echo' argument is true, the post excerpt if 'echo' is false.
  */
-function get_bsearch_header( $search_query, $numrows, $limit ) {
+function the_bsearch_excerpt( $args = array() ) {
 
-	$output      = '';
-	$match_range = get_bsearch_range( $numrows, $limit );
+	$defaults = array(
+		'before'         => '',
+		'after'          => '',
+		'echo'           => true,
+		'post'           => get_post(),
+		'excerpt_length' => 0,
+		'use_excerpt'    => true,
+	);
+	$args     = wp_parse_args( $args, $defaults );
 
-	$pages = intval( $numrows / $limit ); // Number of results pages.
+	$excerpt = get_bsearch_excerpt( $args['post'], $args['excerpt_length'], $args['use_excerpt'] );
 
-	if ( $numrows % $limit ) {
-		$pages++;   // If remainder so add one page.
-	}
+	$output = $args['before'] . $excerpt . $args['after'];
 
-	if ( ( $pages < 1 ) || ( 0 == $pages ) ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		$total = 1; // If $pages is less than one or equal to 0, total pages is 1.
+	/**
+	 * Filters the displayed post excerpt.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $output The post excerpt.
+	 * @param array  $args   Arguments array.
+	 */
+	$output = apply_filters( 'the_bsearch_excerpt', $output, $args );
+
+	if ( $args['echo'] ) {
+		echo $output;
 	} else {
-		$total = $pages;    // Else total pages is $pages value.
+		return $output;
 	}
-
-	$first   = $match_range[0] + 1;   // The first result on the page (Starts with 0).
-	$last    = $match_range[1] + 1;    // The last result on the page (Starts with 0).
-	$current = ( $match_range[0] / $limit ) + 1; // Current page number.
-
-	$output .= '<table width="100%" border="0" class="bsearch_nav">
-	 <tr class="bsearch_nav_row1">
-	  <td width="50%" style="text-align:left">';
-
-	/* translators: 1: First, 2: Last, 3: Number of rows */
-	$output .= sprintf( __( 'Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</strong>', 'better-search' ), $first, $last, $numrows );
-
-	$output .= '
-	  </td>
-	  <td width="50%" style="text-align:right">';
-	/* translators: 1: Current page number, 2: Total pages */
-	$output .= sprintf( __( 'Page <strong>%1$s</strong> of <strong>%2$s</strong>', 'better-search' ), $current, $total );
-
-	$sencoded = rawurlencode( $search_query );
-
-	$output .= '
-	  </td>
-	 </tr>
-	 <tr class="bsearch_nav_row2">
-	  <td style="text-align:left"></td>';
-	$output .= '<td style="text-align:right">';
-	$output .= __( 'Results per-page', 'better-search' );
-	$output .= ': <a href="' . home_url() . '/?s=' . $sencoded . '&limit=10">10</a> | <a href="' . home_url() . '/?s=' . $sencoded . '&limit=20">20</a> | <a href="' . home_url() . '/?s=' . $sencoded . '&limit=50">50</a> | <a href="' . home_url() . '/?s=' . $sencoded . '&limit=100">100</a>
-	  </td>
-	 </tr>
-	</table>';
-
-	/**
-	 * Filter formatted string with header of page
-	 *
-	 * @since   1.2
-	 *
-	 * @param   string  $output         HTML of header table
-	 * @param   string  $search_query   Search string
-	 * @param   int     $numrows        Total number of results
-	 * @param   int     $limit          Results per page
-	 */
-	return apply_filters( 'get_bsearch_header', $output, $search_query, $numrows, $limit );
-}
-
-
-/**
- * Function to return the footer links of the results page.
- *
- * @since   1.2
- *
- * @param   string $search_query   Search string.
- * @param   int    $numrows        Total results.
- * @param   int    $limit          Results per page.
- * @return  string  Formatted footer of search results pages
- */
-function get_bsearch_footer( $search_query, $numrows, $limit ) {
-
-	$match_range = get_bsearch_range( $numrows, $limit );
-	$page        = $match_range[0];
-	$pages       = intval( $numrows / $limit ); // Number of results pages.
-	if ( $numrows % $limit ) {
-		$pages++;   // If remainder so add one page.
-	}
-
-	$search_query = rawurlencode( $search_query );
-
-	$output = '<p class="bsearch_footer">';
-	if ( 0 != $page ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		$back_page = $page - $limit;
-		$output   .= '<a href="' . home_url() . "/?s=$search_query&limit=$limit&bpaged=$back_page\">&laquo; ";
-		$output   .= __( 'Previous', 'better-search' );
-		$output   .= "</a>    \n";
-	}
-
-	$pagination_range = 4;          // Number of pagination elements.
-
-	for ( $i = 1; $i <= $pages; $i++ ) { // loop through each page and give link to it.
-		$current = ( $match_range[0] / $limit ) + 1; // Current page number.
-		if ( $i >= $current + $pagination_range && $i < $pages ) {
-			if ( $i == $current + $pagination_range ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-				$output .= '<span class="bsearch_hellip">&hellip;&nbsp;</span>';
-			}
-			continue;
-		}
-		if ( $i < $current - $pagination_range + 1 && $i < $pages ) {
-			continue;
-		}
-		$ppage = $limit * ( $i - 1 );
-		if ( $ppage == $page ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			$output .= "<b>$i</b>\n";   // If current page don't give link, just text.
-		} else {
-			$output .= '<a href="' . home_url() . "/?s=$search_query&limit=$limit&bpaged=$ppage\">$i</a> \n";
-		}
-	}
-
-	if ( ! ( ( ( $page + $limit ) / $limit ) >= $pages ) && 1 != $pages ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		$next_page = $page + $limit;
-		$output   .= '    <a href="' . home_url() . "/?s=$search_query&limit=$limit&bpaged=$next_page\">";
-		$output   .= __( 'Next', 'better-search' );
-		$output   .= ' &raquo;</a>';
-	}
-	$output .= '</p>';
-
-	/**
-	 * Filter formatted string with footer of page
-	 *
-	 * @since   1.2
-	 *
-	 * @param   string  $output         HTML of footer
-	 * @param   string  $search_query   Search string
-	 * @param   int     $numrows        Total results
-	 * @param   int     $limit          Results per page
-	 */
-	return apply_filters( 'get_bsearch_footer', $output, $search_query, $numrows, $limit );
-}
-
-
-/**
- * Function to convert the mySQL score to percentage.
- *
- * @since   1.2
- *
- * @param   object $search     Search result object.
- * @param   int    $score      Score for the search result.
- * @param   int    $topscore   Score for the most relevant search result.
- * @return  int     Score converted to percentage
- */
-function get_bsearch_score( $search, $score, $topscore ) {
-
-	$output = '';
-
-	if ( $score > 0 ) {
-		$score   = $score * 100 / $topscore;
-		$output  = __( 'Relevance: ', 'better-search' );
-		$output .= bsearch_number_format_i18n( $score, 0 ) . '%';
-	}
-
-	/**
-	 * Filter search result score
-	 *
-	 * @since   1.2
-	 *
-	 * @param   string  $output     HTML of footer
-	 * @param   string  $search     Search result object
-	 * @param   int     $score      Score for the search result
-	 * @param   int     $topscore   Score for the most relevant result
-	 */
-	return apply_filters( 'get_bsearch_score', $output, $search, $score, $topscore );
-}
-
-
-/**
- * Function to get post date.
- *
- * @since   1.2
- *
- * @param   object $search     Search result object.
- * @param   string $before     Added before the date.
- * @param   string $after      Added after the date.
- * @param   string $format     Date format.
- * @return  string  Formatted date string
- */
-function get_bsearch_date( $search, $before = '', $after = '', $format = '' ) {
-	if ( ! $format ) {
-		$format = get_option( 'date_format' );
-	}
-
-	$output = $before . date_i18n( $format, strtotime( $search->post_date ) ) . $after;
-
-	/**
-	 * Filter formatted string with search result date
-	 *
-	 * @since   1.2
-	 *
-	 * @param   string  $output     Formatted date string
-	 * @param   object  $search     Search result object
-	 * @param   string  $before     Added before the date
-	 * @param   string  $after      Added after the date
-	 * @param   string  $format     Date format
-	 */
-	return apply_filters( 'get_bsearch_date', $output, $search, $before, $after, $format );
 }
 
 
@@ -226,15 +66,15 @@ function get_bsearch_date( $search, $before = '', $after = '', $format = '' ) {
  *
  * @since   1.2
  *
- * @param   int        $id             Post ID.
- * @param   int|string $excerpt_length Length of the excerpt in words.
- * @param   bool       $use_excerpt    Use post excerpt or content.
+ * @param   int|WP_Post $post           Post ID or WP_Post instance.
+ * @param   int         $excerpt_length Length of the excerpt in words.
+ * @param   bool        $use_excerpt    Use post excerpt or content.
  * @return  string      Excerpt
  */
-function get_bsearch_excerpt( $id, $excerpt_length = 0, $use_excerpt = true ) {
+function get_bsearch_excerpt( $post = '', $excerpt_length = 0, $use_excerpt = true ) {
 	$content = '';
 
-	$post = get_post( $id );
+	$post = get_post( $post );
 	if ( empty( $post ) ) {
 		return '';
 	}
@@ -258,14 +98,16 @@ function get_bsearch_excerpt( $id, $excerpt_length = 0, $use_excerpt = true ) {
 	/**
 	 * Filter formatted string with search result exeerpt
 	 *
-	 * @since   1.2
+	 * @since 1.2
+	 * @since 3.0.0 Added $content parameter
 	 *
-	 * @param   string      $output         Formatted excerpt
-	 * @param   int         $id             Post ID
-	 * @param   int|string  $excerpt_length Length of the excerpt in words
-	 * @param   bool        $use_excerpt    Use post excerpt or content?
+	 * @param string  $output         Formatted excerpt
+	 * @param WP_Post $post           WP_Post instance.
+	 * @param int     $excerpt_length Length of the excerpt in words
+	 * @param bool    $use_excerpt    Use post excerpt or content?
+	 * @param string  $content        Content that is used to create the excerpt.
 	 */
-	return apply_filters( 'get_bsearch_excerpt', $output, $id, $excerpt_length, $use_excerpt );
+	return apply_filters( 'get_bsearch_excerpt', $output, $post, $excerpt_length, $use_excerpt, $content );
 }
 
 
@@ -349,4 +191,404 @@ function get_bsearch_title( $text_only = true ) {
 	return apply_filters( 'get_bsearch_title', $title );
 }
 
+
+/**
+ * Display the header table on the search results page.
+ *
+ * @since 3.0.0
+ *
+ * @global WP_Query $wp_query WP_Query
+ *
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type string $before        Markup to prepend to the relevance score.
+ *     @type string $after         Markup to append to the relevance score.
+ *     @type bool   $echo          Echo or return?
+ *     @type int    $limit         Number of posts per page.
+ *     @type int    $found_posts   Total number of posts found.
+ *     @type int    $max_num_pages Maximum number of pages of results.
+ *     @type int    $paged         Current page of results.
+ *     @type string $search_query  Search query.
+ * }
+ * @return void|string Void if 'echo' argument is true, the title attribute if 'echo' is false.
+ */
+function the_bsearch_header( $args = array() ) {
+	/** @var WP_Query $wp_query WP_Query */
+	global $wp_query;
+
+	$defaults = array(
+		'before'        => '',
+		'after'         => '',
+		'echo'          => true,
+		'limit'         => isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : bsearch_get_option( 'limit' ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		'found_posts'   => absint( $wp_query->found_posts ),
+		'max_num_pages' => absint( $wp_query->max_num_pages ),
+		'paged'         => (int) get_query_var( 'paged', 1 ),
+		'search_query'  => empty( $wp_query->search_query ) ? get_bsearch_query() : $wp_query->search_query,
+	);
+	$args     = wp_parse_args( $args, $defaults );
+
+	$output = '';
+
+	$current_page = ( $args['paged'] ) ? $args['paged'] : 1;
+	$pages        = $args['max_num_pages'];
+	$last         = $current_page * $args['limit'];
+	$first        = $last - $args['limit'] + 1;
+	$last         = min( $args['found_posts'], $last );
+	$total_pages  = ( $pages < 1 ) ? 1 : $pages;
+
+	$output .= '
+	<table width="100%" border="0" class="bsearch_nav">
+	 <tr class="bsearch_nav_row1">
+	  <td width="50%" style="text-align:left">';
+
+	/* translators: 1: First, 2: Last, 3: Number of rows */
+	$output .= sprintf( __( 'Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</strong>', 'better-search' ), $first, $last, $args['found_posts'] );
+
+	$output .= '
+	  </td>
+	  <td width="50%" style="text-align:right">';
+	/* translators: 1: Current page number, 2: Total pages */
+	$output .= sprintf( __( 'Page <strong>%1$s</strong> of <strong>%2$s</strong>', 'better-search' ), $current_page, $total_pages );
+
+	/**
+	 * Filters the number of limit links to display on the results page.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int[] $steps Array of step sizes.
+	 * @param array $args  Arguments array.
+	 */
+	$limit_steps = apply_filters( 'bsearch_header_limit_steps', array( 10, 20, 50 ), $args );
+
+	$url = array();
+	foreach ( $limit_steps as $limit_step ) {
+		if ( $limit_step <= $args['found_posts'] ) {
+			$link  = esc_url(
+				add_query_arg(
+					array(
+						's'     => $args['search_query'],
+						'limit' => $limit_step,
+					),
+					home_url()
+				)
+			);
+			$url[] = sprintf( '<a href="%1$s">%2$s</a>', $link, $limit_step );
+		}
+	}
+
+	/**
+	 * Show link for All results.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param bool $show_all Show all flag.
+	 */
+	$show_all = apply_filters( 'bsearch_header_show_all', true );
+	if ( $show_all ) {
+		$link  = esc_url(
+			add_query_arg(
+				array(
+					's'     => $args['search_query'],
+					'limit' => $args['found_posts'],
+				),
+				home_url()
+			)
+		);
+		$url[] = sprintf( '<a href="%1$s">%2$s</a>', $link, __( 'All', 'better-search' ) );
+	}
+	$url = implode( ' | ', $url );
+
+	$output .= '
+	  </td>
+	 </tr>
+	 <tr class="bsearch_nav_row2">
+	  <td style="text-align:left"></td>
+	  <td style="text-align:right">';
+	$output .= sprintf( __( 'Results per-page: %s ', 'better-search' ), $url );
+	$output .= '
+	  </td>
+	 </tr>
+	</table>';
+
+	/**
+	 * Filter the relevance score text.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $output Relevance score text.
+	 * @param array  $args   Array of arguments.
+	 */
+	$output = apply_filters( 'the_bsearch_header', $output, $args );
+
+	if ( $args['echo'] ) {
+		echo $output;
+	} else {
+		return $output;
+	}
+}
+
+
+/**
+ * Display the relevance score for the post.
+ *
+ * @since 3.0.0
+ *
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type int    $score    Score of the search result.
+ *     @type int    $topscore Top score for which relevance is 100%.
+ *     @type string $before   Markup to prepend to the relevance score.
+ *     @type string $after    Markup to append to the relevance score.
+ *     @type bool   $echo     Echo or return?
+ * }
+ * @return void|string Void if 'echo' argument is true, the title attribute if 'echo' is false.
+ */
+function the_bsearch_score( $args = array() ) {
+
+	$defaults = array(
+		'score'    => 0,
+		'topscore' => 0,
+		'before'   => __( 'Relevance:', 'better-search' ) . ' ',
+		'after'    => '',
+		'echo'     => true,
+	);
+	$args     = wp_parse_args( $args, $defaults );
+
+	$score = bsearch_score2percent( $args['score'], $args['topscore'] );
+
+	$output = $args['before'] . $score . $args['after'];
+
+	/**
+	 * Filter the relevance score text.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $output Relevance score text.
+	 * @param array  $args   Array of arguments.
+	 */
+	$output = apply_filters( 'the_bsearch_score', $output, $args );
+
+	if ( $args['echo'] ) {
+		echo $output;
+	} else {
+		return $output;
+	}
+}
+
+
+/**
+ * Display the Better Search Post Thumbnail.
+ *
+ * When a theme adds 'post-thumbnail' support, a special 'post-thumbnail' image size
+ * is registered, which differs from the 'thumbnail' image size managed via the
+ * Settings > Media screen.
+ *
+ * When using the_post_thumbnail() or related functions, the 'post-thumbnail' image
+ * size is used by default, though a different size can be specified instead as needed.
+ *
+ * @since 3.0.0
+ *
+ * @param string|int[] $size Optional. Image size. Accepts any registered image size name, or an array of
+ *                           width and height values in pixels (in that order). Default 'post-thumbnail'.
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type string  $before Display before the thumbnail.
+ *     @type string  $after  Display after the thumbnail.
+ *     @type bool    $echo   Echo or return?
+ *     @type WP_Post $post   Post object.
+ * }
+ * @return void|string Void if 'echo' argument is true, the thumbnail HTML if 'echo' is false.
+ */
+function the_bsearch_post_thumbnail( $size = 'post-thumbnail', $args = array() ) {
+
+	$defaults = array(
+		'before' => '',
+		'after'  => '',
+		'echo'   => true,
+		'post'   => get_post(),
+	);
+	$args     = wp_parse_args( $args, $defaults );
+
+	$thumb = bsearch_get_the_post_thumbnail( $args );
+
+	$output = $args['before'] . $thumb . $args['after'];
+
+	/**
+	 * Filter the relevance score text.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string       $output Thumbnail HTML.
+	 * @param string|int[] $size   Image size. Accepts any registered image size name, or an array of
+	 *                             width and height values in pixels (in that order). Default 'post-thumbnail'.
+	 * @param array        $args   Array of arguments.
+	 */
+	$output = apply_filters( 'the_bsearch_post_thumbnail', $output, $size, $args );
+
+	if ( $args['echo'] ) {
+		echo $output;
+	} else {
+		return $output;
+	}
+}
+
+
+/**
+ * Display the Better Search Date.
+ *
+ * @since 3.0.0
+ *
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type string  $before HTML output before the date.
+ *     @type string  $after  HTML output after the date.
+ *     @type bool    $echo   Echo or return?
+ *     @type WP_Post $post   Post ID or WP_Post object. Default current post.
+ *     @type string  $format PHP date format. Defaults to the 'date_format' option.
+ * }
+ * @return void|string Void if 'echo' argument is true, the post date if 'echo' is false.
+ */
+function the_bsearch_date( $args = array() ) {
+
+	$defaults = array(
+		'before' => '',
+		'after'  => '',
+		'echo'   => true,
+		'post'   => get_post(),
+		'format' => get_option( 'date_format' ),
+	);
+	$args     = wp_parse_args( $args, $defaults );
+
+	$output = get_bsearch_date( $args['post'], $args['before'], $args['after'], $args['format'] );
+
+	/**
+	 * Filter the relevance score text.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $output The formatted date string.
+	 * @param array  $args   Array of arguments.
+	 */
+	$output = apply_filters( 'the_bsearch_date', $output, $args );
+
+	if ( $args['echo'] ) {
+		echo $output;
+	} else {
+		return $output;
+	}
+}
+
+
+/**
+ * Function to get post date.
+ *
+ * @since   1.2
+ *
+ * @param   object $search     Search result object.
+ * @param   string $before     Added before the date.
+ * @param   string $after      Added after the date.
+ * @param   string $format     Date format.
+ * @return  string  Formatted date string
+ */
+function get_bsearch_date( $search, $before = '', $after = '', $format = '' ) {
+	if ( ! $format ) {
+		$format = get_option( 'date_format' );
+	}
+
+	$output = $before . date_i18n( $format, strtotime( $search->post_date ) ) . $after;
+
+	/**
+	 * Filter formatted string with search result date
+	 *
+	 * @since   1.2
+	 *
+	 * @param   string  $output     Formatted date string
+	 * @param   object  $search     Search result object
+	 * @param   string  $before     Added before the date
+	 * @param   string  $after      Added after the date
+	 * @param   string  $format     Date format
+	 */
+	return apply_filters( 'get_bsearch_date', $output, $search, $before, $after, $format );
+}
+
+
+/**
+ * Function to return the header links of the results page.
+ *
+ * @since   1.2
+ * @deprecated 3.0.0
+ *
+ * @param   string $search_query   Search string.
+ * @param   int    $numrows        Total number of results.
+ * @param   int    $limit          Results per page.
+ * @return  string  Formatted header table of search results pages
+ */
+function get_bsearch_header( $search_query, $numrows, $limit ) {
+
+	_deprecated_function( __FUNCTION__, '3.0.0', 'the_bsearch_header' );
+
+	$args = array(
+		'echo'         => false,
+		'limit'        => $limit,
+		'found_posts'  => $numrows,
+		'search_query' => $search_query,
+	);
+
+	return the_bsearch_header( $args );
+}
+
+
+/**
+ * Function to return the footer links of the results page.
+ *
+ * @since   1.2
+ * @deprecated 3.0.0
+ *
+ * @param   string $search_query   Search string.
+ * @param   int    $numrows        Total results.
+ * @param   int    $limit          Results per page.
+ * @return  string  Formatted footer of search results pages
+ */
+function get_bsearch_footer( $search_query, $numrows, $limit ) {
+
+	_deprecated_function( __FUNCTION__, '3.0.0', 'get_the_posts_pagination' );
+
+	$args = array(
+		'mid_size'  => 3,
+		'prev_text' => esc_html__( '« Previous', 'better-search' ),
+		'next_text' => esc_html__( 'Next »', 'better-search' ),
+	);
+
+	return get_the_posts_pagination( $args );
+}
+
+
+/**
+ * Function to convert the mySQL score to percentage.
+ *
+ * @since   1.2
+ * @deprecated 3.0.0
+ *
+ * @param   object $search     Search result object.
+ * @param   int    $score      Score for the search result.
+ * @param   int    $topscore   Score for the most relevant search result.
+ * @return  int     Score converted to percentage
+ */
+function get_bsearch_score( $search, $score, $topscore ) {
+
+	_deprecated_function( __FUNCTION__, '3.0.0', 'the_bsearch_score' );
+
+	$args = array(
+		'score'    => $score,
+		'topscore' => $topscore,
+		'echo'     => false,
+	);
+
+	return the_bsearch_score( $args );
+}
 

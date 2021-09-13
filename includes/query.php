@@ -34,7 +34,7 @@ function bsearch_sql_prepare( $search_info, $boolean_mode, $bydate ) {
 	$post_types = bsearch_post_types();
 
 	// Create a FULLTEXT clause only if there is no second element of the $search_info array. Use LIKE otherwise.
-	$use_fulltext = count( $search_info ) > 1 ? false : true;
+	$use_fulltext = $search_info[2];
 
 	// Set BOOLEAN Mode.
 	$boolean_mode = ( $boolean_mode ) ? ' IN BOOLEAN MODE' : '';
@@ -412,13 +412,8 @@ function bsearch_query_default_args() {
 	// This is when fulltext is disabled, and we search using LIKE.
 	$search_info = get_bsearch_terms();
 
-	// Create a FULLTEXT clause only if there is no second element of the $search_info array. Use LIKE otherwise.
-	$use_fulltext = count( $search_info ) > 1 ? false : true;
-
-	$post_types = bsearch_post_types();
-
 	$args = array(
-		'use_fulltext' => $use_fulltext,
+		'use_fulltext' => isset( $search_info[2] ) ? $search_info[2] : false,
 		'boolean_mode' => bsearch_get_option( 'boolean_mode' ) ? ' IN BOOLEAN MODE' : '',
 		'bydate'       => 0,
 		'post_types'   => bsearch_post_types(),
