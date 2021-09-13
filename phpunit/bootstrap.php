@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file.
  *
- * @package Sample_Plugin
+ * @package Better_Search_Plugin
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
@@ -32,3 +32,13 @@ tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
 // Start up the WP testing environment.
 require $_tests_dir . '/includes/bootstrap.php';
+
+activate_plugin( 'better-search/better-search.php' );
+
+echo "Installing Better Search...\n";
+
+global $bsearch_settings, $current_user;
+
+bsearch_install( true );
+
+$bsearch_settings = bsearch_get_settings();
