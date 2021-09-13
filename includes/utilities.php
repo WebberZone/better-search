@@ -21,7 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
 function bsearch_clean_terms( $val ) {
 	global $bsearch_error;
 
-	// instantiate WP_Error class.
+	// Instantiate WP_Error class.
 	$bsearch_error = new WP_Error();
 
 	$val = rawurldecode( $val );
@@ -398,7 +398,7 @@ function bsearch_score2percent( $score, $topscore ) {
 
 	$output = '';
 
-	if ( $score > 0 ) {
+	if ( $score > 0 && $topscore > 0 ) {
 		$score  = $score * 100 / $topscore;
 		$output = bsearch_number_format_i18n( $score, 0 ) . '%';
 	}
