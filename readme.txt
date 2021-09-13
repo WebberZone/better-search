@@ -1,11 +1,11 @@
 === Better Search ===
-Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Contributors: webberzone, Ajay
+Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Donate link: https://ajaydsouza.com/donate/
 Stable tag: 3.0.0
 Requires at least: 5.0
 Tested up to: 5.8
-Requires PHP: 5.6
+Requires PHP: 7.0
 License: GPLv2 or later
 
 
