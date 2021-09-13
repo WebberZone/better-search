@@ -134,7 +134,7 @@ function bsearch_parse_request( $wp ) {
 		$str = bsearch_update_count( $search_query );
 
 		header( 'content-type: application/x-javascript' );
-		echo esc_html( $str );
+		wp_send_json( $str );
 
 		// Stop anything else from loading as it is not needed.
 		exit;
