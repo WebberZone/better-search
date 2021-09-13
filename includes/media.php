@@ -13,17 +13,33 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Function to get the post thumbnail.
  *
- * @since 2.5.0
+ * When a theme adds 'post-thumbnail' support, a special 'post-thumbnail' image size
+ * is registered, which differs from the 'thumbnail' image size managed via the
+ * Settings > Media screen.
  *
- * @param array|string $args Array / Query string with arguments post thumbnails.
+ * When using the_post_thumbnail() or related functions, the 'post-thumbnail' image
+ * size is used by default, though a different size can be specified instead as needed.
+ *
+ * @since 2.5.0
+ * @since 3.0.0 `postid` argument renamed to `post`.
+ *              New `size` attribute added which can be a registered image size name or array of width and height.
+ *              `thumb_width` and `thumb_height` attributes removed. These are extracted based on size.
+ *
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type int|WP_Post $post   Post ID or object.
+ *     @type string  $after  Display after the thumbnail.
+ *     @type bool    $echo   Echo or return?
+ *     @type WP_Post $post   Post object.
+ * }
  * @return string Output with the post thumbnail
  */
 function bsearch_get_the_post_thumbnail( $args = array() ) {
 
 	$defaults = array(
-		'postid'             => '',
-		'thumb_height'       => '150',            // Max height of thumbnails.
-		'thumb_width'        => '150',         // Max width of thumbnails.
+		'post'               => '',
+		'size'               => 'post-thumbnail',
 		'thumb_meta'         => 'post-image',       // Meta field that is used to store the location of default thumbnail image.
 		'thumb_html'         => 'html',     // HTML / CSS for width and height attributes.
 		'thumb_default'      => '',  // Default thumbnail image.
@@ -35,10 +51,17 @@ function bsearch_get_the_post_thumbnail( $args = array() ) {
 	// Parse incomming $args into an array and merge it with $defaults.
 	$args = wp_parse_args( $args, $defaults );
 
-	if ( is_int( $args['postid'] ) ) {
-		$result = get_post( $args['postid'] );
+	$result = get_post( $args['post'] );
+
+	if ( empty( $result ) ) {
+		return '';
+	}
+
+	if ( is_string( $args['size'] ) ) {
+		list( $args['thumb_width'], $args['thumb_height'] ) = bsearch_get_thumb_size( $args['size'] );
 	} else {
-		$result = $args['postid'];
+		$args['thumb_width']  = $args['size'][0];
+		$args['thumb_height'] = $args['size'][1];
 	}
 
 	$post_title = esc_attr( $result->post_title );
@@ -54,10 +77,10 @@ function bsearch_get_the_post_thumbnail( $args = array() ) {
 		if ( $postimage ) {
 			$attachment_id = bsearch_get_attachment_id_from_url( $postimage );
 
-			$postthumb = wp_get_attachment_image_src( $attachment_id, array( $args['thumb_width'], $args['thumb_height'] ) );
+			$postthumb = wp_get_attachment_image_src( $attachment_id, $args['size'] );
 			if ( false !== $postthumb ) {
-				$postimage = $postthumb[0];
-				$pick     .= 'correct';
+				list( $postimage, $args['thumb_width'], $args['thumb_height'] ) = $postthumb;
+				$pick .= 'correct';
 			}
 		}
 	}
@@ -67,10 +90,10 @@ function bsearch_get_the_post_thumbnail( $args = array() ) {
 		if ( false !== get_post_thumbnail_id( $result->ID ) ) {
 			$attachment_id = ( 'attachment' === $result->post_type ) ? $result->ID : get_post_thumbnail_id( $result->ID );
 
-			$postthumb = wp_get_attachment_image_src( $attachment_id, array( $args['thumb_width'], $args['thumb_height'] ) );
+			$postthumb = wp_get_attachment_image_src( $attachment_id, $args['size'] );
 			if ( false !== $postthumb ) {
-				$postimage = $postthumb[0];
-				$pick      = 'featured';
+				list( $postimage, $args['thumb_width'], $args['thumb_height'] ) = $postthumb;
+				$pick = 'featured';
 			}
 		}
 	}
@@ -98,10 +121,10 @@ function bsearch_get_the_post_thumbnail( $args = array() ) {
 		if ( $postimage ) {
 			$attachment_id = bsearch_get_attachment_id_from_url( $postimage );
 
-			$postthumb = wp_get_attachment_image_src( $attachment_id, array( $args['thumb_width'], $args['thumb_height'] ) );
+			$postthumb = wp_get_attachment_image_src( $attachment_id, $args['size'] );
 			if ( false !== $postthumb ) {
-				$postimage = $postthumb[0];
-				$pick     .= 'correct';
+				list( $postimage, $args['thumb_width'], $args['thumb_height'] ) = $postthumb;
+				$pick .= 'correct';
 			}
 		}
 	}
@@ -141,17 +164,14 @@ function bsearch_get_the_post_thumbnail( $args = array() ) {
 		/**
 		 * Filters the thumbnail image URL.
 		 *
-		 * Use this filter to modify the thumbnail URL that is automatically created
-		 * Before v2.1 this was used for cropping the post image using timthumb
-		 *
 		 * @since 2.5.0
+		 * @since 3.0.0 Second argument changed to $args array and third argument changed to Post object.
 		 *
-		 * @param   string  $postimage      URL of the thumbnail image
-		 * @param   int     $thumb_width    Thumbnail width
-		 * @param   int     $thumb_height   Thumbnail height
-		 * @param   object  $result         Post Object
+		 * @param   string  $postimage URL of the thumbnail image
+		 * @param   array   $args      Arguments array.
+		 * @param   WP_Post $result    Post Object
 		 */
-		$postimage = apply_filters( 'bsearch_thumb_url', $postimage, $args['thumb_width'], $args['thumb_height'], $result );
+		$postimage = apply_filters( 'bsearch_thumb_url', $postimage, $args, $result );
 
 		if ( is_ssl() ) {
 			$postimage = preg_replace( '~http://~', 'https://', $postimage );
@@ -271,8 +291,8 @@ function bsearch_get_image_html( $attachment_url, $attr = array() ) {
 	$default_attr = array(
 		'src'          => $attachment_url,
 		'thumb_html'   => 'html',
-		'thumb_width'  => 150,
-		'thumb_height' => 150,
+		'thumb_width'  => '',
+		'thumb_height' => '',
 	);
 
 	$attr = wp_parse_args( $attr, $default_attr );
@@ -338,18 +358,30 @@ function bsearch_get_image_hwstring( $args = array() ) {
 
 	$default_args = array(
 		'thumb_html'   => 'html',
-		'thumb_width'  => 150,
-		'thumb_height' => 150,
+		'thumb_width'  => '',
+		'thumb_height' => '',
 	);
+	$args         = wp_parse_args( $args, $default_args );
 
-	$args = wp_parse_args( $args, $default_args );
+	$thumb_html = '';
 
 	if ( 'css' === $args['thumb_html'] ) {
-		$thumb_html = ' style="max-width:' . $args['thumb_width'] . 'px;max-height:' . $args['thumb_height'] . 'px;" ';
+		if ( $args['thumb_width'] ) {
+			$thumb_html .= 'max-width:' . (int) $args['thumb_width'] . 'px;';
+		}
+		if ( $args['thumb_height'] ) {
+			$thumb_html .= 'max-height:' . (int) $args['thumb_height'] . 'px;';
+		}
+		if ( ! empty( $thumb_html ) ) {
+			$thumb_html = ' style="' . $thumb_html . '" ';
+		}
 	} elseif ( 'html' === $args['thumb_html'] ) {
-		$thumb_html = ' width="' . $args['thumb_width'] . '" height="' . $args['thumb_height'] . '" ';
-	} else {
-		$thumb_html = '';
+		if ( $args['thumb_width'] ) {
+			$thumb_html .= 'width="' . (int) $args['thumb_width'] . '" ';
+		}
+		if ( $args['thumb_height'] ) {
+			$thumb_html .= 'height="' . (int) $args['thumb_height'] . '" ';
+		}
 	}
 
 	/**
@@ -415,18 +447,17 @@ function bsearch_get_attachment_id_from_url( $attachment_url = '' ) {
  * Function to get the correct height and width of the thumbnail.
  *
  * @since 2.5.0
+ * @since 3.0.0 First argument is a string.
  *
- * @param  array $args Array of arguments.
- * @return array Width and height
+ * @param  string $size Image size.
+ * @return array Width and height. If no width and height is found, then 150 is returned for each.
  */
-function bsearch_get_thumb_size( $args ) {
+function bsearch_get_thumb_size( $size = 'thumbnail' ) {
 
-	if ( is_string( $args ) ) {
-		$thumb_size = $args;
-	} elseif ( isset( $args['thumb_size'] ) ) {
-		$thumb_size = $args['thumb_size'];
-	} else {
-		$thumb_size = 'thumbnail';
+	if ( is_string( $size ) ) {
+		$thumb_size = $size;
+	} elseif ( isset( $size['thumb_size'] ) ) {
+		$thumb_size = $size['thumb_size'];
 	}
 
 	// Get thumbnail size.
@@ -435,14 +466,6 @@ function bsearch_get_thumb_size( $args ) {
 	if ( isset( $bsearch_thumb_size['width'] ) ) {
 		$thumb_width  = $bsearch_thumb_size['width'];
 		$thumb_height = $bsearch_thumb_size['height'];
-	}
-
-	if ( empty( $thumb_width ) && isset( $args['thumb_width'] ) ) {
-		$thumb_width = $args['thumb_width'];
-	}
-
-	if ( empty( $thumb_height ) && isset( $args['thumb_height'] ) ) {
-		$thumb_height = $args['thumb_height'];
 	}
 
 	if ( isset( $thumb_width ) && isset( $thumb_height ) ) {
@@ -457,10 +480,8 @@ function bsearch_get_thumb_size( $args ) {
 	 * @since 2.5.0
 	 *
 	 * @param   array   $thumb_size Array with width and height of thumbnail
-	 * @param   array   $args   Array of arguments
 	 */
-	return apply_filters( 'bsearch_get_thumb_size', $thumb_size, $args );
-
+	return apply_filters( 'bsearch_get_thumb_size', $thumb_size );
 }
 
 
