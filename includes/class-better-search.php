@@ -161,7 +161,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 				'include_post_ids' => 0,
 				'how_old'          => 0,
 			);
-			$defaults = array_merge( $defaults, $bsearch_settings );
+			$defaults = array_merge( $defaults, (array) $bsearch_settings );
 			$args     = wp_parse_args( $args, $defaults );
 
 			// Set necessary variables.
