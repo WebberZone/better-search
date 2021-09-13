@@ -31,7 +31,11 @@ if ( ! defined( 'WPINC' ) ) {
  */
 function bsearch_get_option( $key = '', $default = null ) {
 
-	$bsearch_settings = get_option( 'bsearch_settings' );
+	global $bsearch_settings;
+
+	if ( empty( $bsearch_settings ) ) {
+		$bsearch_settings = bsearch_get_settings();
+	}
 
 	if ( is_null( $default ) ) {
 		$default = bsearch_get_default_option( $key );
