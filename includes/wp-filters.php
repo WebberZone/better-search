@@ -16,12 +16,12 @@ if ( ! defined( 'WPINC' ) ) {
  * @since   1.3.3
  */
 function bsearch_clause_head() {
-	global $wp_query;
+
 	$bsearch_custom_css = stripslashes( bsearch_get_option( 'custom_css' ) );
 
 	$output = '';
 
-	if ( $wp_query->is_search ) {
+	if ( is_search() ) {
 
 		if ( bsearch_get_option( 'meta_noindex' ) ) {
 			$output .= '<meta name="robots" content="noindex,follow" />';
