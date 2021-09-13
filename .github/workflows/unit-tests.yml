@@ -83,10 +83,6 @@ jobs:
           php --version
           composer --version
 
-      - name: Setup and install composer
-        run: |
-          composer install
-
       - name: Set up WordPress
         run: phpunit/install.sh wordpress_test root '' 127.0.0.1:3306 ${{ matrix.wp }}
 
