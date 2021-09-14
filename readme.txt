@@ -8,7 +8,6 @@ Tested up to: 5.8
 Requires PHP: 7.0
 License: GPLv2 or later
 
-
 Better Search replaces the default WordPress search with a better search engine that gives contextual results sorted by relevance
 
 == Description ==
@@ -96,6 +95,10 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 = 3.0.0 =
 
+* Features:
+	* New classes Better_Search_Query and Better_Search. The latter is a wrapper for WP_Query and brings all the power of WP_Query to Better Search. The former is the core class that filters the required functions as well as replaces the older seamless mode implementation
+	* New settings to search taxonomies, comments, excerpt, meta, authors and comments. These will all return the posts corresponding where the search term is found in the above fields
+
 * Enhancements/modifications:
 	* `hellip` wrapped in `bsearch_hellip` span tag for easy access
 
@@ -103,7 +106,13 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 	* Resetting settings caused issues for the default styles and color fields
 	* Uninstalling didn't delete the option key from database.
 
+* Deprecated:
+	* PHP 5.x support has been dropped and attempting to install the plugin on these installs will throw errors!
+	* Multitude of functions have been deprecated. Check the deprecated.php file for the full list. Deprecated functions will also throw up a warning
+	* Aggressive Search mode has been removed
+
 == Upgrade Notice ==
 
-= 2.5.3 =
-Security fix. For details on the update check the changelog and release post on https://webberzone.com
+= 3.0.0 =
+Major upgrade. PHP 5.x support dropped. Review your settings on upgrade.
+Check the release post on https://webberzone.com
