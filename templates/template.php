@@ -15,11 +15,11 @@ $bsearch_settings = bsearch_get_settings();
 $search_query     = get_bsearch_query();
 $limit            = isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : $bsearch_settings['limit'];  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $bydate           = isset( $_GET['bydate'] ) ? absint( $_GET['bydate'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$paged            = (int) get_query_var( 'paged', 1 );
+$paged            = (int) get_query_var( 'paged', 1 ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
-// Reset wp_query temporary
+// Reset wp_query temporary.
 $tmp_wpquery = $wp_query;
-$wp_query    = null;
+$wp_query    = null; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 // Set up Better_Search_Query to replace $wp_query.
 $args           = array(
@@ -28,7 +28,7 @@ $args           = array(
 	'paged' => $paged,
 );
 $search_results = new Better_Search_Query( $args );
-$wp_query       = $search_results;
+$wp_query       = $search_results; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 $topscore       = $wp_query->topscore;
 
 // Get Header.
@@ -162,9 +162,9 @@ get_header();
 				<?php
 			}
 
-			// Reset wp_query back to what it was
-			$wp_query = null;
-			$wp_query = $tmp_wpquery;
+			// Reset wp_query back to what it was.
+			$wp_query = null; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+			$wp_query = $tmp_wpquery; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 			?>
 		</div>	<!-- Close id="bsearchresults" -->
 

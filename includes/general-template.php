@@ -54,7 +54,7 @@ function the_bsearch_excerpt( $args = array() ) {
 	$output = apply_filters( 'the_bsearch_excerpt', $output, $args );
 
 	if ( $args['echo'] ) {
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	} else {
 		return $output;
 	}
@@ -214,7 +214,10 @@ function get_bsearch_title( $text_only = true ) {
  * @return void|string Void if 'echo' argument is true, the title attribute if 'echo' is false.
  */
 function the_bsearch_header( $args = array() ) {
-	/** @var WP_Query $wp_query WP_Query */
+	/**
+	 * WP_Query.
+	 *
+	 * @var WP_Query $wp_query WP_Query */
 	global $wp_query;
 
 	$defaults = array(
@@ -323,7 +326,7 @@ function the_bsearch_header( $args = array() ) {
 	$output = apply_filters( 'the_bsearch_header', $output, $args );
 
 	if ( $args['echo'] ) {
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	} else {
 		return $output;
 	}
@@ -372,7 +375,7 @@ function the_bsearch_score( $args = array() ) {
 	$output = apply_filters( 'the_bsearch_score', $output, $args );
 
 	if ( $args['echo'] ) {
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	} else {
 		return $output;
 	}
@@ -430,7 +433,7 @@ function the_bsearch_post_thumbnail( $size = 'post-thumbnail', $args = array() )
 	$output = apply_filters( 'the_bsearch_post_thumbnail', $output, $size, $args );
 
 	if ( $args['echo'] ) {
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	} else {
 		return $output;
 	}
@@ -477,7 +480,7 @@ function the_bsearch_date( $args = array() ) {
 	$output = apply_filters( 'the_bsearch_date', $output, $args );
 
 	if ( $args['echo'] ) {
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	} else {
 		return $output;
 	}

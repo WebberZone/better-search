@@ -169,18 +169,18 @@ if ( ! class_exists( 'Better_Search' ) ) :
 			$args['ignore_sticky_posts'] = true;
 
 			// Set the number of posts to be retrieved. Use posts_per_page if set else use limit.
-			$args['posts_per_page'] = empty( $args['posts_per_page'] ) ? $args['limit'] : $args['posts_per_page'];
+			$args['posts_per_page'] = empty( $args['posts_per_page'] ) ? $args['limit'] : $args['posts_per_page']; // phpcs:ignore WordPress.WP.PostsPerPage.posts_per_page_posts_per_page
 
 			// Store query args before we manipulate them.
 			$this->input_query_args = $args;
 
 			// Set some class variables.
-			$search_query               = isset( $args['s'] ) ? $args['s'] : '';
-			$this->search_info          = get_bsearch_terms( $search_query, array( 'use_fulltext' => $args['use_fulltext'] ) );
-			$this->search_query         = $this->search_info[0];
-			$this->is_boolean_mode      = $args['boolean_mode'];
-			$this->use_fulltext         = $this->search_info[2];
-			$this->is_seamless_mode     = $args['seamless'];
+			$search_query           = isset( $args['s'] ) ? $args['s'] : '';
+			$this->search_info      = get_bsearch_terms( $search_query, array( 'use_fulltext' => $args['use_fulltext'] ) );
+			$this->search_query     = $this->search_info[0];
+			$this->is_boolean_mode  = $args['boolean_mode'];
+			$this->use_fulltext     = $this->search_info[2];
+			$this->is_seamless_mode = $args['seamless'];
 
 			// If post_types is empty or contains a query string then use parse_str else consider it comma-separated.
 			if ( ! empty( $args['post_types'] ) && is_array( $args['post_types'] ) ) {
@@ -323,7 +323,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		 * @param array  $args Array of arguments.
 		 * @return string MATCH field
 		 */
-		function get_match_sql( $search_query, $args = array() ) {
+		public function get_match_sql( $search_query, $args = array() ) {
 			global $wpdb;
 
 			$weight_title   = ! empty( $args['weight_title'] ) ? $args['weight_title'] : bsearch_get_option( 'weight_title' );
@@ -344,7 +344,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 
 				$field_score  = "(MATCH({$wpdb->posts}.post_title) AGAINST ('%s' {$boolean_mode} ) * %d ) + ";
 				$field_score .= "(MATCH({$wpdb->posts}.post_content) AGAINST ('%s' {$boolean_mode} ) * %d ) ";
-				$field_score  = $wpdb->prepare( $field_score, $field_args );
+				$field_score  = $wpdb->prepare( $field_score, $field_args ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$field_score  = stripslashes( $field_score );
 			}
 
@@ -567,23 +567,23 @@ if ( ! class_exists( 'Better_Search' ) ) :
 				$term = $n . $wpdb->esc_like( $term ) . $n;
 
 				if ( ! empty( $this->query_args['search_taxonomies'] ) ) {
-					$clause[] = $wpdb->prepare( "(bsq_t.name $like_op %s)", $term );
+					$clause[] = $wpdb->prepare( "(bsq_t.name $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				}
 
 				if ( ! empty( $this->query_args['search_excerpt'] ) ) {
-					$clause[] = $wpdb->prepare( "({$wpdb->posts}.post_excerpt $like_op %s)", $term );
+					$clause[] = $wpdb->prepare( "({$wpdb->posts}.post_excerpt $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				}
 
 				if ( ! empty( $this->query_args['search_meta'] ) ) {
-					$clause[] = $wpdb->prepare( "(bsq_meta.meta_value $like_op %s)", $term );
+					$clause[] = $wpdb->prepare( "(bsq_meta.meta_value $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				}
 
 				if ( ! empty( $this->query_args['search_authors'] ) ) {
-					$clause[] = $wpdb->prepare( "(bsq_users.display_name $like_op %s)", $term );
+					$clause[] = $wpdb->prepare( "(bsq_users.display_name $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				}
 
 				if ( ! empty( $this->query_args['search_comments'] ) ) {
-					$clause[] = $wpdb->prepare( "(bsq_comments.comment_content $like_op %s)", $term );
+					$clause[] = $wpdb->prepare( "(bsq_comments.comment_content $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				}
 
 				if ( ! empty( $clause ) ) {
@@ -721,9 +721,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param string   $groupby  The GROUP BY clause of the query.
-		 * @param WP_Query $query    The WP_Query instance.
-		 * @return string  Updated GROUP BY
+		 * @param WP_Query $query The WP_Query instance.
 		 */
 		public function pre_get_posts( $query ) {
 
@@ -877,8 +875,6 @@ if ( ! class_exists( 'Better_Search' ) ) :
 				return $clauses;
 			}
 
-			extract( $clauses, EXTR_SKIP );
-
 			if ( $this->use_fulltext ) {
 				$topscore = 0;
 
@@ -892,14 +888,18 @@ if ( ! class_exists( 'Better_Search' ) ) :
 				if ( $topscore ) {
 					$query->topscore = $topscore;
 				} else {
-					$score   = $this->get_match_sql( $this->search_query, $this->query_args );
-					$score   = empty( $score ) ? '0' : $score;
-					$fields  = $score . ' as score';
-					$orderby = 'ORDER BY score DESC ';
-					$limits  = 'LIMIT 0,1';
+					$distinct = $clauses['distinct'];
+					$join     = $clauses['join'];
+					$where    = $clauses['where'];
+					$groupby  = $clauses['groupby'];
+					$score    = $this->get_match_sql( $this->search_query, $this->query_args );
+					$score    = empty( $score ) ? '0' : $score;
+					$fields   = $score . ' as score';
+					$orderby  = 'ORDER BY score DESC ';
+					$limits   = 'LIMIT 0,1';
 
 					$topscore_query  = "SELECT $distinct $fields FROM {$wpdb->posts} $join WHERE 1=1 $where $groupby $orderby $limits";
-					$query->topscore = $wpdb->get_var( $topscore_query );
+					$query->topscore = $wpdb->get_var( $topscore_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
 					if ( ! empty( $this->query_args['cache'] ) ) {
 						set_transient( $cache_name, $query->topscore, $cache_time );
@@ -919,7 +919,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		 * @param string   $context Context of the cache key to be set.
 		 * @return string Cache meta key.
 		 */
-		function get_cache_key( $query, $context = 'query' ) {
+		public function get_cache_key( $query, $context = 'query' ) {
 			$cache_attr          = $this->input_query_args;
 			$cache_attr['paged'] = 1;
 			if ( isset( $this->query_args['paged'] ) ) {
@@ -1033,6 +1033,11 @@ if ( ! class_exists( 'Better_Search' ) ) :
 
 endif;
 
+/**
+ * Load Better Search function.
+ *
+ * @since 3.0.0
+ */
 function bsearch_load_plugin() {
 	if ( bsearch_get_option( 'seamless' ) ) {
 		new Better_Search();

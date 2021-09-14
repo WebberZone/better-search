@@ -87,7 +87,7 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 					$output .= bsearch_get_the_post_thumbnail(
 						array(
 							'post' => $search,
-							'size' => 'thumbnail'
+							'size' => 'thumbnail',
 						)
 					);
 					$output .= '</p>';
