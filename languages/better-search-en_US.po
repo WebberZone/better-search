@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-07 21:56+0100\n"
+"POT-Creation-Date: 2021-09-14 17:43+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team: WebberZone <plugins@webberzone.com>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: __;_e;_c;__ngettext\n"
 "X-Poedit-Basepath: ..\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -138,7 +138,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/help-tab.php:59 includes/admin/settings-page.php:126
-#: includes/general-template.php:291
+#: includes/general-template.php:133
 #: includes/modules/class-bsearch-search-box.php:60
 msgid "Search"
 msgstr ""
@@ -226,58 +226,51 @@ msgstr ""
 msgid "<h3>Weekly Popular Searches</h3>"
 msgstr ""
 
-#: includes/general-template.php:49
+#: includes/general-template.php:95
+msgid "There is no excerpt because this is a protected post."
+msgstr ""
+
+#: includes/general-template.php:131
+msgid "Search for:"
+msgstr ""
+
+#: includes/general-template.php:250
 #, php-format
 msgid ""
 "Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</"
 "strong>"
 msgstr ""
 
-#: includes/general-template.php:55
+#: includes/general-template.php:256
 #, php-format
 msgid "Page <strong>%1$s</strong> of <strong>%2$s</strong>"
 msgstr ""
 
-#: includes/general-template.php:65
-msgid "Results per-page"
+#: includes/general-template.php:302
+msgid "All"
 msgstr ""
 
-#: includes/general-template.php:110
-msgid "Previous"
+#: includes/general-template.php:312
+#, php-format
+msgid "Results per-page: %s "
 msgstr ""
 
-#: includes/general-template.php:138
-msgid "Next"
+#: includes/general-template.php:357
+msgid "Relevance:"
 msgstr ""
 
-#: includes/general-template.php:173
-msgid "Relevance: "
-msgstr ""
-
-#: includes/general-template.php:255
-msgid "There is no excerpt because this is a protected post."
-msgstr ""
-
-#: includes/general-template.php:289
-msgid "Search for:"
-msgstr ""
-
-#: includes/main-functions.php:75
+#: includes/main-functions.php:79
 msgid "Posted on: "
 msgstr ""
 
-#: includes/main-functions.php:112
+#: includes/main-functions.php:113
 msgid "No results."
 msgstr ""
 
-#: includes/main-functions.php:122
+#: includes/main-functions.php:123
 msgid ""
 "Please type in your search terms. Use descriptive words since this search is "
 "intelligent."
-msgstr ""
-
-#: includes/modules/cache.php:38
-msgid "Better Search cache has been cleared"
 msgstr ""
 
 #: includes/modules/class-bsearch-search-box.php:29
@@ -296,7 +289,7 @@ msgstr ""
 msgid "Display the popular searches"
 msgstr ""
 
-#: includes/modules/heatmap.php:148
+#: includes/modules/heatmap.php:145
 msgid "No searches made yet"
 msgstr ""
 
@@ -313,13 +306,4 @@ msgstr ""
 #: includes/utilities.php:363
 #, php-format
 msgid "Powered by %1$s plugin%2$s"
-msgstr ""
-
-#: templates/better-search-template.php:26
-#, php-format
-msgid "Better Search TEMPLATE Search Results for: %s"
-msgstr ""
-
-#: templates/template.php:36
-msgid "Search Results for: "
 msgstr ""
