@@ -69,7 +69,7 @@ function the_bsearch_heatmap( $args = array() ) {
 	$output = apply_filters( 'the_bsearch_heatmap', $output, $args );
 
 	if ( $args['echo'] ) {
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	} else {
 		return $output;
 	}
@@ -421,7 +421,7 @@ function get_bsearch_heatmap_counts( $args = array() ) {
 function get_bsearch_pop_daily() {
 	_deprecated_function( __FUNCTION__, '3.0.0', 'the_bsearch_heatmap' );
 
-	the_bsearch_heatmap( 'daily=1&echo=0' );
+	return the_bsearch_heatmap( 'daily=1&echo=0' );
 }
 
 
@@ -433,7 +433,7 @@ function get_bsearch_pop_daily() {
 function the_pop_searches_daily() {
 	_deprecated_function( __FUNCTION__, '3.0.0', 'the_bsearch_heatmap' );
 
-	the_bsearch_heatmap( 'daily=1' );
+	return the_bsearch_heatmap( 'daily=1' );
 }
 
 /**
@@ -446,7 +446,7 @@ function the_pop_searches_daily() {
 function get_bsearch_pop() {
 	_deprecated_function( __FUNCTION__, '3.0.0', 'the_bsearch_heatmap' );
 
-	the_bsearch_heatmap( 'echo=0' );
+	return the_bsearch_heatmap( 'echo=0' );
 }
 
 

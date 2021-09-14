@@ -403,8 +403,6 @@ function bsearch_score2percent( $score, $topscore ) {
 		$output = bsearch_number_format_i18n( $score, 0 ) . '%';
 	}
 
-	return $output;
-
 	/**
 	 * Filter search result score
 	 *
