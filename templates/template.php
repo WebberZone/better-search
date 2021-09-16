@@ -23,9 +23,10 @@ $wp_query    = null; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohib
 
 // Set up Better_Search_Query to replace $wp_query.
 $args           = array(
-	's'     => $search_query,
-	'limit' => $limit,
-	'paged' => $paged,
+	's'      => $search_query,
+	'limit'  => $limit,
+	'paged'  => $paged,
+	'bydate' => $bydate,
 );
 $search_results = new Better_Search_Query( $args );
 $wp_query       = $search_results; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited

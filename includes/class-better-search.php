@@ -160,6 +160,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 				'include_cat_ids'  => 0,
 				'include_post_ids' => 0,
 				'how_old'          => 0,
+				'bydate'           => 0,
 			);
 			$defaults = array_merge( $defaults, (array) $bsearch_settings );
 			$args     = wp_parse_args( $args, $defaults );
@@ -179,7 +180,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 			$this->search_info      = get_bsearch_terms( $search_query, array( 'use_fulltext' => $args['use_fulltext'] ) );
 			$this->search_query     = $this->search_info[0];
 			$this->is_boolean_mode  = $args['boolean_mode'];
-			$this->use_fulltext     = $this->search_info[2];
+			$this->use_fulltext     = $this->input_query_args['bydate'] ? 0 : $this->search_info[2];
 			$this->is_seamless_mode = $args['seamless'];
 
 			// If post_types is empty or contains a query string then use parse_str else consider it comma-separated.

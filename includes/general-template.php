@@ -210,6 +210,7 @@ function get_bsearch_title( $text_only = true ) {
  *     @type int    $max_num_pages Maximum number of pages of results.
  *     @type int    $paged         Current page of results.
  *     @type string $search_query  Search query.
+ *     @type bool   $bydate        Sory by date. If false, sort by relevance.
  * }
  * @return void|string Void if 'echo' argument is true, the title attribute if 'echo' is false.
  */
@@ -229,6 +230,7 @@ function the_bsearch_header( $args = array() ) {
 		'max_num_pages' => absint( $wp_query->max_num_pages ),
 		'paged'         => (int) get_query_var( 'paged', 1 ),
 		'search_query'  => empty( $wp_query->search_query ) ? get_bsearch_query() : $wp_query->search_query,
+		'bydate'        => isset( $_GET['bydate'] ) ? absint( $_GET['bydate'] ) : 0, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
@@ -265,19 +267,19 @@ function the_bsearch_header( $args = array() ) {
 	 */
 	$limit_steps = apply_filters( 'bsearch_header_limit_steps', array( 10, 20, 50 ), $args );
 
-	$url = array();
+	$rpp = array();
 	foreach ( $limit_steps as $limit_step ) {
 		if ( $limit_step <= $args['found_posts'] ) {
-			$link  = esc_url(
-				add_query_arg(
-					array(
-						's'     => $args['search_query'],
-						'limit' => $limit_step,
-					),
-					home_url()
-				)
+			$link_args = array(
+				's'     => $args['search_query'],
+				'limit' => $limit_step,
 			);
-			$url[] = sprintf( '<a href="%1$s">%2$s</a>', $link, $limit_step );
+			if ( isset( $_GET['bydate'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$link_args['bydate'] = $args['bydate'];
+			}
+
+			$link  = esc_url( add_query_arg( $link_args, home_url() ) );
+			$rpp[] = sprintf( '<a href="%1$s">%2$s</a>', $link, $limit_step );
 		}
 	}
 
@@ -290,26 +292,41 @@ function the_bsearch_header( $args = array() ) {
 	 */
 	$show_all = apply_filters( 'bsearch_header_show_all', true );
 	if ( $show_all ) {
-		$link  = esc_url(
-			add_query_arg(
-				array(
-					's'     => $args['search_query'],
-					'limit' => $args['found_posts'],
-				),
-				home_url()
-			)
+		$link_args = array(
+			's'     => $args['search_query'],
+			'limit' => $args['found_posts'],
 		);
-		$url[] = sprintf( '<a href="%1$s">%2$s</a>', $link, __( 'All', 'better-search' ) );
+		if ( isset( $_GET['bydate'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$link_args['bydate'] = $args['bydate'];
+		}
+
+		$link  = esc_url( add_query_arg( $link_args, home_url() ) );
+		$rpp[] = sprintf( '<a href="%1$s">%2$s</a>', $link, __( 'All', 'better-search' ) );
 	}
-	$url = implode( ' | ', $url );
+	$rpp = implode( ' | ', $rpp );
 
 	$output .= '
 	  </td>
 	 </tr>
 	 <tr class="bsearch_nav_row2">
-	  <td style="text-align:left"></td>
+	  <td style="text-align:left">
+	';
+
+	$rel_or_date_link_args['s']      = $args['search_query'];
+	$rel_or_date_link_args['bydate'] = $args['bydate'] ? 0 : 1;
+	if ( isset( $_GET['limit'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$rel_or_date_link_args['limit'] = $args['limit'];
+	}
+
+	$rel_or_date_link = esc_url( add_query_arg( $rel_or_date_link_args, home_url() ) );
+	$rel_or_date_text = $args['bydate'] ? __( 'Relevance', 'better-search' ) : __( 'Date', 'better-search' );
+	$rel_or_date_link = sprintf( '<a href="%1$s">%2$s</a>', $rel_or_date_link, $rel_or_date_text );
+
+	$output .= sprintf( __( 'Sort by: %1$s', 'better-search' ), $rel_or_date_link );
+	$output .= '
+	  </td>
 	  <td style="text-align:right">';
-	$output .= sprintf( __( 'Results per-page: %s ', 'better-search' ), $url );
+	$output .= sprintf( __( 'Results per-page: %s ', 'better-search' ), $rpp );
 	$output .= '
 	  </td>
 	 </tr>
@@ -594,4 +611,3 @@ function get_bsearch_score( $search, $score, $topscore ) {
 
 	return the_bsearch_score( $args );
 }
-
