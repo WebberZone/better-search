@@ -51,4 +51,19 @@ function bsearch_delete_data() {
 	$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch_content' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
 
 	delete_option( 'bsearch_db_version' );
+
+	$sql = "
+		SELECT option_name
+		FROM {$wpdb->options}
+		WHERE `option_name` LIKE '_transient_bs_%'
+	";
+
+	$results = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+
+	if ( is_array( $results ) ) {
+		foreach ( $results as $result ) {
+			$transient = str_replace( '_transient_', '', $result->option_name );
+			delete_transient( $transient );
+		}
+	}
 }

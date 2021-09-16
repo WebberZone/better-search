@@ -101,6 +101,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 * Enhancements/modifications:
 	* `hellip` wrapped in `bsearch_hellip` span tag for easy access
+	* Transients will be deleted when the plugin is removed
 
 * Bug fixes:
 	* Resetting settings caused issues for the default styles and color fields
