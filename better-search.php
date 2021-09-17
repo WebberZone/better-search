@@ -119,7 +119,6 @@ function bsearch_get_settings() {
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/activation.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search-query.php';
-	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/query.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/main-functions.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/general-template.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/l10n.php';
@@ -132,9 +131,7 @@ function bsearch_get_settings() {
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/class-bsearch-widget.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/class-bsearch-search-box.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/heatmap.php';
-	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/exclusions.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/shortcode.php';
-	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/modules/taxonomies.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/deprecated.php';
 
 /*
