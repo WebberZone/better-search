@@ -114,35 +114,90 @@ function get_bsearch_excerpt( $post = '', $excerpt_length = 0, $use_excerpt = tr
 /**
  * Function to fetch search form.
  *
- * @since   1.1
+ * @since 1.1
+ * @since 3.0.0 Add $args
  *
- * @param   string $search_query   Search query.
- * @return  string  Search form
+ * @param string       $search_query Search query.
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type string $before     Markup to prepend to the search form.
+ *     @type string $after      Markup to append to the search form.
+ *     @type bool   $echo       Echo or return?
+ *     @type string $aria_label ARIA label for the search form.
+ *                              Useful to distinguish multiple search forms on the same page and improve accessibility.
+ * }
+ * @return void|string Void if 'echo' argument is true, the search form if 'echo' is false.
  */
-function get_bsearch_form( $search_query ) {
+function get_bsearch_form( $search_query = '', $args = array() ) {
 
-	if ( '' === $search_query ) {
+	if ( empty( $search_query ) ) {
 		$search_query = get_bsearch_query();
 	}
 	$search_query = esc_attr( $search_query );
 
+	$defaults = array(
+		'before'     => '',
+		'after'      => '',
+		'echo'       => true,
+		'aria_label' => '',
+	);
+	$args     = wp_parse_args( $args, $defaults );
+
+	/**
+	 * Filters the array of arguments used when generating the Better Search form.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param array $args The array of arguments for building the search form.
+	 *                    See get_bsearch_form() for information on accepted arguments.
+	 */
+	$args = apply_filters( 'bsearch_form_args', $args );
+
+	// Ensure that the filtered arguments contain all required default values.
+	$args = array_merge( $defaults, $args );
+
+	// Build a string containing an aria-label to use for the search form.
+	if ( $args['aria_label'] ) {
+		$aria_label = 'aria-label="' . esc_attr( $args['aria_label'] ) . '" ';
+	} else {
+		/*
+		 * If there's no custom aria-label, we can set a default here. At the
+		 * moment it's empty as there's uncertainty about what the default should be.
+		 */
+		$aria_label = '';
+	}
+
 	$form = '
-	<div style="text-align:center"><form method="get" class="bsearchform" action="' . home_url() . '/" >
-	<label class="hidden" for="s">' . __( 'Search for:', 'better-search' ) . '</label>
-	<input type="text" value="' . $search_query . '" name="s" class="s" />
-	<input type="submit" class="searchsubmit" value="' . __( 'Search', 'better-search' ) . '" />
-	</form></div>
+	<div class="bsearch-form-container">
+		<form role="search" ' . $aria_label . 'method="get" class="bsearchform" action="' . esc_url( home_url( '/' ) ) . '">
+			<label>
+				<span class="screen-reader-text">' . _x( 'Search for:', 'label', 'better-search' ) . '</span>
+				<input type="search" class="bsearch-field search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder', 'better-search' ) . '" value="' . $search_query . '" name="s" />
+			</label>
+			<input type="submit" class="bsearch-submit searchsubmit search-submit" value="' . esc_attr_x( 'Search', 'submit button', 'better-search' ) . '" />
+		</form>
+	</div>
 	';
 
 	/**
-	 * Filters the title of the page
+	 * Filters the HTML output of the search form.
 	 *
-	 * @since   1.2
+	 * @since 1.2
+	 * @since 3.0.0 The `$args` parameter was added.
 	 *
-	 * @param   string  $form   HTML to display the form
-	 * @param   string  $search_query   Search query
+	 * @param string $form         The search form HTML output.
+	 * @param string $search_query Search query
+	 * @param array  $args         The array of arguments for building the search form.
+	 *                             See get_bsearch_form() for information on accepted arguments.
 	 */
-	return apply_filters( 'get_bsearch_form', $form, $search_query );
+	$result = apply_filters( 'get_bsearch_form', $form, $search_query, $args );
+
+	if ( $args['echo'] ) {
+		echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	} else {
+		return $result;
+	}
 }
 
 
@@ -202,8 +257,8 @@ function get_bsearch_title( $text_only = true ) {
  * @param string|array $args {
  *     Optional. Array or string of parameters.
  *
- *     @type string $before        Markup to prepend to the relevance score.
- *     @type string $after         Markup to append to the relevance score.
+ *     @type string $before        Markup to prepend to the header table.
+ *     @type string $after         Markup to append to the header table.
  *     @type bool   $echo          Echo or return?
  *     @type int    $limit         Number of posts per page.
  *     @type int    $found_posts   Total number of posts found.
@@ -333,11 +388,11 @@ function the_bsearch_header( $args = array() ) {
 	</table>';
 
 	/**
-	 * Filter the relevance score text.
+	 * Filter the header table.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $output Relevance score text.
+	 * @param string $output Header table.
 	 * @param array  $args   Array of arguments.
 	 */
 	$output = apply_filters( 'the_bsearch_header', $output, $args );
@@ -438,7 +493,7 @@ function the_bsearch_post_thumbnail( $size = 'post-thumbnail', $args = array() )
 	$output = $args['before'] . $thumb . $args['after'];
 
 	/**
-	 * Filter the relevance score text.
+	 * Filter the thumbnail.
 	 *
 	 * @since 3.0.0
 	 *
@@ -487,7 +542,7 @@ function the_bsearch_date( $args = array() ) {
 	$output = get_bsearch_date( $args['post'], $args['before'], $args['after'], $args['format'] );
 
 	/**
-	 * Filter the relevance score text.
+	 * Filter the date.
 	 *
 	 * @since 3.0.0
 	 *
@@ -535,4 +590,3 @@ function get_bsearch_date( $search, $before = '', $after = '', $format = '' ) {
 	 */
 	return apply_filters( 'get_bsearch_date', $output, $search, $before, $after, $format );
 }
-
