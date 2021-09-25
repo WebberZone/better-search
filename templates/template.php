@@ -19,7 +19,6 @@ $paged            = (int) get_query_var( 'paged', 1 ); // phpcs:ignore WordPress
 
 // Reset wp_query temporary.
 $tmp_wpquery = $wp_query;
-$wp_query    = null; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 // Set up Better_Search_Query to replace $wp_query.
 $args           = array(
