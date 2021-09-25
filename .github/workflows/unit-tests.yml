@@ -1,4 +1,4 @@
-name: Test
+name: Unit Tests
 
 on:
   # Run on all pushes and on all pull requests.
@@ -112,9 +112,6 @@ jobs:
         uses: "ramsey/composer-install@v1"
         with:
           composer-options: --ignore-platform-reqs
-
-      - name: 'Composer: Require Polyfills'
-        run: composer require --dev yoast/phpunit-polyfills
 
       - name: Run the unit tests - single site
         run: vendor/bin/phpunit
