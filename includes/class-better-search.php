@@ -61,12 +61,12 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		public $use_fulltext = true;
 
 		/**
-		 * Holds the search query, array of terms and fulltext flag at [0], [1] and [2] respectively.
+		 * Holds the search terms.
 		 *
 		 * @since 3.0.0
 		 * @var array
 		 */
-		public $search_info = array();
+		public $search_terms = array();
 
 		/**
 		 * Holds the search query.
@@ -176,12 +176,8 @@ if ( ! class_exists( 'Better_Search' ) ) :
 			$this->input_query_args = $args;
 
 			// Set some class variables.
-			$search_query           = isset( $args['s'] ) ? $args['s'] : '';
-			$this->search_info      = get_bsearch_terms( $search_query, array( 'use_fulltext' => $args['use_fulltext'] ) );
-			$this->search_query     = $this->search_info[0];
-			$this->is_boolean_mode  = $args['boolean_mode'];
-			$this->use_fulltext     = $this->input_query_args['bydate'] ? 0 : $this->search_info[2];
-			$this->is_seamless_mode = $args['seamless'];
+			$search_query = isset( $args['s'] ) ? $args['s'] : '';
+			$this->set_class_variables( $search_query );
 
 			// If post_types is empty or contains a query string then use parse_str else consider it comma-separated.
 			if ( ! empty( $args['post_types'] ) && is_array( $args['post_types'] ) ) {
@@ -313,6 +309,44 @@ if ( ! class_exists( 'Better_Search' ) ) :
 			 * @param Better_Search $this The Better_Search instance (passed by reference).
 			 */
 			$this->query_args = apply_filters_ref_array( 'better_search_query_args', array( $args, &$this ) );
+		}
+
+
+		/**
+		 * Sets some of the variables used by the CLASS.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param string $search_query Search query.
+		 */
+		public function set_class_variables( $search_query = '' ) {
+
+			$use_fulltext = bsearch_get_option( 'use_fulltext' );
+			$search_query = empty( $search_query ) ? get_bsearch_query() : $search_query;
+			$search_words = array();
+
+			// Extract the search terms. We respect quotes.
+			$search_query = stripslashes( $search_query ); // Added slashes screw with quote grouping when done early, so done later.
+			if ( preg_match_all( '/".*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+/', $search_query, $matches ) ) {
+				$search_words = $matches[0];
+			}
+
+			// if search terms are less than 3 then turn fulltext off.
+			if ( $use_fulltext ) {
+				$use_fulltext_proxy = false;
+				foreach ( $search_words as $search_word ) {
+					if ( strlen( $search_word ) > 3 ) {
+						$use_fulltext_proxy = true;
+					}
+				}
+				$use_fulltext = $use_fulltext_proxy;
+			}
+
+			$this->search_query     = $search_query;
+			$this->search_terms     = $search_words;
+			$this->use_fulltext     = $this->input_query_args['bydate'] ? 0 : $use_fulltext;
+			$this->is_boolean_mode  = $this->input_query_args['boolean_mode'];
+			$this->is_seamless_mode = $this->input_query_args['seamless'];
 		}
 
 		/**
@@ -516,7 +550,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 			 */
 			$exclusion_prefix = apply_filters( 'better_search_query_exclusion_prefix', '-' );
 
-			$search_terms = $this->search_info[1];
+			$search_terms = $this->search_terms;
 
 			// If this is not a fulltext search, we revert to LIKE based searching.
 			if ( ! $this->use_fulltext ) {
@@ -942,7 +976,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		 * @return bool Whether a query is for a search.
 		 */
 		public function is_search( $query ) {
-			if ( ! is_admin() && $query->is_search() ) {
+			if ( ! is_admin() && $query->is_search() && ! empty( $this->search_query ) ) {
 				return true;
 			} else {
 				return false;
