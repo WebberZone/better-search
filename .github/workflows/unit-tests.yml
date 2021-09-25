@@ -99,8 +99,6 @@ jobs:
 
       - name: 'Composer: set up PHPUnit'
         run: composer require --no-update phpunit/phpunit:"${{ steps.set_phpunit.outputs.PHPUNIT }}"
-      - name: 'Composer: Require Polyfills'
-        run: composer require --dev yoast/phpunit-polyfills
 
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies
@@ -114,6 +112,9 @@ jobs:
         uses: "ramsey/composer-install@v1"
         with:
           composer-options: --ignore-platform-reqs
+
+      - name: 'Composer: Require Polyfills'
+        run: composer require --dev yoast/phpunit-polyfills
 
       - name: Run the unit tests - single site
         run: vendor/bin/phpunit
