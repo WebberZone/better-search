@@ -5,6 +5,10 @@
  * @package Better_Search_Plugin
  */
 
+if ( class_exists( '\Yoast\PHPUnitPolyfills\Autoload' ) === false ) {
+    require_once 'vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
+}
+
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 
 // Check if we're installed in a src checkout.
