@@ -78,11 +78,6 @@ jobs:
           # The PHP 5.6 and 7.0 images don't include mysql[i] by default.
           extensions: mysqli
 
-      - name: Tool versions
-        run: |
-          php --version
-          composer --version
-
       - name: Set up WordPress
         run: phpunit/install.sh wordpress_test root '' 127.0.0.1:3306 ${{ matrix.wp }}
 
@@ -116,6 +111,12 @@ jobs:
       - name: 'Run Composer Update'
         run: |
           composer update --ignore-platform-reqs
+
+      - name: Tool versions
+        run: |
+          php --version
+          composer --version
+          phpunit --version
 
       - name: Run the unit tests - single site
         run: vendor/bin/phpunit
