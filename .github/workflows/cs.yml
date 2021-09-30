@@ -39,6 +39,10 @@ jobs:
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v1"
 
+      - name: 'Run Composer Update'
+        run: |
+          composer update
+
       # Check the code-style consistency of the PHP files.
       - name: Check PHP code style
         continue-on-error: true
