@@ -1,0 +1,23 @@
+{
+    "name": "webberzone/better-search",
+    "description": "Better Search replaces the default WordPress search with a better search engine that gives contextual results sorted by relevance",
+    "type": "wordpress-plugin",
+    "keywords": [
+        "search",
+        "better search",
+        "relevant search",
+        "search results"
+        "fulltext search"
+    ],
+    "license": "gpl-2.0-or-later",
+    "authors": [
+        {
+            "name": "WebberZone",
+            "email": "plugins@webberzone.com",
+            "role": "Developer"
+        }
+    ],
+    "requires": {
+        "php": ">=7"
+    }
+}
