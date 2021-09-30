@@ -115,7 +115,7 @@ jobs:
 
       - name: 'Run Composer Update'
         run: |
-          composer update
+          composer update --ignore-platform-reqs
 
       - name: Run the unit tests - single site
         run: vendor/bin/phpunit
