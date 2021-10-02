@@ -344,7 +344,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 
 			$this->search_query     = $search_query;
 			$this->search_terms     = $search_words;
-			$this->use_fulltext     = $this->input_query_args['bydate'] ? 0 : $use_fulltext;
+			$this->use_fulltext     = $use_fulltext;
 			$this->is_boolean_mode  = $this->input_query_args['boolean_mode'];
 			$this->is_seamless_mode = $this->input_query_args['seamless'];
 		}
@@ -702,12 +702,12 @@ if ( ! class_exists( 'Better_Search' ) ) :
 				return $orderby;
 			}
 
-			if ( ! empty( $this->query_args['bydate'] ) ) {
-				$orderby = " $wpdb->posts.post_date DESC ";
-			}
-
 			if ( ! empty( $this->use_fulltext ) ) {
 				$orderby = ' score DESC ';
+			}
+
+			if ( ! empty( $this->query_args['bydate'] ) ) {
+				$orderby = " $wpdb->posts.post_date DESC ";
 			}
 
 			/**
