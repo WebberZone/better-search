@@ -137,10 +137,12 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 	$search_query = esc_attr( $search_query );
 
 	$defaults = array(
-		'before'     => '',
-		'after'      => '',
-		'echo'       => true,
-		'aria_label' => '',
+		'before'              => '',
+		'after'               => '',
+		'echo'                => true,
+		'aria_label'          => '',
+		'post_types'          => bsearch_get_option( 'post_types' ),
+		'selected_post_types' => '',
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
@@ -168,6 +170,23 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 		$aria_label = '';
 	}
 
+	// Parse post_types.
+	$post_types          = wp_parse_slug_list( $args['post_types'] );
+	$selected_post_types = wp_parse_slug_list( $args['selected_post_types'] );
+
+	$select = '';
+	if ( ! empty( $post_types ) ) {
+		$select  = '<label>';
+		$select .= '<span class="screen-reader-text">' . _x( 'Post types:', 'label', 'better-search' ) . '</span>';
+		$select .= '<select name="post_types" id="post_types">';
+		$select .= '<option value="any">- Any post type -</option>';
+		foreach ( $post_types as $post_type ) {
+			$post_type = get_post_type_object( $post_type );
+			$select   .= sprintf( '<option value="%1$s" %3$s>%2$s</option>', $post_type->name, $post_type->labels->singular_name, selected( true, in_array( $post_type->name, $selected_post_types, true ), false ) );
+		}
+		$select .= '</select></label>';
+	}
+
 	$form = '
 	<div class="bsearch-form-container">
 		<form role="search" ' . $aria_label . 'method="get" class="bsearchform" action="' . esc_url( home_url( '/' ) ) . '">
@@ -175,6 +194,7 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 				<span class="screen-reader-text">' . _x( 'Search for:', 'label', 'better-search' ) . '</span>
 				<input type="search" class="bsearch-field search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder', 'better-search' ) . '" value="' . $search_query . '" name="s" />
 			</label>
+			' . $select . '
 			<input type="submit" class="bsearch-submit searchsubmit search-submit" value="' . esc_attr_x( 'Search', 'submit button', 'better-search' ) . '" />
 		</form>
 	</div>
@@ -286,6 +306,7 @@ function the_bsearch_header( $args = array() ) {
 		'paged'         => (int) get_query_var( 'paged', 1 ),
 		'search_query'  => empty( $wp_query->search_query ) ? get_bsearch_query() : $wp_query->search_query,
 		'bydate'        => isset( $_GET['bydate'] ) ? absint( $_GET['bydate'] ) : 0, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		'post_types'    => isset( $_GET['post_types'] ) ? sanitize_title( wp_unslash( $_GET['post_types'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
@@ -333,6 +354,10 @@ function the_bsearch_header( $args = array() ) {
 				$link_args['bydate'] = $args['bydate'];
 			}
 
+			if ( isset( $_GET['post_types'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$link_args['post_types'] = $args['post_types'];
+			}
+
 			$link  = esc_url( add_query_arg( $link_args, home_url() ) );
 			$rpp[] = sprintf( '<a href="%1$s">%2$s</a>', $link, $limit_step );
 		}
@@ -355,6 +380,10 @@ function the_bsearch_header( $args = array() ) {
 			$link_args['bydate'] = $args['bydate'];
 		}
 
+		if ( isset( $_GET['post_types'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$link_args['post_types'] = $args['post_types'];
+		}
+
 		$link  = esc_url( add_query_arg( $link_args, home_url() ) );
 		$rpp[] = sprintf( '<a href="%1$s">%2$s</a>', $link, __( 'All', 'better-search' ) );
 	}
@@ -367,8 +396,9 @@ function the_bsearch_header( $args = array() ) {
 	  <td style="text-align:left">
 	';
 
-	$rel_or_date_link_args['s']      = $args['search_query'];
-	$rel_or_date_link_args['bydate'] = $args['bydate'] ? 0 : 1;
+	$rel_or_date_link_args['s']          = $args['search_query'];
+	$rel_or_date_link_args['post_types'] = $args['post_types'];
+	$rel_or_date_link_args['bydate']     = $args['bydate'] ? 0 : 1;
 	if ( isset( $_GET['limit'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$rel_or_date_link_args['limit'] = $args['limit'];
 	}

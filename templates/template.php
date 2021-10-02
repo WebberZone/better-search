@@ -16,16 +16,21 @@ $search_query     = get_bsearch_query();
 $limit            = isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : $bsearch_settings['limit'];  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $bydate           = isset( $_GET['bydate'] ) ? absint( $_GET['bydate'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $paged            = (int) get_query_var( 'paged', 1 ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+$post_types       = isset( $_GET['post_types'] ) ? sanitize_title( wp_unslash( $_GET['post_types'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+if ( 'any' === $post_types ) {
+	$post_types = bsearch_get_option( 'post_types' );
+}
 
 // Reset wp_query temporary.
 $tmp_wpquery = $wp_query;
 
 // Set up Better_Search_Query to replace $wp_query.
 $args           = array(
-	's'      => $search_query,
-	'limit'  => $limit,
-	'paged'  => $paged,
-	'bydate' => $bydate,
+	's'          => $search_query,
+	'limit'      => $limit,
+	'paged'      => $paged,
+	'bydate'     => $bydate,
+	'post_types' => $post_types,
 );
 $search_results = new Better_Search_Query( $args );
 $wp_query       = $search_results; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
@@ -40,7 +45,7 @@ get_header();
 
 	<div id="content" class="bsearch_results_page">
 
-		<?php echo get_bsearch_form( $search_query ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<?php echo get_bsearch_form( $search_query, array( 'selected_post_types' => $post_types ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 		<div id="bsearchresults">
 			<?php do_action( 'bsearch_before_page_title' ); ?>
@@ -168,7 +173,7 @@ get_header();
 			?>
 		</div>	<!-- Close id="bsearchresults" -->
 
-		<?php echo get_bsearch_form( $search_query ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<?php echo get_bsearch_form( $search_query, array( 'selected_post_types' => $post_types ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 		<?php if ( $bsearch_settings['include_heatmap'] ) : ?>
 
