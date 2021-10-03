@@ -11,15 +11,13 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 // Initialise some variables.
-$bsearch_settings = bsearch_get_settings();
-$search_query     = get_bsearch_query();
-$limit            = isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : $bsearch_settings['limit'];  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$bydate           = isset( $_GET['bydate'] ) ? absint( $_GET['bydate'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$paged            = (int) get_query_var( 'paged', 1 ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-$post_types       = isset( $_GET['post_types'] ) ? sanitize_title( wp_unslash( $_GET['post_types'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-if ( 'any' === $post_types ) {
-	$post_types = bsearch_get_option( 'post_types' );
-}
+$bsearch_settings    = bsearch_get_settings();
+$search_query        = get_bsearch_query();
+$limit               = isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : $bsearch_settings['limit'];  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$bydate              = isset( $_GET['bydate'] ) ? absint( $_GET['bydate'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$paged               = (int) get_query_var( 'paged', 1 ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+$selected_post_types = isset( $_GET['post_types'] ) ? sanitize_title( wp_unslash( $_GET['post_types'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$post_types          = ( 'any' === $selected_post_types ) ? bsearch_get_option( 'post_types' ) : $selected_post_types;
 
 // Reset wp_query temporary.
 $tmp_wpquery = $wp_query;
@@ -45,7 +43,7 @@ get_header();
 
 	<div id="content" class="bsearch_results_page">
 
-		<?php the_bsearch_form( $search_query, array( 'selected_post_types' => $post_types ) ); ?>
+		<?php the_bsearch_form( $search_query, array( 'selected_post_types' => $selected_post_types ) ); ?>
 
 		<div id="bsearchresults">
 			<?php do_action( 'bsearch_before_page_title' ); ?>
@@ -173,7 +171,7 @@ get_header();
 			?>
 		</div>	<!-- Close id="bsearchresults" -->
 
-		<?php the_bsearch_form( $search_query, array( 'selected_post_types' => $post_types ) ); ?>
+		<?php the_bsearch_form( $search_query, array( 'selected_post_types' => $selected_post_types ) ); ?>
 
 		<?php if ( $bsearch_settings['include_heatmap'] ) : ?>
 
