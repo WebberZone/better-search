@@ -93,11 +93,12 @@ add_action( 'wp_enqueue_scripts', 'bsearch_enqueue_scripts' );
 function bsearch_query_vars( $vars ) {
 	// Add these to the list of queryvars that WP gathers.
 	$vars[] = 'bsearch_search_query';
+	$vars[] = 'bsearch_highlight';
 
 	/**
 	 * Function to add additional queries to query_vars.
 	 *
-	 * @since   2.2.4
+	 * @since 2.2.4
 	 *
 	 * @param array $vars Updated Query variables array with Better Search queries added.
 	 */

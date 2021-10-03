@@ -452,7 +452,7 @@ function bsearch_settings_styles() {
 			/* translators: 1: Opening a tag, 2: Closing a tag, 3: Opening code tage, 4. Closing code tag. */
 			'desc'        => sprintf( esc_html__( 'Do not include %3$sstyle%4$s tags. Check out the %1$sFAQ%2$s for available CSS classes to style.', 'better-search' ), '<a href="' . esc_url( 'https://wordpress.org/plugins/better-search/faq/' ) . '" target="_blank">', '</a>', '<code>', '</code>' ),
 			'type'        => 'css',
-			'options'     => bsearch_get_custom_css(),
+			'options'     => '',
 			'field_class' => 'codemirror_css',
 		),
 	);
@@ -558,31 +558,3 @@ function bsearch_get_badwords() {
 	 */
 	return apply_filters( 'bsearch_get_badwords', $badwords );
 }
-
-/**
- * Get custom CSS.
- *
- * @since 2.2.0
- *
- * @return string Custom CSS
- */
-function bsearch_get_custom_css() {
-
-	$custom_css = '
-#bsearchform { margin: 20px; padding: 20px; }
-#heatmap { margin: 20px; padding: 20px; border: 1px dashed #ccc }
-.bsearch_results_page { max-width:90%; margin: 20px; padding: 20px; }
-.bsearch_footer { text-align: center; }
-.bsearch_highlight { background:#ffc; }
-	';
-
-	/**
-	 * Filters custom CSS.
-	 *
-	 * @since 2.2.0
-	 *
-	 * @param string Custom CSS
-	 */
-	return apply_filters( 'bsearch_get_badwords', $custom_css );
-}
-

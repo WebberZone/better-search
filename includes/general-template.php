@@ -110,6 +110,19 @@ function get_bsearch_excerpt( $post = '', $excerpt_length = 0, $use_excerpt = tr
 	return apply_filters( 'get_bsearch_excerpt', $output, $post, $excerpt_length, $use_excerpt, $content );
 }
 
+/**
+ * Echo the Better Search form.
+ *
+ * @since 3.0.0
+ * @see get_bsearch_form()
+ *
+ * @param string $search_query Search query.
+ * @param array  $args         Array or string of parameters.
+ */
+function the_bsearch_form( $search_query = '', $args = array() ) {
+	echo get_bsearch_form( $search_query, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+
 
 /**
  * Function to fetch search form.
@@ -619,4 +632,33 @@ function get_bsearch_date( $search, $before = '', $after = '', $format = '' ) {
 	 * @param   string  $format     Date format
 	 */
 	return apply_filters( 'get_bsearch_date', $output, $search, $before, $after, $format );
+}
+
+
+/**
+ * Displays the permalink for the current post.
+ *
+ * @since 3.0.0
+ *
+ * @param int|WP_Post $post Optional. Post ID or post object. Default is the global `$post`.
+ * @param array       $query_args Optional. Additional query arguments to add to the permalink.
+ */
+function the_bsearch_permalink( $post = 0, $query_args = array() ) {
+
+	$permalink = get_permalink( $post );
+
+	if ( $permalink && ! empty( $query_args ) ) {
+		$permalink = add_query_arg( $query_args, $permalink );
+	}
+
+	/**
+	 * Filters the display of the permalink for the current post.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string      $permalink  The permalink for the current post.
+	 * @param int|WP_Post $post       Post ID, WP_Post object, or 0. Default 0.
+	 * @param array       $query_args Additional query arguments to add to the permalink.
+	 */
+	echo esc_url( apply_filters( 'the_bsearch_permalink', $permalink, $post, $query_args ) );
 }

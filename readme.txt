@@ -100,6 +100,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 	* New settings to search taxonomies, comments, excerpt, meta, authors and comments. These will all return the posts corresponding where the search term is found in the above fields
 	* New parameter `bydate` if set to true will sort posts by date
 	* Advanced Search form now displays the select dropdown of post types that allows to search a specific post type
+	* Highlight search terms on pages referred from the search results page
 
 * Enhancements/modifications:
 	* `hellip` wrapped in `bsearch_hellip` span tag for easy access
