@@ -58,8 +58,10 @@ add_action( 'wp_head', 'bsearch_clause_head' );
  */
 function bsearch_content( $content ) {
 
-	if ( ! is_admin() && in_the_loop() && is_search() && bsearch_get_option( 'highlight' ) ) {
-		$search_query = get_bsearch_query();
+	$bsearch_highlight = bsearch_clean_terms( get_query_var( 'bsearch_highlight' ) );
+
+	if ( ! is_admin() && in_the_loop() && ( is_search() || ! empty( $bsearch_highlight ) ) && bsearch_get_option( 'highlight' ) ) {
+		$search_query = is_search() ? get_bsearch_query() : $bsearch_highlight;
 
 		$search_query = preg_quote( $search_query, '/' );
 		$keys         = explode( ' ', str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $search_query ) );
@@ -73,4 +75,46 @@ add_filter( 'the_content', 'bsearch_content' );
 add_filter( 'get_the_excerpt', 'bsearch_content' );
 add_filter( 'the_title', 'bsearch_content' );
 
+/**
+ * Filters the permalink to add additional query_args.
+ *
+ * @since 3.0.0
+ *
+ * @param string $link Permalink.
+ * @return string Permalink with query args addded.
+ */
+function bsearch_post_link( $link ) {
 
+	if ( ! is_search() || ! in_the_loop() || is_admin() || ! bsearch_get_option( 'highlight' ) ) {
+		return $link;
+	}
+
+	$query_args['bsearch_highlight'] = get_bsearch_query();
+
+	if ( ! empty( $query_args ) ) {
+		$link = add_query_arg( $query_args, $link );
+	}
+
+	return $link;
+}
+add_filter( 'post_link', 'bsearch_post_link' );
+add_filter( 'post_type_link', 'bsearch_post_link' );
+add_filter( 'page_link', 'bsearch_post_link' );
+add_filter( 'attachment_link', 'bsearch_post_link' );
+
+
+/**
+ * Enqueue styles and scripts.
+ *
+ * @since 3.0.0
+ */
+function bsearch_enqueue_scripts_styles() {
+
+	wp_register_style( 'bsearch-style', plugins_url( 'includes/css/bsearch-styles.min.css', BETTER_SEARCH_PLUGIN_FILE ), array(), '1.0' );
+
+	if ( ! is_admin() && ( is_search() || is_singular() ) ) {
+		wp_enqueue_style( 'bsearch-style' );
+		wp_add_inline_style( 'bsearch-style', esc_html( bsearch_get_option( 'custom_css' ) ) );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'bsearch_enqueue_scripts_styles' );

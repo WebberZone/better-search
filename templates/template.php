@@ -45,7 +45,7 @@ get_header();
 
 	<div id="content" class="bsearch_results_page">
 
-		<?php echo get_bsearch_form( $search_query, array( 'selected_post_types' => $post_types ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<?php the_bsearch_form( $search_query, array( 'selected_post_types' => $post_types ) ); ?>
 
 		<div id="bsearchresults">
 			<?php do_action( 'bsearch_before_page_title' ); ?>
@@ -78,7 +78,7 @@ get_header();
 						if ( bsearch_get_option( 'include_thumb' ) ) :
 							?>
 							<div class="thumbnail bsearch_thumb_wrapper">
-								<a href="<?php the_permalink(); ?>" class="thumbnail-link">
+								<a href="<?php the_bsearch_permalink(); ?>" class="thumbnail-link">
 									<?php
 										// Display post thumbnail.
 										the_bsearch_post_thumbnail(
@@ -99,7 +99,7 @@ get_header();
 							<?php do_action( 'bsearch_before_entry_header_inner' ); ?>
 
 							<h2 class="search-entry-title entry-title bsearch-entry-title">
-								<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"><?php the_title(); ?></a>
+								<a href="<?php the_bsearch_permalink(); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"><?php the_title(); ?></a>
 							</h2>
 
 							<ul class="bsearch_post_meta">
@@ -135,7 +135,7 @@ get_header();
 
 						<footer class="entry-footer default-max-width">
 							<div class="bsearch-entry-readmore">
-								<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php esc_html_e( 'Read more &raquo;', 'better-search' ); ?></a>
+								<a href="<?php the_bsearch_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php esc_html_e( 'Read more &raquo;', 'better-search' ); ?></a>
 								<span class="screen-reader-text"><?php the_title(); ?></span>
 							</div><!-- .search-entry-readmore -->
 						</footer><!-- .entry-footer -->
@@ -173,7 +173,7 @@ get_header();
 			?>
 		</div>	<!-- Close id="bsearchresults" -->
 
-		<?php echo get_bsearch_form( $search_query, array( 'selected_post_types' => $post_types ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<?php the_bsearch_form( $search_query, array( 'selected_post_types' => $post_types ) ); ?>
 
 		<?php if ( $bsearch_settings['include_heatmap'] ) : ?>
 
