@@ -4,7 +4,7 @@
  *
  * @package Better_Search_Plugin
  */
-require_once '/../../../../vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
+require_once dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 
