@@ -192,7 +192,7 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 		$select  = '<label>';
 		$select .= '<span class="screen-reader-text">' . _x( 'Post types:', 'label', 'better-search' ) . '</span>';
 		$select .= '<select name="post_types" id="post_types">';
-		$select .= '<option value="any">- Any post type -</option>';
+		$select .= sprintf( '<option value="any">%1$s</option>', __( 'Any Post Type', 'better-search' ) );
 		foreach ( $post_types as $post_type ) {
 			$post_type = get_post_type_object( $post_type );
 			$select   .= sprintf( '<option value="%1$s" %3$s>%2$s</option>', $post_type->name, $post_type->labels->singular_name, selected( true, in_array( $post_type->name, $selected_post_types, true ), false ) );
