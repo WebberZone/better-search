@@ -4,6 +4,8 @@
  *
  * @package Better_Search_Plugin
  */
+require_once dirname( dirname( __FILE__ ) ) . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
+
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 
 // Check if we're installed in a src checkout.
