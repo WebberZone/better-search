@@ -31,9 +31,9 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 * **Automatic**: Once activated, Better Search will automatically replace your default WordPress search with more relevant search results
 * **Seamless integration**: Search results are perfectly integrated into your theme without the need for custom search templates
 * **Relevance**: Search results are automatically sorted by relevance. You can also turn off relevancy based searching, in which case, results are sorted by date
-* **Control the results**: Fine tune the results by changing the weighting of post title and post content. Turn on BOOLEAN search to override the default NATURAL LANGUAGE search of mySQL
-* **Popular searches**: Find out what visitors are searching for on your blog. Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap. Widget support for easy integration in your theme
-* **Customisation**: Support for a template file for perfect integration into your blog template. Alternatively, just input your own CSS styles in the *Custom Styles* tab in the Settings Page. Check the FAQ for more information
+* **Control the results**: Search within title, content, excerpt, meta fields, authors, tags and other taxonomies and comments
+* **Popular searches**: Find out what visitors are searching for on your blog. Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap. Widget support for easy integration in your theme as well as a shortcode [[bsearch_heatmap]]
+* **Customisation**: Use your own template file for perfect integration into your blog template. Input your own CSS styles in the *Custom Styles* tab in the Settings Page. Check the FAQ for more information
 * **Supports cache plugins**: Works with caching plugins like WP-Super-Cache and W3 Total Cache
 * **Profanity filter**: Customise the list of stop words that will automatically be filtered out of search queries
 * **Translation ready**: Better Search is translation ready
