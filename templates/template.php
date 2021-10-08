@@ -116,7 +116,7 @@ get_header();
 								<?php endif; ?>
 								<li class="meta-author"><?php esc_html_e( 'Post author:', 'better-search' ); ?> <?php the_author_posts_link(); ?></li>
 								<li class="meta-date"><?php esc_html_e( 'Published date:', 'better-search' ); ?> <?php the_bsearch_date(); ?></li>
-								<li class="meta-cat"><?php esc_html_e( 'Categories:', 'better-search' ); ?><?php the_category( ', ' ); ?></li>
+								<li class="meta-cat"><?php esc_html_e( 'Categories:', 'better-search' ); ?> <?php the_category( ', ' ); ?></li>
 								<?php do_action( 'bsearch_after_post_meta' ); ?>
 							</ul>
 
