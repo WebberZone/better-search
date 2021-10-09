@@ -640,7 +640,7 @@ function get_bsearch_date( $search, $before = '', $after = '', $format = '' ) {
  *
  * @since 3.0.0
  *
- * @param int|WP_Post $post Optional. Post ID or post object. Default is the global `$post`.
+ * @param int|WP_Post $post       Optional. Post ID or post object. Default is the global `$post`.
  * @param array       $query_args Optional. Additional query arguments to add to the permalink.
  */
 function the_bsearch_permalink( $post = 0, $query_args = array() ) {
@@ -657,8 +657,125 @@ function the_bsearch_permalink( $post = 0, $query_args = array() ) {
 	 * @since 3.0.0
 	 *
 	 * @param string      $permalink  The permalink for the current post.
-	 * @param int|WP_Post $post       Post ID, WP_Post object, or 0. Default 0.
+	 * @param int|WP_Post $post       WP_Post object.
 	 * @param array       $query_args Additional query arguments to add to the permalink.
 	 */
 	echo esc_url( apply_filters( 'the_bsearch_permalink', $permalink, $post, $query_args ) );
+}
+
+
+/**
+ * Retrieves a post’s terms as a list with specified format. Works with custom post types.
+ *
+ * @since 3.0.0
+ *
+ * @param int|WP_Post  $post Optional. Post ID or post object. Default is the global `$post`.
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type string          $before_terms String to use before the terms.
+ *     @type string          $sep_terms    String to use between the terms.
+ *     @type string          $after_terms  String to use after the terms.
+ *     @type string          $before       String to use before the terms list.
+ *     @type string          $sep          String to use between the terms list for each taxonomy.
+ *     @type string          $after        String to use after the terms list.
+ *     @type bool            $echo         Echo or return?
+ *     @type string|string[] $taxonomy     The taxonomy slug or array of slugs for which to retrieve terms.
+ * }
+ * @return void|string Void if 'echo' argument is true, the post term list if 'echo' is false.
+ */
+function the_bsearch_term_list( $post = 0, $args = array() ) {
+
+	$post = get_post( $post );
+	if ( empty( $post ) ) {
+		return '';
+	}
+
+	$defaults = array(
+		'before_terms' => '',
+		'sep_terms'    => ', ',
+		'after_terms'  => '',
+		'before'       => '',
+		'sep'          => ' | ',
+		'after'        => '',
+		'echo'         => true,
+		'taxonomy'     => get_object_taxonomies( $post->post_type ),
+	);
+	$args     = wp_parse_args( $args, $defaults );
+
+	$output = array();
+
+	foreach ( $args['taxonomy'] as $taxonomy ) {
+		$output[] = get_the_term_list( $post->ID, $taxonomy, $args['before_terms'], $args['sep_terms'], $args['after_terms'] );
+	}
+	$output = array_filter( $output );
+
+	$output = $args['before'] . implode( $args['sep'], $output ) . $args['after'];
+
+	/**
+	 * Filters the post terms for the current post.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string      $output The post term list.
+	 * @param int|WP_Post $post   WP_Post object.
+	 * @param array       $args   Array of arguments.
+	 */
+	$output = apply_filters( 'the_bsearch_term_list', $output, $post, $args );
+
+	if ( $args['echo'] ) {
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	} else {
+		return $output;
+	}
+}
+
+/**
+ * Display the Better Search Post Type.
+ *
+ * @since 3.0.0
+ *
+ * @param int|WP_Post  $post Optional. Post ID or post object. Default is the global `$post`.
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type string  $before HTML output before the post type.
+ *     @type string  $after  HTML output after the post type.
+ *     @type bool    $echo   Echo or return?
+ * }
+ * @return void|string Void if 'echo' argument is true, the post date if 'echo' is false.
+ */
+function the_bsearch_post_type( $post = 0, $args = array() ) {
+
+	$post = get_post( $post );
+	if ( empty( $post ) ) {
+		return '';
+	}
+
+	$defaults = array(
+		'before' => '',
+		'after'  => '',
+		'echo'   => true,
+	);
+	$args     = wp_parse_args( $args, $defaults );
+
+	$obj    = get_post_type_object( $post->post_type );
+	$output = $obj->labels->singular_name;
+
+	/**
+	 * Filters the post type for the current post.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string      $output The post type.
+	 * @param int|WP_Post $post   WP_Post object.
+	 * @param array       $args   Array of arguments.
+	 */
+	$output = apply_filters( 'the_bsearch_term_list', $output, $post, $args );
+
+	if ( $args['echo'] ) {
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	} else {
+		return $output;
+	}
 }
