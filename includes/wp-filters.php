@@ -89,11 +89,9 @@ function bsearch_post_link( $link ) {
 		return $link;
 	}
 
-	$query_args['bsearch_highlight'] = get_bsearch_query();
+	$query_args['bsearch_highlight'] = rawurlencode( get_bsearch_query() );
 
-	if ( ! empty( $query_args ) ) {
-		$link = add_query_arg( $query_args, $link );
-	}
+	$link = add_query_arg( $query_args, $link );
 
 	return $link;
 }
