@@ -189,7 +189,7 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 
 	$select = '';
 	if ( ! empty( $post_types ) ) {
-		$select  = '<label>';
+		$select  = '<div class="bsearch-form-post-types">';
 		$select .= '<span class="screen-reader-text">' . _x( 'Post types:', 'label', 'better-search' ) . '</span>';
 		$select .= '<select name="post_types" id="post_types">';
 		$select .= sprintf( '<option value="any">%1$s</option>', __( 'Any Post Type', 'better-search' ) );
@@ -197,16 +197,16 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 			$post_type = get_post_type_object( $post_type );
 			$select   .= sprintf( '<option value="%1$s" %3$s>%2$s</option>', $post_type->name, $post_type->labels->singular_name, selected( true, in_array( $post_type->name, $selected_post_types, true ), false ) );
 		}
-		$select .= '</select></label>';
+		$select .= '</select></div>';
 	}
 
 	$form = '
 	<div class="bsearch-form-container">
 		<form role="search" ' . $aria_label . 'method="get" class="bsearchform" action="' . esc_url( home_url( '/' ) ) . '">
-			<label>
+			<div class="bsearch-form-search-field">
 				<span class="screen-reader-text">' . _x( 'Search for:', 'label', 'better-search' ) . '</span>
 				<input type="search" class="bsearch-field search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder', 'better-search' ) . '" value="' . $search_query . '" name="s" />
-			</label>
+			</div>
 			' . $select . '
 			<input type="submit" class="bsearch-submit searchsubmit search-submit" value="' . esc_attr_x( 'Search', 'submit button', 'better-search' ) . '" />
 		</form>
