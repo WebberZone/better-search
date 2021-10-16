@@ -134,11 +134,12 @@ function the_bsearch_form( $search_query = '', $args = array() ) {
  * @param string|array $args {
  *     Optional. Array or string of parameters.
  *
- *     @type string $before     Markup to prepend to the search form.
- *     @type string $after      Markup to append to the search form.
- *     @type bool   $echo       Echo or return?
- *     @type string $aria_label ARIA label for the search form.
- *                              Useful to distinguish multiple search forms on the same page and improve accessibility.
+ *     @type string   $before     Markup to prepend to the search form.
+ *     @type string   $after      Markup to append to the search form.
+ *     @type bool     $echo       Echo or return?
+ *     @type string   $aria_label ARIA label for the search form.
+ *                                Useful to distinguish multiple search forms on the same page and improve accessibility.
+ *     @type string[] $post_types Comma separated list or array of post types.
  * }
  * @return void|string Void if 'echo' argument is true, the search form if 'echo' is false.
  */
