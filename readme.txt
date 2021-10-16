@@ -95,6 +95,8 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 = 3.0.0 =
 
+Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webberzone.com/blog/better-search-v3-0-0/)
+
 * Features:
 	* New classes Better_Search_Query and Better_Search. The latter is a wrapper for WP_Query and brings all the power of WP_Query to Better Search. The former is the core class that filters the required functions as well as replaces the older seamless mode implementation
 	* New settings to search taxonomies, comments, excerpt, meta, authors and comments. These will all return the posts corresponding where the search term is found in the above fields
