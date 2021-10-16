@@ -18,16 +18,23 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @extends WP_Widget
  */
-class BSearch_Widget extends WP_Widget {
+class Better_Search_Heatmap extends WP_Widget {
 
 	/**
 	 * Register widget with WordPress.
 	 */
 	public function __construct() {
+		$widget_ops = array(
+			'classname'                   => 'widget_bsearch_pop',
+			'description'                 => __( 'Popular searches cloud', 'better-search' ),
+			'customize_selective_refresh' => true,
+			'show_instance_in_rest'       => true,
+		);
+
 		parent::__construct(
-			'widget_bsearch_pop', // Base ID.
-			__( 'Popular Searches [Better Search]', 'better-search' ), // Name.
-			array( 'description' => __( 'Display the popular searches', 'better-search' ) ) // Args.
+			'widget_bsearch_pop',
+			__( 'Popular Searches [Better Search]', 'better-search' ),
+			$widget_ops
 		);
 	}
 
@@ -39,7 +46,7 @@ class BSearch_Widget extends WP_Widget {
 	 * @param array $instance Previously saved values from database.
 	 */
 	public function form( $instance ) {
-		$title       = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
+		$title       = isset( $instance['title'] ) ? $instance['title'] : '';
 		$daily       = isset( $instance['title'] ) ? esc_attr( $instance['daily'] ) : 'overall';
 		$daily_range = isset( $instance['daily_range'] ) ? esc_attr( $instance['daily_range'] ) : '';
 		?>
@@ -50,23 +57,13 @@ class BSearch_Widget extends WP_Widget {
 		</p>
 		<p>
 			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'daily' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'daily' ) ); ?>">
-				<option value="overall"
-				<?php
-				if ( 'overall' === $daily ) {
-					echo 'selected="selected"'; }
-				?>
-><?php esc_attr_e( 'Overall', 'better-search' ); ?></option>
-				<option value="daily"
-				<?php
-				if ( 'daily' === $daily ) {
-					echo 'selected="selected"'; }
-				?>
-><?php esc_attr_e( 'Custom time period (Enter below)', 'better-search' ); ?></option>
+				<option value="overall" <?php selected( $daily, 'overall' ); ?>><?php esc_attr_e( 'Overall', 'better-search' ); ?></option>
+				<option value="daily" <?php selected( $daily, 'daily' ); ?>><?php esc_attr_e( 'Custom time period', 'better-search' ); ?></option>
 			</select>
 		</p>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'daily_range' ) ); ?>">
-				<?php esc_attr_e( 'Range in number of days (applies only to custom option above)', 'better-search' ); ?>: <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'daily_range' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'daily_range' ) ); ?>" type="text" value="<?php echo esc_attr( $daily_range ); ?>" />
+				<?php esc_attr_e( 'Range in number of days (custom time period only)', 'better-search' ); ?>: <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'daily_range' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'daily_range' ) ); ?>" type="text" value="<?php echo esc_attr( $daily_range ); ?>" />
 			</label>
 		</p>
 
@@ -78,7 +75,7 @@ class BSearch_Widget extends WP_Widget {
 			 *
 			 * @param   array   $instance   Widget options array
 			 */
-			do_action( 'bsearch_widget_options_after', $instance );
+			do_action( 'bsearch_heatmap_options_after', $instance );
 		?>
 
 		<?php
@@ -98,8 +95,8 @@ class BSearch_Widget extends WP_Widget {
 	public function update( $new_instance, $old_instance ) {
 		$instance                = $old_instance;
 		$instance['title']       = wp_strip_all_tags( $new_instance['title'] );
-		$instance['daily']       = wp_strip_all_tags( $new_instance['daily'] );
-		$instance['daily_range'] = wp_strip_all_tags( $new_instance['daily_range'] );
+		$instance['daily']       = esc_attr( $new_instance['daily'] );
+		$instance['daily_range'] = esc_attr( $new_instance['daily_range'] );
 
 		/**
 		 * Filters Update widget options array.
@@ -108,7 +105,7 @@ class BSearch_Widget extends WP_Widget {
 		 *
 		 * @param   array   $instance   Widget options array
 		 */
-		return apply_filters( 'bsearch_widget_options_update', $instance );
+		return apply_filters( 'bsearch_heatmap_options_update', $instance );
 	} //ending update
 
 
@@ -122,32 +119,42 @@ class BSearch_Widget extends WP_Widget {
 	 * @param array $instance The settings for the particular instance of the widget.
 	 */
 	public function widget( $args, $instance ) {
-		global $wpdb;
+		$default_title = wp_strip_all_tags( bsearch_get_option( 'title' ) );
+		$title         = ! empty( $instance['title'] ) ? $instance['title'] : $default_title;
 
-		$daily_range = isset( $instance['daily_range'] ) ? $instance['daily_range'] : bsearch_get_option( 'daily_range' );
+		/** This filter is documented in wp-includes/widgets/class-wp-widget-pages.php */
+		$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
 
-		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? wp_strip_all_tags( bsearch_get_option( 'title' ) ) : $instance['title'] );
-
-		$daily = isset( $instance['daily'] ) ? $instance['daily'] : 'overall';
+		$daily       = isset( $instance['daily'] ) ? $instance['daily'] : 'overall';
+		$daily       = ( 'overall' === $daily ) ? 0 : 1;
+		$daily_range = isset( $instance['daily_range'] ) ? absint( $instance['daily_range'] ) : bsearch_get_option( 'daily_range' );
 
 		echo $args['before_widget']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $args['before_title'] . $title . $args['after_title']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
-		if ( 'overall' === $daily ) {
-			echo get_bsearch_heatmap( //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				array(
-					'daily'       => 0,
-					'daily_range' => $daily_range,
-				)
-			);
-		} else {
-			echo get_bsearch_heatmap( //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				array(
-					'daily'       => 1,
-					'daily_range' => $daily_range,
-				)
-			);
+		if ( $title ) {
+			echo $args['before_title'] . $title . $args['after_title']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
+
+		the_bsearch_heatmap(
+			/**
+			* Filters the arguments for the Better Search form widget.
+			*
+			* @since 3.0.0
+			*
+			* @see the_bsearch_heatmap()
+			*
+			* @param array $args     An array of arguments used to retrieve the Better Search form.
+			* @param array $instance Array of settings for the current widget.
+			*/
+			apply_filters(
+				'widget_bsearch_heatmap_args',
+				array(
+					'daily'       => $daily,
+					'daily_range' => $daily_range,
+				),
+				$instance
+			)
+		);
+
 		if ( bsearch_get_option( 'show_credit' ) ) {
 			echo bsearch_get_credit_link(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
@@ -164,8 +171,6 @@ class BSearch_Widget extends WP_Widget {
  * @since   1.3.3
  */
 function bsearch_register_widget() {
-	register_widget( 'BSearch_Widget' );
+	register_widget( 'Better_Search_Heatmap' );
 }
 add_action( 'widgets_init', 'bsearch_register_widget' );
-
-
