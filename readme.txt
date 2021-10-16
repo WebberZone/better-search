@@ -101,6 +101,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 	* New parameter `bydate` if set to true will sort posts by date
 	* Advanced Search form now displays the select dropdown of post types that allows to search a specific post type
 	* Highlight search terms on pages referred from the search results page
+	* New stylesheet which is enqueued on search results page and singular posts/pages
 
 * Enhancements/modifications:
 	* `hellip` wrapped in `bsearch_hellip` span tag for easy access

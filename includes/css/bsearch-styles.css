@@ -22,6 +22,9 @@
 
 .bsearchform {
 	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	flex-flow: row wrap;
 	justify-content: space-between;
 }
 
