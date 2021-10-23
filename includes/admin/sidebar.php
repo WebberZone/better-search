@@ -26,12 +26,12 @@ if ( ! defined( 'WPINC' ) ) {
 						<input type="hidden" name="business" value="donate@ajaydsouza.com">
 						<input type="hidden" name="lc" value="IN">
 						<input type="hidden" name="item_name" value="<?php esc_html_e( 'Donation for Better Search', 'better-search' ); ?>">
-						<input type="hidden" name="item_number" value="crp_plugin_settings">
+						<input type="hidden" name="item_number" value="bsearch_plugin_settings">
 						<strong><?php esc_html_e( 'Enter amount in USD', 'better-search' ); ?></strong>: <input name="amount" value="15.00" size="6" type="text"><br />
 						<input type="hidden" name="currency_code" value="USD">
 						<input type="hidden" name="button_subtype" value="services">
 						<input type="hidden" name="bn" value="PP-BuyNowBF:btn_donate_LG.gif:NonHosted">
-						<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="<?php esc_html_e( 'Send your donation to the author of', 'better-search' ); ?> Better Search">
+						<input type="image" src="<?php echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/paypal_donate_button.webp' ); ?>" border="0" name="submit" alt="<?php esc_html_e( 'Send your donation to the author of', 'better-search' ); ?> Better Search">
 						<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
 					</form>
 				</div>
@@ -47,37 +47,37 @@ if ( ! defined( 'WPINC' ) ) {
 				<div id="quick-links">
 					<ul>
 						<li>
-							<a href="https://webberzone.com/plugins/better-search/">
+							<a href="https://webberzone.com/plugins/better-search/" target="_blank">
 								<?php esc_html_e( 'Better Search plugin homepage', 'better-search' ); ?>
 							</a>
 						</li>
 						<li>
-							<a href="https://wordpress.org/plugins/better-search/faq/">
+							<a href="https://wordpress.org/plugins/better-search/faq/" target="_blank">
 								<?php esc_html_e( 'FAQ', 'better-search' ); ?>
 							</a>
 						</li>
 						<li>
-							<a href="http://wordpress.org/support/plugin/better-search">
+							<a href="http://wordpress.org/support/plugin/better-search" target="_blank">
 								<?php esc_html_e( 'Support', 'better-search' ); ?>
 							</a>
 						</li>
 						<li>
-							<a href="https://wordpress.org/support/view/plugin-reviews/better-search">
+							<a href="https://wordpress.org/support/view/plugin-reviews/better-search" target="_blank">
 								<?php esc_html_e( 'Reviews', 'better-search' ); ?>
 							</a>
 						</li>
 						<li>
-							<a href="https://github.com/WebberZone/better-search">
+							<a href="https://github.com/WebberZone/better-search" target="_blank">
 								<?php esc_html_e( 'Github repository', 'better-search' ); ?>
 							</a>
 						</li>
 						<li>
-							<a href="https://webberzone.com/plugins/">
+							<a href="https://webberzone.com/plugins/" target="_blank">
 								<?php esc_html_e( 'Other plugins', 'better-search' ); ?>
 							</a>
 						</li>
 						<li>
-							<a href="https://ajaydsouza.com/">
+							<a href="https://ajaydsouza.com/" target="_blank">
 								<?php esc_html_e( "Ajay's blog", 'better-search' ); ?>
 							</a>
 						</li>
