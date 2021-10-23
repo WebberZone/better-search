@@ -34,7 +34,7 @@ function the_bsearch_excerpt( $args = array() ) {
 		'after'          => '',
 		'echo'           => true,
 		'post'           => get_post(),
-		'excerpt_length' => 0,
+		'excerpt_length' => bsearch_get_option( 'excerpt_length' ),
 		'use_excerpt'    => true,
 	);
 	$args     = wp_parse_args( $args, $defaults );
