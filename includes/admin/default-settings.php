@@ -252,6 +252,12 @@ function bsearch_settings_search() {
 			'options'  => '',
 			'readonly' => true,
 		),
+		'display_header'          => array(
+			'id'   => 'display_header',
+			'name' => '<h3>' . esc_html__( 'Display options', 'better-search' ) . '</h3>',
+			'desc' => '',
+			'type' => 'header',
+		),
 		'highlight'               => array(
 			'id'      => 'highlight',
 			'name'    => esc_html__( 'Highlight search terms', 'better-search' ),
@@ -273,6 +279,12 @@ function bsearch_settings_search() {
 			'type'    => 'number',
 			'options' => '100',
 			'size'    => 'small',
+		),
+		'banned_header'           => array(
+			'id'   => 'banned_header',
+			'name' => '<h3>' . esc_html__( 'Banned words options', 'better-search' ) . '</h3>',
+			'desc' => '',
+			'type' => 'header',
 		),
 		'badwords'                => array(
 			'id'      => 'badwords',
