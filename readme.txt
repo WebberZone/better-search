@@ -100,6 +100,7 @@ Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webber
 * Enhancements/modifications:
 	* New option to disable the automatic addition of the stylesheet
 	* Custom search results page now displays `Sort by` and `Sorted by`
+	* New constant `BETTER_SEARCH_VERSION` that is used to enqueue scripts and styles
 
 * Bug fixes:
 	* If no `excerpt_length` is passed, the plugin will use the default value from the settings page

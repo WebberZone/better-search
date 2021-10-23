@@ -110,7 +110,7 @@ add_filter( 'attachment_link', 'bsearch_post_link' );
 function bsearch_enqueue_scripts_styles() {
 
 	if ( bsearch_get_option( 'include_styles' ) ) {
-		wp_register_style( 'bsearch-style', plugins_url( 'includes/css/bsearch-styles.min.css', BETTER_SEARCH_PLUGIN_FILE ), array(), '1.0' );
+		wp_register_style( 'bsearch-style', plugins_url( 'includes/css/bsearch-styles.min.css', BETTER_SEARCH_PLUGIN_FILE ), array(), BETTER_SEARCH_VERSION );
 	}
 
 	if ( ! is_admin() && ( is_search() || is_singular() ) ) {
