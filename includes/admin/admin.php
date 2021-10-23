@@ -91,7 +91,7 @@ function bsearch_plugin_actions_links( $links ) {
 
 	return array_merge(
 		array(
-			'settings' => '<a href="' . admin_url( 'options-general.php?page=bsearch_options_page' ) . '">' . __( 'Settings', 'better-search' ) . '</a>',
+			'settings' => '<a href="' . admin_url( 'admin.php?page=bsearch_options_page' ) . '">' . __( 'Settings', 'better-search' ) . '</a>',
 		),
 		$links
 	);
