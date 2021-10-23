@@ -72,7 +72,7 @@ function bsearch_enqueue_scripts() {
 		 */
 		$ajax_bsearch_tracker = apply_filters( 'bsearch_tracker_script_args', $ajax_bsearch_tracker );
 
-		wp_enqueue_script( 'bsearch_tracker', plugins_url( 'includes/js/better-search-tracker.min.js', BETTER_SEARCH_PLUGIN_FILE ), array( 'jquery' ), '1.0', true );
+		wp_enqueue_script( 'bsearch_tracker', plugins_url( 'includes/js/better-search-tracker.min.js', BETTER_SEARCH_PLUGIN_FILE ), array( 'jquery' ), BETTER_SEARCH_VERSION, true );
 
 		wp_localize_script( 'bsearch_tracker', 'ajax_bsearch_tracker', $ajax_bsearch_tracker );
 

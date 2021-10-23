@@ -31,6 +31,17 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
+ * Holds the version of Contextual Related Posts.
+ *
+ * @since 2.9.3
+ *
+ * @var string Contextual Related Posts Version.
+ */
+if ( ! defined( 'BETTER_SEARCH_VERSION' ) ) {
+	define( 'BETTER_SEARCH_VERSION', '3.0.1' );
+}
+
+/**
  * Holds the filesystem directory path (with trailing slash) for Better Search
  *
  * @since 2.2.0
