@@ -1,18 +1,11 @@
-#bsearchform {
-	margin: 20px;
-	padding: 20px;
-}
-
-#heatmap {
-	margin: 20px;
-	padding: 20px;
-	border: 1px dashed #ccc
-}
-
 .bsearch_results_page {
 	max-width: 90%;
 	margin: 20px;
 	padding: 20px;
+}
+
+.bsearch_thumb_wrapper img {
+	max-width: 100%;
 }
 
 .bsearch-form-container {
@@ -40,7 +33,6 @@
 	/* styling */
 	background-color: #fff;
 	border: thin solid #999;
-	border-radius: 4px;
 	display: inline-block;
 	font: inherit;
 	line-height: 1.5em;
