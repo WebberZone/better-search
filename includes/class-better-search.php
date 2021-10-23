@@ -1072,9 +1072,11 @@ endif;
  * Load Better Search function.
  *
  * @since 3.0.0
+ *
+ * @param WP_Query $query The WP_Query instance (passed by reference).
  */
-function bsearch_load_plugin() {
-	if ( bsearch_get_option( 'seamless' ) ) {
+function bsearch_load_plugin( $query ) {
+	if ( $query->is_search() && bsearch_get_option( 'seamless' ) ) {
 		new Better_Search();
 	}
 }
