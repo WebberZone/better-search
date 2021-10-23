@@ -458,7 +458,14 @@ function bsearch_settings_heatmap() {
 function bsearch_settings_styles() {
 
 	$settings = array(
-		'custom_css' => array(
+		'include_styles' => array(
+			'id'      => 'include_styles',
+			'name'    => esc_html__( 'Include inbuilt styles', 'better-search' ),
+			'desc'    => esc_html__( 'Uncheck this to disable this plugin from adding the inbuilt styles. You will need to add your own CSS styles if you disable this option', 'better-search' ),
+			'type'    => 'checkbox',
+			'options' => true,
+		),
+		'custom_css'     => array(
 			'id'          => 'custom_css',
 			'name'        => esc_html__( 'Custom CSS', 'better-search' ),
 			/* translators: 1: Opening a tag, 2: Closing a tag, 3: Opening code tage, 4. Closing code tag. */

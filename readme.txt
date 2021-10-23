@@ -97,6 +97,9 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webberzone.com/blog/better-search-v3-0-0/)
 
+* Enhancements/modifications:
+	* New option to disable the automatic addition of the stylesheet
+
 * Bug fixes:
 	* If no `excerpt_length` is passed, the plugin will use the default value from the settings page
 	* Better_Search is only initiated if it is a search results page
