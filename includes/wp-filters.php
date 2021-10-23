@@ -74,6 +74,7 @@ function bsearch_content( $content ) {
 add_filter( 'the_content', 'bsearch_content' );
 add_filter( 'get_the_excerpt', 'bsearch_content' );
 add_filter( 'the_title', 'bsearch_content' );
+add_filter( 'the_bsearch_excerpt', 'bsearch_content' );
 
 /**
  * Filters the permalink to add additional query_args.

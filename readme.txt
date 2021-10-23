@@ -103,6 +103,7 @@ Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webber
 * Bug fixes:
 	* If no `excerpt_length` is passed, the plugin will use the default value from the settings page
 	* Better_Search is only initiated if it is a search results page
+	* Custom results page excerpt is now highlighted
 
 = 3.0.0 =
 
