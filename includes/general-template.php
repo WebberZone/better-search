@@ -418,10 +418,19 @@ function the_bsearch_header( $args = array() ) {
 	}
 
 	$rel_or_date_link = esc_url( add_query_arg( $rel_or_date_link_args, home_url() ) );
-	$rel_or_date_text = $args['bydate'] ? __( 'Relevance', 'better-search' ) : __( 'Date', 'better-search' );
-	$rel_or_date_link = sprintf( '<a href="%1$s">%2$s</a>', $rel_or_date_link, $rel_or_date_text );
 
-	$output .= sprintf( __( 'Sort by: %1$s', 'better-search' ), $rel_or_date_link );
+	if ( $args['bydate'] ) {
+		$sorted_by = __( 'Date', 'better-search' );
+		$sort_by   = __( 'Relevance', 'better-search' );
+	} else {
+		$sorted_by = __( 'Relevance', 'better-search' );
+		$sort_by   = __( 'Date', 'better-search' );
+	}
+
+	$sorted_by = sprintf( '%1$s: %2$s', __( 'Sorted by', 'better-search' ), $sorted_by );
+	$sort_by   = sprintf( '%2$s: <a href="%1$s">%3$s</a>', $rel_or_date_link, __( 'Sort by', 'better-search' ), $sort_by );
+
+	$output .= $sorted_by . ' | ' . $sort_by;
 	$output .= '
 	  </td>
 	  <td style="text-align:right">';
