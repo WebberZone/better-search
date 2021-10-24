@@ -41,7 +41,7 @@ jobs:
             wp: '5.3'
             experimental: true
           - php: '7.1'
-            wp: '5.0'
+            wp: '5.1'
             experimental: true
           - php: '7.4'
             wp: 'nightly'
