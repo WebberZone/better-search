@@ -132,6 +132,6 @@ Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webber
 
 == Upgrade Notice ==
 
-= 3.0.0 =
+= 3.0.1 =
 Major upgrade. PHP 5.x support dropped. Review your settings on upgrade.
 Check the release post on https://webberzone.com

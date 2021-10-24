@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-16 22:09+0100\n"
+"POT-Creation-Date: 2021-10-24 14:26+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
 "Language-Team: WebberZone <plugins@webberzone.com>\n"
@@ -262,25 +262,28 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/general-template.php:421
-msgid "Relevance"
-msgstr ""
-
-#: includes/general-template.php:421
+#: includes/general-template.php:423 includes/general-template.php:427
 msgid "Date"
 msgstr ""
 
-#: includes/general-template.php:424
-#, php-format
-msgid "Sort by: %1$s"
+#: includes/general-template.php:424 includes/general-template.php:426
+msgid "Relevance"
 msgstr ""
 
-#: includes/general-template.php:428
+#: includes/general-template.php:430
+msgid "Sorted by"
+msgstr ""
+
+#: includes/general-template.php:431
+msgid "Sort by"
+msgstr ""
+
+#: includes/general-template.php:437
 #, php-format
 msgid "Results per-page: %s "
 msgstr ""
 
-#: includes/general-template.php:473
+#: includes/general-template.php:482
 msgid "Relevance:"
 msgstr ""
 
