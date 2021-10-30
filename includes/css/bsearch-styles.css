@@ -78,7 +78,6 @@ ul.bsearch_post_meta {
 ul.bsearch_post_meta li {
 	flex: auto;
 	list-style-type: none;
-	border: 1px dotted #333;
 	padding: 2px;
 	margin: 0;
 }
