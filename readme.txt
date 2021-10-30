@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 Requires at least: 5.0
 Tested up to: 5.8
 Requires PHP: 7.0
@@ -93,9 +93,14 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
-= 3.0.1 =
+= 3.0.2 =
 
 Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webberzone.com/blog/better-search-v3-0-0/)
+
+* Bug fixes:
+	* Fixed excerpt_length setting not used in the default template
+
+= 3.0.1 =
 
 * Enhancements/modifications:
 	* New option to disable the automatic addition of the stylesheet
@@ -132,6 +137,6 @@ Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webber
 
 == Upgrade Notice ==
 
-= 3.0.1 =
+= 3.0.2 =
 Major upgrade. PHP 5.x support dropped. Review your settings on upgrade.
 Check the release post on https://webberzone.com
