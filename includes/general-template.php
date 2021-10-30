@@ -434,6 +434,7 @@ function the_bsearch_header( $args = array() ) {
 	$output .= '
 	  </td>
 	  <td style="text-align:right">';
+	/* translators: 1: Results per page. */
 	$output .= sprintf( __( 'Results per-page: %s ', 'better-search' ), $rpp );
 	$output .= '
 	  </td>
