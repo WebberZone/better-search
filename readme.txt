@@ -16,7 +16,7 @@ Better Search replaces the default WordPress search with a better search engine 
 
 Better Search can search through not just posts, but also pages and other custom post types. Let your visitors find what they are looking for.
 
-The plugin is packed with options to allow you to easily customise the output. You can also fine tune the results by assigning a greater weight to either the title or the content. The default mode is a seamless integration with your WordPress theme. And, for power users, Better Search supports templates for that extra something.
+The plugin is packed with options to allow you to easily customize the output. You can also fine tune the results by assigning a greater weight to either the title or the content. The default mode is a seamless integration with your WordPress theme. And, for power users, Better Search supports templates for that extra something.
 
 And for even more advanced users, Better Search is packed with filters and actions that allow you to easily extend the plugin's feature set.
 
@@ -30,7 +30,7 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 * **Popular searches**: Find out what visitors are searching for on your blog. Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap. Widget support for easy integration in your theme as well as a shortcode [[bsearch_heatmap]]
 * **Customisation**: Use your own template file for perfect integration into your blog template. Input your own CSS styles in the *Custom Styles* tab in the Settings Page. Check the FAQ for more information
 * **Supports cache plugins**: Works with caching plugins like WP-Super-Cache and W3 Total Cache
-* **Profanity filter**: Customise the list of stop words that will automatically be filtered out of search queries
+* **Profanity filter**: customize the list of stop words that will automatically be filtered out of search queries
 * **Translation ready**: Better Search is translation ready
 
 
@@ -79,13 +79,13 @@ If your question isn't listed there, please create a new post in the [WordPress.
 
 = Can I customize the output? =
 
-Better Search has a huge set of options that help you customise the output or fine tune the results without leaving the comfort of your WordPress site. Goto **Settings > Better Search** to configure.
+Better Search has a huge set of options that help you customize the output or fine tune the results without leaving the comfort of your WordPress site. Goto **Settings > Better Search** to configure.
 
 The plugin also supports the use of template files within your theme. You can create a file called `better-search-template.php` in your theme's directory and the plugin will use it to display the results.
 
 = My search words are getting filtered or *How does the profanity filter work* =
 
-Better Search includes a very cool profanity filter using the script from [Banbuilder](https://banbuilder.com/). You can customise which list of words you want to filter out from the Better Search settings page. Find the setting called "Filter these words:". The plugin will automatically strip out both partial and complete references of these words.
+Better Search includes a very cool profanity filter using the script from [Banbuilder](https://github.com/snipe/banbuilder). You can customize which list of words you want to filter out from the Better Search settings page. Find the setting called "Filter these words:". The plugin will automatically strip out both partial and complete references of these words.
 You can turn the filter off by emptying the list.
 
 Know of a better profanity filter? Suggest one in the [forums](https://wordpress.org/support/plugin/better-search).
