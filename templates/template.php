@@ -128,8 +128,7 @@ get_header();
 						<?php do_action( 'bsearch_after_entry_header' ); ?>
 
 						<div class="entry-content">
-							<?php $args['excerpt_length'] = apply_filters( 'bsearch_results_excerpt_length', 55 ); ?>
-							<?php the_bsearch_excerpt( $args ); ?>
+							<?php the_bsearch_excerpt(); ?>
 						</div><!-- .entry-content -->
 
 						<footer class="entry-footer default-max-width">
