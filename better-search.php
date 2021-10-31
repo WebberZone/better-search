@@ -84,46 +84,6 @@ if ( ! defined( 'BETTER_SEARCH_PLUGIN_FILE' ) ) {
 global $bsearch_db_version;
 $bsearch_db_version = '1.0';
 
-
-/**
- * Declare $bsearch_settings global so that it can be accessed in every function
- *
- * @since   1.3
- */
-global $bsearch_settings;
-$bsearch_settings = bsearch_get_settings();
-
-
-/**
- * Get Settings.
- *
- * Retrieves all plugin settings
- *
- * @since  2.2.0
- *
- * @return array Better Search settings
- */
-function bsearch_get_settings() {
-
-	$settings = get_option( 'bsearch_settings' );
-
-	if ( empty( $settings ) ) {
-		add_option( 'bsearch_settings', bsearch_settings_defaults() );
-		$settings = get_option( 'bsearch_settings' );
-	}
-
-	/**
-	 * Settings array
-	 *
-	 * Retrieves all plugin settings
-	 *
-	 * @since 1.2.0
-	 * @param array $settings Settings array
-	 */
-	return apply_filters( 'bsearch_get_settings', $settings );
-}
-
-
 /*
  * ----------------------------------------------------------------------------*
  * Include files
@@ -169,4 +129,43 @@ if ( is_admin() ) {
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/admin/class-better-search-statistics.php';
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/admin/class-better-search-statistics-table.php';
 
+}
+
+
+/**
+ * Declare $bsearch_settings global so that it can be accessed in every function
+ *
+ * @since   1.3
+ */
+global $bsearch_settings;
+$bsearch_settings = bsearch_get_settings();
+
+
+/**
+ * Get Settings.
+ *
+ * Retrieves all plugin settings
+ *
+ * @since  2.2.0
+ *
+ * @return array Better Search settings
+ */
+function bsearch_get_settings() {
+
+	$settings = get_option( 'bsearch_settings' );
+
+	if ( empty( $settings ) ) {
+		add_option( 'bsearch_settings', bsearch_settings_defaults() );
+		$settings = get_option( 'bsearch_settings' );
+	}
+
+	/**
+	 * Settings array
+	 *
+	 * Retrieves all plugin settings
+	 *
+	 * @since 1.2.0
+	 * @param array $settings Settings array
+	 */
+	return apply_filters( 'bsearch_get_settings', $settings );
 }
