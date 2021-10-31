@@ -102,22 +102,30 @@ get_header();
 
 							<ul class="bsearch_post_meta">
 								<?php do_action( 'bsearch_before_post_meta' ); ?>
-								<?php if ( isset( $post->score ) ) : ?>
-								<li class="meta-relevance">
-									<?php
-									the_bsearch_score(
-										array(
-											'score'    => $post->score,
-											'topscore' => $topscore,
-										)
-									);
-									?>
-								</li>
+								<?php if ( isset( $post->score ) && bsearch_get_option( 'display_relevance' ) ) : ?>
+									<li class="meta-relevance">
+										<?php
+										the_bsearch_score(
+											array(
+												'score'    => $post->score,
+												'topscore' => $topscore,
+											)
+										);
+										?>
+									</li>
 								<?php endif; ?>
-								<li class="meta-type"><?php esc_html_e( 'Type:', 'better-search' ); ?> <?php the_bsearch_post_type(); ?></li>
-								<li class="meta-author"><?php esc_html_e( 'Post author:', 'better-search' ); ?> <?php the_author_posts_link(); ?></li>
-								<li class="meta-date"><?php esc_html_e( 'Published date:', 'better-search' ); ?> <?php the_bsearch_date(); ?></li>
-								<li class="meta-cat"><?php esc_html_e( 'Terms:', 'better-search' ); ?> <?php the_bsearch_term_list(); ?></li>
+								<?php if ( bsearch_get_option( 'display_post_type' ) ) : ?>
+									<li class="meta-type"><?php esc_html_e( 'Type', 'better-search' ); ?>: <?php the_bsearch_post_type(); ?></li>
+								<?php endif; ?>
+								<?php if ( bsearch_get_option( 'display_author' ) ) : ?>
+									<li class="meta-author"><?php esc_html_e( 'Post author', 'better-search' ); ?>: <?php the_author_posts_link(); ?></li>
+								<?php endif; ?>
+								<?php if ( bsearch_get_option( 'display_date' ) ) : ?>
+									<li class="meta-date"><?php esc_html_e( 'Published date', 'better-search' ); ?>: <?php the_bsearch_date(); ?></li>
+								<?php endif; ?>
+								<?php if ( bsearch_get_option( 'display_taxonomies' ) ) : ?>
+									<li class="meta-cat"><?php esc_html_e( 'Terms', 'better-search' ); ?>: <?php the_bsearch_term_list(); ?></li>
+								<?php endif; ?>
 								<?php do_action( 'bsearch_after_post_meta' ); ?>
 							</ul>
 

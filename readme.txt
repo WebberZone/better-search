@@ -97,6 +97,9 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webberzone.com/blog/better-search-v3-0-0/)
 
+* Enhancements/modifications:
+	* New options to disable the display of relevance, post type, author, post date and taxonomies list on the custom search results page
+
 * Bug fixes:
 	* Fixed excerpt_length setting not used in the default template
 
