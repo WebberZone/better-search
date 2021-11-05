@@ -3,6 +3,8 @@
 [![WordPress Plugin Version](https://img.shields.io/wordpress/plugin/v/better-search.svg?style=flat-square)](https://wordpress.org/plugins/better-search/)
 [![License](https://img.shields.io/badge/license-GPL_v2%2B-orange.svg?style=flat-square)](https://opensource.org/licenses/GPL-2.0)
 [![WordPress Tested](https://img.shields.io/wordpress/v/better-search.svg?style=flat-square)](https://wordpress.org/plugins/better-search/)
+[![Required PHP](https://img.shields.io/wordpress/plugin/required-php/better-search?style=flat-square)](https://wordpress.org/plugins/better-search/)
+[![Active installs](https://img.shields.io/wordpress/plugin/installs/better-search?style=flat-square)](https://wordpress.org/plugins/better-search/)
 
 __Requires:__ 5.0
 
