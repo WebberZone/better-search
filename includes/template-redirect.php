@@ -46,10 +46,6 @@ function bsearch_template_redirect( $template ) {
 	@header( 'HTTP/1.1 200 OK', 1 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 	@header( 'Status: 200 OK', 1 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
-	$search_query = get_bsearch_query();
-
-	$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : bsearch_get_option( 'limit' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
 	// Added necessary code to the head.
 	add_action( 'wp_head', 'bsearch_head' );
 
@@ -85,8 +81,6 @@ add_action( 'template_include', 'bsearch_template_redirect', 1 );
 function bsearch_head() {
 
 	$bsearch_custom_css = stripslashes( bsearch_get_option( 'custom_css' ) );
-
-	$search_query = get_bsearch_query();
 
 	// Add custom CSS to header.
 	if ( ( '' != $bsearch_custom_css ) && is_search() ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
