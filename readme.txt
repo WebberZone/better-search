@@ -102,6 +102,7 @@ Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webber
 
 * Bug fixes:
 	* Fixed excerpt_length setting not used in the default template
+	* All required attributes are now passed to the shortcodes
 
 = 3.0.1 =
 
