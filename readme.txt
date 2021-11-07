@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 3.0.2
+Stable tag: 3.0.3
 Requires at least: 5.0
 Tested up to: 5.8
 Requires PHP: 7.0
@@ -93,9 +93,15 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
-= 3.0.2 =
+= 3.0.3 =
 
 Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webberzone.com/blog/better-search-v3-0-0/)
+
+* Bug fixes:
+	* With seamless mode OFF, by default, all post types were being pulled even those not selected in the settings page
+	* With seamless mode ON, caching incorrectly gave the same set of results
+
+= 3.0.2 =
 
 * Enhancements/modifications:
 	* New options to disable the display of relevance, post type, author, post date and taxonomies list on the custom search results page
@@ -141,6 +147,6 @@ Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webber
 
 == Upgrade Notice ==
 
-= 3.0.2 =
+= 3.0.3 =
 Major upgrade. PHP 5.x support dropped. Review your settings on upgrade.
 Check the release post on https://webberzone.com
