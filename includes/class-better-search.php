@@ -956,6 +956,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		 */
 		public function get_cache_key( $query, $context = 'query' ) {
 			$cache_attr          = $this->input_query_args;
+			$cache_attr['s']     = $this->search_query;
 			$cache_attr['paged'] = 1;
 			if ( isset( $this->query_args['paged'] ) ) {
 				$cache_attr['paged'] = $this->query_args['paged'];
