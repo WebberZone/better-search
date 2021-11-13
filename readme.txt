@@ -100,6 +100,7 @@ Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webber
 * Bug fixes:
 	* With seamless mode OFF, by default, all post types were being pulled even those not selected in the settings page
 	* With seamless mode ON, caching incorrectly gave the same set of results
+	* Exclude categories didn't save properly if the field is blanked out
 
 = 3.0.2 =
 

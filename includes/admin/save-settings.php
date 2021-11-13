@@ -317,7 +317,7 @@ add_filter( 'bsearch_settings_sanitize_color', 'bsearch_sanitize_color_field' );
  */
 function bsearch_sanitize_exclude_cat( $settings ) {
 
-	if ( ! empty( $settings['exclude_cat_slugs'] ) ) {
+	if ( isset( $settings['exclude_cat_slugs'] ) ) {
 
 		$exclude_cat_slugs = array_unique( str_getcsv( $settings['exclude_cat_slugs'] ) );
 
