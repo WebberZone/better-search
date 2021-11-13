@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-05 18:08+0000\n"
+"POT-Creation-Date: 2021-11-13 12:57+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza\n"
 "Language-Team: WebberZone\n"
@@ -860,7 +860,7 @@ msgstr ""
 msgid "Please upload a file to import"
 msgstr ""
 
-#: includes/class-better-search.php:1047
+#: includes/class-better-search.php:1048
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid ""
 "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,"
