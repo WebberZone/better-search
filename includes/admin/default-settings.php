@@ -84,7 +84,7 @@ function bsearch_settings_general() {
 			'name'    => esc_html__( 'Enable cache', 'better-search' ),
 			'desc'    => esc_html__( 'If activated, Better Search will use the Transients API to cache the search results for 1 hour.', 'better-search' ),
 			'type'    => 'checkbox',
-			'options' => true,
+			'options' => false,
 		),
 		'cache_time'          => array(
 			'id'      => 'cache_time',
