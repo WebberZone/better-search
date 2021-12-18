@@ -379,7 +379,7 @@ function bsearch_get_credit_link() {
 function bsearch_highlight( $input, $keys ) {
 
 	$reg_ex = '/(?!<[^>]*?>)(' . implode( '|', $keys ) . ')(?![^<]*?>)/iu';
-	$output = preg_replace( $reg_ex, '<span class="bsearch_highlight">$1</span>', $input );
+	$output = preg_replace( $reg_ex, '<span class="bsearch_highlight">$1</span>', html_entity_decode( $input ) );
 
 	return $output;
 }
