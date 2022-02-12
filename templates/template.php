@@ -73,14 +73,24 @@ get_header();
 					<article id="post-<?php the_ID(); ?>" <?php post_class( 'bsearch-post' ); ?>>
 
 						<?php
+						// Display post thumbnail.
 						if ( bsearch_get_option( 'include_thumb' ) ) :
 							?>
 							<div class="thumbnail bsearch_thumb_wrapper">
 								<a href="<?php the_bsearch_permalink(); ?>" class="thumbnail-link">
 									<?php
-										// Display post thumbnail.
+										/**
+										 * Filter the post thumbnail size in the search results.
+										 *
+										 * @since 3.1.0
+										 *
+										 * @param string  $size Thumbnail size. Default is 'thumbnail'.
+										 * @param WP_Post $post WP_Post object.
+										 */
+										$size = apply_filters( 'bsearch_post_thumbnail_size', 'thumbnail', $post );
+
 										the_bsearch_post_thumbnail(
-											'post-thumbnail',
+											$size,
 											array(
 												'post' => $post,
 											)

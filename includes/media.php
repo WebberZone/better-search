@@ -39,7 +39,7 @@ function bsearch_get_the_post_thumbnail( $args = array() ) {
 
 	$defaults = array(
 		'post'               => '',
-		'size'               => 'post-thumbnail',
+		'size'               => 'thumbnail',
 		'thumb_meta'         => 'post-image',       // Meta field that is used to store the location of default thumbnail image.
 		'thumb_html'         => 'html',     // HTML / CSS for width and height attributes.
 		'thumb_default'      => '',  // Default thumbnail image.

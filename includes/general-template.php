@@ -532,13 +532,14 @@ function the_bsearch_score( $args = array() ) {
  * }
  * @return void|string Void if 'echo' argument is true, the thumbnail HTML if 'echo' is false.
  */
-function the_bsearch_post_thumbnail( $size = 'post-thumbnail', $args = array() ) {
+function the_bsearch_post_thumbnail( $size = 'thumbnail', $args = array() ) {
 
 	$defaults = array(
 		'before' => '',
 		'after'  => '',
 		'echo'   => true,
 		'post'   => get_post(),
+		'size'   => $size,
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
