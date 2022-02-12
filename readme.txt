@@ -93,6 +93,12 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
+= 3.1.0 =
+
+* Bug fixes:
+	* Post thumbnail size was ignored by `the_bsearch_post_thumbnail`
+	* HTML entities were displayed instead of being processed
+
 = 3.0.3 =
 
 Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webberzone.com/blog/better-search-v3-0-0/)
