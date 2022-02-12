@@ -9,13 +9,13 @@
  * @author    Ajay D'Souza <me@ajaydsouza.com>
  * @license   GPL-2.0+
  * @link      https://webberzone.com
- * @copyright 2009-2021 Ajay D'Souza
+ * @copyright 2009-2022 Ajay D'Souza
  *
  * @wordpress-plugin
  * Plugin Name: Better Search
  * Plugin URI:  https://webberzone.com/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     3.0.3
+ * Version:     3.1.0-beta2
  * Author:      Ajay D'Souza
  * Author URI:  https://webberzone.com/
  * Text Domain: better-search
@@ -38,7 +38,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @var string Contextual Related Posts Version.
  */
 if ( ! defined( 'BETTER_SEARCH_VERSION' ) ) {
-	define( 'BETTER_SEARCH_VERSION', '3.0.2' );
+	define( 'BETTER_SEARCH_VERSION', '3.1.0' );
 }
 
 /**
