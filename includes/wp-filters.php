@@ -71,10 +71,10 @@ function bsearch_content( $content ) {
 
 	return apply_filters( 'bsearch_content', $content );
 }
-add_filter( 'the_content', 'bsearch_content' );
-add_filter( 'get_the_excerpt', 'bsearch_content' );
-add_filter( 'the_title', 'bsearch_content' );
-add_filter( 'the_bsearch_excerpt', 'bsearch_content' );
+add_filter( 'the_content', 'bsearch_content', 999 );
+add_filter( 'get_the_excerpt', 'bsearch_content', 999 );
+add_filter( 'the_title', 'bsearch_content', 999 );
+add_filter( 'the_bsearch_excerpt', 'bsearch_content', 999 );
 
 /**
  * Filters the permalink to add additional query_args.
