@@ -141,6 +141,12 @@ function bsearch_get_the_post_thumbnail( $args = array() ) {
 		$pick      = 'video_thumb';
 	}
 
+	// If no thumb found and settings permit, use default thumb.
+	if ( ! $postimage && $args['thumb_default_show'] ) {
+		$postimage = $args['thumb_default'];
+		$pick      = 'default_thumb';
+	}
+
 	// If no thumb found and settings permit, use site icon.
 	if ( ! $postimage ) {
 		$postimage = get_site_icon_url( max( $args['thumb_width'], $args['thumb_height'] ) );
@@ -150,12 +156,6 @@ function bsearch_get_the_post_thumbnail( $args = array() ) {
 	if ( ! $postimage ) {
 		$postimage = get_site_icon_url( min( $args['thumb_width'], $args['thumb_height'] ) );
 		$pick      = 'site_icon_min';
-	}
-
-	// If no thumb found and settings permit, use default thumb.
-	if ( ! $postimage && $args['thumb_default_show'] ) {
-		$postimage = $args['thumb_default'];
-		$pick      = 'default_thumb';
 	}
 
 	// Hopefully, we've found a thumbnail by now. If so, run it through the custom filter, check for SSL and create the image tag.
@@ -213,6 +213,20 @@ function bsearch_get_the_post_thumbnail( $args = array() ) {
 		$attr['thumb_height'] = $args['thumb_height'];
 
 		$output .= bsearch_get_image_html( $postimage, $attr );
+
+		if ( function_exists( 'wp_img_tag_add_srcset_and_sizes_attr' ) ) {
+			if ( empty( $attachment_id ) ) {
+				$attachment_id = bsearch_get_attachment_id_from_url( $postimage );
+			}
+
+			if ( ! empty( $attachment_id ) ) {
+				$output = wp_img_tag_add_srcset_and_sizes_attr( $output, 'bsearch_thumbnail', $attachment_id );
+			}
+		}
+
+		if ( function_exists( 'wp_img_tag_add_loading_attr' ) ) {
+			$output = wp_img_tag_add_loading_attr( $output, 'bsearch_thumbnail' );
+		}
 	}
 
 	/**
