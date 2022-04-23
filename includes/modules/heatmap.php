@@ -50,7 +50,7 @@ function the_bsearch_heatmap( $args = array() ) {
 
 	$output  = '<div class="bsearch_heatmap">';
 	$output .= '<h2>' . $title . '</h2>';
-	$output  = $args['before'] . $heatmap . $args['after'];
+	$output .= $args['before'] . $heatmap . $args['after'];
 
 	if ( bsearch_get_option( 'show_credit' ) ) {
 		$output .= bsearch_get_credit_link();
@@ -251,7 +251,7 @@ function get_bsearch_heatmap( $args = array() ) {
 		$color = '';
 
 		for ( $i = 0; $i < 3; $i++ ) {
-			$color .= dechex( $coldval[ $i ] + ( $colorstep[ $i ] * $fraction ) );
+			$color .= dechex( absint( $coldval[ $i ] + ( $colorstep[ $i ] * $fraction ) ) );
 		}
 		$style = sprintf( 'font-size:%1$s%2$s;color:#%3$s;', round( $fontsize ), $args['unit'], $color );
 
@@ -460,4 +460,3 @@ function the_pop_searches() {
 
 	the_bsearch_heatmap();
 }
-
