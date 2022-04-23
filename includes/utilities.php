@@ -377,11 +377,21 @@ function bsearch_get_credit_link() {
  * @return string Highlighted string.
  */
 function bsearch_highlight( $input, $keys ) {
+	$highlight_keys = array();
 
-	$reg_ex = '/(?!<[^>]*?>)(' . implode( '|', $keys ) . ')(?![^<]*?>)/iu';
-	$output = preg_replace( $reg_ex, '<span class="bsearch_highlight">$1</span>', html_entity_decode( $input ) );
+	foreach ( $keys as $key ) {
+		if ( ! empty( $key ) && ' ' !== $key ) {
+			$highlight_keys[] = preg_quote( $key, '/' );
+		}
+	}
 
-	return $output;
+	if ( ! empty( $highlight_keys ) ) {
+		$reg_ex = '/(?!<[^>]*?>)(' . implode( '|', $highlight_keys ) . ')(?![^<]*?>)/iu';
+		$output = preg_replace( $reg_ex, '<span class="bsearch_highlight">$1</span>', html_entity_decode( $input ) );
+		return $output;
+	}
+
+	return $input;
 }
 
 
@@ -414,4 +424,3 @@ function bsearch_score2percent( $score, $topscore ) {
 	 */
 	return apply_filters( 'bsearch_score2percent', $output, $score, $topscore );
 }
-

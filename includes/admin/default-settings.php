@@ -137,7 +137,7 @@ function bsearch_settings_general() {
 function bsearch_settings_search() {
 
 	$settings = array(
-		'limit'                   => array(
+		'limit'                    => array(
 			'id'      => 'limit',
 			'name'    => esc_html__( 'Number of Search Results per page', 'better-search' ),
 			'desc'    => esc_html__( 'This is the maximum number of search results that will be displayed per page by default', 'better-search' ),
@@ -145,21 +145,21 @@ function bsearch_settings_search() {
 			'options' => '10',
 			'size'    => 'small',
 		),
-		'post_types'              => array(
+		'post_types'               => array(
 			'id'      => 'post_types',
 			'name'    => esc_html__( 'Post types to include', 'better-search' ),
 			'desc'    => esc_html__( 'Select which post types you want to include in the search results', 'better-search' ),
 			'type'    => 'posttypes',
 			'options' => 'post,page',
 		),
-		'use_fulltext'            => array(
+		'use_fulltext'             => array(
 			'id'      => 'use_fulltext',
 			'name'    => esc_html__( 'Enable mySQL FULLTEXT searching', 'better-search' ),
 			'desc'    => esc_html__( 'Disabling this option will no longer give relevancy based results', 'better-search' ),
 			'type'    => 'checkbox',
 			'options' => true,
 		),
-		'boolean_mode'            => array(
+		'boolean_mode'             => array(
 			'id'      => 'boolean_mode',
 			'name'    => esc_html__( 'Activate BOOLEAN mode', 'better-search' ),
 			/* translators: 1: Opening anchor tag, 2: Closing anchor tag, */
@@ -167,7 +167,7 @@ function bsearch_settings_search() {
 			'type'    => 'checkbox',
 			'options' => false,
 		),
-		'weight_title'            => array(
+		'weight_title'             => array(
 			'id'      => 'weight_title',
 			'name'    => esc_html__( 'Weight of the title', 'better-search' ),
 			'desc'    => esc_html__( 'Set this to a bigger number than the next option to prioritize the post title', 'better-search' ),
@@ -175,7 +175,7 @@ function bsearch_settings_search() {
 			'options' => '10',
 			'size'    => 'small',
 		),
-		'weight_content'          => array(
+		'weight_content'           => array(
 			'id'      => 'weight_content',
 			'name'    => esc_html__( 'Weight of the post content', 'better-search' ),
 			'desc'    => esc_html__( 'Set this to a bigger number than the previous option to prioritize the post content', 'better-search' ),
@@ -183,56 +183,56 @@ function bsearch_settings_search() {
 			'options' => '1',
 			'size'    => 'small',
 		),
-		'search_excerpt'          => array(
+		'search_excerpt'           => array(
 			'id'      => 'search_excerpt',
 			'name'    => esc_html__( 'Search Excerpt', 'better-search' ),
 			'desc'    => esc_html__( 'Select to search the post excerpt.', 'better-search' ),
 			'type'    => 'checkbox',
 			'options' => true,
 		),
-		'search_taxonomies'       => array(
+		'search_taxonomies'        => array(
 			'id'      => 'search_taxonomies',
 			'name'    => esc_html__( 'Search Taxonomies', 'better-search' ),
 			'desc'    => esc_html__( 'Select to include posts where all taxonomies match the search term(s). This includes categories, tags and custom post types.', 'better-search' ),
 			'type'    => 'checkbox',
 			'options' => false,
 		),
-		'search_meta'             => array(
+		'search_meta'              => array(
 			'id'      => 'search_meta',
 			'name'    => esc_html__( 'Search Meta', 'better-search' ),
 			'desc'    => esc_html__( 'Select to include posts where meta values match the search term(s).', 'better-search' ),
 			'type'    => 'checkbox',
 			'options' => false,
 		),
-		'search_authors'          => array(
+		'search_authors'           => array(
 			'id'      => 'search_authors',
 			'name'    => esc_html__( 'Search Authors', 'better-search' ),
 			'desc'    => esc_html__( 'Select to include posts from authors that match the search term(s).', 'better-search' ),
 			'type'    => 'checkbox',
 			'options' => false,
 		),
-		'search_comments'         => array(
+		'search_comments'          => array(
 			'id'      => 'search_comments',
 			'name'    => esc_html__( 'Search Comments', 'better-search' ),
 			'desc'    => esc_html__( 'Select to include posts where comments include the search term(s).', 'better-search' ),
 			'type'    => 'checkbox',
 			'options' => false,
 		),
-		'exclude_protected_posts' => array(
+		'exclude_protected_posts'  => array(
 			'id'      => 'exclude_protected_posts',
 			'name'    => esc_html__( 'Exclude password protected posts', 'better-search' ),
 			'desc'    => esc_html__( 'Enabling this option will remove password protected posts from the search results', 'better-search' ),
 			'type'    => 'checkbox',
 			'options' => true,
 		),
-		'exclude_post_ids'        => array(
+		'exclude_post_ids'         => array(
 			'id'      => 'exclude_post_ids',
 			'name'    => esc_html__( 'Exclude post IDs', 'better-search' ),
 			'desc'    => esc_html__( 'Enter a comma separated list of post/page/custom post type IDs e.g. 188,1024,50', 'better-search' ),
 			'type'    => 'numbercsv',
 			'options' => '',
 		),
-		'exclude_cat_slugs'       => array(
+		'exclude_cat_slugs'        => array(
 			'id'               => 'exclude_cat_slugs',
 			'name'             => esc_html__( 'Exclude Categories', 'better-search' ),
 			'desc'             => esc_html__( 'Comma separated list of category slugs. The field above has an autocomplete so simply start typing in the starting letters and it will prompt you with options. Does not support custom taxonomies.', 'better-search' ),
@@ -244,7 +244,7 @@ function bsearch_settings_search() {
 				'data-wp-taxonomy' => 'category',
 			),
 		),
-		'exclude_categories'      => array(
+		'exclude_categories'       => array(
 			'id'       => 'exclude_categories',
 			'name'     => esc_html__( 'Exclude category IDs', 'better-search' ),
 			'desc'     => esc_html__( 'This is a readonly field that is automatically populated based on the above input when the settings are saved. These might differ from the IDs visible in the Categories page which use the term_id. Better Search uses the term_taxonomy_id which is unique to this taxonomy.', 'better-search' ),
@@ -252,62 +252,69 @@ function bsearch_settings_search() {
 			'options'  => '',
 			'readonly' => true,
 		),
-		'display_header'          => array(
+		'display_header'           => array(
 			'id'   => 'display_header',
 			'name' => '<h3>' . esc_html__( 'Display options', 'better-search' ) . '</h3>',
 			'desc' => esc_html__( 'These settings allow you to customize the output of the search results page. Except for the highlight setting, these only apply when Seamless mode is off.', 'better-search' ),
 			'type' => 'header',
 		),
-		'highlight'               => array(
+		'highlight'                => array(
 			'id'      => 'highlight',
 			'name'    => esc_html__( 'Highlight search terms', 'better-search' ),
-			'desc'    => esc_html__( 'If enabled, the search terms are wrapped with the class <code>bsearch_highlight</code>. The default stylesheet includes CSS to add some colour.', 'better-search' ),
+			'desc'    => esc_html__( 'If enabled, the search terms are wrapped with the class <code>bsearch_highlight</code> on the search results page. The default stylesheet includes CSS to add some colour.', 'better-search' ),
 			'type'    => 'checkbox',
-			'options' => false,
+			'options' => true,
 		),
-		'include_thumb'           => array(
+		'highlight_followed_links' => array(
+			'id'      => 'highlight_followed_links',
+			'name'    => esc_html__( 'Highlight followed links', 'better-search' ),
+			'desc'    => esc_html__( 'If enabled, the plugin will highlight the search terms on posts/pages when visits them from the search results page.', 'better-search' ),
+			'type'    => 'checkbox',
+			'options' => true,
+		),
+		'include_thumb'            => array(
 			'id'      => 'include_thumb',
 			'name'    => esc_html__( 'Display thumbnail', 'better-search' ),
 			'desc'    => '',
 			'type'    => 'checkbox',
 			'options' => true,
 		),
-		'display_relevance'       => array(
+		'display_relevance'        => array(
 			'id'      => 'display_relevance',
 			'name'    => esc_html__( 'Display relevance', 'better-search' ),
 			'desc'    => '',
 			'type'    => 'checkbox',
 			'options' => true,
 		),
-		'display_post_type'       => array(
+		'display_post_type'        => array(
 			'id'      => 'display_post_type',
 			'name'    => esc_html__( 'Display post type', 'better-search' ),
 			'desc'    => '',
 			'type'    => 'checkbox',
 			'options' => true,
 		),
-		'display_author'          => array(
+		'display_author'           => array(
 			'id'      => 'display_author',
 			'name'    => esc_html__( 'Display author', 'better-search' ),
 			'desc'    => '',
 			'type'    => 'checkbox',
 			'options' => true,
 		),
-		'display_date'            => array(
+		'display_date'             => array(
 			'id'      => 'display_date',
 			'name'    => esc_html__( 'Display date', 'better-search' ),
 			'desc'    => '',
 			'type'    => 'checkbox',
 			'options' => true,
 		),
-		'display_taxonomies'      => array(
+		'display_taxonomies'       => array(
 			'id'      => 'display_taxonomies',
 			'name'    => esc_html__( 'Display taxonomies', 'better-search' ),
 			'desc'    => '',
 			'type'    => 'checkbox',
 			'options' => true,
 		),
-		'excerpt_length'          => array(
+		'excerpt_length'           => array(
 			'id'      => 'excerpt_length',
 			'name'    => esc_html__( 'Length of excerpt (in words)', 'better-search' ),
 			'desc'    => '',
@@ -315,27 +322,27 @@ function bsearch_settings_search() {
 			'options' => '100',
 			'size'    => 'small',
 		),
-		'banned_header'           => array(
+		'banned_header'            => array(
 			'id'   => 'banned_header',
 			'name' => '<h3>' . esc_html__( 'Banned words options', 'better-search' ) . '</h3>',
 			'desc' => '',
 			'type' => 'header',
 		),
-		'badwords'                => array(
+		'badwords'                 => array(
 			'id'      => 'badwords',
 			'name'    => esc_html__( 'Filter these words', 'better-search' ),
 			'desc'    => esc_html__( 'Words in this list will be stripped out of the search results. Enter these as a comma-separated list.', 'better-search' ),
 			'type'    => 'textarea',
 			'options' => implode( ',', bsearch_get_badwords() ),
 		),
-		'banned_whole_words'      => array(
+		'banned_whole_words'       => array(
 			'id'      => 'banned_whole_words',
 			'name'    => esc_html__( 'Filter whole words only', 'better-search' ),
 			'desc'    => esc_html__( 'When activated, only whole words in the search query are filtered. Partial words are ignored. e.g. grow will not ban grown or grower.', 'better-search' ),
 			'type'    => 'checkbox',
 			'options' => false,
 		),
-		'banned_stop_search'      => array(
+		'banned_stop_search'       => array(
 			'id'      => 'banned_stop_search',
 			'name'    => esc_html__( 'Stop query on banned words filter', 'better-search' ),
 			'desc'    => esc_html__( 'When activated, this option will return no results if the search query includes any of the words in the box above. If you have seamless mode off, Better Search will display an error message. With seamless mode on, this will give a Nothing found message. You can customize it by editing your theme.', 'better-search' ),
