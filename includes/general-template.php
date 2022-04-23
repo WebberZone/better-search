@@ -153,7 +153,7 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 	$defaults = array(
 		'before'              => '',
 		'after'               => '',
-		'echo'                => true,
+		'echo'                => false,
 		'aria_label'          => '',
 		'post_types'          => bsearch_get_option( 'post_types' ),
 		'selected_post_types' => '',
