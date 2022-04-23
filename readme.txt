@@ -95,6 +95,9 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 = 3.1.0 =
 
+* Enhancements/modifications:
+	* New argument `show_post_types` for `get_bsearch_form()` set as default to false. Arguments can be modified by overriding the filter `bsearch_form_args`
+
 * Bug fixes:
 	* Post thumbnail size was ignored by `the_bsearch_post_thumbnail`
 	* HTML entities were displayed instead of being processed
