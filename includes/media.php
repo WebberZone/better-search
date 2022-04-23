@@ -28,10 +28,14 @@ if ( ! defined( 'WPINC' ) ) {
  * @param string|array $args {
  *     Optional. Array or string of parameters.
  *
- *     @type int|WP_Post $post   Post ID or object.
- *     @type string  $after  Display after the thumbnail.
- *     @type bool    $echo   Echo or return?
- *     @type WP_Post $post   Post object.
+ *     @type int|WP_Post $post               Post ID or object.
+ *     @type string      $size               Size of the thumbnail.
+ *     @type string      $thumb_meta         Meta field that is used to store the location of default thumbnail image.
+ *     @type string      $thumb_html         HTML / CSS for width and height attributes.
+ *     @type string      $thumb_default      URL of default thumbnail image.
+ *     @type bool        $thumb_default_show Whether to show default thumbnail image.
+ *     @type bool        $scan_images        Scan post content for the first image.
+ *     @type string      $class              Thumbnail class.
  * }
  * @return string Output with the post thumbnail
  */
@@ -40,12 +44,12 @@ function bsearch_get_the_post_thumbnail( $args = array() ) {
 	$defaults = array(
 		'post'               => '',
 		'size'               => 'thumbnail',
-		'thumb_meta'         => 'post-image',       // Meta field that is used to store the location of default thumbnail image.
-		'thumb_html'         => 'html',     // HTML / CSS for width and height attributes.
-		'thumb_default'      => '',  // Default thumbnail image.
-		'thumb_default_show' => true,   // Show default thumb if none found (if false, don't show thumb at all).
-		'scan_images'        => true,         // Scan post for images.
-		'class'              => 'bsearch_thumb',         // Class of the thumbnail.
+		'thumb_meta'         => 'post-image',
+		'thumb_html'         => 'html',
+		'thumb_default'      => '',
+		'thumb_default_show' => true,
+		'scan_images'        => true,
+		'class'              => 'bsearch_thumb',
 	);
 
 	// Parse incomming $args into an array and merge it with $defaults.
@@ -552,4 +556,3 @@ function bsearch_get_all_image_sizes( $size = '' ) {
 	 */
 	return apply_filters( 'bsearch_get_all_image_sizes', $sizes );
 }
-
