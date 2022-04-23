@@ -62,11 +62,11 @@ function bsearch_search_form_func( $atts ) {
 
 	$atts = shortcode_atts(
 		array(
-			'before'     => '',
-			'after'      => '',
-			'echo'       => true,
-			'aria_label' => '',
-			'post_types' => bsearch_get_option( 'post_types' ),
+			'before'              => '',
+			'after'               => '',
+			'aria_label'          => '',
+			'post_types'          => bsearch_get_option( 'post_types' ),
+			'selected_post_types' => '',
 		),
 		$atts,
 		'bsearch_form'
