@@ -155,10 +155,6 @@ class Better_Search_Heatmap extends WP_Widget {
 			)
 		);
 
-		if ( bsearch_get_option( 'show_credit' ) ) {
-			echo bsearch_get_credit_link(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		}
-
 		echo $args['after_widget']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	} //ending function widget

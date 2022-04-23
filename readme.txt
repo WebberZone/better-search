@@ -98,6 +98,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 * Bug fixes:
 	* Post thumbnail size was ignored by `the_bsearch_post_thumbnail`
 	* HTML entities were displayed instead of being processed
+	* Show credit displayed twice
 
 = 3.0.3 =
 
