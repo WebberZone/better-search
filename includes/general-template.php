@@ -84,11 +84,24 @@ function get_bsearch_excerpt( $post = '', $excerpt_length = 0, $use_excerpt = tr
 	if ( empty( $content ) ) {
 		$content = $post->post_content;
 	}
+	$output = strip_shortcodes( $content );
+	$output = excerpt_remove_blocks( $output );
 
-	$output = wp_strip_all_tags( strip_shortcodes( $content ) );
+	/** This filter is documented in wp-includes/post-template.php */
+	$output = apply_filters( 'the_content', $output );
+	$output = str_replace( ']]>', ']]&gt;', $output );
+
+	/**
+	 * Filters the string in the "more" link displayed after a trimmed excerpt.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $more_string The string shown within the more link.
+	 */
+	$excerpt_more = apply_filters( 'bsearch_excerpt_more', ' [&hellip;]' );
 
 	if ( $excerpt_length > 0 ) {
-		$output = wp_trim_words( $output, $excerpt_length );
+		$output = wp_trim_words( $output, $excerpt_length, $excerpt_more );
 	}
 
 	if ( post_password_required( $post ) ) {
