@@ -173,7 +173,7 @@ function bsearch_get_the_post_thumbnail( $args = array() ) {
 		 *
 		 * @param   string  $postimage URL of the thumbnail image
 		 * @param   array   $args      Arguments array.
-		 * @param   WP_Post $result    Post Object
+		 * @param   WP_Post $result    Post Object.
 		 */
 		$postimage = apply_filters( 'bsearch_thumb_url', $postimage, $args, $result );
 
@@ -187,30 +187,37 @@ function bsearch_get_the_post_thumbnail( $args = array() ) {
 		 * Filters the thumbnail classes and allows a filter function to add any more classes if needed.
 		 *
 		 * @since 2.5.0
+		 * @since 3.1.0 Added $result
 		 *
 		 * @param   string  $thumb_html Thumbnail HTML
-		 * @param   array   $args Argument array
+		 * @param   array   $args       Argument array
+		 * @param   WP_Post $result     Post Object.
 		 */
-		$attr['class'] = apply_filters( 'bsearch_thumb_class', $class, $args );
+		$attr['class'] = apply_filters( 'bsearch_thumb_class', $class, $args, $result );
 
 		/**
 		 * Filters the thumbnail alt.
 		 *
 		 * @since 2.5.0
+		 * @since 3.1.0 Added $result
 		 *
-		 * @param string $post_title Thumbnail alt attribute
-		 * @param array  $args       Argument array
+		 * @param string  $post_title Thumbnail alt attribute
+		 * @param array   $args       Argument array
+		 * @param WP_Post $result     Post Object.
 		 */
-		$attr['alt'] = apply_filters( 'bsearch_thumb_alt', $post_title, $args );
+		$attr['alt'] = apply_filters( 'bsearch_thumb_alt', $post_title, $args, $result );
 
 		/**
 		 * Filters the thumbnail title.
 		 *
 		 * @since 2.5.0
+		 * @since 3.1.0 Added $args and $result
 		 *
-		 * @param string $post_title Thumbnail title attribute
+		 * @param string  $post_title Thumbnail title attribute
+		 * @param array   $args       Argument array
+		 * @param WP_Post $result     Post Object.
 		 */
-		$attr['title'] = apply_filters( 'bsearch_thumb_title', $post_title );
+		$attr['title'] = apply_filters( 'bsearch_thumb_title', $post_title, $args, $result );
 
 		$attr['thumb_html']   = $args['thumb_html'];
 		$attr['thumb_width']  = $args['thumb_width'];
