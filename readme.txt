@@ -105,6 +105,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 	* Post thumbnail size was ignored by `the_bsearch_post_thumbnail`
 	* HTML entities were displayed instead of being processed
 	* Show credit displayed twice
+	* `post_type` arguments were incorrectly processed when empty
 
 = 3.0.3 =
 

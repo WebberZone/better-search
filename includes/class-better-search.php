@@ -180,7 +180,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 			$search_query = isset( $args['s'] ) ? $args['s'] : '';
 			$this->set_class_variables( $search_query );
 
-			if ( ! empty( $args['post_type'] ) ) {
+			if ( empty( $args['post_type'] ) ) {
 
 				// If post_types is empty or contains a query string then use parse_str else consider it comma-separated.
 				if ( ! empty( $args['post_types'] ) && is_array( $args['post_types'] ) ) {
