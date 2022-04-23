@@ -58,15 +58,40 @@ add_action( 'wp_head', 'bsearch_clause_head' );
  */
 function bsearch_content( $content ) {
 
-	$bsearch_highlight = bsearch_clean_terms( get_query_var( 'bsearch_highlight' ) );
+	if ( is_admin() || ! in_the_loop() ) {
+		return $content;
+	}
 
-	if ( ! is_admin() && in_the_loop() && ( is_search() || ! empty( $bsearch_highlight ) ) && bsearch_get_option( 'highlight' ) ) {
-		$search_query = is_search() ? get_bsearch_query() : $bsearch_highlight;
+	$referer = wp_get_referer() ? urldecode( wp_get_referer() ) : '';
+	if ( is_search() ) {
+		$is_referer_search_engine = true;
+	} else {
+		$siteurl = get_option( 'home' );
+		if ( preg_match( "#^$siteurl#i", $referer ) ) {
+			parse_str( wp_parse_url( $referer, PHP_URL_QUERY ), $queries );
+			if ( ! empty( $queries['s'] ) ) {
+				$is_referer_search_engine = true;
+			}
+		}
+	}
 
-		$search_query = preg_quote( $search_query, '/' );
-		$keys         = explode( ' ', str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $search_query ) );
+	if ( empty( $is_referer_search_engine ) ) {
+		return $content;
+	}
+
+	if ( bsearch_get_option( 'highlight' ) && is_search() ) {
+		$search_query = get_bsearch_query();
+	}
+
+	if ( bsearch_get_option( 'highlight_followed_links' ) ) {
+		$search_query = preg_replace( '/^.*s=([^&]+)&?.*$/i', '$1', $referer );
+		$search_query = preg_replace( '/\'|"/', '', $search_query );
+	}
+
+	if ( ! empty( $search_query ) ) {
+		$search_query = str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $search_query );
+		$keys         = preg_split( '/[\s,\+\.]+/', $search_query );
 		$content      = bsearch_highlight( $content, $keys );
-
 	}
 
 	return apply_filters( 'bsearch_content', $content );
@@ -75,32 +100,6 @@ add_filter( 'the_content', 'bsearch_content', 999 );
 add_filter( 'get_the_excerpt', 'bsearch_content', 999 );
 add_filter( 'the_title', 'bsearch_content', 999 );
 add_filter( 'the_bsearch_excerpt', 'bsearch_content', 999 );
-
-/**
- * Filters the permalink to add additional query_args.
- *
- * @since 3.0.0
- *
- * @param string $link Permalink.
- * @return string Permalink with query args addded.
- */
-function bsearch_post_link( $link ) {
-
-	if ( ! is_search() || ! in_the_loop() || is_admin() || ! bsearch_get_option( 'highlight' ) ) {
-		return $link;
-	}
-
-	$query_args['bsearch_highlight'] = rawurlencode( get_bsearch_query() );
-
-	$link = add_query_arg( $query_args, $link );
-
-	return $link;
-}
-add_filter( 'post_link', 'bsearch_post_link' );
-add_filter( 'post_type_link', 'bsearch_post_link' );
-add_filter( 'page_link', 'bsearch_post_link' );
-add_filter( 'attachment_link', 'bsearch_post_link' );
-
 
 /**
  * Enqueue styles and scripts.
