@@ -81,9 +81,7 @@ function bsearch_content( $content ) {
 
 	if ( bsearch_get_option( 'highlight' ) && is_search() ) {
 		$search_query = get_bsearch_query();
-	}
-
-	if ( bsearch_get_option( 'highlight_followed_links' ) ) {
+	} elseif ( bsearch_get_option( 'highlight_followed_links' ) ) {
 		$search_query = preg_replace( '/^.*s=([^&]+)&?.*$/i', '$1', $referer );
 		$search_query = preg_replace( '/\'|"/', '', $search_query );
 	}
