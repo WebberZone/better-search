@@ -23,13 +23,23 @@ $post_types          = ( 'any' === $selected_post_types ) ? bsearch_get_option( 
 $tmp_wpquery = $wp_query;
 
 // Set up Better_Search_Query to replace $wp_query.
-$args           = array(
+$args = array(
 	's'          => $search_query,
 	'limit'      => $limit,
 	'paged'      => $paged,
 	'bydate'     => $bydate,
 	'post_types' => $post_types,
 );
+
+/**
+ * Filter the arguments that are passed to Better_Search_Query.
+ *
+ * @since 3.1.0
+ *
+ * @param array $args Arguments array.
+ */
+$args = apply_filters( 'bsearch_template_query_args', $args );
+
 $search_results = new Better_Search_Query( $args );
 $wp_query       = $search_results; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 $topscore       = $wp_query->topscore;
