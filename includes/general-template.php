@@ -134,12 +134,13 @@ function the_bsearch_form( $search_query = '', $args = array() ) {
  * @param string|array $args {
  *     Optional. Array or string of parameters.
  *
- *     @type string   $before     Markup to prepend to the search form.
- *     @type string   $after      Markup to append to the search form.
- *     @type bool     $echo       Echo or return?
- *     @type string   $aria_label ARIA label for the search form.
- *                                Useful to distinguish multiple search forms on the same page and improve accessibility.
- *     @type string[] $post_types Comma separated list or array of post types.
+ *     @type string   $before           Markup to prepend to the search form.
+ *     @type string   $after            Markup to append to the search form.
+ *     @type bool     $echo             Echo or return?
+ *     @type string   $aria_label       ARIA label for the search form.
+ *                                      Useful to distinguish multiple search forms on the same page and improve accessibility.
+ *     @type string[] $post_types       Comma separated list or array of post types.
+ *     @type bool     $show_post_types  Whether to show the post types dropdown.
  * }
  * @return void|string Void if 'echo' argument is true, the search form if 'echo' is false.
  */
@@ -157,6 +158,7 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 		'aria_label'          => '',
 		'post_types'          => bsearch_get_option( 'post_types' ),
 		'selected_post_types' => '',
+		'show_post_types'     => false,
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
@@ -189,14 +191,19 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 	$selected_post_types = wp_parse_slug_list( $args['selected_post_types'] );
 
 	$select = '';
-	if ( ! empty( $post_types ) ) {
+	if ( ! empty( $post_types ) && $args['show_post_types'] ) {
 		$select  = '<div class="bsearch-form-post-types">';
 		$select .= '<span class="screen-reader-text">' . _x( 'Post types:', 'label', 'better-search' ) . '</span>';
 		$select .= '<select name="post_types" id="post_types">';
 		$select .= sprintf( '<option value="any">%1$s</option>', __( 'Any Post Type', 'better-search' ) );
 		foreach ( $post_types as $post_type ) {
 			$post_type = get_post_type_object( $post_type );
-			$select   .= sprintf( '<option value="%1$s" %3$s>%2$s</option>', $post_type->name, $post_type->labels->singular_name, selected( true, in_array( $post_type->name, $selected_post_types, true ), false ) );
+			$select   .= sprintf(
+				'<option value="%1$s" %3$s>%2$s</option>',
+				$post_type->name,
+				$post_type->labels->singular_name,
+				selected( true, in_array( $post_type->name, $selected_post_types, true ), false )
+			);
 		}
 		$select .= '</select></div>';
 	}

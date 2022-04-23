@@ -67,6 +67,7 @@ function bsearch_search_form_func( $atts ) {
 			'aria_label'          => '',
 			'post_types'          => bsearch_get_option( 'post_types' ),
 			'selected_post_types' => '',
+			'show_post_types'     => false,
 		),
 		$atts,
 		'bsearch_form'

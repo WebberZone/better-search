@@ -77,7 +77,8 @@ class BSearch_Search_Box extends WP_Widget {
 			apply_filters(
 				'widget_bsearch_form_args',
 				array(
-					'post_types' => $post_types,
+					'post_types'      => $post_types,
+					'show_post_types' => $show_post_types,
 				),
 				$instance
 			)
