@@ -424,3 +424,121 @@ function bsearch_score2percent( $score, $topscore ) {
 	 */
 	return apply_filters( 'bsearch_score2percent', $output, $score, $topscore );
 }
+
+
+/**
+ * Find the locations of each of the words within the text.
+ *
+ * @since 3.1.0
+ *
+ * @param array  $words     Array of words whose location needs to be extracted.
+ * @param string $fulltext  Text to search the words in.
+ * @return array
+ */
+function bsearch_extract_locations( $words, $fulltext ) {
+	$locations = array();
+	if ( ! is_array( $words ) ) {
+		$words = array( $words );
+	}
+	foreach ( $words as $word ) {
+		$wordlen = strlen( $word );
+		$loc     = stripos( $fulltext, $word );
+		while ( false !== $loc ) {
+			$locations[] = $loc;
+			$loc         = stripos( $fulltext, $word, $loc + $wordlen );
+		}
+	}
+	$locations = array_unique( $locations );
+
+	// If no words were found, show beginning of the fulltext.
+	if ( empty( $locations ) ) {
+		$locations[0] = 0;
+	}
+
+	sort( $locations );
+	return $locations;
+}
+
+/**
+ * Extract the start position of the relevant portion to display.
+ *
+ * This is done by looping over each match and finding the smallest distance between two found
+ * strings. The idea being that the closer the terms are the better match the snippet would be.
+ * When checking for matches we only change the location if there is a better match.
+ * The only exception is where we have only two matches in which case we just take the
+ * first as will be equally distant.
+ *
+ * @since 3.1.0
+ *
+ * @param array $locations      Array of locations.
+ * @param int   $padding_before Number of characters to include before the first match.
+ * @return int Starting position of the relevant extract.
+ */
+function bsearch_extract_start_position( $locations, $padding_before ) {
+	// If we only have 1 match we dont actually do the for loop so set to the first.
+	$startpos     = $locations[0];
+	$loccount     = count( $locations );
+	$smallestdiff = PHP_INT_MAX;
+
+	// If we only have 2 skip as its probably equally relevant.
+	if ( count( $locations ) > 2 ) {
+		// Skip the first as we check 1 behind.
+		for ( $i = 1; $i < $loccount; $i++ ) {
+			if ( ( $loccount - 1 ) === $i ) {
+				$diff = $locations[ $i ] - $locations[ $i - 1 ];
+			} else {
+				$diff = $locations[ $i + 1 ] - $locations[ $i ];
+			}
+
+			if ( $smallestdiff > $diff ) {
+				$smallestdiff = $diff;
+				$startpos     = $locations[ $i ];
+			}
+		}
+	}
+
+	$startpos = $startpos > $padding_before ? $startpos - $padding_before : 0;
+	return $startpos;
+}
+
+/**
+ * Extract the relevant excerpt for a set of words.
+ *
+ * @since 3.1.0
+ *
+ * @param array  $words           Array of words used to determine the relevant excerpt.
+ * @param string $fulltext        Full text to search for the extract.
+ * @param string $excerpt_more    What to append if $text needs to be trimmed. Default '…'.
+ * @param int    $excerpt_length  Excerpt length in characters.
+ * @param int    $padding_before  Number of characters to include before the first match.
+ * @return string Excerpt containing the relevant portion of of the text.
+ */
+function bsearch_extract_relevant_excerpt( $words, $fulltext, $excerpt_more = '&hellip;', $excerpt_length = -1, $padding_before = 100 ) {
+
+	$textlength = strlen( $fulltext );
+	if ( $textlength <= $excerpt_length ) {
+		return $fulltext;
+	}
+
+	$locations = bsearch_extract_locations( $words, $fulltext );
+	$startpos  = bsearch_extract_start_position( $locations, $padding_before );
+
+	// if we are going to snip too much...
+	if ( $textlength - $startpos < $excerpt_length ) {
+		$startpos = $startpos - ( $textlength - $startpos ) / 2;
+	}
+
+	$reltext = substr( $fulltext, $startpos, $excerpt_length );
+
+	// Check to ensure we dont snip the last word if thats the match.
+	if ( $startpos + $excerpt_length < $textlength ) {
+		$reltext = substr( $reltext, 0, strrpos( $reltext, ' ' ) ) . $excerpt_more; // Remove last word.
+	}
+
+	// If we trimmed from the front add ...
+	if ( 0 !== $startpos ) {
+		$reltext = $excerpt_more . substr( $reltext, strpos( $reltext, ' ' ) + 1 ); // Remove first word.
+	}
+
+	return $reltext;
+}

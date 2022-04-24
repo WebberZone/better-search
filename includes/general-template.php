@@ -35,11 +35,21 @@ function the_bsearch_excerpt( $args = array() ) {
 		'echo'           => true,
 		'post'           => get_post(),
 		'excerpt_length' => bsearch_get_option( 'excerpt_length' ),
-		'use_excerpt'    => true,
+		'use_excerpt'    => false,
+		'relevant'       => true,
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
-	$excerpt = get_bsearch_excerpt( $args['post'], $args['excerpt_length'], $args['use_excerpt'] );
+	/**
+	 * Filter the arguments used by the_bsearch_excerpt().
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param array $args Arguments array.
+	 */
+	$args = apply_filters( 'the_bsearch_excerpt_args', $args );
+
+	$excerpt = get_bsearch_excerpt( $args['post'], $args['excerpt_length'], $args['use_excerpt'], $args['relevant'] );
 
 	$output = $args['before'] . $excerpt . $args['after'];
 
@@ -69,9 +79,10 @@ function the_bsearch_excerpt( $args = array() ) {
  * @param   int|WP_Post $post           Post ID or WP_Post instance.
  * @param   int         $excerpt_length Length of the excerpt in words.
  * @param   bool        $use_excerpt    Use post excerpt or content.
+ * @param   bool        $relevant       Only relevant portion of excerpt.
  * @return  string      Excerpt
  */
-function get_bsearch_excerpt( $post = '', $excerpt_length = 0, $use_excerpt = true ) {
+function get_bsearch_excerpt( $post = '', $excerpt_length = 0, $use_excerpt = true, $relevant = true ) {
 	$content = '';
 
 	$post = get_post( $post );
@@ -90,6 +101,7 @@ function get_bsearch_excerpt( $post = '', $excerpt_length = 0, $use_excerpt = tr
 	/** This filter is documented in wp-includes/post-template.php */
 	$output = apply_filters( 'the_content', $output );
 	$output = str_replace( ']]>', ']]&gt;', $output );
+	$output = wp_strip_all_tags( $output );
 
 	/**
 	 * Filters the string in the "more" link displayed after a trimmed excerpt.
@@ -99,6 +111,14 @@ function get_bsearch_excerpt( $post = '', $excerpt_length = 0, $use_excerpt = tr
 	 * @param string $more_string The string shown within the more link.
 	 */
 	$excerpt_more = apply_filters( 'bsearch_excerpt_more', ' [&hellip;]' );
+
+	if ( $relevant ) {
+		$search_query = get_bsearch_query();
+		$search_query = str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $search_query );
+		$words        = preg_split( '/[\s,\+\.]+/', $search_query );
+
+		$output = bsearch_extract_relevant_excerpt( $words, $output, $excerpt_more );
+	}
 
 	if ( $excerpt_length > 0 ) {
 		$output = wp_trim_words( $output, $excerpt_length, $excerpt_more );
