@@ -154,11 +154,6 @@ function bsearch_get_settings() {
 
 	$settings = get_option( 'bsearch_settings' );
 
-	if ( empty( $settings ) ) {
-		add_option( 'bsearch_settings', bsearch_settings_defaults() );
-		$settings = get_option( 'bsearch_settings' );
-	}
-
 	/**
 	 * Settings array
 	 *
