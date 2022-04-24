@@ -41,7 +41,10 @@ function bsearch_settings_sanitize( $input = array() ) {
 	$settings_types = bsearch_get_registered_settings_types();
 
 	// Check if we need to set to defaults.
-	$reset = isset( $_POST['settings_reset'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	if ( isset( $_POST['settings_reset'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$reset                   = isset( $_POST['settings_reset'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$_POST['settings_reset'] = null;
+	}
 
 	if ( $reset ) {
 		bsearch_settings_reset();
@@ -353,4 +356,3 @@ function bsearch_sanitize_cache( $settings ) {
 	return $settings;
 }
 add_filter( 'bsearch_settings_sanitize', 'bsearch_sanitize_cache' );
-
