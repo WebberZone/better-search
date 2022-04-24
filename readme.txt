@@ -110,6 +110,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 	* Show credit displayed twice
 	* `post_type` arguments were incorrectly processed when empty
 	* PHP error in `Better_Search::set_topscore()`
+	* Resetting settings caused an infinite loop
 
 = 3.0.3 =
 
