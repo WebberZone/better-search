@@ -163,7 +163,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 				'how_old'          => 0,
 				'bydate'           => 0,
 			);
-			$defaults = array_merge( $defaults, (array) $bsearch_settings );
+			$defaults = array_merge( $defaults, bsearch_settings_defaults(), (array) $bsearch_settings );
 			$args     = wp_parse_args( $args, $defaults );
 
 			// Set necessary variables.

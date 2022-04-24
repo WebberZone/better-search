@@ -42,11 +42,9 @@ function bsearch_settings_sanitize( $input = array() ) {
 
 	// Check if we need to set to defaults.
 	if ( isset( $_POST['settings_reset'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$reset                   = isset( $_POST['settings_reset'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$_POST['settings_reset'] = null;
-	}
 
-	if ( $reset ) {
+		$_POST['settings_reset'] = null;
+
 		bsearch_settings_reset();
 		$bsearch_settings = bsearch_get_settings();
 
