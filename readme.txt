@@ -98,6 +98,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 * Features:
 	* New filter `bsearch_template_query_args` in the default template to modify arguments array passed to `Better_Search_Query`
 	* New option **Highlight followed links**: if enabled, the plugin will highlight the search terms on posts/pages when visits them from the search results page
+	* `the_bsearch_excerpt()` will now show the relevant part of the excerpt where applicable by default. You can override the arguments by filtering `the_bsearch_excerpt_args`
 
 * Enhancements/modifications:
 	* New argument `show_post_types` for `get_bsearch_form()` set as default to false. Arguments can be modified by overriding the filter `bsearch_form_args`
