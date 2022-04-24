@@ -938,6 +938,10 @@ if ( ! class_exists( 'Better_Search' ) ) :
 					$orderby  = 'ORDER BY score DESC ';
 					$limits   = 'LIMIT 0,1';
 
+					if ( ! empty( $groupby ) ) {
+						$groupby = 'GROUP BY ' . $groupby;
+					}
+
 					$topscore_query  = "SELECT $distinct $fields FROM {$wpdb->posts} $join WHERE 1=1 $where $groupby $orderby $limits";
 					$query->topscore = $wpdb->get_var( $topscore_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
