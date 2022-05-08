@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 12:57+0000\n"
+"POT-Creation-Date: 2022-05-08 17:10+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza\n"
 "Language-Team: WebberZone\n"
@@ -34,6 +34,7 @@ msgid "Better Search Settings"
 msgstr ""
 
 #: includes/admin/admin.php:30
+#: includes/admin/class-better-search-network-admin.php:40
 msgid "Better Search"
 msgstr ""
 
@@ -78,6 +79,19 @@ msgstr ""
 msgid "Contribute"
 msgstr ""
 
+#: includes/admin/class-better-search-network-admin.php:39
+msgid "Better Search Network Admin"
+msgstr ""
+
+#: includes/admin/class-better-search-network-admin.php:59
+msgid "Better Search Network Settings"
+msgstr ""
+
+#: includes/admin/class-better-search-network-admin.php:84
+#: includes/admin/class-better-search-statistics.php:103
+msgid "Search Table"
+msgstr ""
+
 #: includes/admin/class-better-search-statistics-table.php:40
 msgid "popular_search"
 msgstr ""
@@ -120,10 +134,6 @@ msgstr ""
 
 #: includes/admin/class-better-search-statistics-table.php:390
 msgid "Filter"
-msgstr ""
-
-#: includes/admin/class-better-search-statistics.php:103
-msgid "Search Table"
 msgstr ""
 
 #: includes/admin/class-better-search-statistics.php:128
@@ -375,67 +385,77 @@ msgstr ""
 #: includes/admin/default-settings.php:264
 msgid ""
 "If enabled, the search terms are wrapped with the class "
-"<code>bsearch_highlight</code>. The default stylesheet includes CSS to add "
-"some colour."
+"<code>bsearch_highlight</code> on the search results page. The default "
+"stylesheet includes CSS to add some colour."
 msgstr ""
 
 #: includes/admin/default-settings.php:270
-msgid "Display thumbnail"
+msgid "Highlight followed links"
+msgstr ""
+
+#: includes/admin/default-settings.php:271
+msgid ""
+"If enabled, the plugin will highlight the search terms on posts/pages when "
+"visits them from the search results page."
 msgstr ""
 
 #: includes/admin/default-settings.php:277
-msgid "Display relevance"
+msgid "Display thumbnail"
 msgstr ""
 
 #: includes/admin/default-settings.php:284
-msgid "Display post type"
+msgid "Display relevance"
 msgstr ""
 
 #: includes/admin/default-settings.php:291
-msgid "Display author"
+msgid "Display post type"
 msgstr ""
 
 #: includes/admin/default-settings.php:298
-msgid "Display date"
+msgid "Display author"
 msgstr ""
 
 #: includes/admin/default-settings.php:305
-msgid "Display taxonomies"
+msgid "Display date"
 msgstr ""
 
 #: includes/admin/default-settings.php:312
+msgid "Display taxonomies"
+msgstr ""
+
+#: includes/admin/default-settings.php:319
 msgid "Length of excerpt (in words)"
 msgstr ""
 
-#: includes/admin/default-settings.php:320
+#: includes/admin/default-settings.php:327
 msgid "Banned words options"
 msgstr ""
 
-#: includes/admin/default-settings.php:326
+#: includes/admin/default-settings.php:333
 msgid "Filter these words"
 msgstr ""
 
-#: includes/admin/default-settings.php:327
+#: includes/admin/default-settings.php:334
 msgid ""
 "Words in this list will be stripped out of the search results. Enter these "
 "as a comma-separated list."
 msgstr ""
 
-#: includes/admin/default-settings.php:333
+#: includes/admin/default-settings.php:340
 msgid "Filter whole words only"
 msgstr ""
 
-#: includes/admin/default-settings.php:334
+#: includes/admin/default-settings.php:341
 msgid ""
 "When activated, only whole words in the search query are filtered. Partial "
 "words are ignored. e.g. grow will not ban grown or grower."
 msgstr ""
 
-#: includes/admin/default-settings.php:340
+#: includes/admin/default-settings.php:347
 msgid "Stop query on banned words filter"
 msgstr ""
 
-#: includes/admin/default-settings.php:341
+#: includes/admin/default-settings.php:348
 msgid ""
 "When activated, this option will return no results if the search query "
 "includes any of the words in the box above. If you have seamless mode off, "
@@ -444,99 +464,99 @@ msgid ""
 "theme."
 msgstr ""
 
-#: includes/admin/default-settings.php:370
+#: includes/admin/default-settings.php:377
 msgid "Include heatmap on the search results"
 msgstr ""
 
-#: includes/admin/default-settings.php:371
+#: includes/admin/default-settings.php:378
 msgid ""
 "This option will display the heatmaps at the bottom of the search results "
 "page. Display popular searches to your visitors. Does not apply when "
 "Seamless mode is enabled."
 msgstr ""
 
-#: includes/admin/default-settings.php:377
+#: includes/admin/default-settings.php:384
 msgid "Heading of Overall Popular Searches"
 msgstr ""
 
-#: includes/admin/default-settings.php:378
-#: includes/admin/default-settings.php:386
+#: includes/admin/default-settings.php:385
+#: includes/admin/default-settings.php:393
 msgid "Displayed before the list of the searches as a the master heading"
 msgstr ""
 
-#: includes/admin/default-settings.php:380
+#: includes/admin/default-settings.php:387
 msgid "Popular searches:"
 msgstr ""
 
-#: includes/admin/default-settings.php:385
+#: includes/admin/default-settings.php:392
 msgid "Heading of Daily Popular Searches"
 msgstr ""
 
-#: includes/admin/default-settings.php:388
+#: includes/admin/default-settings.php:395
 msgid "Currently trending searches:"
 msgstr ""
 
-#: includes/admin/default-settings.php:393
+#: includes/admin/default-settings.php:400
 msgid "Currently trending should contain searches of how many days?"
 msgstr ""
 
-#: includes/admin/default-settings.php:394
+#: includes/admin/default-settings.php:401
 msgid ""
 "This settings allows you to change the number of days for the currently "
 "trending heatmap. This used to be called Daily popular in previous versions."
 msgstr ""
 
-#: includes/admin/default-settings.php:401
+#: includes/admin/default-settings.php:408
 msgid "Number of search terms to display"
 msgstr ""
 
-#: includes/admin/default-settings.php:409
+#: includes/admin/default-settings.php:416
 msgid "Font size of least popular search term"
 msgstr ""
 
-#: includes/admin/default-settings.php:417
+#: includes/admin/default-settings.php:424
 msgid "Font size of most popular search term"
 msgstr ""
 
-#: includes/admin/default-settings.php:425
+#: includes/admin/default-settings.php:432
 msgid "Color of least popular search term"
 msgstr ""
 
-#: includes/admin/default-settings.php:436
+#: includes/admin/default-settings.php:443
 msgid "Color of most popular search term"
 msgstr ""
 
-#: includes/admin/default-settings.php:447
+#: includes/admin/default-settings.php:454
 msgid "Text to include before each search term"
 msgstr ""
 
-#: includes/admin/default-settings.php:454
+#: includes/admin/default-settings.php:461
 msgid "Text to include after each search term"
 msgstr ""
 
-#: includes/admin/default-settings.php:461
+#: includes/admin/default-settings.php:468
 msgid "Open links in new window"
 msgstr ""
 
-#: includes/admin/default-settings.php:468
+#: includes/admin/default-settings.php:475
 msgid "Add nofollow to links"
 msgstr ""
 
-#: includes/admin/default-settings.php:498
+#: includes/admin/default-settings.php:505
 msgid "Include inbuilt styles"
 msgstr ""
 
-#: includes/admin/default-settings.php:499
+#: includes/admin/default-settings.php:506
 msgid ""
 "Uncheck this to disable this plugin from adding the inbuilt styles. You will "
 "need to add your own CSS styles if you disable this option"
 msgstr ""
 
-#: includes/admin/default-settings.php:505
+#: includes/admin/default-settings.php:512
 msgid "Custom CSS"
 msgstr ""
 
-#: includes/admin/default-settings.php:507
+#: includes/admin/default-settings.php:514
 #, php-format
 msgid ""
 "Do not include %3$sstyle%4$s tags. Check out the %1$sFAQ%2$s for available "
@@ -860,7 +880,7 @@ msgstr ""
 msgid "Please upload a file to import"
 msgstr ""
 
-#: includes/class-better-search.php:1048
+#: includes/class-better-search.php:1057
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid ""
 "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,"
@@ -875,11 +895,11 @@ msgstr ""
 msgid "<h3>Weekly Popular Searches</h3>"
 msgstr ""
 
-#: includes/deprecated.php:312 templates/template.php:163
+#: includes/deprecated.php:312 templates/template.php:183
 msgid "« Previous"
 msgstr ""
 
-#: includes/deprecated.php:313 templates/template.php:164
+#: includes/deprecated.php:313 templates/template.php:184
 msgid "Next »"
 msgstr ""
 
@@ -897,72 +917,72 @@ msgid ""
 "intelligent."
 msgstr ""
 
-#: includes/general-template.php:95
+#: includes/general-template.php:128
 msgid "There is no excerpt because this is a protected post."
 msgstr ""
 
-#: includes/general-template.php:194
+#: includes/general-template.php:229
 msgctxt "label"
 msgid "Post types:"
 msgstr ""
 
-#: includes/general-template.php:196
+#: includes/general-template.php:231
 msgid "Any Post Type"
 msgstr ""
 
-#: includes/general-template.php:208
+#: includes/general-template.php:248
 msgctxt "label"
 msgid "Search for:"
 msgstr ""
 
-#: includes/general-template.php:209
+#: includes/general-template.php:249
 msgctxt "placeholder"
 msgid "Search &hellip;"
 msgstr ""
 
-#: includes/general-template.php:212
+#: includes/general-template.php:252
 msgctxt "submit button"
 msgid "Search"
 msgstr ""
 
-#: includes/general-template.php:342
+#: includes/general-template.php:382
 #, php-format
 msgid ""
 "Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</"
 "strong>"
 msgstr ""
 
-#: includes/general-template.php:348
+#: includes/general-template.php:388
 #, php-format
 msgid "Page <strong>%1$s</strong> of <strong>%2$s</strong>"
 msgstr ""
 
-#: includes/general-template.php:402
+#: includes/general-template.php:442
 msgid "All"
 msgstr ""
 
-#: includes/general-template.php:423 includes/general-template.php:427
+#: includes/general-template.php:463 includes/general-template.php:467
 msgid "Date"
 msgstr ""
 
-#: includes/general-template.php:424 includes/general-template.php:426
+#: includes/general-template.php:464 includes/general-template.php:466
 msgid "Relevance"
 msgstr ""
 
-#: includes/general-template.php:430
+#: includes/general-template.php:470
 msgid "Sorted by"
 msgstr ""
 
-#: includes/general-template.php:431
+#: includes/general-template.php:471
 msgid "Sort by"
 msgstr ""
 
-#: includes/general-template.php:438
+#: includes/general-template.php:478
 #, php-format
 msgid "Results per-page: %s "
 msgstr ""
 
-#: includes/general-template.php:483
+#: includes/general-template.php:523
 msgid "Relevance:"
 msgstr ""
 
@@ -982,7 +1002,7 @@ msgid "Popular Searches [Better Search]"
 msgstr ""
 
 #: includes/modules/class-better-search-heatmap.php:55
-#: includes/modules/class-bsearch-search-box.php:101
+#: includes/modules/class-bsearch-search-box.php:102
 msgid "Title"
 msgstr ""
 
@@ -1006,7 +1026,7 @@ msgstr ""
 msgid "Search Form [Better Search]"
 msgstr ""
 
-#: includes/modules/class-bsearch-search-box.php:106
+#: includes/modules/class-bsearch-search-box.php:107
 msgid "Display post types dropdown?"
 msgstr ""
 
@@ -1036,31 +1056,31 @@ msgstr ""
 msgid "Powered by %1$s plugin%2$s"
 msgstr ""
 
-#: templates/template.php:54
+#: templates/template.php:64
 #, php-format
 msgid "Search results for \"%s\""
 msgstr ""
 
-#: templates/template.php:118
+#: templates/template.php:138
 msgid "Type"
 msgstr ""
 
-#: templates/template.php:121
+#: templates/template.php:141
 msgid "Post author"
 msgstr ""
 
-#: templates/template.php:124
+#: templates/template.php:144
 msgid "Published date"
 msgstr ""
 
-#: templates/template.php:127
+#: templates/template.php:147
 msgid "Terms"
 msgstr ""
 
-#: templates/template.php:144
+#: templates/template.php:164
 msgid "Read more &raquo;"
 msgstr ""
 
-#: templates/template.php:172
+#: templates/template.php:192
 msgid "No results found."
 msgstr ""
