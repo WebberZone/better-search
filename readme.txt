@@ -2,9 +2,9 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 3.0.3
+Stable tag: 3.1.0
 Requires at least: 5.0
-Tested up to: 5.8
+Tested up to: 6.0
 Requires PHP: 7.0
 License: GPLv2 or later
 
@@ -95,6 +95,8 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 = 3.1.0 =
 
+Release post: [https://webberzone.com/blog/better-search-v3-1-0/](https://webberzone.com/blog/better-search-v3-1-0/)
+
 * Features:
 	* New filter `bsearch_template_query_args` in the default template to modify arguments array passed to `Better_Search_Query`
 	* New option **Highlight followed links**: if enabled, the plugin will highlight the search terms on posts/pages when visits them from the search results page
@@ -167,6 +169,5 @@ Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webber
 
 == Upgrade Notice ==
 
-= 3.0.3 =
-Major upgrade. PHP 5.x support dropped. Review your settings on upgrade.
-Check the release post on https://webberzone.com
+= 3.1.0 =
+Check the Changelog or release post on https://webberzone.com for complete details
