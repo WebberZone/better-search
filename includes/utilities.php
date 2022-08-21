@@ -443,7 +443,7 @@ function bsearch_extract_locations( $words, $fulltext ) {
 	foreach ( $words as $word ) {
 		$wordlen = strlen( $word );
 		$loc     = stripos( $fulltext, $word );
-		while ( false !== $loc ) {
+		while ( ! empty( $loc ) ) {
 			$locations[] = $loc;
 			$loc         = stripos( $fulltext, $word, $loc + $wordlen );
 		}
