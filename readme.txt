@@ -97,6 +97,10 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 * Enhancements/modifications:
 	* Only highlight whole words
+	* Censor character has been modified to be a blank phrase instead of a space. Additionally multiple spaces will be replaced by a single space.
+
+* Bug fixes:
+	* mySQL error was generated if there were + signs with banned words in BOOLEAN mode
 
 = 3.1.0 =
 

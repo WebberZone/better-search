@@ -28,7 +28,7 @@ function bsearch_clean_terms( $val ) {
 
 	$badwords = array_map( 'trim', explode( ',', bsearch_get_option( 'badwords' ) ) );
 
-	$censor_char = ' ';
+	$censor_char = '';
 
 	/**
 	 * Allow the censored character to be replaced.
@@ -50,6 +50,9 @@ function bsearch_clean_terms( $val ) {
 	}
 
 	$val = $val_censored['clean'];
+	$val = preg_replace( '!\s+!', ' ', $val ); // Replace multiple spaces with a single.
+	$val = preg_replace( '!\++!', '+', $val ); // Replace multiple + with a single.
+	$val = rtrim( $val, '+' ); // Remove any trailing + signs.
 	$val = wp_kses_post( $val );
 
 	/**
