@@ -3,9 +3,9 @@ Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Donate link: https://ajaydsouza.com/donate/
 Stable tag: 3.1.0
-Requires at least: 5.0
+Requires at least: 5.6
 Tested up to: 6.0
-Requires PHP: 7.0
+Requires PHP: 7.1
 License: GPLv2 or later
 
 Better Search replaces the default WordPress search with a better search engine that gives contextual results sorted by relevance
@@ -92,6 +92,11 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 
 == Changelog ==
+
+= 3.2.0 =
+
+* Enhancements/modifications:
+	* Only highlight whole words
 
 = 3.1.0 =
 

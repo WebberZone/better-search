@@ -386,7 +386,7 @@ function bsearch_highlight( $input, $keys ) {
 	}
 
 	if ( ! empty( $highlight_keys ) ) {
-		$reg_ex = '/(?!<[^>]*?>)(' . implode( '|', $highlight_keys ) . ')(?![^<]*?>)/iu';
+		$reg_ex = '/\b(?!<[^>]*?>)(' . implode( '|', $highlight_keys ) . ')(?![^<]*?>)\b/iu';
 		$output = preg_replace( $reg_ex, '<span class="bsearch_highlight">$1</span>', html_entity_decode( $input ) );
 		return $output;
 	}
