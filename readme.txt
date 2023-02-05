@@ -4,8 +4,8 @@ Tags: search, Better Search, related search, relevant search, search results, co
 Donate link: https://ajaydsouza.com/donate/
 Stable tag: 3.1.0
 Requires at least: 5.6
-Tested up to: 6.0
-Requires PHP: 7.1
+Tested up to: 6.2
+Requires PHP: 7.4
 License: GPLv2 or later
 
 Better Search replaces the default WordPress search with a better search engine that gives contextual results sorted by relevance
@@ -101,6 +101,8 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 * Bug fixes:
 	* mySQL error was generated if there were + signs with banned words in BOOLEAN mode
+	* Fixed `bsearch_form` shortcode incorrect parameters
+	* PHP 8.1 compatibility
 
 = 3.1.0 =
 

@@ -73,6 +73,6 @@ function bsearch_search_form_func( $atts ) {
 		'bsearch_form'
 	);
 
-	return get_bsearch_form( $atts );
+	return get_bsearch_form( '', $atts );
 }
 add_shortcode( 'bsearch_form', 'bsearch_search_form_func' );
