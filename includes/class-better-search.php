@@ -93,10 +93,18 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		public $query_args = array();
 
 		/**
+		 * Holds the array of stopwords.
+		 *
+		 * @since 3.0.0
+		 * @var array
+		 */
+		public $stopwords = 0;
+
+		/**
 		 * Holds the Top score.
 		 *
 		 * @since 3.0.0
-		 * @var int
+		 * @var float
 		 */
 		public $topscore = 0;
 
@@ -608,6 +616,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 
 				if ( ! empty( $this->query_args['search_taxonomies'] ) ) {
 					$clause[] = $wpdb->prepare( "(bsq_t.name $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					$clause[] = $wpdb->prepare( "(bsq_tt.description $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				}
 
 				if ( ! empty( $this->query_args['search_excerpt'] ) ) {
