@@ -68,7 +68,7 @@ function bsearch_content( $content ) {
 	} else {
 		$siteurl = get_option( 'home' );
 		if ( preg_match( "#^$siteurl#i", $referer ) ) {
-			parse_str( wp_parse_url( $referer, PHP_URL_QUERY ), $queries );
+			parse_str( (string) wp_parse_url( $referer, PHP_URL_QUERY ), $queries );
 			if ( ! empty( $queries['s'] ) ) {
 				$is_referer_search_engine = true;
 			}
