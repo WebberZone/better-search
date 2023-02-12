@@ -103,6 +103,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 * Bug fixes:
 	* mySQL error was generated if there were + signs with banned words in BOOLEAN mode
 	* Fixed `bsearch_form` shortcode incorrect parameters
+	* Queries with apostrophe gave errors
 	* PHP 8.1 compatibility
 
 = 3.1.0 =
