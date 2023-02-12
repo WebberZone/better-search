@@ -393,7 +393,6 @@ if ( ! class_exists( 'Better_Search' ) ) :
 				$field_score  = "(MATCH({$wpdb->posts}.post_title) AGAINST ('%s' {$boolean_mode} ) * %d ) + ";
 				$field_score .= "(MATCH({$wpdb->posts}.post_content) AGAINST ('%s' {$boolean_mode} ) * %d ) ";
 				$field_score  = $wpdb->prepare( $field_score, $field_args ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				$field_score  = stripslashes( $field_score );
 			}
 
 			/**
