@@ -133,8 +133,20 @@ function bsearch_load_admin_scripts( $hook ) {
 
 	global $bsearch_settings_page, $bsearch_settings_tools_help, $bsearch_settings_popular_searches, $bsearch_settings_popular_searches_daily;
 
-	wp_register_script( 'better-search-admin-js', BETTER_SEARCH_PLUGIN_URL . 'includes/admin/js/admin-scripts.min.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wp-color-picker' ), BETTER_SEARCH_VERSION, true );
-	wp_register_script( 'better-search-suggest-js', BETTER_SEARCH_PLUGIN_URL . 'includes/admin/js/better-search-suggest.min.js', array( 'jquery', 'jquery-ui-autocomplete' ), BETTER_SEARCH_VERSION, true );
+	wp_register_script(
+		'better-search-admin-js',
+		BETTER_SEARCH_PLUGIN_URL . 'includes/admin/js/admin-scripts.min.js',
+		array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'wp-color-picker' ),
+		BETTER_SEARCH_VERSION,
+		true
+	);
+	wp_register_script(
+		'better-search-suggest-js',
+		BETTER_SEARCH_PLUGIN_URL . 'includes/admin/js/better-search-suggest.min.js',
+		array( 'jquery', 'jquery-ui-autocomplete' ),
+		BETTER_SEARCH_VERSION,
+		true
+	);
 
 	if ( in_array( $hook, array( $bsearch_settings_page, $bsearch_settings_tools_help, $bsearch_settings_popular_searches, $bsearch_settings_popular_searches_daily ), true ) ) {
 
@@ -153,6 +165,13 @@ function bsearch_load_admin_scripts( $hook ) {
 				),
 			)
 		);
+		wp_localize_script(
+			'better-search-admin-js',
+			'bsearch_admin_data',
+			array(
+				'security' => wp_create_nonce( 'bsearch-admin' ),
+			)
+		);
 
 	}
 
@@ -168,4 +187,3 @@ function bsearch_load_admin_scripts( $hook ) {
 	}
 }
 add_action( 'admin_enqueue_scripts', 'bsearch_load_admin_scripts' );
-

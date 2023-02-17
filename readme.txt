@@ -105,6 +105,7 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 	* Fixed `bsearch_form` shortcode incorrect parameters
 	* Queries with apostrophe gave errors
 	* PHP 8.1 compatibility
+	* Security fix when clearing cache
 
 = 3.1.0 =
 
