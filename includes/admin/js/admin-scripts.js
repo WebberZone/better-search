@@ -4,7 +4,8 @@ function clearCache() {
 	jQuery.post(
 		ajaxurl,
 		{
-			action: 'bsearch_clear_cache'
+			action: 'bsearch_clear_cache',
+			security: bsearch_admin_data.security
 		},
 		function (response, textStatus, jqXHR) {
 			alert( response.message );
@@ -16,7 +17,7 @@ function clearCache() {
 jQuery( document ).ready(
 	function($) {
 		// Prompt the user when they leave the page without saving the form.
-		formmodified = 0;
+		var formmodified = 0;
 
 		function confirmFormChange() {
 			formmodified = 1;

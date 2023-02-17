@@ -41,6 +41,11 @@ function bsearch_cache_delete( $transients = array() ) {
  */
 function bsearch_ajax_clearcache() {
 
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( 0 );
+	}
+	check_ajax_referer( 'bsearch-admin', 'security' );
+
 	$count = bsearch_cache_delete();
 
 	exit(
