@@ -443,12 +443,18 @@ function bsearch_extract_locations( $words, $fulltext ) {
 	if ( ! is_array( $words ) ) {
 		$words = array( $words );
 	}
-	foreach ( $words as $word ) {
-		$wordlen = strlen( $word );
-		$loc     = stripos( $fulltext, $word );
-		while ( ! empty( $loc ) ) {
-			$locations[] = $loc;
-			$loc         = stripos( $fulltext, $word, $loc + $wordlen );
+
+	if (
+		// Check for empty search query to avoid infinite loop 
+		!(count($words) == 1 && $words[0] == '')
+	) {
+		foreach ( $words as $word ) {
+			$wordlen = strlen( $word );
+			$loc     = stripos( $fulltext, $word );
+			while ( false !== $loc ) {
+				$locations[] = $loc;
+				$loc         = stripos( $fulltext, $word, $loc + $wordlen );
+			}
 		}
 	}
 	$locations = array_unique( $locations );
