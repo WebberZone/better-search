@@ -1,8 +1,8 @@
-=== Better Search ===
+=== Better Search - Relevant search results for WordPress ===
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 3.1.0
+Stable tag: 3.2.0
 Requires at least: 5.6
 Tested up to: 6.2
 Requires PHP: 7.4
@@ -38,6 +38,10 @@ Additionally, the plugin also tracks the searches and you to display a "search h
 Better Search is also available on [Github](https://github.com/WebberZone/better-search)
 So, if you've got some cool feature that you'd like to implement into the plugin or a bug you've been able to fix, consider forking the project and sending me a pull request.
 
+= Plugins by WebberZone =
+* [Contextual Related Posts](https://webberzone.com/plugins/contextual-related-posts)
+* [Top 10](https://webberzone.com/plugins/top-10)
+* [Other plugins](https://webberzone.com/plugins/)
 
 == Screenshots ==
 
@@ -183,5 +187,5 @@ Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webber
 
 == Upgrade Notice ==
 
-= 3.1.0 =
+= 3.2.0 =
 Check the Changelog or release post on https://webberzone.com for complete details
