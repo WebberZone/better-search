@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 17:10+0100\n"
+"POT-Creation-Date: 2023-04-07 22:28+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza\n"
 "Language-Team: WebberZone\n"
@@ -11,21 +11,29 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
 "esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
 "translate_nooped_plural\n"
 "X-Poedit-Basepath: ..\n"
-"X-Generator: Poedit 3.0\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: includes/admin/admin-dashboard.php:57 includes/admin/admin.php:38
+#: includes/admin/admin-dashboard.php:36
+msgid "View all daily popular searches"
+msgstr ""
+
+#: includes/admin/admin-dashboard.php:38
+msgid "View all popular searches"
+msgstr ""
+
+#: includes/admin/admin-dashboard.php:73 includes/admin/admin.php:38
 msgid "Popular Searches"
 msgstr ""
 
-#: includes/admin/admin-dashboard.php:58 includes/admin/admin.php:41
+#: includes/admin/admin-dashboard.php:74 includes/admin/admin.php:41
 msgid "Daily Popular Searches"
 msgstr ""
 
@@ -35,7 +43,6 @@ msgid "Better Search Settings"
 msgstr ""
 
 #: includes/admin/admin.php:30
-#: includes/admin/class-better-search-network-admin.php:40
 msgid "Better Search"
 msgstr ""
 
@@ -80,19 +87,6 @@ msgstr ""
 msgid "Contribute"
 msgstr ""
 
-#: includes/admin/class-better-search-network-admin.php:39
-msgid "Better Search Network Admin"
-msgstr ""
-
-#: includes/admin/class-better-search-network-admin.php:59
-msgid "Better Search Network Settings"
-msgstr ""
-
-#: includes/admin/class-better-search-network-admin.php:84
-#: includes/admin/class-better-search-statistics.php:103
-msgid "Search Table"
-msgstr ""
-
 #: includes/admin/class-better-search-statistics-table.php:40
 msgid "popular_search"
 msgstr ""
@@ -135,6 +129,10 @@ msgstr ""
 
 #: includes/admin/class-better-search-statistics-table.php:390
 msgid "Filter"
+msgstr ""
+
+#: includes/admin/class-better-search-statistics.php:103
+msgid "Search Table"
 msgstr ""
 
 #: includes/admin/class-better-search-statistics.php:128
@@ -567,8 +565,8 @@ msgstr ""
 #: includes/admin/help-tab.php:35 includes/admin/help-tab.php:106
 #, php-format
 msgid ""
-"For more information or how to get support visit the <a href=\"%1$s"
-"\">WebberZone support site</a>."
+"For more information or how to get support visit the <a "
+"href=\"%1$s\">WebberZone support site</a>."
 msgstr ""
 
 #: includes/admin/help-tab.php:37 includes/admin/help-tab.php:108
@@ -881,7 +879,7 @@ msgstr ""
 msgid "Please upload a file to import"
 msgstr ""
 
-#: includes/class-better-search.php:1057
+#: includes/class-better-search.php:1065
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid ""
 "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,"
@@ -987,7 +985,7 @@ msgstr ""
 msgid "Relevance:"
 msgstr ""
 
-#: includes/modules/cache.php:51
+#: includes/modules/cache.php:56
 #, php-format
 msgid "%s entry cleared"
 msgid_plural "%s entries cleared"
@@ -1052,7 +1050,7 @@ msgid ""
 "Your search query consists banned words. Please remove these and try again."
 msgstr ""
 
-#: includes/utilities.php:363
+#: includes/utilities.php:366
 #, php-format
 msgid "Powered by %1$s plugin%2$s"
 msgstr ""
