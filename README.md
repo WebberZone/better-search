@@ -10,7 +10,7 @@
 
 __Requires:__ 5.6
 
-__Tested up to:__ 6.0
+__Tested up to:__ 6.2
 
 __License:__ [GPL-2.0+](https://www.gnu.org/licenses/gpl-2.0.html)
 
