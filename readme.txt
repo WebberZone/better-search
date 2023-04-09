@@ -99,6 +99,8 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 = 3.2.0 =
 
+Release post: [https://webberzone.com/blog/better-search-v3-2-0/](https://webberzone.com/blog/better-search-v3-2-0/)
+
 * Enhancements/modifications:
 	* Only highlight whole words
 	* Censor character has been modified to be a blank phrase instead of a space. Additionally multiple spaces will be replaced by a single space.
