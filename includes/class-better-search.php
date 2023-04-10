@@ -98,7 +98,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		 * @since 3.0.0
 		 * @var array
 		 */
-		public $stopwords = 0;
+		public $stopwords = array();
 
 		/**
 		 * Holds the Top score.
@@ -1050,7 +1050,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		 * @return string[] Stopwords.
 		 */
 		protected function get_search_stopwords() {
-			if ( isset( $this->stopwords ) ) {
+			if ( !empty( $this->stopwords ) ) {
 				return $this->stopwords;
 			}
 
