@@ -445,8 +445,8 @@ function bsearch_extract_locations( $words, $fulltext ) {
 	}
 
 	if (
-		// Check for empty search query to avoid infinite loop 
-		!(count($words) == 1 && $words[0] == '')
+		// Check for empty search query to avoid infinite loop.
+		! ( 1 === count( $words ) && '' === $words[0] )
 	) {
 		foreach ( $words as $word ) {
 			$wordlen = strlen( $word );
