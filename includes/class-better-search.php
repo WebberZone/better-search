@@ -1050,7 +1050,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		 * @return string[] Stopwords.
 		 */
 		protected function get_search_stopwords() {
-			if ( !empty( $this->stopwords ) ) {
+			if ( ! empty( $this->stopwords ) ) {
 				return $this->stopwords;
 			}
 
