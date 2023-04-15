@@ -19,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @var string
  */
-$bsearch_url = plugins_url() . '/' . plugin_basename( dirname( __FILE__ ) );
+$bsearch_url = plugins_url() . '/' . plugin_basename( __DIR__ );
 
 
 /**
@@ -177,9 +177,9 @@ function bsearch_default_options() {
 	/*
 	 * Filters default options for Better Search
 	 *
-	 * @since	2.0.0
+	 * @since   2.0.0
 	 *
-	 * @param	array	$bsearch_settings	default options
+	 * @param   array   $bsearch_settings   default options
 	 */
 	return apply_filters( 'bsearch_default_options', $bsearch_settings );
 }
@@ -382,7 +382,7 @@ function get_bsearch_results( $search_query = '', $limit = '' ) {
 	$output = '';
 
 	/* Lets start printing the results */
-	if ( '' != $search_query ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+	if ( '' !== $search_query ) {
 		if ( $searches ) {
 			$output .= get_bsearch_header( $search_query, $numrows, $limit );
 
@@ -521,7 +521,7 @@ function get_bsearch_matches( $search_query, $bydate ) {
 
 		if ( isset( $matches['search_query'] ) ) {
 
-			if ( $matches['search_query'] == $search_query ) { //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			if ( $matches['search_query'] === $search_query ) {
 				$results = $matches[0];
 
 				/**
@@ -769,7 +769,6 @@ function bsearch_posts_fields( $search_query, $args = array() ) {
 
 	/** This filter has been defined in class-better-search.php */
 	return apply_filters( 'bsearch_posts_fields', $fields, $search_query, $args );
-
 }
 
 
@@ -883,7 +882,6 @@ function bsearch_posts_where( $search_info, $args = array() ) {
 	 * @param array    $args           Array of arguments
 	 */
 	return apply_filters( 'bsearch_posts_where', $where, $search_info[0], $args );
-
 }
 
 
@@ -1146,7 +1144,6 @@ function bsearch_exclude_categories_where( $where ) {
 
 		return $sql;
 	}
-
 }
 add_filter( 'bsearch_posts_where', 'bsearch_exclude_categories_where' );
 
@@ -1225,4 +1222,3 @@ function bsearch_exclude_post_ids( $where ) {
 	return $where;
 }
 add_filter( 'bsearch_posts_where', 'bsearch_exclude_post_ids' );
-

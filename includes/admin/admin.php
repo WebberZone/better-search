@@ -44,7 +44,6 @@ function bsearch_add_admin_pages_links() {
 	// Add links to Tools pages.
 	$bsearch_settings_tools_help = add_submenu_page( 'bsearch_options_page', esc_html__( 'Better Search Tools', 'better-search' ), esc_html__( 'Tools', 'better-search' ), 'manage_options', 'bsearch_tools_page', 'bsearch_tools_page' );
 	add_action( "load-$bsearch_settings_tools_help", 'bsearch_settings_tools_help' );
-
 }
 add_action( 'admin_menu', 'bsearch_add_admin_pages_links' );
 
@@ -95,7 +94,6 @@ function bsearch_plugin_actions_links( $links ) {
 		),
 		$links
 	);
-
 }
 add_filter( 'plugin_action_links_' . plugin_basename( BETTER_SEARCH_PLUGIN_FILE ), 'bsearch_plugin_actions_links' );
 

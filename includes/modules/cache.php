@@ -27,7 +27,7 @@ function bsearch_cache_delete( $transients = array() ) {
 	foreach ( $transients as $transient ) {
 		$del = delete_transient( $transient );
 		if ( $del ) {
-			$loop++;
+			++$loop;
 		}
 	}
 	return $loop;

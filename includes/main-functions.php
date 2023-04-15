@@ -35,7 +35,6 @@ function get_bsearch_query( $escaped = true ) {
 	 * @param   string  $search_query   Search query
 	 */
 	return apply_filters( 'get_bsearch_query', $search_query );
-
 }
 
 

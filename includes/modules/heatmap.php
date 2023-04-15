@@ -180,26 +180,24 @@ function get_bsearch_heatmap( $args = array() ) {
 	if ( $results_sorted !== $results ) {
 		$results = $results_sorted;
 		unset( $results_sorted );
-	} else {
-		if ( 'RAND' === $args['order'] ) {
+	} elseif ( 'RAND' === $args['order'] ) {
 			shuffle( $results );
+	} else {
+
+		// SQL cannot save you; this is a second (potentially different) sort on a subset of data.
+		if ( 'name' === $args['orderby'] ) {
+			uasort( $results, '_wp_object_name_sort_cb' );
 		} else {
+			uasort(
+				$results,
+				function ( $a, $b ): int {
+					return $a->count <=> $b->count;
+				}
+			);
+		}
 
-			// SQL cannot save you; this is a second (potentially different) sort on a subset of data.
-			if ( 'name' === $args['orderby'] ) {
-				uasort( $results, '_wp_object_name_sort_cb' );
-			} else {
-				uasort(
-					$results,
-					function ( $a, $b ): int {
-						return $a->count <=> $b->count;
-					}
-				);
-			}
-
-			if ( 'DESC' === $args['order'] ) {
-				$results = array_reverse( $results, true );
-			}
+		if ( 'DESC' === $args['order'] ) {
+			$results = array_reverse( $results, true );
 		}
 	}
 

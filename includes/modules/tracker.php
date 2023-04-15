@@ -77,7 +77,6 @@ function bsearch_enqueue_scripts() {
 		wp_localize_script( 'bsearch_tracker', 'ajax_bsearch_tracker', $ajax_bsearch_tracker );
 
 	}
-
 }
 add_action( 'wp_enqueue_scripts', 'bsearch_enqueue_scripts' );
 

@@ -154,7 +154,6 @@ function bsearch_censor_string( $string, $badwords, $censor_char = '*', $whole_w
 	$newstring['clean'] = preg_replace( $badwords, $replacement, $newstring['orig'] );
 
 	return $newstring;
-
 }
 
 
