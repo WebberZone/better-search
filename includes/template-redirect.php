@@ -56,7 +56,7 @@ function bsearch_template_redirect( $template ) {
 	$priority_template_lookup = array(
 		get_stylesheet_directory() . '/better-search-template.php',
 		get_template_directory() . '/better-search-template.php',
-		plugin_dir_path( dirname( __FILE__ ) ) . 'templates/template.php',
+		plugin_dir_path( __DIR__ ) . 'templates/template.php',
 	);
 
 	foreach ( $priority_template_lookup as $exists ) {
@@ -91,7 +91,6 @@ function bsearch_head() {
 	if ( bsearch_get_option( 'meta_noindex' ) ) {
 		echo '<meta name="robots" content="noindex,follow" />';
 	}
-
 }
 
 
@@ -127,6 +126,5 @@ function bsearch_title( $title ) {
 	 * @param   string  $search_query   Search query
 	 */
 	return apply_filters( 'bsearch_title', $bsearch_title, $title, $search_query );
-
 }
 

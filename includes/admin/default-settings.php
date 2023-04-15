@@ -38,7 +38,6 @@ function bsearch_get_registered_settings() {
 	 * @param array   $bsearch_setings Settings array
 	 */
 	return apply_filters( 'bsearch_registered_settings', $bsearch_settings );
-
 }
 
 /**

@@ -146,7 +146,6 @@ function bsearch_single_activate() {
 
 		update_option( 'bsearch_db_version', $bsearch_db_version );
 	}
-
 }
 
 
@@ -166,7 +165,6 @@ function bsearch_activate_new_site( $blog_id ) {
 	switch_to_blog( $blog_id );
 	bsearch_single_activate();
 	restore_current_blog();
-
 }
 add_action( 'wpmu_new_blog', 'bsearch_activate_new_site' );
 

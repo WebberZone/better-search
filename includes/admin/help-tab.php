@@ -84,7 +84,6 @@ function bsearch_settings_help() {
 	);
 
 	do_action( 'bsearch_settings_help', $screen );
-
 }
 
 /**

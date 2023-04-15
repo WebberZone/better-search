@@ -126,7 +126,6 @@ function bsearch_settings_sanitize( $input = array() ) {
 	 * @param array $input Input settings array.
 	 */
 	return apply_filters( 'bsearch_settings_sanitize', $output, $input );
-
 }
 
 
@@ -239,7 +238,6 @@ function bsearch_sanitize_textarea_field( $value ) {
 	$allowedtags = apply_filters( 'bsearch_sanitize_allowed_tags', $allowedtags, $value );
 
 	return wp_kses( wp_unslash( $value ), $allowedtags );
-
 }
 add_filter( 'bsearch_settings_sanitize_textarea', 'bsearch_sanitize_textarea_field' );
 

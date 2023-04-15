@@ -136,7 +136,6 @@ class Better_Search_Statistics_Table extends WP_List_Table {
 		$result = $wpdb->get_results( $sql, 'ARRAY_A' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
 		return $result;
-
 	}
 
 
@@ -250,7 +249,6 @@ class Better_Search_Statistics_Table extends WP_List_Table {
 			home_url() . '/?s=' . esc_attr( $item['title'] ),
 			$this->row_actions( $actions )
 		);
-
 	}
 
 

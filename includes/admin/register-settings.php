@@ -308,7 +308,6 @@ function bsearch_get_default_option( $key = '' ) {
 	} else {
 		return false;
 	}
-
 }
 
 
@@ -342,6 +341,5 @@ function bsearch_upgrade_settings() {
 	$settings['custom_css'] = $old_settings['custom_CSS'];
 
 	return $settings;
-
 }
 

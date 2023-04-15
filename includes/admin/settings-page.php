@@ -136,7 +136,6 @@ function bsearch_get_settings_sections() {
 	 * @param array $bsearch_settings_sections Settings array
 	 */
 	return apply_filters( 'bsearch_settings_sections', $bsearch_settings_sections );
-
 }
 
 
@@ -323,7 +322,7 @@ function bsearch_checkbox_callback( $args ) {
 
 	$html  = sprintf( '<input type="hidden" name="bsearch_settings[%1$s]" value="-1" />', sanitize_key( $args['id'] ) );
 	$html .= sprintf( '<input type="checkbox" id="bsearch_settings[%1$s]" name="bsearch_settings[%1$s]" value="1" %2$s />', sanitize_key( $args['id'] ), $checked );
-	$html .= ( $set <> $default ) ? '<em style="color:orange"> ' . esc_html__( 'Modified from default setting', 'better-search' ) . '</em>' : ''; //phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+	$html .= ( $set !== $default ) ? '<em style="color:orange"> ' . esc_html__( 'Modified from default setting', 'better-search' ) . '</em>' : '';
 	$html .= '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
 
 	/** This filter has been defined in settings-page.php */
@@ -675,9 +674,6 @@ function bsearch_tags_search() {
 
 	echo wp_json_encode( $results );
 	wp_die();
-
 }
 add_action( 'wp_ajax_nopriv_bsearch_tag_search', 'bsearch_tags_search' );
 add_action( 'wp_ajax_bsearch_tag_search', 'bsearch_tags_search' );
-
-
