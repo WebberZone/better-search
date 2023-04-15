@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 3.2.0
+Stable tag: 3.2.1
 Requires at least: 5.6
 Tested up to: 6.2
 Requires PHP: 7.4
@@ -97,9 +97,15 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
-= 3.2.0 =
+= 3.2.1 =
 
 Release post: [https://webberzone.com/blog/better-search-v3-2-0/](https://webberzone.com/blog/better-search-v3-2-0/)
+
+* Bug fixes:
+	* Make stopwords an array by [@ezific](https://github.com/ezific)
+	* Fix bsearch_extract_locations by [@mjsterling](https://github.com/mjsterling)
+
+= 3.2.0 =
 
 * Enhancements/modifications:
 	* Only highlight whole words
@@ -189,5 +195,5 @@ Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webber
 
 == Upgrade Notice ==
 
-= 3.2.0 =
+= 3.2.1 =
 Check the Changelog or release post on https://webberzone.com for complete details
