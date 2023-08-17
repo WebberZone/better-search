@@ -4,7 +4,7 @@ Tags: search, Better Search, related search, relevant search, search results, co
 Donate link: https://ajaydsouza.com/donate/
 Stable tag: 3.2.1
 Requires at least: 5.6
-Tested up to: 6.2
+Tested up to: 6.3
 Requires PHP: 7.4
 License: GPLv2 or later
 
