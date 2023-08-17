@@ -97,6 +97,13 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
+= 3.2.2 =
+
+* Enhancements:
+	* Use `get_match_sql` instead of `score` in the order by clause
+	* Support `meta_query` argument
+	* New filter: `better_search_query_date_query`
+
 = 3.2.1 =
 
 Release post: [https://webberzone.com/blog/better-search-v3-2-0/](https://webberzone.com/blog/better-search-v3-2-0/)

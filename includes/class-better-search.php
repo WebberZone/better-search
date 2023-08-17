@@ -265,13 +265,55 @@ if ( ! class_exists( 'Better_Search' ) ) :
 			$args['tax_query'] = $tax_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 
 			// Set date_query.
-			$args['date_query'] = array(
+			$date_query = array(
 				array(
 					'after'     => ( 0 === absint( $args['how_old'] ) ) ? '' : gmdate( 'Y-m-d', strtotime( current_time( 'mysql' ) ) - ( absint( $args['how_old'] ) * DAY_IN_SECONDS ) ),
 					'before'    => current_time( 'mysql' ),
 					'inclusive' => true,
 				),
 			);
+
+			/**
+			 * Filter the date_query passed to WP_Query.
+			 *
+			 * @since 3.2.2
+			 *
+			 * @param array   $date_query Array of date parameters to be passed to WP_Query.
+			 * @param array   $args       Arguments array.
+			 */
+			$args['date_query'] = apply_filters( 'better_search_query_date_query', $date_query, $args );
+
+			// Meta Query.
+			if ( ! empty( $args['meta_query'] ) && is_array( $args['meta_query'] ) ) {
+				$meta_query = $args['meta_query'];
+			} else {
+				$meta_query = array();
+			}
+
+			/**
+			 * Filter the meta_query passed to WP_Query.
+			 *
+			 * @since 3.2.2
+			 *
+			 * @param array   $meta_query Array of meta_query parameters.
+			 * @param array   $args       Arguments array.
+			 */
+			$meta_query = apply_filters( 'better_search_query_meta_query', $meta_query, $args ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+
+			// Add a relation key if more than one $meta_query.
+			if ( count( $meta_query ) > 1 ) {
+				/**
+				 * Filter the meta_query relation parameter.
+				 *
+				 * @since 3.2.2
+				 *
+				 * @param string  $relation The logical relationship between each inner meta_query array when there is more than one. Default is 'AND'.
+				 * @param array   $args     Arguments array.
+				 */
+				$meta_query['relation'] = apply_filters( 'better_search_query_meta_query_relation', 'AND', $args );
+			}
+
+			$args['meta_query'] = $meta_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 
 			// Set post_status.
 			$args['post_status'] = empty( $args['post_status'] ) ? array( 'publish', 'inherit' ) : $args['post_status'];
@@ -716,7 +758,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 			}
 
 			if ( ! empty( $this->use_fulltext ) ) {
-				$orderby = ' score DESC ';
+				$orderby = ' ' . $this->get_match_sql( $this->search_query, $this->query_args ) . ' DESC ';
 			}
 
 			if ( ! empty( $this->query_args['bydate'] ) ) {
