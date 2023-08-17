@@ -127,4 +127,3 @@ function bsearch_title( $title ) {
 	 */
 	return apply_filters( 'bsearch_title', $bsearch_title, $title, $search_query );
 }
-

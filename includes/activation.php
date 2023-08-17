@@ -185,4 +185,3 @@ function bsearch_on_delete_blog( $tables ) {
 	return $tables;
 }
 add_filter( 'wpmu_drop_tables', 'bsearch_on_delete_blog' );
-

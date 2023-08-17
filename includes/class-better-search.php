@@ -1081,7 +1081,6 @@ if ( ! class_exists( 'Better_Search' ) ) :
 			$this->stopwords = apply_filters( 'wp_search_stopwords', $stopwords );
 			return $this->stopwords;
 		}
-
 	}
 
 endif;

@@ -94,4 +94,3 @@ function get_bsearch_terms( $search_query = '', $args = array() ) {
 	 */
 	return apply_filters( 'get_bsearch_terms', $s_array );
 }
-
