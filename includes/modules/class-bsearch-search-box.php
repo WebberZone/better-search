@@ -160,7 +160,6 @@ class BSearch_Search_Box extends WP_Widget {
 			wp_add_inline_style( 'bsearch-style', esc_html( bsearch_get_option( 'custom_css' ) ) );
 		}
 	}
-
 }
 
 

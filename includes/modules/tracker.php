@@ -206,4 +206,3 @@ function bsearch_update_count( $search_query ) {
 	 */
 	return apply_filters( 'bsearch_update_count', $str, $search_query );
 }
-

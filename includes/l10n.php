@@ -19,4 +19,3 @@ function bsearch_lang_init() {
 	load_plugin_textdomain( 'better-search', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 }
 add_action( 'plugins_loaded', 'bsearch_lang_init' );
-

@@ -342,4 +342,3 @@ function bsearch_upgrade_settings() {
 
 	return $settings;
 }
-

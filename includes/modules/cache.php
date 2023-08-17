@@ -106,4 +106,3 @@ function bsearch_cache_get_keys() {
 
 	return apply_filters( 'bsearch_cache_get_keys', $keys );
 }
-
