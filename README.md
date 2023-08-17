@@ -1,6 +1,6 @@
 # Better Search - Supercharge your WordPress search results
 
-![Better Search WordPress Plugin](https://raw.github.com/ajaydsouza/better-search/master/wporg-assets/banner-1544x500.png)
+[![Better Search WordPress Plugin](https://raw.github.com/ajaydsouza/better-search/master/wporg-assets/banner-1544x500.png)](https://webberzone.com/plugins/better-search/)
 
 [![WordPress Plugin Version](https://img.shields.io/wordpress/plugin/v/better-search.svg?style=flat-square)](https://wordpress.org/plugins/better-search/)
 [![License](https://img.shields.io/badge/license-GPL_v2%2B-orange.svg?style=flat-square)](https://opensource.org/licenses/GPL-2.0)
@@ -10,7 +10,7 @@
 
 __Requires:__ 5.6
 
-__Tested up to:__ 6.2
+__Tested up to:__ 6.3
 
 __License:__ [GPL-2.0+](https://www.gnu.org/licenses/gpl-2.0.html)
 
