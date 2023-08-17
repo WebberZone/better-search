@@ -104,6 +104,9 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 	* Support `meta_query` argument
 	* New filter: `better_search_query_date_query`
 
+* Bug fixes:
+	* Checkbox in admin page always showed as modified
+
 = 3.2.1 =
 
 Release post: [https://webberzone.com/blog/better-search-v3-2-0/](https://webberzone.com/blog/better-search-v3-2-0/)
