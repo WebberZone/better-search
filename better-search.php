@@ -1,7 +1,5 @@
 <?php
 /**
- * Better Search replaces the default WordPress search with a better search that gives contextual results sorted by relevance
- *
  * Better Search is a plugin that will replace the default WordPress search page
  * with highly relevant search results improving your visitors search experience.
  *
@@ -15,7 +13,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  https://webberzone.com/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     3.2.2-beta1
+ * Version:     3.2.2
  * Author:      Ajay D'Souza
  * Author URI:  https://webberzone.com/
  * Text Domain: better-search
