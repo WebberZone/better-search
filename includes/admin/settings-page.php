@@ -43,7 +43,7 @@ function bsearch_options_page() {
 
 					$active = $active_tab === $tab_id ? ' ' : '';
 
-					echo '<li><a href="#' . esc_attr( $tab_id ) . '" title="' . esc_attr( $tab_name ) . '" class="nav-tab ' . sanitize_html_class( $active ) . '">';
+					echo '<li style="padding:0; border:0; margin:0;"><a href="#' . esc_attr( $tab_id ) . '" title="' . esc_attr( $tab_name ) . '" class="nav-tab ' . sanitize_html_class( $active ) . '">';
 						echo esc_html( $tab_name );
 					echo '</a></li>';
 
@@ -664,8 +664,8 @@ function bsearch_tags_search() {
 	}
 
 	$results = get_terms(
-		$taxonomy,
 		array(
+			'taxonomy'   => $taxonomy,
 			'name__like' => $s,
 			'fields'     => 'names',
 			'hide_empty' => false,
