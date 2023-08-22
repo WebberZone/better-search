@@ -4,7 +4,7 @@
  *
  * @package   Better_Search
  * @subpackage  Better_Search_Statistics
- * @author    Ajay D'Souza <me@ajaydsouza.com>
+ * @author    Ajay D'Souza
  * @license   GPL-2.0+
  * @link      https://webberzone.com
  * @copyright 2008-2019 Ajay D'Souza
