@@ -2,9 +2,9 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 3.2.1
-Requires at least: 5.6
-Tested up to: 6.3
+Stable tag: 3.2.2
+Requires at least: 5.9
+Tested up to: 6.4
 Requires PHP: 7.4
 License: GPLv2 or later
 
@@ -12,26 +12,27 @@ Better Search replaces the default WordPress search with a better search engine 
 
 == Description ==
 
-[Better Search](https://webberzone.com/plugins/better-search/) replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find what they are looking for quicker than if you didn't have **Better Search** installed.
+Are you looking for a way to improve your WordPress site search and make it easier for your visitors to find what they need? If so, you need **[Better Search](https://webberzone.com/plugins/better-search/)**, the plugin that replaces the default WordPress search engine with a more powerful and relevant one.
 
-Better Search can search through not just posts, but also pages and other custom post types. Let your visitors find what they are looking for.
+**Better Search** is not just a simple search plugin. It is a complete solution that gives you full control over your site search results. You can customize the output, fine tune the relevance, search within different fields and post types, track the popular searches, and much more.
 
-The plugin is packed with options to allow you to easily customize the output. You can also fine tune the results by assigning a greater weight to either the title or the content. The default mode is a seamless integration with your WordPress theme. And, for power users, Better Search supports templates for that extra something.
+With **Better Search**, you can make your site search more user-friendly and engaging. You can display a "search heatmap" of the most popular searches on your site, either as a widget or a shortcode. You can also use your own template file and CSS styles to match your theme perfectly.
 
-And for even more advanced users, Better Search is packed with filters and actions that allow you to easily extend the plugin's feature set.
+**Better Search** has its own caching system and is also compatible with caching plugins like WP Super Cache and W3 Total Cache, so you don't have to worry about performance issues. It also has a profanity filter that lets you block unwanted words from search queries. And it is translation ready, so you can use it in any language.
 
-Additionally, the plugin also tracks the searches and you to display a "search heatmap" of the most popular searches. Support for WordPress widgets will allow you to easily add this heatmap to your theme's sidebar or footer.
+Here are some of the main features of **Better Search**:
 
-= Features =
-* **Automatic**: Once activated, Better Search will automatically replace your default WordPress search with more relevant search results
-* **Seamless integration**: Search results are perfectly integrated into your theme without the need for custom search templates
-* **Relevance**: Search results are automatically sorted by relevance. You can also turn off relevancy based searching, in which case, results are sorted by date
+* **Automatic**: Just activate the plugin and enjoy better search results right away
+* **Seamless integration**: No need to edit any code or create custom search templates
+* **Relevance**: Sort the results by relevance or date, and assign different weights to title and content
 * **Control the results**: Search within title, content, excerpt, meta fields, authors, tags and other taxonomies and comments
-* **Popular searches**: Find out what visitors are searching for on your blog. Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap. Widget support for easy integration in your theme as well as a shortcode [[bsearch_heatmap]]
-* **Customisation**: Use your own template file for perfect integration into your blog template. Input your own CSS styles in the *Custom Styles* tab in the Settings Page. Check the FAQ for more information
-* **Supports cache plugins**: Works with caching plugins like WP-Super-Cache and W3 Total Cache
-* **Profanity filter**: customize the list of stop words that will automatically be filtered out of search queries
-* **Translation ready**: Better Search is translation ready
+* **Popular searches**: Show a heatmap of the most popular searches on your site, either as a widget or a shortcode
+* **Customisation**: Use your own template file and CSS styles for the ultimate look and feel
+* **Supports cache plugins**: Works seamlessly with caching plugins like WP-Super-Cache and W3 Total Cache
+* **Profanity filter**: Filter out any words that you don't want to appear in search queries
+* **Translation ready**: Use the plugin in any language
+
+If you want to take your site search to the next level, download **Better Search** today and see the difference for yourself.
 
 
 = Contribute =
@@ -39,9 +40,15 @@ Better Search is also available on [Github](https://github.com/WebberZone/better
 So, if you've got some cool feature that you'd like to implement into the plugin or a bug you've been able to fix, consider forking the project and sending me a pull request.
 
 = Plugins by WebberZone =
-* [Contextual Related Posts](https://webberzone.com/plugins/contextual-related-posts)
-* [Top 10](https://webberzone.com/plugins/top-10)
-* [Other plugins](https://webberzone.com/plugins/)
+
+Better Search is one of the many plugins developed by WebberZone. Check out our other plugins:
+
+* [Top 10](https://wordpress.org/plugins/top-10/) - Track daily and total visits on your blog posts and display the popular and trending posts
+* [WebberZone Snippetz](https://wordpress.org/plugins/add-to-all/) - The ultimate snippet manager for WordPress to create and manage custom HTML, CSS or JS code snippets
+* [Knowledge Base](https://wordpress.org/plugins/knowledgebase/) - Create a knowledge base or FAQ section on your WordPress site
+* [Contextual Related Posts](https://wordpress.org/plugins/contextual-related-posts/) - Display related posts on your WordPress blog and feed
+* [Auto-Close](https://wordpress.org/plugins/autoclose/) - Automatically close comments, pingbacks and trackbacks and manage revisions on your WordPress site
+
 
 == Screenshots ==
 
@@ -205,5 +212,5 @@ Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webber
 
 == Upgrade Notice ==
 
-= 3.2.1 =
+= 3.2.2 =
 Check the Changelog or release post on https://webberzone.com for complete details
