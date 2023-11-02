@@ -8,9 +8,9 @@
 [![Required PHP](https://img.shields.io/wordpress/plugin/required-php/better-search?style=flat-square)](https://wordpress.org/plugins/better-search/)
 [![Active installs](https://img.shields.io/wordpress/plugin/installs/better-search?style=flat-square)](https://wordpress.org/plugins/better-search/)
 
-__Requires:__ 5.6
+__Requires:__ 5.9
 
-__Tested up to:__ 6.3
+__Tested up to:__ 6.4
 
 __License:__ [GPL-2.0+](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -20,27 +20,27 @@ Better Search replaces the default WordPress search with a better search engine 
 
 ## Description
 
-[Better Search](https://webberzone.com/plugins/better-search/) replaces the default WordPress search engine with a more powerful search engine that gives search results relevant to the title and content of the post. This means that visitors to your blog will find what they are looking for quicker than if you didn't have __Better Search__ installed.
+Are you looking for a way to improve your WordPress site search and make it easier for your visitors to find what they need? If so, you need __[Better Search](https://webberzone.com/plugins/better-search/)__, the plugin that replaces the default WordPress search engine with a more powerful and relevant one.
 
-Better Search can search through not just posts, but also pages and other custom post types. Let your visitors find what they are looking for.
+**Better Search** is not just a simple search plugin. It is a complete solution that gives you full control over your site search results. You can customize the output, fine tune the relevance, search within different fields and post types, track the popular searches, and much more.
 
-The plugin is packed with options to allow you to easily customise the output. You can also fine tune the results by assigning a greater weight to either the title or the content. The default mode is a seamless integration with your WordPress theme. And, for power users, Better Search supports templates for that extra something.
+With __Better Search__, you can make your site search more user-friendly and engaging. You can display a "search heatmap" of the most popular searches on your site, either as a widget or a shortcode. You can also use your own template file and CSS styles to match your theme perfectly.
 
-And for even more advanced users, Better Search is packed with filters and actions that allow you to easily extend the plugin's feature set.
+**Better Search** has its own caching system and is also compatible with caching plugins like WP Super Cache and W3 Total Cache, so you don't have to worry about performance issues. It also has a profanity filter that lets you block unwanted words from search queries. And it is translation ready, so you can use it in any language.
 
-Additionally, the plugin also tracks the searches and you to display a "search heatmap" of the most popular searches. Support for WordPress widgets will allow you to easily add this heatmap to your theme's sidebar or footer.
+Here are some of the main features of __Better Search__:
 
-### Features
-
-* __Automatic__: Once activated, Better Search will automatically replace your default WordPress search with more relevant search results
-* __Seamless integration__: Search results are perfectly integrated into your theme without the need for custom search templates
-* __Relevance__: Search results are automatically sorted by relevance. You can also turn off relevancy based searching, in which case, results are sorted by date
+* __Automatic__: Just activate the plugin and enjoy better search results right away
+* __Seamless integration__: No need to edit any code or create custom search templates
+* __Relevance__: Sort the results by relevance or date, and assign different weights to title and content
 * __Control the results__: Search within title, content, excerpt, meta fields, authors, tags and other taxonomies and comments
-* __Popular searches__: Find out what visitors are searching for on your blog. Display a list of popular search terms (daily and overall) on your blog in the form of a heatmap. Widget support for easy integration in your theme as well as a shortcode [[bsearch_heatmap]]
-* __Customisation__: Use your own template file for perfect integration into your blog template. Input your own CSS styles in the *Custom Styles* tab in the Settings Page. Check the FAQ for more information
-* __Supports cache plugins__: Works with caching plugins like WP-Super-Cache and W3 Total Cache
-* __Profanity filter__: Customise the list of stop words that will automatically be filtered out of search queries
-* __Translation ready__: Better Search is translation ready
+* __Popular searches__: Show a heatmap of the most popular searches on your site, either as a widget or a shortcode
+* __Customisation__: Use your own template file and CSS styles for the ultimate look and feel
+* __Supports cache plugins__: Works seamlessly with caching plugins like WP-Super-Cache and W3 Total Cache
+* __Profanity filter__: Filter out any words that you don't want to appear in search queries
+* __Translation ready__: Use the plugin in any language
+
+If you want to take your site search to the next level, download __Better Search__ today and see the difference for yourself.
 
 ## Screenshots
 
