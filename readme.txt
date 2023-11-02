@@ -104,6 +104,11 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
+= 3.3.0 =
+
+* Enhancements:
+	* Uninstall now uses `get_sites()` behind the scenes to delete options from all sites in a multisite install
+
 = 3.2.2 =
 
 * Enhancements:
