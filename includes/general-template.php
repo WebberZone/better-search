@@ -5,6 +5,9 @@
  * @package Better_Search
  */
 
+use WebberZone\Better_Search\Frontend\Media_Handler;
+use WebberZone\Better_Search\Util\Helpers;
+
 // If this file is called directly, then abort execution.
 if ( ! defined( 'WPINC' ) ) {
 	die( "Aren't you supposed to come here via WP-Admin?" );
@@ -14,25 +17,23 @@ if ( ! defined( 'WPINC' ) ) {
  * Display the Better Search post excerpt.
  *
  * @since 3.0.0
+ * @since 3.3.0 Removed $echo parameter. This function will always display the excerpt.
  *
  * @param string|array $args {
  *     Optional. Array or string of parameters.
  *
  *     @type string  $before      HTML output before the date.
  *     @type string  $after       HTML output after the date.
- *     @type bool    $echo        Echo or return?
  *     @type WP_Post $post        Post ID or WP_Post object. Default current post.
  *     @type string  $format      PHP date format. Defaults to the 'date_format' option.
  *     @type bool    $use_excerpt Use the excerpt or create it from post content.
  * }
- * @return void|string Void if 'echo' argument is true, the post excerpt if 'echo' is false.
  */
 function the_bsearch_excerpt( $args = array() ) {
 
 	$defaults = array(
 		'before'         => '',
 		'after'          => '',
-		'echo'           => true,
 		'post'           => get_post(),
 		'excerpt_length' => bsearch_get_option( 'excerpt_length' ),
 		'use_excerpt'    => false,
@@ -41,7 +42,7 @@ function the_bsearch_excerpt( $args = array() ) {
 	$args     = wp_parse_args( $args, $defaults );
 
 	/**
-	 * Filter the arguments used by the_bsearch_excerpt().
+	 * Filter the arguments used by get_bsearch_excerpt().
 	 *
 	 * @since 3.1.0
 	 *
@@ -63,11 +64,7 @@ function the_bsearch_excerpt( $args = array() ) {
 	 */
 	$output = apply_filters( 'the_bsearch_excerpt', $output, $args );
 
-	if ( $args['echo'] ) {
-		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	} else {
-		return $output;
-	}
+	echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -76,13 +73,13 @@ function the_bsearch_excerpt( $args = array() ) {
  *
  * @since   1.2
  *
- * @param   int|WP_Post $post           Post ID or WP_Post instance.
- * @param   int         $excerpt_length Length of the excerpt in words.
- * @param   bool        $use_excerpt    Use post excerpt or content.
- * @param   bool        $relevant       Only relevant portion of excerpt.
+ * @param   int|\WP_Post $post           Post ID or WP_Post instance.
+ * @param   int          $excerpt_length Length of the excerpt in words.
+ * @param   bool         $use_excerpt    Use post excerpt or content.
+ * @param   bool         $relevant       Only relevant portion of excerpt.
  * @return  string      Excerpt
  */
-function get_bsearch_excerpt( $post = '', $excerpt_length = 0, $use_excerpt = true, $relevant = true ) {
+function get_bsearch_excerpt( $post = null, $excerpt_length = 0, $use_excerpt = true, $relevant = true ) {
 	$content = '';
 
 	$post = get_post( $post );
@@ -117,7 +114,7 @@ function get_bsearch_excerpt( $post = '', $excerpt_length = 0, $use_excerpt = tr
 		$search_query = str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $search_query );
 		$words        = preg_split( '/[\s,\+\.]+/', $search_query );
 
-		$output = bsearch_extract_relevant_excerpt( $words, $output, $excerpt_more );
+		$output = Helpers::extract_relevant_excerpt( $words, $output, $excerpt_more );
 	}
 
 	if ( $excerpt_length > 0 ) {
@@ -158,10 +155,11 @@ function the_bsearch_form( $search_query = '', $args = array() ) {
 
 
 /**
- * Function to fetch search form.
+ * Retrieve the Better Search form.
  *
  * @since 1.1
  * @since 3.0.0 Add $args
+ * @since 3.3.0 Remove $echo parameter. This function will always return the form.
  *
  * @param string       $search_query Search query.
  * @param string|array $args {
@@ -169,13 +167,12 @@ function the_bsearch_form( $search_query = '', $args = array() ) {
  *
  *     @type string   $before           Markup to prepend to the search form.
  *     @type string   $after            Markup to append to the search form.
- *     @type bool     $echo             Echo or return?
  *     @type string   $aria_label       ARIA label for the search form.
  *                                      Useful to distinguish multiple search forms on the same page and improve accessibility.
  *     @type string[] $post_types       Comma separated list or array of post types.
  *     @type bool     $show_post_types  Whether to show the post types dropdown.
  * }
- * @return void|string Void if 'echo' argument is true, the search form if 'echo' is false.
+ * @return string The Better Search form.
  */
 function get_bsearch_form( $search_query = '', $args = array() ) {
 
@@ -267,11 +264,7 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 	 */
 	$result = apply_filters( 'get_bsearch_form', $form, $search_query, $args );
 
-	if ( $args['echo'] ) {
-		echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	} else {
-		return $result;
-	}
+	return $result;
 }
 
 
@@ -325,6 +318,33 @@ function get_bsearch_title( $text_only = true ) {
  * Display the header table on the search results page.
  *
  * @since 3.0.0
+ * @since 3.3.0 Removed $echo parameter. This function will always display the header.
+ *
+ * @see get_bsearch_header()
+ *
+ * @global WP_Query $wp_query WP_Query
+ *
+ * @param string|array $args Array or string of parameters.
+ */
+function the_bsearch_header( $args = array() ) {
+
+	/**
+	 * Filter the header table.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @see get_bsearch_header()
+	 *
+	 * @param string $output Header table.
+	 * @param array  $args   Array of arguments.
+	 */
+	echo apply_filters( 'the_bsearch_header', get_bsearch_header( $args ), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+
+/**
+ * Retrieve the Better Search header.
+ *
+ * @since 3.3.0
  *
  * @global WP_Query $wp_query WP_Query
  *
@@ -333,7 +353,6 @@ function get_bsearch_title( $text_only = true ) {
  *
  *     @type string $before        Markup to prepend to the header table.
  *     @type string $after         Markup to append to the header table.
- *     @type bool   $echo          Echo or return?
  *     @type int    $limit         Number of posts per page.
  *     @type int    $found_posts   Total number of posts found.
  *     @type int    $max_num_pages Maximum number of pages of results.
@@ -341,9 +360,9 @@ function get_bsearch_title( $text_only = true ) {
  *     @type string $search_query  Search query.
  *     @type bool   $bydate        Sory by date. If false, sort by relevance.
  * }
- * @return void|string Void if 'echo' argument is true, the title attribute if 'echo' is false.
+ * @return string The Better Search header.
  */
-function the_bsearch_header( $args = array() ) {
+function get_bsearch_header( $args = array() ) {
 	/**
 	 * WP_Query.
 	 *
@@ -482,20 +501,16 @@ function the_bsearch_header( $args = array() ) {
 	</table>';
 
 	/**
-	 * Filter the header table.
+	 * Filter the Better Search header HTML.
 	 *
-	 * @since 3.0.0
+	 * @since 3.3.0
 	 *
-	 * @param string $output Header table.
+	 * @param string $output Better Search header HTML.
 	 * @param array  $args   Array of arguments.
 	 */
-	$output = apply_filters( 'the_bsearch_header', $output, $args );
+	$output = apply_filters( 'get_bsearch_header', $output, $args );
 
-	if ( $args['echo'] ) {
-		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	} else {
-		return $output;
-	}
+	return $output;
 }
 
 
@@ -503,6 +518,35 @@ function the_bsearch_header( $args = array() ) {
  * Display the relevance score for the post.
  *
  * @since 3.0.0
+ * @since 3.3.0 Removed $echo parameter. This function will always display the score.
+ *
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type int    $score    Score of the search result.
+ *     @type int    $topscore Top score for which relevance is 100%.
+ *     @type string $before   Markup to prepend to the relevance score.
+ *     @type string $after    Markup to append to the relevance score.
+ * }
+ * @return void|string Void if 'echo' argument is true, the title attribute if 'echo' is false.
+ */
+function the_bsearch_score( $args = array() ) {
+
+	/**
+	 * Filter the relevance score text.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $output Relevance score text.
+	 * @param array  $args   Array of arguments.
+	 */
+	echo apply_filters( 'the_bsearch_score', get_bsearch_score( $args ), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+
+/**
+ * Retrieve the relevance score for the post in the search results.
+ *
+ * @since 3.3.0
  *
  * @param string|array $args {
  *     Optional. Array or string of parameters.
@@ -513,52 +557,41 @@ function the_bsearch_header( $args = array() ) {
  *     @type string $after    Markup to append to the relevance score.
  *     @type bool   $echo     Echo or return?
  * }
- * @return void|string Void if 'echo' argument is true, the title attribute if 'echo' is false.
+ * @return string Better Search score.
  */
-function the_bsearch_score( $args = array() ) {
+function get_bsearch_score( $args = array() ) {
 
 	$defaults = array(
 		'score'    => 0,
 		'topscore' => 0,
 		'before'   => __( 'Relevance:', 'better-search' ) . ' ',
 		'after'    => '',
-		'echo'     => true,
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
-	$score = bsearch_score2percent( $args['score'], $args['topscore'] );
+	$score = Helpers::score2percent( $args['score'], $args['topscore'] );
 
 	$output = $args['before'] . $score . $args['after'];
 
 	/**
 	 * Filter the relevance score text.
 	 *
-	 * @since 3.0.0
+	 * @since 3.3.0
 	 *
 	 * @param string $output Relevance score text.
 	 * @param array  $args   Array of arguments.
 	 */
-	$output = apply_filters( 'the_bsearch_score', $output, $args );
+	$output = apply_filters( 'get_bsearch_score', $output, $args );
 
-	if ( $args['echo'] ) {
-		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	} else {
-		return $output;
-	}
+	return $output;
 }
 
 
 /**
  * Display the Better Search Post Thumbnail.
  *
- * When a theme adds 'post-thumbnail' support, a special 'post-thumbnail' image size
- * is registered, which differs from the 'thumbnail' image size managed via the
- * Settings > Media screen.
- *
- * When using the_post_thumbnail() or related functions, the 'post-thumbnail' image
- * size is used by default, though a different size can be specified instead as needed.
- *
  * @since 3.0.0
+ * @since 3.3.0 Removed $echo parameter. This function will always display the thumbnail.
  *
  * @param string|int[] $size Optional. Image size. Accepts any registered image size name, or an array of
  *                           width and height values in pixels (in that order). Default 'post-thumbnail'.
@@ -567,23 +600,20 @@ function the_bsearch_score( $args = array() ) {
  *
  *     @type string  $before Display before the thumbnail.
  *     @type string  $after  Display after the thumbnail.
- *     @type bool    $echo   Echo or return?
  *     @type WP_Post $post   Post object.
  * }
- * @return void|string Void if 'echo' argument is true, the thumbnail HTML if 'echo' is false.
  */
 function the_bsearch_post_thumbnail( $size = 'thumbnail', $args = array() ) {
 
 	$defaults = array(
 		'before' => '',
 		'after'  => '',
-		'echo'   => true,
 		'post'   => get_post(),
 		'size'   => $size,
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
-	$thumb = bsearch_get_the_post_thumbnail( $args );
+	$thumb = Media_Handler::get_the_post_thumbnail( $args );
 
 	$output = $args['before'] . $thumb . $args['after'];
 
@@ -599,11 +629,7 @@ function the_bsearch_post_thumbnail( $size = 'thumbnail', $args = array() ) {
 	 */
 	$output = apply_filters( 'the_bsearch_post_thumbnail', $output, $size, $args );
 
-	if ( $args['echo'] ) {
-		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	} else {
-		return $output;
-	}
+	echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -611,24 +637,22 @@ function the_bsearch_post_thumbnail( $size = 'thumbnail', $args = array() ) {
  * Display the Better Search Date.
  *
  * @since 3.0.0
+ * @since 3.3.0 Removed $echo parameter. This function will always display the date.
  *
  * @param string|array $args {
  *     Optional. Array or string of parameters.
  *
  *     @type string  $before HTML output before the date.
  *     @type string  $after  HTML output after the date.
- *     @type bool    $echo   Echo or return?
  *     @type WP_Post $post   Post ID or WP_Post object. Default current post.
  *     @type string  $format PHP date format. Defaults to the 'date_format' option.
  * }
- * @return void|string Void if 'echo' argument is true, the post date if 'echo' is false.
  */
 function the_bsearch_date( $args = array() ) {
 
 	$defaults = array(
 		'before' => '',
 		'after'  => '',
-		'echo'   => true,
 		'post'   => get_post(),
 		'format' => get_option( 'date_format' ),
 	);
@@ -646,11 +670,7 @@ function the_bsearch_date( $args = array() ) {
 	 */
 	$output = apply_filters( 'the_bsearch_date', $output, $args );
 
-	if ( $args['echo'] ) {
-		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	} else {
-		return $output;
-	}
+	echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -720,8 +740,33 @@ function the_bsearch_permalink( $post = 0, $query_args = array() ) {
  * Retrieves a post’s terms as a list with specified format. Works with custom post types.
  *
  * @since 3.0.0
+ * @since 3.3.0 Removed $echo parameter. This function will always display the terms.
  *
- * @param int|WP_Post  $post Optional. Post ID or post object. Default is the global `$post`.
+ * @see get_bsearch_term_list()
+ *
+ * @param int|\WP_Post $post Optional. Post ID or post object. Default is the global `$post`.
+ * @param string|array $args Optional. Array or string of parameters.
+ */
+function the_bsearch_term_list( $post = 0, $args = array() ) {
+
+	/**
+	 * Filters the post terms for the current post.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string       $output The post term list.
+	 * @param int|\WP_Post $post   WP_Post object.
+	 * @param array        $args   Array of arguments.
+	 */
+	echo apply_filters( 'the_bsearch_term_list', get_bsearch_term_list( $post, $args ), $post, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+
+/**
+ * Retrieves a post’s terms as a list with specified format. Works with custom post types.
+ *
+ * @since 3.3.0
+ *
+ * @param int|\WP_Post $post Optional. Post ID or post object. Default is the global `$post`.
  * @param string|array $args {
  *     Optional. Array or string of parameters.
  *
@@ -734,9 +779,9 @@ function the_bsearch_permalink( $post = 0, $query_args = array() ) {
  *     @type bool            $echo         Echo or return?
  *     @type string|string[] $taxonomy     The taxonomy slug or array of slugs for which to retrieve terms.
  * }
- * @return void|string Void if 'echo' argument is true, the post term list if 'echo' is false.
+ * @return string The post terms list.
  */
-function the_bsearch_term_list( $post = 0, $args = array() ) {
+function get_bsearch_term_list( $post = 0, $args = array() ) {
 
 	$post = get_post( $post );
 	if ( empty( $post ) ) {
@@ -750,7 +795,6 @@ function the_bsearch_term_list( $post = 0, $args = array() ) {
 		'before'       => '',
 		'sep'          => ' | ',
 		'after'        => '',
-		'echo'         => true,
 		'taxonomy'     => get_object_taxonomies( $post->post_type ),
 	);
 	$args     = wp_parse_args( $args, $defaults );
@@ -767,52 +811,29 @@ function the_bsearch_term_list( $post = 0, $args = array() ) {
 	/**
 	 * Filters the post terms for the current post.
 	 *
-	 * @since 3.0.0
+	 * @since 3.3.0
 	 *
 	 * @param string      $output The post term list.
 	 * @param int|WP_Post $post   WP_Post object.
 	 * @param array       $args   Array of arguments.
 	 */
-	$output = apply_filters( 'the_bsearch_term_list', $output, $post, $args );
+	$output = apply_filters( 'get_bsearch_term_list', $output, $post, $args );
 
-	if ( $args['echo'] ) {
-		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	} else {
-		return $output;
-	}
+	return $output;
 }
 
 /**
- * Display the Better Search Post Type.
+ * Display the Post Type on the search results page.
  *
  * @since 3.0.0
+ * @since 3.3.0 Removed $echo parameter. This function will always display the post type.
+ *
+ * @see get_bsearch_post_type()
  *
  * @param int|WP_Post  $post Optional. Post ID or post object. Default is the global `$post`.
- * @param string|array $args {
- *     Optional. Array or string of parameters.
- *
- *     @type string  $before HTML output before the post type.
- *     @type string  $after  HTML output after the post type.
- *     @type bool    $echo   Echo or return?
- * }
- * @return void|string Void if 'echo' argument is true, the post date if 'echo' is false.
+ * @param string|array $args Optional. Array or string of parameters.
  */
 function the_bsearch_post_type( $post = 0, $args = array() ) {
-
-	$post = get_post( $post );
-	if ( empty( $post ) ) {
-		return '';
-	}
-
-	$defaults = array(
-		'before' => '',
-		'after'  => '',
-		'echo'   => true,
-	);
-	$args     = wp_parse_args( $args, $defaults );
-
-	$obj    = get_post_type_object( $post->post_type );
-	$output = $obj->labels->singular_name;
 
 	/**
 	 * Filters the post type for the current post.
@@ -823,11 +844,50 @@ function the_bsearch_post_type( $post = 0, $args = array() ) {
 	 * @param int|WP_Post $post   WP_Post object.
 	 * @param array       $args   Array of arguments.
 	 */
-	$output = apply_filters( 'the_bsearch_term_list', $output, $post, $args );
+	echo apply_filters( 'the_bsearch_term_list', get_bsearch_post_type( $post, $args ), $post, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
 
-	if ( $args['echo'] ) {
-		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	} else {
-		return $output;
+/**
+ * Display the Post Type label.
+ *
+ * @since 3.3.0
+ *
+ * @param int|\WP_Post $post Optional. Post ID or post object. Default is the global `$post`.
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type string  $before HTML output before the post type.
+ *     @type string  $after  HTML output after the post type.
+ * }
+ * @return string The post type label.
+ */
+function get_bsearch_post_type( $post = 0, $args = array() ) {
+
+	$post = get_post( $post );
+	if ( empty( $post ) ) {
+		return '';
 	}
+
+	$defaults = array(
+		'before' => '',
+		'after'  => '',
+	);
+	$args     = wp_parse_args( $args, $defaults );
+
+	$obj    = get_post_type_object( $post->post_type );
+	$output = $obj->labels->singular_name;
+	$output = $args['before'] . $output . $args['after'];
+
+	/**
+	 * Filters the post type label for the current post.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param string      $output The post type.
+	 * @param int|\WP_Post $post   WP_Post object.
+	 * @param array       $args   Array of arguments.
+	 */
+	$output = apply_filters( 'get_bsearch_term_list', $output, $post, $args );
+
+	return $output;
 }
