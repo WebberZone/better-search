@@ -40,6 +40,6 @@ echo "Installing Better Search...\n";
 
 global $bsearch_settings, $current_user;
 
-bsearch_install( true );
+\WebberZone\Better_Search\Admin\Activator::activation_hook( false );
 
 $bsearch_settings = bsearch_get_settings();
