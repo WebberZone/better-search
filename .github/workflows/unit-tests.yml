@@ -85,13 +85,15 @@ jobs:
         id: set_phpunit
         run: |
           if [[ "${{ matrix.php }}" > "7.4" ]]; then
-            echo '::set-output name=PHPUNIT::8.5.*'
+            echo "PHPUNIT=8.5.*" >> $GITHUB_ENV
           else
-            echo '::set-output name=PHPUNIT::5.7.*||6.*||7.5.*'
+            echo "PHPUNIT=PHPUNIT::5.7.*||6.*||7.5.*" >> $GITHUB_ENV
           fi
 
       - name: 'Composer: set up PHPUnit'
-        run: composer require --no-update phpunit/phpunit:"${{ steps.set_phpunit.outputs.PHPUNIT }}"
+        env:
+          PHPUNIT: ${{ env.PHPUNIT }}
+        run: composer require --no-update phpunit/phpunit:"${{ env.PHPUNIT }}"
 
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies
