@@ -19,10 +19,7 @@
 	flex-direction: row;
 	flex-flow: row wrap;
 	justify-content: space-between;
-}
-
-.bsearchform div {
-	padding: 2px;
+	gap: 10px;
 }
 
 .bsearchform .bsearch-form-search-field {

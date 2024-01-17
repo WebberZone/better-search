@@ -23,7 +23,7 @@ jobs:
       matrix:
         # Notes regarding supported versions in WP:
         # The base matrix only contains the PHP versions which are supported on all supported WP versions.
-        php: ['7.1', '7.2', '7.3', '7.4']
+        php: ['8.0', '7.3', '7.4']
         wp: ['latest']
         experimental: [false]
 
@@ -31,20 +31,17 @@ jobs:
           # Complement the builds run via the matrix with high/low WP builds for PHP 7.4 and 8.0.
           # PHP 8.0 is sort of supported since WP 5.6.
           # PHP 7.4 is supported since WP 5.3.
-          - php: '8.0'
+          - php: '8.3'
+            wp: 'latest'
+            experimental: true
+          - php: '8.2'
+            wp: 'latest'
+            experimental: true
+          - php: '8.1'
             wp: 'latest'
             experimental: true
           - php: '8.0'
-            wp: '5.6'
-            experimental: true
-          - php: '7.4'
-            wp: '5.3'
-            experimental: true
-          - php: '7.1'
-            wp: '5.1'
-            experimental: true
-          - php: '7.4'
-            wp: 'nightly'
+            wp: '5.9'
             experimental: true
 
     name: "PHP ${{ matrix.php }} - WP ${{ matrix.wp }}"
@@ -88,13 +85,15 @@ jobs:
         id: set_phpunit
         run: |
           if [[ "${{ matrix.php }}" > "7.4" ]]; then
-            echo '::set-output name=PHPUNIT::7.5.*'
+            echo "PHPUNIT=8.5.*" >> $GITHUB_ENV
           else
-            echo '::set-output name=PHPUNIT::5.7.*||6.*||7.5.*'
+            echo "PHPUNIT=5.7.*||6.*||7.5.*" >> $GITHUB_ENV
           fi
 
       - name: 'Composer: set up PHPUnit'
-        run: composer require --no-update phpunit/phpunit:"${{ steps.set_phpunit.outputs.PHPUNIT }}"
+        env:
+          PHPUNIT: ${{ env.PHPUNIT }}
+        run: composer require --no-update phpunit/phpunit:"${{ env.PHPUNIT }}"
 
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies

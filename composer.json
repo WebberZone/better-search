@@ -13,11 +13,30 @@
     "authors": [
         {
             "name": "WebberZone",
-            "email": "plugins@webberzone.com",
             "role": "Developer"
         }
     ],
     "requires": {
         "php": ">=7.4"
+    },
+    "require-dev": {
+        "szepeviktor/phpstan-wordpress": "^1.3",
+        "phpstan/extension-installer": "^1.3",
+        "phpstan/phpstan": "^1.10",
+        "php-stubs/wordpress-stubs": "^6.2",
+        "wp-coding-standards/wpcs": "^2.3",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "yoast/phpunit-polyfills": "^1.0",
+        "phpunit/phpunit": "^5.7.21 || ^6.5 || ^7.5"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "scripts": {
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit=2048M"
     }
 }
