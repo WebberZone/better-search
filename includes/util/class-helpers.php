@@ -414,6 +414,11 @@ class Helpers {
 	 * @return string Highlighted string.
 	 */
 	public static function highlight( $input, $keys ) {
+		// If keys are empty, return the input as is.
+		if ( empty( $keys ) ) {
+			return $input;
+		}
+
 		$highlight_keys = array();
 
 		foreach ( $keys as $key ) {
@@ -422,13 +427,18 @@ class Helpers {
 			}
 		}
 
-		if ( ! empty( $highlight_keys ) ) {
-			$reg_ex = '/\b(?!<[^>]*?>)(' . implode( '|', $highlight_keys ) . ')(?![^<]*?>)\b/iu';
-			$output = preg_replace( $reg_ex, '<span class="bsearch_highlight">$1</span>', html_entity_decode( $input ) );
-			return $output;
+		// If highlight_keys are empty, return the input as is.
+		if ( empty( $highlight_keys ) ) {
+			return $input;
 		}
 
-		return $input;
+		// Regular expression to match the keys outside of HTML tags.
+		$regex = '/\b(?!<[^>]*?>)(' . implode( '|', $highlight_keys ) . ')(?![^<]*?>)\b/iu';
+
+		// Replace matched keys with highlighted version.
+		$output = preg_replace( $regex, '<span class="bsearch_highlight">$1</span>', html_entity_decode( $input ) );
+
+		return $output;
 	}
 
 
