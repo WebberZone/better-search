@@ -82,7 +82,7 @@ jobs:
         id: set_phpunit
         run: |
           if [[ "${{ matrix.php }}" > "7.4" ]]; then
-            echo '::set-output name=PHPUNIT::7.5.*'
+            echo '::set-output name=PHPUNIT::8.5.*'
           else
             echo '::set-output name=PHPUNIT::5.7.*||6.*||7.5.*'
           fi
