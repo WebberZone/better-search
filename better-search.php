@@ -33,7 +33,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @since 2.9.3
  */
-define( 'BETTER_SEARCH_VERSION', '3.2.2' );
+define( 'BETTER_SEARCH_VERSION', '3.3.0' );
 
 /**
  * Holds the filesystem directory path (with trailing slash) for Better Search
