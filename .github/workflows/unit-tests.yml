@@ -87,7 +87,7 @@ jobs:
           if [[ "${{ matrix.php }}" > "7.4" ]]; then
             echo "PHPUNIT=8.5.*" >> $GITHUB_ENV
           else
-            echo "PHPUNIT=PHPUNIT::5.7.*||6.*||7.5.*" >> $GITHUB_ENV
+            echo "PHPUNIT=5.7.*||6.*||7.5.*" >> $GITHUB_ENV
           fi
 
       - name: 'Composer: set up PHPUnit'
