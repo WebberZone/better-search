@@ -53,5 +53,10 @@ class Styles_Handler {
 		if ( $custom_css ) {
 			wp_add_inline_style( 'bsearch-custom-style', $custom_css );
 		}
+
+		if ( ! is_admin() && ( is_search() || is_singular() ) && bsearch_get_option( 'include_styles' ) ) {
+			wp_enqueue_style( 'bsearch-style' );
+			wp_enqueue_style( 'bsearch-custom-style' );
+		}
 	}
 }
