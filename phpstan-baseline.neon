@@ -1,0 +1,101 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Constant BETTER_SEARCH_PLUGIN_DIR not found\\.$#"
+			count: 1
+			path: includes/admin/class-admin.php
+
+		-
+			message: "#^Constant BETTER_SEARCH_PLUGIN_URL not found\\.$#"
+			count: 7
+			path: includes/admin/class-admin.php
+
+		-
+			message: "#^Variable \\$menu_page might not be defined\\.$#"
+			count: 1
+			path: includes/admin/settings/class-settings-api.php
+
+		-
+			message: "#^Constant BETTER_SEARCH_PLUGIN_URL not found\\.$#"
+			count: 3
+			path: includes/admin/settings/sidebar.php
+
+		-
+			message: "#^Constant BETTER_SEARCH_PLUGIN_DIR not found\\.$#"
+			count: 1
+			path: includes/autoloader.php
+
+		-
+			message: "#^Access to an undefined property WP_Query\\:\\:\\$topscore\\.$#"
+			count: 3
+			path: includes/class-better-search.php
+
+		-
+			message: "#^Cannot access property \\$score on int\\|WP_Post\\.$#"
+			count: 1
+			path: includes/class-better-search.php
+
+		-
+			message: "#^Variable \\$cache_name might not be defined\\.$#"
+			count: 1
+			path: includes/class-better-search.php
+
+		-
+			message: "#^Variable \\$cache_time might not be defined\\.$#"
+			count: 1
+			path: includes/class-better-search.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: includes/class-tracker.php
+
+		-
+			message: "#^Property WP\\:\\:\\$query_vars \\(array\\) in isset\\(\\) is not nullable\\.$#"
+			count: 1
+			path: includes/class-tracker.php
+
+		-
+			message: "#^Result of \\|\\| is always false\\.$#"
+			count: 1
+			path: includes/class-tracker.php
+
+		-
+			message: "#^Variable \\$wp in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: includes/class-tracker.php
+
+		-
+			message: "#^Method WebberZone\\\\Better_Search\\\\Frontend\\\\Widgets\\\\Search_Box\\:\\:form\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: includes/frontend/widgets/class-search-box.php
+
+		-
+			message: "#^Method WebberZone\\\\Better_Search\\\\Frontend\\\\Widgets\\\\Search_Heatmap\\:\\:form\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: includes/frontend/widgets/class-search-heatmap.php
+
+		-
+			message: "#^Parameter \\#2 \\$array of function implode expects array\\<string\\>, array\\<int\\<0, max\\>, string\\|WP_Error\\> given\\.$#"
+			count: 1
+			path: includes/general-template.php
+
+		-
+			message: "#^Function the_bsearch_heatmap\\(\\) never returns void so it can be removed from the return type\\.$#"
+			count: 1
+			path: includes/heatmap.php
+
+		-
+			message: "#^Variable \\$a might not be defined\\.$#"
+			count: 2
+			path: includes/heatmap.php
+
+		-
+			message: "#^Access to an undefined property Better_Search_Query\\:\\:\\$topscore\\.$#"
+			count: 1
+			path: templates/template.php
+
+		-
+			message: "#^Variable \\$post might not be defined\\.$#"
+			count: 2
+			path: templates/template.php
