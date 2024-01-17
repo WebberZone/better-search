@@ -95,7 +95,13 @@ class Tracker {
 			 */
 			$ajax_bsearch_tracker = apply_filters( 'bsearch_tracker_script_args', $ajax_bsearch_tracker );
 
-			wp_enqueue_script( 'bsearch_tracker', plugins_url( 'includes/js/better-search-tracker.min.js', BETTER_SEARCH_PLUGIN_FILE ), array( 'jquery' ), BETTER_SEARCH_VERSION, true );
+			wp_enqueue_script(
+				'bsearch_tracker',
+				plugins_url( 'includes/js/better-search-tracker.min.js', BETTER_SEARCH_PLUGIN_FILE ),
+				array(),
+				BETTER_SEARCH_VERSION,
+				true
+			);
 
 			wp_localize_script( 'bsearch_tracker', 'ajax_bsearch_tracker', $ajax_bsearch_tracker );
 
@@ -151,8 +157,17 @@ class Tracker {
 
 			$str = self::update_count( $search_query );
 
-			header( 'content-type: application/x-javascript' );
-			wp_send_json( $str );
+			// If the debug parameter is set then we output $str else we send a No Content header.
+			if ( array_key_exists( 'bsearch_debug', $wp->query_vars ) && 1 === absint( $wp->query_vars['bsearch_debug'] ) ) {
+				header( 'content-type: application/x-javascript' );
+				wp_send_json( $str );
+			} else {
+				header( 'HTTP/1.0 204 No Content' );
+				header( 'Cache-Control: max-age=15, s-maxage=0' );
+			}
+
+			// Stop anything else from loading as it is not needed.
+			exit;
 
 		} else {
 			return;
