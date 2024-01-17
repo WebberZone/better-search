@@ -183,7 +183,7 @@ class Dashboard {
 			'manage_options',
 			'bsearch_dashboard',
 			array( $this, 'render_page' ),
-			'dashicons-editor-ol'
+			'dashicons-search'
 		);
 
 		add_submenu_page(
