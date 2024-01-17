@@ -106,7 +106,13 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 = 3.3.0 =
 
+Complete rewrite of the plugin code using OOP. The plugin now uses autoloading and namespaces. This is a major release.
+
+* Features:
+	* New Admin Dashboard will show the number of searches and the top searches for the day, week, month and all time
+
 * Enhancements:
+	* Better Search Tracker doesn't use jQuery anymore
 	* Uninstall now uses `get_sites()` behind the scenes to delete options from all sites in a multisite install
 
 = 3.2.2 =

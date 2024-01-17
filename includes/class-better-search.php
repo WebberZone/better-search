@@ -7,6 +7,8 @@
  * @since 3.0.0
  */
 
+use WebberZone\Better_Search\Util\Cache;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -130,7 +132,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		 */
 		public function hooks() {
 
-			add_filter( 'pre_get_posts', array( $this, 'pre_get_posts' ), 10, 2 );
+			add_filter( 'pre_get_posts', array( $this, 'pre_get_posts' ), 10 );
 			add_filter( 'posts_fields', array( $this, 'posts_fields' ), 10, 2 );
 			add_filter( 'posts_join', array( $this, 'posts_join' ), 10, 2 );
 			add_filter( 'posts_search', array( $this, 'posts_search' ), 10, 2 );
@@ -360,8 +362,12 @@ if ( ! class_exists( 'Better_Search' ) ) :
 			 *
 			 * @since 3.0.0
 			 *
-			 * @param array         $args The arguments of the query.
-			 * @param Better_Search $this The Better_Search instance (passed by reference).
+			 * @param string|array $args {
+			 *     Optional. Array or string of Query parameters.
+			 *
+			 *     @type array         $args The arguments of the query.
+			 *     @type Better_Search $this The Better_Search instance (passed by reference).
+			 * }
 			 */
 			$this->query_args = apply_filters_ref_array( 'better_search_query_args', array( $args, &$this ) );
 		}
@@ -876,7 +882,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 						}
 					}
 					$query->found_posts   = isset( $cached_data['found_posts'] ) ? $cached_data['found_posts'] : count( $posts );
-					$query->max_num_pages = ceil( $query->found_posts / $query->get( 'posts_per_page' ) );
+					$query->max_num_pages = intval( ceil( $query->found_posts / $query->get( 'posts_per_page' ) ) );
 					$this->in_cache       = true;
 				}
 			}
@@ -1024,7 +1030,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 				$cache_attr['paged'] = $query->query_vars['paged'];
 			}
 
-			return bsearch_cache_get_key( $cache_attr, $context );
+			return Cache::get_key( $cache_attr, $context );
 		}
 
 		/**
@@ -1126,17 +1132,3 @@ if ( ! class_exists( 'Better_Search' ) ) :
 	}
 
 endif;
-
-/**
- * Load Better Search function.
- *
- * @since 3.0.0
- *
- * @param WP_Query $query The WP_Query instance (passed by reference).
- */
-function bsearch_load_plugin( $query ) {
-	if ( $query->is_search() && bsearch_get_option( 'seamless' ) ) {
-		new Better_Search();
-	}
-}
-add_action( 'parse_query', 'bsearch_load_plugin' );

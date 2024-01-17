@@ -20,6 +20,7 @@ $selected_post_types = isset( $_GET['post_types'] ) ? sanitize_title( wp_unslash
 $post_types          = ( 'any' === $selected_post_types ) ? bsearch_get_option( 'post_types' ) : $selected_post_types;
 
 // Reset wp_query temporary.
+global $wp_query;
 $tmp_wpquery = $wp_query;
 
 // Set up Better_Search_Query to replace $wp_query.
