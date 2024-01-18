@@ -8,6 +8,7 @@
  */
 
 use WebberZone\Better_Search\Util\Cache;
+use WebberZone\Better_Search\Util\Helpers;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -383,7 +384,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		public function set_class_variables( $search_query = '' ) {
 
 			$use_fulltext = bsearch_get_option( 'use_fulltext' );
-			$search_query = empty( $search_query ) ? get_bsearch_query() : $search_query;
+			$search_query = empty( $search_query ) ? get_bsearch_query() : Helpers::clean_terms( $search_query );
 			$search_words = array();
 
 			// Extract the search terms. We respect quotes.
@@ -822,6 +823,9 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		public function pre_get_posts( $query ) {
 
 			if ( $this->is_search( $query ) ) {
+				if ( empty( get_bsearch_query() ) ) {
+					$query->set( 'post__in', array( 0 ) );
+				}
 				if ( ! empty( $this->query_args['date_query'] ) ) {
 					$query->set( 'date_query', $this->query_args['date_query'] );
 				}
@@ -1042,7 +1046,7 @@ if ( ! class_exists( 'Better_Search' ) ) :
 		 * @return bool Whether a query is for a search.
 		 */
 		public function is_search( $query ) {
-			if ( ! is_admin() && $query->is_search() && ! empty( $this->search_query ) ) {
+			if ( ! is_admin() && $query->is_search() ) {
 				return true;
 			} else {
 				return false;
