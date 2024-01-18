@@ -30,6 +30,7 @@ if ( ! class_exists( 'Better_Search_Query' ) ) :
 		public function __construct( $args = array() ) {
 			$better_search = new Better_Search( $args );
 
+			add_filter( 'pre_get_posts', array( $better_search, 'pre_get_posts' ), 10 );
 			add_filter( 'posts_fields', array( $better_search, 'posts_fields' ), 10, 2 );
 			add_filter( 'posts_join', array( $better_search, 'posts_join' ), 10, 2 );
 			add_filter( 'posts_search', array( $better_search, 'posts_search' ), 10, 2 );
@@ -44,6 +45,7 @@ if ( ! class_exists( 'Better_Search_Query' ) ) :
 			parent::__construct( $better_search->query_args );
 
 			// Remove filters after use.
+			remove_filter( 'pre_get_posts', array( $better_search, 'pre_get_posts' ) );
 			remove_filter( 'posts_fields', array( $better_search, 'posts_fields' ) );
 			remove_filter( 'posts_join', array( $better_search, 'posts_join' ) );
 			remove_filter( 'posts_search', array( $better_search, 'posts_search' ) );

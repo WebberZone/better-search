@@ -114,6 +114,10 @@ Complete rewrite of the plugin code using OOP. The plugin now uses autoloading a
 * Enhancements:
 	* Better Search Tracker doesn't use jQuery anymore
 	* Uninstall now uses `get_sites()` behind the scenes to delete options from all sites in a multisite install
+	* Blank searches will return no results
+
+* Bug fixes:
+	* Banned search filtering didn't work properly in some cases
 
 = 3.2.2 =
 
