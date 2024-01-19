@@ -7,6 +7,12 @@
 
 ?>
 <div class="postbox-container">
+	<div id="pro-upgrade-banner">
+		<div class="inside" style="text-align: center">
+			<a href="https://webberzone.com/plugins/better-search/pro/" target="_blank"><img src="<?php echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/better-search-pro-banner.png' ); ?>" alt="<?php esc_html_e( 'Better Search Pro - Coming soon. Sign up to find out more', 'better-search' ); ?>" width="300" height="300" style="max-width: 100%;" /></a>
+		</div>
+	</div>
+
 	<div id="donatediv" class="postbox meta-box-sortables">
 		<h2 class='hndle'><span><?php esc_attr_e( 'Support the development', 'better-search' ); ?></span></h2>
 
