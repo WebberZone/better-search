@@ -9,10 +9,11 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
+global $bsearch_error;
 
 // Initialise some variables.
 $bsearch_settings    = bsearch_get_settings();
-$search_query        = get_bsearch_query();
+$search_query        = get_search_query();
 $limit               = isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : $bsearch_settings['limit'];  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $bydate              = isset( $_GET['bydate'] ) ? absint( $_GET['bydate'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $paged               = (int) get_query_var( 'paged', 1 ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
@@ -190,7 +191,7 @@ get_header();
 				<?php
 			} else {
 				?>
-				<p class="no-posts"><?php esc_html_e( 'No results found.', 'better-search' ); ?></p>
+				<p class="no-posts"><?php ( '' !== $bsearch_error->get_error_message( 'bsearch_banned' ) ) ? esc_html_e( $bsearch_error->get_error_message( 'bsearch_banned' ) ) : esc_html_e( 'No results found.', 'better-search' ); ?></p>
 				<?php
 			}
 
