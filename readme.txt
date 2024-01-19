@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 3.2.2
+Stable tag: 3.3.0
 Requires at least: 5.9
 Tested up to: 6.4
 Requires PHP: 7.4
@@ -151,81 +151,8 @@ Release post: [https://webberzone.com/blog/better-search-v3-2-0/](https://webber
 	* PHP 8.1 compatibility
 	* Security fix when clearing cache
 
-= 3.1.0 =
-
-Release post: [https://webberzone.com/blog/better-search-v3-1-0/](https://webberzone.com/blog/better-search-v3-1-0/)
-
-* Features:
-	* New filter `bsearch_template_query_args` in the default template to modify arguments array passed to `Better_Search_Query`
-	* New option **Highlight followed links**: if enabled, the plugin will highlight the search terms on posts/pages when visits them from the search results page
-	* `the_bsearch_excerpt()` will now show the relevant part of the excerpt where applicable by default. You can override the arguments by filtering `the_bsearch_excerpt_args`
-
-* Enhancements/modifications:
-	* New argument `show_post_types` for `get_bsearch_form()` set as default to false. Arguments can be modified by overriding the filter `bsearch_form_args`
-	* Highlighting now uses the referer and no longer requires a special query variable
-
-* Bug fixes:
-	* Post thumbnail size was ignored by `the_bsearch_post_thumbnail`
-	* HTML entities were displayed instead of being processed
-	* Show credit displayed twice
-	* `post_type` arguments were incorrectly processed when empty
-	* PHP error in `Better_Search::set_topscore()`
-	* Resetting settings caused an infinite loop
-
-= 3.0.3 =
-
-Release post: [https://webberzone.com/blog/better-search-v3-0-0/](https://webberzone.com/blog/better-search-v3-0-0/)
-
-* Bug fixes:
-	* With seamless mode OFF, by default, all post types were being pulled even those not selected in the settings page
-	* With seamless mode ON, caching incorrectly gave the same set of results
-	* Exclude categories didn't save properly if the field is blanked out
-
-= 3.0.2 =
-
-* Enhancements/modifications:
-	* New options to disable the display of relevance, post type, author, post date and taxonomies list on the custom search results page
-
-* Bug fixes:
-	* Fixed excerpt_length setting not used in the default template
-	* All required attributes are now passed to the shortcodes
-
-= 3.0.1 =
-
-* Enhancements/modifications:
-	* New option to disable the automatic addition of the stylesheet
-	* Custom search results page now displays `Sort by` and `Sorted by`
-	* New constant `BETTER_SEARCH_VERSION` that is used to enqueue scripts and styles
-
-* Bug fixes:
-	* If no `excerpt_length` is passed, the plugin will use the default value from the settings page
-	* Better_Search is only initiated if it is a search results page
-	* Custom results page excerpt is now highlighted
-
-= 3.0.0 =
-
-* Features:
-	* New classes Better_Search_Query and Better_Search. The latter is a wrapper for WP_Query and brings all the power of WP_Query to Better Search. The former is the core class that filters the required functions as well as replaces the older seamless mode implementation
-	* New settings to search taxonomies, comments, excerpt, meta, authors and comments. These will all return the posts corresponding where the search term is found in the above fields
-	* New parameter `bydate` if set to true will sort posts by date
-	* Advanced Search form now displays the select dropdown of post types that allows to search a specific post type
-	* Highlight search terms on pages referred from the search results page
-	* New stylesheet which is enqueued on search results page and singular posts/pages
-
-* Enhancements/modifications:
-	* `hellip` wrapped in `bsearch_hellip` span tag for easy access
-	* Transients will be deleted when the plugin is removed
-
-* Bug fixes:
-	* Resetting settings caused issues for the default styles and color fields
-	* Uninstalling didn't delete the option key from database.
-
-* Deprecated:
-	* PHP 5.x support has been dropped and attempting to install the plugin on these installs will throw errors!
-	* Multitude of functions have been deprecated. Check the deprecated.php file for the full list. Deprecated functions will also throw up a warning
-	* Aggressive Search mode has been removed
 
 == Upgrade Notice ==
 
-= 3.2.2 =
-Check the Changelog or release post on https://webberzone.com for complete details
+= 3.3.0 =
+Major release with a complete rewrite. Check the Changelog or release post on https://webberzone.com for complete details

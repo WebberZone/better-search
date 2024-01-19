@@ -17,7 +17,7 @@ parameters:
 
 		-
 			message: "#^Constant BETTER_SEARCH_PLUGIN_URL not found\\.$#"
-			count: 3
+			count: 4
 			path: includes/admin/settings/sidebar.php
 
 		-
