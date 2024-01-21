@@ -67,6 +67,7 @@ jQuery(document).ready(
 						.datepicker(
 							{
 								changeMonth: true,
+								changeYear: true,
 								maxDate: 0,
 								dateFormat: dateFormat
 							}
@@ -81,6 +82,7 @@ jQuery(document).ready(
 						.datepicker(
 							{
 								changeMonth: true,
+								changeYear: true,
 								maxDate: 0,
 								dateFormat: dateFormat
 							}
