@@ -58,6 +58,7 @@ class Statistics {
 	public function admin_enqueue_scripts( $hook ) {
 		if ( $hook === $this->parent_id ) {
 			wp_enqueue_script( 'better-search-admin-js' );
+			wp_enqueue_style( 'better-search-admin-ui-css' );
 		}
 	}
 
