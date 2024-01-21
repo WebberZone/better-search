@@ -479,11 +479,10 @@ class Dashboard {
 
 		$screen->add_help_tab(
 			array(
-				'id'      => 'bsearch-tools-general',
-				'title'   => __( 'General', 'better-search' ),
+				'id'      => 'bsearch-dashboard',
+				'title'   => __( 'Dashboard', 'better-search' ),
 				'content' =>
-				'<p>' . __( 'This screen provides some tools that help maintain certain features of Better Search.', 'better-search' ) . '</p>' .
-					'<p>' . __( 'Clear the cache, reset the popular posts tables plus some miscellaneous fixes for older versions of Better Search.', 'better-search' ) . '</p>',
+				'<p>' . __( "The Admin Dashboard gives you instant insights into your site's search behaviour. At a glance, you'll see the number of searches performed, along with the top searches for the day, week, month, and even all time. ", 'better-search' ) . '</p>',
 			)
 		);
 	}
