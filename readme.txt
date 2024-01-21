@@ -59,7 +59,7 @@ Better Search is one of the many plugins developed by WebberZone. Check out our 
 5. Options in WP-Admin - Tools
 6. Better Search widget
 7. Better Search Popular Searches table in Admin
-
+8. Better Search Dashboard
 
 == Installation ==
 
@@ -105,6 +105,8 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 == Changelog ==
 
 = 3.3.0 =
+
+Release post: [https://webberzone.com/better-search-v3-3-0](https://webberzone.com/better-search-v3-3-0)
 
 Complete rewrite of the plugin code using OOP. The plugin now uses autoloading and namespaces. This is a major release.
 
