@@ -12,7 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Admin Columns Class.
+ * Activator class
  *
  * @since 3.3.0
  */
@@ -25,7 +25,6 @@ class Activator {
 	 */
 	public function __construct() {
 		add_filter( 'wpmu_drop_tables', array( $this, 'on_delete_blog' ) );
-		add_action( 'admin_init', array( $this, 'update_db_check' ) );
 		add_action( 'wp_initialize_site', array( $this, 'activate_new_site' ) );
 	}
 
@@ -81,7 +80,7 @@ class Activator {
 
 		// Create tables if not exists.
 		self::maybe_create_table( $table_name, self::create_full_table_sql() );
-		self::maybe_create_table( $table_name_daily, self::create_full_daily_table_sql() );
+		self::maybe_create_table( $table_name_daily, self::create_daily_table_sql() );
 
 		// Upgrade table code for 2.0.0.
 		$current_db_version = get_option( 'bsearch_db_version' );
@@ -136,8 +135,6 @@ class Activator {
 			$wpdb->hide_errors();
 			dbDelta( $sql );
 			$wpdb->show_errors();
-
-			update_option( 'bsearch_db_version', BETTER_SEARCH_DB_VERSION );
 		}
 	}
 
@@ -170,7 +167,7 @@ class Activator {
 	 *
 	 * @return string SQL to create the daily table.
 	 */
-	public static function create_full_daily_table_sql() {
+	public static function create_daily_table_sql() {
 		global $wpdb;
 
 		$charset_collate = $wpdb->get_charset_collate();
@@ -192,6 +189,8 @@ class Activator {
 	 * @since 3.3.0
 	 *
 	 * @param bool $backup Whether to backup the table or not.
+	 *
+	 * @return bool True if recreated, false if not.
 	 */
 	public static function recreate_overall_table( $backup = true ) {
 		global $wpdb;
@@ -199,33 +198,38 @@ class Activator {
 		$table_name        = $wpdb->prefix . 'bsearch';
 		$backup_table_name = $table_name . '_backup';
 
+		$success = false;
+
 		if ( $backup ) {
 			$success = $wpdb->query( "CREATE TABLE $backup_table_name LIKE $table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			if ( false !== $success ) {
-				$wpdb->query( "INSERT INTO $backup_table_name SELECT * FROM $table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$success = $wpdb->query( "INSERT INTO $backup_table_name SELECT * FROM $table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			}
 		} else {
 			// Create a temporary table and store the data.
-			$wpdb->query(  // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			$success = $wpdb->query(  // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 				"
-			CREATE TEMPORARY TABLE $backup_table_name AS " . // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				CREATE TEMPORARY TABLE $backup_table_name AS " . // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT searchvar, SUM(cntaccess) as cntaccess
-			FROM $table_name " . // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				FROM $table_name " . // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				'GROUP BY searchvar
 			'
 			);
 		}
 
-		$wpdb->query( "DROP TABLE IF EXISTS $table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		if ( false !== $success ) {
+			$wpdb->query( "DROP TABLE IF EXISTS $table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		self::maybe_create_table( $table_name, self::create_full_table_sql() );
+			self::maybe_create_table( $table_name, self::create_full_table_sql() );
 
-		// Insert the data back into the table.
-		$wpdb->query( "INSERT INTO $table_name (searchvar, cntaccess ) SELECT bs.searchvar, bs.cntaccess FROM $backup_table_name AS bs ON DUPLICATE KEY UPDATE $table_name.cntaccess = $table_name.cntaccess + VALUES(cntaccess);" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// Insert the data back into the table.
+			$success = $wpdb->query( "INSERT INTO $table_name (searchvar, cntaccess ) SELECT bs.searchvar, bs.cntaccess FROM $backup_table_name AS bs ON DUPLICATE KEY UPDATE $table_name.cntaccess = $table_name.cntaccess + VALUES(cntaccess);" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
+		}
 		if ( ! $backup ) {
 			$wpdb->query( "DROP TABLE $backup_table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}
+		return $success;
 	}
 
 	/**
@@ -234,6 +238,8 @@ class Activator {
 	 * @since 3.3.0
 	 *
 	 * @param bool $backup Whether to backup the table or not.
+	 *
+	 * @return bool True if recreated, false if not.
 	 */
 	public static function recreate_daily_table( $backup = true ) {
 		global $wpdb;
@@ -241,34 +247,39 @@ class Activator {
 		$table_name        = $wpdb->prefix . 'bsearch_daily';
 		$backup_table_name = $table_name . '_backup';
 
+		$success = false;
+
 		if ( $backup ) {
 			$success = $wpdb->query( "CREATE TABLE $backup_table_name LIKE $table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			if ( false !== $success ) {
-				$wpdb->query( "INSERT INTO $backup_table_name SELECT * FROM $table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$success = $wpdb->query( "INSERT INTO $backup_table_name SELECT * FROM $table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			}
 		} else {
 			// Create a temporary table and store the data.
-			$wpdb->query(  // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			$success = $wpdb->query(  // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 				"
 				CREATE TEMPORARY TABLE $backup_table_name AS " . // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT searchvar, dp_date, SUM(cntaccess) as cntaccess
+				"SELECT searchvar, SUM(cntaccess) as cntaccess, dp_date
 				FROM $table_name " . // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				'GROUP BY searchvar, dp_date
 			'
 			);
 		}
 
-		$wpdb->query( "DROP TABLE IF EXISTS $table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		if ( false !== $success ) {
+			$wpdb->query( "DROP TABLE IF EXISTS $table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		self::maybe_create_table( $table_name, self::create_full_daily_table_sql() );
+			self::maybe_create_table( $table_name, self::create_daily_table_sql() );
 
-		// Insert the data back into the table.
-		$wpdb->query( "INSERT INTO $table_name (searchvar, dp_date, cntaccess ) SELECT bs.searchvar, bs.dp_date, bs.cntaccess FROM $backup_table_name AS bs ON DUPLICATE KEY UPDATE $table_name.cntaccess = $table_name.cntaccess + VALUES(cntaccess);" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-
+			// Insert the data back into the table.
+			$success = $wpdb->query( "INSERT INTO $table_name (searchvar, cntaccess, dp_date ) SELECT bs.searchvar, bs.cntaccess, bs.dp_date FROM $backup_table_name AS bs ON DUPLICATE KEY UPDATE $table_name.cntaccess = $table_name.cntaccess + VALUES(cntaccess);" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		}
 		if ( ! $backup ) {
 			$wpdb->query( "DROP TABLE $backup_table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}
+		return $success;
 	}
+
 
 	/**
 	 * Fired when a new site is activated with a WPMU environment.
@@ -306,20 +317,5 @@ class Activator {
 		$tables[] = $wpdb->prefix . 'bsearch_daily';
 
 		return $tables;
-	}
-
-	/**
-	 * Function to call install function if needed.
-	 *
-	 * @since 3.3.0
-	 */
-	public static function update_db_check() {
-		global $network_wide;
-
-		$current_db_version = get_option( 'bsearch_db_version' );
-
-		if ( version_compare( $current_db_version, BETTER_SEARCH_DB_VERSION, '<' ) ) {
-			self::activation_hook( $network_wide );
-		}
 	}
 }

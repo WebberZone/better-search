@@ -120,6 +120,24 @@ class Tools_Page {
 			add_settings_error( 'bsearch-notices', '', esc_html__( 'Daily tables have been recreated', 'better-search' ), 'success' );
 		}
 
+		/* Restore backup tables */
+		if ( ( isset( $_POST['bsearch_restore_overall'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
+			$restore_flag = self::restore_backup_tables( false );
+			if ( ! $restore_flag ) {
+				add_settings_error( 'bsearch-notices', '', esc_html__( 'Backup tables do not exist', 'better-search' ), 'error' );
+			} else {
+				add_settings_error( 'bsearch-notices', '', esc_html__( 'Backup tables have been restored', 'better-search' ), 'success' );
+			}
+		}
+		if ( ( isset( $_POST['bsearch_restore_daily'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
+			$restore_flag = self::restore_backup_tables( true );
+			if ( ! $restore_flag ) {
+				add_settings_error( 'bsearch-notices', '', esc_html__( 'Backup tables do not exist', 'better-search' ), 'error' );
+			} else {
+				add_settings_error( 'bsearch-notices', '', esc_html__( 'Backup tables have been restored', 'better-search' ), 'success' );
+			}
+		}
+
 		/* Delete backup tables */
 		if ( ( isset( $_POST['bsearch_delete_backup_tables'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
 			self::delete_backup_tables();
@@ -203,9 +221,17 @@ class Tools_Page {
 			</form>
 
 			<form method="post">
-				<h2 style="padding-left:0px"><?php esc_html_e( 'Drop Backup Tables', 'better-search' ); ?></h2>
+				<h2 style="padding-left:0px"><?php esc_html_e( 'Backup Tables', 'better-search' ); ?></h2>
 				<p class="description">
-					<?php esc_html_e( 'During the v3.3 upgrade, Better Search attempted to create backup tables of your search data. If your site has been working fine and populating with new information, then you can safely delete these backed up tables to save database space.', 'better-search' ); ?>
+					<?php esc_html_e( 'During the v3.3 upgrade, Better Search attempted to create backup tables of your search data.', 'better-search' ); ?>
+				</p>
+				<p>
+					<input name="bsearch_restore_overall" type="submit" id="bsearch_restore_overall" value="<?php esc_attr_e( 'Restore Popular searches table', 'better-search' ); ?>" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to restore the popular searches table from the backup?', 'better-search' ); ?>')) return false;" />
+					<input name="bsearch_restore_daily" type="submit" id="bsearch_restore_daily" value="<?php esc_attr_e( 'Restore Daily Popular searches table', 'better-search' ); ?>" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to restore the daily popular searches table from the backup?', 'better-search' ); ?>')) return false;" />
+				</p>
+
+				<p class="description">
+					<?php esc_html_e( 'If your site has been working fine and populating with new information, then you can safely delete these backed up tables to save database space.', 'better-search' ); ?>
 				</p>
 				<p>
 					<input name="bsearch_delete_backup_tables" type="submit" id="bsearch_delete_backup_tables" value="<?php esc_attr_e( 'Delete backup tables', 'better-search' ); ?>" class="button button-secondary" style="color:#f00" onclick="if (!confirm('<?php esc_attr_e( 'This will delete the backup tables of Better Search. Have you backed up your database?', 'better-search' ); ?>')) return false;" />
@@ -263,6 +289,38 @@ class Tools_Page {
 		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch_content;' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
 
 		Activator::create_fulltext_indexes();
+	}
+
+	/**
+	 * Restore tables from backup.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param bool $daily  TRUE = Daily tables, FALSE = Overall tables.
+	 *
+	 * @return bool True if backup tables exist, false otherwise.
+	 */
+	public static function restore_backup_tables( $daily = true ) {
+		global $wpdb;
+
+		// Check if backup tables exist.
+		$backup_table_name = ( $daily ) ? $wpdb->prefix . 'bsearch_daily_backup' : $wpdb->prefix . 'bsearch_backup';
+		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$backup_table_name'" ) ) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			return false;
+		}
+
+		$table_name = ( $daily ) ? $wpdb->prefix . 'bsearch_daily' : $wpdb->prefix . 'bsearch';
+
+		// Start transaction.
+		$wpdb->query( 'START TRANSACTION;' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		// Rename tables.
+		$wpdb->query( "DROP TABLE IF EXISTS $table_name;" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "RENAME TABLE $backup_table_name TO $table_name;" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		$wpdb->query( 'COMMIT;' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return true;
 	}
 
 	/**
