@@ -60,6 +60,24 @@ class Admin {
 	public $activator;
 
 	/**
+	 * Upgrader class.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @var object Upgrader class.
+	 */
+	public $upgrader;
+
+	/**
+	 * Admin Notices.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @var object Admin Notices.
+	 */
+	public $admin_notices;
+
+	/**
 	 * Tools page.
 	 *
 	 * @since 3.3.0
@@ -135,6 +153,8 @@ class Admin {
 		$this->statistics        = new Statistics();
 		$this->settings          = new Settings\Settings();
 		$this->activator         = new Activator();
+		$this->upgrader          = new Upgrader();
+		$this->admin_notices     = new Admin_Notices();
 		$this->tools_page        = new Tools_Page();
 		$this->dashboard_widgets = new Dashboard_Widgets();
 		$this->cache             = new Cache();
