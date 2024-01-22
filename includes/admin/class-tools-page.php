@@ -95,36 +95,40 @@ class Tools_Page {
 		/* Recreate index */
 		if ( ( isset( $_POST['bsearch_recreate'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
 			self::recreate_index();
-			add_settings_error( 'bsearch-notices', '', esc_html__( 'FULLTEXT index has been recreated', 'better-search' ), 'error' );
+			add_settings_error( 'bsearch-notices', '', esc_html__( 'FULLTEXT index has been recreated', 'better-search' ), 'success' );
 		}
 
 		/* Truncate overall posts table */
 		if ( ( isset( $_POST['bsearch_trunc_all'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
 			self::trunc_count( false );
-			add_settings_error( 'bsearch-notices', '', esc_html__( 'Better Search popular searches table reset', 'better-search' ), 'error' );
+			add_settings_error( 'bsearch-notices', '', esc_html__( 'Better Search popular searches table reset', 'better-search' ), 'success' );
 		}
 
 		/* Truncate daily posts table */
 		if ( ( isset( $_POST['bsearch_trunc_daily'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
 			self::trunc_count( true );
-			add_settings_error( 'bsearch-notices', '', esc_html__( 'Better Search daily searches table reset', 'better-search' ), 'error' );
+			add_settings_error( 'bsearch-notices', '', esc_html__( 'Better Search daily searches table reset', 'better-search' ), 'success' );
 		}
 
-		/* Delete old settings */
-		if ( ( isset( $_POST['bsearch_delete_old_settings'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
-			$old_settings = get_option( 'ald_bsearch_settings' );
+		/* Recreate tables */
+		if ( ( isset( $_POST['bsearch_recreate_overall'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
+			Activator::recreate_overall_table( false );
+			add_settings_error( 'bsearch-notices', '', esc_html__( 'Overall tables have been recreated', 'better-search' ), 'success' );
+		}
+		if ( ( isset( $_POST['bsearch_recreate_daily'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
+			Activator::recreate_daily_table( false );
+			add_settings_error( 'bsearch-notices', '', esc_html__( 'Daily tables have been recreated', 'better-search' ), 'success' );
+		}
 
-			if ( empty( $old_settings ) ) {
-				add_settings_error( 'bsearch-notices', '', esc_html__( 'Old settings key does not exist', 'autoclose' ), 'error' );
-			} else {
-				delete_option( 'ald_bsearch_settings' );
-				add_settings_error( 'bsearch-notices', '', esc_html__( 'Old settings key has been deleted', 'autoclose' ), 'updated' );
-			}
+		/* Delete backup tables */
+		if ( ( isset( $_POST['bsearch_delete_backup_tables'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
+			self::delete_backup_tables();
+			add_settings_error( 'bsearch-notices', '', esc_html__( 'Backup tables have been deleted', 'better-search' ), 'success' );
 		}
 
 		/* Message for successful file import */
 		if ( isset( $_GET['settings_import'] ) && 'success' === $_GET['settings_import'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			add_settings_error( 'bsearch-notices', '', esc_html__( 'Settings have been imported successfully', 'better-search' ), 'updated' );
+			add_settings_error( 'bsearch-notices', '', esc_html__( 'Settings have been imported successfully', 'better-search' ), 'success' );
 		}
 
 		ob_start();
@@ -148,6 +152,10 @@ class Tools_Page {
 					<?php esc_html_e( 'Clear the Better Search cache. This will also be cleared automatically when you save the settings page.', 'better-search' ); ?>
 				</p>
 
+				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>
+			</form>
+
+			<form method="post">
 				<h2 style="padding-left:0px"><?php esc_html_e( 'Recreate FULLTEXT index', 'better-search' ); ?></h2>
 				<p>
 					<input name="bsearch_recreate" type="submit" id="bsearch_recreate" value="<?php esc_attr_e( 'Recreate Index', 'better-search' ); ?>" class="button button-secondary" onclick="if ( ! confirm('<?php esc_attr_e( 'Are you sure you want to recreate the index?', 'better-search' ); ?>') ) return false;" />
@@ -165,6 +173,23 @@ class Tools_Page {
 					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_content (post_content);</code>
 				</p>
 
+				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>
+			</form>
+
+			<form method="post">
+				<h2 style="padding-left:0px"><?php esc_html_e( 'Recreate Tables', 'better-search' ); ?></h2>
+				<p class="description">
+					<?php esc_html_e( 'These buttons will recreate the tables in which Better Search stores its data. This is particularly useful if you are noticing issues with tracking or if there was a problem with the database upgrade', 'better-search' ); ?>
+				</p>
+				<p>
+					<input name="bsearch_recreate_overall" type="submit" id="bsearch_recreate_overall" value="<?php esc_attr_e( 'Recreate overall tables', 'better-search' ); ?>" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'This will recreate the overall tables. Have you backuped up your database?', 'better-search' ); ?>')) return false;" />
+					<input name="bsearch_recreate_daily" type="submit" id="bsearch_recreate_daily" value="<?php esc_attr_e( 'Recreate daily tables', 'better-search' ); ?>" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'This will recreate the daily tables. Have you backed up your database?', 'better-search' ); ?>')) return false;" />
+				</p>
+
+				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>
+			</form>
+
+			<form method="post">
 				<h2 style="padding-left:0px"><?php esc_html_e( 'Reset database', 'better-search' ); ?></h2>
 				<p>
 					<input name="bsearch_trunc_all" type="submit" id="bsearch_trunc_all" value="<?php esc_attr_e( 'Reset Popular searches table', 'better-search' ); ?>" class="button button-secondary" style="color:#f00" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to reset the popular searches?', 'better-search' ); ?>')) return false;" />
@@ -178,42 +203,12 @@ class Tools_Page {
 			</form>
 
 			<form method="post">
-
-				<h2 style="padding-left:0px"><?php esc_html_e( 'Export/Import settings', 'better-search' ); ?></h2>
+				<h2 style="padding-left:0px"><?php esc_html_e( 'Drop Backup Tables', 'better-search' ); ?></h2>
 				<p class="description">
-					<?php esc_html_e( 'Export the plugin settings for this site as a .json file. This allows you to easily import the configuration into another site.', 'better-search' ); ?>
-				</p>
-				<p><input type="hidden" name="bsearch_action" value="export_settings" /></p>
-				<p>
-					<?php submit_button( esc_html__( 'Export Settings', 'better-search' ), 'primary', 'bsearch_export_settings', false ); ?>
-				</p>
-
-				<?php wp_nonce_field( 'bsearch_export_settings_nonce', 'bsearch_export_settings_nonce' ); ?>
-			</form>
-
-			<form method="post" enctype="multipart/form-data">
-
-				<p class="description">
-					<?php esc_html_e( 'Import the plugin settings from a .json file. This file can be obtained by exporting the settings on another site using the form above.', 'better-search' ); ?>
+					<?php esc_html_e( 'During the v3.3 upgrade, Better Search attempted to create backup tables of your search data. If your site has been working fine and populating with new information, then you can safely delete these backed up tables to save database space.', 'better-search' ); ?>
 				</p>
 				<p>
-					<input type="file" name="import_settings_file" />
-				</p>
-				<p>
-					<?php submit_button( esc_html__( 'Import Settings', 'better-search' ), 'primary', 'bsearch_import_settings', false ); ?>
-				</p>
-
-				<input type="hidden" name="bsearch_action" value="import_settings" />
-				<?php wp_nonce_field( 'bsearch_import_settings_nonce', 'bsearch_import_settings_nonce' ); ?>
-			</form>
-
-			<form method="post">
-				<h2 style="padding-left:0px"><?php esc_html_e( 'Other tools', 'better-search' ); ?></h2>
-				<p>
-					<input name="bsearch_delete_old_settings" type="submit" id="bsearch_delete_old_settings" value="<?php esc_attr_e( 'Delete old settings', 'better-search' ); ?>" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'This will delete the settings before v2.5.x. Proceed?', 'better-search' ); ?>')) return false;" />
-				</p>
-				<p class="description">
-					<?php esc_html_e( 'From v2.2.x, Better Search stores the settings in a new key in the database. This will delete the old settings for the current blog. It is recommended that you do this at the earliest after upgrade. However, you should do this only if you are comfortable with the new settings.', 'better-search' ); ?>
+					<input name="bsearch_delete_backup_tables" type="submit" id="bsearch_delete_backup_tables" value="<?php esc_attr_e( 'Delete backup tables', 'better-search' ); ?>" class="button button-secondary" style="color:#f00" onclick="if (!confirm('<?php esc_attr_e( 'This will delete the backup tables of Better Search. Have you backed up your database?', 'better-search' ); ?>')) return false;" />
 				</p>
 
 				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>
@@ -263,17 +258,11 @@ class Tools_Page {
 
 		global $wpdb;
 
-		$wpdb->query( 'START TRANSACTION;' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
-
 		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch;' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch_title;' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch_content;' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
 
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch (post_title, post_content);' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_title (post_title);' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT bsearch_content (post_content);' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
-
-		$wpdb->query( 'COMMIT;' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
+		Activator::create_fulltext_indexes();
 	}
 
 	/**
@@ -355,6 +344,18 @@ class Tools_Page {
 			)
 		);
 		exit;
+	}
+
+	/**
+	 * Delete Better Search backup tables.
+	 *
+	 * @since 3.3.0
+	 */
+	public static function delete_backup_tables() {
+		global $wpdb;
+
+		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}bsearch_backup" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}bsearch_daily_backup" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	/**

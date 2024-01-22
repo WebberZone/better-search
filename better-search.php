@@ -3,7 +3,7 @@
  * Better Search is a plugin that will replace the default WordPress search page
  * with highly relevant search results improving your visitors search experience.
  *
- * @package Better_Search
+ * @package   Better_Search
  * @author    Ajay D'Souza <me@ajaydsouza.com>
  * @license   GPL-2.0+
  * @link      https://webberzone.com
@@ -23,9 +23,10 @@
  * GitHub Plugin URI: https://github.com/WebberZone/better-search/
  */
 
-// If this file is called directly, then abort execution.
+namespace WebberZone\Better_Search;
+
 if ( ! defined( 'WPINC' ) ) {
-	die( "Aren't you supposed to come here via WP-Admin?" );
+	die;
 }
 
 /**
@@ -57,14 +58,11 @@ define( 'BETTER_SEARCH_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'BETTER_SEARCH_PLUGIN_FILE', __FILE__ );
 
 /**
- * Global variable holding the current database version of Better Search
+ * Holds the version of Better Search.
  *
- * @since 1.0
- *
- * @var string
+ * @since 3.3.0
  */
-global $bsearch_db_version;
-$bsearch_db_version = '1.0';
+define( 'BETTER_SEARCH_DB_VERSION', '2.0' );
 
 // Load the autoloader.
 require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/autoloader.php';
@@ -77,7 +75,7 @@ require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/autoloader.php';
  * @param bool $network_wide Whether the plugin is being activated network-wide.
  */
 function activate_bsearch( $network_wide ) {
-	\WebberZone\Better_Search\Admin\Activator::activation_hook( $network_wide );
+	Admin\Activator::activation_hook( $network_wide );
 }
 register_activation_hook( __FILE__, __NAMESPACE__ . '\activate_bsearch' );
 
@@ -87,7 +85,7 @@ register_activation_hook( __FILE__, __NAMESPACE__ . '\activate_bsearch' );
  * @since 3.3.0
  */
 function load_bsearch() {
-	\WebberZone\Better_Search\Main::get_instance();
+	Main::get_instance();
 }
 add_action( 'plugins_loaded', __NAMESPACE__ . '\load_bsearch' );
 

@@ -108,12 +108,13 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 Release post: [https://webberzone.com/better-search-v3-3-0](https://webberzone.com/better-search-v3-3-0)
 
-Complete rewrite of the plugin code using OOP. The plugin now uses autoloading and namespaces. This is a major release.
+This is a major release. Complete rewrite of the plugin code - Better Search now uses autoloading and namespaces. Database structure has been changed.
 
 * Features:
 	* New Admin Dashboard will show the number of searches and the top searches for the day, week, month and all time
 
 * Enhancements:
+	* The tables in the database have been changed for more optimized update queries. The plugin will attempt to automatically update the tables. If this fails, you can recreate the tables from the Tools screen.
 	* Better Search Tracker doesn't use jQuery anymore
 	* Uninstall now uses `get_sites()` behind the scenes to delete options from all sites in a multisite install
 	* Blank searches will return no results

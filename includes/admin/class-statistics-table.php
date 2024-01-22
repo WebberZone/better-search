@@ -47,7 +47,7 @@ class Statistics_Table extends \WP_List_Table {
 
 		global $wpdb;
 
-		$from_date = isset( $args['search-date-filter-from'] ) ? $args['search-date-filter-from'] : current_time( 'd M Y' );
+		$from_date = isset( $args['search-date-filter-from'] ) ? $args['search-date-filter-from'] : gmdate( 'd M Y', strtotime( '-1 month' ) );
 		$from_date = gmdate( 'Y-m-d', strtotime( $from_date ) );
 		$to_date   = isset( $args['search-date-filter-to'] ) ? $args['search-date-filter-to'] : current_time( 'd M Y' );
 		$to_date   = gmdate( 'Y-m-d', strtotime( $to_date ) );
@@ -57,7 +57,6 @@ class Statistics_Table extends \WP_List_Table {
 		$table_name       = $wpdb->prefix . 'bsearch AS bst';
 
 		// Fields to return.
-		$fields[] = 'bst.accessedid as ID';
 		$fields[] = 'bst.searchvar as title';
 		$fields[] = 'bst.cntaccess as total_count';
 		$fields[] = 'SUM(bsd.cntaccess) as daily_count';
@@ -133,17 +132,15 @@ class Statistics_Table extends \WP_List_Table {
 	/**
 	 * Delete search result.
 	 *
-	 * @param string $id Search result ID.
+	 * @param string $id Search result.
 	 */
 	public static function delete_search_entry( $id ) {
 		global $wpdb;
 
-		$searchvar = $wpdb->get_var( $wpdb->prepare( "SELECT searchvar from {$wpdb->prefix}bsearch where accessedid = %d", $id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-
 		$wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			"{$wpdb->prefix}bsearch",
 			array(
-				'searchvar' => $searchvar,
+				'searchvar' => $id,
 			),
 			array( '%s' )
 		);
@@ -151,7 +148,7 @@ class Statistics_Table extends \WP_List_Table {
 		$wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			"{$wpdb->prefix}bsearch_daily",
 			array(
-				'searchvar' => $searchvar,
+				'searchvar' => $id,
 			),
 			array( '%s' )
 		);
@@ -213,7 +210,7 @@ class Statistics_Table extends \WP_List_Table {
 		return sprintf(
 			'<input type="checkbox" name="%1$s[]" value="%2$s" />',
 			'search',
-			$item['ID']
+			$item['title']
 		);
 	}
 
@@ -229,8 +226,17 @@ class Statistics_Table extends \WP_List_Table {
 		$page         = isset( $_REQUEST['page'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		$actions = array(
-			'view'   => sprintf( '<a href="%s" target="_blank">' . __( 'View', 'better-search' ) . '</a>', home_url() . '/?s=' . esc_attr( $item['title'] ) ),
-			'delete' => sprintf( '<a href="?page=%s&action=%s&id=%s&_wpnonce=%s">' . __( 'Delete', 'better-search' ) . '</a>', esc_attr( $page ), 'delete', absint( $item['ID'] ), $delete_nonce ),
+			'view'   => sprintf(
+				'<a href="%s" target="_blank">' . __( 'View', 'better-search' ) . '</a>',
+				home_url() . '/?s=' . esc_attr( $item['title'] )
+			),
+			'delete' => sprintf(
+				'<a href="?page=%s&action=%s&id=%s&_wpnonce=%s">' . __( 'Delete', 'better-search' ) . '</a>',
+				esc_attr( $page ),
+				'delete',
+				$item['title'],
+				$delete_nonce
+			),
 		);
 
 		// Return the title contents.
@@ -341,7 +347,7 @@ class Statistics_Table extends \WP_List_Table {
 		// Detect when a bulk action is being triggered...
 		if ( 'delete' === $this->current_action() ) {
 			// In our file that handles the request, verify the nonce.
-			$id = isset( $_GET['id'] ) ? sanitize_text_field( wp_unslash( $_GET['id'] ) ) : 0;
+			$id = isset( $_GET['id'] ) ? sanitize_text_field( wp_unslash( $_GET['id'] ) ) : '';
 
 			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( wp_unslash( $_GET['_wpnonce'] ), 'bsearch_delete_entry' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				self::delete_search_entry( $id );
@@ -376,12 +382,13 @@ class Statistics_Table extends \WP_List_Table {
 			ob_start();
 
 			// Add date selector.
-			$current_date = current_time( 'd M Y' );
+			$to_date   = current_time( 'd M Y' );
+			$from_date = gmdate( 'd M Y', strtotime( '-1 month' ) );
 
-			$post_date_from = isset( $_REQUEST['search-date-filter-from'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['search-date-filter-from'] ) ) : $current_date; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$post_date_from = isset( $_REQUEST['search-date-filter-from'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['search-date-filter-from'] ) ) : $from_date; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			echo '<input type="text" id="datepicker-from" name="search-date-filter-from" value="' . esc_attr( $post_date_from ) . '" size="11" />';
 
-			$post_date_to = isset( $_REQUEST['search-date-filter-to'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['search-date-filter-to'] ) ) : $current_date; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$post_date_to = isset( $_REQUEST['search-date-filter-to'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['search-date-filter-to'] ) ) : $to_date; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			echo '<input type="text" id="datepicker-to" name="search-date-filter-to" value="' . esc_attr( $post_date_to ) . '" size="11" />';
 
 			$output = ob_get_clean();
