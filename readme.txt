@@ -114,7 +114,7 @@ This is a major release. Complete rewrite of the plugin code - Better Search now
 	* New Admin Dashboard will show the number of searches and the top searches for the day, week, month and all time
 
 * Enhancements:
-	* The tables in the database have been changed for more optimized update queries. The plugin will attempt to automatically update the tables. If this fails, you can recreate the tables from the Tools screen.
+	* The tables in the database have been changed for more optimized update queries. The plugin will prompt you to run the upgrade script when you update the plugin
 	* Better Search Tracker doesn't use jQuery anymore
 	* Uninstall now uses `get_sites()` behind the scenes to delete options from all sites in a multisite install
 	* Blank searches will return no results
