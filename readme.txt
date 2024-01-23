@@ -118,6 +118,7 @@ This is a major release. Complete rewrite of the plugin code - Better Search now
 	* Better Search Tracker doesn't use jQuery anymore
 	* Uninstall now uses `get_sites()` behind the scenes to delete options from all sites in a multisite install
 	* Blank searches will return no results
+	* Better Search tables will only be deleted if you set `BETTER_SEARCH_DELETE_DATA` to true in you wp-config.php file
 
 * Bug fixes:
 	* Banned search filtering didn't work properly in some cases
