@@ -104,7 +104,10 @@ class Upgrader {
 
 			<form method="post">
 				<p class="description">
-					<?php esc_html_e( 'Upgrade the Better Search Database Tables. If you are running multisite, then this will attempt the upgrade across all sites in the network.', 'better-search' ); ?>
+					<?php esc_html_e( 'Upgrade the Better Search Database Tables.', 'better-search' ); ?>
+					<?php if ( is_network_admin() ) { ?>
+						<strong><?php esc_html_e( 'This will upgrade the database across all sites in the network.', 'better-search' ); ?></strong>
+					<?php } ?>
 				</p>
 				<p>
 					<input name="bsearch_upgrade_db" type="submit" id="bsearch_upgrade_db" value="<?php esc_attr_e( 'Click to begin', 'better-search' ); ?>" class="button button-secondary" />
@@ -149,12 +152,18 @@ class Upgrader {
 		if ( version_compare( $current_db_version, BETTER_SEARCH_DB_VERSION, '<' ) ) {
 			$success_overall = Activator::recreate_overall_table();
 			$success_daily   = Activator::recreate_daily_table();
-			if ( false !== $success_overall && false !== $success_daily ) {
-				update_option( 'bsearch_db_version', BETTER_SEARCH_DB_VERSION );
-				return sprintf( esc_html__( 'Database upgraded on site %s', 'better-search' ), get_admin_url() );
+
+			if ( is_wp_error( $success_overall ) ) {
+				return $success_overall->get_error_message();
 			}
+			if ( is_wp_error( $success_daily ) ) {
+				return $success_daily->get_error_message();
+			}
+
+			update_option( 'bsearch_db_version', BETTER_SEARCH_DB_VERSION );
+			return sprintf( esc_html__( 'Database upgraded on site %s', 'better-search' ), get_site_url() );
 		}
-		return sprintf( esc_html__( 'Database is already up to date on site %s', 'better-search' ), get_admin_url() );
+		return sprintf( esc_html__( 'Database is already up to date on site %s', 'better-search' ), get_site_url() );
 	}
 
 	/**
