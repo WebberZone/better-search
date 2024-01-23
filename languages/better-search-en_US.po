@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 20:26+0530\n"
+"POT-Creation-Date: 2024-01-23 20:32+0530\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza\n"
 "Language-Team: WebberZone\n"
@@ -21,13 +21,37 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
+#: includes/admin/class-activator.php:217
+#, php-format
+msgid "Database backup failed on site %1$s. Error message: %2$s"
+msgstr ""
+
+#: includes/admin/class-activator.php:231
+#, php-format
+msgid "Database insert failed on site %1$s. Error message: %2$s"
+msgstr ""
+
+#: includes/admin/class-admin-notices.php:58
+msgid ""
+"Better Search database needs to be updated. Please click on the button below "
+"to update the database."
+msgstr ""
+
+#: includes/admin/class-admin-notices.php:60
+msgid "Update Database"
+msgstr ""
+
+#: includes/admin/class-admin-notices.php:63
+msgid "Update Database (Network)"
+msgstr ""
+
 #: includes/admin/class-dashboard-widgets.php:42
-#: includes/admin/class-statistics.php:73
+#: includes/admin/class-statistics.php:74
 msgid "Popular Searches"
 msgstr ""
 
 #: includes/admin/class-dashboard-widgets.php:47
-#: includes/admin/class-statistics.php:82
+#: includes/admin/class-statistics.php:83
 msgid "Daily Popular Searches"
 msgstr ""
 
@@ -62,6 +86,7 @@ msgid "Better Search"
 msgstr ""
 
 #: includes/admin/class-dashboard.php:192
+#: includes/admin/class-dashboard.php:483
 msgid "Dashboard"
 msgstr ""
 
@@ -102,7 +127,7 @@ msgid "Sorry, no popular searches found."
 msgstr ""
 
 #: includes/admin/class-dashboard.php:469
-#: includes/admin/class-tools-page.php:370
+#: includes/admin/class-tools-page.php:438
 #, php-format
 msgid ""
 "For more information or how to get support visit the <a "
@@ -110,7 +135,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/class-dashboard.php:471
-#: includes/admin/class-tools-page.php:372
+#: includes/admin/class-tools-page.php:440
 #, php-format
 msgid ""
 "Support queries should be posted in the <a href=\"%1$s\">WordPress.org "
@@ -118,7 +143,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/class-dashboard.php:474
-#: includes/admin/class-tools-page.php:375
+#: includes/admin/class-tools-page.php:443
 #: includes/admin/settings/class-settings.php:911
 #, php-format
 msgid ""
@@ -126,25 +151,11 @@ msgid ""
 "reports only)."
 msgstr ""
 
-#: includes/admin/class-dashboard.php:483
-#: includes/admin/class-tools-page.php:384
-#: includes/admin/settings/class-settings.php:235
-#: includes/admin/settings/class-settings.php:935
-msgid "General"
-msgstr ""
-
 #: includes/admin/class-dashboard.php:485
-#: includes/admin/class-tools-page.php:386
 msgid ""
-"This screen provides some tools that help maintain certain features of "
-"Better Search."
-msgstr ""
-
-#: includes/admin/class-dashboard.php:486
-#: includes/admin/class-tools-page.php:387
-msgid ""
-"Clear the cache, reset the popular posts tables plus some miscellaneous "
-"fixes for older versions of Better Search."
+"The Admin Dashboard gives you instant insights into your site's search "
+"behaviour. At a glance, you'll see the number of searches performed, along "
+"with the top searches for the day, week, month, and even all time. "
 msgstr ""
 
 #: includes/admin/class-statistics-table.php:31
@@ -155,61 +166,61 @@ msgstr ""
 msgid "popular_searches"
 msgstr ""
 
-#: includes/admin/class-statistics-table.php:183
+#: includes/admin/class-statistics-table.php:180
 msgid "No popular searches available."
 msgstr ""
 
-#: includes/admin/class-statistics-table.php:232
+#: includes/admin/class-statistics-table.php:230
 msgid "View"
 msgstr ""
 
-#: includes/admin/class-statistics-table.php:233
+#: includes/admin/class-statistics-table.php:234
 msgid "Delete"
 msgstr ""
 
-#: includes/admin/class-statistics-table.php:254
+#: includes/admin/class-statistics-table.php:260
 msgid "Search term"
 msgstr ""
 
-#: includes/admin/class-statistics-table.php:255
+#: includes/admin/class-statistics-table.php:261
 msgid "Total searches"
 msgstr ""
 
-#: includes/admin/class-statistics-table.php:256
+#: includes/admin/class-statistics-table.php:262
 msgid "Daily searches"
 msgstr ""
 
-#: includes/admin/class-statistics-table.php:290
+#: includes/admin/class-statistics-table.php:296
 msgid "Delete search term"
 msgstr ""
 
-#: includes/admin/class-statistics-table.php:349
+#: includes/admin/class-statistics-table.php:355
 msgid "Are you sure you want to do this"
 msgstr ""
 
-#: includes/admin/class-statistics-table.php:391
+#: includes/admin/class-statistics-table.php:398
 msgid "Filter"
 msgstr ""
 
-#: includes/admin/class-statistics.php:72
-#: includes/admin/class-statistics.php:114
+#: includes/admin/class-statistics.php:73
+#: includes/admin/class-statistics.php:115
 msgid "Better Search Popular Searches"
 msgstr ""
 
-#: includes/admin/class-statistics.php:81
+#: includes/admin/class-statistics.php:82
 msgid "Better Search Daily Popular Searches"
 msgstr ""
 
-#: includes/admin/class-statistics.php:124
+#: includes/admin/class-statistics.php:125
 msgid "Search Table"
 msgstr ""
 
-#: includes/admin/class-statistics.php:148
+#: includes/admin/class-statistics.php:149
 msgid "Popular Searches per page"
 msgstr ""
 
 #: includes/admin/class-tools-page.php:54
-#: includes/admin/class-tools-page.php:133
+#: includes/admin/class-tools-page.php:155
 msgid "Better Search Tools"
 msgstr ""
 
@@ -229,75 +240,117 @@ msgstr ""
 msgid "Better Search daily searches table reset"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:118
-msgid "Old settings key does not exist"
+#: includes/admin/class-tools-page.php:116
+msgid "Overall tables have been recreated"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:121
-msgid "Old settings key has been deleted"
+#: includes/admin/class-tools-page.php:120
+msgid "Daily tables have been recreated"
 msgstr ""
 
 #: includes/admin/class-tools-page.php:127
+#: includes/admin/class-tools-page.php:135
+msgid "Backup tables do not exist"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:129
+#: includes/admin/class-tools-page.php:137
+msgid "Backup tables have been restored"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:144
+msgid "Backup tables have been deleted"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:149
 msgid "Settings have been imported successfully"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:143
-#: includes/admin/class-tools-page.php:145
+#: includes/admin/class-tools-page.php:165
+#: includes/admin/class-tools-page.php:167
 msgid "Clear cache"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:148
+#: includes/admin/class-tools-page.php:170
 msgid ""
 "Clear the Better Search cache. This will also be cleared automatically when "
 "you save the settings page."
 msgstr ""
 
-#: includes/admin/class-tools-page.php:151
+#: includes/admin/class-tools-page.php:177
 msgid "Recreate FULLTEXT index"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:153
+#: includes/admin/class-tools-page.php:179
 msgid "Recreate Index"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:153
+#: includes/admin/class-tools-page.php:179
 msgid "Are you sure you want to recreate the index?"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:156
+#: includes/admin/class-tools-page.php:182
 msgid ""
 "Recreate the FULLTEXT index that Better Search uses to get the relevant "
 "search results. This might take a lot of time to regenerate if you have a "
 "lot of posts."
 msgstr ""
 
-#: includes/admin/class-tools-page.php:158
+#: includes/admin/class-tools-page.php:184
 msgid ""
 "If the Recreate Index button fails, please run the following queries in "
 "phpMyAdmin or Adminer"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:168
+#: includes/admin/class-tools-page.php:198
+msgid "Recreate Tables"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:200
+msgid ""
+"These buttons will recreate the tables in which Better Search stores its "
+"data. This is particularly useful if you are noticing issues with tracking "
+"or if there was a problem with the database upgrade"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:203
+msgid "Recreate overall tables"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:203
+msgid ""
+"This will recreate the overall tables. Have you backuped up your database?"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:204
+msgid "Recreate daily tables"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:204
+msgid "This will recreate the daily tables. Have you backed up your database?"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:211
 msgid "Reset database"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:170
+#: includes/admin/class-tools-page.php:213
 msgid "Reset Popular searches table"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:170
+#: includes/admin/class-tools-page.php:213
 msgid "Are you sure you want to reset the popular searches?"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:171
+#: includes/admin/class-tools-page.php:214
 msgid "Reset Daily Popular searches table"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:171
+#: includes/admin/class-tools-page.php:214
 msgid "Are you sure you want to reset the daily popular searches?"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:174
+#: includes/admin/class-tools-page.php:217
 msgid ""
 "This will reset the Better Search tables. If you are running Better Search "
 "on multisite then it will delete the popular posts across the entire "
@@ -305,56 +358,120 @@ msgid ""
 "backed up before proceeding"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:182
-msgid "Export/Import settings"
+#: includes/admin/class-tools-page.php:224
+msgid "Backup Tables"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:184
+#: includes/admin/class-tools-page.php:226
+msgid "From v3.3, Better Search uses a new database table format."
+msgstr ""
+
+#: includes/admin/class-tools-page.php:229
 msgid ""
-"Export the plugin settings for this site as a .json file. This allows you to "
-"easily import the configuration into another site."
+"As part of the upgrade process, the plugin backed up the older tables. "
+"Restoring any of the tables will also reset the database version so you will "
+"once again be prompted to upgrade the tables."
 msgstr ""
 
-#: includes/admin/class-tools-page.php:188
-msgid "Export Settings"
-msgstr ""
-
-#: includes/admin/class-tools-page.php:197
+#: includes/admin/class-tools-page.php:232
 msgid ""
-"Import the plugin settings from a .json file. This file can be obtained by "
-"exporting the settings on another site using the form above."
+"You will need to restore both tables and delete the backup tables before you "
+"can begin the upgrade process."
 msgstr ""
 
-#: includes/admin/class-tools-page.php:203
-msgid "Import Settings"
+#: includes/admin/class-tools-page.php:235
+msgid "Restore Popular searches table"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:211
-msgid "Other tools"
-msgstr ""
-
-#: includes/admin/class-tools-page.php:213
-msgid "Delete old settings"
-msgstr ""
-
-#: includes/admin/class-tools-page.php:213
-msgid "This will delete the settings before v2.5.x. Proceed?"
-msgstr ""
-
-#: includes/admin/class-tools-page.php:216
+#: includes/admin/class-tools-page.php:235
 msgid ""
-"From v2.2.x, Better Search stores the settings in a new key in the database. "
-"This will delete the old settings for the current blog. It is recommended "
-"that you do this at the earliest after upgrade. However, you should do this "
-"only if you are comfortable with the new settings."
+"Are you sure you want to restore the popular searches table from the backup?"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:334
+#: includes/admin/class-tools-page.php:236
+msgid "Restore Daily Popular searches table"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:236
+msgid ""
+"Are you sure you want to restore the daily popular searches table from the "
+"backup?"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:240
+msgid ""
+"If your site has been working fine and populating with new information, then "
+"you can delete these backed up tables to save database space."
+msgstr ""
+
+#: includes/admin/class-tools-page.php:243
+msgid "Delete backup tables"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:243
+msgid ""
+"This will delete the backup tables of Better Search. Have you backed up your "
+"database?"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:402
 msgid "Please upload a valid .json file"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:340
+#: includes/admin/class-tools-page.php:408
 msgid "Please upload a file to import"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:452
+#: includes/admin/settings/class-settings.php:235
+#: includes/admin/settings/class-settings.php:935
+msgid "General"
+msgstr ""
+
+#: includes/admin/class-tools-page.php:454
+msgid ""
+"This screen provides some tools that help maintain certain features of "
+"Better Search."
+msgstr ""
+
+#: includes/admin/class-tools-page.php:455
+msgid ""
+"Clear the cache, reset the popular posts tables plus some miscellaneous "
+"fixes for older versions of Better Search."
+msgstr ""
+
+#: includes/admin/class-upgrader.php:52 includes/admin/class-upgrader.php:69
+msgid "Upgrade Better Search Database"
+msgstr ""
+
+#: includes/admin/class-upgrader.php:53 includes/admin/class-upgrader.php:70
+msgid "Upgrade"
+msgstr ""
+
+#: includes/admin/class-upgrader.php:97
+msgid "Better Search Database Upgrade"
+msgstr ""
+
+#: includes/admin/class-upgrader.php:107
+msgid "Upgrade the Better Search Database Tables."
+msgstr ""
+
+#: includes/admin/class-upgrader.php:109
+msgid "This will upgrade the database across all sites in the network."
+msgstr ""
+
+#: includes/admin/class-upgrader.php:113
+msgid "Click to begin"
+msgstr ""
+
+#: includes/admin/class-upgrader.php:164
+#, php-format
+msgid "Database upgraded on site %s"
+msgstr ""
+
+#: includes/admin/class-upgrader.php:166
+#, php-format
+msgid "Database is already up to date on site %s"
 msgstr ""
 
 #: includes/admin/settings/class-settings-api.php:241
