@@ -223,7 +223,13 @@ class Tools_Page {
 			<form method="post">
 				<h2 style="padding-left:0px"><?php esc_html_e( 'Backup Tables', 'better-search' ); ?></h2>
 				<p class="description">
-					<?php esc_html_e( 'During the v3.3 upgrade, Better Search attempted to create backup tables of your search data.', 'better-search' ); ?>
+					<?php esc_html_e( 'From v3.3, Better Search uses a new database table format.', 'better-search' ); ?>
+				</p>
+				<p class="description">
+					<?php esc_html_e( 'As part of the upgrade process, the plugin backed up the older tables. Restoring any of the tables will also reset the database version so you will once again be prompted to upgrade the tables.', 'better-search' ); ?>
+				</p>
+				<p class="description">
+					<strong><?php esc_html_e( 'You will need to restore both tables and delete the backup tables before you can begin the upgrade process.', 'better-search' ); ?></strong>
 				</p>
 				<p>
 					<input name="bsearch_restore_overall" type="submit" id="bsearch_restore_overall" value="<?php esc_attr_e( 'Restore Popular searches table', 'better-search' ); ?>" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to restore the popular searches table from the backup?', 'better-search' ); ?>')) return false;" />
@@ -231,7 +237,7 @@ class Tools_Page {
 				</p>
 
 				<p class="description">
-					<?php esc_html_e( 'If your site has been working fine and populating with new information, then you can safely delete these backed up tables to save database space.', 'better-search' ); ?>
+					<?php esc_html_e( 'If your site has been working fine and populating with new information, then you can delete these backed up tables to save database space.', 'better-search' ); ?>
 				</p>
 				<p>
 					<input name="bsearch_delete_backup_tables" type="submit" id="bsearch_delete_backup_tables" value="<?php esc_attr_e( 'Delete backup tables', 'better-search' ); ?>" class="button button-secondary" style="color:#f00" onclick="if (!confirm('<?php esc_attr_e( 'This will delete the backup tables of Better Search. Have you backed up your database?', 'better-search' ); ?>')) return false;" />
@@ -320,7 +326,22 @@ class Tools_Page {
 
 		$wpdb->query( 'COMMIT;' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
+		// Restore the database version.
+		update_option( 'bsearch_db_version', '1.0' );
+
 		return true;
+	}
+
+	/**
+	 * Delete Better Search backup tables.
+	 *
+	 * @since 3.3.0
+	 */
+	public static function delete_backup_tables() {
+		global $wpdb;
+
+		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}bsearch_backup" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}bsearch_daily_backup" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	/**
@@ -402,18 +423,6 @@ class Tools_Page {
 			)
 		);
 		exit;
-	}
-
-	/**
-	 * Delete Better Search backup tables.
-	 *
-	 * @since 3.3.0
-	 */
-	public static function delete_backup_tables() {
-		global $wpdb;
-
-		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}bsearch_backup" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}bsearch_daily_backup" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	/**
