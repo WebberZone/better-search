@@ -42,6 +42,10 @@ Here are some of the main features of __Better Search__:
 
 If you want to take your site search to the next level, download __Better Search__ today and see the difference for yourself.
 
+## mySQL FULLTEXT indices
+
+On activation, the plugin creates three mySQL FULLTEXT indices (or indexes) in the `*_posts` table. These are for `post_content`, `post_title` and `(post_title,post_content)`. If you’re running a multisite installation, then this is created for each of the blogs on activation. All these indices occupy space in your mySQL database but are essential for the plugin to run.
+
 ## Screenshots
 
 ![General Options](https://raw.github.com/ajaydsouza/better-search/master/wporg-assets/screenshot-1.png)
