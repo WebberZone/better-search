@@ -109,6 +109,9 @@ class Upgrader {
 						<strong><?php esc_html_e( 'This will upgrade the database across all sites in the network.', 'better-search' ); ?></strong>
 					<?php } ?>
 				</p>
+				<p class="description">
+					<strong><?php esc_html_e( 'Please ensure you have a database backup before proceeding with the upgrade!', 'better-search' ); ?></strong>
+				</p>
 				<p>
 					<input name="bsearch_upgrade_db" type="submit" id="bsearch_upgrade_db" value="<?php esc_attr_e( 'Click to begin', 'better-search' ); ?>" class="button button-secondary" />
 				</p>
