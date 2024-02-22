@@ -181,7 +181,7 @@ class Tracker {
 	 */
 	public static function tracker_parser() {
 
-		$search_query = isset( $_POST['bsearch_search_query'] ) ? rawurldecode( wp_kses( wp_unslash( $_POST['bsearch_search_query'] ), array() ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$search_query = isset( $_POST['bsearch_search_query'] ) ? rawurldecode( sanitize_text_field( wp_unslash( $_POST['bsearch_search_query'] ), array() ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$debug        = isset( $_POST['bsearch_debug'] ) ? absint( $_POST['bsearch_debug'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$str = self::update_count( $search_query );
