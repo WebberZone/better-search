@@ -210,7 +210,7 @@ class Statistics_Table extends \WP_List_Table {
 		return sprintf(
 			'<input type="checkbox" name="%1$s[]" value="%2$s" />',
 			'search',
-			$item['title']
+			esc_attr( $item['title'] )
 		);
 	}
 
@@ -234,7 +234,7 @@ class Statistics_Table extends \WP_List_Table {
 				'<a href="?page=%s&action=%s&id=%s&_wpnonce=%s">' . __( 'Delete', 'better-search' ) . '</a>',
 				esc_attr( $page ),
 				'delete',
-				$item['title'],
+				esc_attr( $item['title'] ),
 				$delete_nonce
 			),
 		);

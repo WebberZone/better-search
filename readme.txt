@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 3.3.0
+Stable tag: 3.3.1
 Requires at least: 5.9
 Tested up to: 6.4
 Requires PHP: 7.4
@@ -107,6 +107,10 @@ Know of a better profanity filter? Suggest one in the [forums](https://wordpress
 
 == Changelog ==
 
+= 3.3.1 =
+
+* Security fix: Potential Cross Site Scripting (XSS) vulnerability. Thanks to Abdi Pranata for reporting this via Patchstack [https://patchstack.com/](https://patchstack.com/)
+
 = 3.3.0 =
 
 Release post: [https://webberzone.com/better-search-v3-3-0](https://webberzone.com/better-search-v3-3-0)
@@ -161,5 +165,5 @@ Release post: [https://webberzone.com/blog/better-search-v3-2-0/](https://webber
 
 == Upgrade Notice ==
 
-= 3.3.0 =
-Major release with a complete rewrite. Check the Changelog or release post on https://webberzone.com for complete details
+= 3.3.1 =
+Security fix: Potential Cross Site Scripting (XSS) vulnerability. Please update immediately.

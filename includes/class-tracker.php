@@ -153,7 +153,7 @@ class Tracker {
 
 		if ( array_key_exists( 'bsearch_search_query', $wp->query_vars ) && ! empty( $wp->query_vars['bsearch_search_query'] ) ) {
 
-			$search_query = rawurldecode( wp_kses( wp_unslash( $wp->query_vars['bsearch_search_query'] ), array() ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$search_query = rawurldecode( wp_kses_data( wp_unslash( $wp->query_vars['bsearch_search_query'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 			$str = self::update_count( $search_query );
 
@@ -181,7 +181,7 @@ class Tracker {
 	 */
 	public static function tracker_parser() {
 
-		$search_query = isset( $_POST['bsearch_search_query'] ) ? rawurldecode( sanitize_text_field( wp_unslash( $_POST['bsearch_search_query'] ), array() ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$search_query = isset( $_POST['bsearch_search_query'] ) ? rawurldecode( wp_kses_data( wp_unslash( $_POST['bsearch_search_query'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$debug        = isset( $_POST['bsearch_debug'] ) ? absint( $_POST['bsearch_debug'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$str = self::update_count( $search_query );
