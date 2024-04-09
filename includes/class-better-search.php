@@ -879,6 +879,8 @@ if ( ! class_exists( 'Better_Search' ) ) :
 							'posts_per_page' => $query->get( 'posts_per_page' ),
 						)
 					);
+					$posts = array_map( 'get_post', $posts );
+					
 					// Set the score for each of the posts.
 					if ( $posts ) {
 						foreach ( $posts as $post ) {
