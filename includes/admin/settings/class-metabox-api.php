@@ -2,8 +2,7 @@
 /**
  * Class to display and save a Metabox.
  *
- * @link  https://webberzone.com
- * @since 2.0.0
+ * @since 3.3.0
  *
  * @package WebberZone\Better_Search
  */
@@ -18,8 +17,9 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * ATA Metabox class to register the metabox for ata_snippets post type.
  *
- * @since 2.0.0
+ * @since 3.5.0
  */
+#[\AllowDynamicProperties]
 class Metabox_API {
 
 	/**
@@ -27,7 +27,7 @@ class Metabox_API {
 	 *
 	 * @var   string
 	 */
-	const VERSION = '2.2.0';
+	const VERSION = '2.3.0';
 
 	/**
 	 * Settings Key.
@@ -77,10 +77,11 @@ class Metabox_API {
 	 * @param array|string $args {
 	 *     Array or string of arguments. Default is blank array.
 	 *
-	 *     @type string $settings_key        Admin menu type. See add_custom_menu_page() for options.
-	 *     @type string $prefix              Parent menu slug.
-	 *     @type string $post_type           Admin menu slug.
-	 *     @type array  $registered_settings Settings fields array.
+	 *     @type string                     $settings_key           Settings key - is used to prepare the form fields. It is not the meta key.
+	 *     @type string                     $prefix                 Used to create the meta keys. The meta key format is _{$prefix}_{$setting_id}.
+	 *     @type string|array|\WP_Screen    $post_type              The post type(s) on which to show the box.
+	 *     @type array                      $registered_settings    Settings fields array.
+	 *     @type string                     $checkbox_modified_text Text to show to indicate a checkbox has been modified from its default value.
 	 * }
 	 */
 	public function __construct( $args ) {
@@ -99,9 +100,9 @@ class Metabox_API {
 			$this->$name = $value;
 		}
 
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_action( "save_post_{$this->post_type}", array( $this, 'save' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 
 	/**
@@ -154,34 +155,11 @@ class Metabox_API {
 			)
 		);
 
-		wp_enqueue_script(
-			'wz-admin-js',
-			plugins_url( 'js/admin-scripts' . $minimize . '.js', __FILE__ ),
-			array( 'jquery' ),
-			self::VERSION,
-			true
-		);
-		wp_enqueue_script(
-			'wz-codemirror-js',
-			plugins_url( 'js/apply-codemirror' . $minimize . '.js', __FILE__ ),
-			array( 'jquery' ),
-			self::VERSION,
-			true
-		);
-		wp_enqueue_script(
-			'wz-taxonomy-suggest-js',
-			plugins_url( 'js/taxonomy-suggest' . $minimize . '.js', __FILE__ ),
-			array( 'jquery' ),
-			self::VERSION,
-			true
-		);
-		wp_enqueue_script(
-			'wz-media-selector-js',
-			plugins_url( 'js/media-selector' . $minimize . '.js', __FILE__ ),
-			array( 'jquery' ),
-			self::VERSION,
-			true
-		);
+		// Enqueue WZ Admin JS.
+		wp_enqueue_script( 'wz-admin-js' );
+		wp_enqueue_script( 'wz-codemirror-js' );
+		wp_enqueue_script( 'wz-taxonomy-suggest-js' );
+		wp_enqueue_script( 'wz-media-selector-js' );
 	}
 
 	/**
@@ -363,7 +341,7 @@ class Metabox_API {
 					}
 				}
 				$settings[ $fields['ids_field'] ] = join( ',', $ids );
-				$settings[ $key ]                 = \WebberZone\Better_Search\Util\Helpers::str_putcsv( $names );
+				$settings[ $key ]                 = Settings_Sanitize::str_putcsv( $names );
 			} else {
 				$settings[ $fields['ids_field'] ] = '';
 			}

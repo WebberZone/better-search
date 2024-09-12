@@ -7,6 +7,9 @@
 
 namespace WebberZone\Better_Search;
 
+use Better_Search_Core_Query;
+use WebberZone\Better_Search\Admin\Activator;
+
 if ( ! defined( 'WPINC' ) ) {
 	exit;
 }
@@ -163,7 +166,7 @@ final class Main {
 	 */
 	public function load_seamless_mode( $query ) {
 		if ( $query->is_search() && bsearch_get_option( 'seamless' ) ) {
-			new \Better_Search();
+			new \Better_Search_Core_Query( $query->query_vars );
 		}
 	}
 
@@ -272,5 +275,84 @@ final class Main {
 		}
 
 		return $title;
+	}
+
+		/**
+		 * Hook into WP_Query to check if bsearch_query is set and is true. If so, we load the Top 10 query.
+		 *
+		 * @since 3.5.0
+		 *
+		 * @param \WP_Query $query The WP_Query object.
+		 */
+	public function parse_query( $query ) {
+		if ( true === $query->get( 'better_search_query' ) ) {
+			new Better_Search_Core_Query( $query->query_vars );
+		}
+	}
+
+	/**
+	 * Checks if another version of Top 10/Top 10 Pro is active and deactivates it.
+	 * Hooked on `activated_plugin` so other plugin is deactivated when current plugin is activated.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @param string $plugin        The plugin being activated.
+	 * @param bool   $network_wide  Whether the plugin is being activated network-wide.
+	 */
+	public function activated_plugin( $plugin, $network_wide ) {
+		if ( ! in_array( $plugin, array( 'better-search/better-search.php', 'better-search-pro/better-search.php' ), true ) ) {
+			return;
+		}
+
+		Activator::activation_hook( $network_wide );
+
+		$plugin_to_deactivate  = 'better-search/better-search.php';
+		$deactivated_notice_id = '1';
+
+		// If we just activated the free version, deactivate the pro version.
+		if ( $plugin === $plugin_to_deactivate ) {
+			$plugin_to_deactivate  = 'better-search-pro/better-search.php';
+			$deactivated_notice_id = '2';
+		}
+
+		if ( is_multisite() && is_network_admin() ) {
+			$active_plugins = (array) get_site_option( 'active_sitewide_plugins', array() );
+			$active_plugins = array_keys( $active_plugins );
+		} else {
+			$active_plugins = (array) get_option( 'active_plugins', array() );
+		}
+
+		foreach ( $active_plugins as $plugin_basename ) {
+			if ( $plugin_to_deactivate === $plugin_basename ) {
+				set_transient( 'bsearch_deactivated_notice_id', $deactivated_notice_id, 1 * HOUR_IN_SECONDS );
+				deactivate_plugins( $plugin_basename );
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Displays a notice when either Top 10 or Top 10 Pro is automatically deactivated.
+	 *
+	 * @since 3.5.0
+	 */
+	public function plugin_deactivated_notice() {
+		$deactivated_notice_id = (int) get_transient( 'bsearch_deactivated_notice_id' );
+		if ( ! in_array( $deactivated_notice_id, array( 1, 2 ), true ) ) {
+			return;
+		}
+
+		$message = __( "Top 10 and Top 10 Pro should not be active at the same time. We've automatically deactivated Top 10.", 'better-search' );
+		if ( 2 === $deactivated_notice_id ) {
+			$message = __( "Top 10 and Top 10 Pro should not be active at the same time. We've automatically deactivated Top 10 Pro.", 'better-search' );
+		}
+
+		?>
+			<div class="updated" style="border-left: 4px solid #ffba00;">
+				<p><?php echo esc_html( $message ); ?></p>
+			</div>
+			<?php
+
+			delete_transient( 'bsearch_deactivated_notice_id' );
 	}
 }
