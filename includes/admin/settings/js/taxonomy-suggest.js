@@ -8,7 +8,7 @@ jQuery(document).ready(function($) {
 		options = options || {};
 
 		var taxonomy = options.taxonomy || $element.attr( 'data-wp-taxonomy' ) || 'category';
-		var tag_search = options.tag_search || $element.attr( 'data-wp-action' ) || 'ata_tag_search';
+		var tag_search = options.tag_search || $element.attr( 'data-wp-action' ) || 'wz_tags_search';
 		delete( options.taxonomy );
 		delete( options.tag_search );
 

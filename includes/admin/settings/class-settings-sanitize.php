@@ -153,27 +153,35 @@ class Settings_Sanitize {
 	}
 
 	/**
-	 * Sanitize post_types fields
+	 * Sanitize multicheck fields
 	 *
-	 * @param  array $value The field value.
+	 * @param  array|int $value The field value.
 	 * @return string  $value  Sanitized value
 	 */
-	public function sanitize_posttypes_field( $value ) {
-		$post_types = array_map( 'sanitize_text_field', (array) wp_unslash( $value ) );
+	public function sanitize_multicheck_field( $value ) {
+		$values = ( -1 === (int) $value ) ? array() : array_map( 'sanitize_text_field', (array) wp_unslash( $value ) );
 
-		return implode( ',', $post_types );
+		return implode( ',', $values );
 	}
 
 	/**
 	 * Sanitize post_types fields
 	 *
-	 * @param  array $value The field value.
+	 * @param  array|int $value The field value.
+	 * @return string  $value  Sanitized value
+	 */
+	public function sanitize_posttypes_field( $value ) {
+		return $this->sanitize_multicheck_field( $value );
+	}
+
+	/**
+	 * Sanitize post_types fields
+	 *
+	 * @param  array|int $value The field value.
 	 * @return string  $value  Sanitized value
 	 */
 	public function sanitize_taxonomies_field( $value ) {
-		$taxonomies = array_map( 'sanitize_text_field', (array) wp_unslash( $value ) );
-
-		return implode( ',', $taxonomies );
+		return $this->sanitize_multicheck_field( $value );
 	}
 
 	/**
@@ -184,5 +192,95 @@ class Settings_Sanitize {
 	 */
 	public function sanitize_color_field( $value ) {
 		return sanitize_hex_color( $value );
+	}
+
+	/**
+	 * Convert a string to CSV.
+	 *
+	 * @param array  $input_array Input string.
+	 * @param string $delimiter Delimiter.
+	 * @param string $enclosure Enclosure.
+	 * @param string $terminator Terminating string.
+	 * @return string CSV string.
+	 */
+	public static function str_putcsv( $input_array, $delimiter = ',', $enclosure = '"', $terminator = "\n" ) {
+		// First convert associative array to numeric indexed array.
+		$work_array = array();
+		foreach ( $input_array as $key => $value ) {
+			$work_array[] = $value;
+		}
+
+		$output     = '';
+		$array_size = count( $work_array );
+
+		for ( $i = 0; $i < $array_size; $i++ ) {
+			// Nested array, process nest item.
+			if ( is_array( $work_array[ $i ] ) ) {
+				$output .= self::str_putcsv( $work_array[ $i ], $delimiter, $enclosure, $terminator );
+			} else {
+				switch ( gettype( $work_array[ $i ] ) ) {
+					// Manually set some strings.
+					case 'NULL':
+						$sp_format = '';
+						break;
+					case 'boolean':
+						$sp_format = ( true === $work_array[ $i ] ) ? 'true' : 'false';
+						break;
+					// Make sure sprintf has a good datatype to work with.
+					case 'integer':
+						$sp_format = '%i';
+						break;
+					case 'double':
+						$sp_format = '%0.2f';
+						break;
+					case 'string':
+						$sp_format        = '%s';
+						$work_array[ $i ] = str_replace( "$enclosure", "$enclosure$enclosure", $work_array[ $i ] );
+						break;
+					// Unknown or invalid items for a csv - note: the datatype of array is already handled above, assuming the data is nested.
+					case 'object':
+					case 'resource':
+					default:
+						$sp_format = '';
+						break;
+				}
+				$output .= sprintf( '%2$s' . $sp_format . '%2$s', $work_array[ $i ], $enclosure );
+				$output .= ( $i < ( $array_size - 1 ) ) ? $delimiter : $terminator;
+			}
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Processes category/taxonomy slugs and adds a new element to the settings array containing the term taxonomy IDs.
+	 *
+	 * @param array  $settings The settings array containing the taxonomy slugs to sanitize.
+	 * @param string $source_key The key in the settings array containing the slugs. Pattern is Name (taxonomy:term_taxonomy_id).
+	 * @param string $target_key The key in the settings array to store the sanitized term taxonomy IDs.
+	 * @return void
+	 */
+	public static function sanitize_tax_slugs( &$settings, $source_key, $target_key ) {
+		if ( isset( $settings[ $source_key ] ) ) {
+			$slugs = array_unique( str_getcsv( $settings[ $source_key ] ) );
+
+			foreach ( $slugs as $slug ) {
+				// Pattern is Name (taxonomy:term_taxonomy_id).
+				preg_match( '/(.*)\((.*):(\d+)\)/i', (string) $slug, $matches );
+				if ( isset( $matches[3] ) ) {
+					$term = get_term_by( 'term_taxonomy_id', $matches[3] );
+				} else {
+					// Fallback to fetching the category as this was the original format.
+					$term = get_term_by( 'name', $slug, 'category' );
+				}
+				if ( isset( $term->term_taxonomy_id ) ) {
+					$tax_ids[]   = $term->term_taxonomy_id;
+					$tax_slugs[] = "{$term->name} ({$term->taxonomy}:{$term->term_taxonomy_id})";
+				}
+			}
+
+			$settings[ $target_key ] = isset( $tax_ids ) ? join( ',', $tax_ids ) : '';
+			$settings[ $source_key ] = isset( $tax_slugs ) ? self::str_putcsv( $tax_slugs ) : '';
+		}
 	}
 }

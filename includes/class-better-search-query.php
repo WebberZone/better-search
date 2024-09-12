@@ -28,7 +28,7 @@ if ( ! class_exists( 'Better_Search_Query' ) ) :
 		 * @param array|string $args The Query variables. Accepts an array or a query string.
 		 */
 		public function __construct( $args = array() ) {
-			$better_search = new Better_Search( $args );
+			$better_search = new Better_Search_Core_Query( $args );
 
 			add_filter( 'pre_get_posts', array( $better_search, 'pre_get_posts' ), 10 );
 			add_filter( 'posts_fields', array( $better_search, 'posts_fields' ), 10, 2 );
