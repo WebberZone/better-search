@@ -3,8 +3,8 @@ Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
 Donate link: https://ajaydsouza.com/donate/
 Stable tag: 3.3.1
-Requires at least: 5.9
-Tested up to: 6.4
+Requires at least: 6.3
+Tested up to: 6.6
 Requires PHP: 7.4
 License: GPLv2 or later
 
@@ -104,8 +104,16 @@ You can turn the filter off by emptying the list.
 
 Know of a better profanity filter? Suggest one in the [forums](https://wordpress.org/support/plugin/better-search).
 
+= How can I report security bugs? =
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/better-search)
+
 
 == Changelog ==
+
+= 3.4.0 =
+
+
 
 = 3.3.1 =
 

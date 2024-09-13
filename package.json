@@ -1,0 +1,51 @@
+{
+    "name": "@webberzone/better-search",
+    "version": "4.0.0",
+    "description": "Better Search replaces the default WordPress search with a better search engine that gives contextual results sorted by relevance",
+    "author": "WebberZone",
+    "license": "GPL-2.0-or-later",
+    "main": "index.js",
+    "scripts": {
+        "build": "wp-scripts build --webpack-src-dir=includes/frontend/blocks/src/ --output-path=includes/frontend/blocks/build/",
+        "build:query": "wp-scripts build --webpack-src-dir=includes/pro/blocks/src/query/ --output-path=includes/pro/blocks/build/query/",
+        "build:featured-image": "wp-scripts build --webpack-src-dir=includes/pro/blocks/src/featured-image/ --output-path=includes/pro/blocks/build/featured-image/",
+        "build:pro": "npm run build:query && npm run build:featured-image && npm run build:popular-posts-pro",
+        "build:all": "npm run build && npm run build:pro",
+        "format": "wp-scripts format ./includes/pro/blocks/src/ ./includes/frontend/blocks/src/",
+        "format:free": "wp-scripts format ./includes/frontend/blocks/src/",
+        "format:pro": "wp-scripts format ./includes/pro/blocks/src/",
+        "lint:css": "wp-scripts lint-style ./includes/pro/blocks/src/ ./includes/frontend/blocks/src/",
+        "lint:js": "wp-scripts lint-js ./includes/pro/blocks/src/ ./includes/frontend/blocks/src/",
+        "packages-update": "wp-scripts packages-update",
+        "start": "wp-scripts start --webpack-src-dir=includes/frontend/blocks/src/ --output-path=includes/frontend/blocks/build/",
+        "start:featured-image": "wp-scripts start --webpack-src-dir=includes/pro/blocks/src/featured-image/ --output-path=includes/pro/blocks/build/featured-image/",
+        "start:query": "wp-scripts start --webpack-src-dir=includes/pro/blocks/src/query/ --output-path=includes/pro/blocks/build/query/",
+        "start:pro": "npm run start:query & npm run start:featured-image & npm run start:popular-posts-pro",
+        "start:all": "npm run start & npm run start:pro",
+        "zip": "wp-scripts plugin-zip"
+    },
+    "files": [
+        "css",
+        "freemius",
+        "includes",
+        "languages",
+        "README.md",
+        "better-search.php",
+        "index.php",
+        "uninstaller.php",
+        "changelog.txt",
+        "readme.txt",
+        "default.png",
+        "default2.png",
+        "wpml-config.xml"
+    ],
+    "devDependencies": {
+        "@wordpress/prettier-config": "^4.7.0",
+        "@wordpress/scripts": "^27"
+    },
+    "dependencies": {
+        "@wordpress/icons": "^10.7.0",
+        "clsx": "^2.1.1",
+        "uuid": "^10.0.0"
+    }
+}

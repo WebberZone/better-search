@@ -8,9 +8,9 @@
 [![Required PHP](https://img.shields.io/wordpress/plugin/required-php/better-search?style=flat-square)](https://wordpress.org/plugins/better-search/)
 [![Active installs](https://img.shields.io/wordpress/plugin/installs/better-search?style=flat-square)](https://wordpress.org/plugins/better-search/)
 
-__Requires:__ 5.9
+__Requires:__ 6.3
 
-__Tested up to:__ 6.4
+__Tested up to:__ 6.6
 
 __License:__ [GPL-2.0+](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -22,11 +22,11 @@ Better Search replaces the default WordPress search with a better search engine 
 
 Are you looking for a way to improve your WordPress site search and make it easier for your visitors to find what they need? If so, you need __[Better Search](https://webberzone.com/plugins/better-search/)__, the plugin that replaces the default WordPress search engine with a more powerful and relevant one.
 
-**Better Search** is not just a simple search plugin. It is a complete solution that gives you full control over your site search results. You can customize the output, fine tune the relevance, search within different fields and post types, track the popular searches, and much more.
+__Better Search__ is not just a simple search plugin. It is a complete solution that gives you full control over your site search results. You can customize the output, fine tune the relevance, search within different fields and post types, track the popular searches, and much more.
 
 With __Better Search__, you can make your site search more user-friendly and engaging. You can display a "search heatmap" of the most popular searches on your site, either as a widget or a shortcode. You can also use your own template file and CSS styles to match your theme perfectly.
 
-**Better Search** has its own caching system and is also compatible with caching plugins like WP Super Cache and W3 Total Cache, so you don't have to worry about performance issues. It also has a profanity filter that lets you block unwanted words from search queries. And it is translation ready, so you can use it in any language.
+__Better Search__ has its own caching system and is also compatible with caching plugins like WP Super Cache and W3 Total Cache, so you don't have to worry about performance issues. It also has a profanity filter that lets you block unwanted words from search queries. And it is translation ready, so you can use it in any language.
 
 Here are some of the main features of __Better Search__:
 
@@ -77,6 +77,10 @@ Alternatively, search for __Better Search__ from Plugins &raquo; Add New within 
 
 ## Frequently Asked Questions
 
-Check out the [FAQ on the plugin page](https://wordpress.org/plugins/better-search/faq/) for a detailed list of questions and answers
+Check out the [FAQ on the plugin page](https://wordpress.org/plugins/better-search/faq/) for a detailed list of questions and answers.
 
 If your question isn't listed there, please create a new post in the [WordPress.org support forum](https://wordpress.org/support/plugin/better-search). I monitor the forums regularly. If you're looking for more advanced *paid* support, please see [details here](https://webberzone.com/support/).
+
+## How can I report security bugs?
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/better-search)
