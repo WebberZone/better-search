@@ -13,7 +13,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  https://webberzone.com/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     3.3.1
+ * Version:     4.0.0-beta1
  * Author:      WebberZone
  * Author URI:  https://webberzone.com/
  * Text Domain: better-search
@@ -34,7 +34,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @since 2.9.3
  */
-define( 'BETTER_SEARCH_VERSION', '3.3.0' );
+define( 'BETTER_SEARCH_VERSION', '4.0.0' );
 
 /**
  * Holds the filesystem directory path (with trailing slash) for Better Search
@@ -67,27 +67,17 @@ define( 'BETTER_SEARCH_DB_VERSION', '2.0' );
 // Load the autoloader.
 require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/autoloader.php';
 
-/**
- * The code that runs during plugin activation.
- *
- * @since 3.3.0
- *
- * @param bool $network_wide Whether the plugin is being activated network-wide.
- */
-function activate_bsearch( $network_wide ) {
-	Admin\Activator::activation_hook( $network_wide );
+if ( ! function_exists( __NAMESPACE__ . '\load_bsearch' ) ) {
+	/**
+	 * The main function responsible for returning the one true WebberZone Snippetz instance to functions everywhere.
+	 *
+	 * @since 3.3.0
+	 */
+	function load_bsearch() {
+		Main::get_instance();
+	}
+	add_action( 'plugins_loaded', __NAMESPACE__ . '\load_bsearch' );
 }
-register_activation_hook( __FILE__, __NAMESPACE__ . '\activate_bsearch' );
-
-/**
- * The main function responsible for returning the one true WebberZone Snippetz instance to functions everywhere.
- *
- * @since 3.3.0
- */
-function load_bsearch() {
-	Main::get_instance();
-}
-add_action( 'plugins_loaded', __NAMESPACE__ . '\load_bsearch' );
 
 /*
  *----------------------------------------------------------------------------
@@ -95,7 +85,7 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\load_bsearch' );
  *----------------------------------------------------------------------------
  */
 require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/options-api.php';
-require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search.php';
+require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search-core-query.php';
 require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search-query.php';
 require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/functions.php';
 require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/general-template.php';
