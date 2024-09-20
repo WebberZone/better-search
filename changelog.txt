@@ -1,5 +1,60 @@
 This file holds the archive of changelog entries
 
+= 3.3.1 =
+
+* Security fix: Potential Cross Site Scripting (XSS) vulnerability. Thanks to Abdi Pranata for reporting this via Patchstack [https://patchstack.com/](https://patchstack.com/)
+
+= 3.3.0 =
+
+Release post: [https://webberzone.com/better-search-v3-3-0](https://webberzone.com/better-search-v3-3-0)
+
+This is a major release. Complete rewrite of the plugin code - Better Search now uses autoloading and namespaces. Database structure has been changed.
+
+* Features:
+	* New Admin Dashboard will show the number of searches and the top searches for the day, week, month and all time
+
+* Enhancements:
+	* The tables in the database have been changed for more optimized update queries. The plugin will prompt you to run the upgrade script when you update the plugin
+	* Better Search Tracker doesn't use jQuery anymore
+	* Uninstall now uses `get_sites()` behind the scenes to delete options from all sites in a multisite install
+	* Blank searches will return no results
+	* Better Search tables will only be deleted if you set `BETTER_SEARCH_DELETE_DATA` to true in you wp-config.php file
+
+* Bug fixes:
+	* Banned search filtering didn't work properly in some cases
+
+= 3.2.2 =
+
+* Enhancements:
+	* Use `get_match_sql` instead of `score` in the order by clause
+	* Support `meta_query` argument
+	* New filter: `better_search_query_date_query`
+
+* Bug fixes:
+	* Checkbox in admin page always showed as modified
+
+= 3.2.1 =
+
+Release post: [https://webberzone.com/blog/better-search-v3-2-0/](https://webberzone.com/blog/better-search-v3-2-0/)
+
+* Bug fixes:
+	* Make stopwords an array by [@ezific](https://github.com/ezific)
+	* Fix bsearch_extract_locations by [@mjsterling](https://github.com/mjsterling)
+
+= 3.2.0 =
+
+* Enhancements/modifications:
+	* Only highlight whole words
+	* Censor character has been modified to be a blank phrase instead of a space. Additionally multiple spaces will be replaced by a single space.
+	* Description of the taxonomy is also searched
+
+* Bug fixes:
+	* mySQL error was generated if there were + signs with banned words in BOOLEAN mode
+	* Fixed `bsearch_form` shortcode incorrect parameters
+	* Queries with apostrophe gave errors
+	* PHP 8.1 compatibility
+	* Security fix when clearing cache
+
 = 3.1.0 =
 
 Release post: [https://webberzone.com/blog/better-search-v3-1-0/](https://webberzone.com/blog/better-search-v3-1-0/)
