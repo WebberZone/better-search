@@ -28,22 +28,22 @@ parameters:
 		-
 			message: "#^Access to an undefined property WP_Query\\:\\:\\$topscore\\.$#"
 			count: 3
-			path: includes/class-better-search.php
+			path: includes/class-better-search-core-query.php
 
 		-
 			message: "#^Cannot access property \\$score on int\\|WP_Post\\.$#"
 			count: 1
-			path: includes/class-better-search.php
+			path: includes/class-better-search-core-query.php
 
 		-
 			message: "#^Variable \\$cache_name might not be defined\\.$#"
 			count: 1
-			path: includes/class-better-search.php
+			path: includes/class-better-search-core-query.php
 
 		-
 			message: "#^Variable \\$cache_time might not be defined\\.$#"
 			count: 1
-			path: includes/class-better-search.php
+			path: includes/class-better-search-core-query.php
 
 		-
 			message: "#^Negated boolean expression is always false\\.$#"
