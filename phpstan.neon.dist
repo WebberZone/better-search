@@ -4,7 +4,7 @@ parameters:
     level: 5
     paths:
         - better-search.php
-        - uninstall.php
+        - uninstaller.php
         - includes/
         - templates/
     ignoreErrors:
