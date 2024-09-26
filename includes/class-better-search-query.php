@@ -28,7 +28,7 @@ if ( ! class_exists( 'Better_Search_Query' ) ) :
 		 * @param array|string $args The Query variables. Accepts an array or a query string.
 		 */
 		public function __construct( $args = array() ) {
-			$args       = wp_parse_args( $args, array( 'is_better_search_query' => true ) );
+			$args       = wp_parse_args( $args, array( 'better_search_query' => true ) );
 			$core_query = new Better_Search_Core_Query( $args );
 
 			add_filter( 'pre_get_posts', array( $core_query, 'pre_get_posts' ), 10 );

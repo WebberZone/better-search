@@ -1,0 +1,93 @@
+<?php
+/**
+ * Functions dealing with live search.
+ *
+ * @package   Better_Search
+ */
+
+namespace WebberZone\Better_Search\Frontend;
+
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+/**
+ * Class Live_Search
+ *
+ * @since 4.0.0
+ */
+class Live_Search {
+
+	/**
+	 * Constructor to initialize the class.
+	 */
+	public function __construct() {
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'wp_ajax_bsearch_live_search', array( $this, 'live_search' ) );
+		add_action( 'wp_ajax_nopriv_bsearch_live_search', array( $this, 'live_search' ) );
+	}
+
+	/**
+	 * Enqueue the live search script.
+	 */
+	public function enqueue_scripts() {
+		if ( ! \bsearch_get_option( 'enable_live_search' ) ) {
+			return;
+		}
+
+		$minimize = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+		wp_enqueue_script(
+			'bsearch-live-search',
+			plugins_url( 'includes/js/better-search-live-search' . $minimize . '.js', BETTER_SEARCH_PLUGIN_FILE ),
+			array(),
+			BETTER_SEARCH_VERSION,
+			true
+		);
+		wp_localize_script(
+			'bsearch-live-search',
+			'bsearch_live_search',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+			)
+		);
+
+		wp_enqueue_style(
+			'bsearch-live-search-style',
+			plugins_url( 'includes/css/bsearch-live-search' . $minimize . '.css', BETTER_SEARCH_PLUGIN_FILE ),
+			array(),
+			BETTER_SEARCH_VERSION
+		);
+	}
+
+	/**
+	 * Live search function.
+	 */
+	public function live_search() {
+		$search_query = isset( $_POST['s'] ) ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+		$query = new \Better_Search_Query(
+			array(
+				'better_search_query' => true,
+				's'                   => $search_query,
+				'posts_per_page'      => 5,
+				'post_type'           => wp_parse_list( \bsearch_get_option( 'post_types' ) ),
+				'post_status'         => 'publish',
+			)
+		);
+
+		$results = array();
+		if ( $query->have_posts() ) {
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				$results[] = array(
+					'title' => get_the_title(),
+					'link'  => get_permalink(),
+				);
+			}
+		}
+		wp_reset_postdata();
+
+		wp_send_json( $results );
+	}
+}

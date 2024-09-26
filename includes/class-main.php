@@ -82,6 +82,15 @@ final class Main {
 	public $display;
 
 	/**
+	 * Live Search.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @var object Live Search.
+	 */
+	public $live_search;
+
+	/**
 	 * Gets the instance of the class.
 	 *
 	 * @since 3.3.0
@@ -112,11 +121,12 @@ final class Main {
 	 * @since 3.3.0
 	 */
 	private function init() {
-		$this->language   = new Frontend\Language_Handler();
-		$this->styles     = new Frontend\Styles_Handler();
-		$this->tracker    = new Tracker();
-		$this->shortcodes = new Frontend\Shortcodes();
-		$this->display    = new Frontend\Display();
+		$this->language    = new Frontend\Language_Handler();
+		$this->styles      = new Frontend\Styles_Handler();
+		$this->tracker     = new Tracker();
+		$this->shortcodes  = new Frontend\Shortcodes();
+		$this->display     = new Frontend\Display();
+		$this->live_search = new Frontend\Live_Search();
 
 		$this->hooks();
 
@@ -165,8 +175,10 @@ final class Main {
 	 * @param \WP_Query $query Query object.
 	 */
 	public function load_seamless_mode( $query ) {
-		if ( $query->is_search() && bsearch_get_option( 'seamless' ) ) {
-			new \Better_Search_Core_Query( $query->query_vars );
+		if ( $query->is_search() ) {
+			if ( bsearch_get_option( 'seamless' ) || true === $query->get( 'better_search_query' ) ) {
+				new \Better_Search_Core_Query( $query->query_vars );
+			}
 		}
 	}
 

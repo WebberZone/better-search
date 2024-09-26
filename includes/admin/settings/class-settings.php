@@ -293,6 +293,13 @@ class Settings {
 				'type'    => 'checkbox',
 				'options' => true,
 			),
+			'enable_live_search'  => array(
+				'id'      => 'enable_live_search',
+				'name'    => esc_html__( 'Enable live search', 'better-search' ),
+				'desc'    => esc_html__( 'This option will enable the live search feature on the search form.', 'better-search' ),
+				'type'    => 'checkbox',
+				'options' => false,
+			),
 			'track_popular'       => array(
 				'id'      => 'track_popular',
 				'name'    => esc_html__( 'Enable search tracking', 'better-search' ),

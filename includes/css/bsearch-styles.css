@@ -27,7 +27,6 @@
 }
 
 .bsearchform select, .bsearchform input[type="search"] {
-	/* styling */
 	background-color: #fff;
 	border: thin solid #999;
 	display: inline-block;

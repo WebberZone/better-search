@@ -113,8 +113,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.0.0 =
 
+* Features:
+	* New live search feature that shows search results as you type.
+
 * Enhancements:
-	* Renamed Better_Search to Better_Search_Core_Query. Each of the methods now remove the filter from itself.
+	* Renamed Better_Search to Better_Search_Core_Query. Each of the methods now remove the filter from itself. It will also automatically parse wp_query parameters.
 
 
 For previous changelog entries, please refer to the separate changelog.txt file or [Github Releases page](https://github.com/WebberZone/better-search/releases)
