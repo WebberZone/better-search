@@ -479,10 +479,6 @@ class Better_Search_Core_Query {
 		if ( $this->is_search( $query ) || true === $query->get( 'better_search_query' ) ) {
 			$query_args = $this->query_args;
 
-			if ( empty( get_bsearch_query() ) ) {
-				$query->set( 'post__in', array( 0 ) );
-			}
-
 			$fields = array(
 				'date_query',
 				'tax_query',
