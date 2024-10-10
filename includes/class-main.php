@@ -91,6 +91,15 @@ final class Main {
 	public $live_search;
 
 	/**
+	 * Pro.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @var object Pro.
+	 */
+	public $pro;
+
+	/**
 	 * Gets the instance of the class.
 	 *
 	 * @since 3.3.0
@@ -127,6 +136,7 @@ final class Main {
 		$this->shortcodes  = new Frontend\Shortcodes();
 		$this->display     = new Frontend\Display();
 		$this->live_search = new Frontend\Live_Search();
+		$this->pro         = new Pro\Pro();
 
 		$this->hooks();
 
@@ -158,7 +168,7 @@ final class Main {
 	}
 
 	/**
-	 * Initialise the Top 10 widgets.
+	 * Initialise the Better Search widgets.
 	 *
 	 * @since 3.3.0
 	 */
@@ -289,21 +299,26 @@ final class Main {
 		return $title;
 	}
 
-		/**
-		 * Hook into WP_Query to check if bsearch_query is set and is true. If so, we load the Top 10 query.
-		 *
-		 * @since 3.5.0
-		 *
-		 * @param \WP_Query $query The WP_Query object.
-		 */
+	/**
+	 * Hook into WP_Query to check if better_search_query is set and true.
+	 * If so, load the Better Search query.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @param \WP_Query $query The WP_Query object.
+	 */
 	public function parse_query( $query ) {
 		if ( true === $query->get( 'better_search_query' ) ) {
-			new Better_Search_Core_Query( $query->query_vars );
+			// Load the Better Search query only if it's not already initialized.
+			if ( ! isset( $query->query_vars['is_better_search_loaded'] ) || ! $query->query_vars['is_better_search_loaded'] ) {
+				$query->set( 'is_better_search_loaded', true );
+				new Better_Search_Core_Query( $query->query_vars );
+			}
 		}
 	}
 
 	/**
-	 * Checks if another version of Top 10/Top 10 Pro is active and deactivates it.
+	 * Checks if another version of Better Search/Better Search Pro is active and deactivates it.
 	 * Hooked on `activated_plugin` so other plugin is deactivated when current plugin is activated.
 	 *
 	 * @since 3.5.0
@@ -344,7 +359,7 @@ final class Main {
 	}
 
 	/**
-	 * Displays a notice when either Top 10 or Top 10 Pro is automatically deactivated.
+	 * Displays a notice when either Better Search or Better Search Pro is automatically deactivated.
 	 *
 	 * @since 3.5.0
 	 */
@@ -354,9 +369,9 @@ final class Main {
 			return;
 		}
 
-		$message = __( "Top 10 and Top 10 Pro should not be active at the same time. We've automatically deactivated Top 10.", 'better-search' );
+		$message = __( "Better Search and Better Search Pro should not be active at the same time. We've automatically deactivated Better Search.", 'better-search' );
 		if ( 2 === $deactivated_notice_id ) {
-			$message = __( "Top 10 and Top 10 Pro should not be active at the same time. We've automatically deactivated Top 10 Pro.", 'better-search' );
+			$message = __( "Better Search and Better Search Pro should not be active at the same time. We've automatically deactivated Better Search Pro.", 'better-search' );
 		}
 
 		?>

@@ -103,14 +103,6 @@ class Better_Search_Core_Query {
 	public $query_args = array();
 
 	/**
-	 * Holds the top score.
-	 *
-	 * @since 4.0.0
-	 * @var bool
-	 */
-	public $is_better_search_query = true;
-
-	/**
 	 * Holds the array of stopwords.
 	 *
 	 * @since 3.0.0
@@ -136,8 +128,9 @@ class Better_Search_Core_Query {
 	public function __construct( $args = array() ) {
 		$this->prepare_query_args( $args );
 
-		if ( ( $this->is_seamless_mode && is_main_query() ) ||
-			( isset( $args['better_search_query'] ) && true === $args['better_search_query'] && ! $this->is_better_search_query ) ) {
+		if ( ( $this->is_seamless_mode && is_main_query() && ! wp_is_serving_rest_request() ) ||
+			! empty( $args['better_search_query'] )
+		) {
 			$this->hooks();
 		}
 	}
@@ -148,6 +141,10 @@ class Better_Search_Core_Query {
 	 * @since 3.0.0
 	 */
 	public function hooks() {
+
+		if ( isset( $this->query_args['is_better_search_loaded'] ) && $this->query_args['is_better_search_loaded'] ) {
+			return;
+		}
 
 		add_filter( 'pre_get_posts', array( $this, 'pre_get_posts' ), 10 );
 		add_filter( 'posts_fields', array( $this, 'posts_fields' ), 10, 2 );
@@ -199,11 +196,9 @@ class Better_Search_Core_Query {
 		$args['better_search_query'] = true;
 		$args['suppress_filters']    = false;
 		$args['ignore_sticky_posts'] = true;
-		$args['no_found_rows']       = true;
 
 		// Store query args before we manipulate them.
-		$this->input_query_args       = $args;
-		$this->is_better_search_query = isset( $this->input_query_args['is_better_search_query'] ) ? $this->input_query_args['is_better_search_query'] : false;
+		$this->input_query_args = $args;
 
 		/**
 		 * Applies filters to the query arguments before executing the query.
@@ -489,6 +484,9 @@ class Better_Search_Core_Query {
 				'post_status',
 				'posts_per_page',
 				'author',
+				'no_found_rows',
+				'suppress_filters',
+				'ignore_sticky_posts',
 			);
 
 			foreach ( $fields as $field ) {
@@ -497,9 +495,6 @@ class Better_Search_Core_Query {
 				}
 			}
 
-			$query->set( 'suppress_filters', false );
-			$query->set( 'no_found_rows', true );
-			$query->set( 'ignore_sticky_posts', true );
 			remove_filter( 'pre_get_posts', array( $this, 'pre_get_posts' ) );
 		}
 	}
@@ -963,14 +958,14 @@ class Better_Search_Core_Query {
 	}
 
 	/**
-	 * Filter posts_clauses in WP_Query
+	 * Filter posts_clauses in WP_Query.
 	 *
 	 * @since 4.0.0
 	 *
 	 * @param string[]  $clauses Array of clauses.
 	 * @param \WP_Query $query The WP_Query instance.
 	 *
-	 * @return array Updated Array of clauses.
+	 * @return array Updated array of clauses.
 	 */
 	public function posts_clauses( $clauses, $query ) {
 
@@ -983,8 +978,8 @@ class Better_Search_Core_Query {
 		 *
 		 * @since 4.0.0
 		 *
-		 * @param string[]                  $clauses Array of clauses.
-		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
+		 * @param string[]                 $clauses Array of clauses.
+		 * @param Better_Search_Core_Query $query   The Better_Search instance (passed by reference).
 		 */
 		$clauses = apply_filters_ref_array( 'better_search_query_posts_clauses', array( $clauses, &$this ) );
 
