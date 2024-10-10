@@ -157,6 +157,7 @@ class Better_Search_Core_Query {
 		add_filter( 'posts_distinct', array( $this, 'posts_distinct' ), 10, 2 );
 		add_filter( 'posts_orderby', array( $this, 'posts_orderby' ), 10, 2 );
 		add_filter( 'posts_groupby', array( $this, 'posts_groupby' ), 10, 2 );
+		add_filter( 'posts_clauses', array( $this, 'posts_clauses' ), 10, 2 );
 		add_filter( 'posts_clauses_request', array( $this, 'set_topscore' ), 10, 2 );
 		add_filter( 'posts_pre_query', array( $this, 'posts_pre_query' ), 10, 2 );
 		add_filter( 'the_posts', array( $this, 'the_posts' ), 10, 2 );
@@ -422,8 +423,8 @@ class Better_Search_Core_Query {
 		 * @param string|array $args {
 		 *     Optional. Array or string of Query parameters.
 		 *
-		 *     @type array         $args The arguments of the query.
-		 *     @type Better_Search $this The Better_Search instance (passed by reference).
+		 *     @param array                    $args  The arguments of the query.
+		 *     @param Better_Search_Core_Query $query The Better_Search instance (passed by reference).
 		 * }
 		 */
 		$this->query_args = apply_filters_ref_array( 'better_search_query_args', array( $args, &$this ) );
@@ -523,8 +524,9 @@ class Better_Search_Core_Query {
 		 * @param string  $match_sql   The match SQL.
 		 * @param string  $search_query Source Post instance.
 		 * @param array   $args  Arguments array.
+		 * @param Better_Search_Core_Query $query The Better_Search instance.
 		 */
-		$match = apply_filters( 'better_search_query_pre_get_match_sql', '', $search_query, $args );
+		$match = apply_filters_ref_array( 'better_search_query_get_match_sql', array( '', $search_query, $args, &$this ) );
 
 		if ( ! empty( $match ) ) {
 			return $match;
@@ -555,14 +557,16 @@ class Better_Search_Core_Query {
 		 * Filter the MATCH part of the FIELDS clause of the query.
 		 *
 		 * @since 2.0.0
+		 * @since 4.0.0 Added $query parameter.
 		 *
 		 * @param string $field_score    The MATCH section of the FIELDS clause of the query, i.e. score.
 		 * @param string $search_query   Search query.
 		 * @param int    $weight_title   Weight of title.
 		 * @param int    $weight_content Weight of content.
 		 * @param array  $args           Array of arguments.
+		 * @param Better_Search_Core_Query $query The Better_Search instance (passed by reference).
 		 */
-		return apply_filters( 'bsearch_posts_match_field', $field_score, $search_query, $weight_title, $weight_content, $args );
+		return apply_filters_ref_array( 'bsearch_posts_match_field', array( $field_score, $search_query, $weight_title, $weight_content, $args, &$this ) );
 	}
 
 	/**
@@ -600,9 +604,9 @@ class Better_Search_Core_Query {
 		 * @param string     $fields       The SELECT clause of the query.
 		 * @param string     $search_query Search query
 		 * @param array      $args         Array of arguments
-		 * @param \WP_Query  $query        The WP_Query instance.
+		 * @param Better_Search_Core_Query $query The Better_Search instance (passed by reference).
 		 */
-		$fields = apply_filters( 'bsearch_posts_fields', $fields, $this->search_query, $this->query_args, $query );
+		$fields = apply_filters_ref_array( 'bsearch_posts_fields', array( $fields, $this->search_query, $this->query_args, &$this ) );
 
 		remove_filter( 'posts_fields', array( $this, 'posts_fields' ) );
 
@@ -647,8 +651,8 @@ class Better_Search_Core_Query {
 			 *
 			 * @since 3.0.0
 			 *
-			 * @param string    $join  The JOIN clause of the query.
-			 * @param \WP_Query $query The Better_Search instance (passed by reference).
+			 * @param string                    $join  The JOIN clause of the query.
+			 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 			 */
 			$join = apply_filters_ref_array( 'better_search_query_posts_join', array( $join, &$this ) );
 
@@ -685,8 +689,8 @@ class Better_Search_Core_Query {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param string    $where The WHERE clause of the query.
-		 * @param \WP_Query $query The Better_Search instance (passed by reference).
+		 * @param string                    $where The WHERE clause of the query.
+		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
 		$where = apply_filters_ref_array( 'better_search_query_posts_where', array( $where, &$this ) );
 
@@ -820,8 +824,8 @@ class Better_Search_Core_Query {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param string    $where The search part of the WHERE clause of the query.
-		 * @param \WP_Query $query The Better_Search instance (passed by reference).
+		 * @param string                    $where The search part of the WHERE clause of the query.
+		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
 		$where = apply_filters_ref_array( 'better_search_query_posts_search', array( $where, &$this ) );
 
@@ -852,8 +856,8 @@ class Better_Search_Core_Query {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param string    $distinct The DISTINCT clause of the query.
-		 * @param \WP_Query $query    The Better_Search instance (passed by reference).
+		 * @param string                    $distinct The DISTINCT clause of the query.
+		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
 		$distinct = apply_filters_ref_array( 'better_search_query_posts_distinct', array( $distinct, &$this ) );
 
@@ -884,7 +888,7 @@ class Better_Search_Core_Query {
 			if ( 'relevance' === $query->get( 'orderby' ) || 'relatedness' === $query->get( 'orderby' ) ) {
 				$orderby = ' ' . $this->get_match_sql( $this->search_query, $this->query_args ) . ' DESC ';
 			}
-			return apply_filters( 'better_search_query_posts_orderby', $orderby, $query );
+			return apply_filters_ref_array( 'better_search_query_posts_orderby', array( $orderby, &$this ) );
 		}
 
 		// Initialize an array to build the orderby clauses.
@@ -903,10 +907,10 @@ class Better_Search_Core_Query {
 		 *
 		 * @since 4.0.0
 		 *
-		 * @param string[]   $orderby_clauses The SELECT clause of the query.
-		 * @param \WP_Query  $query           The WP_Query instance.
+		 * @param string[]                  $orderby_clauses The SELECT clause of the query.
+		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
-		$orderby_clauses = apply_filters( 'better_search_query_posts_orderby_clauses', $orderby_clauses, $query );
+		$orderby_clauses = apply_filters_ref_array( 'better_search_query_posts_orderby_clauses', array( $orderby_clauses, &$this ) );
 
 		// Combine all the orderby clauses.
 		if ( ! empty( $orderby_clauses ) ) {
@@ -918,8 +922,8 @@ class Better_Search_Core_Query {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param string    $orderby The ORDER BY clause of the query.
-		 * @param \WP_Query $query   The Better_Search instance (passed by reference).
+		 * @param string                    $orderby The ORDER BY clause of the query.
+		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
 		$orderby = apply_filters_ref_array( 'better_search_query_posts_orderby', array( $orderby, &$this ) );
 
@@ -948,14 +952,45 @@ class Better_Search_Core_Query {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param string    $groupby The GROUP BY clause of the query.
-		 * @param \WP_Query $query   The Better_Search instance (passed by reference).
+		 * @param string                    $groupby The GROUP BY clause of the query.
+		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
 		$groupby = apply_filters_ref_array( 'better_search_query_posts_groupby', array( $groupby, &$this ) );
 
 		remove_filter( 'posts_groupby', array( $this, 'posts_groupby' ) );
 
 		return $groupby;
+	}
+
+	/**
+	 * Filter posts_clauses in WP_Query
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param string[]  $clauses Array of clauses.
+	 * @param \WP_Query $query The WP_Query instance.
+	 *
+	 * @return array Updated Array of clauses.
+	 */
+	public function posts_clauses( $clauses, $query ) {
+
+		if ( ! $this->is_search( $query ) ) {
+			return $clauses;
+		}
+
+		/**
+		 * Filters the posts_clauses of Better_Search after processing and before returning.
+		 *
+		 * @since 4.0.0
+		 *
+		 * @param string[]                  $clauses Array of clauses.
+		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
+		 */
+		$clauses = apply_filters_ref_array( 'better_search_query_posts_clauses', array( $clauses, &$this ) );
+
+		remove_filter( 'posts_clauses', array( $this, 'posts_clauses' ) );
+
+		return $clauses;
 	}
 
 	/**
@@ -1007,10 +1042,10 @@ class Better_Search_Core_Query {
 		 *
 		 * @since 3.2.0
 		 *
-		 * @param \WP_Post[]  $posts Array of post data.
-		 * @param \WP_Query   $query The Better_Search instance (passed by reference).
+		 * @param \WP_Post[]                $posts Array of post data.
+		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
-		$posts = apply_filters( 'better_search_query_posts_pre_query', $posts, $query );
+		$posts = apply_filters_ref_array( 'better_search_query_posts_pre_query', array( $posts, &$this ) );
 
 		remove_filter( 'posts_pre_query', array( $this, 'posts_pre_query' ) );
 
@@ -1040,10 +1075,11 @@ class Better_Search_Core_Query {
 			 *
 			 * @since 3.0.0
 			 *
-			 * @param int   $cache_time Cache time in seconds
-			 * @param array $args       Array of all the arguments
+			 * @param int                       $cache_time Cache time in seconds
+			 * @param array                     $args       Array of all the arguments
+			 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 			 */
-			$cache_time = apply_filters( 'better_search_query_cache_time', $this->query_args['cache_time'], $this->query_args );
+			$cache_time = apply_filters_ref_array( 'better_search_query_cache_time', array( $this->query_args['cache_time'], $this->query_args, &$this ) );
 			$cache_name = $this->get_cache_key( $query );
 
 			$cached_data = array();
@@ -1075,11 +1111,13 @@ class Better_Search_Core_Query {
 		 * Filter array of WP_Post objects before it is returned to the Better_Search instance.
 		 *
 		 * @since 3.0.0
+		 * @since 4.0.0 Added $query parameter.
 		 *
-		 * @param WP_Post[] $posts Array of post objects.
-		 * @param array     $args  Arguments array.
+		 * @param WP_Post[]                $posts Array of post objects.
+		 * @param array                    $args  Arguments array.
+		 * @param Better_Search_Core_Query $query The Better_Search instance (passed by reference).
 		 */
-		$posts = apply_filters( 'better_search_query_the_posts', $posts, $this->query_args );
+		$posts = apply_filters_ref_array( 'better_search_query_the_posts', array( $posts, $this->query_args, &$this ) );
 
 		remove_filter( 'the_posts', array( $this, 'the_posts' ) );
 
