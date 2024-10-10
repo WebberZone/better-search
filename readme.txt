@@ -4,7 +4,7 @@ Tags: search, Better Search, related search, relevant search, search results, co
 Donate link: https://ajaydsouza.com/donate/
 Stable tag: 3.3.1
 Requires at least: 6.3
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.4
 License: GPLv2 or later
 
@@ -115,9 +115,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 * Features:
 	* New live search feature that shows search results as you type.
+	* [Pro] New setting to only show search results above a certain relevance threshold.
 
-* Enhancements:
-	* Renamed Better_Search to Better_Search_Core_Query. Each of the methods now remove the filter from itself. It will also automatically parse wp_query parameters.
+* Enhancements/Modifications:
+	* Renamed `Better_Search` to `Better_Search_Core_Query`. Each of the methods now remove the filter from itself. It will also automatically parse wp_query parameters.
+	* Updated `Better_Search_Core_Query` filters to use the class instead of `WP_Query`.
+	* [Pro] Added a new button to create the indexes and display the index status on the settings page under the **Search tab for Enable mySQL FULLTEXT searching**.
 
 
 For previous changelog entries, please refer to the separate changelog.txt file or [Github Releases page](https://github.com/WebberZone/better-search/releases)

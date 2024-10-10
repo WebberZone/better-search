@@ -146,7 +146,9 @@ class Settings {
 		add_action( 'admin_menu', array( $this, 'initialise_settings' ) );
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 11, 2 );
 		add_filter( 'plugin_action_links_' . plugin_basename( BETTER_SEARCH_PLUGIN_FILE ), array( $this, 'plugin_actions_links' ) );
-		add_filter( 'bsearch_settings_sanitize', array( $this, 'change_settings_on_save' ), 99 );
+		add_filter( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 99 );
+		add_filter( self::$prefix . '_settings_sanitize', array( $this, 'change_settings_on_save' ), 99 );
+		add_filter( self::$prefix . '_after_setting_output', array( $this, 'after_setting_output' ), 10, 2 );
 	}
 
 	/**
@@ -330,8 +332,8 @@ class Settings {
 			),
 			'cache_time'          => array(
 				'id'      => 'cache_time',
-				'name'    => esc_html__( 'Time to cache', 'top-10' ),
-				'desc'    => esc_html__( 'Enter the number of seconds to cache the output.', 'top-10' ),
+				'name'    => esc_html__( 'Time to cache', 'better-search' ),
+				'desc'    => esc_html__( 'Enter the number of seconds to cache the output.', 'better-search' ),
 				'type'    => 'text',
 				'options' => HOUR_IN_SECONDS,
 			),
@@ -423,6 +425,17 @@ class Settings {
 				'type'    => 'number',
 				'options' => '1',
 				'size'    => 'small',
+			),
+			'min_relevance'            => array(
+				'id'      => 'min_relevance',
+				'name'    => esc_html__( 'Minimum relevance percentage', 'better-search' ),
+				'desc'    => esc_html__( 'The minimum relevance percentage required for a post to be included in the search results. This is a number between 0 and 100.', 'better-search' ),
+				'type'    => 'number',
+				'options' => '0',
+				'size'    => 'small',
+				'pro'     => true,
+				'max'     => 100,
+				'min'     => 0,
 			),
 			'search_excerpt'           => array(
 				'id'      => 'search_excerpt',
@@ -994,6 +1007,39 @@ class Settings {
 	}
 
 	/**
+	 * Enqueue scripts and styles.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param string $hook Current hook.
+	 */
+	public function admin_enqueue_scripts( $hook ) {
+
+		if ( ! isset( $this->settings_api->settings_page ) || $hook !== $this->settings_api->settings_page ) {
+			return;
+		}
+		wp_localize_script(
+			'wz-admin-js',
+			'bsearch_admin',
+			array()
+		);
+		wp_enqueue_script( 'better-search-admin-js' );
+		wp_enqueue_style( 'better-search-admin-ui-css' );
+		wp_localize_script(
+			'better-search-admin-js',
+			'bsearch_admin_data',
+			array(
+				'ajax_url'             => admin_url( 'admin-ajax.php' ),
+				'security'             => wp_create_nonce( 'bsearch-admin' ),
+				'confirm_message'      => esc_html__( 'Are you sure you want to clear the cache?', 'better-search' ),
+				'success_message'      => esc_html__( 'Cache cleared successfully!', 'better-search' ),
+				'fail_message'         => esc_html__( 'Failed to clear cache. Please try again.', 'better-search' ),
+				'request_fail_message' => esc_html__( 'Request failed: ', 'better-search' ),
+			)
+		);
+	}
+
+	/**
 	 * Modify settings when they are being saved.
 	 *
 	 * @since 3.3.0
@@ -1029,5 +1075,20 @@ class Settings {
 		\WebberZone\Better_Search\Util\Cache::delete();
 
 		return $settings;
+	}
+
+	/**
+	 * Updated the settings fields to display a pro version link.
+	 *
+	 * @param string $output Settings field HTML.
+	 * @param array  $args   Settings field arguments.
+	 * @return string Updated HTML.
+	 */
+	public static function after_setting_output( $output, $args ) {
+		if ( isset( $args['pro'] ) && $args['pro'] ) {
+			$output .= '<a class="bsearch_button bsearch_button_gold" target="_blank" href="https://webberzone.com/plugins/better-search/pro/" title="' . esc_attr__( 'Upgrade to Pro', 'better-search' ) . '">' . esc_html__( 'Upgrade to Pro', 'better-search' ) . '</a>';
+		}
+
+		return $output;
 	}
 }
