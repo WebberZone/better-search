@@ -17,8 +17,15 @@ $search_query        = get_search_query();
 $limit               = isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : $bsearch_settings['limit'];  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $bydate              = isset( $_GET['bydate'] ) ? absint( $_GET['bydate'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $paged               = (int) get_query_var( 'paged', 1 ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-$selected_post_types = isset( $_GET['post_types'] ) ? sanitize_title( wp_unslash( $_GET['post_types'] ) ) : 'any'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$post_types          = ( 'any' === $selected_post_types ) ? bsearch_get_option( 'post_types' ) : $selected_post_types;
+$selected_post_types = 'any';
+
+if ( isset( $_GET['post_types'] ) ) {// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$selected_post_types = sanitize_title( wp_unslash( $_GET['post_types'] ) );// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+} elseif ( isset( $_GET['post_type'] ) ) {// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$selected_post_types = sanitize_title( wp_unslash( $_GET['post_type'] ) );// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+}
+
+$post_types = ( 'any' === $selected_post_types ) ? bsearch_get_option( 'post_types' ) : $selected_post_types;
 
 // Reset wp_query temporary.
 global $wp_query;
