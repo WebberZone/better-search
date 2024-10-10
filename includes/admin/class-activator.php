@@ -92,31 +92,111 @@ class Activator {
 		}
 	}
 
-	/** Create fulltext indexes on the posts table.
+	/**
+	 * Create fulltext indexes on the posts table.
 	 *
 	 * @since 3.3.0
 	 */
 	public static function create_fulltext_indexes() {
+		// Get the list of fulltext indexes.
+		$indexes = self::get_fulltext_indexes();
+
+		// Loop through the indexes and create them if not exist.
+		foreach ( $indexes as $index => $columns ) {
+			if ( ! self::is_index_installed( $index ) ) {
+				self::install_fulltext_index( $index, $columns );
+			}
+		}
+	}
+
+	/**
+	 * Check if a fulltext index already exists on the posts table.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param string $index Index name.
+	 * @return bool True if the index exists, false otherwise.
+	 */
+	private static function is_index_installed( $index ) {
 		global $wpdb;
 
+		$index_exists = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				"SHOW INDEX FROM {$wpdb->posts} WHERE Key_name = %s",
+				$index
+			)
+		);
+
+		return (bool) $index_exists;
+	}
+
+	/**
+	 * Install a fulltext index on the posts table.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param string $index   Index name.
+	 * @param string $columns Columns to be indexed.
+	 * @return void
+	 */
+	private static function install_fulltext_index( $index, $columns ) {
+		global $wpdb;
+
+		// Install the fulltext index if it doesn't exist.
+		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT ' . $index . ' ' . $columns . ';' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.NotPrepared
+	}
+
+	/**
+	 * Get the list of fulltext indexes to be created on the posts table.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @return array Array of fulltext indexes with their respective columns.
+	 */
+	private static function get_fulltext_indexes() {
 		$indexes = array(
 			'bsearch'         => '(post_title, post_content)',
 			'bsearch_title'   => '(post_title)',
 			'bsearch_content' => '(post_content)',
 		);
 
-		foreach ( $indexes as $index => $columns ) {
-			$index_exists = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-				$wpdb->prepare(
-					"SHOW INDEX FROM {$wpdb->posts} WHERE Key_name = %s",
-					$index
-				)
-			);
+		/**
+		 * Filter the fulltext indexes.
+		 *
+		 * @since 4.0.0
+		 *
+		 * @param array $indexes Array of fulltext indexes.
+		 */
+		return apply_filters( 'bsearch_fulltext_indexes', $indexes );
+	}
 
-			if ( ! $index_exists ) {
-				$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT ' . $index . ' ' . $columns . ';' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.NotPrepared
-			}
+	/**
+	 * Check the status of all fulltext indexes.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @return array Array of index statuses indicating whether they are installed.
+	 */
+	public static function check_fulltext_indexes() {
+		// Get the list of fulltext indexes.
+		$indexes  = self::get_fulltext_indexes();
+		$statuses = array();
+
+		// Check if each index is installed and add to the report.
+		foreach ( $indexes as $index => $columns ) {
+			$statuses[ $index ] = self::is_index_installed( $index )
+				? '<span style="color: #006400;">' . __( 'Installed', 'better-search' ) . '</span>'
+				: '<span style="color: #8B0000;">' . __( 'Not Installed', 'better-search' ) . '</span>';
 		}
+
+		/**
+		 * Filter the index statuses report.
+		 *
+		 * @since 4.0.0
+		 *
+		 * @param array $statuses Array of index statuses.
+		 */
+		return apply_filters( 'bsearch_fulltext_index_statuses', $statuses );
 	}
 
 	/**
