@@ -18,6 +18,9 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Activator {
 
+	private const TABLE_NAME       = 'bsearch';
+	private const TABLE_NAME_DAILY = 'bsearch_daily';
+
 	/**
 	 * Constructor class.
 	 *
@@ -70,8 +73,8 @@ class Activator {
 	public static function single_activate() {
 		global $wpdb;
 
-		$table_name       = $wpdb->prefix . 'bsearch';
-		$table_name_daily = $wpdb->prefix . 'bsearch_daily';
+		$table_name       = $wpdb->prefix . self::TABLE_NAME;
+		$table_name_daily = $wpdb->prefix . self::TABLE_NAME_DAILY;
 
 		// Create FULLTEXT indexes.
 		$wpdb->hide_errors();
@@ -200,6 +203,25 @@ class Activator {
 	}
 
 	/**
+	 * Check if all fulltext indexes are installed.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @return bool True if all fulltext indexes are installed, false if any are missing.
+	 */
+	public static function is_fulltext_index_installed() {
+		$indexes = self::get_fulltext_indexes();
+
+		foreach ( $indexes as $index => $columns ) {
+			if ( ! self::is_index_installed( $index ) ) {
+				return false; // Return false if any index is missing.
+			}
+		}
+
+		return true; // Return true if all indexes are installed.
+	}
+
+	/**
 	 * Create table if not exists.
 	 *
 	 * @since 3.3.0
@@ -229,8 +251,9 @@ class Activator {
 		global $wpdb;
 
 		$charset_collate = $wpdb->get_charset_collate();
+		$table_name      = $wpdb->prefix . self::TABLE_NAME;
 
-		$sql = "CREATE TABLE {$wpdb->prefix}bsearch" . // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$sql = "CREATE TABLE {$table_name}" . // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
 		" (
 			searchvar VARCHAR(100) NOT NULL,
 			cntaccess int NOT NULL,
@@ -251,8 +274,9 @@ class Activator {
 		global $wpdb;
 
 		$charset_collate = $wpdb->get_charset_collate();
+		$table_name      = $wpdb->prefix . self::TABLE_NAME_DAILY;
 
-		$sql = "CREATE TABLE {$wpdb->prefix}bsearch_daily" . // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$sql = "CREATE TABLE {$table_name}" . // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
 		" (
 			searchvar VARCHAR(100) NOT NULL,
 			cntaccess int NOT NULL,
@@ -331,7 +355,7 @@ class Activator {
 	public static function recreate_overall_table( $backup = true ) {
 		global $wpdb;
 		return self::recreate_table(
-			$wpdb->prefix . 'bsearch',
+			$wpdb->prefix . self::TABLE_NAME,
 			self::create_full_table_sql(),
 			$backup
 		);
@@ -349,7 +373,7 @@ class Activator {
 	public static function recreate_daily_table( $backup = true ) {
 		global $wpdb;
 		return self::recreate_table(
-			$wpdb->prefix . 'bsearch_daily',
+			$wpdb->prefix . self::TABLE_NAME_DAILY,
 			self::create_daily_table_sql(),
 			$backup,
 			array( 'searchvar', 'cntaccess', 'dp_date' ),
@@ -390,8 +414,8 @@ class Activator {
 	public static function on_delete_blog( $tables ) {
 		global $wpdb;
 
-		$tables[] = $wpdb->prefix . 'bsearch';
-		$tables[] = $wpdb->prefix . 'bsearch_daily';
+		$tables[] = $wpdb->prefix . self::TABLE_NAME;
+		$tables[] = $wpdb->prefix . self::TABLE_NAME_DAILY;
 
 		return $tables;
 	}

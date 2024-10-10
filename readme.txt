@@ -120,6 +120,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Enhancements/Modifications:
 	* Renamed `Better_Search` to `Better_Search_Core_Query`. Each of the methods now remove the filter from itself. It will also automatically parse wp_query parameters.
 	* Updated `Better_Search_Core_Query` filters to use the class instead of `WP_Query`.
+	* Display an admin notice if any of the fulltext indexes are missing and **Enable mySQL FULLTEXT searching** is enabled. This is only shown to admins and cannot be dismissed until the indexes are created.
 	* [Pro] Added a new button to create the indexes and display the index status on the settings page under the **Search tab for Enable mySQL FULLTEXT searching**.
 
 
