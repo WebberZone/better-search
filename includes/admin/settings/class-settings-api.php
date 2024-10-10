@@ -21,7 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Settings API wrapper class
  *
- * @version 2.5.1
+ * @version 2.5.2
  */
 #[\AllowDynamicProperties]
 class Settings_API {
