@@ -25,6 +25,7 @@ class Admin_Notices {
 	 */
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'update_db_check' ) );
+		add_action( 'admin_notices', array( $this, 'fulltext_index_notice' ) );
 	}
 
 	/**
@@ -65,5 +66,30 @@ class Admin_Notices {
 			</p>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Display admin notice if the fulltext indexes are not created.
+	 *
+	 * @since 4.0.0
+	 */
+	public function fulltext_index_notice() {
+		if ( ! current_user_can( 'manage_options' ) || ! \bsearch_get_option( 'use_fulltext' ) ) {
+			return;
+		}
+
+		// Check if all indexes are installed.
+		if ( ! Activator::is_fulltext_index_installed() ) {
+			?>
+			<div class="notice notice-warning">
+				<p>
+					<?php esc_html_e( 'Better Search: Some fulltext indexes are missing, which will affect search results.', 'better-search' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=bsearch_tools_page' ) ); ?>">
+						<?php esc_html_e( 'Click here to recreate indexes.', 'better-search' ); ?>
+					</a>
+				</p>
+			</div>
+			<?php
+		}
 	}
 }
