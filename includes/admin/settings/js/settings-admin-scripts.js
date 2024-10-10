@@ -64,7 +64,7 @@ jQuery(document).ready(function ($) {
 	});
 
 	$('.reset-default-thumb').on('click', function () {
-		$('#tptn_settings\\[thumb_default\\]').val(tptn_admin.thumb_default);
+		$('#bsearch_settings\\[thumb_default\\]').val(bsearch_admin.thumb_default);
 	});
 
 });
