@@ -302,6 +302,14 @@ class Settings {
 				'type'    => 'checkbox',
 				'options' => false,
 			),
+			'enable_rest_api'     => array(
+				'id'      => 'enable_rest_api',
+				'name'    => esc_html__( 'Enable REST API', 'better-search' ),
+				'desc'    => esc_html__( 'When enabled, the REST API endpoint (search) will display relevant search results.', 'better-search' ),
+				'type'    => 'checkbox',
+				'options' => false,
+				'pro'     => true,
+			),
 			'track_popular'       => array(
 				'id'      => 'track_popular',
 				'name'    => esc_html__( 'Enable search tracking', 'better-search' ),
@@ -437,6 +445,12 @@ class Settings {
 				'max'     => 100,
 				'min'     => 0,
 			),
+			'search_header'            => array(
+				'id'   => 'search_header',
+				'name' => '<h3>' . esc_html__( 'Inclusion options', 'better-search' ) . '</h3>',
+				'desc' => '',
+				'type' => 'header',
+			),
 			'search_excerpt'           => array(
 				'id'      => 'search_excerpt',
 				'name'    => esc_html__( 'Search Excerpt', 'better-search' ),
@@ -471,6 +485,12 @@ class Settings {
 				'desc'    => esc_html__( 'Select to include posts where comments include the search term(s).', 'better-search' ),
 				'type'    => 'checkbox',
 				'options' => false,
+			),
+			'exclude_header'           => array(
+				'id'   => 'exclude_header',
+				'name' => '<h3>' . esc_html__( 'Exclusion options', 'better-search' ) . '</h3>',
+				'desc' => '',
+				'type' => 'header',
 			),
 			'exclude_protected_posts'  => array(
 				'id'      => 'exclude_protected_posts',
@@ -1086,7 +1106,12 @@ class Settings {
 	 */
 	public static function after_setting_output( $output, $args ) {
 		if ( isset( $args['pro'] ) && $args['pro'] ) {
-			$output .= '<a class="bsearch_button bsearch_button_gold" target="_blank" href="https://webberzone.com/plugins/better-search/pro/" title="' . esc_attr__( 'Upgrade to Pro', 'better-search' ) . '">' . esc_html__( 'Upgrade to Pro', 'better-search' ) . '</a>';
+			$output .= sprintf(
+				'<a class="bsearch_button bsearch_button_gold" target="_blank" href="%s" title="%s">%s</a>',
+				esc_url( 'https://webberzone.com/plugins/better-search/pro/' ),
+				esc_attr__( 'Upgrade to Pro', 'better-search' ),
+				esc_html__( 'Upgrade to Pro', 'better-search' )
+			);
 		}
 
 		return $output;
