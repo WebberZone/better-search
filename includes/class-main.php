@@ -136,7 +136,6 @@ final class Main {
 		$this->shortcodes  = new Frontend\Shortcodes();
 		$this->display     = new Frontend\Display();
 		$this->live_search = new Frontend\Live_Search();
-		$this->pro         = new Pro\Pro();
 
 		$this->hooks();
 

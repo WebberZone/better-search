@@ -116,6 +116,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Features:
 	* New live search feature that shows search results as you type.
 	* [Pro] New setting to only show search results above a certain relevance threshold.
+	* [Pro] New setting *Enable REST API* which allows the REST API to utilize the Better Search search engine when enabled. [Read this knowledge base article for more information ahout how Better Search enhances the Search endpoint](https://webberzone.com/support/knowledgebase/better-search-rest-api/).
 
 * Enhancements/Modifications:
 	* Renamed `Better_Search` to `Better_Search_Core_Query`. Each of the methods now remove the filter from itself. It will also automatically parse wp_query parameters.
