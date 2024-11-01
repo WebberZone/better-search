@@ -445,6 +445,20 @@ class Settings {
 				'max'     => 100,
 				'min'     => 0,
 			),
+			'fuzzy_search_level'       => array(
+				'id'      => 'fuzzy_search_level',
+				'name'    => esc_html__( 'Fuzzy search level', 'better-search' ),
+				'desc'    => esc_html__( 'This option will allow you to enable fuzzy search. Adjust the level of flexibility for matching search terms. Higher levels may include more results with potential misspellings. Note that fuzzy searching can be computationally intensive, so it is recommended to have caching enabled, especially on high traffic sites.', 'better-search' ),
+				'type'    => 'select',
+				'options' => array(
+					'off'    => esc_html__( 'Off', 'better-search' ),
+					'low'    => esc_html__( 'Low', 'better-search' ),
+					'medium' => esc_html__( 'Medium', 'better-search' ),
+					'high'   => esc_html__( 'High', 'better-search' ),
+				),
+				'default' => 'off',
+				'pro'     => true,
+			),
 			'search_header'            => array(
 				'id'   => 'search_header',
 				'name' => '<h3>' . esc_html__( 'Inclusion options', 'better-search' ) . '</h3>',
