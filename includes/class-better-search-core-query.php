@@ -531,7 +531,7 @@ class Better_Search_Core_Query {
 		$weight_title   = $args['weight_title'] ?? bsearch_get_option( 'weight_title' );
 		$weight_content = $args['weight_content'] ?? bsearch_get_option( 'weight_content' );
 		$boolean_mode   = $this->is_boolean_mode ? ' IN BOOLEAN MODE' : '';
-		$search_query   = htmlspecialchars_decode( $search_query );
+		$search_query   = wp_specialchars_decode( $search_query );
 
 		$field_score = '';
 
