@@ -91,6 +91,11 @@ parameters:
 			path: includes/heatmap.php
 
 		-
+			message: "#^Constant DB_NAME not found\\.$#"
+			count: 1
+			path: includes/pro/class-fuzzy-search.php
+
+		-
 			message: "#^Access to an undefined property Better_Search_Query\\:\\:\\$topscore\\.$#"
 			count: 1
 			path: templates/template.php

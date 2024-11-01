@@ -93,6 +93,13 @@ class Activator {
 			self::recreate_daily_table();
 			update_option( 'bsearch_db_version', BETTER_SEARCH_DB_VERSION );
 		}
+
+		/**
+		 * Fires after the plugin has been activated.
+		 *
+		 * @since 4.0.0
+		 */
+		do_action( 'bsearch_activate' );
 	}
 
 	/**
