@@ -25,8 +25,8 @@ class Language_Handler {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
-		add_filter( 'Better_Search_query_the_posts', array( $this, 'translate_ids' ), 999 );
+		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+		add_filter( 'better_search_query_the_posts', array( $this, 'translate_ids' ), 999 );
 	}
 
 	/**
