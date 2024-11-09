@@ -116,6 +116,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Features:
 	* New live search feature that shows search results as you type.
 	* [Pro] New setting to enable and set the fuzzy search level. Once enabled, the plugin will attempt to find results if the search term is misspelled. This only works effectively for English words.
+	* [Pro] Multisite search feature allowing network admins to select specific sites for cross-network searches. Sites not selected will function independently.
 	* [Pro] New setting to only show search results above a certain relevance threshold.
 	* [Pro] New setting *Enable REST API* which allows the REST API to utilize the Better Search search engine when enabled. [Read this knowledge base article for more information ahout how Better Search enhances the Search endpoint](https://webberzone.com/support/knowledgebase/better-search-rest-api/).
 
@@ -123,6 +124,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 	* Renamed `Better_Search` to `Better_Search_Core_Query`. Each of the methods now remove the filter from itself. It will also automatically parse wp_query parameters.
 	* Updated `Better_Search_Core_Query` filters to use the class instead of `WP_Query`.
 	* Display an admin notice if any of the fulltext indexes are missing and **Enable mySQL FULLTEXT searching** is enabled. This is only shown to admins and cannot be dismissed until the indexes are created.
+	* Better Search results page now work with Block Templates. You can enable Seamless mode to use your theme's search template.
 	* [Pro] Added a new button to create the indexes and display the index status on the settings page under the **Search tab for Enable mySQL FULLTEXT searching**.
 
 * Bug fixes:
