@@ -119,6 +119,14 @@ class Better_Search_Core_Query {
 	public $topscore = 0;
 
 	/**
+	 * Holds the match SQL.
+	 *
+	 * @since 4.0.0
+	 * @var string
+	 */
+	public $match_sql = '';
+
+	/**
 	 * Main constructor.
 	 *
 	 * @since 3.0.0
@@ -129,7 +137,8 @@ class Better_Search_Core_Query {
 		$this->prepare_query_args( $args );
 
 		if ( ( $this->is_seamless_mode && is_main_query() && ! wp_is_serving_rest_request() ) ||
-			! empty( $args['better_search_query'] )
+			! empty( $args['better_search_query'] ) ||
+			! empty( $this->query_args['better_search_query'] )
 		) {
 			$this->hooks();
 		}
@@ -155,7 +164,8 @@ class Better_Search_Core_Query {
 		add_filter( 'posts_orderby', array( $this, 'posts_orderby' ), 10, 2 );
 		add_filter( 'posts_groupby', array( $this, 'posts_groupby' ), 10, 2 );
 		add_filter( 'posts_clauses', array( $this, 'posts_clauses' ), 10, 2 );
-		add_filter( 'posts_clauses_request', array( $this, 'set_topscore' ), 10, 2 );
+		add_filter( 'posts_request', array( $this, 'posts_request' ), 10, 2 );
+		add_filter( 'posts_clauses_request', array( $this, 'set_topscore' ), 100, 2 );
 		add_filter( 'posts_pre_query', array( $this, 'posts_pre_query' ), 10, 2 );
 		add_filter( 'the_posts', array( $this, 'the_posts' ), 10, 2 );
 	}
@@ -561,7 +571,11 @@ class Better_Search_Core_Query {
 		 * @param array  $args           Array of arguments.
 		 * @param Better_Search_Core_Query $query The Better_Search instance (passed by reference).
 		 */
-		return apply_filters_ref_array( 'bsearch_posts_match_field', array( $field_score, $search_query, $weight_title, $weight_content, $args, &$this ) );
+		$field_score = apply_filters_ref_array( 'bsearch_posts_match_field', array( $field_score, $search_query, $weight_title, $weight_content, $args, &$this ) );
+
+		$this->match_sql = $field_score;
+
+		return $field_score;
 	}
 
 	/**
@@ -881,7 +895,7 @@ class Better_Search_Core_Query {
 		if ( ! empty( $query->get( 'orderby' ) ) ) {
 			// if orderby is set to relevance, then we need to set the orderby to the match clause.
 			if ( 'relevance' === $query->get( 'orderby' ) || 'relatedness' === $query->get( 'orderby' ) ) {
-				$orderby = ' ' . $this->get_match_sql( $this->search_query, $this->query_args ) . ' DESC ';
+				$orderby = ' score DESC ';
 			}
 			return apply_filters_ref_array( 'better_search_query_posts_orderby', array( $orderby, &$this ) );
 		}
@@ -890,7 +904,7 @@ class Better_Search_Core_Query {
 		$orderby_clauses = array();
 
 		if ( ! empty( $this->use_fulltext ) ) {
-			$orderby_clauses[] = ' ' . $this->get_match_sql( $this->search_query, $this->query_args ) . ' DESC ';
+			$orderby_clauses[] = ' score DESC ';
 		}
 
 		if ( ! empty( $this->query_args['bydate'] ) || ( isset( $this->query_args['ordering'] ) && 'date' === $this->query_args['ordering'] ) ) {
@@ -986,6 +1000,37 @@ class Better_Search_Core_Query {
 		remove_filter( 'posts_clauses', array( $this, 'posts_clauses' ) );
 
 		return $clauses;
+	}
+
+	/**
+	 * Filter posts_request in WP_Query.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param string    $request The request.
+	 * @param \WP_Query $query   The WP_Query instance.
+	 *
+	 * @return string Updated request.
+	 */
+	public function posts_request( $request, $query ) {
+
+		if ( ! $this->is_search( $query ) ) {
+			return $request;
+		}
+
+		/**
+		 * Filters the posts_request of Better_Search after processing and before returning.
+		 *
+		 * @since 4.0.0
+		 *
+		 * @param string                   $request Array of clauses.
+		 * @param Better_Search_Core_Query $query   The Better_Search instance (passed by reference).
+		 */
+		$request = apply_filters_ref_array( 'better_search_query_posts_request', array( $request, &$this ) );
+
+		remove_filter( 'posts_request', array( $this, 'posts_request' ) );
+
+		return $request;
 	}
 
 	/**
@@ -1131,46 +1176,53 @@ class Better_Search_Core_Query {
 	public function set_topscore( $clauses, $query ) {
 		global $wpdb;
 
-		if ( ! $this->is_search( $query ) ) {
+		if ( ! $this->is_search( $query ) || ! $this->use_fulltext ) {
+			$this->topscore  = 0;
+			$query->topscore = 0;
 			return $clauses;
 		}
 
-		if ( $this->use_fulltext ) {
-			$topscore = 0;
+		$topscore = 0;
+
+		if ( ! empty( $this->query_args['cache'] ) ) {
+			/** This filter has been documented in better-search-query.php */
+			$cache_time = apply_filters( 'better_search_query_cache_time', $this->query_args['cache_time'], $this->query_args );
+			$cache_name = $this->get_cache_key( $query, 'ts' );
+			$topscore   = get_transient( $cache_name );
+		}
+
+		if ( $topscore ) {
+			$this->topscore  = $topscore;
+			$query->topscore = $topscore;
+		} else {
+			$score = $this->match_sql;
+			$score = empty( $score ) ? '0' : $score;
+
+			$where  = $wpdb->prepare( 'post_date <= %s', current_time( 'mysql' ) );
+			$where .= " AND ( post_status = 'publish' OR post_status = 'inherit' ) ";
+			$where .= " AND post_password = '' ";
+
+			// Assuming $query->get( 'post_type' ) returns an array of post types.
+			$post_types = $query->get( 'post_type' );
+			$post_types = is_array( $post_types ) ? $post_types : array( $post_types );
+
+			if ( ! empty( $post_types ) ) {
+				$where .= $wpdb->prepare( ' AND post_type IN (' . implode( ', ', array_fill( 0, count( $post_types ), '%s' ) ) . ')', ...$post_types );
+			}
+
+			$topscore_query = sprintf(
+				"SELECT MAX(%s) as topscore FROM {$wpdb->posts} WHERE %s",
+				$score,
+				$where
+			);
+
+			$this->topscore = $wpdb->get_var( $topscore_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+
+			$query->topscore = $this->topscore;
 
 			if ( ! empty( $this->query_args['cache'] ) ) {
-				/** This filter has been documented in better-search-query.php */
-				$cache_time = apply_filters( 'better_search_query_cache_time', $this->query_args['cache_time'], $this->query_args );
-				$cache_name = $this->get_cache_key( $query, 'ts' );
-				$topscore   = get_transient( $cache_name );
+				set_transient( $cache_name, $this->topscore, $cache_time );
 			}
-
-			if ( $topscore ) {
-				$query->topscore = $topscore;
-			} else {
-				$distinct = $clauses['distinct'];
-				$join     = $clauses['join'];
-				$where    = $clauses['where'];
-				$groupby  = $clauses['groupby'];
-				$score    = $this->get_match_sql( $this->search_query, $this->query_args );
-				$score    = empty( $score ) ? '0' : $score;
-				$fields   = $score . ' as score';
-				$orderby  = 'ORDER BY score DESC ';
-				$limits   = 'LIMIT 0,1';
-
-				if ( ! empty( $groupby ) ) {
-					$groupby = 'GROUP BY ' . $groupby;
-				}
-
-				$topscore_query  = "SELECT $distinct $fields FROM {$wpdb->posts} $join WHERE 1=1 $where $groupby $orderby $limits";
-				$query->topscore = $wpdb->get_var( $topscore_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-
-				if ( ! empty( $this->query_args['cache'] ) ) {
-					set_transient( $cache_name, $query->topscore, $cache_time );
-				}
-			}
-		} else {
-			$query->topscore = 0;
 		}
 
 		return $clauses;

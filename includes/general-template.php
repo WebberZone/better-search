@@ -716,8 +716,13 @@ function get_bsearch_date( $search, $before = '', $after = '', $format = '' ) {
  * @param array       $query_args Optional. Additional query arguments to add to the permalink.
  */
 function the_bsearch_permalink( $post = 0, $query_args = array() ) {
+	$post = get_post( $post );
 
-	$permalink = get_permalink( $post );
+	if ( is_multisite() && ! empty( $post->blog_id ) ) {
+		$permalink = get_blog_permalink( $post->blog_id, $post->ID );
+	} else {
+		$permalink = get_permalink( $post );
+	}
 
 	if ( $permalink && ! empty( $query_args ) ) {
 		$permalink = add_query_arg( $query_args, $permalink );
@@ -788,6 +793,10 @@ function get_bsearch_term_list( $post = 0, $args = array() ) {
 		return '';
 	}
 
+	if ( is_multisite() && ! empty( $post->blog_id ) ) {
+		switch_to_blog( $post->blog_id );
+	}
+
 	$defaults = array(
 		'before_terms' => '',
 		'sep_terms'    => ', ',
@@ -818,6 +827,10 @@ function get_bsearch_term_list( $post = 0, $args = array() ) {
 	 * @param array       $args   Array of arguments.
 	 */
 	$output = apply_filters( 'get_bsearch_term_list', $output, $post, $args );
+
+	if ( is_multisite() && ! empty( $post->blog_id ) ) {
+		restore_current_blog();
+	}
 
 	return $output;
 }

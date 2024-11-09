@@ -24,8 +24,8 @@ class Shortcodes {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		add_shortcode( 'bsearch_heatmap', array( __CLASS__, 'bsearch_heatmap' ) );
-		add_shortcode( 'bsearch_form', array( __CLASS__, 'bsearch_form' ) );
+		add_shortcode( 'bsearch_heatmap', array( $this, 'bsearch_heatmap' ) );
+		add_shortcode( 'bsearch_form', array( $this, 'bsearch_form' ) );
 	}
 
 	/**

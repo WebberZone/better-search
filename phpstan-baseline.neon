@@ -102,5 +102,5 @@ parameters:
 
 		-
 			message: "#^Variable \\$post might not be defined\\.$#"
-			count: 2
+			count: 6
 			path: templates/template.php

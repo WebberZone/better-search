@@ -138,8 +138,8 @@ class Media_Handler {
 
 		// If there is no thumbnail found, check the post thumbnail.
 		if ( ! $postimage ) {
-			if ( false !== get_post_thumbnail_id( $result->ID ) ) {
-				$attachment_id = ( 'attachment' === $result->post_type ) ? $result->ID : get_post_thumbnail_id( $result->ID );
+			if ( false !== get_post_thumbnail_id( $result ) ) {
+				$attachment_id = ( 'attachment' === $result->post_type ) ? $result->ID : get_post_thumbnail_id( $result );
 
 				$postthumb = wp_get_attachment_image_src( $attachment_id, $args['size'] );
 				if ( false !== $postthumb ) {

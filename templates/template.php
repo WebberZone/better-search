@@ -18,6 +18,7 @@ $limit               = isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : $bse
 $bydate              = isset( $_GET['bydate'] ) ? absint( $_GET['bydate'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $paged               = (int) get_query_var( 'paged', 1 ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 $selected_post_types = 'any';
+$current_blog_id     = get_current_blog_id();
 
 if ( isset( $_GET['post_types'] ) ) {// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$selected_post_types = sanitize_title( wp_unslash( $_GET['post_types'] ) );// phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -96,7 +97,7 @@ get_header();
 						if ( bsearch_get_option( 'include_thumb' ) ) :
 							?>
 							<div class="thumbnail bsearch_thumb_wrapper">
-								<a href="<?php the_bsearch_permalink(); ?>" class="thumbnail-link">
+								<a href="<?php the_bsearch_permalink( $post ); ?>" class="thumbnail-link">
 									<?php
 										/**
 										 * Filter the post thumbnail size in the search results.
@@ -126,7 +127,7 @@ get_header();
 							<?php do_action( 'bsearch_before_entry_header_inner' ); ?>
 
 							<h2 class="search-entry-title entry-title bsearch-entry-title">
-								<a href="<?php the_bsearch_permalink(); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"><?php the_title(); ?></a>
+								<a href="<?php the_bsearch_permalink( $post ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"><?php the_title(); ?></a>
 							</h2>
 
 							<ul class="bsearch_post_meta">
@@ -144,7 +145,7 @@ get_header();
 									</li>
 								<?php endif; ?>
 								<?php if ( bsearch_get_option( 'display_post_type' ) ) : ?>
-									<li class="meta-type"><?php esc_html_e( 'Type', 'better-search' ); ?>: <?php the_bsearch_post_type(); ?></li>
+									<li class="meta-type"><?php esc_html_e( 'Type', 'better-search' ); ?>: <?php the_bsearch_post_type( $post ); ?></li>
 								<?php endif; ?>
 								<?php if ( bsearch_get_option( 'display_author' ) ) : ?>
 									<li class="meta-author"><?php esc_html_e( 'Post author', 'better-search' ); ?>: <?php the_author_posts_link(); ?></li>
@@ -153,7 +154,7 @@ get_header();
 									<li class="meta-date"><?php esc_html_e( 'Published date', 'better-search' ); ?>: <?php the_bsearch_date(); ?></li>
 								<?php endif; ?>
 								<?php if ( bsearch_get_option( 'display_taxonomies' ) ) : ?>
-									<li class="meta-cat"><?php esc_html_e( 'Terms', 'better-search' ); ?>: <?php the_bsearch_term_list(); ?></li>
+									<li class="meta-cat"><?php esc_html_e( 'Terms', 'better-search' ); ?>: <?php the_bsearch_term_list( $post ); ?></li>
 								<?php endif; ?>
 								<?php do_action( 'bsearch_after_post_meta' ); ?>
 							</ul>
@@ -181,11 +182,11 @@ get_header();
 
 					<?php do_action( 'bsearch_after_article' ); ?>
 
-					<?php
-				endwhile;
-				?>
+				<?php endwhile; ?>
+				
 				<div style="text-align:center">
 				<?php
+				switch_to_blog( $current_blog_id );
 				the_posts_pagination(
 					array(
 						'mid_size'  => 3,
