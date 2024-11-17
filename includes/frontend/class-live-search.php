@@ -66,11 +66,24 @@ class Live_Search {
 	public function live_search() {
 		$search_query = isset( $_POST['s'] ) ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
+		if ( empty( $search_query ) ) {
+			wp_send_json( array() );
+		}
+
+		/**
+		 * Filter the number of posts to show in the live search.
+		 *
+		 * @since 4.0.0
+		 *
+		 * @param int $posts_per_page Number of posts to show in the live search.
+		 */
+		$posts_per_page = (int) apply_filters( 'bsearch_live_search_posts_per_page', 5 );
+
 		$query = new \Better_Search_Query(
 			array(
 				'better_search_query' => true,
 				's'                   => $search_query,
-				'posts_per_page'      => 5,
+				'posts_per_page'      => $posts_per_page,
 				'post_type'           => wp_parse_list( \bsearch_get_option( 'post_types' ) ),
 				'post_status'         => 'publish',
 			)

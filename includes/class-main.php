@@ -7,13 +7,10 @@
 
 namespace WebberZone\Better_Search;
 
-use Better_Search_Core_Query;
 use WebberZone\Better_Search\Admin\Activator;
-
 if ( ! defined( 'WPINC' ) ) {
 	exit;
 }
-
 /**
  * Main plugin class.
  *
@@ -120,7 +117,6 @@ final class Main {
 			self::$instance = new self();
 			self::$instance->init();
 		}
-
 		return self::$instance;
 	}
 
@@ -146,11 +142,15 @@ final class Main {
 		$this->display          = new Frontend\Display();
 		$this->live_search      = new Frontend\Live_Search();
 		$this->template_handler = new Frontend\Template_Handler();
-
 		$this->hooks();
-
+		if ( ! function_exists( 'bsearch_freemius' ) ) {
+			require_once __DIR__ . '/load-freemius.php';
+		}
 		if ( is_admin() ) {
 			$this->admin = new Admin\Admin();
+			if ( is_multisite() ) {
+				$this->admin = new Admin\Network\Admin();
+			}
 		}
 	}
 
@@ -180,8 +180,8 @@ final class Main {
 	 * @since 3.3.0
 	 */
 	public function register_widgets() {
-		register_widget( '\WebberZone\Better_Search\Frontend\Widgets\Search_Box' );
-		register_widget( '\WebberZone\Better_Search\Frontend\Widgets\Search_Heatmap' );
+		register_widget( '\\WebberZone\\Better_Search\\Frontend\\Widgets\\Search_Box' );
+		register_widget( '\\WebberZone\\Better_Search\\Frontend\\Widgets\\Search_Heatmap' );
 	}
 
 	/**
@@ -193,8 +193,7 @@ final class Main {
 	 * @param \WP_Query $query Query object.
 	 */
 	public function load_seamless_mode( $query ) {
-		if ( $query->is_search() || true === $query->get( 'better_search_query' ) ) {
-			// Load the Better Search query only if it's not already initialized.
+		if ( $query->is_search() && wp_is_block_theme() || true === $query->get( 'better_search_query' ) ) {
 			if ( ! isset( $query->query_vars['is_better_search_loaded'] ) || ! $query->query_vars['is_better_search_loaded'] ) {
 				new \Better_Search_Core_Query( $query->query_vars );
 				$query->set( 'is_better_search_loaded', true );
@@ -215,25 +214,20 @@ final class Main {
 		if ( ! in_array( $plugin, array( 'better-search/better-search.php', 'better-search-pro/better-search.php' ), true ) ) {
 			return;
 		}
-
 		Activator::activation_hook( $network_wide );
-
 		$plugin_to_deactivate  = 'better-search/better-search.php';
 		$deactivated_notice_id = '1';
-
 		// If we just activated the free version, deactivate the pro version.
 		if ( $plugin === $plugin_to_deactivate ) {
 			$plugin_to_deactivate  = 'better-search-pro/better-search.php';
 			$deactivated_notice_id = '2';
 		}
-
 		if ( is_multisite() && is_network_admin() ) {
 			$active_plugins = (array) get_site_option( 'active_sitewide_plugins', array() );
 			$active_plugins = array_keys( $active_plugins );
 		} else {
 			$active_plugins = (array) get_option( 'active_plugins', array() );
 		}
-
 		foreach ( $active_plugins as $plugin_basename ) {
 			if ( $plugin_to_deactivate === $plugin_basename ) {
 				set_transient( 'bsearch_deactivated_notice_id', $deactivated_notice_id, 1 * HOUR_IN_SECONDS );
@@ -253,18 +247,64 @@ final class Main {
 		if ( ! in_array( $deactivated_notice_id, array( 1, 2 ), true ) ) {
 			return;
 		}
-
 		$message = __( "Better Search and Better Search Pro should not be active at the same time. We've automatically deactivated Better Search.", 'better-search' );
 		if ( 2 === $deactivated_notice_id ) {
 			$message = __( "Better Search and Better Search Pro should not be active at the same time. We've automatically deactivated Better Search Pro.", 'better-search' );
 		}
-
 		?>
 			<div class="updated" style="border-left: 4px solid #ffba00;">
 				<p><?php echo esc_html( $message ); ?></p>
 			</div>
 			<?php
-
 			delete_transient( 'bsearch_deactivated_notice_id' );
+	}
+
+	/**
+	 * Display the pro upgrade banner.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param bool $donate Whether to show the donate banner.
+	 */
+	public static function pro_upgrade_banner( $donate = true ) {
+		if ( ! bsearch_freemius()->is_paying() ) {
+			?>
+				<div id="pro-upgrade-banner">
+					<div class="inside">
+						<p><a href="https://webberzone.com/plugins/better-search/pro/" target="_blank"><img src="
+						<?php
+						echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/better-search-pro-banner.png' );
+						?>
+			" alt="
+			<?php
+			esc_html_e( 'Better Search Pro - Coming soon. Sign up to find out more', 'better-search' );
+			?>
+			" width="300" height="300" style="max-width: 100%;" /></a></p>
+
+						<?php
+						if ( $donate ) {
+							?>
+											
+							<p style="text-align:center;">
+							<?php
+							esc_html_e( 'OR' );
+							?>
+				</p>
+							<p><a href="https://wzn.io/donate-bs" target="_blank"><img src="
+							<?php
+							echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/support.webp' );
+							?>
+				" alt="
+							<?php
+							esc_html_e( 'Support the development - Send us a donation today.', 'better-search' );
+							?>
+				" width="300" height="169" style="max-width: 100%;" /></a></p>
+							<?php
+						}
+						?>
+					</div>
+				</div>
+			<?php
+		}
 	}
 }

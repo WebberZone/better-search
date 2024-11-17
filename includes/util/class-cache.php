@@ -43,13 +43,9 @@ class Cache {
 
 		$count = $this->delete();
 
-		exit(
-			wp_json_encode(
-				array(
-					'success' => 1,
-					/* translators: 1: Number of entries. */
-					'message' => sprintf( _n( '%s entry cleared', '%s entries cleared', $count, 'better-search' ), number_format_i18n( $count ) ),
-				)
+		wp_send_json_success(
+			array(
+				'message' => sprintf( _n( '%s entry cleared', '%s entries cleared', $count, 'better-search' ), number_format_i18n( $count ) ),
 			)
 		);
 	}

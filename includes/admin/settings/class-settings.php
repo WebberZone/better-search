@@ -336,7 +336,7 @@ class Settings {
 				'name'    => esc_html__( 'Enable cache', 'better-search' ),
 				'desc'    => esc_html__( 'If activated, Better Search will use the Transients API to cache the search results for 1 hour.', 'better-search' ),
 				'type'    => 'checkbox',
-				'options' => false,
+				'options' => true,
 			),
 			'cache_time'          => array(
 				'id'      => 'cache_time',
@@ -405,7 +405,7 @@ class Settings {
 			),
 			'use_fulltext'             => array(
 				'id'      => 'use_fulltext',
-				'name'    => esc_html__( 'Enable mySQL FULLTEXT searching', 'better-search' ),
+				'name'    => esc_html__( 'Enable MySQL FULLTEXT searching', 'better-search' ),
 				'desc'    => esc_html__( 'Disabling this option will no longer give relevancy based results', 'better-search' ),
 				'type'    => 'checkbox',
 				'options' => true,
@@ -464,6 +464,14 @@ class Settings {
 				'name' => '<h3>' . esc_html__( 'Inclusion options', 'better-search' ) . '</h3>',
 				'desc' => '',
 				'type' => 'header',
+			),
+			'search_slug'              => array(
+				'id'      => 'search_slug',
+				'name'    => esc_html__( 'Search Post slug', 'better-search' ),
+				'desc'    => esc_html__( 'Select to search the post slug.', 'better-search' ),
+				'type'    => 'checkbox',
+				'options' => false,
+				'pro'     => true,
 			),
 			'search_excerpt'           => array(
 				'id'      => 'search_excerpt',
@@ -1059,6 +1067,7 @@ class Settings {
 		);
 		wp_enqueue_script( 'better-search-admin-js' );
 		wp_enqueue_style( 'better-search-admin-ui-css' );
+		wp_enqueue_style( 'wp-spinner' );
 		wp_localize_script(
 			'better-search-admin-js',
 			'bsearch_admin_data',
