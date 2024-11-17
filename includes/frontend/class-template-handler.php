@@ -83,7 +83,7 @@ class Template_Handler {
 		$template_paths = array(
 			get_stylesheet_directory() . '/better-search-template.php',
 			get_template_directory() . '/better-search-template.php',
-			plugin_dir_path( dirname( __DIR__ ) ) . 'templates/template.php',
+			plugin_dir_path( dirname( __DIR__ ) ) . 'templates/better-search-template.php',
 		);
 
 		foreach ( $template_paths as $template_path ) {

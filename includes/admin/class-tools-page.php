@@ -71,12 +71,18 @@ class Tools_Page {
 	public function admin_enqueue_scripts( $hook ) {
 		if ( $hook === $this->parent_id ) {
 			wp_enqueue_script( 'better-search-admin-js' );
-			wp_enqueue_style( 'bsearch-admin-ui-css', );
+			wp_enqueue_style( 'bsearch-admin-ui-css' );
+			wp_enqueue_style( 'wp-spinner' );
 			wp_localize_script(
 				'better-search-admin-js',
 				'bsearch_admin_data',
 				array(
-					'security' => wp_create_nonce( 'bsearch-admin' ),
+					'ajax_url'             => admin_url( 'admin-ajax.php' ),
+					'security'             => wp_create_nonce( 'bsearch-admin' ),
+					'confirm_message'      => esc_html__( 'Are you sure you want to clear the cache?', 'better-search' ),
+					'success_message'      => esc_html__( 'Cache cleared successfully!', 'better-search' ),
+					'fail_message'         => esc_html__( 'Failed to clear cache. Please try again.', 'better-search' ),
+					'request_fail_message' => esc_html__( 'Request failed: ', 'better-search' ),
 				)
 			);
 		}
@@ -164,7 +170,12 @@ class Tools_Page {
 
 				<h2 style="padding-left:0px"><?php esc_html_e( 'Clear cache', 'better-search' ); ?></h2>
 				<p>
-					<input type="button" name="cache_clear" id="cache_clear"  value="<?php esc_attr_e( 'Clear cache', 'better-search' ); ?>" class="button button-secondary" onclick="return clearCache();" />
+					<?php
+						printf(
+							'<button type="button" name="bsearch_cache_clear" class="button button-secondary bsearch_cache_clear" aria-label="%1$s">%1$s</button>',
+							esc_html__( 'Clear cache', 'better-search' )
+						);
+					?>
 				</p>
 				<p class="description">
 					<?php esc_html_e( 'Clear the Better Search cache. This will also be cleared automatically when you save the settings page.', 'better-search' ); ?>
@@ -176,7 +187,13 @@ class Tools_Page {
 			<form method="post">
 				<h2 style="padding-left:0px"><?php esc_html_e( 'Recreate FULLTEXT index', 'better-search' ); ?></h2>
 				<p>
-					<input name="bsearch_recreate" type="submit" id="bsearch_recreate" value="<?php esc_attr_e( 'Recreate Index', 'better-search' ); ?>" class="button button-secondary" onclick="if ( ! confirm('<?php esc_attr_e( 'Are you sure you want to recreate the index?', 'better-search' ); ?>') ) return false;" />
+					<?php
+						printf(
+							'<button type="submit" name="bsearch_recreate" id="bsearch_recreate" class="button button-secondary" onclick="if ( ! confirm(\'%1$s\') ) return false;">%2$s</button>',
+							esc_attr__( 'Are you sure you want to recreate the index?', 'better-search' ),
+							esc_attr__( 'Recreate Index', 'better-search' )
+						);
+					?>
 				</p>
 				<p class="description">
 					<?php esc_html_e( 'Recreate the FULLTEXT index that Better Search uses to get the relevant search results. This might take a lot of time to regenerate if you have a lot of posts.', 'better-search' ); ?>
@@ -200,8 +217,18 @@ class Tools_Page {
 					<?php esc_html_e( 'These buttons will recreate the tables in which Better Search stores its data. This is particularly useful if you are noticing issues with tracking or if there was a problem with the database upgrade', 'better-search' ); ?>
 				</p>
 				<p>
-					<input name="bsearch_recreate_overall" type="submit" id="bsearch_recreate_overall" value="<?php esc_attr_e( 'Recreate overall tables', 'better-search' ); ?>" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'This will recreate the overall tables. Have you backuped up your database?', 'better-search' ); ?>')) return false;" />
-					<input name="bsearch_recreate_daily" type="submit" id="bsearch_recreate_daily" value="<?php esc_attr_e( 'Recreate daily tables', 'better-search' ); ?>" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'This will recreate the daily tables. Have you backed up your database?', 'better-search' ); ?>')) return false;" />
+					<?php
+						printf(
+							'<button type="submit" name="bsearch_recreate_overall" id="bsearch_recreate_overall" class="button button-secondary" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
+							esc_attr__( 'This will recreate the overall tables. Have you backed up your database?', 'better-search' ),
+							esc_attr__( 'Recreate overall tables', 'better-search' )
+						);
+						printf(
+							'<button type="submit" name="bsearch_recreate_daily" id="bsearch_recreate_daily" class="button button-secondary" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
+							esc_attr__( 'This will recreate the daily tables. Have you backed up your database?', 'better-search' ),
+							esc_attr__( 'Recreate daily tables', 'better-search' )
+						);
+					?>
 				</p>
 
 				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>
@@ -210,8 +237,18 @@ class Tools_Page {
 			<form method="post">
 				<h2 style="padding-left:0px"><?php esc_html_e( 'Reset database', 'better-search' ); ?></h2>
 				<p>
-					<input name="bsearch_trunc_all" type="submit" id="bsearch_trunc_all" value="<?php esc_attr_e( 'Reset Popular searches table', 'better-search' ); ?>" class="button button-secondary" style="color:#f00" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to reset the popular searches?', 'better-search' ); ?>')) return false;" />
-					<input name="bsearch_trunc_daily" type="submit" id="bsearch_trunc_daily" value="<?php esc_attr_e( 'Reset Daily Popular searches table', 'better-search' ); ?>" class="button button-secondary" style="color:#f00" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to reset the daily popular searches?', 'better-search' ); ?>')) return false;" />
+					<?php
+						printf(
+							'<button type="submit" name="bsearch_trunc_all" id="bsearch_trunc_all" class="button button-secondary" style="color:#f00" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
+							esc_attr__( 'Are you sure you want to reset the popular searches?', 'better-search' ),
+							esc_attr__( 'Reset Popular searches table', 'better-search' )
+						);
+						printf(
+							'<button type="submit" name="bsearch_trunc_daily" id="bsearch_trunc_daily" class="button button-secondary" style="color:#f00" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
+							esc_attr__( 'Are you sure you want to reset the daily popular searches?', 'better-search' ),
+							esc_attr__( 'Reset Daily Popular searches table', 'better-search' )
+						);
+					?>
 				</p>
 				<p class="description">
 					<?php esc_html_e( 'This will reset the Better Search tables. If you are running Better Search on multisite then it will delete the popular posts across the entire network. This cannot be reversed. Make sure that your database has been backed up before proceeding', 'better-search' ); ?>
@@ -232,15 +269,21 @@ class Tools_Page {
 					<strong><?php esc_html_e( 'You will need to restore both tables and delete the backup tables before you can begin the upgrade process.', 'better-search' ); ?></strong>
 				</p>
 				<p>
-					<input name="bsearch_restore_overall" type="submit" id="bsearch_restore_overall" value="<?php esc_attr_e( 'Restore Popular searches table', 'better-search' ); ?>" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to restore the popular searches table from the backup?', 'better-search' ); ?>')) return false;" />
-					<input name="bsearch_restore_daily" type="submit" id="bsearch_restore_daily" value="<?php esc_attr_e( 'Restore Daily Popular searches table', 'better-search' ); ?>" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to restore the daily popular searches table from the backup?', 'better-search' ); ?>')) return false;" />
+					<button name="bsearch_restore_overall" type="submit" id="bsearch_restore_overall" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to restore the popular searches table from the backup?', 'better-search' ); ?>')) return false;"><?php esc_attr_e( 'Restore Popular searches table', 'better-search' ); ?></button>
+					<button name="bsearch_restore_daily" type="submit" id="bsearch_restore_daily" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to restore the daily popular searches table from the backup?', 'better-search' ); ?>')) return false;"><?php esc_attr_e( 'Restore Daily Popular searches table', 'better-search' ); ?></button>
 				</p>
 
 				<p class="description">
 					<?php esc_html_e( 'If your site has been working fine and populating with new information, then you can delete these backed up tables to save database space.', 'better-search' ); ?>
 				</p>
 				<p>
-					<input name="bsearch_delete_backup_tables" type="submit" id="bsearch_delete_backup_tables" value="<?php esc_attr_e( 'Delete backup tables', 'better-search' ); ?>" class="button button-secondary" style="color:#f00" onclick="if (!confirm('<?php esc_attr_e( 'This will delete the backup tables of Better Search. Have you backed up your database?', 'better-search' ); ?>')) return false;" />
+					<?php
+						printf(
+							'<button type="submit" name="bsearch_delete_backup_tables" id="bsearch_delete_backup_tables" class="button button-secondary" style="color:#f00" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
+							esc_attr__( 'This will delete the backup tables of Better Search. Have you backed up your database?', 'better-search' ),
+							esc_attr__( 'Delete backup tables', 'better-search' )
+						);
+					?>
 				</p>
 
 				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>

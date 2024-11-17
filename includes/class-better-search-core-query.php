@@ -811,6 +811,19 @@ class Better_Search_Core_Query {
 				$clause[] = $wpdb->prepare( "(bsq_comments.comment_content $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			}
 
+			/**
+			 * Filters the search clauses of Better_Search. This can be used to add custom search clauses.
+			 *
+			 * @since 4.0.0
+			 *
+			 * @param array                     $clause The search clause of the query.
+			 * @param string                    $term The search term.
+			 * @param string                    $like_op The LIKE operator.
+			 * @param string                    $andor_op The AND/OR operator.
+			 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
+			 */
+			$clause = apply_filters_ref_array( 'better_search_query_posts_search_clauses', array( $clause, $term, $like_op, &$this ) );
+
 			if ( ! empty( $clause ) ) {
 				$search_clause .= " {$searchand} (" . implode( $andor_op, $clause ) . ') ';
 				$searchand      = ' AND ';

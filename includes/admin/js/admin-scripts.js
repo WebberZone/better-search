@@ -1,21 +1,31 @@
-// Function to clear the cache.
-function clearCache() {
-	/**** since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php ****/
-	jQuery.post(
-		ajaxurl,
-		{
-			action: 'bsearch_clear_cache',
-			security: bsearch_admin_data.security
-		},
-		function (response, textStatus, jqXHR) {
-			alert(response.message);
-		},
-		'json'
-	);
-}
-
 jQuery(document).ready(
 	function ($) {
+		$('button[name="bsearch_cache_clear"]').on('click', function () {
+			if (confirm(bsearch_admin_data.confirm_message)) {
+				var $button = $(this);
+				$button.prop('disabled', true).append(' <span class="spinner is-active"></span>');
+				clearCache($button);
+			}
+		});
+
+		// Function to clear the cache.
+		function clearCache($button) {
+			$.post(bsearch_admin_data.ajax_url, {
+				action: 'bsearch_clear_cache',
+				security: bsearch_admin_data.security
+			}, function (response) {
+				if (response.success) {
+					alert(response.data.message);
+				} else {
+					alert(bsearch_admin_data.fail_message);
+				}
+			}).fail(function (jqXHR, textStatus) {
+				alert(bsearch_admin_data.request_fail_message + textStatus);
+			}).always(function () {
+				$button.prop('disabled', false).find('.spinner').remove();
+			});
+		}
+
 		// Prompt the user when they leave the page without saving the form.
 		var formmodified = 0;
 

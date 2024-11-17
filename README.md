@@ -35,12 +35,23 @@ Here are some of the main features of __Better Search__:
 * __Relevance__: Sort the results by relevance or date, and assign different weights to title and content
 * __Control the results__: Search within title, content, excerpt, meta fields, authors, tags and other taxonomies and comments
 * __Popular searches__: Show a heatmap of the most popular searches on your site, either as a widget or a shortcode
+* __AJAX Live Search__: Show search results as you type in any search form on your site
 * __Customisation__: Use your own template file and CSS styles for the ultimate look and feel
 * __Supports cache plugins__: Works seamlessly with caching plugins like WP-Super-Cache and W3 Total Cache
 * __Profanity filter__: Filter out any words that you don't want to appear in search queries
 * __Translation ready__: Use the plugin in any language
 
 If you want to take your site search to the next level, download __Better Search__ today and see the difference for yourself.
+
+## Features in Better Search Pro
+
+[__Better Search Pro__](https://webberzone.com/plugins/better-search/pro/) is the premium version of the plugin that offers even more features and functionality. With __Better Search Pro__, you can:
+
+* [__Multisite search__](https://webberzone.com/support/knowledgebase/multisite-search/): Allow network admins to select specific sites for cross-network searches.
+* [__Fuzzy search__](https://webberzone.com/support/knowledgebase/fuzzy-matches/): Find results even if the search term is misspelt.
+* [__Relevance threshold__](https://webberzone.com/support/knowledgebase/better-search-settings-search/#minimum-relevance-percentage-pro-only): Only show search results above a certain relevance threshold.
+* [__Search the post slug__](https://webberzone.com/support/knowledgebase/better-search-settings-search/#search-post-slug-pro-only): Include the post slug in the search results.
+* [__REST API__](https://webberzone.com/support/knowledgebase/better-search-rest-api/): Allow the REST API to utilize the Better Search when enabled.
 
 ## mySQL FULLTEXT indices
 

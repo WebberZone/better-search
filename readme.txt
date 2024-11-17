@@ -1,6 +1,6 @@
 === Better Search - Relevant search results for WordPress ===
 Contributors: webberzone, Ajay
-Tags: search, Better Search, related search, relevant search, search results, contextual search, heatmap, popular searches, top searches, relevance
+Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
 Stable tag: 3.3.1
 Requires at least: 6.3
@@ -27,12 +27,23 @@ Here are some of the main features of **Better Search**:
 * **Relevance**: Sort the results by relevance or date, and assign different weights to title and content
 * **Control the results**: Search within title, content, excerpt, meta fields, authors, tags and other taxonomies and comments
 * **Popular searches**: Show a heatmap of the most popular searches on your site, either as a widget or a shortcode
+* **AJAX Live Search**: Show search results as you type in any search form on your site
 * **Customisation**: Use your own template file and CSS styles for the ultimate look and feel
 * **Supports cache plugins**: Works seamlessly with caching plugins like WP-Super-Cache and W3 Total Cache
 * **Profanity filter**: Filter out any words that you don't want to appear in search queries
 * **Translation ready**: Use the plugin in any language
 
 If you want to take your site search to the next level, download **Better Search** today and see the difference for yourself.
+
+= Features in Better Search Pro =
+
+[__Better Search Pro__](https://webberzone.com/plugins/better-search/pro/) is the premium version of the plugin that offers even more features and functionality. With __Better Search Pro__, you can:
+
+* [__Multisite search__](https://webberzone.com/support/knowledgebase/multisite-search/): Allow network admins to select specific sites for cross-network searches.
+* [__Fuzzy search__](https://webberzone.com/support/knowledgebase/fuzzy-matches/): Find results even if the search term is misspelt.
+* [__Relevance threshold__](https://webberzone.com/support/knowledgebase/better-search-settings-search/#minimum-relevance-percentage-pro-only): Only show search results above a certain relevance threshold.
+* [__Search the post slug__](https://webberzone.com/support/knowledgebase/better-search-settings-search/#search-post-slug-pro-only): Include the post slug in the search results.
+* [__REST API__](https://webberzone.com/support/knowledgebase/better-search-rest-api/): Allow the REST API to utilize the Better Search when enabled.
 
 = mySQL FULLTEXT indices =
 
@@ -115,16 +126,17 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 * Features:
 	* New live search feature that shows search results as you type.
-	* [Pro] New setting to enable and set the fuzzy search level. Once enabled, the plugin will attempt to find results if the search term is misspelled. This only works effectively for English words.
+	* [Pro] New setting to enable and set the fuzzy search level. Once enabled, the plugin will attempt to find results if the search term is misspelt. This only works effectively for English words.
 	* [Pro] Multisite search feature allowing network admins to select specific sites for cross-network searches. Sites not selected will function independently.
 	* [Pro] New setting to only show search results above a certain relevance threshold.
-	* [Pro] New setting *Enable REST API* which allows the REST API to utilize the Better Search search engine when enabled. [Read this knowledge base article for more information ahout how Better Search enhances the Search endpoint](https://webberzone.com/support/knowledgebase/better-search-rest-api/).
+	* [Pro] New setting to search the post slug.
+	* [Pro] New setting *Enable REST API* allows the REST API to utilize the Better Search when enabled. [Read this knowledge base article for more information about how Better Search enhances the Search endpoint](https://webberzone.com/support/knowledgebase/better-search-rest-api/).
 
 * Enhancements/Modifications:
-	* Renamed `Better_Search` to `Better_Search_Core_Query`. Each of the methods now remove the filter from itself. It will also automatically parse wp_query parameters.
+	* Renamed `Better_Search` to `Better_Search_Core_Query`. Each of the methods now removes the filter from itself. It will also automatically parse wp_query parameters.
 	* Updated `Better_Search_Core_Query` filters to use the class instead of `WP_Query`.
-	* Display an admin notice if any of the fulltext indexes are missing and **Enable mySQL FULLTEXT searching** is enabled. This is only shown to admins and cannot be dismissed until the indexes are created.
-	* Better Search results page now work with Block Templates. You can enable Seamless mode to use your theme's search template.
+	* Display admin notice if any FULLTEXT index is missing and **Enable mySQL FULLTEXT searching** is enabled. This is only shown to admins and cannot be dismissed until the indexes are created.
+	* Better Search results page now works with Block Templates. You can enable Seamless mode to use your theme's search template.
 	* [Pro] Added a new button to create the indexes and display the index status on the settings page under the **Search tab for Enable mySQL FULLTEXT searching**.
 
 * Bug fixes:
@@ -134,5 +146,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
-= 3.3.1 =
-Security fix: Potential Cross Site Scripting (XSS) vulnerability. Please update immediately.
+= 4.0.0 =
+Live AJAX Search, New features, Better Search Pro launched!
