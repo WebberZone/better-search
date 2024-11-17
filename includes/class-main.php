@@ -193,7 +193,7 @@ final class Main {
 	 * @param \WP_Query $query Query object.
 	 */
 	public function load_seamless_mode( $query ) {
-		if ( $query->is_search() && wp_is_block_theme() || true === $query->get( 'better_search_query' ) ) {
+		if ( ( $query->is_search() && wp_is_block_theme() ) || true === $query->get( 'better_search_query' ) ) {
 			if ( ! isset( $query->query_vars['is_better_search_loaded'] ) || ! $query->query_vars['is_better_search_loaded'] ) {
 				new \Better_Search_Core_Query( $query->query_vars );
 				$query->set( 'is_better_search_loaded', true );
