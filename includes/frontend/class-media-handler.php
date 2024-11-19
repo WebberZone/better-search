@@ -312,7 +312,7 @@ class Media_Handler {
 		}
 
 		/**
-		 * Filters post thumbnail created for Top 10.
+		 * Filters post thumbnail created for Better Search.
 		 *
 		 * @since   1.9.10.1
 		 *
