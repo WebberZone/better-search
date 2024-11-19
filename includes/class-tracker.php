@@ -34,7 +34,7 @@ class Tracker {
 	}
 
 	/**
-	 * Enqueues the scripts needed by Top 10.
+	 * Enqueues the scripts needed by Better Search.
 	 *
 	 * @since 1.9.7
 	 * @return void
@@ -114,7 +114,7 @@ class Tracker {
 	 * @since   2.0.0
 	 *
 	 * @param   array $vars   Query variables array.
-	 * @return  array Query variables array with Top 10 parameters appended
+	 * @return  array Query variables array with Better Search parameters appended
 	 */
 	public static function query_vars( $vars ) {
 		// Add these to the list of queryvars that WP gathers.

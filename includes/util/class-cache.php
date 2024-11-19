@@ -30,7 +30,7 @@ class Cache {
 	}
 
 	/**
-	 * Function to clear the Top 10 Cache with Ajax.
+	 * Function to clear the Better Search Cache with Ajax.
 	 *
 	 * @since 3.3.0
 	 */
@@ -51,7 +51,7 @@ class Cache {
 	}
 
 	/**
-	 * Delete the Top 10 cache.
+	 * Delete the Better Search cache.
 	 *
 	 * @since 3.3.0
 	 *

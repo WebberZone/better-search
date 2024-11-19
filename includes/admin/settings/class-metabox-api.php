@@ -298,7 +298,7 @@ class Metabox_API {
 		echo '</table>';
 
 		/**
-		 * Action triggered when displaying Top 10 meta box.
+		 * Action triggered when displaying Better Search meta box.
 		 *
 		 * @param object $post  Post object.
 		 */

@@ -253,7 +253,11 @@ final class Main {
 		}
 		?>
 			<div class="updated" style="border-left: 4px solid #ffba00;">
-				<p><?php echo esc_html( $message ); ?></p>
+				<p>
+					<?php
+					esc_html_e( $message );
+					?>
+				</p>
 			</div>
 			<?php
 			delete_transient( 'bsearch_deactivated_notice_id' );
