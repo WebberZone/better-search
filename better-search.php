@@ -13,7 +13,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  https://webberzone.com/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     4.0.0-RC2
+ * Version:     4.0.0-RC3
  * Author:      WebberZone
  * Author URI:  https://webberzone.com/
  * Text Domain: better-search
@@ -29,40 +29,50 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-/**
- * Holds the version of Better Search.
- *
- * @since 2.9.3
- */
-define( 'BETTER_SEARCH_VERSION', '4.0.0' );
+if ( ! defined( 'BETTER_SEARCH_VERSION' ) ) {
+	/**
+	 * Holds the version of Better Search.
+	 *
+	 * @since 2.9.3
+	 */
+	define( 'BETTER_SEARCH_VERSION', '4.0.0' );
+}
 
-/**
- * Holds the filesystem directory path (with trailing slash) for Better Search
- *
- * @since 2.2.0
- */
-define( 'BETTER_SEARCH_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+if ( ! defined( 'BETTER_SEARCH_PLUGIN_DIR' ) ) {
+	/**
+	 * Holds the filesystem directory path (with trailing slash) for Better Search
+	 *
+	 * @since 2.2.0
+	 */
+	define( 'BETTER_SEARCH_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+}
 
-/**
- * Holds the filesystem directory path (with trailing slash) for Better Search
- *
- * @since 2.2.0
- */
-define( 'BETTER_SEARCH_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+if ( ! defined( 'BETTER_SEARCH_PLUGIN_URL' ) ) {
+	/**
+	 * Holds the filesystem directory path (with trailing slash) for Better Search
+	 *
+	 * @since 2.2.0
+	 */
+	define( 'BETTER_SEARCH_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+}
 
-/**
- * Holds the filesystem directory path (with trailing slash) for Better Search
- *
- * @since 2.2.0
- */
-define( 'BETTER_SEARCH_PLUGIN_FILE', __FILE__ );
+if ( ! defined( 'BETTER_SEARCH_PLUGIN_FILE' ) ) {
+	/**
+	 * Holds the filesystem directory path (with trailing slash) for Better Search
+	 *
+	 * @since 2.2.0
+	 */
+	define( 'BETTER_SEARCH_PLUGIN_FILE', __FILE__ );
+}
 
-/**
- * Holds the version of Better Search.
- *
- * @since 3.3.0
- */
-define( 'BETTER_SEARCH_DB_VERSION', '2.0' );
+if ( ! defined( 'BETTER_SEARCH_DB_VERSION' ) ) {
+	/**
+	 * Holds the version of Better Search.
+	 *
+	 * @since 3.3.0
+	 */
+	define( 'BETTER_SEARCH_DB_VERSION', '2.0' );
+}
 
 // Load Freemius.
 require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/load-freemius.php';
