@@ -163,6 +163,9 @@ final class Main {
 		add_action( 'init', array( $this, 'initiate_plugin' ) );
 		add_action( 'widgets_init', array( $this, 'register_widgets' ) );
 		add_action( 'parse_query', array( $this, 'load_seamless_mode' ) );
+
+		add_action( 'activated_plugin', array( $this, 'activated_plugin' ), 10, 2 );
+		add_action( 'pre_current_active_plugins', array( $this, 'plugin_deactivated_notice' ) );
 	}
 
 	/**
@@ -255,7 +258,7 @@ final class Main {
 			<div class="updated" style="border-left: 4px solid #ffba00;">
 				<p>
 					<?php
-					esc_html_e( $message );
+					echo esc_html( $message );
 					?>
 				</p>
 			</div>
