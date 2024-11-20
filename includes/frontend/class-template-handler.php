@@ -26,6 +26,7 @@ class Template_Handler {
 	 * @since 4.0.0
 	 */
 	public function __construct() {
+		add_action( 'parse_query', array( $this, 'load_seamless_mode' ) );
 		add_filter( 'template_include', array( $this, 'template_include' ) );
 		add_action( 'init', array( $this, 'register_patterns' ) );
 		add_filter( 'get_block_templates', array( $this, 'manage_block_templates' ), 10, 3 );
@@ -35,6 +36,23 @@ class Template_Handler {
 		foreach ( $template_types as $template_type ) {
 			$callback = "add_custom_{$template_type}_template";
 			add_filter( "{$template_type}_template_hierarchy", array( $this, $callback ) );
+		}
+	}
+
+	/**
+	 * Load seamless mode and hook into WP_Query to check if better_search_query is set and true.
+	 * If so, load the Better Search query.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param \WP_Query $query Query object.
+	 */
+	public function load_seamless_mode( $query ) {
+		if ( ( $query->is_search() && wp_is_block_theme() ) || true === $query->get( 'better_search_query' ) ) {
+			if ( ! isset( $query->query_vars['is_better_search_loaded'] ) || ! $query->query_vars['is_better_search_loaded'] ) {
+				new \Better_Search_Core_Query( $query->query_vars );
+				$query->set( 'is_better_search_loaded', true );
+			}
 		}
 	}
 
