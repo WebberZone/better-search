@@ -162,7 +162,6 @@ final class Main {
 	public function hooks() {
 		add_action( 'init', array( $this, 'initiate_plugin' ) );
 		add_action( 'widgets_init', array( $this, 'register_widgets' ) );
-		add_action( 'parse_query', array( $this, 'load_seamless_mode' ) );
 
 		add_action( 'activated_plugin', array( $this, 'activated_plugin' ), 10, 2 );
 		add_action( 'pre_current_active_plugins', array( $this, 'plugin_deactivated_notice' ) );
@@ -185,23 +184,6 @@ final class Main {
 	public function register_widgets() {
 		register_widget( '\\WebberZone\\Better_Search\\Frontend\\Widgets\\Search_Box' );
 		register_widget( '\\WebberZone\\Better_Search\\Frontend\\Widgets\\Search_Heatmap' );
-	}
-
-	/**
-	 * Load seamless mode and hook into WP_Query to check if better_search_query is set and true.
-	 * If so, load the Better Search query.
-	 *
-	 * @since 3.3.0
-	 *
-	 * @param \WP_Query $query Query object.
-	 */
-	public function load_seamless_mode( $query ) {
-		if ( ( $query->is_search() && wp_is_block_theme() ) || true === $query->get( 'better_search_query' ) ) {
-			if ( ! isset( $query->query_vars['is_better_search_loaded'] ) || ! $query->query_vars['is_better_search_loaded'] ) {
-				new \Better_Search_Core_Query( $query->query_vars );
-				$query->set( 'is_better_search_loaded', true );
-			}
-		}
 	}
 
 	/**
