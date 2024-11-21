@@ -90,7 +90,7 @@ Alternatively, search for __Better Search__ from Plugins &raquo; Add New within 
 
 Check out the [FAQ on the plugin page](https://wordpress.org/plugins/better-search/faq/) for a detailed list of questions and answers.
 
-If your question isn't listed there, please create a new post in the [WordPress.org support forum](https://wordpress.org/support/plugin/better-search). I monitor the forums regularly. If you're looking for more advanced *paid* support, please see [details here](https://webberzone.com/support/).
+If your question isn't listed there, please create a new post in the [WordPress.org support forum](https://wordpress.org/support/plugin/better-search). If you're looking for more advanced *paid* support, please see [details here](https://webberzone.com/support/). Paid users receive support via email.
 
 ## How can I report security bugs?
 

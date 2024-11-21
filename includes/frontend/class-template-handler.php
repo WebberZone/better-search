@@ -48,7 +48,10 @@ class Template_Handler {
 	 * @param \WP_Query $query Query object.
 	 */
 	public function load_seamless_mode( $query ) {
-		if ( ( $query->is_search() && wp_is_block_theme() ) || true === $query->get( 'better_search_query' ) ) {
+		if (
+			$query->get( 'better_search_query' ) ||
+			( wp_is_block_theme() && $query->is_search() )
+		) {
 			if ( ! isset( $query->query_vars['is_better_search_loaded'] ) || ! $query->query_vars['is_better_search_loaded'] ) {
 				new \Better_Search_Core_Query( $query->query_vars );
 				$query->set( 'is_better_search_loaded', true );

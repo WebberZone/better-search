@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 3.3.1
+Stable tag: 4.0.0
 Requires at least: 6.3
 Tested up to: 6.7
 Requires PHP: 7.4
@@ -93,11 +93,6 @@ Better Search is one of the many plugins developed by WebberZone. Check out our 
 
 4. Goto **Settings > Better Search** to configure
 
-5. Goto **Appearance > Widgets** to add the Popular Searches sidebar widgets to your theme
-
-6. Optionally visit the **Custom Styles** tab to add any custom CSS styles. These are added to `wp_head` on the pages where the posts are displayed
-
-
 == Frequently Asked Questions ==
 
 If your question isn't listed there, please create a new post in the [WordPress.org support forum](https://wordpress.org/support/plugin/better-search). I monitor the forums regularly. If you're looking for more advanced _paid_ support, please see [details here](https://webberzone.com/support/).
@@ -123,6 +118,8 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 == Changelog ==
 
 = 4.0.0 =
+
+Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/](https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/)
 
 * Features:
 	* New live search feature that shows search results as you type.
