@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-17 23:18+0000\n"
+"POT-Creation-Date: 2024-11-21 21:15+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza\n"
 "Language-Team: WebberZone\n"
@@ -103,7 +103,7 @@ msgstr ""
 
 #: includes/admin/class-dashboard.php:182
 #: includes/admin/network/class-admin.php:59
-#: includes/frontend/class-template-handler.php:106
+#: includes/frontend/class-template-handler.php:127
 msgid "Better Search"
 msgstr ""
 
@@ -1253,27 +1253,27 @@ msgid ""
 "was,what,when,where,who,will,with,www"
 msgstr ""
 
-#: includes/class-main.php:268
+#: includes/class-main.php:253
 msgid ""
 "Better Search and Better Search Pro should not be active at the same time. "
 "We've automatically deactivated Better Search."
 msgstr ""
 
-#: includes/class-main.php:270
+#: includes/class-main.php:255
 msgid ""
 "Better Search and Better Search Pro should not be active at the same time. "
 "We've automatically deactivated Better Search Pro."
 msgstr ""
 
-#: includes/class-main.php:294
+#: includes/class-main.php:283
 msgid "Better Search Pro - Coming soon. Sign up to find out more"
 msgstr ""
 
-#: includes/class-main.php:297
+#: includes/class-main.php:286
 msgid "OR"
 msgstr ""
 
-#: includes/class-main.php:298
+#: includes/class-main.php:287
 msgid "Support the development - Send us a donation today."
 msgstr ""
 
@@ -1493,6 +1493,12 @@ msgstr ""
 
 #: includes/pro/class-admin.php:251
 msgid ". Click the above button to create any missing fulltext indexes."
+msgstr ""
+
+#: includes/pro/class-fuzzy-search.php:541
+msgid ""
+"Better Search Pro: Fuzzy search indexes are missing, which will affect "
+"search results. Create the indexes in the Search tab."
 msgstr ""
 
 #: includes/pro/class-multisite-search.php:267
