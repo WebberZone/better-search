@@ -36,7 +36,7 @@ class Admin_Notices {
 	public function update_db_check() {
 		$current_db_version = get_option( 'bsearch_db_version' );
 
-		if ( version_compare( $current_db_version, BETTER_SEARCH_DB_VERSION, '<' ) ) {
+		if ( $current_db_version && version_compare( $current_db_version, BETTER_SEARCH_DB_VERSION, '<' ) ) {
 			add_action( 'admin_notices', array( $this, 'update_db_notice' ) );
 			add_action( 'network_admin_notices', array( $this, 'update_db_notice' ) );
 		}
