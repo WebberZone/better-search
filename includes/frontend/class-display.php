@@ -53,7 +53,7 @@ class Display {
 			$siteurl = get_option( 'home' );
 			if ( preg_match( "#^$siteurl#i", $referer ) ) {
 				parse_str( (string) wp_parse_url( $referer, PHP_URL_QUERY ), $queries );
-				if ( ! empty( $queries['s'] ) ) {
+				if ( ! empty( $queries['s'] ) || preg_match( '#/search/.*#i', $referer ) ) {
 					$is_referer_search_engine = true;
 				}
 			}
@@ -66,7 +66,11 @@ class Display {
 		if ( bsearch_get_option( 'highlight' ) && is_search() ) {
 			$search_query = get_bsearch_query();
 		} elseif ( bsearch_get_option( 'highlight_followed_links' ) ) {
-			$search_query = preg_replace( '/^.*s=([^&]+)&?.*$/i', '$1', $referer );
+			if ( preg_match( '/\/search\/([^\/\?]+)/i', $referer, $matches ) ) {
+				$search_query = $matches[1];
+			} else {
+				$search_query = preg_replace( '/^.*s=([^&]+)&?.*$/i', '$1', $referer );
+			}
 			$search_query = preg_replace( '/\'|"/', '', $search_query );
 		}
 
