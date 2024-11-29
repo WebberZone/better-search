@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.0.0
+Stable tag: 4.0.1
 Requires at least: 6.3
 Tested up to: 6.7
 Requires PHP: 7.4
@@ -117,9 +117,20 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 4.0.0 =
+= 4.0.1 =
 
 Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/](https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/)
+
+* Modifications:
+	* Setting: "Filter whole words only" set to _true_ by default.
+
+* Bug fixes:
+	* Corrected the database upgrade notice that was incorrectly displayed for new users.
+	* Fixed an issue where the search term was not highlighted in the content when following a /search/ link.
+	* Resolved an issue where the search term was incorrectly highlighted in the alt text of images.
+	* Seamless mode didn't load correctly.
+
+= 4.0.0 =
 
 * Features:
 	* New live search feature that shows search results as you type.
@@ -143,5 +154,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
-= 4.0.0 =
+= 4.0.1 =
 Live AJAX Search, New features, Better Search Pro launched!
