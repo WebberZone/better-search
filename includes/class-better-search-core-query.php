@@ -907,7 +907,7 @@ class Better_Search_Core_Query {
 		// If orderby is set, then this was done intentionally and we don't make any modifications.
 		if ( ! empty( $query->get( 'orderby' ) ) ) {
 			// if orderby is set to relevance, then we need to set the orderby to the match clause.
-			if ( 'relevance' === $query->get( 'orderby' ) || 'relatedness' === $query->get( 'orderby' ) ) {
+			if ( ( 'relevance' === $query->get( 'orderby' ) || 'relatedness' === $query->get( 'orderby' ) ) && ! empty( $this->match_sql ) && $this->use_fulltext ) {
 				$orderby = ' score DESC ';
 			}
 			return apply_filters_ref_array( 'better_search_query_posts_orderby', array( $orderby, &$this ) );
@@ -916,7 +916,7 @@ class Better_Search_Core_Query {
 		// Initialize an array to build the orderby clauses.
 		$orderby_clauses = array();
 
-		if ( ! empty( $this->use_fulltext ) ) {
+		if ( ! empty( $this->use_fulltext ) || empty( $this->match_sql ) ) {
 			$orderby_clauses[] = ' score DESC ';
 		}
 
