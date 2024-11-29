@@ -213,7 +213,9 @@ get_header();
 				
 				<div style="text-align:center">
 				<?php
-				switch_to_blog( $current_blog_id );
+				if ( function_exists( 'switch_to_blog' ) ) {
+					switch_to_blog( $current_blog_id );
+				}
 				the_posts_pagination(
 					array(
 						'mid_size'  => 3,
@@ -226,7 +228,7 @@ get_header();
 				<?php
 			} else {
 				?>
-				<p class="no-posts"><?php ( '' !== $bsearch_error->get_error_message( 'bsearch_banned' ) ) ? esc_html_e( $bsearch_error->get_error_message( 'bsearch_banned' ) ) : esc_html_e( 'No results found.', 'better-search' ); ?></p>
+				<p class="no-posts"><?php ( '' !== $bsearch_error->get_error_message( 'bsearch_banned' ) ) ? esc_html( $bsearch_error->get_error_message( 'bsearch_banned' ) ) : esc_html_e( 'No results found.', 'better-search' ); ?></p>
 				<?php
 			}
 
