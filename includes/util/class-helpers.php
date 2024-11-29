@@ -433,7 +433,7 @@ class Helpers {
 		}
 
 		// Regular expression to match the keys outside of HTML tags.
-		$regex = '/\b(?!<[^>]*?>)(' . implode( '|', $highlight_keys ) . ')(?![^<]*?>)\b/iu';
+		$regex = '/\b(?!<[^>]*?(?:alt\s*=\s*["\'][^"\']*["\'])?[^>]*?>)(' . implode( '|', $highlight_keys ) . ')(?![^<]*?>)\b/iu';
 
 		// Replace matched keys with highlighted version.
 		$output = preg_replace( $regex, '<span class="bsearch_highlight">$1</span>', html_entity_decode( $input ) );
