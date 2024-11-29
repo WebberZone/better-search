@@ -638,7 +638,7 @@ class Settings {
 				'name'    => esc_html__( 'Filter whole words only', 'better-search' ),
 				'desc'    => esc_html__( 'When activated, only whole words in the search query are filtered. Partial words are ignored. e.g. grow will not ban grown or grower.', 'better-search' ),
 				'type'    => 'checkbox',
-				'options' => false,
+				'options' => true,
 			),
 			'banned_stop_search'       => array(
 				'id'      => 'banned_stop_search',
