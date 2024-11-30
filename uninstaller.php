@@ -40,6 +40,10 @@ if ( is_multisite() ) {
 function bsearch_delete_data() {
 	global $wpdb;
 
+	if ( is_plugin_active( 'better-search-pro/better-search.php' ) ) {
+		return;
+	}
+
 	if ( defined( 'BETTER_SEARCH_DELETE_DATA' ) && BETTER_SEARCH_DELETE_DATA ) {
 		$wpdb->query( 'DROP TABLE ' . $wpdb->prefix . 'bsearch' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( 'DROP TABLE ' . $wpdb->prefix . 'bsearch_daily' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
