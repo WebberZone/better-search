@@ -1,0 +1,8 @@
+<wpml-config>
+    <admin-texts>
+        <key name="bsearch_settings">
+            <key name="title" />
+            <key name="title_daily" />
+        </key>
+    </admin-texts>
+</wpml-config>
