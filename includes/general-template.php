@@ -111,7 +111,7 @@ function get_bsearch_excerpt( $post = null, $excerpt_length = 0, $use_excerpt = 
 
 	if ( $relevant ) {
 		$search_query = get_bsearch_query();
-		$search_query = str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $search_query );
+		$search_query = preg_replace( '/[^a-zA-Z0-9\s]/', '', $search_query );
 		$words        = preg_split( '/[\s,\+\.]+/', $search_query );
 
 		$output = Helpers::extract_relevant_excerpt( $words, $output, $excerpt_more );
