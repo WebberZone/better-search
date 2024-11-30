@@ -1,6 +1,6 @@
 {
     "name": "@webberzone/better-search",
-    "version": "4.0.0",
+    "version": "4.0.2",
     "description": "Better Search replaces the default WordPress search with a better search engine that gives contextual results sorted by relevance",
     "author": "WebberZone",
     "license": "GPL-2.0-or-later",
@@ -25,7 +25,6 @@
         "zip": "wp-scripts plugin-zip"
     },
     "files": [
-        "css",
         "freemius",
         "includes",
         "languages",
@@ -35,17 +34,16 @@
         "uninstaller.php",
         "changelog.txt",
         "readme.txt",
-        "default.png",
-        "default2.png",
+        "security.md",
         "wpml-config.xml"
     ],
     "devDependencies": {
-        "@wordpress/prettier-config": "^4.7.0",
+        "@wordpress/prettier-config": "^4.13.0",
         "@wordpress/scripts": "^27"
     },
     "dependencies": {
-        "@wordpress/icons": "^10.7.0",
+        "@wordpress/icons": "^10.13.0",
         "clsx": "^2.1.1",
-        "uuid": "^10.0.0"
+        "uuid": "^11.0.3"
     }
 }
