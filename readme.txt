@@ -117,9 +117,16 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 4.0.1 =
+= 4.0.2 =
 
 Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/](https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/)
+
+* Modifications:
+	* Improved search term highlighting in post titles when accessed from the search results page, preventing conflicts with shortcodes calling `the_title` filter.
+	* Deleting the free plugin should retain the settings for the Pro plugin.
+	* Added WPML support for Settings' strings: Heatmap title for overall and daily searches.
+
+= 4.0.1 =
 
 * Modifications:
 	* Setting: "Filter whole words only" set to _true_ by default.
