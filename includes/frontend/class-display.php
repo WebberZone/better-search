@@ -21,6 +21,14 @@ if ( ! defined( 'WPINC' ) ) {
 class Display {
 
 	/**
+	 * Indicates if the current content is the primary content.
+	 *
+	 * @since 4.0.2
+	 * @var int
+	 */
+	private static $title_count = 0;
+
+	/**
 	 * Constructor class.
 	 *
 	 * @since 3.3.0
@@ -42,8 +50,14 @@ class Display {
 	 * @return string Post Content
 	 */
 	public function content( $content ) {
-		if ( is_admin() || ! in_the_loop() ) {
+		if ( is_admin() || ! in_the_loop() || ! is_main_query() ) {
 			return $content;
+		}
+		if ( current_filter() === 'the_title' ) {
+			if ( self::$title_count > 0 ) {
+				return $content;
+			}
+			++self::$title_count;
 		}
 
 		$referer = wp_get_referer() ? urldecode( wp_get_referer() ) : '';
@@ -75,7 +89,7 @@ class Display {
 		}
 
 		if ( ! empty( $search_query ) ) {
-			$search_query = str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $search_query );
+			$search_query = preg_replace( '/[^a-zA-Z0-9\s]/', '', $search_query );
 			$keys         = preg_split( '/[\s,\+\.]+/', $search_query );
 			$content      = Helpers::highlight( $content, $keys );
 		}
