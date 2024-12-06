@@ -116,6 +116,12 @@ class Tools_Page {
 			add_settings_error( 'bsearch-notices', '', esc_html__( 'Better Search daily searches table reset', 'better-search' ), 'success' );
 		}
 
+		/* Create tables */
+		if ( ( isset( $_POST['bsearch_create_tables'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
+			Activator::create_tables();
+			add_settings_error( 'bsearch-notices', '', esc_html__( 'Tables have been created', 'better-search' ), 'success' );
+		}
+
 		/* Recreate tables */
 		if ( ( isset( $_POST['bsearch_recreate_overall'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
 			Activator::recreate_overall_table( false );
@@ -206,6 +212,24 @@ class Tools_Page {
 					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related (post_title, post_content);</code>
 					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_title (post_title);</code>
 					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_content (post_content);</code>
+				</p>
+
+				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>
+			</form>
+
+			<form method="post">
+				<h2 style="padding-left:0px"><?php esc_html_e( 'Create tables', 'better-search' ); ?></h2>
+				<p class="description">
+					<?php esc_html_e( 'These buttons will create the tables in which Better Search stores its data.', 'better-search' ); ?>
+				</p>
+				<p>
+					<?php
+						printf(
+							'<button type="submit" name="bsearch_create_tables" id="bsearch_create_tables" class="button button-secondary" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
+							esc_attr__( 'This will create the overall tables. Have you backed up your database?', 'better-search' ),
+							esc_attr__( 'Create overall tables', 'better-search' )
+						);
+					?>
 				</p>
 
 				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>

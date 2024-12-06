@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.0.1
+Stable tag: 4.0.2
 Requires at least: 6.3
 Tested up to: 6.7
 Requires PHP: 7.4
@@ -125,6 +125,11 @@ Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wor
 	* Improved search term highlighting in post titles when accessed from the search results page, preventing conflicts with shortcodes calling `the_title` filter.
 	* Deleting the free plugin should retain the settings for the Pro plugin.
 	* Added WPML support for Settings' strings: Heatmap title for overall and daily searches.
+	* A new button added to the Tools page to manually create the Better Search tables.
+	* An admin notice is now shown when the Better Search tables are missing.
+
+* Bug fixes:
+	* Fixed the issue where database tables were not created in a new installation.
 
 = 4.0.1 =
 
@@ -161,5 +166,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
-= 4.0.1 =
-Live AJAX Search, New features, Better Search Pro launched!
+= 4.0.2 =
+Bug fixes, Better Search Pro launched!

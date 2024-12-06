@@ -18,8 +18,21 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Activator {
 
-	private const TABLE_NAME       = 'bsearch';
-	private const TABLE_NAME_DAILY = 'bsearch_daily';
+	/**
+	 * Name of the main table.
+	 *
+	 * @since 4.0.0
+	 * @var string
+	 */
+	public static $table_name = 'bsearch';
+
+	/**
+	 * Name of the daily table.
+	 *
+	 * @since 4.0.0
+	 * @var string
+	 */
+	public static $table_name_daily = 'bsearch_daily';
 
 	/**
 	 * Constructor class.
@@ -73,8 +86,8 @@ class Activator {
 	public static function single_activate() {
 		global $wpdb;
 
-		$table_name       = $wpdb->prefix . self::TABLE_NAME;
-		$table_name_daily = $wpdb->prefix . self::TABLE_NAME_DAILY;
+		$table_name       = $wpdb->prefix . self::$table_name;
+		$table_name_daily = $wpdb->prefix . self::$table_name_daily;
 
 		// Create FULLTEXT indexes.
 		$wpdb->hide_errors();
@@ -127,7 +140,7 @@ class Activator {
 	 * @param string $index Index name.
 	 * @return bool True if the index exists, false otherwise.
 	 */
-	private static function is_index_installed( $index ) {
+	public static function is_index_installed( $index ) {
 		global $wpdb;
 
 		$index_exists = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -149,7 +162,7 @@ class Activator {
 	 * @param string $columns Columns to be indexed.
 	 * @return void
 	 */
-	private static function install_fulltext_index( $index, $columns ) {
+	public static function install_fulltext_index( $index, $columns ) {
 		global $wpdb;
 
 		// Install the fulltext index if it doesn't exist.
@@ -163,7 +176,7 @@ class Activator {
 	 *
 	 * @return array Array of fulltext indexes with their respective columns.
 	 */
-	private static function get_fulltext_indexes() {
+	public static function get_fulltext_indexes() {
 		$indexes = array(
 			'bsearch'         => '(post_title, post_content)',
 			'bsearch_title'   => '(post_title)',
@@ -229,6 +242,24 @@ class Activator {
 	}
 
 	/**
+	 * Check if the Better Search table is installed.
+	 *
+	 * @since 4.0.2
+	 *
+	 * @param string $table_name Table name.
+	 * @return bool True if the table exists, false otherwise.
+	 */
+	public static function is_table_installed( $table_name ) {
+		global $wpdb;
+
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) === $table_name ) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Create table if not exists.
 	 *
 	 * @since 3.3.0
@@ -238,13 +269,23 @@ class Activator {
 	 */
 	public static function maybe_create_table( $table_name, $sql ) {
 		global $wpdb;
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) !== $table_name ) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+		if ( ! self::is_table_installed( $table_name ) ) {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 			$wpdb->hide_errors();
 			dbDelta( $sql );
 			$wpdb->show_errors();
 		}
+	}
+
+	/**
+	 * Create tables.
+	 *
+	 * @since 4.0.2
+	 */
+	public static function create_tables() {
+		self::maybe_create_table( self::$table_name, self::create_full_table_sql() );
+		self::maybe_create_table( self::$table_name_daily, self::create_daily_table_sql() );
 	}
 
 	/**
@@ -258,7 +299,7 @@ class Activator {
 		global $wpdb;
 
 		$charset_collate = $wpdb->get_charset_collate();
-		$table_name      = $wpdb->prefix . self::TABLE_NAME;
+		$table_name      = $wpdb->prefix . self::$table_name;
 
 		$sql = "CREATE TABLE {$table_name}" . // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
 		" (
@@ -281,7 +322,7 @@ class Activator {
 		global $wpdb;
 
 		$charset_collate = $wpdb->get_charset_collate();
-		$table_name      = $wpdb->prefix . self::TABLE_NAME_DAILY;
+		$table_name      = $wpdb->prefix . self::$table_name_daily;
 
 		$sql = "CREATE TABLE {$table_name}" . // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
 		" (
@@ -313,7 +354,7 @@ class Activator {
 	public static function recreate_table( $table_name, $create_table_sql, $backup = true, $fields = array( 'searchvar', 'cntaccess' ), $group_by_fields = array( 'searchvar' ) ) {
 		global $wpdb;
 
-		$backup_table_name = $table_name . '_backup';
+		$backup_table_name = ( $backup ) ? $table_name . '_backup' : $table_name . '_temp';
 		$success           = false;
 
 		$fields_sql          = implode( ', ', $fields );
@@ -364,7 +405,7 @@ class Activator {
 	public static function recreate_overall_table( $backup = true ) {
 		global $wpdb;
 		return self::recreate_table(
-			$wpdb->prefix . self::TABLE_NAME,
+			$wpdb->prefix . self::$table_name,
 			self::create_full_table_sql(),
 			$backup
 		);
@@ -382,7 +423,7 @@ class Activator {
 	public static function recreate_daily_table( $backup = true ) {
 		global $wpdb;
 		return self::recreate_table(
-			$wpdb->prefix . self::TABLE_NAME_DAILY,
+			$wpdb->prefix . self::$table_name_daily,
 			self::create_daily_table_sql(),
 			$backup,
 			array( 'searchvar', 'cntaccess', 'dp_date' ),
@@ -423,8 +464,8 @@ class Activator {
 	public static function on_delete_blog( $tables ) {
 		global $wpdb;
 
-		$tables[] = $wpdb->prefix . self::TABLE_NAME;
-		$tables[] = $wpdb->prefix . self::TABLE_NAME_DAILY;
+		$tables[] = $wpdb->prefix . self::$table_name;
+		$tables[] = $wpdb->prefix . self::$table_name_daily;
 
 		return $tables;
 	}
