@@ -26,6 +26,7 @@ class Admin_Notices {
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'update_db_check' ) );
 		add_action( 'admin_notices', array( $this, 'fulltext_index_notice' ) );
+		add_action( 'admin_notices', array( $this, 'missing_table_notice' ) );
 	}
 
 	/**
@@ -86,6 +87,35 @@ class Admin_Notices {
 					<?php esc_html_e( 'Better Search: Some fulltext indexes are missing, which will affect search results.', 'better-search' ); ?>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=bsearch_tools_page' ) ); ?>">
 						<?php esc_html_e( 'Click here to recreate indexes.', 'better-search' ); ?>
+					</a>
+				</p>
+			</div>
+			<?php
+		}
+	}
+
+	/**
+	 * Display admin notice if the tables are not created.
+	 *
+	 * @since 4.0.2
+	 */
+	public function missing_table_notice() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		global $wpdb;
+
+		$table_name       = $wpdb->prefix . 'bsearch';
+		$table_name_daily = $wpdb->prefix . 'bsearch_daily';
+
+		if ( ! Activator::is_table_installed( $table_name ) || ! Activator::is_table_installed( $table_name_daily ) ) {
+			?>
+			<div class="notice notice-warning">
+				<p>
+					<?php esc_html_e( 'Better Search: Some tables are missing, which will affect search results.', 'better-search' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=bsearch_tools_page' ) ); ?>">
+						<?php esc_html_e( 'Click here to recreate tables.', 'better-search' ); ?>
 					</a>
 				</p>
 			</div>

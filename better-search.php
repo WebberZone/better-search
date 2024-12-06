@@ -93,6 +93,9 @@ if ( ! function_exists( __NAMESPACE__ . '\load_bsearch' ) ) {
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\load_bsearch' );
 }
 
+// Register the activation hook.
+register_activation_hook( __FILE__, __NAMESPACE__ . '\Admin\Activator::activation_hook' );
+
 /*
  *----------------------------------------------------------------------------
  * Include files
