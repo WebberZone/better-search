@@ -7,13 +7,13 @@
  * @author    Ajay D'Souza <me@ajaydsouza.com>
  * @license   GPL-2.0+
  * @link      https://webberzone.com
- * @copyright 2009-2024 Ajay D'Souza
+ * @copyright 2009-2025 Ajay D'Souza
  *
  * @wordpress-plugin
  * Plugin Name: Better Search
  * Plugin URI:  https://webberzone.com/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     4.0.2-beta1
+ * Version:     4.0.2-RC1
  * Update URI: https://api.freemius.com
  * Author:      WebberZone
  * Author URI:  https://webberzone.com/
