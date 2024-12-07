@@ -53,13 +53,6 @@ class Display {
 		if ( is_admin() || ! in_the_loop() || ! is_main_query() ) {
 			return $content;
 		}
-		if ( current_filter() === 'the_title' ) {
-			if ( self::$title_count > 0 ) {
-				return $content;
-			}
-			++self::$title_count;
-		}
-
 		$referer = wp_get_referer() ? urldecode( wp_get_referer() ) : '';
 		if ( is_search() ) {
 			$is_referer_search_engine = true;
@@ -86,9 +79,17 @@ class Display {
 				$search_query = preg_replace( '/^.*s=([^&]+)&?.*$/i', '$1', $referer );
 			}
 			$search_query = preg_replace( '/\'|"/', '', $search_query );
+
+			if ( current_filter() === 'the_title' ) {
+				if ( self::$title_count > 0 ) {
+					return $content;
+				}
+				++self::$title_count;
+			}
 		}
 
 		if ( ! empty( $search_query ) ) {
+			$search_query = str_replace( array( '"', '&quot;' ), '', $search_query );
 			$search_query = preg_replace( '/[^a-zA-Z0-9\s]/', '', $search_query );
 			$keys         = preg_split( '/[\s,\+\.]+/', $search_query );
 			$content      = Helpers::highlight( $content, $keys );
