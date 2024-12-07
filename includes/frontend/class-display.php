@@ -50,7 +50,7 @@ class Display {
 	 * @return string Post Content
 	 */
 	public function content( $content ) {
-		if ( is_admin() || ! in_the_loop() || ! is_main_query() ) {
+		if ( is_admin() || ! in_the_loop() ) {
 			return $content;
 		}
 		$referer = wp_get_referer() ? urldecode( wp_get_referer() ) : '';
@@ -89,8 +89,7 @@ class Display {
 		}
 
 		if ( ! empty( $search_query ) ) {
-			$search_query = str_replace( array( '"', '&quot;' ), '', $search_query );
-			$search_query = preg_replace( '/[^a-zA-Z0-9\s]/', '', $search_query );
+			$search_query = str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $search_query );
 			$keys         = preg_split( '/[\s,\+\.]+/', $search_query );
 			$content      = Helpers::highlight( $content, $keys );
 		}
