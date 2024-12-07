@@ -494,7 +494,10 @@ class Helpers {
 		) {
 			foreach ( $words as $word ) {
 				$wordlen = strlen( $word );
-				$loc     = stripos( $fulltext, $word );
+				if ( $wordlen < 2 ) {
+					continue;
+				}
+				$loc = stripos( $fulltext, $word );
 				while ( false !== $loc ) {
 					$locations[] = $loc;
 					$loc         = stripos( $fulltext, $word, $loc + $wordlen );

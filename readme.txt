@@ -117,6 +117,9 @@ Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wor
 
 * Bug fixes:
 	* Fixed a bug where post titles in search results were not highlighted properly.
+	* Fix for highlighting when Seamless Mode is off.
+	* Only highlight words > 2 characters.
+	* Words with double or single quotes are properly highlighted.
 
 = 4.0.2 =
 
