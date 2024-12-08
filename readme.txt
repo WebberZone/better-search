@@ -115,11 +115,15 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/](https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/)
 
+* Modifications:
+	* Added font color (#000) to `.bsearch_highlight` class.
+	* Only highlight words > 2 characters.
+
 * Bug fixes:
 	* Fixed a bug where post titles in search results were not highlighted properly.
 	* Fix for highlighting when Seamless Mode is off.
-	* Only highlight words > 2 characters.
 	* Words with double or single quotes are properly highlighted.
+	* Quotes are properly displayed in heatmap.
 
 = 4.0.2 =
 
