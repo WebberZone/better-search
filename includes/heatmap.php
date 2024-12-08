@@ -243,7 +243,7 @@ function get_bsearch_heatmap( $args = array() ) {
 
 	foreach ( $results as $key => $result ) {
 		$count     = $result->count;
-		$searchvar = esc_attr( $result->name );
+		$searchvar = $result->name;
 		$url       = add_query_arg( array( 's' => rawurlencode( $searchvar ) ), home_url( '/' ) );
 		$fraction  = $count - $min;
 		$fontsize  = $args['smallest'] + $fontstep * $fraction;
@@ -309,7 +309,7 @@ function get_bsearch_heatmap( $args = array() ) {
 			$rel,
 			$target,
 			$aria_label ? sprintf( ' aria-label="%1$s (%2$s)"', esc_attr( $result->name ), esc_attr( $formatted_count ) ) : '',
-			$searchvar,
+			esc_html( $searchvar ),
 			$args['show_count'] ? '<span class="bsearch_heatmap_link_count"> (' . Helpers::number_format_i18n( $count ) . ')</span>' : '',
 			$args['after_term']
 		);
