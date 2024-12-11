@@ -541,7 +541,7 @@ class Better_Search_Core_Query {
 		$weight_title   = $args['weight_title'] ?? bsearch_get_option( 'weight_title' );
 		$weight_content = $args['weight_content'] ?? bsearch_get_option( 'weight_content' );
 		$boolean_mode   = $this->is_boolean_mode ? ' IN BOOLEAN MODE' : '';
-		$search_query   = wp_specialchars_decode( $search_query );
+		$search_query   = wp_specialchars_decode( $search_query, ENT_QUOTES );
 
 		$field_score = '';
 
@@ -549,11 +549,9 @@ class Better_Search_Core_Query {
 		if ( $this->use_fulltext ) {
 			// Prepare the query once and use it with prepared arguments.
 			$field_score = $wpdb->prepare(
-				"(MATCH({$wpdb->posts}.post_title) AGAINST (%s {$boolean_mode}) * %d) + " . // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"(MATCH({$wpdb->posts}.post_content) AGAINST (%s {$boolean_mode}) * %d)", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$search_query,
+				"(MATCH({$wpdb->posts}.post_title) AGAINST ('{$search_query}' {$boolean_mode}) * %d) + " . // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"(MATCH({$wpdb->posts}.post_content) AGAINST ('{$search_query}' {$boolean_mode}) * %d)", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				$weight_title,
-				$search_query,
 				$weight_content
 			);
 		}
@@ -753,6 +751,8 @@ class Better_Search_Core_Query {
 			}
 
 			foreach ( (array) $search_terms as $term ) {
+				$term = str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $term );
+
 				// If there is an $exclusion_prefix, terms prefixed with it should be excluded.
 				$exclude = $exclusion_prefix && ( substr( $term, 0, 1 ) === $exclusion_prefix );
 				if ( $exclude ) {
@@ -775,6 +775,7 @@ class Better_Search_Core_Query {
 		// Let's do a LIKE search for all other fields.
 		$searchand = '';
 		foreach ( (array) $search_terms as $term ) {
+			$term   = str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $term );
 			$clause = array();
 
 			// If there is an $exclusion_prefix, terms prefixed with it should be excluded.
