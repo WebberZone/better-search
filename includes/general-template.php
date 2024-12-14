@@ -382,6 +382,7 @@ function get_bsearch_header( $args = array() ) {
 		'post_types'    => isset( $_GET['post_types'] ) ? sanitize_title( wp_unslash( $_GET['post_types'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	);
 	$args     = wp_parse_args( $args, $defaults );
+    $args['search_query'] = rawurlencode($args['search_query']);
 
 	$output = '';
 
