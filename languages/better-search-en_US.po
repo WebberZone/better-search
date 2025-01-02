@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-07 12:23+0000\n"
+"POT-Creation-Date: 2025-01-02 21:30+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza\n"
 "Language-Team: WebberZone\n"
@@ -322,7 +322,7 @@ msgid "Settings have been imported successfully"
 msgstr ""
 
 #: includes/admin/class-tools-page.php:177
-#: includes/admin/class-tools-page.php:182 includes/pro/class-admin.php:86
+#: includes/admin/class-tools-page.php:182
 msgid "Clear cache"
 msgstr ""
 
@@ -1276,34 +1276,34 @@ msgstr ""
 msgid "Follow me"
 msgstr ""
 
-#: includes/class-better-search-core-query.php:1342
+#: includes/class-better-search-core-query.php:1343
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid ""
 "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,"
 "was,what,when,where,who,will,with,www"
 msgstr ""
 
-#: includes/class-main.php:253
+#: includes/class-main.php:235
 msgid ""
 "Better Search and Better Search Pro should not be active at the same time. "
 "We've automatically deactivated Better Search."
 msgstr ""
 
-#: includes/class-main.php:255
+#: includes/class-main.php:237
 msgid ""
 "Better Search and Better Search Pro should not be active at the same time. "
 "We've automatically deactivated Better Search Pro."
 msgstr ""
 
-#: includes/class-main.php:283
+#: includes/class-main.php:269
 msgid "Better Search Pro - Coming soon. Sign up to find out more"
 msgstr ""
 
-#: includes/class-main.php:286
+#: includes/class-main.php:279
 msgid "OR"
 msgstr ""
 
-#: includes/class-main.php:287
+#: includes/class-main.php:288
 msgid "Support the development - Send us a donation today."
 msgstr ""
 
@@ -1445,44 +1445,44 @@ msgctxt "submit button"
 msgid "Search"
 msgstr ""
 
-#: includes/general-template.php:401
+#: includes/general-template.php:403
 #, php-format
 msgid ""
 "Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</"
 "strong>"
 msgstr ""
 
-#: includes/general-template.php:407
+#: includes/general-template.php:409
 #, php-format
 msgid "Page <strong>%1$s</strong> of <strong>%2$s</strong>"
 msgstr ""
 
-#: includes/general-template.php:461
+#: includes/general-template.php:463
 msgid "All"
 msgstr ""
 
-#: includes/general-template.php:482 includes/general-template.php:486
+#: includes/general-template.php:484 includes/general-template.php:488
 msgid "Date"
 msgstr ""
 
-#: includes/general-template.php:483 includes/general-template.php:485
+#: includes/general-template.php:485 includes/general-template.php:487
 msgid "Relevance"
 msgstr ""
 
-#: includes/general-template.php:489
+#: includes/general-template.php:491
 msgid "Sorted by"
 msgstr ""
 
-#: includes/general-template.php:490
+#: includes/general-template.php:492
 msgid "Sort by"
 msgstr ""
 
-#: includes/general-template.php:497
+#: includes/general-template.php:499
 #, php-format
 msgid "Results per-page: %s "
 msgstr ""
 
-#: includes/general-template.php:567
+#: includes/general-template.php:569
 msgid "Relevance:"
 msgstr ""
 
@@ -1492,81 +1492,6 @@ msgid "%s search"
 msgid_plural "%s searches"
 msgstr[0] ""
 msgstr[1] ""
-
-#: includes/pro/class-admin.php:104
-msgid "Create fulltext indexes"
-msgstr ""
-
-#: includes/pro/class-admin.php:113
-msgid "Create fuzzy search indexes"
-msgstr ""
-
-#: includes/pro/class-admin.php:158
-msgid "Installing..."
-msgstr ""
-
-#: includes/pro/class-admin.php:169
-msgid "Done"
-msgstr ""
-
-#: includes/pro/class-admin.php:173
-msgid "Failed to install"
-msgstr ""
-
-#: includes/pro/class-admin.php:194
-msgid "Fuzzy search indexes are installed."
-msgstr ""
-
-#: includes/pro/class-admin.php:197
-msgid "Fuzzy search indexes are not installed."
-msgstr ""
-
-#: includes/pro/class-admin.php:251
-msgid ". Click the above button to create any missing fulltext indexes."
-msgstr ""
-
-#: includes/pro/class-fuzzy-search.php:541
-msgid ""
-"Better Search Pro: Fuzzy search indexes are missing, which will affect "
-"search results. Create the indexes in the Search tab."
-msgstr ""
-
-#: includes/pro/class-multisite-search.php:267
-msgid "Selected sites saved successfully!"
-msgstr ""
-
-#: includes/pro/class-multisite-search.php:282
-msgid "Enable Multisite Search"
-msgstr ""
-
-#: includes/pro/class-multisite-search.php:289
-msgid "Available Sites"
-msgstr ""
-
-#: includes/pro/class-multisite-search.php:293
-msgid "Select All"
-msgstr ""
-
-#: includes/pro/class-multisite-search.php:317
-msgid "No sites found in the network."
-msgstr ""
-
-#: includes/pro/class-multisite-search.php:322
-msgid ""
-"Select the sites to include in the multisite search. This applies across all "
-"sites in the network except for those not selected above."
-msgstr ""
-
-#: includes/pro/class-multisite-search.php:324
-msgid ""
-"For optimal performance, disable seamless mode. Note that searching across "
-"multiple sites can be resource-intensive, so enabling caching is recommended "
-"to improve search speed and reduce server load."
-msgstr ""
-
-#: includes/pro/class-multisite-search.php:330
-msgid "Save Settings"
-msgstr ""
 
 #: includes/util/class-cache.php:48
 #, php-format
