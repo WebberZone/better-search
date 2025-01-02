@@ -23,7 +23,7 @@ jobs:
       matrix:
         # Notes regarding supported versions in WP:
         # The base matrix only contains the PHP versions which are supported on all supported WP versions.
-        php: ['8.0', '7.3', '7.4']
+        php: ['8.0', '8.1', '8.2', '7.4']
         wp: ['latest']
         experimental: [false]
 
@@ -41,7 +41,7 @@ jobs:
             wp: 'latest'
             experimental: true
           - php: '8.0'
-            wp: '5.9'
+            wp: '6.3'
             experimental: true
 
     name: "PHP ${{ matrix.php }} - WP ${{ matrix.wp }}"
