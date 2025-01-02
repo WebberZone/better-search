@@ -111,6 +111,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.0.4 =
+
+* Bug fixes:
+	* Search terms with three or less characters threw an error.
+
 = 4.0.3 =
 
 Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/](https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/)

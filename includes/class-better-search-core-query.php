@@ -917,7 +917,7 @@ class Better_Search_Core_Query {
 		// Initialize an array to build the orderby clauses.
 		$orderby_clauses = array();
 
-		if ( ! empty( $this->use_fulltext ) || empty( $this->match_sql ) ) {
+		if ( ! empty( $this->use_fulltext ) && ! empty( $this->match_sql ) ) {
 			$orderby_clauses[] = ' score DESC ';
 		}
 
