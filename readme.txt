@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.0.3
+Stable tag: 4.0.4
 Requires at least: 6.3
 Tested up to: 6.7
 Requires PHP: 7.4
@@ -113,12 +113,16 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.0.4 =
 
+Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/](https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/)
+
+* Modifications:
+	* Updated Freemius SDK to v2.10.1
+
 * Bug fixes:
 	* Search terms with three or less characters threw an error.
+	* A quoted search string removes the = sign in add_query_arg if unescaped.
 
 = 4.0.3 =
-
-Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/](https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/)
 
 * Modifications:
 	* Added font color (#000) to `.bsearch_highlight` class.
@@ -177,5 +181,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
-= 4.0.3 =
-Bug fixes, Better Search Pro launched!
+= 4.0.4 =
+Bug fixes.
