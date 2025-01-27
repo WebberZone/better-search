@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.0.4
+Stable tag: 4.0.5
 Requires at least: 6.3
 Tested up to: 6.7
 Requires PHP: 7.4
@@ -111,9 +111,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 4.0.4 =
+= 4.0.5 =
 
-Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/](https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/)
+* Modifications:
+	* Updated Freemius SDK to v2.11.0
+
+= 4.0.4 =
 
 * Modifications:
 	* Updated Freemius SDK to v2.10.1
@@ -159,6 +162,8 @@ Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wor
 
 = 4.0.0 =
 
+Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/](https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/)
+
 * Features:
 	* New live search feature that shows search results as you type.
 	* [Pro] New setting to enable and set the fuzzy search level. Once enabled, the plugin will attempt to find results if the search term is misspelt. This only works effectively for English words.
@@ -181,5 +186,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
-= 4.0.4 =
-Bug fixes.
+= 4.0.5 =
+Updated Freemius SDK to v2.11.0
