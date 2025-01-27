@@ -1,10 +1,7 @@
 <?php
 /**
  * PHPUnit bootstrap file.
- *
- * @package Better_Search_Plugin
  */
-require_once dirname( dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) ) . '/.composer/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 
@@ -27,19 +24,12 @@ if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 require_once $_tests_dir . '/includes/functions.php';
 
 function _manually_load_plugin() {
-	require dirname( dirname( __FILE__ ) ) . '/better-search.php';
+	require dirname( __DIR__ ) . '/better-search.php';
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
+// Include the PHPUnit Polyfills autoloader.
+require dirname( __DIR__ ) . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
+
 // Start up the WP testing environment.
 require $_tests_dir . '/includes/bootstrap.php';
-
-activate_plugin( 'better-search/better-search.php' );
-
-echo "Installing Better Search...\n";
-
-global $bsearch_settings, $current_user;
-
-\WebberZone\Better_Search\Admin\Activator::activation_hook( false );
-
-$bsearch_settings = bsearch_get_settings();
