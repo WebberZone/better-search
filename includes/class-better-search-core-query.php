@@ -15,12 +15,12 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-	/**
-	 * Better_Search: Main search class.
-	 *
-	 * @since 4.0.0
-	 */
-class Better_Search_Core_Query {
+/**
+ * Better_Search: Main search class.
+ *
+ * @since 4.0.0
+ */
+class Better_Search_Core_Query extends \WP_Query {
 
 	/**
 	 * Blog ID.
@@ -165,7 +165,7 @@ class Better_Search_Core_Query {
 		add_filter( 'posts_groupby', array( $this, 'posts_groupby' ), 10, 2 );
 		add_filter( 'posts_clauses', array( $this, 'posts_clauses' ), 10, 2 );
 		add_filter( 'posts_request', array( $this, 'posts_request' ), 10, 2 );
-		add_filter( 'posts_clauses_request', array( $this, 'set_topscore' ), 100, 2 );
+		add_filter( 'better_search_query_posts_request', array( $this, 'set_topscore' ), 999, 2 );
 		add_filter( 'posts_pre_query', array( $this, 'posts_pre_query' ), 10, 2 );
 		add_filter( 'the_posts', array( $this, 'the_posts' ), 10, 2 );
 	}
@@ -197,6 +197,7 @@ class Better_Search_Core_Query {
 			'include_post_ids' => 0,
 			'how_old'          => 0,
 			'bydate'           => 0,
+			'is_nested_query'  => false,
 		);
 		$defaults = array_merge( $defaults, bsearch_settings_defaults(), (array) $bsearch_settings );
 		$args     = wp_parse_args( $args, $defaults );
@@ -399,42 +400,57 @@ class Better_Search_Core_Query {
 		$args['post__not_in'] = $exclude_post_ids;
 
 		// Unset what we don't need.
-		unset( $args['include_heatmap'] );
-		unset( $args['title'] );
-		unset( $args['title_daily'] );
-		unset( $args['daily_range'] );
-		unset( $args['heatmap_limit'] );
-		unset( $args['heatmap_smallest'] );
-		unset( $args['heatmap_largest'] );
-		unset( $args['heatmap_cold'] );
-		unset( $args['heatmap_hot'] );
-		unset( $args['heatmap_before'] );
-		unset( $args['heatmap_after'] );
-		unset( $args['link_new_window'] );
-		unset( $args['link_nofollow'] );
-		unset( $args['custom_css'] );
-		unset( $args['excerpt_length'] );
-		unset( $args['include_thumb'] );
-		unset( $args['highlight'] );
-		unset( $args['show_credit'] );
-		unset( $args['number_format_count'] );
-		unset( $args['meta_noindex'] );
+		$args = self::unset_unnecessary_args( $args );
 
 		/**
 		 * Filters the arguments of the query.
 		 *
-		 * @since 3.0.0
+		 * @since 4.0.0
 		 *
-		 * @param string|array $args {
-		 *     Optional. Array or string of Query parameters.
-		 *
-		 *     @param array                    $args  The arguments of the query.
-		 *     @param Better_Search_Core_Query $query The Better_Search instance (passed by reference).
-		 * }
+		 * @param array                   $args  Array of arguments.
+		 * @param Better_Search_Core_Query $query The Better_Search instance (passed by reference).
 		 */
 		$this->query_args = apply_filters_ref_array( 'better_search_query_args', array( $args, &$this ) );
 	}
 
+	/**
+	 * Unset unnecessary arguments that are not needed for the WP_Query.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param array $args Array of arguments.
+	 * @return array Modified array of arguments.
+	 */
+	public static function unset_unnecessary_args( $args ) {
+		$unnecessary_args = array(
+			'include_heatmap',
+			'title',
+			'title_daily',
+			'daily_range',
+			'heatmap_limit',
+			'heatmap_smallest',
+			'heatmap_largest',
+			'heatmap_cold',
+			'heatmap_hot',
+			'heatmap_before',
+			'heatmap_after',
+			'link_new_window',
+			'link_nofollow',
+			'custom_css',
+			'excerpt_length',
+			'include_thumb',
+			'highlight',
+			'show_credit',
+			'number_format_count',
+			'meta_noindex',
+		);
+
+		foreach ( $unnecessary_args as $arg ) {
+			unset( $args[ $arg ] );
+		}
+
+		return $args;
+	}
 
 	/**
 	 * Sets some of the variables used by the CLASS.
@@ -482,7 +498,7 @@ class Better_Search_Core_Query {
 	 */
 	public function pre_get_posts( $query ) {
 
-		if ( $this->is_search( $query ) || true === $query->get( 'better_search_query' ) ) {
+		if ( $this->is_better_search( $query ) ) {
 			$query_args = $this->query_args;
 
 			$fields = array(
@@ -588,7 +604,7 @@ class Better_Search_Core_Query {
 	public function posts_fields( $fields, $query ) {
 		global $wpdb;
 
-		if ( ! $this->is_search( $query ) ) {
+		if ( ! $this->is_better_search( $query ) ) {
 			return $fields;
 		}
 
@@ -613,7 +629,7 @@ class Better_Search_Core_Query {
 		 * @param array      $args         Array of arguments
 		 * @param Better_Search_Core_Query $query The Better_Search instance (passed by reference).
 		 */
-		$fields = apply_filters_ref_array( 'bsearch_posts_fields', array( $fields, $this->search_query, $this->query_args, &$this ) );
+		$fields = apply_filters_ref_array( 'bsearch_posts_fields', array( $fields, $this->search_query, $this->query_args, &$query ) );
 
 		remove_filter( 'posts_fields', array( $this, 'posts_fields' ) );
 
@@ -632,7 +648,7 @@ class Better_Search_Core_Query {
 	public function posts_join( $join, $query ) {
 		global $wpdb;
 
-		if ( $this->is_search( $query ) ) {
+		if ( $this->is_better_search( $query ) ) {
 
 			// Check for duplicate joins to prevent adding the same join multiple times.
 			if ( false === strpos( $join, 'bsq_tr' ) && ! empty( $this->query_args['search_taxonomies'] ) ) {
@@ -661,7 +677,7 @@ class Better_Search_Core_Query {
 			 * @param string                    $join  The JOIN clause of the query.
 			 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 			 */
-			$join = apply_filters_ref_array( 'better_search_query_posts_join', array( $join, &$this ) );
+			$join = apply_filters_ref_array( 'better_search_query_posts_join', array( $join, &$query ) );
 
 			// Remove the filter after it's applied to avoid duplicates in future queries.
 			remove_filter( 'posts_join', array( $this, 'posts_join' ) );
@@ -683,7 +699,7 @@ class Better_Search_Core_Query {
 	public function posts_where( $where, $query ) {
 		global $bsearch_error;
 
-		if ( ! $this->is_search( $query ) ) {
+		if ( ! $this->is_better_search( $query ) ) {
 			return $where;
 		}
 
@@ -699,7 +715,7 @@ class Better_Search_Core_Query {
 		 * @param string                    $where The WHERE clause of the query.
 		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
-		$where = apply_filters_ref_array( 'better_search_query_posts_where', array( $where, &$this ) );
+		$where = apply_filters_ref_array( 'better_search_query_posts_where', array( $where, &$query ) );
 
 		remove_filter( 'posts_where', array( $this, 'posts_where' ) );
 
@@ -718,7 +734,7 @@ class Better_Search_Core_Query {
 	public function posts_search( $where, $query ) {
 		global $wpdb;
 
-		if ( ! $this->is_search( $query ) ) {
+		if ( ! $this->is_better_search( $query ) ) {
 			return $where;
 		}
 
@@ -823,7 +839,7 @@ class Better_Search_Core_Query {
 			 * @param string                    $andor_op The AND/OR operator.
 			 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 			 */
-			$clause = apply_filters_ref_array( 'better_search_query_posts_search_clauses', array( $clause, $term, $like_op, &$this ) );
+			$clause = apply_filters_ref_array( 'better_search_query_posts_search_clauses', array( $clause, $term, $like_op, $andor_op, &$query ) );
 
 			if ( ! empty( $clause ) ) {
 				$search_clause .= " {$searchand} (" . implode( $andor_op, $clause ) . ') ';
@@ -850,7 +866,7 @@ class Better_Search_Core_Query {
 		 * @param string                    $where The search part of the WHERE clause of the query.
 		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
-		$where = apply_filters_ref_array( 'better_search_query_posts_search', array( $where, &$this ) );
+		$where = apply_filters_ref_array( 'better_search_query_posts_search', array( $where, &$query ) );
 
 		remove_filter( 'posts_search', array( $this, 'posts_search' ) );
 
@@ -868,7 +884,7 @@ class Better_Search_Core_Query {
 	 */
 	public function posts_distinct( $distinct, $query ) {
 
-		if ( ! $this->is_search( $query ) ) {
+		if ( ! $this->is_better_search( $query ) ) {
 			return $distinct;
 		}
 
@@ -882,7 +898,7 @@ class Better_Search_Core_Query {
 		 * @param string                    $distinct The DISTINCT clause of the query.
 		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
-		$distinct = apply_filters_ref_array( 'better_search_query_posts_distinct', array( $distinct, &$this ) );
+		$distinct = apply_filters_ref_array( 'better_search_query_posts_distinct', array( $distinct, &$query ) );
 
 		remove_filter( 'posts_distinct', array( $this, 'posts_distinct' ) );
 
@@ -901,7 +917,7 @@ class Better_Search_Core_Query {
 	public function posts_orderby( $orderby, $query ) {
 		global $wpdb;
 
-		if ( ! $this->is_search( $query ) ) {
+		if ( ! $this->is_better_search( $query ) ) {
 			return $orderby;
 		}
 
@@ -911,7 +927,7 @@ class Better_Search_Core_Query {
 			if ( ( 'relevance' === $query->get( 'orderby' ) || 'relatedness' === $query->get( 'orderby' ) ) && ! empty( $this->match_sql ) && $this->use_fulltext ) {
 				$orderby = ' score DESC ';
 			}
-			return apply_filters_ref_array( 'better_search_query_posts_orderby', array( $orderby, &$this ) );
+			return apply_filters_ref_array( 'better_search_query_posts_orderby', array( $orderby, &$query ) );
 		}
 
 		// Initialize an array to build the orderby clauses.
@@ -933,7 +949,7 @@ class Better_Search_Core_Query {
 		 * @param string[]                  $orderby_clauses The SELECT clause of the query.
 		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
-		$orderby_clauses = apply_filters_ref_array( 'better_search_query_posts_orderby_clauses', array( $orderby_clauses, &$this ) );
+		$orderby_clauses = apply_filters_ref_array( 'better_search_query_posts_orderby_clauses', array( $orderby_clauses, &$query ) );
 
 		// Combine all the orderby clauses.
 		if ( ! empty( $orderby_clauses ) ) {
@@ -948,7 +964,7 @@ class Better_Search_Core_Query {
 		 * @param string                    $orderby The ORDER BY clause of the query.
 		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
-		$orderby = apply_filters_ref_array( 'better_search_query_posts_orderby', array( $orderby, &$this ) );
+		$orderby = apply_filters_ref_array( 'better_search_query_posts_orderby', array( $orderby, &$query ) );
 
 		remove_filter( 'posts_orderby', array( $this, 'posts_orderby' ) );
 
@@ -966,7 +982,7 @@ class Better_Search_Core_Query {
 	 */
 	public function posts_groupby( $groupby, $query ) {
 
-		if ( ! $this->is_search( $query ) ) {
+		if ( ! $this->is_better_search( $query ) ) {
 			return $groupby;
 		}
 
@@ -978,7 +994,7 @@ class Better_Search_Core_Query {
 		 * @param string                    $groupby The GROUP BY clause of the query.
 		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
-		$groupby = apply_filters_ref_array( 'better_search_query_posts_groupby', array( $groupby, &$this ) );
+		$groupby = apply_filters_ref_array( 'better_search_query_posts_groupby', array( $groupby, &$query ) );
 
 		remove_filter( 'posts_groupby', array( $this, 'posts_groupby' ) );
 
@@ -997,7 +1013,7 @@ class Better_Search_Core_Query {
 	 */
 	public function posts_clauses( $clauses, $query ) {
 
-		if ( ! $this->is_search( $query ) ) {
+		if ( ! $this->is_better_search( $query ) ) {
 			return $clauses;
 		}
 
@@ -1009,7 +1025,7 @@ class Better_Search_Core_Query {
 		 * @param string[]                 $clauses Array of clauses.
 		 * @param Better_Search_Core_Query $query   The Better_Search instance (passed by reference).
 		 */
-		$clauses = apply_filters_ref_array( 'better_search_query_posts_clauses', array( $clauses, &$this ) );
+		$clauses = apply_filters_ref_array( 'better_search_query_posts_clauses', array( $clauses, &$query ) );
 
 		remove_filter( 'posts_clauses', array( $this, 'posts_clauses' ) );
 
@@ -1028,7 +1044,7 @@ class Better_Search_Core_Query {
 	 */
 	public function posts_request( $request, $query ) {
 
-		if ( ! $this->is_search( $query ) ) {
+		if ( ! $this->is_better_search( $query ) ) {
 			return $request;
 		}
 
@@ -1040,7 +1056,7 @@ class Better_Search_Core_Query {
 		 * @param string                   $request Array of clauses.
 		 * @param Better_Search_Core_Query $query   The Better_Search instance (passed by reference).
 		 */
-		$request = apply_filters_ref_array( 'better_search_query_posts_request', array( $request, &$this ) );
+		$request = apply_filters_ref_array( 'better_search_query_posts_request', array( $request, &$query ) );
 
 		remove_filter( 'posts_request', array( $this, 'posts_request' ) );
 
@@ -1058,7 +1074,7 @@ class Better_Search_Core_Query {
 	 */
 	public function posts_pre_query( $posts, $query ) {
 
-		if ( ! $this->is_search( $query ) ) {
+		if ( ! $this->is_better_search( $query ) ) {
 			return $posts;
 		}
 
@@ -1099,7 +1115,7 @@ class Better_Search_Core_Query {
 		 * @param \WP_Post[]                $posts Array of post data.
 		 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 		 */
-		$posts = apply_filters_ref_array( 'better_search_query_posts_pre_query', array( $posts, &$this ) );
+		$posts = apply_filters_ref_array( 'better_search_query_posts_pre_query', array( $posts, &$query ) );
 
 		remove_filter( 'posts_pre_query', array( $this, 'posts_pre_query' ) );
 
@@ -1117,7 +1133,7 @@ class Better_Search_Core_Query {
 	 */
 	public function the_posts( $posts, $query ) {
 
-		if ( ! $this->is_search( $query ) ) {
+		if ( ! $this->is_better_search( $query ) ) {
 			return $posts;
 		}
 
@@ -1133,7 +1149,7 @@ class Better_Search_Core_Query {
 			 * @param array                     $args       Array of all the arguments
 			 * @param Better_Search_Core_Query  $query The Better_Search instance (passed by reference).
 			 */
-			$cache_time = apply_filters_ref_array( 'better_search_query_cache_time', array( $this->query_args['cache_time'], $this->query_args, &$this ) );
+			$cache_time = apply_filters_ref_array( 'better_search_query_cache_time', array( $this->query_args['cache_time'], $this->query_args, &$query ) );
 			$cache_name = $this->get_cache_key( $query );
 
 			$cached_data = array();
@@ -1171,7 +1187,7 @@ class Better_Search_Core_Query {
 		 * @param array                    $args  Arguments array.
 		 * @param Better_Search_Core_Query $query The Better_Search instance (passed by reference).
 		 */
-		$posts = apply_filters_ref_array( 'better_search_query_the_posts', array( $posts, $this->query_args, &$this ) );
+		$posts = apply_filters_ref_array( 'better_search_query_the_posts', array( $posts, $this->query_args, &$query ) );
 
 		remove_filter( 'the_posts', array( $this, 'the_posts' ) );
 
@@ -1182,24 +1198,24 @@ class Better_Search_Core_Query {
 	 * Set up the top score for the query. This runs an extra query.
 	 *
 	 * @since 3.0.0
+	 * @since 4.0.6 Changed filter to `better_search_query_posts_request`
 	 *
-	 * @param array    $clauses Array of post data.
-	 * @param WP_Query $query The WP_Query instance.
-	 * @return array   Updated Array of post objects.
+	 * @param string                   $request The complete SQL query.
+	 * @param Better_Search_Core_Query $query   The Better_Search instance (passed by reference).
+	 * @return string   The SQL query.
 	 */
-	public function set_topscore( $clauses, $query ) {
+	public function set_topscore( $request, $query ) {
 		global $wpdb;
 
-		if ( ! $this->is_search( $query ) || ! $this->use_fulltext ) {
+		if ( ! $this->is_better_search( $query ) || ! $this->use_fulltext || ! empty( $query->query_args['is_nested_query'] ) || ! empty( $query->query_vars['is_nested_query'] ) ) {
 			$this->topscore  = 0;
 			$query->topscore = 0;
-			return $clauses;
+			return $request;
 		}
 
+		// Check cache first.
 		$topscore = 0;
-
 		if ( ! empty( $this->query_args['cache'] ) ) {
-			/** This filter has been documented in better-search-query.php */
 			$cache_time = apply_filters( 'better_search_query_cache_time', $this->query_args['cache_time'], $this->query_args );
 			$cache_name = $this->get_cache_key( $query, 'ts' );
 			$topscore   = get_transient( $cache_name );
@@ -1208,38 +1224,43 @@ class Better_Search_Core_Query {
 		if ( $topscore ) {
 			$this->topscore  = $topscore;
 			$query->topscore = $topscore;
-		} else {
-			$score = $this->match_sql;
-			$score = empty( $score ) ? '0' : $score;
-
-			$where  = $wpdb->prepare( 'post_date <= %s', current_time( 'mysql' ) );
-			$where .= " AND ( post_status = 'publish' OR post_status = 'inherit' ) ";
-			$where .= " AND post_password = '' ";
-
-			// Assuming $query->get( 'post_type' ) returns an array of post types.
-			$post_types = $query->get( 'post_type' );
-			$post_types = is_array( $post_types ) ? $post_types : array( $post_types );
-
-			if ( ! empty( $post_types ) ) {
-				$where .= $wpdb->prepare( ' AND post_type IN (' . implode( ', ', array_fill( 0, count( $post_types ), '%s' ) ) . ')', ...$post_types );
-			}
-
-			$topscore_query = sprintf(
-				"SELECT MAX(%s) as topscore FROM {$wpdb->posts} WHERE %s",
-				$score,
-				$where
-			);
-
-			$this->topscore = $wpdb->get_var( $topscore_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-
-			$query->topscore = $this->topscore;
-
-			if ( ! empty( $this->query_args['cache'] ) ) {
-				set_transient( $cache_name, $this->topscore, $cache_time );
-			}
+			return $request;
 		}
 
-		return $clauses;
+		// Take $request. Check if there is a LIMIT clause. If so, make sure it's limited to a single entry only. If there is no LIMIT then add it to extract a single entry only. Also, check if there is an ORDER BY clause. If so, make sure it's ordered by the score column. If there is no ORDER BY clause then add one.
+		if ( strpos( $request, 'LIMIT' ) !== false ) {
+			$score_query = preg_replace( '/LIMIT\s+\\d+(,\\d+)?/', 'LIMIT 1', $request );
+		} else {
+			$score_query = $request . ' LIMIT 1';
+		}
+
+		if ( strpos( $request, 'ORDER BY' ) !== false ) {
+			// Only replace if it's not already ordered by score DESC.
+			if ( strpos( $request, 'ORDER BY score DESC' ) === false ) {
+				// Extract everything after ORDER BY until LIMIT or end of string.
+				if ( preg_match( '/ORDER BY\s+(.*?)(?=\s+LIMIT|\s*$)/i', $request, $matches ) ) {
+					$current_order = $matches[1];
+					// Replace the current ORDER BY clause with score DESC.
+					$score_query = str_replace(
+						'ORDER BY ' . $current_order,
+						'ORDER BY score DESC',
+						$score_query
+					);
+				}
+			}
+		} else {
+			$score_query = $score_query . ' ORDER BY score DESC';
+		}
+
+		$this->topscore = (float) $wpdb->get_var( $score_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		$query->topscore = $this->topscore;
+
+		if ( ! empty( $this->query_args['cache'] ) ) {
+			set_transient( $cache_name, $this->topscore, $cache_time );
+		}
+
+		return $request;
 	}
 
 	/**
@@ -1264,14 +1285,14 @@ class Better_Search_Core_Query {
 	}
 
 	/**
-	 * Is the query for a search?
+	 * Check if a query is for a search.
 	 *
-	 * @since 3.0.0
+	 * @since 4.0.0
 	 *
 	 * @param WP_Query $query The WP_Query instance.
 	 * @return bool Whether a query is for a search.
 	 */
-	public function is_search( $query ) {
+	public function is_better_search( $query ) {
 		if ( ( ! is_admin() && $query->is_search() ) || true === $query->get( 'better_search_query' ) ) {
 			return true;
 		} else {
