@@ -41,7 +41,7 @@ if ( ! class_exists( 'Better_Search_Query' ) ) :
 			add_filter( 'posts_groupby', array( $core_query, 'posts_groupby' ), 10, 2 );
 			add_filter( 'posts_clauses', array( $core_query, 'posts_clauses' ), 10, 2 );
 			add_filter( 'posts_request', array( $core_query, 'posts_request' ), 10, 2 );
-			add_filter( 'posts_clauses_request', array( $core_query, 'set_topscore' ), 10, 2 );
+			add_filter( 'better_search_query_posts_request', array( $core_query, 'set_topscore' ), 10, 2 );
 			add_filter( 'posts_pre_query', array( $core_query, 'posts_pre_query' ), 10, 2 );
 			add_filter( 'the_posts', array( $core_query, 'the_posts' ), 10, 2 );
 
@@ -58,7 +58,7 @@ if ( ! class_exists( 'Better_Search_Query' ) ) :
 			remove_filter( 'posts_groupby', array( $core_query, 'posts_groupby' ) );
 			remove_filter( 'posts_clauses', array( $core_query, 'posts_clauses' ) );
 			remove_filter( 'posts_request', array( $core_query, 'posts_request' ) );
-			remove_filter( 'posts_clauses_request', array( $core_query, 'set_topscore' ) );
+			remove_filter( 'better_search_query_posts_request', array( $core_query, 'set_topscore' ) );
 			remove_filter( 'posts_pre_query', array( $core_query, 'posts_pre_query' ) );
 			remove_filter( 'the_posts', array( $core_query, 'the_posts' ) );
 		}
