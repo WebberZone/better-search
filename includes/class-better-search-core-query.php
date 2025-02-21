@@ -842,7 +842,7 @@ class Better_Search_Core_Query extends \WP_Query {
 			$clause = apply_filters_ref_array( 'better_search_query_posts_search_clauses', array( $clause, $term, $like_op, $andor_op, &$query ) );
 
 			if ( ! empty( $clause ) ) {
-				$search_clause .= " {$searchand} (" . implode( $andor_op, $clause ) . ') ';
+				$search_clause .= " {$searchand} (" . implode( $andor_op, (array) $clause ) . ') ';
 				$searchand      = ' AND ';
 			}
 		}
@@ -850,6 +850,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		if ( ! empty( $search_clause ) ) {
 			$search .= " OR ({$search_clause}) ";
 		}
+
 		if ( ! empty( $search ) ) {
 			$where = " AND ({$search}) ";
 
