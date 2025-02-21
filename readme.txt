@@ -111,6 +111,14 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.1.0 =
+
+* Features:
+	* Better Search now loads globally and can be accessed using `better_search()`.
+
+* Bug fixes:
+	* Fixed issues with permalinks and titles not loading properly when Multisite search is enabled.
+
 = 4.0.5 =
 
 * Modifications:
