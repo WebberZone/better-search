@@ -1,6 +1,6 @@
 <?php
 /**
- * Autoloads classes from the WebberZone\Snippetz namespace.
+ * Autoloads classes from the WebberZone\Better_Search namespace.
  *
  * @package WebberZone\Better_Search
  */
@@ -10,7 +10,7 @@ namespace WebberZone\Better_Search;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Autoloader for WebberZone\Snippetz classes.
+ * Autoloader for WebberZone\Better_Search classes.
  *
  * @param string $class_name The name of the class to load.
  */
