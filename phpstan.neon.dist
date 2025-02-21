@@ -7,4 +7,11 @@ parameters:
         - uninstaller.php
         - includes/
         - templates/
+    scanDirectories:
+        - includes/
+        - templates/
+        - freemius/
+    scanFiles:
+        - better-search.php
+        - uninstaller.php
     ignoreErrors:
