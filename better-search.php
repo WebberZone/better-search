@@ -13,7 +13,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  https://webberzone.com/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     4.0.5
+ * Version:     4.1.0-beta1
  * Author:      WebberZone
  * Author URI:  https://webberzone.com/
  * Text Domain: better-search
@@ -79,26 +79,41 @@ require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/load-freemius.php';
 // Load the autoloader.
 require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/autoloader.php';
 
+if ( ! function_exists( __NAMESPACE__ . '\better_search' ) ) {
+	/**
+	 * Returns the main instance of Better_Search to prevent the need to use globals.
+	 *
+	 * @since 4.0.6
+	 *
+	 * @return Main Main instance of the plugin.
+	 */
+	function better_search() {
+		return Main::get_instance();
+	}
+}
+
 if ( ! function_exists( __NAMESPACE__ . '\load_bsearch' ) ) {
 	/**
-	 * The main function responsible for returning the one true WebberZone Snippetz instance to functions everywhere.
+	 * The main function responsible for returning the one true WebberZone Better Search instance to functions everywhere.
 	 *
 	 * @since 3.3.0
+	 *
+	 * @return void
 	 */
 	function load_bsearch() {
-		Main::get_instance();
+		better_search();
 	}
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\load_bsearch' );
 }
-
-// Register the activation hook.
-register_activation_hook( __FILE__, __NAMESPACE__ . '\Admin\Activator::activation_hook' );
 
 /*
  *----------------------------------------------------------------------------
  * Include files
  *----------------------------------------------------------------------------
  */
+// Register the activation hook.
+register_activation_hook( __FILE__, __NAMESPACE__ . '\Admin\Activator::activation_hook' );
+
 require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/options-api.php';
 require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search-core-query.php';
 require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search-query.php';
