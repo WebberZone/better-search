@@ -17,18 +17,13 @@ parameters:
 
 		-
 			message: "#^Constant BETTER_SEARCH_PLUGIN_URL not found\\.$#"
-			count: 4
+			count: 2
 			path: includes/admin/settings/sidebar.php
 
 		-
 			message: "#^Constant BETTER_SEARCH_PLUGIN_DIR not found\\.$#"
 			count: 1
 			path: includes/autoloader.php
-
-		-
-			message: "#^Access to an undefined property WP_Query\\:\\:\\$topscore\\.$#"
-			count: 3
-			path: includes/class-better-search-core-query.php
 
 		-
 			message: "#^Cannot access property \\$score on int\\|WP_Post\\.$#"
@@ -44,6 +39,11 @@ parameters:
 			message: "#^Variable \\$cache_time might not be defined\\.$#"
 			count: 1
 			path: includes/class-better-search-core-query.php
+
+		-
+			message: "#^Constant BETTER_SEARCH_PLUGIN_URL not found\\.$#"
+			count: 2
+			path: includes/class-main.php
 
 		-
 			message: "#^Negated boolean expression is always false\\.$#"
@@ -81,11 +81,6 @@ parameters:
 			path: includes/general-template.php
 
 		-
-			message: "#^Function the_bsearch_heatmap\\(\\) never returns void so it can be removed from the return type\\.$#"
-			count: 1
-			path: includes/heatmap.php
-
-		-
 			message: "#^Variable \\$a might not be defined\\.$#"
 			count: 2
 			path: includes/heatmap.php
@@ -98,9 +93,9 @@ parameters:
 		-
 			message: "#^Access to an undefined property Better_Search_Query\\:\\:\\$topscore\\.$#"
 			count: 1
-			path: templates/template.php
+			path: templates/better-search-template.php
 
 		-
 			message: "#^Variable \\$post might not be defined\\.$#"
 			count: 6
-			path: templates/template.php
+			path: templates/better-search-template.php
