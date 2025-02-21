@@ -1,22 +1,23 @@
-.search-form, form[role="search"] {
+.search-form,
+form[role="search"] {
     position: relative;
+    width: 100%;
 }
 
 .bsearch-autocomplete-results {
     display: none;
-}
-
-.bsearch-autocomplete-results {
     position: absolute;
     z-index: 1000;
     background: #fefefe;
     border: 1px solid #ccc;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     max-height: 200px;
     overflow-y: auto;
     width: 100%;
     top: 100%;
     left: 0;
+    margin-top: 4px;
 }
 
 .bsearch-autocomplete-results ul {
@@ -25,18 +26,22 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    /* Align items vertically */
 }
 
 .bsearch-autocomplete-results li {
     display: flex;
-    margin: 0 0 0 0 !important;
+    margin: 0 !important;
     align-items: center;
-    padding: 5px;
+    padding: 0;
     border-bottom: 1px solid #eee;
     cursor: pointer;
 }
 
+.bsearch-autocomplete-results li:last-child {
+    border-bottom: none;
+}
+
+.bsearch-autocomplete-results li.selected,
 .bsearch-autocomplete-results li:hover {
     background-color: #f0f0f0;
 }
@@ -44,22 +49,86 @@
 .bsearch-autocomplete-results a {
     display: block;
     width: 100%;
-    height: 100%;
+    padding: 12px 16px;
     text-align: left;
+    text-decoration: none;
+    color: #333;
+    line-height: 1.4;
+    transition: all 0.2s ease;
 }
 
-/* Ensuring ul does not affect the input field */
-.search-form, form[role="search"] {
-    position: relative;
-    width: 100%;
-    /* Ensure it's responsive */
+/* Focus styles for input */
+.search-form input[type="search"]:focus,
+form[role="search"] input[type="search"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #2271b1;
+    border-color: #2271b1;
+}
+
+/* Focus styles for submit button */
+.search-form input[type="submit"]:focus,
+.search-form button[type="submit"]:focus,
+form[role="search"] input[type="submit"]:focus,
+form[role="search"] button[type="submit"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #2271b1;
+    border-color: #2271b1;
+}
+
+/* Focus styles for result links */
+.bsearch-autocomplete-results a:focus {
+    outline: none;
+    background-color: #e8f0fe;
+    box-shadow: inset 0 0 0 2px #2271b1;
+    color: #000;
+    text-decoration: underline;
+}
+
+/* Selected state combined with focus */
+.bsearch-autocomplete-results li.selected a:focus {
+    background-color: #e8f0fe;
+    box-shadow: inset 0 0 0 2px #2271b1;
+}
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+
+    .bsearch-autocomplete-results li.selected,
+    .bsearch-autocomplete-results a:focus {
+        outline: 2px solid CanvasText;
+        outline-offset: -2px;
+    }
+}
+
+/* Ensure scrollbar is visible and styled */
+.bsearch-autocomplete-results {
+    scrollbar-width: thin;
+    scrollbar-color: #2271b1 #f0f0f0;
+}
+
+.bsearch-autocomplete-results::-webkit-scrollbar {
+    width: 8px;
+}
+
+.bsearch-autocomplete-results::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.bsearch-autocomplete-results::-webkit-scrollbar-thumb {
+    background-color: #2271b1;
+    border-radius: 4px;
+    border: 2px solid #f0f0f0;
 }
 
 @media (max-width: 600px) {
     .bsearch-autocomplete-results {
         width: 100%;
-        /* Ensure results take full width */
         max-height: 150px;
-        /* Adjust height for smaller screens */
+        margin-top: 2px;
+    }
+
+    .bsearch-autocomplete-results a {
+        padding: 10px 12px;
     }
 }
