@@ -116,8 +116,17 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Features:
 	* Better Search now loads globally and can be accessed using `better_search()`.
 
+* Modifications:
+	* Query improvements for better compatibility with Better Search Pro.
+	* Improved accessibility of live search results particularly better keyboard navigation.
+	* [Pro] Multisite search now respects the settings of each site.
+	* [Pro] Better Fuzzy search compatibility with multisite search.
+	* [Pro] Better compatibility with PolyLang when using Multisite search. However, PolyLang must be set up exactly the same on all sites of the multisite setup.
+
 * Bug fixes:
-	* Fixed issues with permalinks and titles not loading properly when Multisite search is enabled.
+	* [Pro] Fixed issues with permalinks and titles not loading properly when Multisite search is enabled.
+	* [Pro] Fixed Multisite search when Seamless Mode is off.
+	* [Pro] Fixed bugs with Fuzzy Search query in some cases.
 
 = 4.0.5 =
 
