@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-02 21:30+0000\n"
+"POT-Creation-Date: 2025-02-23 11:18+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza\n"
 "Language-Team: WebberZone\n"
@@ -323,7 +323,7 @@ msgid "Settings have been imported successfully"
 msgstr ""
 
 #: includes/admin/class-tools-page.php:177
-#: includes/admin/class-tools-page.php:182
+#: includes/admin/class-tools-page.php:182 includes/pro/class-admin.php:86
 msgid "Clear cache"
 msgstr ""
 
@@ -1277,34 +1277,34 @@ msgstr ""
 msgid "Follow me"
 msgstr ""
 
-#: includes/class-better-search-core-query.php:1343
+#: includes/class-better-search-core-query.php:1365
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid ""
 "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,"
 "was,what,when,where,who,will,with,www"
 msgstr ""
 
-#: includes/class-main.php:235
+#: includes/class-main.php:253
 msgid ""
 "Better Search and Better Search Pro should not be active at the same time. "
 "We've automatically deactivated Better Search."
 msgstr ""
 
-#: includes/class-main.php:237
+#: includes/class-main.php:255
 msgid ""
 "Better Search and Better Search Pro should not be active at the same time. "
 "We've automatically deactivated Better Search Pro."
 msgstr ""
 
-#: includes/class-main.php:269
+#: includes/class-main.php:283
 msgid "Better Search Pro - Coming soon. Sign up to find out more"
 msgstr ""
 
-#: includes/class-main.php:279
+#: includes/class-main.php:286
 msgid "OR"
 msgstr ""
 
-#: includes/class-main.php:288
+#: includes/class-main.php:287
 msgid "Support the development - Send us a donation today."
 msgstr ""
 
@@ -1493,6 +1493,115 @@ msgid "%s search"
 msgid_plural "%s searches"
 msgstr[0] ""
 msgstr[1] ""
+
+#: includes/pro/class-admin.php:104
+msgid "Create fulltext indexes"
+msgstr ""
+
+#: includes/pro/class-admin.php:113
+msgid "Create fuzzy search indexes"
+msgstr ""
+
+#: includes/pro/class-admin.php:158
+msgid "Installing..."
+msgstr ""
+
+#: includes/pro/class-admin.php:169
+msgid "Done"
+msgstr ""
+
+#: includes/pro/class-admin.php:173
+msgid "Failed to install"
+msgstr ""
+
+#: includes/pro/class-admin.php:194
+msgid "Fuzzy search indexes are installed."
+msgstr ""
+
+#: includes/pro/class-admin.php:197
+msgid "Fuzzy search indexes are not installed."
+msgstr ""
+
+#: includes/pro/class-admin.php:251
+msgid ". Click the above button to create any missing fulltext indexes."
+msgstr ""
+
+#: includes/pro/class-fuzzy-search.php:581
+msgid ""
+"Better Search Pro: Fuzzy search indexes are missing, which will affect "
+"search results. Create the indexes in the Search tab."
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:440
+msgid "Selected sites saved successfully!"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:512
+msgid ""
+"Better Search Pro: Different table collations detected across network sites. "
+"This will affect multisite search functionality."
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:513
+msgid ""
+"Please use the same collation for all tables to ensure proper UNION queries "
+"in multisite search."
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:518
+#, php-format
+msgid "Recommended collation: %s (most commonly used across sites)"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:523
+msgid "Run the following MySQL commands to fix the collation:"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:530
+msgid ""
+"Note: Please backup your database before running any ALTER TABLE commands."
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:553
+msgid "Enable Multisite Search"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:560
+msgid "Available Sites"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:564
+msgid "Select All"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:580
+msgid "Site ID"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:581
+msgid "Site URL"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:582
+msgid "Collation"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:613
+msgid ""
+"Select the sites to include in the multisite search. This applies across all "
+"sites in the network except for those not selected above."
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:615
+msgid ""
+"For optimal performance, disable seamless mode. Note that searching across "
+"multiple sites can be resource-intensive, so enabling caching is recommended "
+"to improve search speed and reduce server load."
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:621
+msgid "Save Settings"
+msgstr ""
 
 #: includes/util/class-cache.php:48
 #, php-format
