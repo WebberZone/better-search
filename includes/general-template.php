@@ -192,6 +192,9 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
+	// Sanitize args.
+	$args = Helpers::sanitize_args( $args );
+
 	/**
 	 * Filters the array of arguments used when generating the Better Search form.
 	 *
