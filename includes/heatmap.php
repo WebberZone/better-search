@@ -150,6 +150,9 @@ function get_bsearch_heatmap( $args = array() ) {
 	// Parse incomming $args into an array and merge it with $defaults.
 	$args = wp_parse_args( $args, $defaults );
 
+	// Sanitize args.
+	$args = Helpers::sanitize_args( $args );
+
 	$output = ( 'array' === $args['format'] ) ? array() : '';
 
 	$results = get_bsearch_heatmap_counts( $args );
