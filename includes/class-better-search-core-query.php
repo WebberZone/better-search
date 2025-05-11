@@ -127,6 +127,14 @@ class Better_Search_Core_Query extends \WP_Query {
 	public $match_sql = '';
 
 	/**
+	 * Holds the array of post scores.
+	 *
+	 * @since 4.1.2
+	 * @var array
+	 */
+	public $post_scores = array();
+
+	/**
 	 * Main constructor.
 	 *
 	 * @since 3.0.0
@@ -165,7 +173,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		add_filter( 'posts_groupby', array( $this, 'posts_groupby' ), 10, 2 );
 		add_filter( 'posts_clauses', array( $this, 'posts_clauses' ), 10, 2 );
 		add_filter( 'posts_request', array( $this, 'posts_request' ), 10, 2 );
-		add_filter( 'better_search_query_posts_request', array( $this, 'set_topscore' ), 999, 2 );
+		add_filter( 'better_search_query_posts_request', array( $this, 'set_topscore' ), PHP_INT_MAX, 2 );
 		add_filter( 'posts_pre_query', array( $this, 'posts_pre_query' ), 10, 2 );
 		add_filter( 'the_posts', array( $this, 'the_posts' ), 10, 2 );
 	}
@@ -1138,6 +1146,14 @@ class Better_Search_Core_Query extends \WP_Query {
 			return $posts;
 		}
 
+		// Store scores in the query object for template access.
+		$query->post_scores = array();
+		foreach ( $posts as $post ) {
+			if ( isset( $post->score ) ) {
+				$query->post_scores[ $post->ID ] = floatval( $post->score );
+			}
+		}
+
 		// Support caching to speed up retrieval.
 		if ( ! empty( $posts ) && ! empty( $this->query_args['cache'] ) && ! $this->in_cache && ! ( $query->is_preview() || is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) ) {
 
@@ -1230,7 +1246,7 @@ class Better_Search_Core_Query extends \WP_Query {
 
 		// Take $request. Check if there is a LIMIT clause. If so, make sure it's limited to a single entry only. If there is no LIMIT then add it to extract a single entry only. Also, check if there is an ORDER BY clause. If so, make sure it's ordered by the score column. If there is no ORDER BY clause then add one.
 		if ( strpos( $request, 'LIMIT' ) !== false ) {
-			$score_query = preg_replace( '/LIMIT\s+\\d+(,\\d+)?/', 'LIMIT 1', $request );
+			$score_query = preg_replace( '/LIMIT\s+(?:\d+\s*,\s*)?\d+/', 'LIMIT 1', $request );
 		} else {
 			$score_query = $request . ' LIMIT 1';
 		}
@@ -1253,8 +1269,9 @@ class Better_Search_Core_Query extends \WP_Query {
 			$score_query = $score_query . ' ORDER BY score DESC';
 		}
 
-		$this->topscore = (float) $wpdb->get_var( $score_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$topscore = $wpdb->get_results( $score_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
+		$this->topscore  = ! empty( $topscore ) ? (float) wp_list_pluck( $topscore, 'score' )[0] : 0;
 		$query->topscore = $this->topscore;
 
 		if ( ! empty( $this->query_args['cache'] ) ) {

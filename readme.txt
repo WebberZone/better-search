@@ -111,6 +111,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.2.0 =
+
+* Bug fixes:
+	* Fixed an issue where post score was not being displayed.
+
 = 4.1.1 =
 
 * Bug fixes:

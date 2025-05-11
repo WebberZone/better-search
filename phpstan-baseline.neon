@@ -26,6 +26,11 @@ parameters:
 			path: includes/autoloader.php
 
 		-
+			message: "#^Access to an undefined property WP_Query\\:\\:\\$post_scores\\.$#"
+			count: 1
+			path: includes/class-better-search-core-query.php
+
+		-
 			message: "#^Cannot access property \\$score on int\\|WP_Post\\.$#"
 			count: 1
 			path: includes/class-better-search-core-query.php
@@ -66,16 +71,6 @@ parameters:
 			path: includes/class-tracker.php
 
 		-
-			message: "#^Method WebberZone\\\\Better_Search\\\\Frontend\\\\Widgets\\\\Search_Box\\:\\:form\\(\\) should return string but return statement is missing\\.$#"
-			count: 1
-			path: includes/frontend/widgets/class-search-box.php
-
-		-
-			message: "#^Method WebberZone\\\\Better_Search\\\\Frontend\\\\Widgets\\\\Search_Heatmap\\:\\:form\\(\\) should return string but return statement is missing\\.$#"
-			count: 1
-			path: includes/frontend/widgets/class-search-heatmap.php
-
-		-
 			message: "#^Parameter \\#2 \\$array of function implode expects array\\<string\\>, array\\<int\\<0, max\\>, string\\|WP_Error\\> given\\.$#"
 			count: 1
 			path: includes/general-template.php
@@ -91,11 +86,41 @@ parameters:
 			path: includes/pro/class-fuzzy-search.php
 
 		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 2
+			path: includes/pro/class-fuzzy-search.php
+
+		-
+			message: "#^Property Better_Search_Core_Query\\:\\:\\$match_sql \\(string\\) in isset\\(\\) is not nullable\\.$#"
+			count: 1
+			path: includes/pro/class-fuzzy-search.php
+
+		-
+			message: "#^Access to an undefined property WP_Post\\:\\:\\$blog_id\\.$#"
+			count: 3
+			path: includes/pro/class-multisite-search.php
+
+		-
+			message: "#^Class PLL_Frontend_Filters not found\\.$#"
+			count: 1
+			path: includes/pro/class-multisite-search.php
+
+		-
+			message: "#^Constant DB_NAME not found\\.$#"
+			count: 1
+			path: includes/pro/class-multisite-search.php
+
+		-
+			message: "#^Variable \\$query in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: includes/pro/class-pro.php
+
+		-
 			message: "#^Access to an undefined property Better_Search_Query\\:\\:\\$topscore\\.$#"
 			count: 1
 			path: templates/better-search-template.php
 
 		-
 			message: "#^Variable \\$post might not be defined\\.$#"
-			count: 6
+			count: 7
 			path: templates/better-search-template.php

@@ -113,6 +113,7 @@ get_header();
 
 				while ( have_posts() ) :
 					the_post();
+					$post_score = $post->score ?? bsearch_get_post_score( $post->ID );
 					?>
 
 					<?php do_action( 'bsearch_before_article' ); ?>
@@ -159,17 +160,18 @@ get_header();
 
 							<ul class="bsearch_post_meta">
 								<?php do_action( 'bsearch_before_post_meta' ); ?>
-								<?php if ( isset( $post->score ) && bsearch_get_option( 'display_relevance' ) ) : ?>
-									<li class="meta-relevance">
-										<?php
-										the_bsearch_score(
-											array(
-												'score'    => $post->score,
-												'topscore' => $topscore,
-											)
-										);
-										?>
-									</li>
+								<?php if ( bsearch_get_option( 'display_relevance' ) ) : ?>
+								<li class="meta-relevance">
+									<?php
+
+									the_bsearch_score(
+										array(
+											'score'    => $post_score,
+											'topscore' => $topscore,
+										)
+									);
+									?>
+								</li>
 								<?php endif; ?>
 								<?php if ( bsearch_get_option( 'display_post_type' ) ) : ?>
 									<li class="meta-type"><?php esc_html_e( 'Type', 'better-search' ); ?>: <?php the_bsearch_post_type( $post ); ?></li>

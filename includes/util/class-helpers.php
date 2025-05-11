@@ -452,7 +452,6 @@ class Helpers {
 	 * @return string Score converted to percentage
 	 */
 	public static function score2percent( $score, $topscore ) {
-
 		$output = '';
 
 		if ( $score > 0 && $topscore > 0 ) {
