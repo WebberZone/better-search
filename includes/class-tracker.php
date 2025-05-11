@@ -7,8 +7,6 @@
 
 namespace WebberZone\Better_Search;
 
-use WebberZone\Better_Search\Util\Helpers;
-
 if ( ! defined( 'WPINC' ) ) {
 	exit;
 }

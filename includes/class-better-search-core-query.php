@@ -571,11 +571,12 @@ class Better_Search_Core_Query extends \WP_Query {
 
 		// Create the base MATCH part of the FIELDS clause.
 		if ( $this->use_fulltext ) {
-			// Prepare the query once and use it with prepared arguments.
 			$field_score = $wpdb->prepare(
-				"(MATCH({$wpdb->posts}.post_title) AGAINST ('{$search_query}' {$boolean_mode}) * %d) + " . // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"(MATCH({$wpdb->posts}.post_content) AGAINST ('{$search_query}' {$boolean_mode}) * %d)", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"(MATCH({$wpdb->posts}.post_title) AGAINST (%s {$boolean_mode}) * %d) + " . // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"(MATCH({$wpdb->posts}.post_content) AGAINST (%s {$boolean_mode}) * %d)", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$search_query,
 				$weight_title,
+				$search_query,
 				$weight_content
 			);
 		}
