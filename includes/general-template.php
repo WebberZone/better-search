@@ -549,6 +549,28 @@ function the_bsearch_score( $args = array() ) {
 }
 
 /**
+ * Get the relevance score for a post.
+ *
+ * @since 4.1.2
+ *
+ * @param int $post_id Post ID. Default is current post.
+ * @return float Post score or 0 if not available.
+ */
+function bsearch_get_post_score( $post_id = 0 ) {
+	global $wp_query;
+
+	if ( ! $post_id ) {
+		$post_id = get_the_ID();
+	}
+
+	if ( isset( $wp_query->post_scores ) && isset( $wp_query->post_scores[ $post_id ] ) ) {
+		return floatval( $wp_query->post_scores[ $post_id ] );
+	}
+
+	return 0;
+}
+
+/**
  * Retrieve the relevance score for the post in the search results.
  *
  * @since 3.3.0
