@@ -59,6 +59,42 @@ class Helpers {
 
 		$val = rawurldecode( $val );
 
+		// Block SQL injection attempts by detecting common patterns.
+		$sql_injection_patterns = array(
+			'/[\\s\\r\\n\\)]+OR[\\s\\r\\n\\(]+/i',          // Detect OR statements.
+			'/[\\s\\r\\n\\)]+AND[\\s\\r\\n\\(]+/i',         // Detect AND statements.
+			'/\\bUNION\\b.*\\bSELECT\\b/i',              // UNION SELECT.
+			'/[\\\'\\"\\-\\#]\\s*OR\\s+[\\d\\w]+=[\\d\\w]+/i', // Quoted OR equality.
+			'/\\-\\-/',                              // SQL comments.
+			'/;\\s*\\w+/',                           // Multiple statements.
+			'/\\bDROP\\b/i',                         // DROP statements.
+			'/\\bEXEC\\b/i',                          // EXEC statements.
+			'/SLEEP\\s*\\(/i',                       // SLEEP injection.
+			'/BENCHMARK\\s*\\(/i',                   // BENCHMARK injection.
+		);
+
+		// Check each pattern against the search query.
+		foreach ( $sql_injection_patterns as $pattern ) {
+			if ( preg_match( $pattern, $val ) ) {
+				$bsearch_error->add(
+					'bsearch_sql_injection',
+					__( 'Your search query appears to be malicious. Please try a different search.', 'better-search' )
+				);
+
+				/**
+				 * Fires when a SQL injection attempt is detected.
+				 *
+				 * @since 4.0.6
+				 *
+				 * @param string $val The search query that triggered the detection.
+				 * @param string $pattern The pattern that matched.
+				 */
+				do_action( 'bsearch_sql_injection_detected', $val, $pattern );
+
+				return '';
+			}
+		}
+
 		$badwords = array_map( 'trim', explode( ',', bsearch_get_option( 'badwords' ) ) );
 
 		$censor_char = '';

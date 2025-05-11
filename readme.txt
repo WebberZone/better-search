@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.1.1
+Stable tag: 4.1.2
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 7.4
@@ -111,7 +111,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 4.2.0 =
+= 4.1.2 =
+
+* Features:
+	* Added SQL injection detection.
 
 * Bug fixes:
 	* Fixed an issue where post score was not being displayed.
@@ -216,5 +219,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
-= 4.1.1 =
-Bug fix: properly sanitized shortcode arguments.
+= 4.1.2 =
+Bug fixes; Check the changelog for details.
