@@ -115,6 +115,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 * Bug fixes:
 	* Fixed an issue where post score was not being displayed.
+	* Better Search form post type correctly uses `post_type` instead of `post_types` for better compatibility.
 
 = 4.1.1 =
 
