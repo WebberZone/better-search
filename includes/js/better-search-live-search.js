@@ -1,241 +1,445 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const searchForms = document.querySelectorAll('.search-form, form[role="search"]');
+/**
+ * Manages autocomplete search functionality for forms
+ */
+class SearchAutocomplete {
+    static SELECTOR = '.search-form, form[role="search"]';
+    static DEBOUNCE_DELAY = 300;
 
-    searchForms.forEach(form => {
-        const searchInput = form.querySelector('input[name="s"]');
-        const submitButton = form.querySelector('input[type="submit"], button[type="submit"]');
-        if (!searchInput) return;
+    constructor(form) {
+        this.form = form;
+        this.searchInput = form.querySelector('input[name="s"]');
+        this.submitButton = form.querySelector('input[type="submit"], button[type="submit"]');
+        this.selectedIndex = -1;
+        this.debounceTimer = null;
 
-        const resultsContainer = document.createElement('div');
-        resultsContainer.className = 'bsearch-autocomplete-results';
-        resultsContainer.setAttribute('aria-live', 'polite');
-        resultsContainer.setAttribute('role', 'listbox');
-        resultsContainer.id = 'search-suggestions';
-        searchInput.setAttribute('aria-autocomplete', 'list');
-        searchInput.setAttribute('aria-controls', 'search-suggestions');
+        if (!this.searchInput) return;
 
-        // Move resultsContainer after the submit button in the DOM
-        if (submitButton && submitButton.nextSibling) {
-            submitButton.parentNode.insertBefore(resultsContainer, submitButton.nextSibling);
-        } else {
-            searchInput.parentNode.insertBefore(resultsContainer, searchInput.nextSibling);
-        }
-
-        let debounceTimer;
-        let selectedIndex = -1;
-
-        searchInput.addEventListener('input', function () {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                const searchTerm = this.value;
-                if (searchTerm.length > 2) {
-                    fetchResults(searchTerm, resultsContainer);
-                } else {
-                    clearResults(resultsContainer);
-                }
-            }, 300);
-        });
-
-        // Handle keyboard navigation from search input
-        searchInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                clearResults(resultsContainer);
-                return;
-            }
-
-            const items = resultsContainer.querySelectorAll('li');
-
-            if (e.key === 'ArrowDown' && this.value.length > 2) {
-                e.preventDefault();
-                if (submitButton) {
-                    submitButton.focus();
-                } else if (items.length) {
-                    const firstItem = items[0].querySelector('a');
-                    if (firstItem) {
-                        firstItem.focus();
-                        selectedIndex = 0;
-                        updateSelection(items);
-                    }
-                } else {
-                    fetchResults(this.value, resultsContainer);
-                }
-            }
-        });
-
-        // Handle keyboard navigation from submit button
-        if (submitButton) {
-            submitButton.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') {
-                    e.preventDefault();
-                    clearResults(resultsContainer);
-                    searchInput.focus();
-                    return;
-                }
-
-                const items = resultsContainer.querySelectorAll('li');
-
-                if (e.key === 'ArrowDown' && items.length > 0) {
-                    e.preventDefault();
-                    const firstItem = items[0].querySelector('a');
-                    if (firstItem) {
-                        firstItem.focus();
-                        selectedIndex = 0;
-                        updateSelection(items);
-                    }
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    searchInput.focus();
-                }
-            });
-
-            // Ensure natural tab order by removing tabindex from result links
-            resultsContainer.addEventListener('DOMNodeInserted', function (e) {
-                if (e.target.tagName === 'A') {
-                    e.target.removeAttribute('tabindex');
-                }
-            });
-        }
-
-        // Handle keyboard navigation in results
-        resultsContainer.addEventListener('keydown', function (e) {
-            const items = this.querySelectorAll('li');
-            if (!items.length) return;
-
-            const currentLink = document.activeElement;
-            const currentItem = currentLink?.closest('li');
-            const currentIndex = Array.from(items).indexOf(currentItem);
-
-            switch (e.key) {
-                case 'ArrowDown':
-                    e.preventDefault();
-                    if (currentIndex < items.length - 1) {
-                        items[currentIndex + 1].querySelector('a').focus();
-                        selectedIndex = currentIndex + 1;
-                        updateSelection(items);
-                    }
-                    break;
-                case 'ArrowUp':
-                    e.preventDefault();
-                    if (currentIndex > 0) {
-                        items[currentIndex - 1].querySelector('a').focus();
-                        selectedIndex = currentIndex - 1;
-                        updateSelection(items);
-                    } else {
-                        submitButton ? submitButton.focus() : searchInput.focus();
-                        selectedIndex = -1;
-                        updateSelection(items);
-                    }
-                    break;
-                case 'Escape':
-                    e.preventDefault();
-                    clearResults(resultsContainer);
-                    searchInput.focus();
-                    break;
-            }
-        });
-
-        // Handle click outside
-        document.addEventListener('click', function (event) {
-            if (!form.contains(event.target) && !resultsContainer.contains(event.target)) {
-                clearResults(resultsContainer);
-            }
-        });
-
-        // Keep results visible on input focus
-        searchInput.addEventListener('focus', function () {
-            if (resultsContainer.innerHTML.trim() !== '' && this.value.length > 2) {
-                resultsContainer.style.display = 'block';
-            }
-        });
-    });
-
-    function clearResults(resultsContainer) {
-        resultsContainer.innerHTML = '';
-        resultsContainer.style.display = 'none';
-        selectedIndex = -1;
-        const form = resultsContainer.closest('.search-form, form[role="search"]');
-        if (form) {
-            const input = form.querySelector('input[name="s"]');
-            if (input) {
-                input.removeAttribute('aria-activedescendant');
-            }
-        }
+        this.initializeElements();
+        this.bindEvents();
     }
 
-    function updateSelection(items) {
-        items.forEach((item, index) => {
-            if (index === selectedIndex) {
-                item.setAttribute('aria-selected', 'true');
-                item.classList.add('selected');
-                const form = item.closest('.search-form, form[role="search"]');
-                if (form) {
-                    const input = form.querySelector('input[name="s"]');
-                    if (input) {
-                        input.setAttribute('aria-activedescendant', item.id);
-                    }
-                }
+    /**
+     * Initializes DOM elements and sets up ARIA attributes
+     */
+    initializeElements() {
+        // Create announcement region
+        this.announceRegion = this.createAnnounceRegion();
+        this.form.insertBefore(this.announceRegion, this.form.firstChild);
+
+        // Create results container
+        this.resultsContainer = this.createResultsContainer();
+        this.insertResultsContainer();
+
+        // Configure search input
+        this.configureSearchInput();
+    }
+
+    /**
+     * Creates announcement region for screen readers
+     * @returns {HTMLDivElement}
+     */
+    createAnnounceRegion() {
+        const region = document.createElement('div');
+        region.className = 'bsearch-visually-hidden';
+        region.setAttribute('aria-live', 'assertive');
+        region.id = `announce-${this.generateId()}`;
+        return region;
+    }
+
+    /**
+     * Creates results container
+     * @returns {HTMLDivElement}
+     */
+    createResultsContainer() {
+        const container = document.createElement('div');
+        container.className = 'bsearch-autocomplete-results';
+        container.setAttribute('role', 'listbox');
+        container.id = `search-suggestions-${this.generateId()}`;
+        return container;
+    }
+
+    /**
+     * Generates random ID for elements
+     * @returns {string}
+     */
+    generateId() {
+        return Math.random().toString(36).substring(2, 9);
+    }
+
+    /**
+     * Inserts results container after submit button or input
+     */
+    insertResultsContainer() {
+        const insertAfter = this.submitButton || this.searchInput;
+        insertAfter.parentNode.insertBefore(this.resultsContainer, insertAfter.nextSibling);
+    }
+
+    /**
+     * Configures search input attributes
+     */
+    configureSearchInput() {
+        Object.entries({
+            autocomplete: 'off',
+            'aria-autocomplete': 'list',
+            'aria-controls': this.resultsContainer.id,
+            autocapitalize: 'off',
+            spellcheck: 'false'
+        }).forEach(([key, value]) => {
+            this.searchInput.setAttribute(key, value);
+        });
+    }
+
+    /**
+     * Binds all event listeners
+     */
+    bindEvents() {
+        this.searchInput.addEventListener('input', this.handleInput.bind(this));
+        this.searchInput.addEventListener('keydown', this.handleInputKeydown.bind(this));
+        this.searchInput.addEventListener('focus', this.handleInputFocus.bind(this));
+        this.searchInput.addEventListener('blur', this.handleInputBlur.bind(this));
+
+        if (this.submitButton) {
+            this.submitButton.addEventListener('keydown', this.handleSubmitKeydown.bind(this));
+        }
+
+        this.resultsContainer.addEventListener('keydown', this.handleResultsKeydown.bind(this));
+        this.resultsContainer.addEventListener('DOMNodeInserted', this.handleResultInsert.bind(this));
+
+        document.addEventListener('click', this.handleDocumentClick.bind(this));
+    }
+
+    /**
+     * Handles input changes with debouncing
+     */
+    handleInput() {
+        clearTimeout(this.debounceTimer);
+        this.debounceTimer = setTimeout(() => {
+            const searchTerm = this.searchInput.value.trim();
+
+            if (searchTerm.length > 2) {
+                this.announce('Searching...');
+                this.fetchResults(searchTerm);
             } else {
-                item.setAttribute('aria-selected', 'false');
-                item.classList.remove('selected');
+                this.announce(searchTerm.length === 0 ? '' : 'Please enter at least 3 characters to search');
+                this.clearResults();
             }
-        });
+        }, SearchAutocomplete.DEBOUNCE_DELAY);
     }
 
-    function fetchResults(searchTerm, resultsContainer) {
-        fetch(bsearch_live_search.ajax_url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Cache-Control': 'no-cache'
-            },
-            body: new URLSearchParams({
-                action: 'bsearch_live_search',
-                s: searchTerm
-            }).toString()
-        })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (results) {
-                displayResults(results, resultsContainer);
-            })
-            .catch(function (error) {
-                console.error('Error:', error);
-                clearResults(resultsContainer);
-            });
-    }
+    /**
+     * Handles keyboard navigation in input
+     * @param {KeyboardEvent} event
+     */
+    handleInputKeydown(event) {
+        const items = this.resultsContainer.querySelectorAll('li');
 
-    function displayResults(results, resultsContainer) {
-        resultsContainer.innerHTML = '';
-        if (results.length > 0) {
-            resultsContainer.style.display = 'block';
-            const ul = document.createElement('ul');
-            ul.setAttribute('role', 'presentation');
+        switch (event.key) {
+            case 'Escape':
+                event.preventDefault();
+                this.clearResults();
+                this.announce('Search suggestions closed');
+                break;
 
-            results.forEach((result, index) => {
-                const li = document.createElement('li');
-                li.setAttribute('role', 'option');
-                li.setAttribute('aria-selected', 'false');
-                li.id = `search-suggestion-${index}`;
+            case 'ArrowDown':
+                event.preventDefault();
+                this.handleArrowDown(items);
+                break;
 
-                const a = document.createElement('a');
-                a.href = result.link;
-                a.textContent = result.title;
-                a.addEventListener('focus', function () {
-                    selectedIndex = index;
-                    updateSelection(resultsContainer.querySelectorAll('li'));
-                });
+            case 'ArrowUp':
+                event.preventDefault();
+                this.handleArrowUp(items);
+                break;
 
-                li.appendChild(a);
-                ul.appendChild(li);
-            });
-
-            resultsContainer.appendChild(ul);
-            resultsContainer.setAttribute('aria-label', `${results.length} search suggestions found`);
-        } else {
-            clearResults(resultsContainer);
-            resultsContainer.setAttribute('aria-label', 'No search suggestions found');
+            case 'Enter':
+                this.handleEnter(items, event);
+                break;
         }
     }
+
+    /**
+     * Handles ArrowDown navigation
+     * @param {NodeList} items
+     */
+    handleArrowDown(items) {
+        if (!items.length && this.searchInput.value.length > 2) {
+            this.fetchResults(this.searchInput.value);
+            return;
+        }
+        this.selectedIndex = items.length ?
+            Math.min(this.selectedIndex + 1, items.length - 1) : 0;
+        this.updateSelection(items);
+    }
+
+    /**
+     * Handles ArrowUp navigation
+     * @param {NodeList} items
+     */
+    handleArrowUp(items) {
+        if (!items.length) return;
+        this.selectedIndex = this.selectedIndex > 0 ?
+            this.selectedIndex - 1 : items.length - 1;
+        this.updateSelection(items);
+    }
+
+    /**
+     * Handles Enter key
+     * @param {NodeList} items
+     * @param {KeyboardEvent} event
+     */
+    handleEnter(items, event) {
+        if (items.length && this.selectedIndex >= 0) {
+            event.preventDefault();
+            const selectedItem = items[this.selectedIndex].querySelector('a');
+            if (selectedItem?.href) {
+                this.announce(`Navigating to ${selectedItem.textContent}`);
+                window.location.href = selectedItem.href;
+            }
+        } else {
+            this.announce('Submitting search');
+            this.form.submit();
+        }
+    }
+
+    /**
+     * Handles submit button keyboard events
+     * @param {KeyboardEvent} event
+     */
+    handleSubmitKeydown(event) {
+        const items = this.resultsContainer.querySelectorAll('li');
+
+        switch (event.key) {
+            case 'Escape':
+                event.preventDefault();
+                this.clearResults();
+                this.searchInput.focus();
+                this.announce('Search suggestions closed');
+                break;
+
+            case 'ArrowDown':
+                if (!items.length) return;
+                event.preventDefault();
+                this.selectedIndex = 0;
+                this.updateSelection(items);
+                break;
+
+            case 'ArrowUp':
+                event.preventDefault();
+                this.searchInput.focus();
+                this.announce('Back to search input');
+                break;
+        }
+    }
+
+    /**
+     * Handles results container keyboard events
+     * @param {KeyboardEvent} event
+     */
+    handleResultsKeydown(event) {
+        const items = this.resultsContainer.querySelectorAll('li');
+        if (!items.length) return;
+
+        switch (event.key) {
+            case 'ArrowDown':
+                event.preventDefault();
+                this.selectedIndex = Math.min(this.selectedIndex + 1, items.length - 1);
+                this.updateSelection(items);
+                break;
+
+            case 'ArrowUp':
+                event.preventDefault();
+                this.handleResultsArrowUp(items);
+                break;
+
+            case 'Escape':
+                event.preventDefault();
+                this.clearResults();
+                this.searchInput.focus();
+                this.announce('Search suggestions closed');
+                break;
+
+            case 'Enter':
+                event.preventDefault();
+                this.handleResultsEnter(items);
+                break;
+        }
+    }
+
+    /**
+     * Handles ArrowUp in results
+     * @param {NodeList} items
+     */
+    handleResultsArrowUp(items) {
+        if (this.selectedIndex === 0) {
+            (this.submitButton || this.searchInput).focus();
+            this.selectedIndex = -1;
+            this.announce('Back to search');
+        } else {
+            this.selectedIndex--;
+            this.updateSelection(items);
+        }
+    }
+
+    /**
+     * Handles Enter in results
+     * @param {NodeList} items
+     */
+    handleResultsEnter(items) {
+        if (this.selectedIndex >= 0 && this.selectedIndex < items.length) {
+            const selectedItem = items[this.selectedIndex].querySelector('a');
+            if (selectedItem?.href) {
+                this.announce(`Navigating to ${selectedItem.textContent}`);
+                window.location.href = selectedItem.href;
+            } else {
+                this.searchInput.value = items[this.selectedIndex].textContent;
+                this.form.submit();
+            }
+        }
+    }
+
+    /**
+     * Handles new result insertion
+     * @param {Event} event
+     */
+    handleResultInsert(event) {
+        if (event.target.tagName === 'A') {
+            event.target.removeAttribute('tabindex');
+        }
+    }
+
+    /**
+     * Handles document clicks for closing suggestions
+     * @param {MouseEvent} event
+     */
+    handleDocumentClick(event) {
+        if (!this.form.contains(event.target) && !this.resultsContainer.contains(event.target)) {
+            this.clearResults();
+        }
+    }
+
+    /**
+     * Handles input focus
+     */
+    handleInputFocus() {
+        if (this.resultsContainer.innerHTML.trim() && this.searchInput.value.length > 2) {
+            this.resultsContainer.style.display = 'block';
+        }
+    }
+
+    /**
+     * Handles input blur
+     */
+    handleInputBlur() {
+        setTimeout(() => {
+            this.clearResults();
+            this.announce('Search suggestions closed');
+        }, 100);
+    }
+
+    /**
+     * Updates screen reader announcements
+     * @param {string} message
+     */
+    announce(message) {
+        this.announceRegion.textContent = message;
+        console.log(`Announced: ${message}`);
+    }
+
+    /**
+     * Clears search results
+     */
+    clearResults() {
+        this.resultsContainer.innerHTML = '';
+        this.resultsContainer.style.display = 'none';
+        this.selectedIndex = -1;
+        this.searchInput.removeAttribute('aria-activedescendant');
+        this.announceRegion.textContent = '';
+    }
+
+    /**
+     * Updates selection state
+     * @param {NodeList} items
+     */
+    updateSelection(items) {
+        items.forEach(item => {
+            item.classList.remove('bsearch-selected');
+            item.setAttribute('aria-selected', 'false');
+        });
+
+        const selectedItem = items[this.selectedIndex];
+        if (selectedItem) {
+            selectedItem.classList.add('bsearch-selected');
+            selectedItem.setAttribute('aria-selected', 'true');
+            selectedItem.scrollIntoView({ block: 'nearest' });
+            this.searchInput.setAttribute('aria-activedescendant', selectedItem.id);
+            this.announce(selectedItem.textContent);
+        }
+    }
+
+    /**
+     * Fetches search results
+     * @param {string} searchTerm
+     */
+    async fetchResults(searchTerm) {
+        try {
+            const response = await fetch(bsearch_live_search.ajax_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Cache-Control': 'no-cache'
+                },
+                body: new URLSearchParams({
+                    action: 'bsearch_live_search',
+                    s: searchTerm
+                }).toString()
+            });
+
+            const results = await response.json();
+            this.displayResults(results);
+        } catch (error) {
+            console.error('Error:', error);
+            this.clearResults();
+            this.announce('Error loading search results');
+        }
+    }
+
+    /**
+     * Displays search results
+     * @param {Array} results
+     */
+    displayResults(results) {
+        this.resultsContainer.innerHTML = '';
+
+        if (!results.length) {
+            this.announce('No search suggestions found');
+            return;
+        }
+
+        const ul = document.createElement('ul');
+        ul.setAttribute('role', 'listbox');
+
+        results.forEach((result, index) => {
+            const li = document.createElement('li');
+            li.setAttribute('role', 'option');
+            li.setAttribute('aria-selected', 'false');
+            li.id = `search-suggestion-${index}`;
+
+            const a = document.createElement('a');
+            a.href = result.link;
+            a.textContent = result.title;
+            li.appendChild(a);
+            ul.appendChild(li);
+        });
+
+        this.resultsContainer.appendChild(ul);
+        this.resultsContainer.style.display = 'block';
+        this.announce(`${results.length} search suggestions found. Use up and down arrow keys to navigate.`);
+    }
+}
+
+/**
+ * Initializes search autocomplete for all matching forms
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll(SearchAutocomplete.SELECTOR)
+        .forEach(form => new SearchAutocomplete(form));
 });

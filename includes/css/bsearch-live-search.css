@@ -4,6 +4,19 @@ form[role="search"] {
     width: 100%;
 }
 
+/* Visually hidden element for screen readers */
+.bsearch-visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
 .bsearch-autocomplete-results {
     display: none;
     position: absolute;
@@ -42,8 +55,15 @@ form[role="search"] {
 }
 
 .bsearch-autocomplete-results li.selected,
-.bsearch-autocomplete-results li:hover {
+.bsearch-autocomplete-results li:hover,
+.bsearch-autocomplete-results li.bsearch-selected {
     background-color: #f0f0f0;
+}
+
+.bsearch-autocomplete-results li:focus-within,
+.bsearch-autocomplete-results li.bsearch-selected {
+    outline: 2px solid #2271b1;
+    outline-offset: -2px;
 }
 
 .bsearch-autocomplete-results a {
