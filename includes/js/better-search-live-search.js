@@ -117,10 +117,10 @@ class SearchAutocomplete {
             const searchTerm = this.searchInput.value.trim();
 
             if (searchTerm.length > 2) {
-                this.announce('Searching...');
+                this.announce(bsearch_live_search.strings.searching);
                 this.fetchResults(searchTerm);
             } else {
-                this.announce(searchTerm.length === 0 ? '' : 'Please enter at least 3 characters to search');
+                this.announce(searchTerm.length === 0 ? '' : bsearch_live_search.strings.min_chars);
                 this.clearResults();
             }
         }, SearchAutocomplete.DEBOUNCE_DELAY);
@@ -137,7 +137,7 @@ class SearchAutocomplete {
             case 'Escape':
                 event.preventDefault();
                 this.clearResults();
-                this.announce('Search suggestions closed');
+                this.announce(bsearch_live_search.strings.suggestions_closed);
                 break;
 
             case 'ArrowDown':
@@ -191,11 +191,11 @@ class SearchAutocomplete {
             event.preventDefault();
             const selectedItem = items[this.selectedIndex].querySelector('a');
             if (selectedItem?.href) {
-                this.announce(`Navigating to ${selectedItem.textContent}`);
+                this.announce(bsearch_live_search.strings.navigating_to.replace('%s', selectedItem.textContent));
                 window.location.href = selectedItem.href;
             }
         } else {
-            this.announce('Submitting search');
+            this.announce(bsearch_live_search.strings.submitting_search);
             this.form.submit();
         }
     }
@@ -212,7 +212,7 @@ class SearchAutocomplete {
                 event.preventDefault();
                 this.clearResults();
                 this.searchInput.focus();
-                this.announce('Search suggestions closed');
+                this.announce(bsearch_live_search.strings.suggestions_closed);
                 break;
 
             case 'ArrowDown':
@@ -225,7 +225,7 @@ class SearchAutocomplete {
             case 'ArrowUp':
                 event.preventDefault();
                 this.searchInput.focus();
-                this.announce('Back to search input');
+                this.announce(bsearch_live_search.strings.back_to_input);
                 break;
         }
     }
@@ -254,7 +254,7 @@ class SearchAutocomplete {
                 event.preventDefault();
                 this.clearResults();
                 this.searchInput.focus();
-                this.announce('Search suggestions closed');
+                this.announce(bsearch_live_search.strings.suggestions_closed);
                 break;
 
             case 'Enter':
@@ -272,7 +272,7 @@ class SearchAutocomplete {
         if (this.selectedIndex === 0) {
             (this.submitButton || this.searchInput).focus();
             this.selectedIndex = -1;
-            this.announce('Back to search');
+            this.announce(bsearch_live_search.strings.back_to_search);
         } else {
             this.selectedIndex--;
             this.updateSelection(items);
@@ -287,7 +287,7 @@ class SearchAutocomplete {
         if (this.selectedIndex >= 0 && this.selectedIndex < items.length) {
             const selectedItem = items[this.selectedIndex].querySelector('a');
             if (selectedItem?.href) {
-                this.announce(`Navigating to ${selectedItem.textContent}`);
+                this.announce(bsearch_live_search.strings.navigating_to.replace('%s', selectedItem.textContent));
                 window.location.href = selectedItem.href;
             } else {
                 this.searchInput.value = items[this.selectedIndex].textContent;
@@ -398,7 +398,7 @@ class SearchAutocomplete {
         } catch (error) {
             console.error('Error:', error);
             this.clearResults();
-            this.announce('Error loading search results');
+            this.announce(bsearch_live_search.strings.error_loading);
         }
     }
 
@@ -410,7 +410,7 @@ class SearchAutocomplete {
         this.resultsContainer.innerHTML = '';
 
         if (!results.length) {
-            this.announce('No search suggestions found');
+            this.announce(bsearch_live_search.strings.no_suggestions);
             return;
         }
 
@@ -432,7 +432,7 @@ class SearchAutocomplete {
 
         this.resultsContainer.appendChild(ul);
         this.resultsContainer.style.display = 'block';
-        this.announce(`${results.length} search suggestions found. Use up and down arrow keys to navigate.`);
+        this.announce(bsearch_live_search.strings.suggestions_found.replace('%d', results.length));
     }
 }
 
