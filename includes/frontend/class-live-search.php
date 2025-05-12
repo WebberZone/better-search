@@ -49,6 +49,19 @@ class Live_Search {
 			'bsearch_live_search',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'strings'  => array(
+					'no_results'         => __( 'No results found', 'better-search-pro' ),
+					'searching'          => __( 'Searching...', 'better-search-pro' ),
+					'min_chars'          => __( 'Please enter at least 3 characters to search', 'better-search-pro' ),
+					'suggestions_closed' => __( 'Search suggestions closed', 'better-search-pro' ),
+					'back_to_search'     => __( 'Back to search', 'better-search-pro' ),
+					'back_to_input'      => __( 'Back to search input', 'better-search-pro' ),
+					'error_loading'      => __( 'Error loading search results', 'better-search-pro' ),
+					'no_suggestions'     => __( 'No search suggestions found', 'better-search-pro' ),
+					'suggestions_found'  => __( '%d search suggestions found. Use up and down arrow keys to navigate.', 'better-search-pro' ),
+					'navigating_to'      => __( 'Navigating to %s', 'better-search-pro' ),
+					'submitting_search'  => __( 'Submitting search', 'better-search-pro' ),
+				),
 			)
 		);
 
