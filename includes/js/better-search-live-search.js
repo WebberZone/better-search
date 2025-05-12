@@ -5,12 +5,15 @@ class SearchAutocomplete {
     static SELECTOR = '.search-form, form[role="search"]';
     static DEBOUNCE_DELAY = 300;
 
+    static CACHE_TIMEOUT = 5 * 60 * 1000; // 5 minutes.
+
     constructor(form) {
         this.form = form;
         this.searchInput = form.querySelector('input[name="s"]');
         this.submitButton = form.querySelector('input[type="submit"], button[type="submit"]');
         this.selectedIndex = -1;
         this.debounceTimer = null;
+        this.cache = new Map();
 
         if (!this.searchInput) return;
 
@@ -93,6 +96,7 @@ class SearchAutocomplete {
      * Binds all event listeners
      */
     bindEvents() {
+        this.form.addEventListener('submit', () => this.clearCache());
         this.searchInput.addEventListener('input', this.handleInput.bind(this));
         this.searchInput.addEventListener('keydown', this.handleInputKeydown.bind(this));
         this.searchInput.addEventListener('focus', this.handleInputFocus.bind(this));
@@ -376,11 +380,61 @@ class SearchAutocomplete {
     }
 
     /**
+     * Gets cached results if available and not expired
+     * @param {string} searchTerm
+     * @returns {Array|null}
+     */
+    getCachedResults(searchTerm) {
+        const cached = this.cache.get(searchTerm);
+        if (!cached) return null;
+
+        const now = Date.now();
+        if (now - cached.timestamp > SearchAutocomplete.CACHE_TIMEOUT) {
+            this.cache.delete(searchTerm);
+            return null;
+        }
+
+        return cached.results;
+    }
+
+    /**
+     * Caches search results
+     * @param {string} searchTerm
+     * @param {Array} results
+     */
+    cacheResults(searchTerm, results) {
+        // Limit cache size to prevent memory issues
+        if (this.cache.size > 50) {
+            const oldestKey = this.cache.keys().next().value;
+            this.cache.delete(oldestKey);
+        }
+
+        this.cache.set(searchTerm, {
+            results,
+            timestamp: Date.now()
+        });
+    }
+
+    /**
+     * Clears the results cache
+     */
+    clearCache() {
+        this.cache.clear();
+    }
+
+    /**
      * Fetches search results
      * @param {string} searchTerm
      */
     async fetchResults(searchTerm) {
         try {
+            // Check cache first
+            const cachedResults = this.getCachedResults(searchTerm);
+            if (cachedResults) {
+                this.displayResults(cachedResults);
+                return;
+            }
+
             const response = await fetch(bsearch_live_search.ajax_url, {
                 method: 'POST',
                 headers: {
@@ -394,6 +448,7 @@ class SearchAutocomplete {
             });
 
             const results = await response.json();
+            this.cacheResults(searchTerm, results);
             this.displayResults(results);
         } catch (error) {
             console.error('Error:', error);
