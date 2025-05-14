@@ -469,7 +469,8 @@ class Better_Search_Core_Query extends \WP_Query {
 	 */
 	public function set_class_variables( $search_query = '' ) {
 
-		$use_fulltext = bsearch_get_option( 'use_fulltext' );
+		$use_fulltext = $this->input_query_args['use_fulltext'] ?? bsearch_get_option( 'use_fulltext' );
+		$min_char     = $this->input_query_args['min_char'] ?? bsearch_get_option( 'min_char' );
 		$search_query = empty( $search_query ) ? get_bsearch_query() : Helpers::clean_terms( $search_query );
 		$search_words = array();
 
@@ -479,11 +480,11 @@ class Better_Search_Core_Query extends \WP_Query {
 			$search_words = $matches[0];
 		}
 
-		// if search terms are less than 3 then turn fulltext off.
+		// if search terms are less than min_char then turn fulltext off.
 		if ( $use_fulltext ) {
 			$use_fulltext_proxy = false;
 			foreach ( $search_words as $search_word ) {
-				if ( strlen( $search_word ) > 3 ) {
+				if ( strlen( $search_word ) > (int) $min_char ) {
 					$use_fulltext_proxy = true;
 				}
 			}
@@ -948,7 +949,8 @@ class Better_Search_Core_Query extends \WP_Query {
 		}
 
 		if ( ! empty( $this->query_args['bydate'] ) || ( isset( $this->query_args['ordering'] ) && 'date' === $this->query_args['ordering'] ) ) {
-			$orderby_clauses[] = " $wpdb->posts.post_date DESC ";
+			$query->query_vars['orderby'] = 'date';
+			$orderby_clauses[]            = " $wpdb->posts.post_date DESC ";
 		}
 
 		/**

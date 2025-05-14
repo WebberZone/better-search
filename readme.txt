@@ -114,11 +114,19 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 = 4.1.2 =
 
 * Features:
-	* Added SQL injection detection.
+	* Added SQL injection detection for search terms.
+	* New setting to set the minimum characters required for a fulltext search.
+
+* Enhancements:
+	* Live Search enhancements:
+		* Added caching to improve performance.
+		* Improved accessibility and keyboard navigation.
 
 * Bug fixes:
 	* Fixed an issue where post score was not being displayed.
 	* Better Search form post type correctly uses `post_type` instead of `post_types` for better compatibility.
+	* Fixed issue with search results not loading properly when Fuzzy Search is enabled and the search term is less than four characters.
+	* Fixed issue with ordering by date didn't work when using Fuzzy Search.
 
 = 4.1.1 =
 
