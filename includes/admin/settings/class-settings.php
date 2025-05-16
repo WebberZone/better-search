@@ -28,15 +28,6 @@ class Settings {
 
 
 	/**
-	 * Admin Dashboard.
-	 *
-	 * @since 3.3.0
-	 *
-	 * @var object Admin Dashboard.
-	 */
-	public $admin_dashboard;
-
-	/**
 	 * Settings API.
 	 *
 	 * @since 3.3.0
@@ -44,69 +35,6 @@ class Settings {
 	 * @var object Settings API.
 	 */
 	public $settings_api;
-
-	/**
-	 * Statistics table.
-	 *
-	 * @since 3.3.0
-	 *
-	 * @var object Statistics table.
-	 */
-	public $statistics;
-
-	/**
-	 * Activator class.
-	 *
-	 * @since 3.3.0
-	 *
-	 * @var object Activator class.
-	 */
-	public $activator;
-
-	/**
-	 * Admin Columns.
-	 *
-	 * @since 3.3.0
-	 *
-	 * @var object Admin Columns.
-	 */
-	public $admin_columns;
-
-	/**
-	 * Metabox functions.
-	 *
-	 * @since 3.3.0
-	 *
-	 * @var object Metabox functions.
-	 */
-	public $metabox;
-
-	/**
-	 * Import Export functions.
-	 *
-	 * @since 3.3.0
-	 *
-	 * @var object Import Export functions.
-	 */
-	public $import_export;
-
-	/**
-	 * Tools page.
-	 *
-	 * @since 3.3.0
-	 *
-	 * @var object Tools page.
-	 */
-	public $tools_page;
-
-	/**
-	 * Settings Page in Admin area.
-	 *
-	 * @since 3.3.0
-	 *
-	 * @var string Settings Page.
-	 */
-	public $settings_page;
 
 	/**
 	 * Prefix which is used for creating the unique filters and actions.
