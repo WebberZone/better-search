@@ -1,5 +1,76 @@
 This file holds the archive of changelog entries
 
+= 4.0.5 =
+
+* Modifications:
+	* Updated Freemius SDK to v2.11.0
+
+= 4.0.4 =
+
+* Modifications:
+	* Updated Freemius SDK to v2.10.1
+
+* Bug fixes:
+	* Search terms with three or less characters threw an error.
+	* A quoted search string removes the = sign in add_query_arg if unescaped.
+
+= 4.0.3 =
+
+* Modifications:
+	* Added font color (#000) to `.bsearch_highlight` class.
+	* Only highlight words > 2 characters.
+
+* Bug fixes:
+	* Fixed a bug where post titles in search results were not highlighted properly.
+	* Fix for highlighting when Seamless Mode is off.
+	* Words with double or single quotes are properly highlighted.
+	* Quotes are properly displayed in heatmap.
+
+= 4.0.2 =
+
+* Modifications:
+	* Improved search term highlighting in post titles when accessed from the search results page, preventing conflicts with shortcodes calling `the_title` filter.
+	* Deleting the free plugin should retain the settings for the Pro plugin.
+	* Added WPML support for Settings' strings: Heatmap title for overall and daily searches.
+	* A new button has been added to the Tools page to manually create the Better Search tables.
+	* An admin notice is now shown when the Better Search tables are missing.
+
+* Bug fixes:
+	* Fixed the issue where database tables were not created in a new installation.
+
+= 4.0.1 =
+
+* Modifications:
+	* Setting: "Filter whole words only" set to _true_ by default.
+
+* Bug fixes:
+	* Corrected the database upgrade notice that was incorrectly displayed for new users.
+	* Fixed an issue where the search term was not highlighted in the post content when following a /search/ link.
+	* Resolved an issue where the search term was incorrectly highlighted in the images' alt text.
+	* Seamless mode didn't load correctly.
+
+= 4.0.0 =
+
+Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/](https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/)
+
+* Features:
+	* New live search feature that shows search results as you type.
+	* [Pro] New setting to enable and set the fuzzy search level. Once enabled, the plugin will attempt to find results if the search term is misspelt. This only works effectively for English words.
+	* [Pro] Multisite search feature allowing network admins to select specific sites for cross-network searches. Sites not selected will function independently.
+	* [Pro] New setting to only show search results above a certain relevance threshold.
+	* [Pro] New setting to search the post slug.
+	* [Pro] New setting *Enable REST API* allows the REST API to utilize the Better Search when enabled. [Read this knowledge base article for more information about how Better Search enhances the Search endpoint](https://webberzone.com/support/knowledgebase/better-search-rest-api/).
+
+* Enhancements/Modifications:
+	* Renamed `Better_Search` to `Better_Search_Core_Query`. Each of the methods now removes the filter from itself. It will also automatically parse wp_query parameters.
+	* Updated `Better_Search_Core_Query` filters to use the class instead of `WP_Query`.
+	* Display admin notice if any FULLTEXT index is missing and **Enable MySQL FULLTEXT searching** is enabled. This is only shown to admins and cannot be dismissed until the indexes are created.
+	* Better Search results page now works with Block Templates. You can enable Seamless mode to use your theme's search template.
+	* [Pro] Added a new button to create the indexes and display the index status on the settings page under the **Search tab for Enable MySQL FULLTEXT searching**.
+
+* Bug fixes:
+	* Quotes in search terms should work correctly now.
+
 = 3.3.1 =
 
 * Security fix: Potential Cross Site Scripting (XSS) vulnerability. Thanks to Abdi Pranata for reporting this via Patchstack [https://patchstack.com/](https://patchstack.com/)
@@ -49,7 +120,7 @@ Release post: [https://webberzone.com/blog/better-search-v3-2-0/](https://webber
 	* Description of the taxonomy is also searched
 
 * Bug fixes:
-	* mySQL error was generated if there were + signs with banned words in BOOLEAN mode
+	* MySQL error was generated if there were + signs with banned words in BOOLEAN mode
 	* Fixed `bsearch_form` shortcode incorrect parameters
 	* Queries with apostrophe gave errors
 	* PHP 8.1 compatibility
@@ -330,7 +401,7 @@ For previous changelog entries, please refer to the separate changelog.txt file
 
 = 1.3 =
 * Features:
-	* New option to activate BOOLEAN mode of mySQL FULLTEXT searching. <a href="https://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html" target="_blank">Check the mySQL docs for further information on this</a>
+	* New option to activate BOOLEAN mode of MySQL FULLTEXT searching. <a href="https://dev.MySQL.com/doc/refman/5.0/en/fulltext-boolean.html" target="_blank">Check the MySQL docs for further information on this</a>
 	* Custom post type support. Now choose what visitors are allowed to search
 	* Links in the search heatmap are no-follow by default. You can turn this off in the Settings page
 	* Option to make make heatmap links to open in a new window

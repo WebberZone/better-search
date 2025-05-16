@@ -12,48 +12,54 @@ Better Search replaces the default WordPress search with a better search engine 
 
 == Description ==
 
-Are you looking for a way to improve your WordPress site search and make it easier for visitors to find what they need? If so, you need **[Better Search](https://webberzone.com/plugins/better-search/)**, the plugin that replaces the default WordPress search engine with a more powerful and relevant one.
+Supercharge your WordPress site search with __[Better Search](https://webberzone.com/plugins/better-search/)__ – a powerful replacement for the default WordPress search engine that delivers more relevant results and a richer search experience.
 
-**Better Search** is more than just a simple search plugin. This complete solution gives you full control over your site search results. You can customize the output, fine-tune the relevance, search within different fields and post types, track popular searches, and much more.
+Better Search gives you complete control over your site’s search results. Fine-tune relevance, search across different fields and post types, track popular queries, and customise the output — all without writing a single line of code.
 
-With **Better Search**, you can make your site search more user-friendly and engaging. You can display a "search heatmap" of the most popular searches on your site, either as a widget or a shortcode. You can also use your template file and CSS styles to match your theme perfectly.
+Make your search more intuitive and engaging with a search heatmap of popular queries, display results as users type with AJAX Live Search, and tailor the look to your theme with custom templates and styles.
 
-**Better Search** has a caching system and is compatible with caching plugins like WP Super Cache and W3 Total Cache, so you don't have to worry about performance issues. It also has a profanity filter that blocks unwanted words from search queries. It is translation-ready so that you can use it in any language.
+Built with performance in mind, Better Search includes its own caching system and works smoothly with popular caching plugins like WP Super Cache and W3 Total Cache. It also features a profanity filter and is translation-ready for global use.
 
-Here are some of the main features of **Better Search**:
+Here are some of the main features of __Better Search__:
 
-* **Automatic**: Activate the plugin and enjoy better search results right away
-* **Seamless integration**: No need to edit any code or create custom search templates
-* **Relevance**: Sort the results by relevance or date and assign different weights to the title and content
-* **Control the results**: Search within title, content, excerpt, meta fields, authors, tags and other taxonomies and comments
-* **Popular searches**: Show a heatmap of the most popular searches on your site, either as a widget or a shortcode
-* **AJAX Live Search**: Show search results as you type in any search form on your site
-* **Customization**: Use your template file and CSS styles for the ultimate look and feel
-* **Supports cache plugins**: Works seamlessly with caching plugins like WP-Super-Cache and W3 Total Cache
-* **Profanity filter**: Filter out any words that you don't want to appear in search queries
-* **Translation ready**: Use the plugin in any language
+* __Automatic__: Just activate the plugin and enjoy better search results right away
+* __Seamless integration__: No need to edit any code or create custom search templates
+* __Relevance__: Sort the results by relevance or date, and assign different weights to title and content
+* __Control the results__: Search within title, content, excerpt, meta fields, authors, tags and other taxonomies and comments
+* __Popular searches__: Show a heatmap of the most popular searches on your site, either as a widget or a shortcode
+* __AJAX Live Search__: Show search results as you type in any search form on your site
+* __Customisation__: Use your own template file and CSS styles for the ultimate look and feel
+* __Supports cache plugins__: Works seamlessly with caching plugins like WP-Super-Cache and W3 Total Cache
+* __Profanity filter__: Filter out any words that you don't want to appear in search queries
+* __Translation ready__: Use the plugin in any language
 
-If you want to improve your site search, download **Better Search** today and experience the difference!
+If you want to improve your site search, download Better Search today and experience the difference for yourself.
 
-= Features in Better Search Pro =
+## Features in Better Search Pro
 
-[__Better Search Pro__](https://webberzone.com/plugins/better-search/pro/) is the plugin's premium version that offers even more features and functionality. With __Better Search Pro__, you can:
+[__Better Search Pro__](https://webberzone.com/plugins/better-search/pro/) gives you even more control and performance:
 
-* [__Multisite search__](https://webberzone.com/support/knowledgebase/multisite-search/): Allow network admins to select specific sites for cross-network searches.
-* [__Fuzzy search__](https://webberzone.com/support/knowledgebase/fuzzy-matches/): Find results even if the search term is misspelt.
-* [__Relevance threshold__](https://webberzone.com/support/knowledgebase/better-search-settings-search/#minimum-relevance-percentage-pro-only): Only show search results above a certain relevance threshold.
-* [__Search the post slug__](https://webberzone.com/support/knowledgebase/better-search-settings-search/#search-post-slug-pro-only): Include the post slug in the search results.
-* [__REST API__](https://webberzone.com/support/knowledgebase/better-search-rest-api/): Allow the REST API to utilize the Better Search when enabled.
+* 🔍 [Multisite Search](https://webberzone.com/support/knowledgebase/multisite-search/)
+* ✨ [Fuzzy Matches](https://webberzone.com/support/knowledgebase/fuzzy-matches/)
+* 🎯 [Relevance Threshold](https://webberzone.com/support/knowledgebase/better-search-settings-search/#minimum-relevance-percentage-pro-only)
+* 🔗 [Search Post Slugs](https://webberzone.com/support/knowledgebase/better-search-settings-search/#search-post-slug-pro-only)
+* ⚙️ [REST API Integration](https://webberzone.com/support/knowledgebase/better-search-rest-api/)
 
-= mySQL FULLTEXT indices =
+## MySQL FULLTEXT indices
 
-The plugin creates three mySQL FULLTEXT indices (or indexes) in the `*_posts` table on activation. These are for `post_content`, `post_title`, and `(post_title, post_content)`. If you're running a multisite installation, these are created for each of the blogs on activation. All these indices occupy space in your mySQL database but are essential for running the plugin.
+Better Search adds the following MySQL FULLTEXT indices to the `wp_posts` table:
 
-= Contribute =
-Better Search is also available on [Github](https://github.com/WebberZone/better-search)
-So, if you've got some cool feature you'd like to implement into the plugin or a bug you've been able to fix, consider forking the project and sending me a pull request.
+* `post_content`
+* `post_title`
+* `(post_title, post_content)`
 
-= Plugins by WebberZone =
+On multisite, these are added to each blog upon activation. These indices power the relevance-based search and are required for full functionality.
+
+## Contribute
+
+Better Search is also available on [Github](https://github.com/WebberZone/better-search). If you've got some cool feature you'd like to implement into the plugin or a bug you've been able to fix, consider forking the project and sending me a pull request.
+
+## Plugins by WebberZone
 
 Better Search is one of the many plugins developed by WebberZone. Check out our other plugins:
 
@@ -91,18 +97,22 @@ Better Search is one of the many plugins developed by WebberZone. Check out our 
 
 If your question has not been covered here, please create a new post in the [WordPress.org support forum](https://wordpress.org/support/plugin/better-search). I monitor the forums regularly. If you want more advanced _paid_ support, please see [details here](https://webberzone.com/support/).
 
-= Can I customize the output? =
+= Will this work with any WordPress theme? =  
+Yes! It replaces the default WordPress search and integrates with most themes out of the box.
 
-Better Search has a vast set of options that help you customize the output or fine-tune the results without leaving the comfort of your WordPress site. To configure, go to **Settings > Better Search**.
+= Does it support WooCommerce or custom post types? =  
+Yes, you can enable searching in any public post type from the settings.
 
-The plugin also supports the use of template files within your theme. You can create a file called `better-search-template.php` in your theme's directory, and the plugin will display the results.
+= How does it affect performance? =  
+Better Search uses MySQL FULLTEXT indexes and includes internal caching. It also works well with external caching plugins.
 
-= My search words are getting filtered or *How does the profanity filter work* =
+= Can I customise the search results template? =  
+Yes, you can override the results template by copying the file to your theme directory. More info in the [documentation](https://webberzone.com/support/knowledgebase/better-search-templates/).
 
-Better Search includes a very cool profanity filter using the script from [Banbuilder](https://github.com/snipe/banbuilder). You can customize which list of words you want to filter out from the Better Search settings page. Find the setting called "Filter these words:". The plugin will automatically strip out partial and complete references to these words.
-You can turn the filter off by emptying the list.
+= What is the Profanity Filter? =  
+It filters out selected keywords from being searched. Handy for family-safe sites.
 
-Do you know of a better profanity filter? Suggest one in the [forums](https://wordpress.org/support/plugin/better-search).
+Better Search includes a very cool profanity filter using the script from [Banbuilder](https://github.com/snipe/banbuilder). You can customize which list of words you want to filter out from the Better Search settings page. Find the setting called "Filter these words:". The plugin will automatically strip out partial and complete references to these words. You can turn the filter off by emptying the list.
 
 = How can I report security bugs? =
 
@@ -151,77 +161,6 @@ Release post: [https://webberzone.com/announcements/better-search-v4-1-0/](https
 	* [Pro] Fixed issues with permalinks and titles not loading properly when Multisite search is enabled.
 	* [Pro] Fixed Multisite search when Seamless Mode is off.
 	* [Pro] Fixed bugs with Fuzzy Search query in some cases.
-
-= 4.0.5 =
-
-* Modifications:
-	* Updated Freemius SDK to v2.11.0
-
-= 4.0.4 =
-
-* Modifications:
-	* Updated Freemius SDK to v2.10.1
-
-* Bug fixes:
-	* Search terms with three or less characters threw an error.
-	* A quoted search string removes the = sign in add_query_arg if unescaped.
-
-= 4.0.3 =
-
-* Modifications:
-	* Added font color (#000) to `.bsearch_highlight` class.
-	* Only highlight words > 2 characters.
-
-* Bug fixes:
-	* Fixed a bug where post titles in search results were not highlighted properly.
-	* Fix for highlighting when Seamless Mode is off.
-	* Words with double or single quotes are properly highlighted.
-	* Quotes are properly displayed in heatmap.
-
-= 4.0.2 =
-
-* Modifications:
-	* Improved search term highlighting in post titles when accessed from the search results page, preventing conflicts with shortcodes calling `the_title` filter.
-	* Deleting the free plugin should retain the settings for the Pro plugin.
-	* Added WPML support for Settings' strings: Heatmap title for overall and daily searches.
-	* A new button has been added to the Tools page to manually create the Better Search tables.
-	* An admin notice is now shown when the Better Search tables are missing.
-
-* Bug fixes:
-	* Fixed the issue where database tables were not created in a new installation.
-
-= 4.0.1 =
-
-* Modifications:
-	* Setting: "Filter whole words only" set to _true_ by default.
-
-* Bug fixes:
-	* Corrected the database upgrade notice that was incorrectly displayed for new users.
-	* Fixed an issue where the search term was not highlighted in the post content when following a /search/ link.
-	* Resolved an issue where the search term was incorrectly highlighted in the images' alt text.
-	* Seamless mode didn't load correctly.
-
-= 4.0.0 =
-
-Release post: [https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/](https://webberzone.com/announcements/better-search-v4-enhance-wordpress-search-with-pro-features/)
-
-* Features:
-	* New live search feature that shows search results as you type.
-	* [Pro] New setting to enable and set the fuzzy search level. Once enabled, the plugin will attempt to find results if the search term is misspelt. This only works effectively for English words.
-	* [Pro] Multisite search feature allowing network admins to select specific sites for cross-network searches. Sites not selected will function independently.
-	* [Pro] New setting to only show search results above a certain relevance threshold.
-	* [Pro] New setting to search the post slug.
-	* [Pro] New setting *Enable REST API* allows the REST API to utilize the Better Search when enabled. [Read this knowledge base article for more information about how Better Search enhances the Search endpoint](https://webberzone.com/support/knowledgebase/better-search-rest-api/).
-
-* Enhancements/Modifications:
-	* Renamed `Better_Search` to `Better_Search_Core_Query`. Each of the methods now removes the filter from itself. It will also automatically parse wp_query parameters.
-	* Updated `Better_Search_Core_Query` filters to use the class instead of `WP_Query`.
-	* Display admin notice if any FULLTEXT index is missing and **Enable mySQL FULLTEXT searching** is enabled. This is only shown to admins and cannot be dismissed until the indexes are created.
-	* Better Search results page now works with Block Templates. You can enable Seamless mode to use your theme's search template.
-	* [Pro] Added a new button to create the indexes and display the index status on the settings page under the **Search tab for Enable mySQL FULLTEXT searching**.
-
-* Bug fixes:
-	* Quotes in search terms should work correctly now.
 
 For previous changelog entries, please refer to the separate changelog.txt file or [Github Releases page](https://github.com/WebberZone/better-search/releases)
 
