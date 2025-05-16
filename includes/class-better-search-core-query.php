@@ -484,7 +484,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		if ( $use_fulltext ) {
 			$use_fulltext_proxy = false;
 			foreach ( $search_words as $search_word ) {
-				if ( strlen( $search_word ) > (int) $min_char ) {
+				if ( strlen( $search_word ) >= (int) $min_char ) {
 					$use_fulltext_proxy = true;
 				}
 			}
