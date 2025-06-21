@@ -14,6 +14,7 @@ class SearchAutocomplete {
         this.selectedIndex = -1;
         this.debounceTimer = null;
         this.cache = new Map();
+        this.observer = null;
 
         if (!this.searchInput) return;
 
@@ -107,7 +108,9 @@ class SearchAutocomplete {
         }
 
         this.resultsContainer.addEventListener('keydown', this.handleResultsKeydown.bind(this));
-        this.resultsContainer.addEventListener('DOMNodeInserted', this.handleResultInsert.bind(this));
+        
+        // Set up MutationObserver to watch for changes in the results container
+        this.setupMutationObserver();
 
         document.addEventListener('click', this.handleDocumentClick.bind(this));
     }
@@ -301,13 +304,24 @@ class SearchAutocomplete {
     }
 
     /**
-     * Handles new result insertion
-     * @param {Event} event
+     * Sets up MutationObserver to watch for changes in the results container
      */
-    handleResultInsert(event) {
-        if (event.target.tagName === 'A') {
-            event.target.removeAttribute('tabindex');
-        }
+    setupMutationObserver() {
+        this.observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.tagName === 'A') {
+                            node.removeAttribute('tabindex');
+                        } else if (node.querySelectorAll) {
+                            node.querySelectorAll('a').forEach(a => a.removeAttribute('tabindex'));
+                        }
+                    });
+                }
+            });
+        });
+        
+        this.observer.observe(this.resultsContainer, { childList: true, subtree: true });
     }
 
     /**
@@ -352,6 +366,12 @@ class SearchAutocomplete {
      * Clears search results
      */
     clearResults() {
+        // Disconnect and reconnect observer when clearing results to prevent memory leaks
+        if (this.observer) {
+            this.observer.disconnect();
+            this.observer.observe(this.resultsContainer, { childList: true, subtree: true });
+        }
+        
         this.resultsContainer.innerHTML = '';
         this.resultsContainer.style.display = 'none';
         this.selectedIndex = -1;
