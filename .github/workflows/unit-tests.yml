@@ -90,6 +90,9 @@ jobs:
           PHPUNIT: ${{ env.PHPUNIT }}
         run: composer require --no-update phpunit/phpunit:"${{ env.PHPUNIT }}"
 
+      - name: Install Composer dependencies
+        run: composer update --no-interaction --prefer-dist
+
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies
       - name: Install Composer dependencies for PHP < 8.0
