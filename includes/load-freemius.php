@@ -20,7 +20,7 @@ function bsearch_freemius() {
 			define( 'WP_FS__PRODUCT_17020_MULTISITE', true );
 		}
 		// Include Freemius SDK.
-		require_once plugin_dir_path( __DIR__ ) . 'freemius/start.php';
+		require_once dirname( __DIR__ ) . '/vendor/freemius/start.php';
 		$bsearch_freemius = \fs_dynamic_init(
 			array(
 				'id'             => '17020',
