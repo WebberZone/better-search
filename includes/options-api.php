@@ -23,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 function bsearch_get_settings() {
 
-	$settings = (array) get_option( 'bsearch_settings' );
+	$settings = get_option( 'bsearch_settings', array() );
 
 	/**
 	 * Settings array
