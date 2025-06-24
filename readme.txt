@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.1.2
+Stable tag: 4.1.3
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 7.4
@@ -121,6 +121,17 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.1.3 =
+
+* Modifications:
+	* Moved Freemius SDK to vendor folder.
+	* Relevance score in the template is hidden when there is no score for the post.
+
+* Bug fixes:
+	* Fix the minimum characters length setting.
+	* Fixed DOMNodeInserted deprecated error in Live Search.
+	* Fixed edge case issue where settings are not initialized when using multisite resulting in type errors.
+
 = 4.1.2 =
 
 * Features:
@@ -166,5 +177,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
-= 4.1.2 =
+= 4.1.3 =
 Bug fixes; Check the changelog for details.
