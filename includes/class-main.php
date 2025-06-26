@@ -143,9 +143,7 @@ final class Main {
 		$this->live_search      = new Frontend\Live_Search();
 		$this->template_handler = new Frontend\Template_Handler();
 		$this->hooks();
-		if ( ! function_exists( 'bsearch_freemius' ) ) {
-			require_once __DIR__ . '/load-freemius.php';
-		}
+
 		if ( is_admin() ) {
 			$this->admin = new Admin\Admin();
 			if ( is_multisite() ) {
@@ -256,7 +254,7 @@ final class Main {
 	 * @param bool $donate Whether to show the donate banner.
 	 */
 	public static function pro_upgrade_banner( $donate = true ) {
-		if ( ! bsearch_freemius()->is_paying() ) {
+		if ( function_exists( 'bsearch_freemius' ) && ! bsearch_freemius()->is_paying() ) {
 			?>
 				<div id="pro-upgrade-banner">
 					<div class="inside">
