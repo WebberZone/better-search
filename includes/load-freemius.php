@@ -28,7 +28,7 @@ function bsearch_freemius() {
 				'premium_slug'   => 'better-search-pro',
 				'type'           => 'plugin',
 				'public_key'     => 'pk_40525301bca835d9836ec4d946693',
-				'is_premium'     => true,
+				'is_premium'     => false,
 				'premium_suffix' => 'Pro',
 				'has_addons'     => false,
 				'has_paid_plans' => true,
@@ -61,9 +61,6 @@ function bsearch_freemius_get_plugin_icon() {
  */
 function bsearch_freemius_uninstall() {
 	require_once dirname( __DIR__ ) . '/uninstaller.php';
-	if ( bsearch_freemius()->can_use_premium_code__premium_only() ) {
-		\WebberZone\Better_Search\Pro\Pro::uninstall_pro();
-	}
 }
 
 // Init Freemius.
