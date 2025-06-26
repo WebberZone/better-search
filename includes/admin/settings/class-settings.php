@@ -12,8 +12,6 @@ namespace WebberZone\Better_Search\Admin\Settings;
 
 use WebberZone\Better_Search\Util\Helpers;
 
-use function WebberZone\Better_Search\bsearch_freemius;
-
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -1070,8 +1068,7 @@ class Settings {
 	public static function after_setting_output( $output, $args ) {
 		if ( isset( $args['pro'] ) && $args['pro'] ) {
 			$output .= sprintf(
-				'<a class="bsearch_button bsearch_button_gold" target="_blank" href="%s" title="%s">%s</a>',
-				esc_url( bsearch_freemius()->get_upgrade_url() ),
+				'<a class="bsearch_button bsearch_button_gold" target="_blank" href="https://webberzone.com/plugins/better-search/pro/" title="%s">%s</a>',
 				esc_attr__( 'Upgrade to Pro', 'better-search' ),
 				esc_html__( 'Upgrade to Pro', 'better-search' )
 			);
