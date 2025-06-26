@@ -121,6 +121,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.1.4 =
+
+* Bug fixes:
+	* Fixed Freemius initialization code in the free version.
+
 = 4.1.3 =
 
 * Modifications:
