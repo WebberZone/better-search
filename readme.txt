@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.1.3
+Stable tag: 4.1.4
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 7.4
@@ -182,5 +182,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
-= 4.1.3 =
+= 4.1.4 =
 Bug fixes; Check the changelog for details.
