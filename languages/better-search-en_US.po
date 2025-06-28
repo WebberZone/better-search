@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 23:26+0100\n"
+"POT-Creation-Date: 2025-06-28 14:43+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ajay D'Souza\n"
 "Language-Team: WebberZone\n"
@@ -1166,27 +1166,27 @@ msgctxt "Comma-separated list of search stopwords in your language"
 msgid "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,what,when,where,who,will,with,www"
 msgstr ""
 
-#: includes/class-main.php:253
+#: includes/class-main.php:233
 msgid ""
 "Better Search and Better Search Pro should not be active at the same time. We've automatically deactivated Better "
 "Search."
 msgstr ""
 
-#: includes/class-main.php:255
+#: includes/class-main.php:235
 msgid ""
 "Better Search and Better Search Pro should not be active at the same time. We've automatically deactivated Better "
 "Search Pro."
 msgstr ""
 
-#: includes/class-main.php:283
+#: includes/class-main.php:261
 msgid "Better Search Pro - Coming soon. Sign up to find out more"
 msgstr ""
 
-#: includes/class-main.php:286
+#: includes/class-main.php:264
 msgid "OR"
 msgstr ""
 
-#: includes/class-main.php:287
+#: includes/class-main.php:265
 msgid "Support the development - Send us a donation today."
 msgstr ""
 
