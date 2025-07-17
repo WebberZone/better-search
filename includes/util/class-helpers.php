@@ -7,6 +7,8 @@
 
 namespace WebberZone\Better_Search\Util;
 
+use WP_Query;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -635,6 +637,39 @@ class Helpers {
 	}
 
 	/**
+	 * Strip stopwords from text.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param string|array $subject The string or an array with strings to search and replace.
+	 * @param string|array $search  Optional. The pattern to search for. It can be either a string or an array with strings.
+	 * @param string|array $replace Optional. The string to replace with. Default empty string.
+	 *
+	 * @return string Processed text with stopwords removed.
+	 */
+	public static function strip_stopwords( $subject = '', $search = '', $replace = '' ): string {
+		// If no search terms provided, get WordPress stopwords.
+		if ( empty( $search ) ) {
+			$get_search_stopwords = new \ReflectionMethod( 'WP_Query', 'get_search_stopwords' );
+			$get_search_stopwords->setAccessible( true );
+			$search = $get_search_stopwords->invoke( new WP_Query() );
+			$search = array_merge( $search, array( 'from', 'where' ) );
+		}
+
+		// Build regex pattern for all stopwords at once.
+		$pattern = '/\b(' . implode( '|', array_map( 'preg_quote', (array) $search ) ) . ')\b/ui';
+
+		// Remove stopwords.
+		$output = preg_replace( $pattern, $replace, (string) $subject );
+
+		// Remove single characters and normalize whitespace.
+		$output = preg_replace( '/\b[a-z\-]\b/i', '', $output );
+		$output = preg_replace( '/\s+/', ' ', $output );
+
+		return trim( $output );
+	}
+
+	/**
 	 * Parse WP_Query variables to parse comma separated list of IDs and convert them to arrays as needed by WP_Query.
 	 *
 	 * @since 4.0.0
@@ -686,5 +721,141 @@ class Helpers {
 			}
 		}
 		return $args;
+	}
+
+	/**
+	 * Get the primary term for a given post.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param int|\WP_Post $post       Post ID or WP_Post object.
+	 * @param string       $term       Term name.
+	 * @param bool         $return_all Whether to return all terms.
+	 * @param bool         $return_first Whether to return the first term.
+	 * @return array Primary term object at `primary` and array of term
+	 *               objects at `all` if $return_all is true.
+	 */
+	public static function get_primary_term( $post, $term = 'category', $return_all = false, $return_first = true ) {
+		$return = array(
+			'primary' => '',
+			'all'     => array(),
+		);
+
+		$post = get_post( $post );
+		if ( empty( $post ) ) {
+			return $return;
+		}
+
+		// Yoast primary term.
+		if ( class_exists( 'WPSEO_Primary_Term' ) ) {
+			$wpseo_primary_term = new \WPSEO_Primary_Term( $term, $post->ID );
+			$primary_term       = $wpseo_primary_term->get_primary_term();
+			$primary_term       = get_term( $wpseo_primary_term->get_primary_term() );
+
+			if ( ! is_wp_error( $primary_term ) ) {
+				$return['primary'] = $primary_term;
+			}
+		}
+
+		// Rank Math SEO primary term.
+		if ( class_exists( 'RankMath' ) ) {
+			$primary_term = get_term( get_post_meta( $post->ID, "rank_math_primary_{$term}", true ) );
+			if ( ! is_wp_error( $primary_term ) ) {
+				$return['primary'] = $primary_term;
+			}
+		}
+
+		// The SEO Framework primary term.
+		if ( function_exists( 'the_seo_framework' ) ) {
+			$primary_term = get_term( get_post_meta( $post->ID, "_primary_term_{$term}", true ) );
+			if ( ! is_wp_error( $primary_term ) ) {
+				$return['primary'] = $primary_term;
+			}
+		}
+
+		// SEOPress primary term.
+		if ( function_exists( 'seopress_init' ) ) {
+			$primary_term = get_term( get_post_meta( $post->ID, '_seopress_robots_primary_cat', true ) );
+			if ( ! is_wp_error( $primary_term ) ) {
+				$return['primary'] = $primary_term;
+			}
+		}
+
+		if ( empty( $return['primary'] ) || $return_all ) {
+			$terms = get_the_terms( $post, $term );
+
+			if ( ! empty( $terms ) ) {
+				if ( empty( $return['primary'] ) && $return_first ) {
+					$return['primary'] = $terms[0];
+				}
+				if ( $return_all ) {
+					$return['all'] = $terms;
+				}
+			}
+		}
+
+		/**
+		 * Filters the primary category/term for the given post.
+		 *
+		 * @since 3.2.0
+		 *
+		 * @param array        $return Primary term object at `primary` and optionally
+		 *                            array of term objects at `all`.
+		 * @param int|\WP_Post $post   Post ID or WP_Post object.
+		 * @param string       $term   Term name.
+		 */
+		return apply_filters( 'bsearch_get_primary_term', $return, $post, $term );
+	}
+
+	/**
+	 * Get a message about MySQL/MariaDB compatibility issues.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return string Message about compatibility or empty string if compatible.
+	 */
+	public static function get_database_compatibility_message() {
+		global $wpdb;
+
+		$db_version = $wpdb->get_var( 'SELECT VERSION()' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$is_mariadb = strpos( $db_version, 'MariaDB' ) !== false;
+
+		// Extract version number.
+		if ( $is_mariadb ) {
+			preg_match( '/([0-9]+\.[0-9]+\.[0-9]+)/', $db_version, $matches );
+			$version     = $matches[1] ?? '0.0.0';
+			$min_version = '10.5.7';
+			$rec_version = '10.7.1';
+			$db_name     = 'MariaDB';
+		} else {
+			// MySQL.
+			preg_match( '/([0-9]+\.[0-9]+\.[0-9]+)/', $db_version, $matches );
+			$version     = $matches[1] ?? '0.0.0';
+			$min_version = '5.7.8';
+			$rec_version = '8.0.13';
+			$db_name     = 'MySQL';
+		}
+
+		if ( version_compare( $version, $min_version, '<' ) ) {
+			return sprintf(
+				/* translators: 1: Database type (MySQL/MariaDB) 2: Current database version 3: Required database version */
+				__( '⚠️ Your %1$s version (%2$s) does not support all custom table features. %1$s %3$s or higher is required for optimal performance. The plugin might not be able to deliver the best results. Please consider upgrading your database version.', 'better-search' ),
+				esc_html( $db_name ),
+				esc_html( $version ),
+				esc_html( $min_version )
+			);
+		}
+
+		if ( version_compare( $version, $rec_version, '<' ) ) {
+			return sprintf(
+				/* translators: 1: Database type (MySQL/MariaDB) 2: Current database version 3: Recommended database version */
+				__( '⚠️ Your %1$s version (%2$s) is below the recommended version %3$s. While the plugin will work, upgrading your database is recommended for better performance.', 'better-search' ),
+				esc_html( $db_name ),
+				esc_html( $version ),
+				esc_html( $rec_version )
+			);
+		}
+
+		return '';
 	}
 }

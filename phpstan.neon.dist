@@ -10,7 +10,7 @@ parameters:
     scanDirectories:
         - includes/
         - templates/
-        - freemius/
+        - vendor/freemius/
     scanFiles:
         - better-search.php
         - uninstaller.php

@@ -31,11 +31,20 @@ class Admin {
 	public $parent_id;
 
 	/**
+	 * Tools page instance.
+	 *
+	 * @var Tools_Page
+	 */
+	public $tools_page;
+
+	/**
 	 * Main constructor class.
 	 *
 	 * @since 4.0.0
 	 */
 	public function __construct() {
+		$this->tools_page = new Tools_Page();
+
 		$this->hooks();
 	}
 
@@ -46,6 +55,8 @@ class Admin {
 	 */
 	public function hooks() {
 		add_action( 'network_admin_menu', array( $this, 'network_admin_menu' ) );
+		add_action( 'admin_post_bsearch_copy_settings', array( $this, 'handle_copy_settings' ) );
+		add_action( 'network_admin_notices', array( $this, 'show_settings_copied_notice' ) );
 	}
 
 	/**
@@ -85,9 +96,110 @@ class Admin {
 			<p><?php esc_html_e( 'This page allows you to configure the settings for Better Search on your multisite network.', 'better-search' ); ?></p>
 
 			<?php Main::pro_upgrade_banner( false ); ?>
+			<?php settings_errors(); ?>
 
-			<?php do_action( 'bsearch_multisite_settings' ); ?>
+			<div id="poststuff">
+				<div id="post-body" class="metabox-holder">
+					<div id="post-body-content">
+						<?php do_action( 'bsearch_multisite_settings' ); ?>
+					</div><!-- /#post-body-content -->
+
+					<div id="postbox-container-1" class="postbox-container">
+						<?php include_once BETTER_SEARCH_PLUGIN_DIR . 'includes/admin/settings/sidebar.php'; ?>
+					</div><!-- /#postbox-container-1 -->
+				</div><!-- /#post-body -->
+				<br class="clear" />
+			</div><!-- /#poststuff -->
 		</div>
 		<?php
+	}
+
+	/**
+	 * Handle copying Better Search settings from a source site to destination sites.
+	 *
+	 * @since 4.2.0
+	 */
+	public function handle_copy_settings() {
+		if (
+			! isset( $_POST['bsearch_copy_settings_nonce'], $_POST['source_blog_id'], $_POST['target_blog_ids'] ) ||
+			! wp_verify_nonce( sanitize_key( $_POST['bsearch_copy_settings_nonce'] ), 'bsearch_copy_settings' ) ||
+			! current_user_can( 'manage_network_options' )
+		) {
+			wp_die( esc_html__( 'Security check failed.', 'better-search' ) );
+		}
+
+		$source_blog_id  = absint( $_POST['source_blog_id'] );
+		$target_blog_ids = wp_parse_id_list( wp_unslash( $_POST['target_blog_ids'] ) );
+
+		switch_to_blog( $source_blog_id );
+		$settings = bsearch_get_settings();
+		restore_current_blog();
+
+		foreach ( $target_blog_ids as $target_blog_id ) {
+			if ( $target_blog_id === $source_blog_id ) {
+				continue;
+			}
+			switch_to_blog( $target_blog_id );
+			update_option( 'bsearch_settings', $settings );
+			restore_current_blog();
+		}
+
+		// Redirect or display success notice.
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'                          => 'bsearch_dashboard',
+					'settings_copied'               => 1,
+					'source_blog_id'                => $source_blog_id,
+					'target_blog_ids'               => implode( ',', array_diff( $target_blog_ids, array( $source_blog_id ) ) ),
+					'bsearch_settings_copied_nonce' => wp_create_nonce( 'bsearch_settings_copied_notice' ),
+				),
+				network_admin_url( 'admin.php' )
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Display a notice if settings were copied successfully.
+	 *
+	 * @since 4.2.0
+	 */
+	public function show_settings_copied_notice() {
+		$nonce_ok = isset( $_GET['bsearch_settings_copied_nonce'] )
+			&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['bsearch_settings_copied_nonce'] ) ), 'bsearch_settings_copied_notice' );
+
+		if ( $nonce_ok && isset( $_GET['settings_copied'] ) && 1 === absint( $_GET['settings_copied'] ) ) {
+			$source_blog_id  = isset( $_GET['source_blog_id'] )
+				? absint( sanitize_text_field( wp_unslash( $_GET['source_blog_id'] ) ) )
+				: '';
+			$target_blog_ids = isset( $_GET['target_blog_ids'] )
+				? wp_parse_id_list( sanitize_text_field( wp_unslash( $_GET['target_blog_ids'] ) ) )
+				: array();
+			if ( $source_blog_id && $target_blog_ids ) {
+				$targets = implode( ', ', $target_blog_ids );
+				$message = sprintf(
+					/* translators: 1: source blog ID, 2: comma-separated target blog IDs */
+					__( 'Better Search settings copied from site ID %1$s to %2$s.', 'better-search' ),
+					$source_blog_id,
+					$targets
+				);
+			} else {
+				$message = __( 'Better Search settings copied successfully.', 'better-search' );
+			}
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( $message ) . '</p></div>';
+			?>
+			<script>
+			if (window.history.replaceState) {
+				var url = new URL(window.location.href);
+				url.searchParams.delete('settings_copied');
+				url.searchParams.delete('source_blog_id');
+				url.searchParams.delete('target_blog_ids');
+				url.searchParams.delete('bsearch_settings_copied_nonce');
+				window.history.replaceState({}, document.title, url.pathname + url.search);
+			}
+			</script>
+			<?php
+		}
 	}
 }
