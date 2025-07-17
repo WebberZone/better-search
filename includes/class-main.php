@@ -34,6 +34,15 @@ final class Main {
 	public $admin;
 
 	/**
+	 * Network Admin class object.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @var object Network Admin class object.
+	 */
+	public $network_admin;
+
+	/**
 	 * Shortcodes.
 	 *
 	 * @since 3.3.0
@@ -146,8 +155,9 @@ final class Main {
 
 		if ( is_admin() ) {
 			$this->admin = new Admin\Admin();
+
 			if ( is_multisite() ) {
-				$this->admin = new Admin\Network\Admin();
+				$this->network_admin = new Admin\Network\Admin();
 			}
 		}
 	}

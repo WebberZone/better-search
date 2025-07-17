@@ -44,23 +44,19 @@ function bsearch_get_settings() {
  *
  * @since 2.2.0
  *
- * @param string $key     Key of the option to fetch.
+ * @param string $key           Key of the option to fetch.
  * @param mixed  $default_value Default value to fetch if option is missing.
  * @return mixed
  */
 function bsearch_get_option( $key = '', $default_value = null ) {
 
-	global $bsearch_settings;
+	$bsearch_settings = bsearch_get_settings();
 
-	if ( empty( $bsearch_settings ) ) {
-		$bsearch_settings = bsearch_get_settings();
-	}
-
-	if ( is_null( $default_value ) ) {
+	if ( null === $default_value ) {
 		$default_value = bsearch_get_default_option( $key );
 	}
 
-	$value = isset( $bsearch_settings[ $key ] ) ? $bsearch_settings[ $key ] : $default_value;
+	$value = $bsearch_settings[ $key ] ?? $default_value;
 
 	/**
 	 * Filter the value for the option being fetched.
@@ -85,6 +81,48 @@ function bsearch_get_option( $key = '', $default_value = null ) {
 	return apply_filters( 'bsearch_get_option_' . $key, $value, $key, $default_value );
 }
 
+/**
+ * Get an option from a specific blog in a multisite network.
+ *
+ * @since 4.2.0
+ *
+ * @param int    $blog_id       Blog ID to fetch the option from.
+ * @param string $key           Key of the option to fetch.
+ * @param mixed  $default_value Default value to fetch if option is missing.
+ * @return mixed
+ */
+function bsearch_get_blog_option( $blog_id, $key = '', $default_value = false ) {
+
+	$blog_id = (int) $blog_id;
+
+	if ( empty( $blog_id ) ) {
+		$blog_id = get_current_blog_id();
+	}
+
+	if ( get_current_blog_id() === $blog_id ) {
+		return bsearch_get_option( $key, $default_value );
+	}
+
+	if ( is_multisite() ) {
+		switch_to_blog( $blog_id );
+		$value = bsearch_get_option( $key, $default_value );
+		restore_current_blog();
+	} else {
+		$value = bsearch_get_option( $key, $default_value );
+	}
+
+	/**
+	 * Filters a blog option value.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param mixed  $value   The option value.
+	 * @param int    $blog_id Blog ID.
+	 * @param string $key     Option key.
+	 */
+	return apply_filters( "bsearch_blog_option_{$key}", $value, $blog_id, $key );
+}
+
 
 /**
  * Update an option
@@ -107,7 +145,7 @@ function bsearch_update_option( $key = '', $value = false ) {
 	}
 
 	// If no value, delete.
-	if ( empty( $value ) ) {
+	if ( false === $value ) {
 		$remove_option = bsearch_delete_option( $key );
 		return $remove_option;
 	}
@@ -185,7 +223,7 @@ function bsearch_get_registered_settings_types() {
 	$options = array();
 
 	// Populate some default values.
-	foreach ( \WebberZone\Better_Search\Admin\Settings\Settings::get_registered_settings() as $tab => $settings ) {
+	foreach ( \WebberZone\Better_Search\Admin\Settings::get_registered_settings() as $tab => $settings ) {
 		foreach ( $settings as $option ) {
 			$options[ $option['id'] ] = $option['type'];
 		}
@@ -214,7 +252,7 @@ function bsearch_settings_defaults() {
 	$options = array();
 
 	// Populate some default values.
-	foreach ( \WebberZone\Better_Search\Admin\Settings\Settings::get_registered_settings() as $tab => $settings ) {
+	foreach ( \WebberZone\Better_Search\Admin\Settings::get_registered_settings() as $tab => $settings ) {
 		foreach ( $settings as $option ) {
 			// When checkbox is set to true, set this to 1.
 			if ( 'checkbox' === $option['type'] && ! empty( $option['options'] ) ) {

@@ -141,6 +141,15 @@ class Admin {
 	public $menu_slug;
 
 	/**
+	 * Admin Notices API.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @var object Admin Notices API.
+	 */
+	public $admin_notices_api;
+
+	/**
 	 * Main constructor class.
 	 *
 	 * @since 3.3.0
@@ -151,9 +160,10 @@ class Admin {
 		// Initialise admin classes.
 		$this->admin_dashboard   = new Dashboard();
 		$this->statistics        = new Statistics();
-		$this->settings          = new Settings\Settings();
+		$this->settings          = new Settings();
 		$this->activator         = new Activator();
 		$this->upgrader          = new Upgrader();
+		$this->admin_notices_api = new Admin_Notices_API();
 		$this->admin_notices     = new Admin_Notices();
 		$this->tools_page        = new Tools_Page();
 		$this->dashboard_widgets = new Dashboard_Widgets();

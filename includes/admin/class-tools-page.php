@@ -71,7 +71,7 @@ class Tools_Page {
 	public function admin_enqueue_scripts( $hook ) {
 		if ( $hook === $this->parent_id ) {
 			wp_enqueue_script( 'better-search-admin-js' );
-			wp_enqueue_style( 'bsearch-admin-ui-css' );
+			wp_enqueue_style( 'better-search-admin-ui-css' );
 			wp_enqueue_style( 'wp-spinner' );
 			wp_localize_script(
 				'better-search-admin-js',
@@ -172,146 +172,179 @@ class Tools_Page {
 		<div id="post-body" class="metabox-holder columns-2">
 		<div id="post-body-content">
 
-			<form method="post" >
+			<form method="post">
 
-				<h2 style="padding-left:0px"><?php esc_html_e( 'Clear cache', 'better-search' ); ?></h2>
-				<p>
-					<?php
-						printf(
-							'<button type="button" name="bsearch_cache_clear" class="button button-secondary bsearch_cache_clear" aria-label="%1$s">%1$s</button>',
-							esc_html__( 'Clear cache', 'better-search' )
-						);
-					?>
-				</p>
-				<p class="description">
-					<?php esc_html_e( 'Clear the Better Search cache. This will also be cleared automatically when you save the settings page.', 'better-search' ); ?>
-				</p>
+				<div class="postbox">
+					<h2 class="hndle" id="bsearch-clear-cache"><span><?php esc_html_e( 'Clear cache', 'better-search' ); ?></span></h2>
+					<div class="inside">
+						<p>
+							<?php
+								printf(
+									'<button type="button" name="bsearch_cache_clear" class="button button-secondary bsearch_cache_clear" aria-label="%1$s">%1$s</button>',
+									esc_html__( 'Clear cache', 'better-search' )
+								);
+							?>
+						</p>
+						<p class="description">
+							<?php esc_html_e( 'Clear the Better Search cache. This will also be cleared automatically when you save the settings page.', 'better-search' ); ?>
+						</p>
+					</div>
+				</div>
 
 				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>
 			</form>
 
 			<form method="post">
-				<h2 style="padding-left:0px"><?php esc_html_e( 'Recreate FULLTEXT index', 'better-search' ); ?></h2>
-				<p>
-					<?php
-						printf(
-							'<button type="submit" name="bsearch_recreate" id="bsearch_recreate" class="button button-secondary" onclick="if ( ! confirm(\'%1$s\') ) return false;">%2$s</button>',
-							esc_attr__( 'Are you sure you want to recreate the index?', 'better-search' ),
-							esc_attr__( 'Recreate Index', 'better-search' )
-						);
-					?>
-				</p>
-				<p class="description">
-					<?php esc_html_e( 'Recreate the FULLTEXT index that Better Search uses to get the relevant search results. This might take a lot of time to regenerate if you have a lot of posts.', 'better-search' ); ?>
-				</p>
-				<p class="description"><?php esc_html_e( 'If the Recreate Index button fails, please run the following queries in phpMyAdmin or Adminer', 'better-search' ); ?></p>
-				<p>
-					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch;</code>
-					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch_title;</code>
-					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch_content;</code>
-					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related (post_title, post_content);</code>
-					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_title (post_title);</code>
-					<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_content (post_content);</code>
-				</p>
+				<div class="postbox">
+					<h2 class="hndle" id="bsearch-recreate-index"><span><?php esc_html_e( 'Recreate FULLTEXT index', 'better-search' ); ?></span></h2>
+					<div class="inside">
+						<p>
+							<?php
+								printf(
+									'<button type="submit" name="bsearch_recreate" id="bsearch_recreate" class="button button-secondary" onclick="if ( ! confirm(\'%1$s\') ) return false;">%2$s</button>',
+									esc_attr__( 'Are you sure you want to recreate the index?', 'better-search' ),
+									esc_attr__( 'Recreate Index', 'better-search' )
+								);
+							?>
+						</p>
+						<p class="description">
+							<?php esc_html_e( 'Recreate the FULLTEXT index that Better Search uses to get the relevant search results. This might take a lot of time to regenerate if you have a lot of posts.', 'better-search' ); ?>
+						</p>
+						<p class="description"><?php esc_html_e( 'If the Recreate Index button fails, please run the following queries in phpMyAdmin or Adminer', 'better-search' ); ?></p>
+						<p>
+							<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch;</code>
+							<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch_title;</code>
+							<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch_content;</code>
+							<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related (post_title, post_content);</code>
+							<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_title (post_title);</code>
+							<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_content (post_content);</code>
+						</p>
+					</div>
+				</div>
 
 				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>
 			</form>
 
 			<form method="post">
-				<h2 style="padding-left:0px"><?php esc_html_e( 'Create tables', 'better-search' ); ?></h2>
-				<p class="description">
-					<?php esc_html_e( 'These buttons will create the tables in which Better Search stores its data.', 'better-search' ); ?>
-				</p>
-				<p>
-					<?php
-						printf(
-							'<button type="submit" name="bsearch_create_tables" id="bsearch_create_tables" class="button button-secondary" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
-							esc_attr__( 'This will create the overall tables. Have you backed up your database?', 'better-search' ),
-							esc_attr__( 'Create overall tables', 'better-search' )
-						);
-					?>
-				</p>
+				<div class="postbox">
+					<h2 class="hndle" id="bsearch-create-tables"><span><?php esc_html_e( 'Create tables', 'better-search' ); ?></span></h2>
+					<div class="inside">
+						<p class="description">
+							<?php esc_html_e( 'These buttons will create the tables in which Better Search stores its data.', 'better-search' ); ?>
+						</p>
+						<p>
+							<?php
+								printf(
+									'<button type="submit" name="bsearch_create_tables" id="bsearch_create_tables" class="button button-secondary" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
+									esc_attr__( 'This will create the overall tables. Have you backed up your database?', 'better-search' ),
+									esc_attr__( 'Create overall tables', 'better-search' )
+								);
+							?>
+						</p>
+					</div>
+				</div>
 
 				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>
 			</form>
 
 			<form method="post">
-				<h2 style="padding-left:0px"><?php esc_html_e( 'Recreate Tables', 'better-search' ); ?></h2>
-				<p class="description">
-					<?php esc_html_e( 'These buttons will recreate the tables in which Better Search stores its data. This is particularly useful if you are noticing issues with tracking or if there was a problem with the database upgrade', 'better-search' ); ?>
-				</p>
-				<p>
-					<?php
-						printf(
-							'<button type="submit" name="bsearch_recreate_overall" id="bsearch_recreate_overall" class="button button-secondary" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
-							esc_attr__( 'This will recreate the overall tables. Have you backed up your database?', 'better-search' ),
-							esc_attr__( 'Recreate overall tables', 'better-search' )
-						);
-						printf(
-							'<button type="submit" name="bsearch_recreate_daily" id="bsearch_recreate_daily" class="button button-secondary" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
-							esc_attr__( 'This will recreate the daily tables. Have you backed up your database?', 'better-search' ),
-							esc_attr__( 'Recreate daily tables', 'better-search' )
-						);
-					?>
-				</p>
+				<div class="postbox">
+					<h2 class="hndle" id="bsearch-recreate-tables"><span><?php esc_html_e( 'Recreate Tables', 'better-search' ); ?></span></h2>
+					<div class="inside">
+						<p class="description">
+							<?php esc_html_e( 'These buttons will recreate the tables in which Better Search stores its data. This is particularly useful if you are noticing issues with tracking or if there was a problem with the database upgrade', 'better-search' ); ?>
+						</p>
+						<p>
+							<?php
+								printf(
+									'<button type="submit" name="bsearch_recreate_overall" id="bsearch_recreate_overall" class="button button-secondary" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
+									esc_attr__( 'This will recreate the overall tables. Have you backed up your database?', 'better-search' ),
+									esc_attr__( 'Recreate overall tables', 'better-search' )
+								);
+								printf(
+									'<button type="submit" name="bsearch_recreate_daily" id="bsearch_recreate_daily" class="button button-secondary" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
+									esc_attr__( 'This will recreate the daily tables. Have you backed up your database?', 'better-search' ),
+									esc_attr__( 'Recreate daily tables', 'better-search' )
+								);
+							?>
+						</p>
+					</div>
+				</div>
 
 				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>
 			</form>
 
 			<form method="post">
-				<h2 style="padding-left:0px"><?php esc_html_e( 'Reset database', 'better-search' ); ?></h2>
-				<p>
-					<?php
-						printf(
-							'<button type="submit" name="bsearch_trunc_all" id="bsearch_trunc_all" class="button button-secondary" style="color:#f00" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
-							esc_attr__( 'Are you sure you want to reset the popular searches?', 'better-search' ),
-							esc_attr__( 'Reset Popular searches table', 'better-search' )
-						);
-						printf(
-							'<button type="submit" name="bsearch_trunc_daily" id="bsearch_trunc_daily" class="button button-secondary" style="color:#f00" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
-							esc_attr__( 'Are you sure you want to reset the daily popular searches?', 'better-search' ),
-							esc_attr__( 'Reset Daily Popular searches table', 'better-search' )
-						);
-					?>
-				</p>
-				<p class="description">
-					<?php esc_html_e( 'This will reset the Better Search tables. If you are running Better Search on multisite then it will delete the popular posts across the entire network. This cannot be reversed. Make sure that your database has been backed up before proceeding', 'better-search' ); ?>
-				</p>
+				<div class="postbox">
+					<h2 class="hndle" id="bsearch-reset-database"><span><?php esc_html_e( 'Reset database', 'better-search' ); ?></span></h2>
+					<div class="inside">
+						<p>
+							<?php
+								printf(
+									'<button type="submit" name="bsearch_trunc_all" id="bsearch_trunc_all" class="button button-secondary" style="color:#f00" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
+									esc_attr__( 'Are you sure you want to reset the popular searches?', 'better-search' ),
+									esc_attr__( 'Reset Popular searches table', 'better-search' )
+								);
+								printf(
+									'<button type="submit" name="bsearch_trunc_daily" id="bsearch_trunc_daily" class="button button-secondary" style="color:#f00" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
+									esc_attr__( 'Are you sure you want to reset the daily popular searches?', 'better-search' ),
+									esc_attr__( 'Reset Daily Popular searches table', 'better-search' )
+								);
+							?>
+						</p>
+						<p class="description">
+							<?php esc_html_e( 'This will reset the Better Search tables. If you are running Better Search on multisite then it will delete the popular posts across the entire network. This cannot be reversed. Make sure that your database has been backed up before proceeding', 'better-search' ); ?>
+						</p>
+					</div>
+				</div>
 
 				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>
 			</form>
 
 			<form method="post">
-				<h2 style="padding-left:0px"><?php esc_html_e( 'Backup Tables', 'better-search' ); ?></h2>
-				<p class="description">
-					<?php esc_html_e( 'From v3.3, Better Search uses a new database table format.', 'better-search' ); ?>
-				</p>
-				<p class="description">
-					<?php esc_html_e( 'As part of the upgrade process, the plugin backed up the older tables. Restoring any of the tables will also reset the database version so you will once again be prompted to upgrade the tables.', 'better-search' ); ?>
-				</p>
-				<p class="description">
-					<strong><?php esc_html_e( 'You will need to restore both tables and delete the backup tables before you can begin the upgrade process.', 'better-search' ); ?></strong>
-				</p>
-				<p>
-					<button name="bsearch_restore_overall" type="submit" id="bsearch_restore_overall" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to restore the popular searches table from the backup?', 'better-search' ); ?>')) return false;"><?php esc_attr_e( 'Restore Popular searches table', 'better-search' ); ?></button>
-					<button name="bsearch_restore_daily" type="submit" id="bsearch_restore_daily" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to restore the daily popular searches table from the backup?', 'better-search' ); ?>')) return false;"><?php esc_attr_e( 'Restore Daily Popular searches table', 'better-search' ); ?></button>
-				</p>
+				<div class="postbox">
+					<h2 class="hndle" id="bsearch-backup-tables"><span><?php esc_html_e( 'Backup Tables', 'better-search' ); ?></span></h2>
+					<div class="inside">
+						<p class="description">
+							<?php esc_html_e( 'From v3.3, Better Search uses a new database table format.', 'better-search' ); ?>
+						</p>
+						<p class="description">
+							<?php esc_html_e( 'As part of the upgrade process, the plugin backed up the older tables. Restoring any of the tables will also reset the database version so you will once again be prompted to upgrade the tables.', 'better-search' ); ?>
+						</p>
+						<p class="description">
+							<strong><?php esc_html_e( 'You will need to restore both tables and delete the backup tables before you can begin the upgrade process.', 'better-search' ); ?></strong>
+						</p>
+						<p>
+							<button name="bsearch_restore_overall" type="submit" id="bsearch_restore_overall" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to restore the popular searches table from the backup?', 'better-search' ); ?>')) return false;"><?php esc_attr_e( 'Restore Popular searches table', 'better-search' ); ?></button>
+							<button name="bsearch_restore_daily" type="submit" id="bsearch_restore_daily" class="button button-secondary" onclick="if (!confirm('<?php esc_attr_e( 'Are you sure you want to restore the daily popular searches table from the backup?', 'better-search' ); ?>')) return false;"><?php esc_attr_e( 'Restore Daily Popular searches table', 'better-search' ); ?></button>
+						</p>
 
-				<p class="description">
-					<?php esc_html_e( 'If your site has been working fine and populating with new information, then you can delete these backed up tables to save database space.', 'better-search' ); ?>
-				</p>
-				<p>
-					<?php
-						printf(
-							'<button type="submit" name="bsearch_delete_backup_tables" id="bsearch_delete_backup_tables" class="button button-secondary" style="color:#f00" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
-							esc_attr__( 'This will delete the backup tables of Better Search. Have you backed up your database?', 'better-search' ),
-							esc_attr__( 'Delete backup tables', 'better-search' )
-						);
-					?>
-				</p>
+						<p class="description">
+							<?php esc_html_e( 'If your site has been working fine and populating with new information, then you can delete these backed up tables to save database space.', 'better-search' ); ?>
+						</p>
+						<p>
+							<?php
+								printf(
+									'<button type="submit" name="bsearch_delete_backup_tables" id="bsearch_delete_backup_tables" class="button button-secondary" style="color:#f00" onclick="if (!confirm(\'%1$s\')) return false;">%2$s</button>',
+									esc_attr__( 'This will delete the backup tables of Better Search. Have you backed up your database?', 'better-search' ),
+									esc_attr__( 'Delete backup tables', 'better-search' )
+								);
+							?>
+						</p>
+					</div>
+				</div>
 
 				<?php wp_nonce_field( 'bsearch-tools-settings' ); ?>
 			</form>
+
+			<?php
+			/**
+			 * Action hook to add additional tools page content.
+			 *
+			 * @since 4.2.0
+			 */
+			do_action( 'bsearch_admin_tools_page_content' );
+			?>
 
 		</div><!-- /#post-body-content -->
 
