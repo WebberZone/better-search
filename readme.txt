@@ -126,6 +126,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Features:
 	* [Pro] New: Efficient Content Storage and Indexing – Custom tables implementation for better performance and query optimization while maintaining the same relevance algorithm.
 	* [Pro] New: MAX_EXECUTION_TIME hint for MySQL queries.
+	* [Pro] New: LIKE fallback search.
 
 = 4.1.3 =
 
