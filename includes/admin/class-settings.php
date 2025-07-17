@@ -425,6 +425,14 @@ class Settings {
 				'type'    => 'checkbox',
 				'options' => false,
 			),
+			'enable_like_fallback'      => array(
+				'id'      => 'enable_like_fallback',
+				'name'    => esc_html__( 'Enable LIKE fallback', 'better-search' ),
+				'desc'    => esc_html__( 'Enabling this option will perform a LIKE search when FULLTEXT returns zero results. This does not work with custom tables.', 'better-search' ),
+				'type'    => 'checkbox',
+				'options' => false,
+				'pro'     => true,
+			),
 			'weight_title'              => array(
 				'id'      => 'weight_title',
 				'name'    => esc_html__( 'Weight of the title', 'better-search' ),
