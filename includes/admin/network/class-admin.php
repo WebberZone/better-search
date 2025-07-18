@@ -57,6 +57,28 @@ class Admin {
 		add_action( 'network_admin_menu', array( $this, 'network_admin_menu' ) );
 		add_action( 'admin_post_bsearch_copy_settings', array( $this, 'handle_copy_settings' ) );
 		add_action( 'network_admin_notices', array( $this, 'show_settings_copied_notice' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+	}
+
+	/**
+	 * Enqueue admin scripts on network admin pages.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param string $hook Current admin page hook.
+	 */
+	public function admin_enqueue_scripts( $hook ) {
+		if ( $this->parent_id === $hook ) {
+			wp_enqueue_script( 'better-search-admin-js' );
+			wp_localize_script(
+				'better-search-admin-js',
+				'bsearch_admin_data',
+				array(
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
+					'security' => wp_create_nonce( 'bsearch-admin' ),
+				)
+			);
+		}
 	}
 
 	/**
@@ -99,7 +121,7 @@ class Admin {
 			<?php settings_errors(); ?>
 
 			<div id="poststuff">
-				<div id="post-body" class="metabox-holder">
+				<div id="post-body" class="metabox-holder columns-2">
 					<div id="post-body-content">
 						<?php do_action( 'bsearch_multisite_settings' ); ?>
 					</div><!-- /#post-body-content -->

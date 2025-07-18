@@ -1179,7 +1179,7 @@ class Better_Search_Core_Query extends \WP_Query {
 			$cache_name  = $this->get_cache_key( $query );
 			$cached_data = Cache::get( $cache_name );
 
-			if ( ! empty( $cached_data ) ) {
+			if ( false !== $cached_data ) {
 				$post__in = $cached_data;
 				unset( $post__in['found_posts'] );
 				$posts = get_posts(
@@ -1340,15 +1340,19 @@ class Better_Search_Core_Query extends \WP_Query {
 			return $request;
 		}
 
+		// Initialize cache variables.
+		$topscore   = 0;
+		$cache_name = '';
+		$cache_time = 0;
+
 		// Check cache first.
-		$topscore = 0;
 		if ( ! empty( $this->query_args['cache'] ) ) {
 			$cache_time = apply_filters( 'better_search_query_cache_time', $this->query_args['cache_time'], $this->query_args );
 			$cache_name = $this->get_cache_key( $query, 'ts' );
 			$topscore   = Cache::get( $cache_name );
 		}
 
-		if ( $topscore ) {
+		if ( false !== $topscore ) {
 			$this->topscore  = $topscore;
 			$query->topscore = $topscore;
 			return $request;
@@ -1385,7 +1389,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		$this->topscore  = ! empty( $topscore ) ? (float) wp_list_pluck( $topscore, 'score' )[0] : 0;
 		$query->topscore = $this->topscore;
 
-		if ( ! empty( $this->query_args['cache'] ) ) {
+		if ( ! empty( $this->query_args['cache'] ) && ! empty( $cache_name ) ) {
 			Cache::set( $cache_name, $this->topscore, $cache_time );
 		}
 

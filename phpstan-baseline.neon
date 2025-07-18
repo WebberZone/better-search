@@ -46,16 +46,6 @@ parameters:
 			path: includes/class-better-search-core-query.php
 
 		-
-			message: "#^Variable \\$cache_name might not be defined\\.$#"
-			count: 1
-			path: includes/class-better-search-core-query.php
-
-		-
-			message: "#^Variable \\$cache_time might not be defined\\.$#"
-			count: 1
-			path: includes/class-better-search-core-query.php
-
-		-
 			message: "#^Constant BETTER_SEARCH_PLUGIN_URL not found\\.$#"
 			count: 2
 			path: includes/class-main.php
@@ -127,11 +117,6 @@ parameters:
 
 		-
 			message: "#^Class PLL_Frontend_Filters not found\\.$#"
-			count: 1
-			path: includes/pro/class-multisite-search.php
-
-		-
-			message: "#^Constant BETTER_SEARCH_PLUGIN_DIR not found\\.$#"
 			count: 1
 			path: includes/pro/class-multisite-search.php
 
