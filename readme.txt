@@ -128,6 +128,13 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 	* [Pro] New: MAX_EXECUTION_TIME hint for MySQL queries.
 	* [Pro] New: LIKE fallback search.
 
+* Modifications:
+	* Improved caching in Core Query to catch score and blog ID.
+	* New function: bsearch_get_blog_option() to get a Better Search option for a specific blog.
+	* New network settings/tools page.
+	* [Pro] A new button to fix the collation issue has been added to the Network Admin Settings page.
+	* Updated Freemius SDK.
+
 = 4.1.3 =
 
 * Modifications:

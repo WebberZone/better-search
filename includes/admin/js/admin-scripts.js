@@ -45,6 +45,40 @@ jQuery(document).ready(
 
 		$('form *').change(confirmFormChange);
 
+		// Collation fix AJAX handler
+		$(document).on('click', '.bsearch-run-collation-fix', function (e) {
+			e.preventDefault();
+			if (!window.confirm('Are you sure? Please backup your database before proceeding!')) return;
+
+			var $button = $(this);
+			var originalText = $button.text();
+
+			$button.prop('disabled', true)
+				.text('Running...')
+				.append(' <span class="spinner is-active" style="float: none; margin: 0 0 0 5px;"></span>');
+
+			$.post(bsearch_admin_data.ajax_url, {
+				action: 'bsearch_run_collation_fix',
+				blog_id: $button.data('blog-id'),
+				collation: $button.data('collation'),
+				security: bsearch_admin_data.security
+			}, function (response) {
+				if (response.success) {
+					alert(response.data || 'Collation updated successfully.');
+					$button.text('Fixed!').removeClass('button-danger').addClass('button-secondary');
+				} else {
+					alert(response.data || 'Failed to update collation.');
+				}
+			}).fail(function (jqXHR, textStatus) {
+				alert('Request failed: ' + textStatus);
+			}).always(function () {
+				$button.find('.spinner').remove();
+				if ($button.text() !== 'Fixed!') {
+					$button.prop('disabled', false).text(originalText);
+				}
+			});
+		});
+
 		window.onbeforeunload = confirmExit;
 
 		$("input[name='submit']").click(formNotModified);
