@@ -213,14 +213,17 @@ class Tools_Page {
 							<?php esc_html_e( 'Recreate the FULLTEXT index that Better Search uses to get the relevant search results. This might take a lot of time to regenerate if you have a lot of posts.', 'better-search' ); ?>
 						</p>
 						<p class="description"><?php esc_html_e( 'If the Recreate Index button fails, please run the following queries in phpMyAdmin or Adminer', 'better-search' ); ?></p>
-						<p>
-							<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch;</code>
-							<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch_title;</code>
-							<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> DROP INDEX bsearch_content;</code>
-							<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related (post_title, post_content);</code>
-							<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_title (post_title);</code>
-							<code style="display:block">ALTER TABLE <?php echo esc_attr( $wpdb->posts ); ?> ADD FULLTEXT bsearch_related_content (post_content);</code>
-						</p>
+
+						<div class="bsearch-code-wrapper">
+							<?php $sql_queries = self::recreate_indices_sql(); ?>
+							<pre id="bsearch-indices-sql"><code><?php echo implode( "\n", array_map( 'esc_html', $sql_queries ) ); ?></code></pre>
+						</div>
+						<script>
+							jQuery(document).ready(function($) {
+								bsearchAddCopyButton('bsearch-indices-sql');
+							});
+						</script>
+
 					</div>
 				</div>
 
@@ -382,6 +385,26 @@ class Tools_Page {
 		$wpdb->query( $sql ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
 	}
 
+	/**
+	 * Retrieves the SQL code to recreate the fulltext indexes.
+	 *
+	 * @since 4.2.0
+	 */
+	public static function recreate_indices_sql() {
+		global $wpdb;
+
+		$indexes = Activator::get_fulltext_indexes();
+
+		$sql = array();
+		if ( ! empty( $indexes ) ) {
+			foreach ( $indexes as $index => $value ) {
+				$sql[] = "ALTER TABLE {$wpdb->posts} DROP INDEX {$index};";
+				$sql[] = "ALTER TABLE {$wpdb->posts} ADD FULLTEXT {$index} ({$value});";
+			}
+		}
+
+		return $sql;
+	}
 
 	/**
 	 * Recreate FULLTEXT indices.

@@ -1502,3 +1502,37 @@ a.bsearch_button.bsearch_button_gold:hover {
 		padding: 8px 10px;
 	}
 }
+
+/* Copy to clipboard button */
+.bsearch-code-wrapper {
+    position: relative;
+}
+
+.bsearch-code-wrapper pre {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.bsearch-code-wrapper code {
+    display: block;
+}
+
+.bsearch-copy-button {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #2271b1;
+    transition: color 0.1s ease-in-out;
+}
+
+.bsearch-copy-button:hover {
+    color: #135e96;
+}
+
+.bsearch-copy-button.copied {
+    color: #00a32a;
+}

@@ -235,7 +235,11 @@ class Admin {
 			'better-search-admin-js',
 			'better_search_admin',
 			array(
-				'nonce' => wp_create_nonce( 'better_search_admin_nonce' ),
+				'ajaxurl'         => admin_url( 'admin-ajax.php' ),
+				'nonce'           => wp_create_nonce( 'better_search_admin_nonce' ),
+				'copied'          => __( 'Copied!', 'better-search' ),
+				'copyToClipboard' => __( 'Copy to clipboard', 'better-search' ),
+				'copyError'       => __( 'Error copying to clipboard', 'better-search' ),
 			)
 		);
 		wp_register_style(
