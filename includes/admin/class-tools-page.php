@@ -393,13 +393,23 @@ class Tools_Page {
 	public static function recreate_indices_sql() {
 		global $wpdb;
 
-		$indexes = Activator::get_fulltext_indexes();
+		$old_indexes = Activator::get_old_fulltext_indexes();
+		$new_indexes = Activator::get_fulltext_indexes();
+		$all_indexes = array_keys( array_merge( $old_indexes, $new_indexes ) );
 
 		$sql = array();
-		if ( ! empty( $indexes ) ) {
-			foreach ( $indexes as $index => $value ) {
+
+		// Add DROP statements for all possible indexes.
+		foreach ( $all_indexes as $index ) {
+			if ( Activator::is_index_installed( $index ) ) {
 				$sql[] = "ALTER TABLE {$wpdb->posts} DROP INDEX {$index};";
-				$sql[] = "ALTER TABLE {$wpdb->posts} ADD FULLTEXT {$index} ({$value});";
+			}
+		}
+
+		// Add ADD statements only for the new indexes.
+		if ( ! empty( $new_indexes ) ) {
+			foreach ( $new_indexes as $index => $value ) {
+				$sql[] = "ALTER TABLE {$wpdb->posts} ADD FULLTEXT {$index} {$value};";
 			}
 		}
 
@@ -412,12 +422,18 @@ class Tools_Page {
 	 * @since 3.3.0
 	 */
 	public static function recreate_index() {
-
 		global $wpdb;
 
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch;' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch_title;' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' DROP INDEX bsearch_content;' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$old_indexes = Activator::get_old_fulltext_indexes();
+		$new_indexes = Activator::get_fulltext_indexes();
+		$all_indexes = array_keys( array_merge( $old_indexes, $new_indexes ) );
+
+		foreach ( $all_indexes as $index ) {
+			if ( Activator::is_index_installed( $index ) ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$wpdb->query( "ALTER TABLE {$wpdb->posts} DROP INDEX {$index}" );
+			}
+		}
 
 		Activator::create_fulltext_indexes();
 	}

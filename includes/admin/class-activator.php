@@ -145,10 +145,21 @@ class Activator {
 	public static function is_index_installed( $index ) {
 		global $wpdb;
 
+		$new_indexes = self::get_fulltext_indexes();
+		$old_indexes = self::get_old_fulltext_indexes();
+
+		// Find the corresponding old index name if the given index is a new one.
+		$old_index_name = '';
+		if ( in_array( $index, array_keys( $new_indexes ), true ) ) {
+			$key            = array_search( $index, array_keys( $new_indexes ), true );
+			$old_index_name = array_keys( $old_indexes )[ $key ];
+		}
+
 		$index_exists = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->prepare(
-				"SHOW INDEX FROM {$wpdb->posts} WHERE Key_name = %s",
-				$index
+				"SHOW INDEX FROM {$wpdb->posts} WHERE Key_name = %s OR Key_name = %s",
+				$index,
+				$old_index_name
 			)
 		);
 
@@ -168,7 +179,7 @@ class Activator {
 		global $wpdb;
 
 		// Install the fulltext index if it doesn't exist.
-		$wpdb->query( 'ALTER TABLE ' . $wpdb->posts . ' ADD FULLTEXT ' . $index . ' ' . $columns . ';' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( "ALTER TABLE {$wpdb->posts} ADD FULLTEXT {$index} {$columns};" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	/**
@@ -180,9 +191,9 @@ class Activator {
 	 */
 	public static function get_fulltext_indexes() {
 		$indexes = array(
-			'bsearch'         => '(post_title, post_content)',
-			'bsearch_title'   => '(post_title)',
-			'bsearch_content' => '(post_content)',
+			'wz_title_content' => '(post_title, post_content)',
+			'wz_title'         => '(post_title)',
+			'wz_content'       => '(post_content)',
 		);
 
 		/**
@@ -193,6 +204,21 @@ class Activator {
 		 * @param array $indexes Array of fulltext indexes.
 		 */
 		return apply_filters( 'bsearch_fulltext_indexes', $indexes );
+	}
+
+	/**
+	 * Get the list of old fulltext indexes.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return array Array of fulltext indexes with their respective columns.
+	 */
+	public static function get_old_fulltext_indexes() {
+		return array(
+			'bsearch'         => '(post_title, post_content)',
+			'bsearch_title'   => '(post_title)',
+			'bsearch_content' => '(post_content)',
+		);
 	}
 
 	/**
@@ -209,9 +235,14 @@ class Activator {
 
 		// Check if each index is installed and add to the report.
 		foreach ( $indexes as $index => $columns ) {
-			$statuses[ $index ] = self::is_index_installed( $index )
-				? '<span style="color: #006400;">' . __( 'Installed', 'better-search' ) . '</span>'
-				: '<span style="color: #8B0000;">' . __( 'Not Installed', 'better-search' ) . '</span>';
+			$is_installed = self::is_index_installed( $index );
+
+			$statuses[ $index ] = array(
+				'columns' => $columns,
+				'status'  => $is_installed
+					? '<span style="color: #006400;">' . __( 'Installed', 'better-search' ) . '</span>'
+					: '<span style="color: #8B0000;">' . __( 'Not Installed', 'better-search' ) . '</span>',
+			);
 		}
 
 		/**
