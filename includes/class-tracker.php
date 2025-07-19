@@ -7,6 +7,8 @@
 
 namespace WebberZone\Better_Search;
 
+use WebberZone\Better_Search\Util\Hook_Registry;
+
 if ( ! defined( 'WPINC' ) ) {
 	exit;
 }
@@ -24,11 +26,11 @@ class Tracker {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		add_action( 'parse_request', array( $this, 'parse_request' ) );
-		add_filter( 'query_vars', array( $this, 'query_vars' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_action( 'wp_ajax_nopriv_bsearch_tracker', array( $this, 'tracker_parser' ) );
-		add_action( 'wp_ajax_bsearch_tracker', array( $this, 'tracker_parser' ) );
+		Hook_Registry::add_action( 'parse_request', array( $this, 'parse_request' ) );
+		Hook_Registry::add_filter( 'query_vars', array( $this, 'query_vars' ) );
+		Hook_Registry::add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		Hook_Registry::add_action( 'wp_ajax_nopriv_bsearch_tracker', array( $this, 'tracker_parser' ) );
+		Hook_Registry::add_action( 'wp_ajax_bsearch_tracker', array( $this, 'tracker_parser' ) );
 	}
 
 	/**

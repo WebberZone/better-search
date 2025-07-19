@@ -7,6 +7,8 @@
 
 namespace WebberZone\Better_Search\Admin;
 
+use WebberZone\Better_Search\Util\Hook_Registry;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -40,8 +42,8 @@ class Activator {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		add_filter( 'wpmu_drop_tables', array( $this, 'on_delete_blog' ) );
-		add_action( 'wp_initialize_site', array( $this, 'activate_new_site' ) );
+		Hook_Registry::add_filter( 'wpmu_drop_tables', array( $this, 'on_delete_blog' ) );
+		Hook_Registry::add_action( 'wp_initialize_site', array( $this, 'activate_new_site' ) );
 	}
 
 	/**

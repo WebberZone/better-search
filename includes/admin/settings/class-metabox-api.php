@@ -9,6 +9,8 @@
 
 namespace WebberZone\Better_Search\Admin\Settings;
 
+use WebberZone\Better_Search\Util\Helpers;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;

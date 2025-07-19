@@ -10,6 +10,8 @@
 
 namespace WebberZone\Better_Search\Admin;
 
+use WebberZone\Better_Search\Util\Hook_Registry;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -36,10 +38,10 @@ class Tools_Page {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
-		add_action( 'admin_init', array( $this, 'process_settings_export' ) );
-		add_action( 'admin_init', array( $this, 'process_settings_import' ), 9 );
+		Hook_Registry::add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		Hook_Registry::add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		Hook_Registry::add_action( 'admin_init', array( $this, 'process_settings_export' ) );
+		Hook_Registry::add_action( 'admin_init', array( $this, 'process_settings_import' ), 9 );
 	}
 
 	/**
@@ -58,7 +60,7 @@ class Tools_Page {
 			array( $this, 'render_page' )
 		);
 
-		add_action( 'load-' . $this->parent_id, array( $this, 'help_tabs' ) );
+		Hook_Registry::add_action( 'load-' . $this->parent_id, array( $this, 'help_tabs' ) );
 	}
 
 	/**

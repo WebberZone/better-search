@@ -10,6 +10,8 @@
 
 namespace WebberZone\Better_Search\Admin;
 
+use WebberZone\Better_Search\Util\Hook_Registry;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -36,8 +38,8 @@ class Upgrader {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'network_admin_menu', array( $this, 'network_admin_menu' ) );
+		Hook_Registry::add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		Hook_Registry::add_action( 'network_admin_menu', array( $this, 'network_admin_menu' ) );
 	}
 
 	/**

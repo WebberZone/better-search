@@ -9,6 +9,7 @@
 
 use WebberZone\Better_Search\Util\Cache;
 use WebberZone\Better_Search\Util\Helpers;
+use WebberZone\Better_Search\Util\Hook_Registry;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -171,19 +172,19 @@ class Better_Search_Core_Query extends \WP_Query {
 			return;
 		}
 
-		add_filter( 'pre_get_posts', array( $this, 'pre_get_posts' ), 10 );
-		add_filter( 'posts_fields', array( $this, 'posts_fields' ), 10, 2 );
-		add_filter( 'posts_join', array( $this, 'posts_join' ), 10, 2 );
-		add_filter( 'posts_search', array( $this, 'posts_search' ), 10, 2 );
-		add_filter( 'posts_where', array( $this, 'posts_where' ), 10, 2 );
-		add_filter( 'posts_distinct', array( $this, 'posts_distinct' ), 10, 2 );
-		add_filter( 'posts_orderby', array( $this, 'posts_orderby' ), 10, 2 );
-		add_filter( 'posts_groupby', array( $this, 'posts_groupby' ), 10, 2 );
-		add_filter( 'posts_clauses', array( $this, 'posts_clauses' ), 10, 2 );
-		add_filter( 'posts_request', array( $this, 'posts_request' ), 10, 2 );
-		add_filter( 'better_search_query_posts_request', array( $this, 'set_topscore' ), 99999, 2 );
-		add_filter( 'posts_pre_query', array( $this, 'posts_pre_query' ), 10, 2 );
-		add_filter( 'the_posts', array( $this, 'the_posts' ), 10, 2 );
+		Hook_Registry::add_filter( 'pre_get_posts', array( $this, 'pre_get_posts' ), 10 );
+		Hook_Registry::add_filter( 'posts_fields', array( $this, 'posts_fields' ), 10, 2 );
+		Hook_Registry::add_filter( 'posts_join', array( $this, 'posts_join' ), 10, 2 );
+		Hook_Registry::add_filter( 'posts_search', array( $this, 'posts_search' ), 10, 2 );
+		Hook_Registry::add_filter( 'posts_where', array( $this, 'posts_where' ), 10, 2 );
+		Hook_Registry::add_filter( 'posts_distinct', array( $this, 'posts_distinct' ), 10, 2 );
+		Hook_Registry::add_filter( 'posts_orderby', array( $this, 'posts_orderby' ), 10, 2 );
+		Hook_Registry::add_filter( 'posts_groupby', array( $this, 'posts_groupby' ), 10, 2 );
+		Hook_Registry::add_filter( 'posts_clauses', array( $this, 'posts_clauses' ), 10, 2 );
+		Hook_Registry::add_filter( 'posts_request', array( $this, 'posts_request' ), 10, 2 );
+		Hook_Registry::add_filter( 'better_search_query_posts_request', array( $this, 'set_topscore' ), 99999, 3 );
+		Hook_Registry::add_filter( 'posts_pre_query', array( $this, 'posts_pre_query' ), 10, 2 );
+		Hook_Registry::add_filter( 'the_posts', array( $this, 'the_posts' ), 10, 2 );
 	}
 
 	/**
@@ -570,7 +571,7 @@ class Better_Search_Core_Query extends \WP_Query {
 				}
 			}
 
-			remove_filter( 'pre_get_posts', array( $this, 'pre_get_posts' ) );
+			Hook_Registry::remove_filter( 'pre_get_posts', array( $this, 'pre_get_posts' ) );
 		}
 	}
 
@@ -681,7 +682,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		 */
 		$fields = apply_filters_ref_array( 'better_search_query_posts_fields', array( $fields, $query, &$this ) );
 
-		remove_filter( 'posts_fields', array( $this, 'posts_fields' ) );
+		Hook_Registry::remove_filter( 'posts_fields', array( $this, 'posts_fields' ) );
 
 		return $fields;
 	}
@@ -732,7 +733,7 @@ class Better_Search_Core_Query extends \WP_Query {
 			$join = apply_filters_ref_array( 'better_search_query_posts_join', array( $join, $query, &$this ) );
 
 			// Remove the filter after it's applied to avoid duplicates in future queries.
-			remove_filter( 'posts_join', array( $this, 'posts_join' ) );
+			Hook_Registry::remove_filter( 'posts_join', array( $this, 'posts_join' ) );
 		}
 
 		return $join;
@@ -771,7 +772,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		 */
 		$where = apply_filters_ref_array( 'better_search_query_posts_where', array( $where, $query, &$this ) );
 
-		remove_filter( 'posts_where', array( $this, 'posts_where' ) );
+		Hook_Registry::remove_filter( 'posts_where', array( $this, 'posts_where' ) );
 
 		return $where;
 	}
@@ -941,7 +942,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		 */
 		$where = apply_filters_ref_array( 'better_search_query_posts_search', array( $where, $query, &$this ) );
 
-		remove_filter( 'posts_search', array( $this, 'posts_search' ) );
+		Hook_Registry::remove_filter( 'posts_search', array( $this, 'posts_search' ) );
 
 		return $where;
 	}
@@ -975,7 +976,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		 */
 		$distinct = apply_filters_ref_array( 'better_search_query_posts_distinct', array( $distinct, $query, &$this ) );
 
-		remove_filter( 'posts_distinct', array( $this, 'posts_distinct' ) );
+		Hook_Registry::remove_filter( 'posts_distinct', array( $this, 'posts_distinct' ) );
 
 		return $distinct;
 	}
@@ -1056,7 +1057,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		 */
 		$orderby = apply_filters_ref_array( 'better_search_query_posts_orderby', array( $orderby, $query, &$this ) );
 
-		remove_filter( 'posts_orderby', array( $this, 'posts_orderby' ) );
+		Hook_Registry::remove_filter( 'posts_orderby', array( $this, 'posts_orderby' ) );
 
 		return $orderby;
 	}
@@ -1088,7 +1089,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		 */
 		$groupby = apply_filters_ref_array( 'better_search_query_posts_groupby', array( $groupby, $query, &$this ) );
 
-		remove_filter( 'posts_groupby', array( $this, 'posts_groupby' ) );
+		Hook_Registry::remove_filter( 'posts_groupby', array( $this, 'posts_groupby' ) );
 
 		return $groupby;
 	}
@@ -1121,7 +1122,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		 */
 		$clauses = apply_filters_ref_array( 'better_search_query_posts_clauses', array( $clauses, $query, &$this ) );
 
-		remove_filter( 'posts_clauses', array( $this, 'posts_clauses' ) );
+		Hook_Registry::remove_filter( 'posts_clauses', array( $this, 'posts_clauses' ) );
 
 		return $clauses;
 	}
@@ -1154,7 +1155,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		 */
 		$request = apply_filters_ref_array( 'better_search_query_posts_request', array( $request, $query, &$this ) );
 
-		remove_filter( 'posts_request', array( $this, 'posts_request' ) );
+		Hook_Registry::remove_filter( 'posts_request', array( $this, 'posts_request' ) );
 
 		return $request;
 	}
@@ -1226,7 +1227,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		 */
 		$posts = apply_filters_ref_array( 'better_search_query_posts_pre_query', array( $posts, $query, &$this ) );
 
-		remove_filter( 'posts_pre_query', array( $this, 'posts_pre_query' ) );
+		Hook_Registry::remove_filter( 'posts_pre_query', array( $this, 'posts_pre_query' ) );
 
 		return $posts;
 	}
@@ -1312,7 +1313,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		 */
 		$posts = apply_filters_ref_array( 'better_search_query_the_posts', array( $posts, $query, &$this ) );
 
-		remove_filter( 'the_posts', array( $this, 'the_posts' ) );
+		Hook_Registry::remove_filter( 'the_posts', array( $this, 'the_posts' ) );
 
 		return $posts;
 	}
@@ -1324,10 +1325,11 @@ class Better_Search_Core_Query extends \WP_Query {
 	 * @since 4.0.6 Changed filter to `better_search_query_posts_request`
 	 *
 	 * @param string                   $request The complete SQL query.
-	 * @param Better_Search_Core_Query $query   The Better_Search instance (passed by reference).
+	 * @param \WP_Query                $query   The WP_Query instance (passed by reference).
+	 * @param Better_Search_Core_Query $instance The Better_Search instance (passed by reference).
 	 * @return string   The SQL query.
 	 */
-	public function set_topscore( $request, $query ) {
+	public function set_topscore( $request, $query, $instance ) {
 		global $wpdb;
 
 		if ( ! $this->is_better_search( $query ) || ! $this->use_fulltext || ! empty( $query->query_args['is_nested_query'] ) || ! empty( $query->query_vars['is_nested_query'] ) ) {
@@ -1336,12 +1338,12 @@ class Better_Search_Core_Query extends \WP_Query {
 			return $request;
 		}
 
-		if ( $this->should_use_custom_table() ) {
+		if ( $this->should_use_custom_table() && $instance->topscore >= 0 ) {
 			return $request;
 		}
 
 		// Initialize cache variables.
-		$topscore   = 0;
+		$topscore   = false;
 		$cache_name = '';
 		$cache_time = 0;
 

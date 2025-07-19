@@ -7,6 +7,7 @@
 
 namespace WebberZone\Better_Search\Admin;
 
+use WebberZone\Better_Search\Util\Hook_Registry;
 use function WebberZone\Better_Search\better_search;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -36,8 +37,8 @@ class Admin_Notices {
 	 */
 	public function __construct() {
 		// Add initialization hook that runs after full plugin setup.
-		add_action( 'admin_init', array( $this, 'init' ), 5 );
-		add_action( 'admin_init', array( $this, 'update_db_check' ) );
+		Hook_Registry::add_action( 'admin_init', array( $this, 'init' ), 5 );
+		Hook_Registry::add_action( 'admin_init', array( $this, 'update_db_check' ) );
 	}
 
 	/**
@@ -109,7 +110,7 @@ class Admin_Notices {
 		);
 
 		if ( is_multisite() ) {
-			add_action(
+			Hook_Registry::add_action(
 				'network_admin_notices',
 				function () use ( $message ) {
 					// Check if admin_notices_api is available.

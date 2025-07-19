@@ -8,6 +8,7 @@
 namespace WebberZone\Better_Search\Frontend;
 
 use WebberZone\Better_Search\Util\Helpers;
+use WebberZone\Better_Search\Util\Hook_Registry;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -34,10 +35,10 @@ class Display {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		add_filter( 'the_content', array( $this, 'content' ), 999 );
-		add_filter( 'get_the_excerpt', array( $this, 'content' ), 999 );
-		add_filter( 'the_title', array( $this, 'content' ), 999 );
-		add_filter( 'the_bsearch_excerpt', array( $this, 'content' ), 999 );
+		Hook_Registry::add_filter( 'the_content', array( $this, 'content' ), 999 );
+		Hook_Registry::add_filter( 'get_the_excerpt', array( $this, 'content' ), 999 );
+		Hook_Registry::add_filter( 'the_title', array( $this, 'content' ), 999 );
+		Hook_Registry::add_filter( 'the_bsearch_excerpt', array( $this, 'content' ), 999 );
 	}
 
 	/**
