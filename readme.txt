@@ -127,6 +127,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 	* [Pro] New: Efficient Content Storage and Indexing – Custom tables implementation for better performance and query optimization while maintaining the same relevance algorithm.
 	* [Pro] New: MAX_EXECUTION_TIME hint for MySQL queries.
 	* [Pro] New: LIKE fallback search.
+	* Fulltext indexes are now named `wz_title_content`, `wz_title`, and `wz_content` to ensure compatibility and optimize database space, especially when using Contextual Related Posts. After updating to this version, please recreate the indexes to benefit from the changes—until then, the plugin will use the previous index names.
 	* Copy to clipboard functionality for SQL queries in the Tools page.
 
 * Modifications:
