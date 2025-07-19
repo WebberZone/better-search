@@ -152,3 +152,79 @@ jQuery(document).ready(
 		);
 	}
 );
+
+/**
+ * Copy text to clipboard
+ * 
+ * @param {string} elementId - ID of the element containing text to copy
+ * @returns {void}
+ */
+function bsearchCopyToClipboard(elementId) {
+	const element = document.getElementById(elementId);
+	if (!element) return;
+
+	const button = element.parentElement.querySelector('.bsearch-copy-button');
+	if (!button) return;
+
+	navigator.clipboard.writeText(element.textContent).then(() => {
+		const icon = button.querySelector('.dashicons');
+		icon.classList.remove('dashicons-clipboard');
+		icon.classList.add('dashicons-yes');
+		button.classList.add('copied');
+		button.title = better_search_admin.copied;
+
+		setTimeout(() => {
+			icon.classList.remove('dashicons-yes');
+			icon.classList.add('dashicons-clipboard');
+			button.classList.remove('copied');
+			button.title = better_search_admin.copyToClipboard;
+		}, 2000);
+	}).catch(() => {
+		const icon = button.querySelector('.dashicons');
+		icon.classList.remove('dashicons-clipboard');
+		icon.classList.add('dashicons-warning');
+		button.classList.add('error');
+		button.title = better_search_admin.copyError;
+
+		setTimeout(() => {
+			icon.classList.remove('dashicons-warning');
+			icon.classList.add('dashicons-clipboard');
+			button.classList.remove('error');
+			button.title = better_search_admin.copyToClipboard;
+		}, 2000);
+	});
+}
+
+/**
+ * Add copy button to code blocks
+ * 
+ * @param {string} elementId - ID of the element to add copy button to
+ * @returns {void}
+ */
+function bsearchAddCopyButton(elementId) {
+	const element = document.getElementById(elementId);
+	if (!element) return;
+
+	const button = document.createElement('button');
+	button.type = 'button';
+	button.className = 'bsearch-copy-button';
+	button.setAttribute('aria-label', better_search_admin.copyToClipboard);
+	button.title = better_search_admin.copyToClipboard;
+	button.onclick = () => bsearchCopyToClipboard(elementId);
+
+	const screenReaderText = document.createElement('span');
+	screenReaderText.className = 'screen-reader-text';
+	screenReaderText.textContent = better_search_admin.copyToClipboard;
+
+	const icon = document.createElement('span');
+	icon.className = 'dashicons dashicons-clipboard';
+	icon.setAttribute('aria-hidden', 'true');
+
+	button.appendChild(screenReaderText);
+	button.appendChild(icon);
+
+	const wrapper = element.parentElement;
+	if (wrapper && wrapper.classList.contains('bsearch-code-wrapper')) {
+		wrapper.appendChild(button);
+	}
+}
