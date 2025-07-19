@@ -11,6 +11,7 @@
 namespace WebberZone\Better_Search\Admin;
 
 use WebberZone\Better_Search\Util\Helpers;
+use WebberZone\Better_Search\Util\Hook_Registry;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -38,9 +39,9 @@ class Dashboard {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
-		add_action( 'wp_ajax_bsearch_chart_data', array( $this, 'get_chart_data' ) );
+		Hook_Registry::add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		Hook_Registry::add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		Hook_Registry::add_action( 'wp_ajax_bsearch_chart_data', array( $this, 'get_chart_data' ) );
 	}
 
 	/**
@@ -195,7 +196,7 @@ class Dashboard {
 			array( $this, 'render_page' )
 		);
 
-		add_action( 'load-' . $this->parent_id, array( $this, 'help_tabs' ) );
+		Hook_Registry::add_action( 'load-' . $this->parent_id, array( $this, 'help_tabs' ) );
 	}
 
 	/**

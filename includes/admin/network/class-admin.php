@@ -10,6 +10,7 @@
 namespace WebberZone\Better_Search\Admin\Network;
 
 use WebberZone\Better_Search\Main;
+use WebberZone\Better_Search\Util\Hook_Registry;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -54,10 +55,10 @@ class Admin {
 	 * @since 4.0.0
 	 */
 	public function hooks() {
-		add_action( 'network_admin_menu', array( $this, 'network_admin_menu' ) );
-		add_action( 'admin_post_bsearch_copy_settings', array( $this, 'handle_copy_settings' ) );
-		add_action( 'network_admin_notices', array( $this, 'show_settings_copied_notice' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		Hook_Registry::add_action( 'network_admin_menu', array( $this, 'network_admin_menu' ) );
+		Hook_Registry::add_action( 'admin_post_bsearch_copy_settings', array( $this, 'handle_copy_settings' ) );
+		Hook_Registry::add_action( 'network_admin_notices', array( $this, 'show_settings_copied_notice' ) );
+		Hook_Registry::add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 
 	/**

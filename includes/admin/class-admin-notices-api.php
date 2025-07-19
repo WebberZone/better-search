@@ -7,6 +7,8 @@
 
 namespace WebberZone\Better_Search\Admin;
 
+use WebberZone\Better_Search\Util\Hook_Registry;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -34,8 +36,8 @@ class Admin_Notices_API {
 	 * @since 4.2.0
 	 */
 	public function __construct() {
-		add_action( 'admin_notices', array( $this, 'display_notices' ) );
-		add_action( 'wp_ajax_bsearch_dismiss_notice', array( $this, 'handle_notice_dismissal' ) );
+		Hook_Registry::add_action( 'admin_notices', array( $this, 'display_notices' ) );
+		Hook_Registry::add_action( 'wp_ajax_bsearch_dismiss_notice', array( $this, 'handle_notice_dismissal' ) );
 	}
 
 	/**

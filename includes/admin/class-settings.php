@@ -11,6 +11,7 @@
 namespace WebberZone\Better_Search\Admin;
 
 use WebberZone\Better_Search\Util\Helpers;
+use WebberZone\Better_Search\Util\Hook_Registry;
 
 use function WebberZone\Better_Search\bsearch_freemius;
 
@@ -73,12 +74,12 @@ class Settings {
 		self::$prefix       = 'bsearch';
 		$this->menu_slug    = 'bsearch_options_page';
 
-		add_action( 'admin_menu', array( $this, 'initialise_settings' ) );
-		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 11, 2 );
-		add_filter( 'plugin_action_links_' . plugin_basename( BETTER_SEARCH_PLUGIN_FILE ), array( $this, 'plugin_actions_links' ) );
-		add_filter( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 99 );
-		add_filter( self::$prefix . '_settings_sanitize', array( $this, 'change_settings_on_save' ), 99 );
-		add_filter( self::$prefix . '_after_setting_output', array( $this, 'after_setting_output' ), 10, 2 );
+		Hook_Registry::add_action( 'admin_menu', array( $this, 'initialise_settings' ) );
+		Hook_Registry::add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 11, 2 );
+		Hook_Registry::add_filter( 'plugin_action_links_' . plugin_basename( BETTER_SEARCH_PLUGIN_FILE ), array( $this, 'plugin_actions_links' ) );
+		Hook_Registry::add_filter( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 99 );
+		Hook_Registry::add_filter( self::$prefix . '_settings_sanitize', array( $this, 'change_settings_on_save' ), 99 );
+		Hook_Registry::add_filter( self::$prefix . '_after_setting_output', array( $this, 'after_setting_output' ), 10, 2 );
 	}
 
 	/**

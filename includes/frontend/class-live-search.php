@@ -7,6 +7,8 @@
 
 namespace WebberZone\Better_Search\Frontend;
 
+use WebberZone\Better_Search\Util\Hook_Registry;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -22,9 +24,9 @@ class Live_Search {
 	 * Constructor to initialize the class.
 	 */
 	public function __construct() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_action( 'wp_ajax_bsearch_live_search', array( $this, 'live_search' ) );
-		add_action( 'wp_ajax_nopriv_bsearch_live_search', array( $this, 'live_search' ) );
+		Hook_Registry::add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		Hook_Registry::add_action( 'wp_ajax_bsearch_live_search', array( $this, 'live_search' ) );
+		Hook_Registry::add_action( 'wp_ajax_nopriv_bsearch_live_search', array( $this, 'live_search' ) );
 	}
 
 	/**

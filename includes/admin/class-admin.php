@@ -10,6 +10,7 @@
 namespace WebberZone\Better_Search\Admin;
 
 use WebberZone\Better_Search\Util\Cache;
+use WebberZone\Better_Search\Util\Hook_Registry;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -176,7 +177,7 @@ class Admin {
 	 * @since 3.3.0
 	 */
 	public function hooks() {
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		Hook_Registry::add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 
 	/**

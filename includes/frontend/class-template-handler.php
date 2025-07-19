@@ -8,6 +8,7 @@
 namespace WebberZone\Better_Search\Frontend;
 
 use WebberZone\Better_Search\Util\Helpers;
+use WebberZone\Better_Search\Util\Hook_Registry;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -26,16 +27,16 @@ class Template_Handler {
 	 * @since 4.0.0
 	 */
 	public function __construct() {
-		add_action( 'parse_query', array( $this, 'load_seamless_mode' ) );
-		add_filter( 'template_include', array( $this, 'template_include' ) );
-		add_action( 'init', array( $this, 'register_patterns' ) );
-		add_filter( 'get_block_templates', array( $this, 'manage_block_templates' ), 10, 3 );
+		Hook_Registry::add_action( 'parse_query', array( $this, 'load_seamless_mode' ) );
+		Hook_Registry::add_filter( 'template_include', array( $this, 'template_include' ) );
+		Hook_Registry::add_action( 'init', array( $this, 'register_patterns' ) );
+		Hook_Registry::add_filter( 'get_block_templates', array( $this, 'manage_block_templates' ), 10, 3 );
 
 		$template_types = array( 'search', 'archive', 'index' );
 
 		foreach ( $template_types as $template_type ) {
 			$callback = "add_custom_{$template_type}_template";
-			add_filter( "{$template_type}_template_hierarchy", array( $this, $callback ) );
+			Hook_Registry::add_filter( "{$template_type}_template_hierarchy", array( $this, $callback ) );
 		}
 	}
 
@@ -99,7 +100,7 @@ class Template_Handler {
 		status_header( 200 );
 
 		// Add necessary code to the head.
-		add_action( 'wp_head', array( $this, 'wp_head' ) );
+		Hook_Registry::add_action( 'wp_head', array( $this, 'wp_head' ) );
 
 		// Check for a template file within the parent or child theme.
 		$template_paths = array(

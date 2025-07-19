@@ -8,6 +8,8 @@
 namespace WebberZone\Better_Search;
 
 use WebberZone\Better_Search\Admin\Activator;
+use WebberZone\Better_Search\Util\Hook_Registry;
+
 if ( ! defined( 'WPINC' ) ) {
 	exit;
 }
@@ -153,6 +155,12 @@ final class Main {
 		$this->template_handler = new Frontend\Template_Handler();
 		$this->hooks();
 
+		if ( bsearch_freemius()->is__premium_only() ) {
+			if ( bsearch_freemius()->can_use_premium_code() ) {
+				$this->pro = new Pro\Pro();
+			}
+		}
+
 		if ( is_admin() ) {
 			$this->admin = new Admin\Admin();
 
@@ -168,11 +176,11 @@ final class Main {
 	 * @since 3.3.0
 	 */
 	public function hooks() {
-		add_action( 'init', array( $this, 'initiate_plugin' ) );
-		add_action( 'widgets_init', array( $this, 'register_widgets' ) );
+		Hook_Registry::add_action( 'init', array( $this, 'initiate_plugin' ) );
+		Hook_Registry::add_action( 'widgets_init', array( $this, 'register_widgets' ) );
 
-		add_action( 'activated_plugin', array( $this, 'activated_plugin' ), 10, 2 );
-		add_action( 'pre_current_active_plugins', array( $this, 'plugin_deactivated_notice' ) );
+		Hook_Registry::add_action( 'activated_plugin', array( $this, 'activated_plugin' ), 10, 2 );
+		Hook_Registry::add_action( 'pre_current_active_plugins', array( $this, 'plugin_deactivated_notice' ) );
 	}
 
 	/**
