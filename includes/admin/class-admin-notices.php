@@ -8,6 +8,7 @@
 namespace WebberZone\Better_Search\Admin;
 
 use WebberZone\Better_Search\Util\Hook_Registry;
+use WebberZone\Better_Search\Db;
 use function WebberZone\Better_Search\better_search;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -174,7 +175,7 @@ class Admin_Notices {
 					function () {
 						return current_user_can( 'manage_options' ) &&
 								\bsearch_get_option( 'use_fulltext' ) &&
-								! Activator::is_fulltext_index_installed();
+								! Db::is_fulltext_index_installed();
 					},
 				),
 			)
@@ -212,8 +213,8 @@ class Admin_Notices {
 				'conditions'  => array(
 					function () use ( $table_name, $table_name_daily ) {
 						return current_user_can( 'manage_options' ) &&
-								( ! Activator::is_table_installed( $table_name ) ||
-								! Activator::is_table_installed( $table_name_daily ) );
+								( ! Db::is_table_installed( $table_name ) ||
+								! Db::is_table_installed( $table_name_daily ) );
 					},
 				),
 			)

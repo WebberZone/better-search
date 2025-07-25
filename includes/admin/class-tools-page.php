@@ -10,6 +10,7 @@
 namespace WebberZone\Better_Search\Admin;
 
 use WebberZone\Better_Search\Util\Hook_Registry;
+use WebberZone\Better_Search\Db;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -119,17 +120,17 @@ class Tools_Page {
 
 		/* Create tables */
 		if ( ( isset( $_POST['bsearch_create_tables'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
-			Activator::create_tables();
+			Db::create_tables();
 			add_settings_error( 'bsearch-notices', '', esc_html__( 'Tables have been created', 'better-search' ), 'success' );
 		}
 
 		/* Recreate tables */
 		if ( ( isset( $_POST['bsearch_recreate_overall'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
-			Activator::recreate_overall_table( false );
+			Db::recreate_overall_table( false );
 			add_settings_error( 'bsearch-notices', '', esc_html__( 'Overall tables have been recreated', 'better-search' ), 'success' );
 		}
 		if ( ( isset( $_POST['bsearch_recreate_daily'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
-			Activator::recreate_daily_table( false );
+			Db::recreate_daily_table( false );
 			add_settings_error( 'bsearch-notices', '', esc_html__( 'Daily tables have been recreated', 'better-search' ), 'success' );
 		}
 
@@ -392,15 +393,15 @@ class Tools_Page {
 	public static function recreate_indices_sql() {
 		global $wpdb;
 
-		$old_indexes = Activator::get_old_fulltext_indexes();
-		$new_indexes = Activator::get_fulltext_indexes();
+		$old_indexes = Db::get_old_fulltext_indexes();
+		$new_indexes = Db::get_fulltext_indexes();
 		$all_indexes = array_keys( array_merge( $old_indexes, $new_indexes ) );
 
 		$sql = array();
 
 		// Add DROP statements for all possible indexes.
 		foreach ( $all_indexes as $index ) {
-			if ( Activator::is_index_installed( $index ) ) {
+			if ( Db::is_index_installed( $index ) ) {
 				$sql[] = "ALTER TABLE {$wpdb->posts} DROP INDEX {$index};";
 			}
 		}
@@ -423,18 +424,18 @@ class Tools_Page {
 	public static function recreate_index() {
 		global $wpdb;
 
-		$old_indexes = Activator::get_old_fulltext_indexes();
-		$new_indexes = Activator::get_fulltext_indexes();
+		$old_indexes = Db::get_old_fulltext_indexes();
+		$new_indexes = Db::get_fulltext_indexes();
 		$all_indexes = array_keys( array_merge( $old_indexes, $new_indexes ) );
 
 		foreach ( $all_indexes as $index ) {
-			if ( Activator::is_index_installed( $index ) ) {
+			if ( Db::is_index_installed( $index ) ) {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				$wpdb->query( "ALTER TABLE {$wpdb->posts} DROP INDEX {$index}" );
 			}
 		}
 
-		Activator::create_fulltext_indexes();
+		Db::create_fulltext_indexes();
 	}
 
 	/**

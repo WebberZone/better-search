@@ -9,6 +9,7 @@
 
 namespace WebberZone\Better_Search\Admin;
 
+use WebberZone\Better_Search\Db;
 use WebberZone\Better_Search\Util\Hook_Registry;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -154,8 +155,8 @@ class Upgrader {
 		$current_db_version = get_option( 'bsearch_db_version' );
 
 		if ( version_compare( $current_db_version, BETTER_SEARCH_DB_VERSION, '<' ) ) {
-			$success_overall = Activator::recreate_overall_table();
-			$success_daily   = Activator::recreate_daily_table();
+			$success_overall = Db::recreate_overall_table();
+			$success_daily   = Db::recreate_daily_table();
 
 			if ( is_wp_error( $success_overall ) ) {
 				return $success_overall->get_error_message();

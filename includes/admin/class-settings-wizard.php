@@ -1,6 +1,6 @@
 <?php
 /**
- * Settings Wizard for Better Search Pro.
+ * Settings Wizard for Better Search.
  *
  * Provides a guided setup experience for new users.
  *
@@ -21,7 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Settings Wizard class for Better Search Pro.
+ * Settings Wizard class for Better Search.
  *
  * @since 4.2.0
  */
@@ -106,8 +106,8 @@ class Settings_Wizard extends Settings_Wizard_API {
 
 		return array(
 			'welcome'        => array(
-				'title'       => __( 'Welcome to Better Search Pro', 'better-search' ),
-				'description' => __( 'Thank you for installing Better Search Pro! This wizard will help you configure the essential settings to get started quickly.', 'better-search' ),
+				'title'       => __( 'Welcome to Better Search', 'better-search' ),
+				'description' => __( 'Thank you for installing Better Search! This wizard will help you configure the essential settings to get started quickly.', 'better-search' ),
 				'settings'    => array(),
 			),
 			'basic_search'   => array(
@@ -127,7 +127,7 @@ class Settings_Wizard extends Settings_Wizard_API {
 			),
 			'completion'     => array(
 				'title'       => __( 'Setup Complete!', 'better-search' ),
-				'description' => __( 'Your Better Search Pro setup is now complete. You can always modify these settings later from the Settings page.', 'better-search' ),
+				'description' => __( 'Your Better Search setup is now complete. You can always modify these settings later from the Settings page.', 'better-search' ),
 				'settings'    => array(),
 			),
 		);
@@ -162,14 +162,14 @@ class Settings_Wizard extends Settings_Wizard_API {
 	 */
 	protected function get_translation_strings() {
 		return array(
-			'wizard_title'    => __( 'Better Search Pro Setup Wizard', 'better-search' ),
+			'wizard_title'    => __( 'Better Search Setup Wizard', 'better-search' ),
 			'next_step'       => __( 'Continue', 'better-search' ),
 			'previous_step'   => __( 'Go Back', 'better-search' ),
 			'finish_setup'    => __( 'Complete Setup', 'better-search' ),
 			'skip_wizard'     => __( 'Skip Setup Wizard', 'better-search' ),
 			'step_of'         => __( 'Step %1$d of %2$d', 'better-search' ),
 			'wizard_complete' => __( 'Setup Complete!', 'better-search' ),
-			'setup_complete'  => __( 'Better Search Pro has been configured successfully. Your search functionality is now ready to use!', 'better-search' ),
+			'setup_complete'  => __( 'Better Search has been configured successfully. Your search functionality is now ready to use!', 'better-search' ),
 		);
 	}
 
@@ -247,7 +247,7 @@ class Settings_Wizard extends Settings_Wizard_API {
 				'id'          => 'bsearch_wizard_notice',
 				'message'     => sprintf(
 					'<p>%s</p><p><a href="%s" class="button button-primary">%s</a></p>',
-					esc_html__( 'Welcome to Better Search Pro! Would you like to run the setup wizard to configure the plugin?', 'better-search' ),
+					esc_html__( 'Welcome to Better Search! Would you like to run the setup wizard to configure the plugin?', 'better-search' ),
 					esc_url( admin_url( 'admin.php?page=bsearch_wizard' ) ),
 					esc_html__( 'Run Setup Wizard', 'better-search' )
 				),
