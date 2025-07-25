@@ -2,7 +2,6 @@
 /**
  * Register Settings.
  *
- * @link  https://webberzone.com
  * @since 3.3.0
  *
  * @package WebberZone\Better_Search\Admin
@@ -80,6 +79,7 @@ class Settings {
 		Hook_Registry::add_filter( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 99 );
 		Hook_Registry::add_filter( self::$prefix . '_settings_sanitize', array( $this, 'change_settings_on_save' ), 99 );
 		Hook_Registry::add_filter( self::$prefix . '_after_setting_output', array( $this, 'after_setting_output' ), 10, 2 );
+		Hook_Registry::add_action( 'bsearch_settings_form_buttons', array( $this, 'add_wizard_button' ) );
 	}
 
 	/**
@@ -223,7 +223,7 @@ class Settings {
 			'seamless'            => array(
 				'id'      => 'seamless',
 				'name'    => esc_html__( 'Enable seamless integration', 'better-search' ),
-				'desc'    => esc_html__( "Complete integration with your theme. Enabling this option will ignore better-search-template.php. It will continue to display the search results sorted by relevance, although it won't display the percentage relevance.", 'better-search' ),
+				'desc'    => esc_html__( "Seamlessly integrate Better Search results with your theme's native search template. When enabled, Better Search will use your theme's layout for search results while still sorting them by relevance. Note: relevance percentages will not be shown in this mode and the custom better-search-template.php will be ignored.", 'better-search' ),
 				'type'    => 'checkbox',
 				'options' => true,
 			),
@@ -621,7 +621,7 @@ class Settings {
 			'highlight'                 => array(
 				'id'      => 'highlight',
 				'name'    => esc_html__( 'Highlight search terms', 'better-search' ),
-				'desc'    => esc_html__( 'If enabled, the search terms are wrapped with the class <code>bsearch_highlight</code> on the search results page. The default stylesheet includes CSS to add some colour.', 'better-search' ),
+				'desc'    => esc_html__( 'If enabled, the search terms are wrapped with the class "bsearch_highlight" on the search results page. The default stylesheet includes CSS to add some colour.', 'better-search' ),
 				'type'    => 'checkbox',
 				'options' => true,
 			),
@@ -1202,5 +1202,20 @@ class Settings {
 		}
 
 		return $output;
+	}
+
+	/**
+	 * Add a button to the settings page to start the settings wizard.
+	 *
+	 * @since 4.2.0
+	 */
+	public function add_wizard_button() {
+		printf(
+			'<br /><a aria-label="%s" class="button button-secondary" href="%s" title="%s" style="margin-top: 10px;">%s</a>',
+			esc_attr__( 'Start Settings Wizard', 'better-search' ),
+			esc_url( admin_url( 'admin.php?page=bsearch_wizard' ) ),
+			esc_attr__( 'Start Settings Wizard', 'better-search' ),
+			esc_html__( 'Start Settings Wizard', 'better-search' )
+		);
 	}
 }

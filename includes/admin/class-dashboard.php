@@ -2,7 +2,6 @@
 /**
  * Dashboard.
  *
- * @link https://webberzone.com
  * @since 3.3.0
  *
  * @package Better_Search

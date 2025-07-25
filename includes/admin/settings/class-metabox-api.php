@@ -198,7 +198,7 @@ class Metabox_API {
 
 		foreach ( $this->registered_settings as $setting ) {
 			$id   = $setting['id'];
-			$type = isset( $setting['type'] ) ? $setting['type'] : 'text';
+			$type = $setting['type'] ?? 'text';
 
 			/**
 			 * Skip settings that are not really settings.
@@ -287,7 +287,7 @@ class Metabox_API {
 			$id            = $args['id'];
 			$value         = get_post_meta( $post->ID, "_{$this->prefix}_{$id}", true );
 			$args['value'] = ! empty( $value ) ? $value : ( isset( $args['default'] ) ? $args['default'] : $args['options'] );
-			$type          = isset( $args['type'] ) ? $args['type'] : 'text';
+			$type          = $args['type'] ?? 'text';
 			$callback      = method_exists( $settings_form, "callback_{$type}" ) ? array( $settings_form, "callback_{$type}" ) : array( $settings_form, 'callback_missing' );
 
 			echo '<tr>';
