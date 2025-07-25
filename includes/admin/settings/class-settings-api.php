@@ -5,7 +5,6 @@
  * Functions to register, read, write and update settings.
  * Portions of this code have been inspired by Easy Digital Downloads, WordPress Settings Sandbox, WordPress Settings API class, etc.
  *
- * @link  https://webberzone.com
  * @since 3.3.0
  *
  * @package WebberZone\Better_Search

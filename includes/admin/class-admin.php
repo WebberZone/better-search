@@ -106,6 +106,15 @@ class Admin {
 	public $cache;
 
 	/**
+	 * Settings Wizard.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @var object Settings Wizard.
+	 */
+	public $settings_wizard;
+
+	/**
 	 * Settings Page in Admin area.
 	 *
 	 * @since 3.3.0
@@ -169,6 +178,7 @@ class Admin {
 		$this->tools_page        = new Tools_Page();
 		$this->dashboard_widgets = new Dashboard_Widgets();
 		$this->cache             = new Cache();
+		$this->settings_wizard   = new Settings_Wizard();
 	}
 
 	/**
