@@ -115,20 +115,22 @@ class Admin {
 	public function render_page() {
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Better Search Multisite Settings', 'better-search' ); ?></h1>
+			<h1><?php esc_html_e( 'Better Search Pro Multisite Settings', 'better-search' ); ?></h1>
+			<?php do_action( 'bsearch_multisite_settings_header' ); ?>
+
 			<p><?php esc_html_e( 'This page allows you to configure the settings for Better Search on your multisite network.', 'better-search' ); ?></p>
 
-			<?php Main::pro_upgrade_banner( false ); ?>
 			<?php settings_errors(); ?>
 
 			<div id="poststuff">
 				<div id="post-body" class="metabox-holder columns-2">
 					<div id="post-body-content">
+						<?php Main::pro_upgrade_banner( false ); ?>
 						<?php do_action( 'bsearch_multisite_settings' ); ?>
 					</div><!-- /#post-body-content -->
 
 					<div id="postbox-container-1" class="postbox-container">
-						<?php include_once BETTER_SEARCH_PLUGIN_DIR . 'includes/admin/settings/sidebar.php'; ?>
+					<?php \WebberZone\Better_Search\Admin\Admin::display_admin_sidebar(); ?>
 					</div><!-- /#postbox-container-1 -->
 				</div><!-- /#post-body -->
 				<br class="clear" />

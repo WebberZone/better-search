@@ -1105,7 +1105,7 @@ class Settings {
 	public static function get_admin_footer_text() {
 		return sprintf(
 			/* translators: 1: Opening achor tag with Plugin page link, 2: Closing anchor tag, 3: Opening anchor tag with review link. */
-			__( 'Thank you for using %1$sWebberZone Better_Search%2$s! Please %3$srate us%2$s on %3$sWordPress.org%2$s', 'knowledgebase' ),
+			__( 'Thank you for using %1$sWebberZone Better_Search%2$s! Please %3$srate us%2$s on %3$sWordPress.org%2$s', 'better-search' ),
 			'<a href="https://webberzone.com/plugins/better-search/" target="_blank">',
 			'</a>',
 			'<a href="https://wordpress.org/support/plugin/better-search/reviews/#new-post" target="_blank">'

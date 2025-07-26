@@ -1497,7 +1497,8 @@ class Better_Search_Core_Query extends \WP_Query {
 			',',
 			_x(
 				'about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,what,when,where,who,will,with,www',
-				'Comma-separated list of search stopwords in your language'
+				'Comma-separated list of search stopwords in your language',
+				'better-search'
 			)
 		);
 

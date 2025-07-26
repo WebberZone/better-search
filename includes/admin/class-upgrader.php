@@ -166,8 +166,11 @@ class Upgrader {
 			}
 
 			update_option( 'bsearch_db_version', BETTER_SEARCH_DB_VERSION );
+
+			/* translators: %s: Site URL. */
 			return sprintf( esc_html__( 'Database upgraded on site %s', 'better-search' ), get_site_url() );
 		}
+		/* translators: %s: Site URL. */
 		return sprintf( esc_html__( 'Database is already up to date on site %s', 'better-search' ), get_site_url() );
 	}
 
