@@ -114,7 +114,10 @@ class Settings_Form {
 	 */
 	public function callback_missing( $args ) {
 		/* translators: 1: Code. */
-		printf( esc_html__( 'The callback function used for the %1$s setting is missing.' ), '<strong>' . esc_attr( $args['id'] ) . '</strong>' );
+		printf(
+			'The callback function used for the %1$s setting is missing.',
+			'<strong>' . esc_attr( $args['id'] ) . '</strong>'
+		);
 	}
 
 	/**
@@ -477,7 +480,7 @@ class Settings_Form {
 				$name,
 				(int) $option['width'],
 				(int) $option['height'],
-				(bool) $option['crop'] ? ' ' . __( 'cropped' ) : ''
+				(bool) $option['crop'] ? ' cropped' : ''
 			);
 		}
 
@@ -703,7 +706,7 @@ class Settings_Form {
 		$value = isset( $args['value'] ) ? $args['value'] : $this->get_option( $args['id'], $args['options'] );
 		$size  = sanitize_html_class( isset( $args['size'] ) ? $args['size'] : 'regular' );
 		$class = sanitize_html_class( $args['field_class'] );
-		$label = isset( $args['options']['button_label'] ) ? $args['options']['button_label'] : __( 'Choose File' );
+		$label = isset( $args['options']['button_label'] ) ? $args['options']['button_label'] : 'Choose File';
 
 		$html  = sprintf(
 			'<input type="text" class="%1$s" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>',

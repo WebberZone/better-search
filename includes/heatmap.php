@@ -166,7 +166,7 @@ function get_bsearch_heatmap( $args = array() ) {
 		$translate_nooped_plural = $args['topic_count_text'];
 	} else {
 		/* translators: %s: Number of items (search results). */
-		$translate_nooped_plural = _n_noop( '%s search', '%s searches' );
+		$translate_nooped_plural = _n_noop( '%s search', '%s searches', 'better-search' );
 	}
 
 	/**

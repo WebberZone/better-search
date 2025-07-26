@@ -249,11 +249,11 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 	<div class="bsearch-form-container">
 		<form role="search" ' . $aria_label . 'method="get" class="bsearchform" action="' . esc_url( home_url( '/' ) ) . '">
 			<div class="bsearch-form-search-field">
-				<span class="screen-reader-text">' . _x( 'Search for:', 'label' ) . '</span>
-				<input type="search" class="bsearch-field search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder' ) . '" value="' . $search_query . '" name="s" />
+				<span class="screen-reader-text">' . _x( 'Search for:', 'label', 'better-search' ) . '</span>
+				<input type="search" class="bsearch-field search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder', 'better-search' ) . '" value="' . $search_query . '" name="s" />
 			</div>
 			' . $select . '
-			<input type="submit" class="bsearch-submit searchsubmit search-submit" value="' . esc_attr_x( 'Search', 'submit button' ) . '" />
+			<input type="submit" class="bsearch-submit searchsubmit search-submit" value="' . esc_attr_x( 'Search', 'submit button', 'better-search' ) . '" />
 		</form>
 	</div>
 	';

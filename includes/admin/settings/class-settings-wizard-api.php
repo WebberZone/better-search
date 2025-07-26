@@ -237,7 +237,6 @@ class Settings_Wizard_API {
 		}
 
 		$minimize = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		$minimize = ''; // TEMPORARY fix to only load non-minized code.
 
 		// Core scripts and styles.
 		wp_enqueue_style( 'wp-color-picker' );
@@ -318,10 +317,10 @@ class Settings_Wizard_API {
 
 		$settings = array();
 
-		// Check if we have settings in the expected format (bsearch_settings array)
+		// Check if we have settings in the expected format (bsearch_settings array).
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( isset( $_POST[ $this->settings_key ] ) && is_array( $_POST[ $this->settings_key ] ) ) {
-			// Process settings from the settings array format (bsearch_settings[option_name])
+			// Process settings from the settings array format (bsearch_settings[option_name]).
 			foreach ( $current_step_config['settings'] as $setting_id => $setting_config ) {
 				// phpcs:ignore WordPress.Security.NonceVerification.Missing
 				if ( isset( $_POST[ $this->settings_key ][ $setting_id ] ) ) {
@@ -354,15 +353,15 @@ class Settings_Wizard_API {
 	protected function sanitize_setting_value( $value, $setting_config ) {
 		$type = $setting_config['type'] ?? 'text';
 
-		// Use the Settings_Sanitize class for proper sanitization
+		// Use the Settings_Sanitize class for proper sanitization.
 		$settings_sanitize = $this->settings_sanitize;
 
-		// Check if we have a specific sanitizer for this type
+		// Check if we have a specific sanitizer for this type.
 		if ( is_callable( array( $settings_sanitize, "sanitize_{$type}_field" ) ) ) {
 			return call_user_func( array( $settings_sanitize, "sanitize_{$type}_field" ), $value );
 		}
 
-		// Fallback to basic sanitization
+		// Fallback to basic sanitization.
 		if ( is_array( $value ) ) {
 			return array_map( 'sanitize_text_field', $value );
 		}
@@ -439,6 +438,10 @@ class Settings_Wizard_API {
 	protected function complete_wizard() {
 		update_option( "{$this->prefix}_wizard_completed", true );
 		update_option( "{$this->prefix}_wizard_completed_date", current_time( 'mysql' ) );
+
+		// Clean up the transient and option that triggered the wizard
+		delete_transient( "{$this->prefix}_show_wizard_activation_redirect" );
+		delete_option( "{$this->prefix}_show_wizard" );
 
 		/**
 		 * Action fired when the wizard is completed.
@@ -576,13 +579,13 @@ class Settings_Wizard_API {
 										)
 									);
 
-									// Get all settings from the main settings array
+									// Get all settings from the main settings array.
 									$all_settings = get_option( $this->settings_key, array() );
 
-									// Check if this setting exists in the saved settings
+									// Check if this setting exists in the saved settings.
 									$value = isset( $all_settings[ $setting_id ] ) ? $all_settings[ $setting_id ] : null;
 
-									// Use saved value if it exists, otherwise use default
+									// Use saved value if it exists, otherwise use default.
 									$args['value'] = ( null !== $value ) ? $value : ( isset( $args['default'] ) ? $args['default'] : '' );
 									$type          = $args['type'] ?? 'text';
 									$callback      = method_exists( $this->settings_form, "callback_{$type}" ) ? array( $this->settings_form, "callback_{$type}" ) : array( $this->settings_form, 'callback_missing' );

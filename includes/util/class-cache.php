@@ -45,6 +45,7 @@ class Cache {
 
 		wp_send_json_success(
 			array(
+				/* translators: %s is the number of entries cleared */
 				'message' => sprintf( _n( '%s entry cleared', '%s entries cleared', $count, 'better-search' ), number_format_i18n( $count ) ),
 			)
 		);

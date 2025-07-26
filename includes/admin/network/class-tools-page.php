@@ -69,15 +69,18 @@ class Tools_Page {
 		ob_start();
 		?>
 	<div class="wrap">
-		<h1><?php esc_html_e( 'Better Search Multisite Tools', 'better-search' ); ?></h1>
+		<h1><?php esc_html_e( 'Better Search Pro Multisite Tools', 'better-search' ); ?></h1>
 		<?php do_action( 'bsearch_tools_network_page_header' ); ?>
 
-		<?php Main::pro_upgrade_banner( false ); ?>
+		<p><?php esc_html_e( 'This page allows you to run tools for Better Search on your multisite network.', 'better-search' ); ?></p>
+
 		<?php settings_errors(); ?>
 
 		<div id="poststuff">
 		<div id="post-body" class="metabox-holder columns-2">
 		<div id="post-body-content">
+
+			<?php Main::pro_upgrade_banner( false ); ?>
 
 			<?php
 			/**

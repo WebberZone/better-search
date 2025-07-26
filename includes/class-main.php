@@ -272,14 +272,14 @@ final class Main {
 	 * @param bool $donate Whether to show the donate banner.
 	 */
 	public static function pro_upgrade_banner( $donate = true ) {
-		if ( function_exists( 'bsearch_freemius' ) && ! bsearch_freemius()->is_paying() ) {
+		if ( function_exists( __NAMESPACE__ . '\bsearch_freemius' ) && ! bsearch_freemius()->is_paying() ) {
 			?>
 				<div id="pro-upgrade-banner">
 					<div class="inside">
-						<p><a href="https://webberzone.com/plugins/better-search/pro/" target="_blank"><img src="<?php echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/better-search-pro-banner.png' ); ?>" alt="<?php esc_html_e( 'Better Search Pro - Coming soon. Sign up to find out more', 'better-search' ); ?>" width="300" height="300" style="max-width: 100%;" /></a></p>
+						<p><a href="https://webberzone.com/plugins/better-search/pro/" target="_blank"><img src="<?php echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/better-search-pro-banner.png' ); ?>" alt="<?php esc_html_e( 'Learn more about Better Search Pro', 'better-search' ); ?>" width="300" height="300" style="max-width: 100%;" /></a></p>
 
 						<?php if ( $donate ) : ?>							
-							<p style="text-align:center;"><?php esc_html_e( 'OR' ); ?></p>
+							<p style="text-align:center;"><?php esc_html_e( 'OR', 'better-search' ); ?></p>
 							<p><a href="https://wzn.io/donate-bs" target="_blank"><img src="<?php echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/support.webp' ); ?>" alt="<?php esc_html_e( 'Support the development - Send us a donation today.', 'better-search' ); ?>" width="300" height="169" style="max-width: 100%;" /></a></p>
 						<?php endif; ?>
 					</div>

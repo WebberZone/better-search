@@ -60,7 +60,9 @@ class Live_Search {
 					'back_to_input'      => __( 'Back to search input', 'better-search-pro' ),
 					'error_loading'      => __( 'Error loading search results', 'better-search-pro' ),
 					'no_suggestions'     => __( 'No search suggestions found', 'better-search-pro' ),
+					/* translators: %d is the number of suggestions found */
 					'suggestions_found'  => __( '%d search suggestions found. Use up and down arrow keys to navigate.', 'better-search-pro' ),
+					/* translators: %s is the destination being navigated to */
 					'navigating_to'      => __( 'Navigating to %s', 'better-search-pro' ),
 					'submitting_search'  => __( 'Submitting search', 'better-search-pro' ),
 				),
