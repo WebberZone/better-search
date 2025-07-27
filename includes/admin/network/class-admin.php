@@ -125,7 +125,17 @@ class Admin {
 			<div id="poststuff">
 				<div id="post-body" class="metabox-holder columns-2">
 					<div id="post-body-content">
-						<?php Main::pro_upgrade_banner( false ); ?>
+						<?php
+						Main::pro_upgrade_banner(
+							false,
+							sprintf(
+								/* translators: 1: link to Network Plugins page, 2: link to account page */
+								__( 'If you are running Better Search Pro and see the upgrade banner instead of the settings, you may need to activate your license. Go to the %1$s, locate Better Search Pro, and activate your license from there. View your %2$s to check the status of your license.', 'better-search' ),
+								'<a href="' . esc_url( network_admin_url( 'plugins.php' ) ) . '" target="_blank">' . esc_html__( 'Network Plugins page', 'better-search' ) . '</a>',
+								'<a href="' . esc_url( \WebberZone\Better_Search\bsearch_freemius()->get_account_url() ) . '" target="_blank">' . esc_html__( 'account page', 'better-search' ) . '</a>'
+							)
+						);
+						?>
 						<?php do_action( 'bsearch_multisite_settings' ); ?>
 					</div><!-- /#post-body-content -->
 

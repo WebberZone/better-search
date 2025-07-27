@@ -269,13 +269,18 @@ final class Main {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param bool $donate Whether to show the donate banner.
+	 * @param bool   $donate        Whether to show the donate banner.
+	 * @param string $custom_text   Custom text to show in the banner.
 	 */
-	public static function pro_upgrade_banner( $donate = true ) {
+	public static function pro_upgrade_banner( $donate = true, $custom_text = '' ) {
 		if ( function_exists( __NAMESPACE__ . '\bsearch_freemius' ) && ! bsearch_freemius()->is_paying() ) {
 			?>
 				<div id="pro-upgrade-banner">
 					<div class="inside">
+						<?php if ( ! empty( $custom_text ) ) : ?>
+							<p><?php echo wp_kses_post( $custom_text ); ?></p>
+						<?php endif; ?>
+
 						<p><a href="https://webberzone.com/plugins/better-search/pro/" target="_blank"><img src="<?php echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/better-search-pro-banner.png' ); ?>" alt="<?php esc_html_e( 'Learn more about Better Search Pro', 'better-search' ); ?>" width="300" height="300" style="max-width: 100%;" /></a></p>
 
 						<?php if ( $donate ) : ?>							
