@@ -1,8 +1,8 @@
 /* Only apply positioning to forms that have Better Search autocomplete - exclude Max Mega Menu */
-.search-form:has(.bsearch-autocomplete-results):not(.mega-search),
-form[role="search"]:has(.bsearch-autocomplete-results):not(.mega-search),
-.search-form.bsearch-enabled:not(.mega-search),
-form[role="search"].bsearch-enabled:not(.mega-search) {
+.search-form:has(.bsearch-autocomplete-results),
+form[role="search"]:has(.bsearch-autocomplete-results),
+.search-form.bsearch-enabled,
+form[role="search"].bsearch-enabled {
     position: relative;
 }
 
