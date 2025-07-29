@@ -2,7 +2,7 @@
  * Manages autocomplete search functionality for forms
  */
 class SearchAutocomplete {
-    static SELECTOR = '.search-form, form[role="search"]:not(.mega-search)';
+    static SELECTOR = '.search-form, form[role="search"]';
     static DEBOUNCE_DELAY = 300;
 
     static CACHE_TIMEOUT = 5 * 60 * 1000; // 5 minutes.
@@ -17,6 +17,9 @@ class SearchAutocomplete {
         this.observer = null;
 
         if (!this.searchInput) return;
+
+        // Add class to identify forms with Better Search functionality
+        this.form.classList.add('bsearch-enabled');
 
         this.initializeElements();
         this.bindEvents();
