@@ -369,7 +369,6 @@ class SearchAutocomplete {
      * Clears search results
      */
     clearResults() {
-        // Disconnect and reconnect observer when clearing results to prevent memory leaks
         if (this.observer) {
             this.observer.disconnect();
             this.observer.observe(this.resultsContainer, { childList: true, subtree: true });
@@ -510,6 +509,11 @@ class SearchAutocomplete {
 
         this.resultsContainer.appendChild(ul);
         this.resultsContainer.style.display = 'block';
+        
+        // Force proper rendering of the container
+        this.resultsContainer.style.height = 'auto';
+        this.resultsContainer.style.minHeight = '50px';
+        
         this.announce(bsearch_live_search.strings.suggestions_found.replace('%d', results.length));
     }
 }
