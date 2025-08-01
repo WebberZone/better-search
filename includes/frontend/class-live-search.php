@@ -65,6 +65,10 @@ class Live_Search {
 					/* translators: %s is the destination being navigated to */
 					'navigating_to'      => __( 'Navigating to %s', 'better-search-pro' ),
 					'submitting_search'  => __( 'Submitting search', 'better-search-pro' ),
+					/* translators: %1$d is the current result number, %2$d is the total number of results */
+					'result_position'    => __( 'Result %1$d of %2$d', 'better-search-pro' ),
+					/* translators: %s is the post title */
+					'view_post'          => __( 'View post: %s', 'better-search-pro' ),
 				),
 			)
 		);
@@ -111,13 +115,19 @@ class Live_Search {
 			while ( $query->have_posts() ) {
 				$query->the_post();
 				$results[] = array(
-					'title' => html_entity_decode( get_the_title(), ENT_QUOTES, 'UTF-8' ),
+					'title' => get_the_title(),
 					'link'  => get_permalink(),
 				);
 			}
 		}
 		wp_reset_postdata();
 
-		wp_send_json( $results );
+		$response = array(
+			'results' => $results,
+			'total'   => count( $results ),
+			'query'   => $search_query,
+		);
+
+		wp_send_json( $response );
 	}
 }
