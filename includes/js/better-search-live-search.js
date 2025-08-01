@@ -77,8 +77,30 @@ class SearchAutocomplete {
      * Inserts results container after submit button or input
      */
     insertResultsContainer() {
-        const insertAfter = this.submitButton || this.searchInput;
-        insertAfter.parentNode.insertBefore(this.resultsContainer, insertAfter.nextSibling);
+        // Always insert after the search input, regardless of form layout
+        this.searchInput.parentNode.insertBefore(this.resultsContainer, this.searchInput.nextSibling);
+        
+        // Position results relative to search input for better vertical layout support
+        this.positionResults();
+    }
+
+    /**
+     * Positions the results container relative to the search input
+     */
+    positionResults() {
+        const inputRect = this.searchInput.getBoundingClientRect();
+        const formRect = this.form.getBoundingClientRect();
+        
+        // Calculate position relative to form container
+        const top = inputRect.bottom - formRect.top + 4; // 4px margin
+        const left = inputRect.left - formRect.left;
+        const width = inputRect.width;
+        
+        // Apply positioning
+        this.resultsContainer.style.position = 'absolute';
+        this.resultsContainer.style.top = `${top}px`;
+        this.resultsContainer.style.left = `${left}px`;
+        this.resultsContainer.style.width = `${width}px`;
     }
 
     /**
@@ -89,6 +111,7 @@ class SearchAutocomplete {
             autocomplete: 'off',
             'aria-autocomplete': 'list',
             'aria-controls': this.resultsContainer.id,
+            'aria-expanded': 'false',
             autocapitalize: 'off',
             spellcheck: 'false'
         }).forEach(([key, value]) => {
@@ -116,6 +139,9 @@ class SearchAutocomplete {
         this.setupMutationObserver();
 
         document.addEventListener('click', this.handleDocumentClick.bind(this));
+        
+        // Reposition results on window resize
+        window.addEventListener('resize', this.positionResults.bind(this));
     }
 
     /**
@@ -351,9 +377,12 @@ class SearchAutocomplete {
      */
     handleInputBlur() {
         setTimeout(() => {
-            this.clearResults();
-            this.announce('Search suggestions closed');
-        }, 100);
+            // Only clear results if focus didn't move to our results container
+            if (!this.resultsContainer.contains(document.activeElement)) {
+                this.clearResults();
+                this.announce(bsearch_live_search.strings.suggestions_closed);
+            }
+        }, 150);
     }
 
     /**
@@ -369,6 +398,7 @@ class SearchAutocomplete {
      * Clears search results
      */
     clearResults() {
+        // Disconnect and reconnect observer when clearing results to prevent memory leaks
         if (this.observer) {
             this.observer.disconnect();
             this.observer.observe(this.resultsContainer, { childList: true, subtree: true });
@@ -378,6 +408,7 @@ class SearchAutocomplete {
         this.resultsContainer.style.display = 'none';
         this.selectedIndex = -1;
         this.searchInput.removeAttribute('aria-activedescendant');
+        this.searchInput.setAttribute('aria-expanded', 'false');
         this.announceRegion.textContent = '';
     }
 
@@ -397,7 +428,16 @@ class SearchAutocomplete {
             selectedItem.setAttribute('aria-selected', 'true');
             selectedItem.scrollIntoView({ block: 'nearest' });
             this.searchInput.setAttribute('aria-activedescendant', selectedItem.id);
-            this.announce(selectedItem.textContent);
+            
+            // Announce with position information
+            if (bsearch_live_search.strings.result_position) {
+                const positionMessage = bsearch_live_search.strings.result_position
+                    .replace('%1$d', this.selectedIndex + 1)
+                    .replace('%2$d', items.length);
+                this.announce(`${selectedItem.textContent}. ${positionMessage}`);
+            } else {
+                this.announce(selectedItem.textContent);
+            }
         }
     }
 
@@ -453,9 +493,12 @@ class SearchAutocomplete {
             // Check cache first
             const cachedResults = this.getCachedResults(searchTerm);
             if (cachedResults) {
-                this.displayResults(cachedResults);
+                this.displayResults(cachedResults, cachedResults.length);
                 return;
             }
+
+            // Show loading spinner
+            this.showLoadingSpinner();
 
             const response = await fetch(bsearch_live_search.ajax_url, {
                 method: 'POST',
@@ -469,21 +512,28 @@ class SearchAutocomplete {
                 }).toString()
             });
 
-            const results = await response.json();
+            const responseJson = await response.json();
+            // Handle both old format (direct array) and new format (wrapped object)
+            const results = Array.isArray(responseJson) ? responseJson : responseJson.results;
+            const total = Array.isArray(responseJson) ? responseJson.length : responseJson.total;
             this.cacheResults(searchTerm, results);
-            this.displayResults(results);
+            this.displayResults(results, total);
         } catch (error) {
             console.error('Error:', error);
             this.clearResults();
             this.announce(bsearch_live_search.strings.error_loading);
+        } finally {
+            // Always hide loading spinner
+            this.hideLoadingSpinner();
         }
     }
 
     /**
      * Displays search results
      * @param {Array} results
+     * @param {number} total
      */
-    displayResults(results) {
+    displayResults(results, total = results.length) {
         this.resultsContainer.innerHTML = '';
 
         if (!results.length) {
@@ -503,18 +553,62 @@ class SearchAutocomplete {
             const a = document.createElement('a');
             a.href = result.link;
             a.textContent = result.title;
+            // Add aria-label for better screen reader context
+            if (bsearch_live_search.strings.view_post) {
+                a.setAttribute('aria-label', bsearch_live_search.strings.view_post.replace('%s', result.title));
+            }
             li.appendChild(a);
             ul.appendChild(li);
         });
 
         this.resultsContainer.appendChild(ul);
         this.resultsContainer.style.display = 'block';
+        this.searchInput.setAttribute('aria-expanded', 'true');
         
-        // Force proper rendering of the container
-        this.resultsContainer.style.height = 'auto';
-        this.resultsContainer.style.minHeight = '50px';
+        // Reposition results when showing them
+        this.positionResults();
         
-        this.announce(bsearch_live_search.strings.suggestions_found.replace('%d', results.length));
+        this.announce(bsearch_live_search.strings.suggestions_found.replace('%d', total));
+    }
+
+    /**
+     * Shows loading spinner in results container and search input
+     */
+    showLoadingSpinner() {
+        // Clear any existing results
+        this.resultsContainer.innerHTML = '';
+        
+        // Create loading spinner element
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'bsearch-loading-spinner';
+        loadingDiv.innerHTML = '<div class="bsearch-spinner"></div>Searching...';
+        
+        // Show loading in results container
+        this.resultsContainer.appendChild(loadingDiv);
+        this.resultsContainer.style.display = 'block';
+        
+        // Reposition results when showing loading state
+        this.positionResults();
+        
+        // Add loading class to search input for visual feedback
+        this.searchInput.classList.add('bsearch-search-loading');
+        
+        // Announce to screen readers
+        this.announce('Searching for results...');
+    }
+
+    /**
+     * Hides loading spinner from results container and search input
+     */
+    hideLoadingSpinner() {
+        // Remove loading class from search input
+        this.searchInput.classList.remove('bsearch-search-loading');
+        
+        // Remove loading spinner from results (will be replaced by actual results or hidden)
+        const loadingSpinner = this.resultsContainer.querySelector('.bsearch-loading-spinner');
+        if (loadingSpinner) {
+            loadingSpinner.remove();
+        }
     }
 }
 
