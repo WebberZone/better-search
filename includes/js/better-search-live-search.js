@@ -127,13 +127,14 @@ class SearchAutocomplete {
         this.searchInput.addEventListener('input', this.handleInput.bind(this));
         this.searchInput.addEventListener('keydown', this.handleInputKeydown.bind(this));
         this.searchInput.addEventListener('focus', this.handleInputFocus.bind(this));
-        this.searchInput.addEventListener('blur', this.handleInputBlur.bind(this));
+        this.searchInput.addEventListener('focusout', this.handleInputBlur.bind(this));
 
         if (this.submitButton) {
             this.submitButton.addEventListener('keydown', this.handleSubmitKeydown.bind(this));
         }
 
         this.resultsContainer.addEventListener('keydown', this.handleResultsKeydown.bind(this));
+        this.resultsContainer.addEventListener('focusout', this.handleResultsBlur.bind(this));
         
         // Set up MutationObserver to watch for changes in the results container
         this.setupMutationObserver();
@@ -201,8 +202,13 @@ class SearchAutocomplete {
             this.fetchResults(this.searchInput.value);
             return;
         }
-        this.selectedIndex = items.length ?
-            Math.min(this.selectedIndex + 1, items.length - 1) : 0;
+        // If we're at the search input (selectedIndex = -1), move to the first item
+        if (this.selectedIndex === -1) {
+            this.selectedIndex = 0;
+        } else {
+            this.selectedIndex = items.length ?
+                Math.min(this.selectedIndex + 1, items.length - 1) : 0;
+        }
         this.updateSelection(items);
     }
 
@@ -212,8 +218,13 @@ class SearchAutocomplete {
      */
     handleArrowUp(items) {
         if (!items.length) return;
-        this.selectedIndex = this.selectedIndex > 0 ?
-            this.selectedIndex - 1 : items.length - 1;
+        // If we're at the search input (selectedIndex = -1), move to the last item
+        if (this.selectedIndex === -1) {
+            this.selectedIndex = items.length - 1;
+        } else {
+            this.selectedIndex = this.selectedIndex > 0 ?
+                this.selectedIndex - 1 : items.length - 1;
+        }
         this.updateSelection(items);
     }
 
@@ -306,7 +317,7 @@ class SearchAutocomplete {
      */
     handleResultsArrowUp(items) {
         if (this.selectedIndex === 0) {
-            (this.submitButton || this.searchInput).focus();
+            this.searchInput.focus();
             this.selectedIndex = -1;
             this.announce(bsearch_live_search.strings.back_to_search);
         } else {
@@ -341,9 +352,11 @@ class SearchAutocomplete {
                 if (mutation.type === 'childList') {
                     mutation.addedNodes.forEach((node) => {
                         if (node.tagName === 'A') {
-                            node.removeAttribute('tabindex');
+                            // Only remove tabindex from links that are not meant to be focusable
+                            // We preserve tabindex for proper keyboard navigation
                         } else if (node.querySelectorAll) {
-                            node.querySelectorAll('a').forEach(a => a.removeAttribute('tabindex'));
+                            // Don't remove tabindex from result links to preserve keyboard navigation
+                            // Only remove from non-result elements if needed
                         }
                     });
                 }
@@ -377,8 +390,25 @@ class SearchAutocomplete {
      */
     handleInputBlur() {
         setTimeout(() => {
-            // Only clear results if focus didn't move to our results container
-            if (!this.resultsContainer.contains(document.activeElement)) {
+            // Close results if focus moved outside the search functionality entirely
+            const isSearchElement = document.activeElement?.closest(SearchAutocomplete.SELECTOR) !== null || 
+                                  document.activeElement?.closest('.bsearch-autocomplete-results') !== null;
+            if (!isSearchElement) {
+                this.clearResults();
+                this.announce(bsearch_live_search.strings.suggestions_closed);
+            }
+        }, 150);
+    }
+
+    /**
+     * Handles results container blur
+     */
+    handleResultsBlur() {
+        setTimeout(() => {
+            // Close results if focus moved outside the search functionality entirely
+            const isSearchElement = document.activeElement?.closest(SearchAutocomplete.SELECTOR) !== null || 
+                                  document.activeElement?.closest('.bsearch-autocomplete-results') !== null;
+            if (!isSearchElement) {
                 this.clearResults();
                 this.announce(bsearch_live_search.strings.suggestions_closed);
             }
@@ -428,6 +458,12 @@ class SearchAutocomplete {
             selectedItem.setAttribute('aria-selected', 'true');
             selectedItem.scrollIntoView({ block: 'nearest' });
             this.searchInput.setAttribute('aria-activedescendant', selectedItem.id);
+            
+            // Move focus to the selected item for proper tab navigation continuation
+            const link = selectedItem.querySelector('a');
+            if (link) {
+                link.focus();
+            }
             
             // Announce with position information
             if (bsearch_live_search.strings.result_position) {
@@ -553,6 +589,7 @@ class SearchAutocomplete {
             const a = document.createElement('a');
             a.href = result.link;
             a.textContent = result.title;
+            // Preserve natural tab order for proper keyboard navigation
             // Add aria-label for better screen reader context
             if (bsearch_live_search.strings.view_post) {
                 a.setAttribute('aria-label', bsearch_live_search.strings.view_post.replace('%s', result.title));
