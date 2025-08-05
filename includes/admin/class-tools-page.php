@@ -103,7 +103,7 @@ class Tools_Page {
 		/* Recreate index */
 		if ( ( isset( $_POST['bsearch_recreate'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
 			self::recreate_index();
-			add_settings_error( 'bsearch-notices', '', esc_html__( 'FULLTEXT index has been recreated', 'better-search' ), 'success' );
+			add_settings_error( 'bsearch-notices', '', esc_html__( 'Indices have been recreated', 'better-search' ), 'success' );
 		}
 
 		/* Truncate overall posts table */

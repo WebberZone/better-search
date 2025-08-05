@@ -52,6 +52,24 @@ class Db {
 	}
 
 	/**
+	 * Delete the FULLTEXT index.
+	 *
+	 * @since 4.2.0
+	 */
+	public static function delete_fulltext_indexes() {
+		global $wpdb;
+
+		$indexes = array_merge( self::get_fulltext_indexes(), self::get_old_fulltext_indexes() );
+
+		foreach ( $indexes as $index => $columns ) {
+			if ( self::is_index_installed( $index ) ) {
+				$index = esc_sql( $index );
+				$wpdb->query( "ALTER TABLE {$wpdb->posts} DROP INDEX $index" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			}
+		}
+	}
+
+	/**
 	 * Check if a fulltext index already exists on the posts table.
 	 *
 	 * @since 4.0.0
@@ -69,7 +87,10 @@ class Db {
 		$old_index_name = '';
 		if ( in_array( $index, array_keys( $new_indexes ), true ) ) {
 			$key            = array_search( $index, array_keys( $new_indexes ), true );
-			$old_index_name = array_keys( $old_indexes )[ $key ];
+			$old_index_keys = array_keys( $old_indexes );
+			if ( isset( $old_index_keys[ $key ] ) ) {
+				$old_index_name = $old_index_keys[ $key ];
+			}
 		}
 
 		$index_exists = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -304,7 +325,7 @@ class Db {
 	public static function recreate_table( $table_name, $create_table_sql, $backup = true, $fields = array( 'searchvar', 'cntaccess' ), $group_by_fields = array( 'searchvar' ) ) {
 		global $wpdb;
 
-		$backup_table_name = ( $backup ) ? $table_name . '_backup' : $table_name . '_temp';
+		$backup_table_name = $backup ? $table_name . '_backup' : $table_name . '_temp';
 		$success           = false;
 
 		$fields_sql          = implode( ', ', $fields );
