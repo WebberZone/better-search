@@ -119,6 +119,20 @@ class Activator {
 	}
 
 	/**
+	 * Fired for each blog when the plugin is deactivated.
+	 *
+	 * @since 4.2.0
+	 */
+	public static function single_deactivate() {
+		$settings = get_option( 'bsearch_settings' );
+
+		if ( ! empty( $settings['uninstall_indices_deactivate'] ) ) {
+			Db::delete_fulltext_indexes();
+			delete_option( 'bsearch_db_version' );
+		}
+	}
+
+	/**
 	 * Fired when a new site is activated with a WPMU environment.
 	 *
 	 * @since 2.0.0
