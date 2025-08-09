@@ -43,7 +43,7 @@ class Settings {
 	 *
 	 * @var string Prefix.
 	 */
-	public static $prefix;
+	public static $prefix = 'bsearch';
 
 	/**
 	 * Settings Key.
@@ -52,7 +52,7 @@ class Settings {
 	 *
 	 * @var string Settings Key.
 	 */
-	public $settings_key;
+	public $settings_key = 'bsearch_settings';
 
 	/**
 	 * The slug name to refer to this menu by (should be unique for this menu).
@@ -61,7 +61,7 @@ class Settings {
 	 *
 	 * @var string Menu slug.
 	 */
-	public $menu_slug;
+	public $menu_slug = 'bsearch_options_page';
 
 	/**
 	 * Main constructor class.
@@ -69,17 +69,14 @@ class Settings {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		$this->settings_key = 'bsearch_settings';
-		self::$prefix       = 'bsearch';
-		$this->menu_slug    = 'bsearch_options_page';
-
 		Hook_Registry::add_action( 'admin_menu', array( $this, 'initialise_settings' ) );
 		Hook_Registry::add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 11, 2 );
 		Hook_Registry::add_filter( 'plugin_action_links_' . plugin_basename( BETTER_SEARCH_PLUGIN_FILE ), array( $this, 'plugin_actions_links' ) );
 		Hook_Registry::add_filter( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 99 );
+
 		Hook_Registry::add_filter( self::$prefix . '_settings_sanitize', array( $this, 'change_settings_on_save' ), 99 );
 		Hook_Registry::add_filter( self::$prefix . '_after_setting_output', array( $this, 'after_setting_output' ), 10, 2 );
-		Hook_Registry::add_action( 'bsearch_settings_form_buttons', array( $this, 'add_wizard_button' ) );
+		Hook_Registry::add_action( self::$prefix . '_settings_form_buttons', array( $this, 'add_wizard_button' ) );
 	}
 
 	/**

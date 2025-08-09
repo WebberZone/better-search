@@ -9,7 +9,6 @@
 
 namespace WebberZone\Better_Search\Admin\Network;
 
-use WebberZone\Better_Search\Main;
 use WebberZone\Better_Search\Util\Hook_Registry;
 
 // If this file is called directly, abort.
@@ -126,7 +125,7 @@ class Admin {
 				<div id="post-body" class="metabox-holder columns-2">
 					<div id="post-body-content">
 						<?php
-						Main::pro_upgrade_banner(
+						\WebberZone\Better_Search\Admin\Admin::pro_upgrade_banner(
 							false,
 							sprintf(
 								/* translators: 1: link to Network Plugins page, 2: link to account page */

@@ -5,11 +5,11 @@
  * @package WebberZone\Better_Search
  */
 
-use WebberZone\Better_Search\Main;
+use WebberZone\Better_Search\Admin\Admin;
 
 ?>
 <div class="postbox-container">
-	<?php Main::pro_upgrade_banner(); ?>
+	<?php Admin::pro_upgrade_banner(); ?>
 
 	<div id="qlinksdiv" class="postbox meta-box-sortables">
 		<h2 class='hndle metabox-holder'><span><?php esc_html_e( 'Quick links', 'better-search' ); ?></span></h2>

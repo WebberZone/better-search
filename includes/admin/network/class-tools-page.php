@@ -9,7 +9,7 @@
 
 namespace WebberZone\Better_Search\Admin\Network;
 
-use WebberZone\Better_Search\Main;
+use WebberZone\Better_Search\Admin\Admin;
 use WebberZone\Better_Search\Util\Hook_Registry;
 
 // If this file is called directly, abort.
@@ -81,7 +81,7 @@ class Tools_Page {
 		<div id="post-body-content">
 
 			<?php
-				Main::pro_upgrade_banner(
+				Admin::pro_upgrade_banner(
 					false,
 					sprintf(
 						/* translators: 1: link to Network Plugins page, 2: link to account page */
@@ -106,7 +106,7 @@ class Tools_Page {
 		<div id="postbox-container-1" class="postbox-container">
 
 			<div id="side-sortables" class="meta-box-sortables ui-sortable">
-			<?php \WebberZone\Better_Search\Admin\Admin::display_admin_sidebar(); ?>
+			<?php Admin::display_admin_sidebar(); ?>
 			</div><!-- /#side-sortables -->
 
 		</div><!-- /#postbox-container-1 -->
