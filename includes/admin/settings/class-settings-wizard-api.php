@@ -184,6 +184,7 @@ class Settings_Wizard_API {
 		$defaults = array(
 			'page_title'      => 'Setup Wizard',
 			'menu_title'      => 'Setup Wizard',
+			'wizard_title'    => 'Setup Wizard',
 			'next_step'       => 'Next Step',
 			'previous_step'   => 'Previous Step',
 			'finish_setup'    => 'Finish Setup',
@@ -317,10 +318,8 @@ class Settings_Wizard_API {
 
 		$settings = array();
 
-		// Check if we have settings in the expected format (bsearch_settings array).
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( isset( $_POST[ $this->settings_key ] ) && is_array( $_POST[ $this->settings_key ] ) ) {
-			// Process settings from the settings array format (bsearch_settings[option_name]).
 			foreach ( $current_step_config['settings'] as $setting_id => $setting_config ) {
 				// phpcs:ignore WordPress.Security.NonceVerification.Missing
 				if ( isset( $_POST[ $this->settings_key ][ $setting_id ] ) ) {
@@ -445,8 +444,10 @@ class Settings_Wizard_API {
 
 		/**
 		 * Action fired when the wizard is completed.
+		 *
+		 * @param string $prefix Plugin prefix.
 		 */
-		do_action( "{$this->prefix}_wizard_completed" );
+		do_action( "{$this->prefix}_wizard_completed", $this->prefix );
 
 		// Redirect to completion page or main settings.
 		wp_safe_redirect( $this->get_completion_redirect_url() );
