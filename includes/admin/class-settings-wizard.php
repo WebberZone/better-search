@@ -127,27 +127,16 @@ class Settings_Wizard extends Settings_Wizard_API {
 				'description' => __( 'Upgrade to Better Search Pro to unlock advanced features such as additional weighting, LIKE fallback, custom tables, and more. <strong>Take your site search to the next level!</strong>', 'better-search' ) . '<br /><br /><a href="https://webberzone.com/plugins/better-search/pro/" target="_blank" class="button button-primary">' . __( 'Learn more about Pro', 'better-search' ) . '</a>',
 				'settings'    => $this->build_step_settings( $pro_features_keys, $all_settings ),
 			),
-			'completion'     => array(
-				'title'       => __( 'Setup Complete!', 'better-search' ),
-				'description' => __( 'Your Better Search configuration is now complete. You can always modify these settings later from the plugin settings page.', 'better-search' ),
-				'settings'    => array(),
-			),
 		);
 
 		// Add custom tables indexing step if custom tables are enabled.
 		if ( bsearch_get_option( 'use_custom_tables', false ) ) {
-			// Insert the custom tables step before completion.
-			$completion_step = $steps['completion'];
-			unset( $steps['completion'] );
-
 			$steps['custom_tables_index'] = array(
 				'title'       => __( 'Index Custom Tables', 'better-search' ),
 				'description' => __( 'Custom tables have been enabled. Index your content to improve search performance and enable advanced features.', 'better-search' ),
 				'settings'    => array(),
 				'custom_step' => true, // Flag to indicate this needs custom rendering.
 			);
-
-			$steps['completion'] = $completion_step;
 		}
 
 		/**
@@ -566,7 +555,7 @@ class Settings_Wizard extends Settings_Wizard_API {
 
 			<div class="wizard-completion-content">
 				<div class="wizard-completion-features">
-					<h3><?php esc_html_e( 'What\'s Next?', 'better-search' ); ?></h3>
+					<h3><?php esc_html_e( "What's Next?", 'better-search' ); ?></h3>
 					<ul>
 						<li><?php esc_html_e( 'Test your search functionality on the frontend', 'better-search' ); ?></li>
 						<li><?php esc_html_e( 'Customize search templates if needed', 'better-search' ); ?></li>
