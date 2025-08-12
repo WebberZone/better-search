@@ -1,6 +1,6 @@
 {
     "name": "webberzone/better-search",
-    "description": "Better Search replaces the default WordPress search with a better search engine that gives contextual results sorted by relevance",
+    "description": "Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.",
     "type": "wordpress-plugin",
     "keywords": [
         "search",
@@ -10,6 +10,7 @@
         "fulltext search"
     ],
     "license": "gpl-2.0-or-later",
+    "homepage": "https://webberzone.com/plugins/better-search/",
     "authors": [
         {
             "name": "WebberZone",
@@ -28,7 +29,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^1",
         "phpcompatibility/phpcompatibility-wp": "^2",
         "yoast/phpunit-polyfills": "^3",
-        "phpunit/phpunit": "^5.7.21 || ^6.5 || ^7.5 || ^8"
+        "phpunit/phpunit": "^9 || ^10 || ^11 || ^12"
     },
     "config": {
         "allow-plugins": {
