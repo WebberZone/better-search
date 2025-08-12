@@ -1,10 +1,10 @@
 {
     "name": "@webberzone/better-search",
-    "version": "4.0.2",
-    "description": "Better Search replaces the default WordPress search with a better search engine that gives contextual results sorted by relevance",
+    "version": "4.2.0",
+    "description": "Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.",
     "author": "WebberZone",
     "license": "GPL-2.0-or-later",
-    "main": "index.js",
+    "homepage": "https://webberzone.com/plugins/better-search/",
     "scripts": {
         "build": "wp-scripts build --webpack-src-dir=includes/frontend/blocks/src/ --output-path=includes/frontend/blocks/build/",
         "check-engines": "wp-scripts check-engines",
@@ -16,25 +16,26 @@
         "zip": "wp-scripts plugin-zip"
     },
     "files": [
-        "freemius",
         "includes",
         "languages",
         "templates",
+        "vendor/freemius",
         "README.md",
+        "security.md",
         "better-search.php",
         "index.php",
+        "load-freemius.php",
         "uninstaller.php",
         "changelog.txt",
         "readme.txt",
-        "security.md",
         "wpml-config.xml"
     ],
     "devDependencies": {
-        "@wordpress/prettier-config": "^4.26.0",
-        "@wordpress/scripts": "^30.19.0"
+        "@wordpress/prettier-config": "^4.28.0",
+        "@wordpress/scripts": "^30.21.0"
     },
     "dependencies": {
-        "@wordpress/icons": "^10.26.0",
+        "@wordpress/icons": "^10.28.0",
         "clsx": "^2.1.1",
         "uuid": "^11.1.0"
     }
