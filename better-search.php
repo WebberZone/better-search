@@ -74,7 +74,7 @@ if ( ! defined( 'BETTER_SEARCH_DB_VERSION' ) ) {
 }
 
 // Load Freemius.
-require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/load-freemius.php';
+require_once BETTER_SEARCH_PLUGIN_DIR . 'load-freemius.php';
 
 // Load the autoloader.
 require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/autoloader.php';
