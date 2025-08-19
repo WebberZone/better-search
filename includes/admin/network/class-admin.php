@@ -115,7 +115,7 @@ class Admin {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Better Search Pro Multisite Settings', 'better-search' ); ?></h1>
-			<?php do_action( 'bsearch_multisite_settings_header' ); ?>
+			<?php do_action( 'bsearch_network_admin_settings_page_content_header' ); ?>
 
 			<p><?php esc_html_e( 'This page allows you to configure the settings for Better Search on your multisite network.', 'better-search' ); ?></p>
 
@@ -129,13 +129,13 @@ class Admin {
 							false,
 							sprintf(
 								/* translators: 1: link to Network Plugins page, 2: link to account page */
-								__( 'If you are running Better Search Pro and see the upgrade banner instead of the settings, you may need to activate your license. Go to the %1$s, locate Better Search Pro, and activate your license from there. View your %2$s to check the status of your license.', 'better-search' ),
+								__( 'If you are running Better Search Pro and see the upgrade banner instead of the settings, you may need to activate your license. Go to the %1$s, locate Better Search Pro, and activate your license from there. View your %2$s to check the status of your license after activation.', 'better-search' ),
 								'<a href="' . esc_url( network_admin_url( 'plugins.php' ) ) . '" target="_blank">' . esc_html__( 'Network Plugins page', 'better-search' ) . '</a>',
 								'<a href="' . esc_url( \WebberZone\Better_Search\bsearch_freemius()->get_account_url() ) . '" target="_blank">' . esc_html__( 'account page', 'better-search' ) . '</a>'
 							)
 						);
 						?>
-						<?php do_action( 'bsearch_multisite_settings' ); ?>
+						<?php do_action( 'bsearch_network_admin_settings_page_content' ); ?>
 					</div><!-- /#post-body-content -->
 
 					<div id="postbox-container-1" class="postbox-container">
@@ -162,8 +162,18 @@ class Admin {
 			wp_die( esc_html__( 'Security check failed.', 'better-search' ) );
 		}
 
-		$source_blog_id  = absint( $_POST['source_blog_id'] );
+		// Validate and sanitize input data.
+		if ( empty( $_POST['source_blog_id'] ) || empty( $_POST['target_blog_ids'] ) ) {
+			wp_die( esc_html__( 'Missing required data.', 'better-search' ) );
+		}
+
+		$source_blog_id  = (int) absint( $_POST['source_blog_id'] );
 		$target_blog_ids = wp_parse_id_list( wp_unslash( $_POST['target_blog_ids'] ) );
+
+		// Additional validation to ensure we have valid IDs.
+		if ( 0 === $source_blog_id || empty( $target_blog_ids ) ) {
+			wp_die( esc_html__( 'Invalid blog IDs provided.', 'better-search' ) );
+		}
 
 		switch_to_blog( $source_blog_id );
 		$settings = bsearch_get_settings();

@@ -278,7 +278,7 @@ class Admin {
 	 * @param string $custom_text   Custom text to show in the banner.
 	 */
 	public static function pro_upgrade_banner( $donate = true, $custom_text = '' ) {
-		if ( function_exists( __NAMESPACE__ . '\bsearch_freemius' ) && ! \WebberZone\Better_Search\bsearch_freemius()->is_paying() ) {
+		if ( function_exists( '\WebberZone\Better_Search\bsearch_freemius' ) && ! \WebberZone\Better_Search\bsearch_freemius()->is_paying() ) {
 			?>
 				<div id="pro-upgrade-banner">
 					<div class="inside">
@@ -286,7 +286,7 @@ class Admin {
 							<p><?php echo wp_kses_post( $custom_text ); ?></p>
 						<?php endif; ?>
 
-						<p><a href="https://webberzone.com/plugins/better-search/pro/" target="_blank"><img src="<?php echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/bsearch-pro-banner.png' ); ?>" alt="<?php esc_html_e( 'Better Search Pro - Buy now!', 'better-search' ); ?>" width="300" height="300" style="max-width: 100%;" /></a></p>
+						<p><a href="https://webberzone.com/plugins/better-search/pro/" target="_blank"><img src="<?php echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/better-search-pro-banner.png' ); ?>" alt="<?php esc_html_e( 'Better Search Pro - Buy now!', 'better-search' ); ?>" width="300" height="300" style="max-width: 100%;" /></a></p>
 
 						<?php if ( $donate ) : ?>							
 							<p style="text-align:center;"><?php esc_html_e( 'OR', 'better-search' ); ?></p>
