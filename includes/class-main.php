@@ -23,97 +23,97 @@ final class Main {
 	 *
 	 * @var Main
 	 */
-	private static $instance;
+	private static ?self $instance = null;
 
 	/**
 	 * Admin.
 	 *
 	 * @since 3.3.0
 	 *
-	 * @var object Admin.
+	 * @var Admin\Admin|null
 	 */
-	public $admin;
+	public ?Admin\Admin $admin = null;
 
 	/**
 	 * Network Admin class object.
 	 *
 	 * @since 4.2.0
 	 *
-	 * @var object Network Admin class object.
+	 * @var Admin\Network\Admin|null
 	 */
-	public $network_admin;
+	public ?Admin\Network\Admin $network_admin = null;
 
 	/**
 	 * Shortcodes.
 	 *
 	 * @since 3.3.0
 	 *
-	 * @var object Shortcodes.
+	 * @var Frontend\Shortcodes
 	 */
-	public $shortcodes;
+	public Frontend\Shortcodes $shortcodes;
 
 	/**
 	 * Tracker.
 	 *
 	 * @since 3.3.0
 	 *
-	 * @var object Tracker.
+	 * @var Tracker
 	 */
-	public $tracker;
+	public Tracker $tracker;
 
 	/**
 	 * Styles.
 	 *
 	 * @since 3.3.0
 	 *
-	 * @var object Styles.
+	 * @var Frontend\Styles_Handler
 	 */
-	public $styles;
+	public Frontend\Styles_Handler $styles;
 
 	/**
 	 * Language Handler.
 	 *
 	 * @since 3.3.0
 	 *
-	 * @var object Language Handler.
+	 * @var Frontend\Language_Handler
 	 */
-	public $language;
+	public Frontend\Language_Handler $language;
 
 	/**
 	 * Display.
 	 *
 	 * @since 3.3.0
 	 *
-	 * @var object Display.
+	 * @var Frontend\Display
 	 */
-	public $display;
+	public Frontend\Display $display;
 
 	/**
 	 * Live Search.
 	 *
 	 * @since 4.0.0
 	 *
-	 * @var object Live Search.
+	 * @var Frontend\Live_Search
 	 */
-	public $live_search;
+	public Frontend\Live_Search $live_search;
 
 	/**
 	 * Template Handler.
 	 *
 	 * @since 4.0.0
 	 *
-	 * @var object Template Handler.
+	 * @var Frontend\Template_Handler
 	 */
-	public $template_handler;
+	public Frontend\Template_Handler $template_handler;
 
 	/**
-	 * Pro.
+	 * Pro modules.
 	 *
 	 * @since 4.0.0
 	 *
-	 * @var object Pro.
+	 * @var Pro\Pro|null
 	 */
-	public $pro;
+	public ?Pro\Pro $pro = null;
 
 	/**
 	 * Gets the instance of the class.
@@ -122,11 +122,12 @@ final class Main {
 	 *
 	 * @return Main
 	 */
-	public static function get_instance() {
+	public static function get_instance(): self {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
 			self::$instance->init();
 		}
+
 		return self::$instance;
 	}
 
@@ -144,7 +145,7 @@ final class Main {
 	 *
 	 * @since 3.3.0
 	 */
-	private function init() {
+	private function init(): void {
 		// Initialize components.
 		$this->language         = new Frontend\Language_Handler();
 		$this->styles           = new Frontend\Styles_Handler();
@@ -162,12 +163,21 @@ final class Main {
 			if ( bsearch_freemius()->can_use_premium_code() ) {
 				$this->pro = new Pro\Pro();
 			}
+			Pro\Pro::free_hooks();
 		}
 
-		// Initialize admin.
+		// Initialize admin on init action to ensure translations are loaded.
+		Hook_Registry::add_action( 'init', array( $this, 'init_admin' ) );
+	}
+
+	/**
+	 * Initialize admin components.
+	 *
+	 * @since 4.2.0
+	 */
+	public function init_admin(): void {
 		if ( is_admin() ) {
 			$this->admin = new Admin\Admin();
-
 			if ( is_multisite() ) {
 				$this->network_admin = new Admin\Network\Admin();
 			}
