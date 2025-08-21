@@ -1,19 +1,9 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Constant BETTER_SEARCH_PLUGIN_DIR not found\\.$#"
+			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
-			path: includes/admin/class-admin.php
-
-		-
-			message: "#^Constant BETTER_SEARCH_PLUGIN_URL not found\\.$#"
-			count: 7
-			path: includes/admin/class-admin.php
-
-		-
-			message: "#^Constant BETTER_SEARCH_PLUGIN_DIR not found\\.$#"
-			count: 1
-			path: includes/admin/network/class-admin.php
+			path: includes/admin/class-settings-wizard.php
 
 		-
 			message: "#^Variable \\$menu_page might not be defined\\.$#"
@@ -21,18 +11,13 @@ parameters:
 			path: includes/admin/settings/class-settings-api.php
 
 		-
-			message: "#^Constant BETTER_SEARCH_PLUGIN_URL not found\\.$#"
-			count: 2
-			path: includes/admin/settings/sidebar.php
-
-		-
-			message: "#^Constant BETTER_SEARCH_PLUGIN_DIR not found\\.$#"
-			count: 1
-			path: includes/autoloader.php
-
-		-
 			message: "#^Access to an undefined property WP_Query\\:\\:\\$post_scores\\.$#"
 			count: 1
+			path: includes/class-better-search-core-query.php
+
+		-
+			message: "#^Access to an undefined property WP_Query\\:\\:\\$topscore\\.$#"
+			count: 3
 			path: includes/class-better-search-core-query.php
 
 		-
@@ -44,11 +29,6 @@ parameters:
 			message: "#^Cannot access property \\$score on int\\|WP_Post\\.$#"
 			count: 3
 			path: includes/class-better-search-core-query.php
-
-		-
-			message: "#^Constant BETTER_SEARCH_PLUGIN_URL not found\\.$#"
-			count: 2
-			path: includes/class-main.php
 
 		-
 			message: "#^Negated boolean expression is always false\\.$#"
@@ -98,6 +78,11 @@ parameters:
 		-
 			message: "#^Access to an undefined property WP_Post\\:\\:\\$blog_id\\.$#"
 			count: 3
+			path: includes/pro/class-multisite-search.php
+
+		-
+			message: "#^Access to an undefined property WP_Query\\:\\:\\$topscore\\.$#"
+			count: 1
 			path: includes/pro/class-multisite-search.php
 
 		-

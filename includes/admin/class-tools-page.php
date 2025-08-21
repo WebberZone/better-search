@@ -177,7 +177,7 @@ class Tools_Page {
 			<form method="post">
 
 				<div class="postbox">
-					<h2 class="hndle" id="bsearch-clear-cache"><span><?php esc_html_e( 'Clear cache', 'better-search' ); ?></span></h2>
+					<h2 id="bsearch-clear-cache"><span><?php esc_html_e( 'Clear cache', 'better-search' ); ?></span></h2>
 					<div class="inside">
 						<p>
 							<?php
@@ -198,7 +198,7 @@ class Tools_Page {
 
 			<form method="post">
 				<div class="postbox">
-					<h2 class="hndle" id="bsearch-recreate-index"><span><?php esc_html_e( 'Recreate FULLTEXT index', 'better-search' ); ?></span></h2>
+					<h2 id="bsearch-recreate-index"><span><?php esc_html_e( 'Recreate FULLTEXT index', 'better-search' ); ?></span></h2>
 					<div class="inside">
 						<p>
 							<?php
@@ -232,7 +232,7 @@ class Tools_Page {
 
 			<form method="post">
 				<div class="postbox">
-					<h2 class="hndle" id="bsearch-create-tables"><span><?php esc_html_e( 'Create tables', 'better-search' ); ?></span></h2>
+					<h2 id="bsearch-create-tables"><span><?php esc_html_e( 'Create tables', 'better-search' ); ?></span></h2>
 					<div class="inside">
 						<p class="description">
 							<?php esc_html_e( 'These buttons will create the tables in which Better Search stores its data.', 'better-search' ); ?>
@@ -254,7 +254,7 @@ class Tools_Page {
 
 			<form method="post">
 				<div class="postbox">
-					<h2 class="hndle" id="bsearch-recreate-tables"><span><?php esc_html_e( 'Recreate Tables', 'better-search' ); ?></span></h2>
+					<h2 id="bsearch-recreate-tables"><span><?php esc_html_e( 'Recreate Tables', 'better-search' ); ?></span></h2>
 					<div class="inside">
 						<p class="description">
 							<?php esc_html_e( 'These buttons will recreate the tables in which Better Search stores its data. This is particularly useful if you are noticing issues with tracking or if there was a problem with the database upgrade', 'better-search' ); ?>
@@ -281,7 +281,7 @@ class Tools_Page {
 
 			<form method="post">
 				<div class="postbox">
-					<h2 class="hndle" id="bsearch-reset-database"><span><?php esc_html_e( 'Reset database', 'better-search' ); ?></span></h2>
+					<h2 id="bsearch-reset-database"><span><?php esc_html_e( 'Reset database', 'better-search' ); ?></span></h2>
 					<div class="inside">
 						<p>
 							<?php
@@ -308,7 +308,7 @@ class Tools_Page {
 
 			<form method="post">
 				<div class="postbox">
-					<h2 class="hndle" id="bsearch-backup-tables"><span><?php esc_html_e( 'Backup Tables', 'better-search' ); ?></span></h2>
+					<h2 id="bsearch-backup-tables"><span><?php esc_html_e( 'Backup Tables', 'better-search' ); ?></span></h2>
 					<div class="inside">
 						<p class="description">
 							<?php esc_html_e( 'From v3.3, Better Search uses a new database table format.', 'better-search' ); ?>
