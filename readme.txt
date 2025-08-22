@@ -143,10 +143,11 @@ Release post: [https://webberzone.com/announcements/better-search-v4-2-0/](https
 
 * Bug fix:
 	* Fixed an issue where the Live Search conflicted with Mega Menu Pro.
+	* Fixed an issue where activating the Pro plugin while the Free plugin was active, or vice versa, would cause a fatal error.
 
 For previous changelog entries, please refer to the separate changelog.txt file or [Github Releases page](https://github.com/WebberZone/better-search/releases)
 
 == Upgrade Notice ==
 
 = 4.2.0 =
-Major release; Check the changelog for details.
+Major release! Introducing powerful Pro features, a user-friendly setup wizard, enhanced caching and performance improvements, renamed FULLTEXT indexes for better compatibility, and a collection of important bug fixes.
