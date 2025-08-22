@@ -8,6 +8,7 @@
 namespace WebberZone\Better_Search\Admin;
 
 use WebberZone\Better_Search\Util\Helpers;
+use WebberZone\Better_Search\Util\Hook_Registry;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -26,7 +27,7 @@ class Dashboard_Widgets {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		add_filter( 'wp_dashboard_setup', array( $this, 'wp_dashboard_setup' ) );
+		Hook_Registry::add_filter( 'wp_dashboard_setup', array( $this, 'wp_dashboard_setup' ) );
 	}
 
 	/**

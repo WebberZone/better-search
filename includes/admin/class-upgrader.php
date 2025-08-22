@@ -2,13 +2,15 @@
 /**
  * Generates and controls upgrade page.
  *
- * @link  https://webberzone.com
  * @since 3.3.0
  *
  * @package Better_Search
  */
 
 namespace WebberZone\Better_Search\Admin;
+
+use WebberZone\Better_Search\Db;
+use WebberZone\Better_Search\Util\Hook_Registry;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -36,8 +38,8 @@ class Upgrader {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'network_admin_menu', array( $this, 'network_admin_menu' ) );
+		Hook_Registry::add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		Hook_Registry::add_action( 'network_admin_menu', array( $this, 'network_admin_menu' ) );
 	}
 
 	/**
@@ -153,8 +155,8 @@ class Upgrader {
 		$current_db_version = get_option( 'bsearch_db_version' );
 
 		if ( version_compare( $current_db_version, BETTER_SEARCH_DB_VERSION, '<' ) ) {
-			$success_overall = Activator::recreate_overall_table();
-			$success_daily   = Activator::recreate_daily_table();
+			$success_overall = Db::recreate_overall_table();
+			$success_daily   = Db::recreate_daily_table();
 
 			if ( is_wp_error( $success_overall ) ) {
 				return $success_overall->get_error_message();
@@ -164,8 +166,11 @@ class Upgrader {
 			}
 
 			update_option( 'bsearch_db_version', BETTER_SEARCH_DB_VERSION );
+
+			/* translators: %s: Site URL. */
 			return sprintf( esc_html__( 'Database upgraded on site %s', 'better-search' ), get_site_url() );
 		}
+		/* translators: %s: Site URL. */
 		return sprintf( esc_html__( 'Database is already up to date on site %s', 'better-search' ), get_site_url() );
 	}
 

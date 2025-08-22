@@ -5,13 +5,16 @@ parameters:
     paths:
         - better-search.php
         - uninstaller.php
+        - load-freemius.php
         - includes/
         - templates/
     scanDirectories:
         - includes/
         - templates/
-        - freemius/
+        - vendor/freemius/
     scanFiles:
         - better-search.php
         - uninstaller.php
+    bootstrapFiles:
+        - phpstan-bootstrap.php
     ignoreErrors:

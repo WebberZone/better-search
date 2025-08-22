@@ -7,6 +7,8 @@
 
 namespace WebberZone\Better_Search\Frontend;
 
+use WebberZone\Better_Search\Util\Hook_Registry;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -22,9 +24,9 @@ class Live_Search {
 	 * Constructor to initialize the class.
 	 */
 	public function __construct() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_action( 'wp_ajax_bsearch_live_search', array( $this, 'live_search' ) );
-		add_action( 'wp_ajax_nopriv_bsearch_live_search', array( $this, 'live_search' ) );
+		Hook_Registry::add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		Hook_Registry::add_action( 'wp_ajax_bsearch_live_search', array( $this, 'live_search' ) );
+		Hook_Registry::add_action( 'wp_ajax_nopriv_bsearch_live_search', array( $this, 'live_search' ) );
 	}
 
 	/**
@@ -58,9 +60,15 @@ class Live_Search {
 					'back_to_input'      => __( 'Back to search input', 'better-search-pro' ),
 					'error_loading'      => __( 'Error loading search results', 'better-search-pro' ),
 					'no_suggestions'     => __( 'No search suggestions found', 'better-search-pro' ),
+					/* translators: %d is the number of suggestions found */
 					'suggestions_found'  => __( '%d search suggestions found. Use up and down arrow keys to navigate.', 'better-search-pro' ),
+					/* translators: %s is the destination being navigated to */
 					'navigating_to'      => __( 'Navigating to %s', 'better-search-pro' ),
 					'submitting_search'  => __( 'Submitting search', 'better-search-pro' ),
+					/* translators: %1$d is the current result number, %2$d is the total number of results */
+					'result_position'    => __( 'Result %1$d of %2$d', 'better-search-pro' ),
+					/* translators: %s is the post title */
+					'view_post'          => __( 'View post: %s', 'better-search-pro' ),
 				),
 			)
 		);
@@ -114,6 +122,12 @@ class Live_Search {
 		}
 		wp_reset_postdata();
 
-		wp_send_json( $results );
+		$response = array(
+			'results' => $results,
+			'total'   => count( $results ),
+			'query'   => $search_query,
+		);
+
+		wp_send_json( $response );
 	}
 }

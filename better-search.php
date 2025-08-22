@@ -13,7 +13,7 @@
  * Plugin Name: Better Search
  * Plugin URI:  https://webberzone.com/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
- * Version:     4.1.5
+ * Version:     4.2.0
  * Author:      WebberZone
  * Author URI:  https://webberzone.com/
  * Text Domain: better-search
@@ -34,7 +34,7 @@ if ( ! defined( 'BETTER_SEARCH_VERSION' ) ) {
 	 *
 	 * @since 2.9.3
 	 */
-	define( 'BETTER_SEARCH_VERSION', '4.1.5' );
+	define( 'BETTER_SEARCH_VERSION', '4.2.0' );
 }
 
 if ( ! defined( 'BETTER_SEARCH_PLUGIN_DIR' ) ) {
@@ -73,11 +73,78 @@ if ( ! defined( 'BETTER_SEARCH_DB_VERSION' ) ) {
 	define( 'BETTER_SEARCH_DB_VERSION', '2.0' );
 }
 
-// Load Freemius.
-require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/load-freemius.php';
+if ( ! function_exists( __NAMESPACE__ . '\bsearch_deactivate_other_instances' ) ) {
+	/**
+	 * Deactivate other instances of Better Search when this plugin is activated.
+	 *
+	 * @param string $plugin The plugin being activated.
+	 * @param bool   $network_wide Whether the plugin is being activated network-wide.
+	 */
+	function bsearch_deactivate_other_instances( $plugin, $network_wide = false ) {
+		$free_plugin = 'better-search/better-search.php';
+		$pro_plugin  = 'better-search-pro/better-search.php';
 
-// Load the autoloader.
-require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/autoloader.php';
+		// Only proceed if one of our plugins is being activated.
+		if ( ! in_array( $plugin, array( $free_plugin, $pro_plugin ), true ) ) {
+			return;
+		}
+
+		$plugins_to_deactivate = array();
+		$deactivated_plugin    = '';
+
+		// If pro is being activated, deactivate free.
+		if ( $pro_plugin === $plugin ) {
+			if ( is_plugin_active( $free_plugin ) || ( $network_wide && is_plugin_active_for_network( $free_plugin ) ) ) {
+				$plugins_to_deactivate[] = $free_plugin;
+				$deactivated_plugin      = 'Better Search';
+			}
+		}
+
+		// If free is being activated, deactivate pro.
+		if ( $free_plugin === $plugin ) {
+			if ( is_plugin_active( $pro_plugin ) || ( $network_wide && is_plugin_active_for_network( $pro_plugin ) ) ) {
+				$plugins_to_deactivate[] = $pro_plugin;
+				$deactivated_plugin      = 'Better Search Pro';
+			}
+		}
+
+		if ( ! empty( $plugins_to_deactivate ) ) {
+			deactivate_plugins( $plugins_to_deactivate, false, $network_wide );
+			set_transient( 'bsearch_deactivated_notice', $deactivated_plugin, 1 * HOUR_IN_SECONDS );
+		}
+	}
+	add_action( 'activated_plugin', __NAMESPACE__ . '\bsearch_deactivate_other_instances', 10, 2 );
+}
+
+// Show admin notice about automatic deactivation.
+if ( ! has_action( 'admin_notices', __NAMESPACE__ . '\bsearch_show_deactivation_notice' ) ) {
+	add_action(
+		'admin_notices',
+		function () {
+			$deactivated_plugin = get_transient( 'bsearch_deactivated_notice' );
+			if ( $deactivated_plugin ) {
+				/* translators: %s: Name of the deactivated plugin */
+				$message = sprintf( __( "Better Search and Better Search PRO should not be active at the same time. We've automatically deactivated %s.", 'better-search' ), $deactivated_plugin );
+				?>
+			<div class="updated" style="border-left: 4px solid #ffba00;">
+				<p><?php echo esc_html( $message ); ?></p>
+			</div>
+				<?php
+				delete_transient( 'bsearch_deactivated_notice' );
+			}
+		}
+	);
+}
+
+if ( ! function_exists( __NAMESPACE__ . '\bsearch_freemius' ) ) {
+	// Finally load Freemius integration.
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'load-freemius.php';
+}
+
+// Load custom autoloader.
+if ( ! function_exists( __NAMESPACE__ . '\autoload' ) ) {
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/autoloader.php';
+}
 
 if ( ! function_exists( __NAMESPACE__ . '\better_search' ) ) {
 	/**
@@ -92,18 +159,16 @@ if ( ! function_exists( __NAMESPACE__ . '\better_search' ) ) {
 	}
 }
 
-if ( ! function_exists( __NAMESPACE__ . '\load_bsearch' ) ) {
+if ( ! function_exists( __NAMESPACE__ . '\load' ) ) {
 	/**
 	 * The main function responsible for returning the one true WebberZone Better Search instance to functions everywhere.
 	 *
 	 * @since 3.3.0
-	 *
-	 * @return void
 	 */
-	function load_bsearch() {
+	function load(): void {
 		better_search();
 	}
-	add_action( 'plugins_loaded', __NAMESPACE__ . '\load_bsearch' );
+	add_action( 'plugins_loaded', __NAMESPACE__ . '\load' );
 }
 
 /*
@@ -111,16 +176,17 @@ if ( ! function_exists( __NAMESPACE__ . '\load_bsearch' ) ) {
  * Include files
  *----------------------------------------------------------------------------
  */
-// Register the activation hook.
+if ( ! function_exists( 'bsearch_get_settings' ) ) {
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/options-api.php';
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search-core-query.php';
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search-query.php';
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/functions.php';
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/general-template.php';
+	require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/heatmap.php';
+}
+
+// Register activation hook.
 register_activation_hook( __FILE__, __NAMESPACE__ . '\Admin\Activator::activation_hook' );
-
-require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/options-api.php';
-require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search-core-query.php';
-require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/class-better-search-query.php';
-require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/functions.php';
-require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/general-template.php';
-require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/heatmap.php';
-
 
 /**
  * Declare $bsearch_settings global so that it can be accessed in every function

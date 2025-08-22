@@ -395,7 +395,7 @@ class Statistics_Table extends \WP_List_Table {
 
 			if ( ! empty( $output ) ) {
 				echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				submit_button( __( 'Filter' ), '', 'filter_action', false, array( 'id' => 'better-search-query-submit' ) );
+				submit_button( __( 'Filter', 'better-search' ), '', 'filter_action', false, array( 'id' => 'better-search-query-submit' ) );
 			}
 		}
 		?>
@@ -403,4 +403,3 @@ class Statistics_Table extends \WP_List_Table {
 		<?php
 	}
 }
-

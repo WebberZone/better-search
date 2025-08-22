@@ -5,14 +5,14 @@
  * @package WebberZone\Better_Search
  */
 
-use WebberZone\Better_Search\Main;
+use WebberZone\Better_Search\Admin\Admin;
 
 ?>
 <div class="postbox-container">
-	<?php Main::pro_upgrade_banner(); ?>
+	<?php Admin::pro_upgrade_banner(); ?>
 
 	<div id="qlinksdiv" class="postbox meta-box-sortables">
-		<h2 class='hndle metabox-holder'><span><?php esc_html_e( 'Quick links', 'better-search' ); ?></span></h2>
+		<h2 class="metabox-holder"><span><?php esc_html_e( 'Quick links', 'better-search' ); ?></span></h2>
 
 		<div class="inside">
 			<div id="quick-links">
@@ -43,7 +43,7 @@ use WebberZone\Better_Search\Main;
 		</div><!-- /.inside -->
 	</div><!-- /.postbox -->
 	<div id="pluginsdiv" class="postbox meta-box-sortables">
-		<h2 class='hndle metabox-holder'><span><?php esc_html_e( 'WebberZone plugins', 'better-search' ); ?></span></h2>
+		<h2 class="metabox-holder"><span><?php esc_html_e( 'WebberZone plugins', 'better-search' ); ?></span></h2>
 
 		<div class="inside">
 			<div id="quick-links">
@@ -64,7 +64,7 @@ use WebberZone\Better_Search\Main;
 
 <div class="postbox-container">
 	<div id="followdiv" class="postbox meta-box-sortables">
-		<h2 class='hndle'><span><?php esc_html_e( 'Follow me', 'better-search' ); ?></span></h2>
+		<h2><span><?php esc_html_e( 'Follow me', 'better-search' ); ?></span></h2>
 
 		<div class="inside" style="text-align: center">
 		<a href="https://x.com/webberzone/" target="_blank"><img src="<?php echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/x.png' ); ?>" width="100" height="100"></a>

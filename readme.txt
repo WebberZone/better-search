@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.1.5
+Stable tag: 4.2.0
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 7.4
@@ -121,71 +121,33 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 4.1.5 =
+= 4.2.0 =
 
-* Bug fixes:
-	* [Pro] Fixed an issue where pro features remained inactive even with a valid license key.
-
-= 4.1.4 =
-
-* Bug fixes:
-	* Fixed Freemius initialization code in the free version.
-
-= 4.1.3 =
-
-* Modifications:
-	* Moved Freemius SDK to vendor folder.
-	* Relevance score in the template is hidden when there is no score for the post.
-
-* Bug fixes:
-	* Fix the minimum characters length setting.
-	* Fixed DOMNodeInserted deprecated error in Live Search.
-	* Fixed edge case issue where settings are not initialized when using multisite resulting in type errors.
-
-= 4.1.2 =
+Release post: [https://webberzone.com/announcements/better-search-v4-2-0/](https://webberzone.com/announcements/better-search-v4-2-0/)
 
 * Features:
-	* Added SQL injection detection for search terms.
-	* New setting to set the minimum characters required for a fulltext search.
-
-* Enhancements:
-	* Live Search enhancements:
-		* Added caching to improve performance.
-		* Improved accessibility and keyboard navigation.
-
-* Bug fixes:
-	* Fixed an issue where post score was not being displayed.
-	* Better Search form post type correctly uses `post_type` instead of `post_types` for better compatibility.
-	* Fixed issue with search results not loading properly when Fuzzy Search is enabled and the search term is less than four characters.
-	* Fixed issue with ordering by date didn't work when using Fuzzy Search.
-
-= 4.1.1 =
-
-* Bug fixes:
-	* Fixed an issue where shortcode attributes were not properly sanitized.
-
-= 4.1.0 =
-
-Release post: [https://webberzone.com/announcements/better-search-v4-1-0/](https://webberzone.com/announcements/better-search-v4-1-0/)
-
-* Features:
-	* Better Search now loads globally and can be accessed using `better_search()`.
+	* [Pro] New: Efficient Content Storage and Indexing – Custom tables implementation for better performance and query optimization while maintaining the same relevance algorithm.
+	* [Pro] New: MAX_EXECUTION_TIME hint for MySQL queries.
+	* [Pro] New: LIKE fallback search.
+	* New: Wizard to guide users through the setup process.
+	* Copy to clipboard functionality for SQL queries in the Tools page.
 
 * Modifications:
-	* Query improvements for better compatibility with Better Search Pro.
-	* Improved accessibility of live search results particularly better keyboard navigation.
-	* [Pro] Multisite search now respects the settings of each site.
-	* [Pro] Better Fuzzy search compatibility with multisite search.
-	* [Pro] Better compatibility with PolyLang when using Multisite search. However, PolyLang must be set up exactly the same on all sites of the multisite setup.
+	* Improved caching in Core Query to catch score and blog ID.
+	* New function: bsearch_get_blog_option() to get a Better Search option for a specific blog.
+	* New network settings/tools page.
+	* [Pro] A new button to fix any collation issues has been added to the Network Admin Settings page.
+	* Updated Freemius SDK.
+	* Live search displays a loading state while results are being fetched.
+	* Fulltext indexes are now named `wz_title_content`, `wz_title`, and `wz_content` to ensure compatibility and optimize database space, especially when using Contextual Related Posts. After updating to this version, please recreate the indexes to benefit from the changes—until then, the plugin will use the previous index names.
 
-* Bug fixes:
-	* [Pro] Fixed issues with permalinks and titles not loading properly when Multisite search is enabled.
-	* [Pro] Fixed Multisite search when Seamless Mode is off.
-	* [Pro] Fixed bugs with Fuzzy Search query in some cases.
+* Bug fix:
+	* Fixed an issue where the Live Search conflicted with Mega Menu Pro.
+	* Fixed an issue where activating the Pro plugin while the Free plugin was active, or vice versa, would cause a fatal error.
 
 For previous changelog entries, please refer to the separate changelog.txt file or [Github Releases page](https://github.com/WebberZone/better-search/releases)
 
 == Upgrade Notice ==
 
-= 4.1.5 =
-Bug fixes; Check the changelog for details.
+= 4.2.0 =
+Major release! Introducing powerful Pro features, a user-friendly setup wizard, enhanced caching and performance improvements, renamed FULLTEXT indexes for better compatibility, and a collection of important bug fixes.

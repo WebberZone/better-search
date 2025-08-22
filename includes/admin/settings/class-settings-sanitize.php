@@ -2,7 +2,6 @@
 /**
  * Functions to sanitize settings.
  *
- * @link  https://webberzone.com
  * @since 3.3.0
  *
  * @package WebberZone\Better_Search
