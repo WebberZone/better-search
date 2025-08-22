@@ -10,6 +10,7 @@
 namespace WebberZone\Better_Search\Admin;
 
 use WebberZone\Better_Search\Util\Cache;
+use WebberZone\Better_Search\Util\Hook_Registry;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -105,6 +106,15 @@ class Admin {
 	public $cache;
 
 	/**
+	 * Settings Wizard.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @var object Settings Wizard.
+	 */
+	public $settings_wizard;
+
+	/**
 	 * Settings Page in Admin area.
 	 *
 	 * @since 3.3.0
@@ -141,6 +151,15 @@ class Admin {
 	public $menu_slug;
 
 	/**
+	 * Admin Notices API.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @var object Admin Notices API.
+	 */
+	public $admin_notices_api;
+
+	/**
 	 * Main constructor class.
 	 *
 	 * @since 3.3.0
@@ -151,13 +170,15 @@ class Admin {
 		// Initialise admin classes.
 		$this->admin_dashboard   = new Dashboard();
 		$this->statistics        = new Statistics();
-		$this->settings          = new Settings\Settings();
+		$this->settings          = new Settings();
 		$this->activator         = new Activator();
 		$this->upgrader          = new Upgrader();
+		$this->admin_notices_api = new Admin_Notices_API();
 		$this->admin_notices     = new Admin_Notices();
 		$this->tools_page        = new Tools_Page();
 		$this->dashboard_widgets = new Dashboard_Widgets();
 		$this->cache             = new Cache();
+		$this->settings_wizard   = new Settings_Wizard();
 	}
 
 	/**
@@ -166,7 +187,7 @@ class Admin {
 	 * @since 3.3.0
 	 */
 	public function hooks() {
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		Hook_Registry::add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 
 	/**
@@ -224,7 +245,11 @@ class Admin {
 			'better-search-admin-js',
 			'better_search_admin',
 			array(
-				'nonce' => wp_create_nonce( 'better_search_admin_nonce' ),
+				'ajaxurl'         => admin_url( 'admin-ajax.php' ),
+				'nonce'           => wp_create_nonce( 'better_search_admin_nonce' ),
+				'copied'          => __( 'Copied!', 'better-search' ),
+				'copyToClipboard' => __( 'Copy to clipboard', 'better-search' ),
+				'copyError'       => __( 'Error copying to clipboard', 'better-search' ),
 			)
 		);
 		wp_register_style(
@@ -242,5 +267,34 @@ class Admin {
 	 */
 	public static function display_admin_sidebar() {
 		require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/admin/settings/sidebar.php';
+	}
+
+	/**
+	 * Display the pro upgrade banner.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param bool   $donate        Whether to show the donate banner.
+	 * @param string $custom_text   Custom text to show in the banner.
+	 */
+	public static function pro_upgrade_banner( $donate = true, $custom_text = '' ) {
+		if ( function_exists( '\WebberZone\Better_Search\bsearch_freemius' ) && ! \WebberZone\Better_Search\bsearch_freemius()->is_paying() ) {
+			?>
+				<div id="pro-upgrade-banner">
+					<div class="inside">
+						<?php if ( ! empty( $custom_text ) ) : ?>
+							<p><?php echo wp_kses_post( $custom_text ); ?></p>
+						<?php endif; ?>
+
+						<p><a href="https://webberzone.com/plugins/better-search/pro/" target="_blank"><img src="<?php echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/better-search-pro-banner.png' ); ?>" alt="<?php esc_html_e( 'Better Search Pro - Buy now!', 'better-search' ); ?>" width="300" height="300" style="max-width: 100%;" /></a></p>
+
+						<?php if ( $donate ) : ?>							
+							<p style="text-align:center;"><?php esc_html_e( 'OR', 'better-search' ); ?></p>
+							<p><a href="https://wzn.io/donate-bsearch" target="_blank"><img src="<?php echo esc_url( BETTER_SEARCH_PLUGIN_URL . 'includes/admin/images/support.webp' ); ?>" alt="<?php esc_html_e( 'Support the development - Send us a donation today.', 'better-search' ); ?>" width="300" height="169" style="max-width: 100%;" /></a></p>
+						<?php endif; ?>
+					</div>
+				</div>
+			<?php
+		}
 	}
 }

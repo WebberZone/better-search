@@ -27,6 +27,7 @@
 	<rule ref="WordPress">
 		<exclude name="WordPress.WP.I18n" />
 		<exclude name="Universal.Files.SeparateFunctionsFromOO.Mixed" />
+		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
 	</rule>
 	<rule ref="WordPress.Files.FileName">
 		<exclude-pattern>*/phpunit/tests/*\.php$</exclude-pattern>

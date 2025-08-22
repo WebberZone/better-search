@@ -7,6 +7,8 @@
 
 namespace WebberZone\Better_Search\Frontend\Widgets;
 
+use WebberZone\Better_Search\Util\Hook_Registry;
+
 // If this file is called directly, then abort execution.
 if ( ! defined( 'WPINC' ) ) {
 	die( "Aren't you supposed to come here via WP-Admin?" );
@@ -36,7 +38,7 @@ class Search_Box extends \WP_Widget {
 			__( 'Search Form [Better Search]', 'better-search' ),
 			$widget_ops
 		);
-		add_action( 'wp_enqueue_scripts', array( $this, 'front_end_styles' ), 11 );
+		Hook_Registry::add_action( 'wp_enqueue_scripts', array( $this, 'front_end_styles' ), 11 );
 	}
 
 	/**

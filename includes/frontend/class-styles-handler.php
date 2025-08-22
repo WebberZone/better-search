@@ -7,6 +7,8 @@
 
 namespace WebberZone\Better_Search\Frontend;
 
+use WebberZone\Better_Search\Util\Hook_Registry;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -24,7 +26,7 @@ class Styles_Handler {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_styles' ) );
+		Hook_Registry::add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_styles' ) );
 	}
 
 	/**

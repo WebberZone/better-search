@@ -7,6 +7,8 @@
 
 namespace WebberZone\Better_Search\Frontend;
 
+use WebberZone\Better_Search\Util\Hook_Registry;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -25,8 +27,8 @@ class Language_Handler {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
-		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
-		add_filter( 'better_search_query_the_posts', array( $this, 'translate_ids' ), 999 );
+		Hook_Registry::add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+		Hook_Registry::add_filter( 'better_search_query_the_posts', array( $this, 'translate_ids' ), 999 );
 	}
 
 	/**

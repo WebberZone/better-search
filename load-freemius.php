@@ -20,7 +20,7 @@ function bsearch_freemius() {
 			define( 'WP_FS__PRODUCT_17020_MULTISITE', true );
 		}
 		// Include Freemius SDK.
-		require_once dirname( __DIR__ ) . '/vendor/freemius/start.php';
+		require_once __DIR__ . '/vendor/freemius/start.php';
 		$bsearch_freemius = \fs_dynamic_init(
 			array(
 				'id'             => '17020',
@@ -53,14 +53,14 @@ function bsearch_freemius() {
  * @return string
  */
 function bsearch_freemius_get_plugin_icon() {
-	return __DIR__ . '/admin/images/bsearch-icon.png';
+	return __DIR__ . '/includes/admin/images/bsearch-icon.png';
 }
 
 /**
  * Uninstall the plugin.
  */
 function bsearch_freemius_uninstall() {
-	require_once dirname( __DIR__ ) . '/uninstaller.php';
+	require_once __DIR__ . '/uninstaller.php';
 }
 
 // Init Freemius.
