@@ -11,6 +11,7 @@
 .bsearch-form-container {
 	text-align: center;
 	margin: 10px auto;
+	clear: both;
 }
 
 .bsearchform {
