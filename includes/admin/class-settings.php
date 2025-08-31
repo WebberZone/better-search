@@ -166,7 +166,7 @@ class Settings {
 			'performance' => __( 'Performance', 'better-search' ),
 			'search'      => __( 'Search', 'better-search' ),
 			'heatmap'     => __( 'Heatmap', 'better-search' ),
-			'styles'      => __( 'Styles', 'better-search' ),
+			'output'      => __( 'Output', 'better-search' ),
 		);
 
 		/**
@@ -277,7 +277,7 @@ class Settings {
 			'show_credit'         => array(
 				'id'      => 'show_credit',
 				'name'    => esc_html__( 'Link to Better Search plugin page', 'better-search' ),
-				'desc'    => esc_html__( 'A nofollow link to the plugin is added as an extra list item to the list of popular searches. Not mandatory, but thanks if you do it!', 'better-search' ),
+				'desc'    => esc_html__( "When enabled, this setting adds a nofollow link to the Better Search plugin page at the bottom of the popular searches list. It's not mandatory, but it's a nice way to support the plugin's development.", 'better-search' ),
 				'type'    => 'checkbox',
 				'default' => false,
 			),
@@ -354,7 +354,7 @@ class Settings {
 			'max_execution_time'   => array(
 				'id'      => 'max_execution_time',
 				'name'    => esc_html__( 'Max Execution Time', 'better-search' ),
-				'desc'    => esc_html__( 'Maximum execution time for MySQL queries in milliseconds. Set to 0 to disable. Default is 3000 (3 seconds).', 'better-search' ),
+				'desc'    => esc_html__( 'Maximum time (in milliseconds) allowed for MySQL queries to execute. Setting to 0 disables this limit. Default is 3000 (3 seconds). If a query exceeds this time, Better Search will terminate it and display no results. Setting this value too low may prevent legitimate searches from completing.', 'better-search' ),
 				'type'    => 'number',
 				'default' => 3000,
 				'min'     => 0,
@@ -382,10 +382,16 @@ class Settings {
 	 */
 	public static function settings_search() {
 		$settings = array(
+			'search_config_header'      => array(
+				'id'   => 'search_config_header',
+				'name' => '<h3>' . esc_html__( 'Search Configuration', 'better-search' ) . '</h3>',
+				'desc' => '',
+				'type' => 'header',
+			),
 			'limit'                     => array(
 				'id'      => 'limit',
 				'name'    => esc_html__( 'Number of Search Results per page', 'better-search' ),
-				'desc'    => esc_html__( 'This is the maximum number of search results that will be displayed per page by default', 'better-search' ),
+				'desc'    => esc_html__( 'Set the maximum number of search results displayed per page.', 'better-search' ),
 				'type'    => 'number',
 				'default' => '10',
 				'size'    => 'small',
@@ -393,14 +399,14 @@ class Settings {
 			'post_types'                => array(
 				'id'      => 'post_types',
 				'name'    => esc_html__( 'Post types to include', 'better-search' ),
-				'desc'    => esc_html__( 'Select which post types you want to include in the search results', 'better-search' ),
+				'desc'    => esc_html__( 'Select which post types you want to include in the search results.', 'better-search' ),
 				'type'    => 'posttypes',
 				'default' => 'post,page',
 			),
 			'use_fulltext'              => array(
 				'id'      => 'use_fulltext',
 				'name'    => esc_html__( 'Enable MySQL FULLTEXT searching', 'better-search' ),
-				'desc'    => esc_html__( 'Disabling this option will no longer give relevancy based results', 'better-search' ),
+				'desc'    => esc_html__( 'Disabling this option will no longer give relevancy-based results.', 'better-search' ),
 				'type'    => 'checkbox',
 				'default' => true,
 			),
@@ -430,70 +436,6 @@ class Settings {
 				'default' => false,
 				'pro'     => true,
 			),
-			'weight_title'              => array(
-				'id'      => 'weight_title',
-				'name'    => esc_html__( 'Weight of the title', 'better-search' ),
-				'desc'    => esc_html__( 'Set this to a bigger number than the next option to prioritize the post title', 'better-search' ),
-				'type'    => 'number',
-				'default' => '10',
-				'size'    => 'small',
-			),
-			'weight_content'            => array(
-				'id'      => 'weight_content',
-				'name'    => esc_html__( 'Weight of the post content', 'better-search' ),
-				'desc'    => esc_html__( 'Set this to a bigger number than the previous option to prioritize the post content', 'better-search' ),
-				'type'    => 'number',
-				'default' => '1',
-				'size'    => 'small',
-			),
-			'weight_excerpt'            => array(
-				'id'      => 'weight_excerpt',
-				'name'    => __( 'Weight for post excerpt', 'better-search' ),
-				'desc'    => __( 'The weight to give to the post excerpt when calculating the relevance of the post.', 'better-search' ),
-				'type'    => 'number',
-				'default' => 0,
-				'min'     => '0',
-				'size'    => 'small',
-				'pro'     => true,
-			),
-			'weight_taxonomy_category'  => array(
-				'id'      => 'weight_taxonomy_category',
-				'name'    => __( 'Weight for categories', 'better-search' ),
-				'desc'    => __( 'Weight to give category matches when calculating relevance.', 'better-search' ),
-				'type'    => 'number',
-				'default' => 0,
-				'min'     => '0',
-				'size'    => 'small',
-				'pro'     => true,
-			),
-			'weight_taxonomy_post_tag'  => array(
-				'id'      => 'weight_taxonomy_post_tag',
-				'name'    => __( 'Weight for tags', 'better-search' ),
-				'desc'    => __( 'Weight to give tag matches when calculating relevance.', 'better-search' ),
-				'type'    => 'number',
-				'default' => 0,
-				'min'     => '0',
-				'size'    => 'small',
-				'pro'     => true,
-			),
-			'weight_taxonomy_default'   => array(
-				'id'      => 'weight_taxonomy_default',
-				'name'    => __( 'Default taxonomy weight', 'better-search' ),
-				'desc'    => __( 'Weight to give other taxonomy matches when calculating relevance.', 'better-search' ),
-				'type'    => 'number',
-				'default' => 0,
-				'min'     => '0',
-				'size'    => 'small',
-				'pro'     => true,
-			),
-			'use_precomputed_tax_score' => array(
-				'id'      => 'use_precomputed_tax_score',
-				'name'    => __( 'Use precomputed taxonomy score', 'better-search' ),
-				'desc'    => __( 'Enable to use precomputed taxonomy score for relevance calculation. This can improve performance but will ignore the above weights for taxonomies when running live queries.', 'better-search' ),
-				'type'    => 'checkbox',
-				'default' => false,
-				'pro'     => true,
-			),
 			'min_relevance'             => array(
 				'id'      => 'min_relevance',
 				'name'    => esc_html__( 'Minimum relevance percentage', 'better-search' ),
@@ -519,8 +461,78 @@ class Settings {
 				'default' => 'off',
 				'pro'     => true,
 			),
-			'search_header'             => array(
-				'id'   => 'search_header',
+			'weighting_header'          => array(
+				'id'   => 'weighting_header',
+				'name' => '<h3>' . esc_html__( 'Weighting', 'better-search' ) . '</h3>',
+				'desc' => '',
+				'type' => 'header',
+			),
+			'weight_title'              => array(
+				'id'      => 'weight_title',
+				'name'    => esc_html__( 'Post title', 'better-search' ),
+				'desc'    => esc_html__( 'The weight to give to the post content when calculating the relevance of the post. Set this to a higher number than the following option to prioritize the post title in the relevance calculation. ', 'better-search' ),
+				'type'    => 'number',
+				'default' => '10',
+				'size'    => 'small',
+			),
+			'weight_content'            => array(
+				'id'      => 'weight_content',
+				'name'    => esc_html__( 'Post content', 'better-search' ),
+				'desc'    => esc_html__( 'The weight to give to the post content when calculating the relevance of the post.', 'better-search' ),
+				'type'    => 'number',
+				'default' => '1',
+				'size'    => 'small',
+			),
+			'weight_excerpt'            => array(
+				'id'      => 'weight_excerpt',
+				'name'    => esc_html__( 'Post excerpt', 'better-search' ),
+				'desc'    => esc_html__( 'The weight to give to the post excerpt when calculating the relevance of the post.', 'better-search' ),
+				'type'    => 'number',
+				'default' => 0,
+				'min'     => '0',
+				'size'    => 'small',
+				'pro'     => true,
+			),
+			'weight_taxonomy_category'  => array(
+				'id'      => 'weight_taxonomy_category',
+				'name'    => esc_html__( 'Categories', 'better-search' ),
+				'desc'    => esc_html__( 'Weight to give category matches when calculating relevance.', 'better-search' ),
+				'type'    => 'number',
+				'default' => 0,
+				'min'     => '0',
+				'size'    => 'small',
+				'pro'     => true,
+			),
+			'weight_taxonomy_post_tag'  => array(
+				'id'      => 'weight_taxonomy_post_tag',
+				'name'    => esc_html__( 'Tags', 'better-search' ),
+				'desc'    => esc_html__( 'Weight to give tag matches when calculating relevance.', 'better-search' ),
+				'type'    => 'number',
+				'default' => 0,
+				'min'     => '0',
+				'size'    => 'small',
+				'pro'     => true,
+			),
+			'weight_taxonomy_default'   => array(
+				'id'      => 'weight_taxonomy_default',
+				'name'    => esc_html__( 'Default taxonomy weight', 'better-search' ),
+				'desc'    => esc_html__( 'Weight to give other taxonomy matches when calculating relevance.', 'better-search' ),
+				'type'    => 'number',
+				'default' => 0,
+				'min'     => '0',
+				'size'    => 'small',
+				'pro'     => true,
+			),
+			'use_precomputed_tax_score' => array(
+				'id'      => 'use_precomputed_tax_score',
+				'name'    => esc_html__( 'Use precomputed taxonomy score', 'better-search' ),
+				'desc'    => esc_html__( 'Enable to use precomputed taxonomy score for relevance calculation. This can improve performance but will ignore the above weights for taxonomies when running live queries.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => false,
+				'pro'     => true,
+			),
+			'inclusion_header'          => array(
+				'id'   => 'inclusion_header',
 				'name' => '<h3>' . esc_html__( 'Inclusion options', 'better-search' ) . '</h3>',
 				'desc' => '',
 				'type' => 'header',
@@ -607,76 +619,6 @@ class Settings {
 				'type'     => 'text',
 				'default'  => '',
 				'readonly' => true,
-			),
-			'display_header'            => array(
-				'id'   => 'display_header',
-				'name' => '<h3>' . esc_html__( 'Display options', 'better-search' ) . '</h3>',
-				'desc' => esc_html__( 'These settings allow you to customize the output of the search results page. Except for the highlight setting, these only apply when Seamless mode is off.', 'better-search' ),
-				'type' => 'header',
-			),
-			'highlight'                 => array(
-				'id'      => 'highlight',
-				'name'    => esc_html__( 'Highlight search terms', 'better-search' ),
-				'desc'    => esc_html__( 'If enabled, the search terms are wrapped with the class "bsearch_highlight" on the search results page. The default stylesheet includes CSS to add some colour.', 'better-search' ),
-				'type'    => 'checkbox',
-				'default' => true,
-			),
-			'highlight_followed_links'  => array(
-				'id'      => 'highlight_followed_links',
-				'name'    => esc_html__( 'Highlight followed links', 'better-search' ),
-				'desc'    => esc_html__( 'If enabled, the plugin will highlight the search terms on posts/pages when visits them from the search results page.', 'better-search' ),
-				'type'    => 'checkbox',
-				'default' => true,
-			),
-			'include_thumb'             => array(
-				'id'      => 'include_thumb',
-				'name'    => esc_html__( 'Display thumbnail', 'better-search' ),
-				'desc'    => '',
-				'type'    => 'checkbox',
-				'default' => true,
-			),
-			'display_relevance'         => array(
-				'id'      => 'display_relevance',
-				'name'    => esc_html__( 'Display relevance', 'better-search' ),
-				'desc'    => '',
-				'type'    => 'checkbox',
-				'default' => true,
-			),
-			'display_post_type'         => array(
-				'id'      => 'display_post_type',
-				'name'    => esc_html__( 'Display post type', 'better-search' ),
-				'desc'    => '',
-				'type'    => 'checkbox',
-				'default' => true,
-			),
-			'display_author'            => array(
-				'id'      => 'display_author',
-				'name'    => esc_html__( 'Display author', 'better-search' ),
-				'desc'    => '',
-				'type'    => 'checkbox',
-				'default' => true,
-			),
-			'display_date'              => array(
-				'id'      => 'display_date',
-				'name'    => esc_html__( 'Display date', 'better-search' ),
-				'desc'    => '',
-				'type'    => 'checkbox',
-				'default' => true,
-			),
-			'display_taxonomies'        => array(
-				'id'      => 'display_taxonomies',
-				'name'    => esc_html__( 'Display taxonomies', 'better-search' ),
-				'desc'    => '',
-				'type'    => 'checkbox',
-				'default' => true,
-			),
-			'excerpt_length'            => array(
-				'id'      => 'excerpt_length',
-				'name'    => esc_html__( 'Length of excerpt (in words)', 'better-search' ),
-				'desc'    => '',
-				'type'    => 'number',
-				'default' => '100',
-				'size'    => 'small',
 			),
 			'banned_header'             => array(
 				'id'   => 'banned_header',
@@ -846,22 +788,98 @@ class Settings {
 
 
 	/**
-	 * Retrieve the array of Styles settings
+	 * Retrieve the array of Output settings
 	 *
 	 * @since 3.3.0
 	 *
-	 * @return array Styles settings array
+	 * @return array Output settings array
 	 */
-	public static function settings_styles() {
+	public static function settings_output() {
 		$settings = array(
-			'include_styles' => array(
+			'display_header'           => array(
+				'id'   => 'display_header',
+				'name' => '<h3>' . esc_html__( 'Display options', 'better-search' ) . '</h3>',
+				'desc' => esc_html__( 'These settings allow you to customize the output of the search results page. Except for the highlight setting, these only apply when Seamless mode is off.', 'better-search' ),
+				'type' => 'header',
+			),
+			'highlight'                => array(
+				'id'      => 'highlight',
+				'name'    => esc_html__( 'Highlight search terms', 'better-search' ),
+				'desc'    => esc_html__( 'If enabled, the search terms are wrapped with the class "bsearch_highlight" on the search results page. The default stylesheet includes CSS to add some colour.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => true,
+			),
+			'highlight_followed_links' => array(
+				'id'      => 'highlight_followed_links',
+				'name'    => esc_html__( 'Highlight followed links', 'better-search' ),
+				'desc'    => esc_html__( 'If enabled, the plugin will highlight the search terms on posts/pages when visits them from the search results page.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => true,
+			),
+			'include_thumb'            => array(
+				'id'      => 'include_thumb',
+				'name'    => esc_html__( 'Display thumbnail', 'better-search' ),
+				'desc'    => '',
+				'type'    => 'checkbox',
+				'default' => true,
+			),
+			'display_relevance'        => array(
+				'id'      => 'display_relevance',
+				'name'    => esc_html__( 'Display relevance', 'better-search' ),
+				'desc'    => '',
+				'type'    => 'checkbox',
+				'default' => true,
+			),
+			'display_post_type'        => array(
+				'id'      => 'display_post_type',
+				'name'    => esc_html__( 'Display post type', 'better-search' ),
+				'desc'    => '',
+				'type'    => 'checkbox',
+				'default' => true,
+			),
+			'display_author'           => array(
+				'id'      => 'display_author',
+				'name'    => esc_html__( 'Display author', 'better-search' ),
+				'desc'    => '',
+				'type'    => 'checkbox',
+				'default' => true,
+			),
+			'display_date'             => array(
+				'id'      => 'display_date',
+				'name'    => esc_html__( 'Display date', 'better-search' ),
+				'desc'    => '',
+				'type'    => 'checkbox',
+				'default' => true,
+			),
+			'display_taxonomies'       => array(
+				'id'      => 'display_taxonomies',
+				'name'    => esc_html__( 'Display taxonomies', 'better-search' ),
+				'desc'    => '',
+				'type'    => 'checkbox',
+				'default' => true,
+			),
+			'styles_header'            => array(
+				'id'   => 'styles_header',
+				'name' => '<h3>' . esc_html__( 'Styles options', 'better-search' ) . '</h3>',
+				'desc' => esc_html__( 'These settings allow you to customize the output of the search results page. Except for the highlight setting, these only apply when Seamless mode is off.', 'better-search' ),
+				'type' => 'header',
+			),
+			'excerpt_length'           => array(
+				'id'      => 'excerpt_length',
+				'name'    => esc_html__( 'Length of excerpt (in words)', 'better-search' ),
+				'desc'    => '',
+				'type'    => 'number',
+				'default' => '100',
+				'size'    => 'small',
+			),
+			'include_styles'           => array(
 				'id'      => 'include_styles',
 				'name'    => esc_html__( 'Include inbuilt styles', 'better-search' ),
 				'desc'    => esc_html__( 'Uncheck this to disable this plugin from adding the inbuilt styles. You will need to add your own CSS styles if you disable this option', 'better-search' ),
 				'type'    => 'checkbox',
 				'default' => true,
 			),
-			'custom_css'     => array(
+			'custom_css'               => array(
 				'id'          => 'custom_css',
 				'name'        => esc_html__( 'Custom CSS', 'better-search' ),
 				/* translators: 1: Opening a tag, 2: Closing a tag, 3: Opening code tage, 4. Closing code tag. */
@@ -873,13 +891,13 @@ class Settings {
 		);
 
 		/**
-		 * Filters the Styles settings array
+		 * Filters the Output settings array
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param array $settings Styles settings array
+		 * @param array $settings Output settings array
 		 */
-		return apply_filters( self::$prefix . '_settings_styles', $settings );
+		return apply_filters( self::$prefix . '_settings_output', $settings );
 	}
 
 

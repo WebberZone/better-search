@@ -160,7 +160,7 @@ get_header();
 
 							<ul class="bsearch_post_meta">
 								<?php do_action( 'bsearch_before_post_meta' ); ?>
-								<?php if ( bsearch_get_option( 'display_relevance' ) && $post_score > 0 ) : ?>
+								<?php if ( bsearch_get_option( 'display_relevance' ) && $post_score > 0 && $topscore > 0 ) : ?>
 								<li class="meta-relevance">
 									<?php
 

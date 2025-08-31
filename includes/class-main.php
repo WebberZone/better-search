@@ -8,7 +8,6 @@
 namespace WebberZone\Better_Search;
 
 use WebberZone\Better_Search\Util\Hook_Registry;
-
 if ( ! defined( 'WPINC' ) ) {
 	exit;
 }
@@ -127,7 +126,6 @@ final class Main {
 			self::$instance = new self();
 			self::$instance->init();
 		}
-
 		return self::$instance;
 	}
 
@@ -154,18 +152,8 @@ final class Main {
 		$this->display          = new Frontend\Display();
 		$this->live_search      = new Frontend\Live_Search();
 		$this->template_handler = new Frontend\Template_Handler();
-
 		// Load all hooks.
 		new Hook_Loader();
-
-		// Initialize pro features.
-		if ( bsearch_freemius()->is__premium_only() ) {
-			if ( bsearch_freemius()->can_use_premium_code() ) {
-				$this->pro = new Pro\Pro();
-			}
-			Pro\Pro::free_hooks();
-		}
-
 		// Initialize admin on init action to ensure translations are loaded.
 		Hook_Registry::add_action( 'init', array( $this, 'init_admin' ) );
 	}
