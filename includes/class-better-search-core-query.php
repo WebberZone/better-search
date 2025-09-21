@@ -247,6 +247,14 @@ class Better_Search_Core_Query extends \WP_Query {
 		$search_query = isset( $args['s'] ) ? $args['s'] : '';
 		$this->set_class_variables( $search_query );
 
+		// In seamless mode, check for post_type from URL if not already in args.
+		if ( empty( $args['post_type'] ) ) {
+			$post_type_param = filter_input( INPUT_GET, 'post_type', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+			if ( ! empty( $post_type_param ) ) {
+				$args['post_type'] = sanitize_title( wp_unslash( $post_type_param ) );
+			}
+		}
+
 		// Set the number of posts to be retrieved. Use posts_per_page if set else use limit.
 		$args['posts_per_page'] = empty( $args['posts_per_page'] ) ? $args['limit'] : $args['posts_per_page'];
 
@@ -256,37 +264,40 @@ class Better_Search_Core_Query extends \WP_Query {
 		}
 
 		// Set the post types.
-		if ( empty( $args['post_type'] ) ) {
+		// Check if we have post_type (singular) or post_types (plural) parameters.
+		$post_types = array();
 
-			// If post_types is empty or contains a query string then use parse_str else consider it comma-separated.
-			if ( ! empty( $args['post_types'] ) && is_array( $args['post_types'] ) ) {
+		// Handle post_type (singular) - WordPress standard parameter (takes priority).
+		if ( ! empty( $args['post_type'] ) ) {
+			$post_types = is_array( $args['post_type'] ) ? $args['post_type'] : array( $args['post_type'] );
+		} elseif ( ! empty( $args['post_types'] ) ) {
+			if ( is_array( $args['post_types'] ) ) {
 				$post_types = $args['post_types'];
-			} elseif ( ! empty( $args['post_types'] ) && false === strpos( $args['post_types'], '=' ) ) {
+			} elseif ( false === strpos( $args['post_types'], '=' ) ) {
 				$post_types = explode( ',', $args['post_types'] );
 			} else {
 				parse_str( $args['post_types'], $post_types );  // Save post types in $post_types variable.
 			}
-
-			// If post_types is empty or if we want all the post types.
-			if ( empty( $post_types ) || 'all' === $args['post_types'] ) {
-				$post_types = get_post_types(
-					array(
-						'public' => true,
-					)
-				);
-			}
-
-			/**
-			 * Filter the post_types passed to the query.
-			 *
-			 * @since 3.0.0
-			 *
-			 * @param array   $post_types  Array of post types to filter by.
-			 * @param array   $args        Arguments array.
-			 */
-			$args['post_type'] = apply_filters( 'better_search_query_post_types', $post_types, $args );
-
 		}
+
+		// If post_types is empty or if we want all the post types.
+		if ( empty( $post_types ) ) {
+			$post_types = get_post_types(
+				array(
+					'public' => true,
+				)
+			);
+		}
+
+		/**
+		 * Filter the post_types passed to the query.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param array   $post_types  Array of post types to filter by.
+		 * @param array   $args        Arguments array.
+		 */
+		$args['post_type'] = apply_filters( 'better_search_query_post_types', $post_types, $args );
 
 		// Parse the blog_id argument to get an array of IDs.
 		$this->blog_id = wp_parse_id_list( $args['blog_id'] );
