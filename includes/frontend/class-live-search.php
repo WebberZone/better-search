@@ -115,7 +115,7 @@ class Live_Search {
 			while ( $query->have_posts() ) {
 				$query->the_post();
 				$results[] = array(
-					'title' => get_the_title(),
+					'title' => html_entity_decode( get_the_title(), ENT_QUOTES, 'UTF-8' ),
 					'link'  => get_permalink(),
 				);
 			}
