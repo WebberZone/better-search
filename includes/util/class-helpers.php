@@ -68,7 +68,7 @@ class Helpers {
 			'/\\bUNION\\b.*\\bSELECT\\b/i',              // UNION SELECT.
 			'/[\\\'\\"\\-\\#]\\s*OR\\s+[\\d\\w]+=[\\d\\w]+/i', // Quoted OR equality.
 			'/\\-\\-/',                              // SQL comments.
-			'/;\\s*\\w+/',                           // Multiple statements.
+			'/;\\s*(?:SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC)/i', // Multiple statements - only match actual SQL keywords.
 			'/\\bDROP\\b/i',                         // DROP statements.
 			'/\\bEXEC\\b/i',                          // EXEC statements.
 			'/SLEEP\\s*\\(/i',                       // SLEEP injection.
@@ -124,7 +124,7 @@ class Helpers {
 		$val = preg_replace( '!\s+!', ' ', $val ); // Replace multiple spaces with a single.
 		$val = preg_replace( '!\++!', '+', $val ); // Replace multiple + with a single.
 		$val = rtrim( $val, '+' ); // Remove any trailing + signs.
-		$val = wp_kses_post( $val );
+		$val = sanitize_text_field( $val );
 
 		/**
 		 * Clean search string from XSS exploits.
