@@ -526,9 +526,10 @@ class Better_Search_Core_Query extends \WP_Query {
 		$search_words = array();
 
 		// Extract the search terms. We respect quotes.
+		$search_query = html_entity_decode( $search_query, ENT_QUOTES ); // Decode HTML entities to preserve quotes.
 		$search_query = stripslashes( $search_query ); // Added slashes screw with quote grouping when done early, so done later.
-		if ( preg_match_all( '/".*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+/', $search_query, $matches ) ) {
-			$search_words = $matches[0];
+		if ( preg_match_all( '/"([^"]*)"|\'([^\']*)\'|[^\s]+/', $search_query, $matches ) ) {
+			$search_words = array_filter( array_map( 'trim', $matches[0] ) );
 		}
 
 		// if search terms are less than min_char then turn fulltext off.
