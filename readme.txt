@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.2.0
+Stable tag: 4.2.1
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 7.4
@@ -121,6 +121,17 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.2.1  =
+
+* Modifications:
+	* Updated Freemius SDK.
+	* Handle `post_type` when passed through as a query variable.
+	* Added REST API support for custom post type search queries.
+
+* Bug fixes:
+	* HTML entities are now decoded in the Live Search results.
+	* Phrases with double quotes are correctly handled.
+
 = 4.2.0 =
 
 Release post: [https://webberzone.com/announcements/better-search-v4-2-0/](https://webberzone.com/announcements/better-search-v4-2-0/)
@@ -149,5 +160,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
-= 4.2.0 =
-Major release! Introducing powerful Pro features, a user-friendly setup wizard, enhanced caching and performance improvements, renamed FULLTEXT indexes for better compatibility, and a collection of important bug fixes.
+= 4.2.1 =
+Bug fixes.
