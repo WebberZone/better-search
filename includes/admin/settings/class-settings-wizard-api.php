@@ -438,7 +438,7 @@ class Settings_Wizard_API {
 		update_option( "{$this->prefix}_wizard_completed", true );
 		update_option( "{$this->prefix}_wizard_completed_date", current_time( 'mysql' ) );
 
-		// Clean up the transient and option that triggered the wizard
+		// Clean up the transient and option that triggered the wizard.
 		delete_transient( "{$this->prefix}_show_wizard_activation_redirect" );
 		delete_option( "{$this->prefix}_show_wizard" );
 
