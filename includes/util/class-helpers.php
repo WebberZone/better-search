@@ -473,8 +473,14 @@ class Helpers {
 		// Regular expression to match the keys outside of HTML tags.
 		$regex = '/\b(?!<[^>]*?(?:alt\s*=\s*["\'][^"\']*["\'])?[^>]*?>)(' . implode( '|', $highlight_keys ) . ')(?![^<]*?>)\b/iu';
 
-		// Replace matched keys with highlighted version.
-		$output = preg_replace( $regex, '<mark class="bsearch_highlight">$1</mark>', html_entity_decode( $input ) );
+		// Replace matched keys with highlighted version using callback to escape matches.
+		$output = preg_replace_callback(
+			$regex,
+			function ( $matches ) {
+				return '<mark class="bsearch_highlight">' . $matches[1] . '</mark>';
+			},
+			$input
+		);
 
 		return $output;
 	}

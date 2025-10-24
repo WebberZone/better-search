@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.2.1
+Stable tag: 4.2.2-beta1
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 7.4
@@ -120,6 +120,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 
 == Changelog ==
+
+= 4.2.2 =
+
+* Security:
+	* Security fix.
 
 = 4.2.1  =
 

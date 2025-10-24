@@ -27,7 +27,6 @@
 	<rule ref="WordPress">
 		<exclude name="WordPress.WP.I18n" />
 		<exclude name="Universal.Files.SeparateFunctionsFromOO.Mixed" />
-		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
 	</rule>
 	<rule ref="WordPress.Files.FileName">
 		<exclude-pattern>*/phpunit/tests/*\.php$</exclude-pattern>
@@ -37,5 +36,9 @@
 	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
 	<rule ref="Generic.Commenting.Todo"/>
 	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed"/>
+
+	<!-- Check for PHP 7.4+ compatibility. -->
+	<config name="testVersion" value="7.4-"/>
+	<rule ref="PHPCompatibilityWP"/>
 
 </ruleset>
