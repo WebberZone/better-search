@@ -26,7 +26,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
           tools: cs2pr
           coverage: none
 
@@ -36,7 +36,8 @@ jobs:
         uses: "ramsey/composer-install@v3"
 
       - name: 'Run Composer Update'
-        run: composer update
+        run: |
+          composer update -W --ignore-platform-req=php
 
       # Check the code-style consistency of the PHP files.
       - name: Check PHP code style
