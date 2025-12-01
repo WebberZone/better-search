@@ -31,7 +31,6 @@ jobs:
           # Test against older supported WordPress version
           - php: '8.3'
             wp: '6.6'
-            experimental: false
           # Experimental builds for upcoming PHP versions
           - php: '8.5'
             wp: 'latest'
@@ -39,22 +38,6 @@ jobs:
           - php: '8.4'
             wp: 'latest'
             experimental: true
-            wp: 'latest'
-            experimental: true
-
-          - php: '8.3'
-            wp: 'latest'
-            experimental: true
-          - php: '8.2'
-            wp: 'latest'
-            experimental: true
-          - php: '8.2'
-            wp: '6.3'
-            experimental: true
-          - php: '8.0'
-            wp: '5.9'
-            experimental: true
-
     name: "PHP ${{ matrix.php }} - WP ${{ matrix.wp }}"
 
     continue-on-error: ${{ matrix.experimental }}
