@@ -6,6 +6,7 @@
     "license": "GPL-2.0-or-later",
     "homepage": "https://webberzone.com/plugins/better-search/",
     "scripts": {
+        "build:assets": "node build-assets.js",
         "build": "wp-scripts build --webpack-src-dir=includes/frontend/blocks/src/ --output-path=includes/frontend/blocks/build/",
         "check-engines": "wp-scripts check-engines",
         "format": "wp-scripts format ./includes/pro/blocks/src/ ./includes/frontend/blocks/src/",
@@ -32,7 +33,10 @@
     ],
     "devDependencies": {
         "@wordpress/prettier-config": "^4.28.0",
-        "@wordpress/scripts": "^30.21.0"
+        "@wordpress/scripts": "^30.21.0",
+        "clean-css-cli": "^5.6.3",
+        "rtlcss": "^4.3.0",
+        "terser": "^5.44.0"
     },
     "dependencies": {
         "@wordpress/icons": "^10.28.0",
