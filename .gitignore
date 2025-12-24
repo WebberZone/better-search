@@ -1,0 +1,11 @@
+# Ignore entire vendor except Freemius
+/vendor/*
+!/vendor/freemius/
+
+# Tooling
+/phpcompat-tools/
+/node_modules/
+
+# Lock files
+package-lock.json
+composer.lock
