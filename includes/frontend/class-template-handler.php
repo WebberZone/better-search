@@ -82,38 +82,13 @@ class Template_Handler {
 	 */
 	public function bypass_posts_pre_query( ?array $posts, \WP_Query $query ): ?array {
 		if ( ! is_admin() && $query->is_main_query() && isset( $query->query_vars['s'] ) && ! empty( $query->query_vars['s'] ) ) {
-			$now     = current_time( 'mysql' );
-			$now_gmt = current_time( 'mysql', true );
+			// Set essential query properties to prevent further processing.
+			$query->found_posts   = 0;
+			$query->max_num_pages = 0;
+			$query->post_count    = 0;
 
-			$fake_post = new \WP_Post(
-				(object) array(
-					'ID'                    => 0,
-					'post_author'           => 0,
-					'post_date'             => $now,
-					'post_date_gmt'         => $now_gmt,
-					'post_content'          => '',
-					'post_title'            => '',
-					'post_excerpt'          => '',
-					'post_status'           => 'publish',
-					'comment_status'        => 'closed',
-					'ping_status'           => 'closed',
-					'post_password'         => '',
-					'post_name'             => '',
-					'to_ping'               => '',
-					'pinged'                => '',
-					'post_modified'         => $now,
-					'post_modified_gmt'     => $now_gmt,
-					'post_content_filtered' => '',
-					'post_parent'           => 0,
-					'guid'                  => '',
-					'menu_order'            => 0,
-					'post_type'             => 'post',
-					'post_mime_type'        => '',
-					'comment_count'         => 0,
-				)
-			);
-
-			return array( $fake_post );
+			// Return empty array instead of fake post.
+			return array();
 		}
 		return $posts;
 	}
