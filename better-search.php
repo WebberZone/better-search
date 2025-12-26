@@ -34,7 +34,7 @@ if ( ! defined( 'BETTER_SEARCH_VERSION' ) ) {
 	 *
 	 * @since 2.9.3
 	 */
-	define( 'BETTER_SEARCH_VERSION', '4.2.2' );
+	define( 'BETTER_SEARCH_VERSION', '4.2.2-beta1' );
 }
 
 if ( ! defined( 'BETTER_SEARCH_PLUGIN_DIR' ) ) {
@@ -71,6 +71,15 @@ if ( ! defined( 'BETTER_SEARCH_DB_VERSION' ) ) {
 	 * @since 3.3.0
 	 */
 	define( 'BETTER_SEARCH_DB_VERSION', '2.0' );
+}
+
+/**
+ * Holds the default thumbnail URL for Better Search.
+ *
+ * @since 4.2.2
+ */
+if ( ! defined( 'BETTER_SEARCH_DEFAULT_THUMBNAIL_URL' ) ) {
+	define( 'BETTER_SEARCH_DEFAULT_THUMBNAIL_URL', BETTER_SEARCH_PLUGIN_URL . 'includes/images/default-thumb.png' );
 }
 
 if ( ! function_exists( __NAMESPACE__ . '\bsearch_deactivate_other_instances' ) ) {

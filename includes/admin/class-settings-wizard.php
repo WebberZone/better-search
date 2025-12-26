@@ -233,11 +233,14 @@ class Settings_Wizard extends Settings_Wizard_API {
 				'capability'  => 'manage_options',
 				'conditions'  => array(
 					function () {
+						$page = sanitize_key( (string) filter_input( INPUT_GET, 'page', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) );
+
 						// Only show if wizard is not completed, not dismissed, and activation flag is set.
 						// Check both transient and option to ensure it works in multisite environments.
 						return ! $this->is_wizard_completed() &&
 							! get_option( 'bsearch_wizard_notice_dismissed', false ) &&
-							( get_transient( 'bsearch_show_wizard_activation_redirect' ) || get_option( 'bsearch_show_wizard', false ) );
+							( get_transient( 'bsearch_show_wizard_activation_redirect' ) || get_option( 'bsearch_show_wizard', false ) ) &&
+							'bsearch_wizard' !== $page;
 					},
 				),
 			)

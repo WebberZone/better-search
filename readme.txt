@@ -123,8 +123,20 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.2.2 =
 
+* Modifications:
+	* Updated Freemius SDK to v2.13.0.
+	* Upgraded Settings API.
+	* Improved text highlighting.
+	* Fuzzy Search functions are now deleted and recreated from the admin screen button.
+
+* Bug fixes:
+	* Fixed an issue where the setup wizard notice could display on the wizard page.
+	* Fixed parsing of excluded category slugs.
+	* Fixed a translation string in the settings form.
+	* Fixed handling of `<` and `>` in boolean search mode.
+
 * Security:
-	* Security fix.
+	* Fixed a stored XSS vulnerability.
 
 = 4.2.1  =
 
@@ -164,6 +176,9 @@ Release post: [https://webberzone.com/announcements/better-search-v4-2-0/](https
 For previous changelog entries, please refer to the separate changelog.txt file or [Github Releases page](https://github.com/WebberZone/better-search/releases)
 
 == Upgrade Notice ==
+
+ = 4.2.2 =
+ Security fix.
 
 = 4.2.1 =
 Bug fixes.
