@@ -105,8 +105,4 @@ jQuery(document).ready(function($) {
 	$( '.category_autocomplete' ).each( function ( i, element ) {
 		$( element ).WZTagsSuggest();
 	});
-
-	$('.widget-liquid-right, #customize-controls').on( 'click', '.category_autocomplete', function() {
-		$( '.category_autocomplete' ).WZTagsSuggest();
-	});
 });

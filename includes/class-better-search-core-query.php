@@ -621,6 +621,10 @@ class Better_Search_Core_Query extends \WP_Query {
 		$weight_content = $args['weight_content'] ?? bsearch_get_option( 'weight_content' );
 		$boolean_mode   = $this->is_boolean_mode ? ' IN BOOLEAN MODE' : '';
 		$search_query   = wp_specialchars_decode( $search_query, ENT_QUOTES );
+		if ( $this->use_fulltext && $this->is_boolean_mode ) {
+			$search_query = preg_replace( '/[<>]/u', ' ', $search_query );
+			$search_query = trim( preg_replace( '/\s+/u', ' ', $search_query ) );
+		}
 
 		$field_score = '';
 
