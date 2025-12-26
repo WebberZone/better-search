@@ -165,8 +165,8 @@ class Settings {
 			'general'     => __( 'General', 'better-search' ),
 			'performance' => __( 'Performance', 'better-search' ),
 			'search'      => __( 'Search', 'better-search' ),
-			'heatmap'     => __( 'Heatmap', 'better-search' ),
 			'output'      => __( 'Output', 'better-search' ),
+			'heatmap'     => __( 'Heatmap', 'better-search' ),
 		);
 
 		/**

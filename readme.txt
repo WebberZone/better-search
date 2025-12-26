@@ -134,6 +134,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 	* Fixed parsing of excluded category slugs.
 	* Fixed a translation string in the settings form.
 	* Fixed handling of `<` and `>` in boolean search mode.
+	* Fixed Boolean mode didn't work in some cases even when enabled in the Settings page.
 
 * Security:
 	* Fixed a stored XSS vulnerability.

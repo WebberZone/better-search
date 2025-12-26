@@ -546,8 +546,8 @@ class Better_Search_Core_Query extends \WP_Query {
 		$this->search_query     = $search_query;
 		$this->search_terms     = $search_words;
 		$this->use_fulltext     = $use_fulltext;
-		$this->is_boolean_mode  = $this->input_query_args['boolean_mode'];
-		$this->is_seamless_mode = $this->input_query_args['seamless'];
+		$this->is_boolean_mode  = $this->input_query_args['boolean_mode'] ?? bsearch_get_option( 'boolean_mode' );
+		$this->is_seamless_mode = $this->input_query_args['seamless'] ?? bsearch_get_option( 'seamless' );
 		$this->should_use_custom_table();
 	}
 
@@ -679,6 +679,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		$_fields[] = "{$wpdb->posts}.ID as ID";
 
 		$score = $this->get_match_sql( $this->search_query, $this->query_args );
+
 		if ( ! empty( $score ) ) {
 			$_fields[] = $score . ' as score';
 		}
