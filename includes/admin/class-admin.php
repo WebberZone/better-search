@@ -278,7 +278,7 @@ class Admin {
 	 * @since 3.3.0
 	 */
 	public static function display_admin_sidebar() {
-		require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/admin/settings/sidebar.php';
+		require_once BETTER_SEARCH_PLUGIN_DIR . 'includes/admin/sidebar.php';
 	}
 
 	/**

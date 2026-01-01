@@ -1,8 +1,10 @@
 <?php
 /**
- * Settings Form class.
+ * Generates the settings form.
  *
- * @package WebberZone\Better_Search\Admin\Settings
+ * @link  https://webberzone.com
+ *
+ * @package WebberZone\Better_Search
  */
 
 namespace WebberZone\Better_Search\Admin\Settings;
