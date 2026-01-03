@@ -111,7 +111,7 @@ class Cache {
 	}
 
 	/**
-	 * Get the meta key based on a list of parameters.
+	 * Get the cache key based on a list of parameters.
 	 *
 	 * @since 3.3.0
 	 *
@@ -119,11 +119,90 @@ class Cache {
 	 * @param string $context Context of the cache key to be set.
 	 * @return string Cache meta key
 	 */
-	public static function get_key( $attr, $context = 'query' ) {
+	public static function get_key( $attr, $context = 'query' ): string {
+		$args = (array) $attr;
 
-		$key = sprintf( 'bs_cache_%1$s_%2$s', md5( wp_json_encode( $attr ) ), $context );
+		static $setting_types = null;
+		if ( null === $setting_types ) {
+			$setting_types = function_exists( 'bsearch_get_registered_settings_types' ) ? bsearch_get_registered_settings_types() : array();
+		}
 
-		return $key;
+		// Remove args that don't affect query results.
+		$exclude_keys = array(
+			'echo',
+			'extra_class',
+			'heading',
+			'is_block',
+			'is_manual',
+			'is_shortcode',
+			'is_widget',
+			'other_attributes',
+		);
+
+		foreach ( $exclude_keys as $key ) {
+			unset( $args[ $key ] );
+		}
+
+		// Remove any keys ending in _header or _desc, or with type 'header'.
+		foreach ( $args as $key => $value ) {
+			if ( '_header' === substr( $key, -7 ) || '_desc' === substr( $key, -5 ) ) {
+				unset( $args[ $key ] );
+				continue;
+			}
+
+			if ( isset( $setting_types[ $key ] ) && 'header' === $setting_types[ $key ] ) {
+				unset( $args[ $key ] );
+			}
+		}
+
+		// Define categories of types for normalization.
+		$id_array_types     = array( 'postids', 'numbercsv', 'taxonomies' );
+		$string_array_types = array( 'posttypes', 'csv', 'multicheck' );
+		$numeric_types      = array( 'number', 'checkbox', 'select', 'radio', 'radiodesc' );
+
+		// Process arguments based on their registered types.
+		foreach ( $args as $key => $value ) {
+			$type = $setting_types[ $key ] ?? '';
+
+			if ( in_array( $type, $numeric_types, true ) && is_numeric( $value ) ) {
+				$args[ $key ] = (int) $value;
+			} elseif ( in_array( $type, $id_array_types, true ) ) {
+				$args[ $key ] = is_array( $value ) ? $value : wp_parse_id_list( $value );
+				$args[ $key ] = array_unique( array_map( 'absint', $args[ $key ] ) );
+				$args[ $key ] = array_filter( $args[ $key ] );
+				sort( $args[ $key ] );
+				if ( empty( $args[ $key ] ) ) {
+					unset( $args[ $key ] );
+				}
+			} elseif ( in_array( $type, $string_array_types, true ) ) {
+				if ( is_string( $value ) && strpos( $value, '=' ) !== false ) {
+					parse_str( $value, $parsed );
+					$value = array_keys( $parsed );
+				} elseif ( is_string( $value ) ) {
+					$value = explode( ',', $value );
+				}
+				$args[ $key ] = is_array( $value ) ? $value : array( $value );
+				$args[ $key ] = array_unique( array_map( 'strval', $args[ $key ] ) );
+				$args[ $key ] = array_filter( $args[ $key ] );
+				sort( $args[ $key ] );
+				if ( empty( $args[ $key ] ) ) {
+					unset( $args[ $key ] );
+				}
+			}
+		}
+
+		// Sort top-level arguments.
+		ksort( $args );
+
+		// Remove any remaining empty strings or null values.
+		foreach ( $args as $key => $value ) {
+			if ( '' === $value || null === $value ) {
+				unset( $args[ $key ] );
+			}
+		}
+
+		// Generate cache key.
+		return sprintf( 'bs_cache_%1$s_%2$s', md5( wp_json_encode( $args ) ), $context );
 	}
 
 	/**
