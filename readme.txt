@@ -2,9 +2,9 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.2.2-beta1
-Requires at least: 6.5
-Tested up to: 6.8
+Stable tag: 4.2.2
+Requires at least: 6.6
+Tested up to: 6.9
 Requires PHP: 7.4
 License: GPLv2 or later
 
@@ -123,8 +123,23 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.2.2 =
 
+* Modifications:
+	* Updated Freemius SDK to v2.13.0.
+	* Upgraded Settings API.
+	* Improved text highlighting.
+	* The Settings screen's "Create Fuzzy Search Indexes" button now deletes and recreates the Fuzzy Search functions.
+	* The Cache key is now created by eliminating unnecessary variations to improve cache efficiency.
+	* New WebberZone Admin banner on Better Search admin screens for quick access to admin pages.
+
+* Bug fixes:
+	* Fixed an issue where the setup wizard notice could display on the wizard page.
+	* Fixed parsing of excluded category slugs.
+	* Fixed a translation string in the settings form.
+	* Fixed handling of `<` and `>` in boolean search mode.
+	* Fixed Boolean mode didn't work in some cases even when enabled in the Settings page.
+
 * Security:
-	* Security fix.
+	* Fixed a stored XSS vulnerability.
 
 = 4.2.1  =
 
@@ -165,5 +180,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
-= 4.2.1 =
-Bug fixes.
+ = 4.2.2 =
+Better Search 4.2.2 improves text highlighting, cache efficiency, and security with bug fixes for boolean search mode and XSS vulnerability.

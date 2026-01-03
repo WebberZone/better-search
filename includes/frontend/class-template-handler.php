@@ -43,6 +43,7 @@ class Template_Handler {
 	/**
 	 * Load seamless mode and hook into WP_Query to check if better_search_query is set and true.
 	 * If so, load the Better Search query.
+	 * For non-seamless mode, add a filter to bypass the main query for search requests.
 	 *
 	 * @since 4.0.0
 	 *
@@ -59,6 +60,37 @@ class Template_Handler {
 				$query->set( 'is_better_search_loaded', true );
 			}
 		}
+
+		// For non-seamless mode search queries, add a filter to bypass the main query.
+		if ( $query->is_search() && ! bsearch_get_option( 'seamless' ) ) {
+			static $bypass_filter_added = false;
+			if ( ! $bypass_filter_added ) {
+				add_filter( 'posts_pre_query', array( $this, 'bypass_posts_pre_query' ), 10, 2 );
+				$bypass_filter_added = true;
+			}
+		}
+	}
+
+	/**
+	 * Bypass the main query for non-seamless search requests by returning a fake post.
+	 *
+	 * @since 4.2.2
+	 *
+	 * @param \WP_Post[]|null $posts Array of post data.
+	 * @param \WP_Query       $query The WP_Query instance.
+	 * @return \WP_Post[]|null Updated array of post objects.
+	 */
+	public function bypass_posts_pre_query( ?array $posts, \WP_Query $query ): ?array {
+		if ( ! is_admin() && $query->is_main_query() && isset( $query->query_vars['s'] ) && ! empty( $query->query_vars['s'] ) ) {
+			// Set essential query properties to prevent further processing.
+			$query->found_posts   = 0;
+			$query->max_num_pages = 0;
+			$query->post_count    = 0;
+
+			// Return empty array instead of fake post.
+			return array();
+		}
+		return $posts;
 	}
 
 	/**

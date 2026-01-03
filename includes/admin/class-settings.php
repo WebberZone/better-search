@@ -165,8 +165,8 @@ class Settings {
 			'general'     => __( 'General', 'better-search' ),
 			'performance' => __( 'Performance', 'better-search' ),
 			'search'      => __( 'Search', 'better-search' ),
-			'heatmap'     => __( 'Heatmap', 'better-search' ),
 			'output'      => __( 'Output', 'better-search' ),
+			'heatmap'     => __( 'Heatmap', 'better-search' ),
 		);
 
 		/**
@@ -1138,11 +1138,6 @@ class Settings {
 		if ( ! isset( $this->settings_api->settings_page ) || $hook !== $this->settings_api->settings_page ) {
 			return;
 		}
-		wp_localize_script(
-			'wz-admin-js',
-			'bsearch_admin',
-			array()
-		);
 		wp_enqueue_script( 'better-search-admin-js' );
 		wp_enqueue_style( 'better-search-admin-ui-css' );
 		wp_enqueue_style( 'wp-spinner' );
@@ -1173,7 +1168,7 @@ class Settings {
 		// Sanitize exclude_cat_slugs to save a new entry of exclude_categories.
 		if ( isset( $settings['exclude_cat_slugs'] ) ) {
 
-			$exclude_cat_slugs = array_unique( str_getcsv( $settings['exclude_cat_slugs'] ) );
+			$exclude_cat_slugs = array_unique( str_getcsv( $settings['exclude_cat_slugs'], ',', '"', '\\' ) );
 
 			foreach ( $exclude_cat_slugs as $cat_name ) {
 				$cat = get_term_by( 'name', $cat_name, 'category' );

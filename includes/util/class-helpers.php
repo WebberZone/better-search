@@ -442,49 +442,143 @@ class Helpers {
 
 
 	/**
-	 * Add a wrapper class bsearch_highlight to terms which an be styled using CSS.
+	 * Highlights search terms in HTML content without affecting tags or attributes.
 	 *
 	 * @since 3.3.0
 	 *
-	 * @param string $input Input string.
-	 * @param array  $keys  Array of terms to highlight.
+	 * Designed for WordPress post content. Not suitable for arbitrary HTML,
+	 * REST API fragments, or content with inline scripts containing closing tags.
 	 *
-	 * @return string Highlighted string.
+	 * @param string       $content The HTML content to process.
+	 * @param string|array $terms   Single term, phrase, or array of terms/phrases to highlight.
+	 *
+	 * @return string The content with highlighted search terms.
 	 */
-	public static function highlight( $input, $keys ) {
-		// If keys are empty, return the input as is.
-		if ( empty( $keys ) ) {
-			return $input;
+	public static function highlight( $content, $terms ) {
+		// Bail early if content or terms are empty.
+		if ( empty( $content ) || empty( $terms ) ) {
+			return $content;
 		}
 
-		$highlight_keys = array();
+		// Convert terms to array if it's a string.
+		if ( ! is_array( $terms ) ) {
+			$terms = array( $terms );
+		}
 
-		foreach ( $keys as $key ) {
-			if ( ! empty( $key ) && ' ' !== $key ) {
-				$highlight_keys[] = preg_quote( $key, '/' );
+		// Clean quotes from terms and trim whitespace.
+		$terms = array_map(
+			function ( $term ) {
+				// Remove only surrounding quotes, preserve embedded ones.
+				return trim( $term, " \t\n\r\0\x0B\"'" );
+			},
+			$terms
+		);
+
+		// Remove empty terms.
+		$terms = array_filter( $terms );
+
+		if ( empty( $terms ) ) {
+			return $content;
+		}
+
+		// Cap term count to prevent regex explosion.
+		$max_terms = apply_filters( 'bsearch_highlight_max_terms', 50 );
+		$terms     = array_slice( $terms, 0, $max_terms );
+
+		// Escape special regex characters in each term.
+		$escaped_terms = array_map( 'preg_quote', $terms, array_fill( 0, count( $terms ), '/' ) );
+
+		// Sort by length (longest first) to match longer phrases before shorter ones.
+		$length_func = function_exists( 'mb_strlen' ) ? 'mb_strlen' : 'strlen';
+		usort(
+			$escaped_terms,
+			function ( $a, $b ) use ( $length_func ) {
+				return $length_func( $b ) - $length_func( $a );
+			}
+		);
+
+		// Allow filtering whether to use word boundaries.
+		$use_boundaries = apply_filters( 'bsearch_highlight_use_boundaries', true );
+
+		// Build the regex pattern once.
+		if ( $use_boundaries ) {
+			// Captures prefix separator to avoid variable-length lookbehind issues.
+			$pattern = '/(^|[\s\p{P}\p{Z}>])(' . implode( '|', $escaped_terms ) . ')(?=[\s\p{P}\p{Z}]|$|<)/iu';
+		} else {
+			// No boundaries for CJK and emoji support.
+			$pattern = '/(' . implode( '|', $escaped_terms ) . ')/iu';
+		}
+
+		// Early exit if no terms match in content (performance optimization).
+		if ( ! preg_match( $pattern, $content ) ) {
+			return $content;
+		}
+
+		// Split content into tags (including script/style) and text.
+		// This pattern captures complete tags including those with newlines.
+		$parts = preg_split( '/(<(?:script|style)[^>]*>.*?<\/(?:script|style)>|<[^>]+>)/is', $content, -1, PREG_SPLIT_DELIM_CAPTURE );
+
+		// Get highlight tag and sanitize.
+		$tag          = apply_filters( 'bsearch_highlight_tag', 'mark' );
+		$allowed_tags = array( 'mark', 'span', 'strong', 'em' );
+		$tag          = in_array( $tag, $allowed_tags, true ) ? $tag : 'mark';
+
+		// Get highlight class and sanitize.
+		$class = apply_filters( 'bsearch_highlight_class', 'bsearch_highlight' );
+		$class = sanitize_html_class( $class );
+
+		$in_highlight = false;
+
+		// Process only text segments, leave HTML tags and scripts untouched.
+		foreach ( $parts as $index => $part ) {
+			// Skip empty parts.
+			if ( empty( $part ) ) {
+				continue;
+			}
+
+			$part_ltrimmed = ltrim( $part );
+			if ( '' === $part_ltrimmed ) {
+				continue;
+			}
+
+			// Check if this is an HTML tag or script/style block (allow leading whitespace/newlines).
+			if ( '<' === $part_ltrimmed[0] ) {
+				// Track whether we are inside an existing highlight tag to avoid nesting.
+				if ( preg_match( '#^<\s*' . preg_quote( $tag, '#' ) . '\b[^>]*\bclass\s*=\s*(["\"])(.*?)\1#i', $part_ltrimmed, $matches ) ) {
+					$classes = $matches[2];
+					if ( preg_match( '#(^|\s)' . preg_quote( $class, '#' ) . '(\s|$)#', $classes ) ) {
+						$in_highlight = true;
+					}
+				} elseif ( preg_match( '#^<\s*/\s*' . preg_quote( $tag, '#' ) . '\s*>#i', $part_ltrimmed ) ) {
+					$in_highlight = false;
+				}
+
+				continue;
+			}
+
+			// Skip parts that are inside an existing highlight wrapper.
+			if ( $in_highlight ) {
+				continue;
+			}
+
+			// Defensive: if a non-tag part still contains '<', it may be mixed/malformed markup.
+			// Never highlight in such a part to avoid corrupting attributes.
+			if ( false !== strpos( $part, '<' ) ) {
+				continue;
+			}
+
+			// Replace matches in text content only.
+			if ( $use_boundaries ) {
+				// $1 preserves the boundary character, $2 wraps the actual term.
+				$parts[ $index ] = preg_replace( $pattern, '$1<' . $tag . ' class="' . $class . '">$2</' . $tag . '>', $part );
+			} else {
+				// $1 wraps the term directly (no boundary capture).
+				$parts[ $index ] = preg_replace( $pattern, '<' . $tag . ' class="' . $class . '">$1</' . $tag . '>', $part );
 			}
 		}
 
-		// If highlight_keys are empty, return the input as is.
-		if ( empty( $highlight_keys ) ) {
-			return $input;
-		}
-
-		// Regular expression to match the keys outside of HTML tags.
-		$regex = '/\b(?!<[^>]*?(?:alt\s*=\s*["\'][^"\']*["\'])?[^>]*?>)(' . implode( '|', $highlight_keys ) . ')(?![^<]*?>)\b/iu';
-
-		// Replace matched keys with highlighted version using callback to escape matches.
-		$output = preg_replace_callback(
-			$regex,
-			function ( $matches ) {
-				return '<mark class="bsearch_highlight">' . $matches[1] . '</mark>';
-			},
-			$input
-		);
-
-		return $output;
+		return implode( '', $parts );
 	}
-
 
 	/**
 	 * Function to convert the mySQL score to percentage.
