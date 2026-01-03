@@ -128,7 +128,7 @@ class Upgrader {
 		<div id="postbox-container-1" class="postbox-container">
 
 			<div id="side-sortables" class="meta-box-sortables ui-sortable">
-				<?php include_once 'settings/sidebar.php'; ?>
+				<?php include_once 'sidebar.php'; ?>
 			</div><!-- /#side-sortables -->
 
 		</div><!-- /#postbox-container-1 -->

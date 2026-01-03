@@ -2,14 +2,10 @@
 /**
  * Class to display and save a Metabox.
  *
- * @since 3.3.0
- *
  * @package WebberZone\Better_Search
  */
 
 namespace WebberZone\Better_Search\Admin\Settings;
-
-use WebberZone\Better_Search\Util\Helpers;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -17,9 +13,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * ATA Metabox class to register the metabox for ata_snippets post type.
- *
- * @since 3.5.0
+ * Metabox API class.
  */
 #[\AllowDynamicProperties]
 class Metabox_API {
@@ -60,11 +54,11 @@ class Metabox_API {
 	protected $title;
 
 	/**
-	 * Text to show to indicate a checkbox has been modified from its default value.
+	 * Translation strings.
 	 *
-	 * @var string Checkbox Modified Text.
+	 * @var array Translation strings.
 	 */
-	public $checkbox_modified_text;
+	public $translation_strings;
 
 	/**
 	 * Array containing the settings' fields.
@@ -80,20 +74,20 @@ class Metabox_API {
 	 *     Array or string of arguments. Default is blank array.
 	 *
 	 *     @type string                     $settings_key           Settings key - is used to prepare the form fields. It is not the meta key.
-	 *     @type string                     $prefix                 Used to create the meta keys. The meta key format is _{$prefix}_{$setting_id}.
-	 *     @type string|array|\WP_Screen    $post_type              The post type(s) on which to show the box.
-	 *     @type array                      $registered_settings    Settings fields array.
-	 *     @type string                     $checkbox_modified_text Text to show to indicate a checkbox has been modified from its default value.
+	 *     @type string                     $prefix              Used to create the meta keys. The meta key format is _{$prefix}_{$setting_id}.
+	 *     @type string|array|\WP_Screen    $post_type           The post type(s) on which to show the box.
+	 *     @type array                      $registered_settings Settings fields array.
+	 *     @type array                      $translation_strings Translation strings.
 	 * }
 	 */
 	public function __construct( $args ) {
 		$defaults = array(
-			'settings_key'           => '',
-			'prefix'                 => '',
-			'post_type'              => '',
-			'title'                  => '',
-			'registered_settings'    => array(),
-			'checkbox_modified_text' => '',
+			'settings_key'        => '',
+			'prefix'              => '',
+			'post_type'           => '',
+			'title'               => '',
+			'registered_settings' => array(),
+			'translation_strings' => array(),
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -192,7 +186,12 @@ class Metabox_API {
 			return;
 		}
 
-		$settings_sanitize = new Settings_Sanitize();
+		$settings_sanitize = new Settings_Sanitize(
+			array(
+				'settings_key' => $this->settings_key,
+				'prefix'       => $this->prefix,
+			)
+		);
 
 		$posted = $_POST[ $this->settings_key ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
@@ -224,7 +223,7 @@ class Metabox_API {
 		/**
 		 * Filter the post meta array which contains post-specific settings.
 		 *
-		 * @param array $post_meta Array of ATA metabox settings.
+		 * @param array $post_meta Array of metabox settings.
 		 * @param int   $post_id   Post ID
 		 */
 		$post_meta = apply_filters( "{$this->prefix}_meta_key", $post_meta, $post_id );
@@ -256,9 +255,9 @@ class Metabox_API {
 
 		$settings_form = new Settings_Form(
 			array(
-				'settings_key'           => $this->settings_key,
-				'prefix'                 => $this->prefix,
-				'checkbox_modified_text' => $this->checkbox_modified_text,
+				'settings_key'        => $this->settings_key,
+				'prefix'              => $this->prefix,
+				'translation_strings' => $this->translation_strings,
 			)
 		);
 
@@ -286,7 +285,7 @@ class Metabox_API {
 
 			$id            = $args['id'];
 			$value         = get_post_meta( $post->ID, "_{$this->prefix}_{$id}", true );
-			$args['value'] = ! empty( $value ) ? $value : ( isset( $args['default'] ) ? $args['default'] : $args['options'] );
+			$args['value'] = ! empty( $value ) ? $value : ( $args['default'] ?? '' );
 			$type          = $args['type'] ?? 'text';
 			$callback      = method_exists( $settings_form, "callback_{$type}" ) ? array( $settings_form, "callback_{$type}" ) : array( $settings_form, 'callback_missing' );
 
@@ -300,7 +299,7 @@ class Metabox_API {
 		echo '</table>';
 
 		/**
-		 * Action triggered when displaying Better Search meta box.
+		 * Action triggered when displaying the meta box.
 		 *
 		 * @param object $post  Post object.
 		 */
@@ -332,7 +331,7 @@ class Metabox_API {
 				$ids   = array();
 				$names = array();
 
-				$taxes = array_unique( str_getcsv( $settings[ $key ] ) );
+				$taxes = array_unique( str_getcsv( $settings[ $key ], ',', '"', '' ) );
 
 				foreach ( $taxes as $tax ) {
 					$tax_name = get_term_by( 'name', $tax, $fields['tax'] );
