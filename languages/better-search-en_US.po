@@ -21,7 +21,7 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-2: freemius\n"
 
 #. translators: %s: Name of the deactivated plugin
-#: better-search.php:138
+#: better-search.php:139
 #, php-format
 msgid "Better Search and Better Search PRO should not be active at the same time. We've automatically deactivated %s."
 msgstr ""
@@ -116,8 +116,6 @@ msgstr ""
 msgid "Historical searches"
 msgstr ""
 
-#. Plugin Name of the plugin
-#: better-search.php
 #: includes/admin/class-dashboard.php:182
 #: includes/admin/network/class-admin.php:92
 #: includes/frontend/class-template-handler.php:161
@@ -314,12 +312,14 @@ msgstr ""
 
 #. translators: 1: Number of posts in the content table
 #: includes/admin/class-settings-wizard.php:431
+#: includes/pro/custom-tables/class-custom-tables-admin.php:334
 #, php-format
 msgid "Content Table: %1$d entries"
 msgstr ""
 
 #. translators: 1: Number of published posts, 2: Percentage of posts indexed
 #: includes/admin/class-settings-wizard.php:437
+#: includes/pro/custom-tables/class-custom-tables-admin.php:340
 #, php-format
 msgid "Published Posts: %1$d, Index Status: %2$d%%"
 msgstr ""
@@ -1183,6 +1183,7 @@ msgstr ""
 #: includes/admin/class-tools-page.php:180
 #: includes/admin/class-tools-page.php:186
 #: includes/admin/network/class-tools-page.php:141
+#: includes/pro/class-admin.php:87
 msgid "Clear cache"
 msgstr ""
 
@@ -1409,6 +1410,7 @@ msgid "account page"
 msgstr ""
 
 #: includes/admin/network/class-admin.php:162
+#: includes/pro/custom-tables/class-custom-tables-admin.php:787
 msgid "Security check failed."
 msgstr ""
 
@@ -1720,6 +1722,289 @@ msgid_plural "%s searches"
 msgstr[0] ""
 msgstr[1] ""
 
+#: includes/pro/class-admin.php:105
+msgid "Create fulltext indexes"
+msgstr ""
+
+#: includes/pro/class-admin.php:114
+msgid "Create fuzzy search indexes"
+msgstr ""
+
+#: includes/pro/class-admin.php:159
+msgid "Installing..."
+msgstr ""
+
+#: includes/pro/class-admin.php:170
+msgid "Done"
+msgstr ""
+
+#: includes/pro/class-admin.php:174
+msgid "Failed to install"
+msgstr ""
+
+#: includes/pro/class-admin.php:195
+msgid "Fuzzy search indexes are installed."
+msgstr ""
+
+#: includes/pro/class-admin.php:198
+msgid "Fuzzy search indexes are not installed."
+msgstr ""
+
+#: includes/pro/class-admin.php:252
+msgid ". Click the above button to create any missing fulltext indexes."
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:729
+msgid "Selected sites saved successfully!"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:847
+msgid "Enable Multisite Search"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:856
+#: includes/pro/class-multisite-search.php:943
+#: includes/pro/custom-tables/class-custom-tables-admin.php:236
+msgid "Select All"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:873
+msgid "Site ID"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:874
+msgid "Site URL"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:875
+msgid "Collation"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:906
+msgid "Select the sites to include in the multisite search. This applies across all sites in the network except for those not selected above."
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:908
+msgid "For optimal performance, disable seamless mode. Note that searching across multiple sites can be resource-intensive, so enabling caching is recommended to improve search speed and reduce server load."
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:911
+msgid "Save Settings"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:918
+msgid "Copy All Better Search Settings Between Sites"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:925
+msgid "Source Site"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:938
+msgid "Destination Sites"
+msgstr ""
+
+#: includes/pro/class-multisite-search.php:960
+msgid "Copy Settings"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:136
+msgid "Custom tables reindexing has been scheduled. This may take some time depending on the number of posts on your site."
+msgstr ""
+
+#. translators: %1$s: Opening link tag, %2$s: Closing link tag
+#: includes/pro/custom-tables/class-custom-tables-admin.php:159
+#, php-format
+msgid "You have enabled custom tables for Better Search, but the tables appear to be empty. This will cause errors when fetching search results. Please run the reindexing tool from the %1$sTools page%2$s."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:194
+msgid "Better Search Pro: Enhanced Content Search Index Available!"
+msgstr ""
+
+#. translators: 1: Opening link tag with URL to Performance tab, 2: Closing link tag
+#: includes/pro/custom-tables/class-custom-tables-admin.php:197
+#, php-format
+msgid "Speed up your searches by enabling the Enhanced Content Search Index feature in the %1$sPerformance tab%2$s. This creates a custom table for faster and more relevant search results."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:223
+#: includes/pro/custom-tables/class-custom-tables-admin.php:357
+#: includes/pro/custom-tables/class-custom-tables-admin.php:479
+msgid "Reindex Custom Tables"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:225
+msgid "Use this tool to reindex all posts in the custom tables. This is useful if you have just enabled the custom tables feature or if you suspect that the tables are out of sync."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:231
+msgid "Select Sites to Reindex"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:232
+msgid "Leave all unchecked to reindex all sites."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:243
+msgid "Site"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:244
+msgid "Content Table"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:245
+msgid "Published Posts"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:246
+msgid "Index Status"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:287
+msgid "ID"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:330
+msgid "Current Status:"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:353
+msgid "Force complete reindex (Deletes all existing data and reindexes all posts)"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:367
+msgid "Clean Up Orphaned Records"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:373
+msgid "Preparing to reindex..."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:383
+msgid "Recreate Custom Table FULLTEXT Indexes"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:385
+msgid "Use this tool to manually drop and recreate the FULLTEXT indexes on the custom tables. This can be useful if you suspect the indexes are corrupted or not performing optimally."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:389
+msgid "Recreate FULLTEXT Indexes"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:392
+msgid "If the Recreate FULLTEXT Indexes button fails, please run the following queries in phpMyAdmin or Adminer:"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:476
+msgid "Starting reindex process..."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:477
+msgid "Reindexing complete! Refresh this page to see the updated status."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:478
+msgid "An error occurred during reindexing. Please try again."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:480
+msgid "Reindexing... Click to Stop"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:505
+#: includes/pro/custom-tables/class-custom-tables-admin.php:512
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#. translators: 1: Number of processed posts, 2: Total number of posts, 3: Progress percentage
+#: includes/pro/custom-tables/class-custom-tables-admin.php:648
+#, php-format
+msgid "Processed %1$d of %2$d posts (%3$d%%)..."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:797
+msgid "No reindex in progress."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:817
+msgid "Reindexing stopped."
+msgstr ""
+
+#. translators: %d: number of records deleted
+#: includes/pro/custom-tables/class-custom-tables-admin.php:857
+#, php-format
+msgid "Successfully cleaned up %d orphaned records from the custom tables."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:860
+msgid "Failed to clean up orphaned records. Please check your database permissions and logs."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:898
+msgid "FULLTEXT indexes have been successfully recreated."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:898
+msgid "Failed to recreate FULLTEXT indexes. Please check your database permissions and logs."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:946
+msgid "Category"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:951
+msgid "Tag"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:956
+msgid "Default Taxonomy"
+msgstr ""
+
+#. translators: %s: List of mismatched settings
+#: includes/pro/custom-tables/class-custom-tables-admin.php:963
+#, php-format
+msgid "There is a mismatch between Better Search Pro and Contextual Related Posts Pro for these taxonomy weights: %s. The taxonomy scores in the custom tables will be overridden by the Better Search Pro settings if you reindex the tables."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:981
+msgid "Enhanced Content Search Index (ECSI)"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:984
+msgid "Apply network-wide settings for Enhanced Content Search Index (ECSI). These actions take immediate effect across all sites."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:985
+msgid "Learn more about ECSI"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:988
+msgid "Sites will need to reindex their content after enabling this option."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:997
+msgid "Enable on All Sites"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:1006
+msgid "Disable on All Sites"
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:1050
+msgid "Enhanced Content Search Index has been enabled on all sites."
+msgstr ""
+
+#: includes/pro/custom-tables/class-custom-tables-admin.php:1059
+msgid "Enhanced Content Search Index has been disabled on all sites."
+msgstr ""
+
+#: includes/pro/custom-tables/class-table-manager.php:79
+msgid "Failed to create custom tables. Please check your mySQL version."
+msgstr ""
+
 #. translators: %s is the number of entries cleared
 #: includes/util/class-cache.php:49
 #, php-format
@@ -1792,6 +2077,11 @@ msgstr ""
 msgid "No results found."
 msgstr ""
 
+#. Plugin Name of the plugin
+#: better-search.php
+msgid "Better Search Pro"
+msgstr ""
+
 #. Plugin URI of the plugin
 #: better-search.php
 msgid "https://webberzone.com/plugins/better-search/"
@@ -1834,4 +2124,12 @@ msgstr ""
 
 #: includes/admin/class-admin.php:369
 msgid "WebberZone Plugins"
+msgstr ""
+
+#: includes/pro/class-fuzzy-search.php:654
+msgid "Better Search Pro: Fuzzy search indexes are missing, which will affect search results."
+msgstr ""
+
+#: includes/pro/class-fuzzy-search.php:656
+msgid "Create the indexes in the Search tab"
 msgstr ""
