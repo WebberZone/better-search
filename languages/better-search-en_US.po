@@ -1031,34 +1031,34 @@ msgstr ""
 msgid "Thank you for using %1$sWebberZone Better_Search%2$s! Please %3$srate us%2$s on %3$sWordPress.org%2$s"
 msgstr ""
 
-#: includes/admin/class-settings.php:1151
+#: includes/admin/class-settings.php:1152
 #: includes/admin/class-tools-page.php:84
 msgid "Are you sure you want to clear the cache?"
 msgstr ""
 
-#: includes/admin/class-settings.php:1152
+#: includes/admin/class-settings.php:1154
 #: includes/admin/class-tools-page.php:85
 msgid "Cache cleared successfully!"
 msgstr ""
 
-#: includes/admin/class-settings.php:1153
+#: includes/admin/class-settings.php:1155
 #: includes/admin/class-tools-page.php:86
 msgid "Failed to clear cache. Please try again."
 msgstr ""
 
-#: includes/admin/class-settings.php:1154
+#: includes/admin/class-settings.php:1156
 #: includes/admin/class-tools-page.php:87
 msgid "Request failed: "
 msgstr ""
 
-#: includes/admin/class-settings.php:1209
-#: includes/admin/class-settings.php:1210
+#: includes/admin/class-settings.php:1212
+#: includes/admin/class-settings.php:1213
 msgid "Upgrade to Pro"
 msgstr ""
 
-#: includes/admin/class-settings.php:1225
-#: includes/admin/class-settings.php:1227
 #: includes/admin/class-settings.php:1228
+#: includes/admin/class-settings.php:1230
+#: includes/admin/class-settings.php:1231
 msgid "Start Settings Wizard"
 msgstr ""
 
@@ -1836,7 +1836,11 @@ msgstr ""
 msgid "The field above has an autocomplete. Start typing in the starting letters, and it will prompt you with options. This field requires a specific format as displayed by the autocomplete."
 msgstr ""
 
-#: includes/admin/class-settings.php:1265
+#: includes/admin/class-settings.php:1268
 msgctxt "tag delimiter"
 msgid ","
+msgstr ""
+
+#: includes/admin/class-settings.php:1153
+msgid "Clearing..."
 msgstr ""

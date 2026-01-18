@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-18T07:24:49+00:00\n"
+"POT-Creation-Date: 2026-01-18T11:31:23+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: better-search\n"
@@ -1079,38 +1079,42 @@ msgstr ""
 msgid "Thank you for using %1$sWebberZone Better_Search%2$s! Please %3$srate us%2$s on %3$sWordPress.org%2$s"
 msgstr ""
 
-#: includes/admin/class-settings.php:1151
+#: includes/admin/class-settings.php:1152
 #: includes/admin/class-tools-page.php:84
 msgid "Are you sure you want to clear the cache?"
 msgstr ""
 
-#: includes/admin/class-settings.php:1152
+#: includes/admin/class-settings.php:1153
+msgid "Clearing..."
+msgstr ""
+
+#: includes/admin/class-settings.php:1154
 #: includes/admin/class-tools-page.php:85
 msgid "Cache cleared successfully!"
 msgstr ""
 
-#: includes/admin/class-settings.php:1153
+#: includes/admin/class-settings.php:1155
 #: includes/admin/class-tools-page.php:86
 msgid "Failed to clear cache. Please try again."
 msgstr ""
 
-#: includes/admin/class-settings.php:1154
+#: includes/admin/class-settings.php:1156
 #: includes/admin/class-tools-page.php:87
 msgid "Request failed: "
 msgstr ""
 
-#: includes/admin/class-settings.php:1209
-#: includes/admin/class-settings.php:1210
+#: includes/admin/class-settings.php:1212
+#: includes/admin/class-settings.php:1213
 msgid "Upgrade to Pro"
 msgstr ""
 
-#: includes/admin/class-settings.php:1225
-#: includes/admin/class-settings.php:1227
 #: includes/admin/class-settings.php:1228
+#: includes/admin/class-settings.php:1230
+#: includes/admin/class-settings.php:1231
 msgid "Start Settings Wizard"
 msgstr ""
 
-#: includes/admin/class-settings.php:1265
+#: includes/admin/class-settings.php:1268
 msgctxt "tag delimiter"
 msgid ","
 msgstr ""
