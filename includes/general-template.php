@@ -915,7 +915,11 @@ function get_bsearch_post_type( $post = 0, $args = array() ) {
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
-	$obj    = get_post_type_object( $post->post_type );
+	$obj = get_post_type_object( $post->post_type );
+	if ( ! $obj instanceof \WP_Post_Type ) {
+		return '';
+	}
+
 	$output = $obj->labels->singular_name;
 	$output = $args['before'] . $output . $args['after'];
 
