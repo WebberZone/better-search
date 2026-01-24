@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-18T11:31:23+00:00\n"
+"POT-Creation-Date: 2026-01-24T09:27:52+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: better-search\n"
@@ -18,7 +18,7 @@ msgstr ""
 #: better-search.php
 #: includes/admin/class-dashboard.php:182
 #: includes/admin/network/class-admin.php:92
-#: includes/frontend/class-template-handler.php:161
+#: includes/frontend/class-template-handler.php:166
 msgid "Better Search"
 msgstr ""
 
@@ -1691,71 +1691,71 @@ msgstr ""
 msgid "There is no excerpt because this is a protected post."
 msgstr ""
 
-#: includes/general-template.php:228
+#: includes/general-template.php:220
 msgid "Any Post Type"
 msgstr ""
 
-#: includes/general-template.php:231
+#: includes/general-template.php:223
 msgctxt "label"
 msgid "Post types:"
 msgstr ""
 
-#: includes/general-template.php:252
+#: includes/general-template.php:249
 msgctxt "label"
 msgid "Search for:"
 msgstr ""
 
-#: includes/general-template.php:253
+#: includes/general-template.php:250
 msgctxt "placeholder"
 msgid "Search &hellip;"
 msgstr ""
 
-#: includes/general-template.php:256
+#: includes/general-template.php:253
 msgctxt "submit button"
 msgid "Search"
 msgstr ""
 
 #. translators: 1: First, 2: Last, 3: Number of rows
-#: includes/general-template.php:410
+#: includes/general-template.php:407
 #, php-format
 msgid "Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</strong>"
 msgstr ""
 
 #. translators: 1: Current page number, 2: Total pages
-#: includes/general-template.php:416
+#: includes/general-template.php:413
 #, php-format
 msgid "Page <strong>%1$s</strong> of <strong>%2$s</strong>"
 msgstr ""
 
-#: includes/general-template.php:470
+#: includes/general-template.php:467
 msgid "All"
 msgstr ""
 
-#: includes/general-template.php:491
-#: includes/general-template.php:495
+#: includes/general-template.php:488
+#: includes/general-template.php:492
 msgid "Date"
 msgstr ""
 
-#: includes/general-template.php:492
-#: includes/general-template.php:494
+#: includes/general-template.php:489
+#: includes/general-template.php:491
 msgid "Relevance"
 msgstr ""
 
-#: includes/general-template.php:498
+#: includes/general-template.php:495
 msgid "Sorted by"
 msgstr ""
 
-#: includes/general-template.php:499
+#: includes/general-template.php:496
 msgid "Sort by"
 msgstr ""
 
 #. translators: 1: Results per page.
-#: includes/general-template.php:506
+#: includes/general-template.php:503
 #, php-format
 msgid "Results per-page: %s "
 msgstr ""
 
-#: includes/general-template.php:598
+#: includes/general-template.php:595
 msgid "Relevance:"
 msgstr ""
 
