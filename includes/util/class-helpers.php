@@ -498,7 +498,7 @@ class Helpers {
 		);
 
 		// Allow filtering whether to use word boundaries.
-		$use_boundaries = apply_filters( 'bsearch_highlight_use_boundaries', true );
+		$use_boundaries = apply_filters( 'bsearch_highlight_use_boundaries', false );
 
 		// Build the regex pattern once.
 		if ( $use_boundaries ) {
@@ -544,7 +544,7 @@ class Helpers {
 			// Check if this is an HTML tag or script/style block (allow leading whitespace/newlines).
 			if ( '<' === $part_ltrimmed[0] ) {
 				// Track whether we are inside an existing highlight tag to avoid nesting.
-				if ( preg_match( '#^<\s*' . preg_quote( $tag, '#' ) . '\b[^>]*\bclass\s*=\s*(["\"])(.*?)\1#i', $part_ltrimmed, $matches ) ) {
+				if ( preg_match( '#^<\s*' . preg_quote( $tag, '#' ) . '\b[^>]*\bclass\s*=\s*(["\'])([^"\']*)\1#i', $part_ltrimmed, $matches ) ) {
 					$classes = $matches[2];
 					if ( preg_match( '#(^|\s)' . preg_quote( $class, '#' ) . '(\s|$)#', $classes ) ) {
 						$in_highlight = true;
