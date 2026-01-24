@@ -50,47 +50,52 @@ class Template_Handler {
 	 * @param \WP_Query $query Query object.
 	 */
 	public function load_seamless_mode( $query ) {
-		if (
-			$query->get( 'better_search_query' ) ||
+		if ( ! $query instanceof \WP_Query ) {
+			return;
+		}
+
+		$is_seamless           = (bool) bsearch_get_option( 'seamless' );
+		$should_force_seamless = $query->get( 'better_search_query' ) ||
 			( wp_is_block_theme() && $query->is_search() ) ||
-			( $query->is_search() && bsearch_get_option( 'seamless' ) )
-		) {
+			( $query->is_search() && $is_seamless );
+
+		if ( $should_force_seamless ) {
 			if ( ! isset( $query->query_vars['is_better_search_loaded'] ) || ! $query->query_vars['is_better_search_loaded'] ) {
 				new \Better_Search_Core_Query( $query->query_vars );
 				$query->set( 'is_better_search_loaded', true );
 			}
+			return;
 		}
 
-		// For non-seamless mode search queries, add a filter to bypass the main query.
-		if ( $query->is_search() && ! bsearch_get_option( 'seamless' ) ) {
-			static $bypass_filter_added = false;
-			if ( ! $bypass_filter_added ) {
-				add_filter( 'posts_pre_query', array( $this, 'bypass_posts_pre_query' ), 10, 2 );
-				$bypass_filter_added = true;
+		if ( $is_seamless || ! $query->is_main_query() || ! $query->is_search() || is_admin() ) {
+			return;
+		}
+
+		$search_args                            = $query->query_vars;
+		$search_args['better_search_query']     = true;
+		$search_args['is_better_search_loaded'] = true;
+
+		$search_results = new \Better_Search_Query( $search_args );
+
+		$populate_main_query = null;
+		$populate_main_query = static function ( $posts, $current_query ) use ( &$populate_main_query, $search_results, $query ) {
+			if ( ! $current_query instanceof \WP_Query || $current_query !== $query ) {
+				return $posts;
 			}
-		}
-	}
 
-	/**
-	 * Bypass the main query for non-seamless search requests by returning a fake post.
-	 *
-	 * @since 4.2.2
-	 *
-	 * @param \WP_Post[]|null $posts Array of post data.
-	 * @param \WP_Query       $query The WP_Query instance.
-	 * @return \WP_Post[]|null Updated array of post objects.
-	 */
-	public function bypass_posts_pre_query( ?array $posts, \WP_Query $query ): ?array {
-		if ( ! is_admin() && $query->is_main_query() && isset( $query->query_vars['s'] ) && ! empty( $query->query_vars['s'] ) ) {
-			// Set essential query properties to prevent further processing.
-			$query->found_posts   = 0;
-			$query->max_num_pages = 0;
-			$query->post_count    = 0;
+			if ( ! $current_query->is_main_query() || ! $current_query->is_search() ) {
+				return $posts;
+			}
 
-			// Return empty array instead of fake post.
-			return array();
-		}
-		return $posts;
+			remove_filter( 'posts_pre_query', $populate_main_query );
+
+			$current_query->found_posts   = $search_results->found_posts;
+			$current_query->max_num_pages = $search_results->max_num_pages;
+
+			return $search_results->posts;
+		};
+
+		add_filter( 'posts_pre_query', $populate_main_query, 10, 2 );
 	}
 
 	/**
