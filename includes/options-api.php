@@ -338,3 +338,28 @@ function bsearch_get_default_option( $key = '' ) {
 function bsearch_settings_reset() {
 	delete_option( 'bsearch_settings' );
 }
+
+/**
+ * Check if WooCommerce is active.
+ *
+ * @since 4.2.3
+ *
+ * @return bool True if WooCommerce is active.
+ */
+function bsearch_is_woocommerce_active() {
+	return class_exists( 'WooCommerce' ) || function_exists( 'wc_get_product' );
+}
+
+/**
+ * Get post meta value.
+ *
+ * @since 4.2.3
+ *
+ * @param int    $post_id Post ID.
+ * @param string $key     Meta key.
+ * @param bool   $single  Whether to return a single value.
+ * @return mixed Meta value.
+ */
+function bsearch_get_meta( $post_id, $key, $single = true ) {
+	return get_post_meta( $post_id, $key, $single );
+}
