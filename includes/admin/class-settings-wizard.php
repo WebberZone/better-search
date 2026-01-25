@@ -580,7 +580,7 @@ class Settings_Wizard extends Settings_Wizard_API {
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=bsearch_dashboard' ) ); ?>" class="button button-secondary">
 						<?php esc_html_e( 'View Dashboard', 'better-search' ); ?>
 					</a>
-					<a href="<?php echo esc_url( home_url( '?s=test' ) ); ?>" class="button button-secondary" target="_blank">
+					<a href="<?php echo esc_url( home_url( '?s=about' ) ); ?>" class="button button-secondary" target="_blank">
 						<?php esc_html_e( 'Test Search', 'better-search' ); ?>
 					</a>
 				</div>

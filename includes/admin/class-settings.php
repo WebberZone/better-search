@@ -1170,26 +1170,7 @@ class Settings {
 	public function change_settings_on_save( $settings ) {
 
 		// Sanitize exclude_cat_slugs to save a new entry of exclude_categories.
-		if ( isset( $settings['exclude_cat_slugs'] ) ) {
-
-			$exclude_cat_slugs = array_unique( str_getcsv( $settings['exclude_cat_slugs'], ',', '"', '\\' ) );
-
-			foreach ( $exclude_cat_slugs as $cat_name ) {
-				$cat = get_term_by( 'name', $cat_name, 'category' );
-
-				// Fall back to slugs since that was the default format before v2.4.0.
-				if ( false === $cat ) {
-					$cat = get_term_by( 'slug', $cat_name, 'category' );
-				}
-				if ( isset( $cat->term_taxonomy_id ) ) {
-					$exclude_categories[]       = $cat->term_taxonomy_id;
-					$exclude_categories_slugs[] = $cat->name;
-				}
-			}
-			$settings['exclude_categories'] = isset( $exclude_categories ) ? join( ',', $exclude_categories ) : '';
-			$settings['exclude_cat_slugs']  = isset( $exclude_categories_slugs ) ? Helpers::str_putcsv( $exclude_categories_slugs ) : '';
-
-		}
+		Settings\Settings_Sanitize::sanitize_tax_slugs( $settings, 'exclude_cat_slugs', 'exclude_categories' );
 
 		// Delete the cache.
 		\WebberZone\Better_Search\Util\Cache::delete();
