@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-24T15:39:39+00:00\n"
+"POT-Creation-Date: 2026-01-24T19:15:59+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: better-search\n"
@@ -293,19 +293,19 @@ msgid "Better Search Setup Wizard"
 msgstr ""
 
 #: includes/admin/class-settings-wizard.php:184
-msgid "Continue"
+msgid "Next Step"
 msgstr ""
 
 #: includes/admin/class-settings-wizard.php:185
-msgid "Go Back"
+msgid "Previous Step"
 msgstr ""
 
 #: includes/admin/class-settings-wizard.php:186
-msgid "Complete Setup"
+msgid "Finish Setup"
 msgstr ""
 
 #: includes/admin/class-settings-wizard.php:187
-msgid "Skip Setup Wizard"
+msgid "Skip Wizard"
 msgstr ""
 
 #. translators: %1$d: Current step number, %2$d: Total number of steps
@@ -315,115 +315,126 @@ msgid "Step %1$d of %2$d"
 msgstr ""
 
 #: includes/admin/class-settings-wizard.php:190
-msgid "Setup Complete!"
+msgid "Setup Wizard Steps"
 msgstr ""
 
 #: includes/admin/class-settings-wizard.php:191
+msgid "Setup Complete!"
+msgstr ""
+
+#: includes/admin/class-settings-wizard.php:192
 msgid "Better Search has been configured successfully. Your search functionality is now ready to use!"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:227
+#: includes/admin/class-settings-wizard.php:193
+#: includes/admin/class-settings-wizard.php:578
+msgid "Go to Settings"
+msgstr ""
+
+#. translators: %s: Search query.
+#: includes/admin/class-settings-wizard.php:195
+#, php-format
+msgid "No results found for \"%s\""
+msgstr ""
+
+#: includes/admin/class-settings-wizard.php:231
 msgid "Welcome to Better Search! Would you like to run the setup wizard to configure the plugin?"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:229
+#: includes/admin/class-settings-wizard.php:233
 msgid "Run Setup Wizard"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:295
-#: includes/admin/class-settings-wizard.php:457
+#: includes/admin/class-settings-wizard.php:299
+#: includes/admin/class-settings-wizard.php:463
 msgid "Start Indexing"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:296
+#: includes/admin/class-settings-wizard.php:300
 msgid "Stop Indexing"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:297
+#: includes/admin/class-settings-wizard.php:301
 msgid "Starting indexing..."
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:298
+#: includes/admin/class-settings-wizard.php:302
 msgid "Indexing completed successfully!"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:299
+#: includes/admin/class-settings-wizard.php:303
 msgid "An error occurred during indexing."
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:392
+#: includes/admin/class-settings-wizard.php:398
 msgid "Custom tables functionality is not available."
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:403
+#: includes/admin/class-settings-wizard.php:409
 msgid "Custom tables are not available."
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:426
+#: includes/admin/class-settings-wizard.php:432
 msgid "Current Index Status"
 msgstr ""
 
 #. translators: 1: Number of posts in the content table
-#: includes/admin/class-settings-wizard.php:431
+#: includes/admin/class-settings-wizard.php:437
 #, php-format
 msgid "Content Table: %1$d entries"
 msgstr ""
 
 #. translators: 1: Number of published posts, 2: Percentage of posts indexed
-#: includes/admin/class-settings-wizard.php:437
+#: includes/admin/class-settings-wizard.php:443
 #, php-format
 msgid "Published Posts: %1$d, Index Status: %2$d%%"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:451
+#: includes/admin/class-settings-wizard.php:457
 msgid "Index Management"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:452
+#: includes/admin/class-settings-wizard.php:458
 msgid "Click the button below to start indexing your content for improved search performance."
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:461
+#: includes/admin/class-settings-wizard.php:467
 msgid "Force reindex (clear existing data)"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:478
+#: includes/admin/class-settings-wizard.php:484
 msgid "Note:"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:478
+#: includes/admin/class-settings-wizard.php:484
 msgid "You can skip this step and index your content later from the Tools page if needed."
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:561
+#: includes/admin/class-settings-wizard.php:567
 msgid "What's Next?"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:563
+#: includes/admin/class-settings-wizard.php:569
 msgid "Test your search functionality on the frontend"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:564
+#: includes/admin/class-settings-wizard.php:570
 msgid "Customize search templates if needed"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:565
+#: includes/admin/class-settings-wizard.php:571
 msgid "Monitor search statistics in the dashboard"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:566
+#: includes/admin/class-settings-wizard.php:572
 msgid "Fine-tune settings based on user behavior"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:572
-msgid "Go to Settings"
-msgstr ""
-
-#: includes/admin/class-settings-wizard.php:575
+#: includes/admin/class-settings-wizard.php:581
 msgid "View Dashboard"
 msgstr ""
 
-#: includes/admin/class-settings-wizard.php:578
+#: includes/admin/class-settings-wizard.php:584
 msgid "Test Search"
 msgstr ""
 
