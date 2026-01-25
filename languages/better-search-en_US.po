@@ -1036,14 +1036,14 @@ msgstr ""
 msgid "Request failed: "
 msgstr ""
 
-#: includes/admin/class-settings.php:1212
-#: includes/admin/class-settings.php:1213
+#: includes/admin/class-settings.php:1193
+#: includes/admin/class-settings.php:1194
 msgid "Upgrade to Pro"
 msgstr ""
 
-#: includes/admin/class-settings.php:1228
-#: includes/admin/class-settings.php:1230
-#: includes/admin/class-settings.php:1231
+#: includes/admin/class-settings.php:1209
+#: includes/admin/class-settings.php:1211
+#: includes/admin/class-settings.php:1212
 msgid "Start Settings Wizard"
 msgstr ""
 
@@ -1821,7 +1821,7 @@ msgstr ""
 msgid "The field above has an autocomplete. Start typing in the starting letters, and it will prompt you with options. This field requires a specific format as displayed by the autocomplete."
 msgstr ""
 
-#: includes/admin/class-settings.php:1268
+#: includes/admin/class-settings.php:1249
 msgctxt "tag delimiter"
 msgid ","
 msgstr ""
