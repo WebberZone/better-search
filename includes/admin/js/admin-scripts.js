@@ -1,7 +1,7 @@
 jQuery(document).ready(
 	function ($) {
 		$('button[name="bsearch_cache_clear"]').on('click', function () {
-			if (confirm(bsearch_admin_data.confirm_message)) {
+			if (confirm(bsearch_admin_data.strings.confirm_message)) {
 				var $button = $(this);
 				$button.prop('disabled', true).append(' <span class="spinner is-active"></span>');
 				clearCache($button);
@@ -10,40 +10,22 @@ jQuery(document).ready(
 
 		// Function to clear the cache.
 		function clearCache($button) {
-			$.post(bsearch_admin_data.ajax_url, {
+			$.post(ajaxurl, {
 				action: 'bsearch_clear_cache',
 				security: bsearch_admin_data.security
 			}, function (response) {
 				if (response.success) {
 					alert(response.data.message);
 				} else {
-					alert(bsearch_admin_data.fail_message);
+					alert(bsearch_admin_data.strings.fail_message);
 				}
 			}).fail(function (jqXHR, textStatus) {
-				alert(bsearch_admin_data.request_fail_message + textStatus);
+				alert(bsearch_admin_data.strings.request_fail_message + textStatus);
 			}).always(function () {
 				$button.prop('disabled', false).find('.spinner').remove();
 			});
 		}
 
-		// Prompt the user when they leave the page without saving the form.
-		var formmodified = 0;
-
-		function confirmFormChange() {
-			formmodified = 1;
-		}
-
-		function confirmExit() {
-			if (formmodified == 1) {
-				return true;
-			}
-		}
-
-		function formNotModified() {
-			formmodified = 0;
-		}
-
-		$('form *').change(confirmFormChange);
 
 		// Collation fix AJAX handler
 		$(document).on('click', '.bsearch-run-collation-fix', function (e) {
@@ -57,7 +39,7 @@ jQuery(document).ready(
 				.text('Running...')
 				.append(' <span class="spinner is-active" style="float: none; margin: 0 0 0 5px;"></span>');
 
-			$.post(bsearch_admin_data.ajax_url, {
+			$.post(ajaxurl, {
 				action: 'bsearch_run_collation_fix',
 				blog_id: $button.data('blog-id'),
 				collation: $button.data('collation'),
@@ -78,14 +60,6 @@ jQuery(document).ready(
 				}
 			});
 		});
-
-		window.onbeforeunload = confirmExit;
-
-		$("input[name='submit']").click(formNotModified);
-		$("input[id='search-submit']").click(formNotModified);
-		$("input[id='doaction']").click(formNotModified);
-		$("input[id='doaction2']").click(formNotModified);
-		$("input[name='filter_action']").click(formNotModified);
 
 		$(
 			function () {

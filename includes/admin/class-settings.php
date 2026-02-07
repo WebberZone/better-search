@@ -77,6 +77,9 @@ class Settings {
 		Hook_Registry::add_filter( self::$prefix . '_settings_sanitize', array( $this, 'change_settings_on_save' ), 99 );
 		Hook_Registry::add_filter( self::$prefix . '_after_setting_output', array( $this, 'after_setting_output' ), 10, 2 );
 		Hook_Registry::add_action( self::$prefix . '_settings_form_buttons', array( $this, 'add_wizard_button' ) );
+
+		Hook_Registry::add_action( 'wp_ajax_nopriv_' . self::$prefix . '_taxonomy_search_tom_select', array( __CLASS__, 'taxonomy_search_tom_select' ) );
+		Hook_Registry::add_action( 'wp_ajax_' . self::$prefix . '_taxonomy_search_tom_select', array( __CLASS__, 'taxonomy_search_tom_select' ) );
 	}
 
 	/**
@@ -603,14 +606,12 @@ class Settings {
 			'exclude_cat_slugs'         => array(
 				'id'               => 'exclude_cat_slugs',
 				'name'             => esc_html__( 'Exclude Categories', 'better-search' ),
-				'desc'             => esc_html__( 'Comma separated list of category slugs. The field above has an autocomplete so simply start typing in the starting letters and it will prompt you with options. Does not support custom taxonomies.', 'better-search' ),
+				'desc'             => esc_html__( 'The field above has an autocomplete. Start typing in the starting letters, and it will prompt you with options. This field requires a specific format as displayed by the autocomplete.', 'better-search' ),
 				'type'             => 'csv',
 				'default'          => '',
 				'size'             => 'large',
-				'field_class'      => 'category_autocomplete',
-				'field_attributes' => array(
-					'data-wp-taxonomy' => 'category',
-				),
+				'field_class'      => 'ts_autocomplete',
+				'field_attributes' => self::get_taxonomy_search_field_attributes( 'category' ),
 			),
 			'exclude_categories'        => array(
 				'id'       => 'exclude_categories',
@@ -1138,6 +1139,7 @@ class Settings {
 		if ( ! isset( $this->settings_api->settings_page ) || $hook !== $this->settings_api->settings_page ) {
 			return;
 		}
+
 		wp_enqueue_script( 'better-search-admin-js' );
 		wp_enqueue_style( 'better-search-admin-ui-css' );
 		wp_enqueue_style( 'wp-spinner' );
@@ -1145,12 +1147,14 @@ class Settings {
 			'better-search-admin-js',
 			'bsearch_admin_data',
 			array(
-				'ajax_url'             => admin_url( 'admin-ajax.php' ),
-				'security'             => wp_create_nonce( 'bsearch-admin' ),
-				'confirm_message'      => esc_html__( 'Are you sure you want to clear the cache?', 'better-search' ),
-				'success_message'      => esc_html__( 'Cache cleared successfully!', 'better-search' ),
-				'fail_message'         => esc_html__( 'Failed to clear cache. Please try again.', 'better-search' ),
-				'request_fail_message' => esc_html__( 'Request failed: ', 'better-search' ),
+				'security' => wp_create_nonce( 'bsearch-admin' ),
+				'strings'  => array(
+					'confirm_message'      => esc_html__( 'Are you sure you want to clear the cache?', 'better-search' ),
+					'clearing_text'        => esc_html__( 'Clearing...', 'better-search' ),
+					'success_message'      => esc_html__( 'Cache cleared successfully!', 'better-search' ),
+					'fail_message'         => esc_html__( 'Failed to clear cache. Please try again.', 'better-search' ),
+					'request_fail_message' => esc_html__( 'Request failed: ', 'better-search' ),
+				),
 			)
 		);
 	}
@@ -1166,26 +1170,7 @@ class Settings {
 	public function change_settings_on_save( $settings ) {
 
 		// Sanitize exclude_cat_slugs to save a new entry of exclude_categories.
-		if ( isset( $settings['exclude_cat_slugs'] ) ) {
-
-			$exclude_cat_slugs = array_unique( str_getcsv( $settings['exclude_cat_slugs'], ',', '"', '\\' ) );
-
-			foreach ( $exclude_cat_slugs as $cat_name ) {
-				$cat = get_term_by( 'name', $cat_name, 'category' );
-
-				// Fall back to slugs since that was the default format before v2.4.0.
-				if ( false === $cat ) {
-					$cat = get_term_by( 'slug', $cat_name, 'category' );
-				}
-				if ( isset( $cat->term_taxonomy_id ) ) {
-					$exclude_categories[]       = $cat->term_taxonomy_id;
-					$exclude_categories_slugs[] = $cat->name;
-				}
-			}
-			$settings['exclude_categories'] = isset( $exclude_categories ) ? join( ',', $exclude_categories ) : '';
-			$settings['exclude_cat_slugs']  = isset( $exclude_categories_slugs ) ? Helpers::str_putcsv( $exclude_categories_slugs ) : '';
-
-		}
+		Settings\Settings_Sanitize::sanitize_tax_slugs( $settings, 'exclude_cat_slugs', 'exclude_categories' );
 
 		// Delete the cache.
 		\WebberZone\Better_Search\Util\Cache::delete();
@@ -1226,5 +1211,165 @@ class Settings {
 			esc_attr__( 'Start Settings Wizard', 'better-search' ),
 			esc_html__( 'Start Settings Wizard', 'better-search' )
 		);
+	}
+
+	/**
+	 * AJAX handler for Tom Select taxonomy search.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return void
+	 */
+	public static function taxonomy_search_tom_select() {
+		// Verify nonce.
+		if ( ! isset( $_REQUEST['nonce'] ) ) {
+			wp_send_json_error( array( 'message' => 'Missing nonce' ) );
+		}
+
+		$nonce_valid = wp_verify_nonce( sanitize_key( $_REQUEST['nonce'] ), self::$prefix . '_taxonomy_search_tom_select' );
+
+		if ( ! $nonce_valid ) {
+			wp_send_json_error(
+				array(
+					'message'         => 'Invalid nonce',
+					'received_nonce'  => sanitize_key( $_REQUEST['nonce'] ),
+					'expected_action' => self::$prefix . '_taxonomy_search_tom_select',
+				)
+			);
+		}
+
+		if ( ! isset( $_REQUEST['endpoint'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			wp_send_json_error( 'Missing endpoint' );
+		}
+
+		$endpoint = sanitize_key( $_REQUEST['endpoint'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		$search_term = isset( $_REQUEST['q'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['q'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		$comma = _x( ',', 'tag delimiter', 'better-search' );
+		if ( ',' !== $comma ) {
+			$search_term = str_replace( $comma, ',', $search_term );
+		}
+		if ( false !== strpos( $search_term, ',' ) ) {
+			$search_term = explode( ',', $search_term );
+			$search_term = $search_term[ count( $search_term ) - 1 ];
+		}
+		$search_term = trim( $search_term );
+
+		if ( 'public_taxonomies' === $endpoint ) {
+			$taxonomies = (array) get_taxonomies( array( 'public' => true ), 'objects' );
+			$taxonomy   = array();
+			$tax        = null;
+
+			foreach ( $taxonomies as $taxonomy_name => $taxonomy_object ) {
+				if ( ! is_string( $taxonomy_name ) || '' === $taxonomy_name ) {
+					continue;
+				}
+
+				if ( empty( $taxonomy_object->cap->assign_terms ) ) {
+					continue;
+				}
+
+				if ( ! current_user_can( $taxonomy_object->cap->assign_terms ) ) {
+					continue;
+				}
+
+				$taxonomy[] = $taxonomy_name;
+			}
+
+			if ( empty( $taxonomy ) ) {
+				wp_send_json_success( array() );
+			}
+
+			$tax = get_taxonomy( $taxonomy[0] );
+		} else {
+			$taxonomy = $endpoint;
+			$tax      = get_taxonomy( $taxonomy );
+
+			if ( ! $tax ) {
+				wp_send_json_error( 'Invalid taxonomy' );
+			}
+
+			if ( ! current_user_can( $tax->cap->assign_terms ) ) {
+				wp_send_json_error( 'Insufficient permissions' );
+			}
+		}
+
+		/** This filter has been defined in /wp-admin/includes/ajax-actions.php */
+		$term_search_min_chars = (int) apply_filters( 'term_search_min_chars', 2, $tax, $search_term );
+
+		/*
+		 * Require $term_search_min_chars chars for matching (default: 2)
+		 * ensure it's a non-negative, non-zero integer.
+		 */
+		if ( ( 0 === $term_search_min_chars ) || ( strlen( $search_term ) < $term_search_min_chars ) ) {
+			wp_send_json_success( array() );
+		}
+
+		$terms = get_terms(
+			array(
+				'taxonomy'   => $taxonomy,
+				'name__like' => $search_term,
+				'hide_empty' => false,
+			)
+		);
+
+		$results = array();
+		foreach ( (array) $terms as $term ) {
+			$formatted_string = "{$term->name} ({$term->taxonomy}:{$term->term_taxonomy_id})";
+			$results[]        = array(
+				'value' => $formatted_string,
+				'text'  => $term->name,
+			);
+		}
+
+		wp_send_json_success( $results );
+	}
+
+	/**
+	 * Get field attributes for Tom Select taxonomy search fields.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param string $taxonomy  The taxonomy to search.
+	 * @param array  $ts_config Optional Tom Select configuration.
+	 * @return array Field attributes array.
+	 */
+	private static function get_taxonomy_search_field_attributes( $taxonomy, $ts_config = array() ) {
+		$attributes = array(
+			'data-wp-prefix'   => strtoupper( (string) self::$prefix ),
+			'data-wp-action'   => self::$prefix . '_taxonomy_search_tom_select',
+			'data-wp-nonce'    => wp_create_nonce( self::$prefix . '_taxonomy_search_tom_select' ),
+			'data-wp-endpoint' => $taxonomy,
+		);
+
+		if ( ! empty( $ts_config ) ) {
+			$attributes['data-wp-ts-config'] = wp_json_encode( $ts_config );
+		}
+
+		return $attributes;
+	}
+
+	/**
+	 * Get field attributes for Tom Select meta key search fields.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param array $ts_config Optional Tom Select configuration.
+	 * @return array Field attributes array.
+	 */
+	private static function get_meta_keys_search_field_attributes( $ts_config = array() ) {
+		$attributes = array(
+			'data-wp-prefix'   => strtoupper( (string) self::$prefix ),
+			'data-wp-action'   => self::$prefix . '_taxonomy_search_tom_select',
+			'data-wp-nonce'    => wp_create_nonce( self::$prefix . '_taxonomy_search_tom_select' ),
+			'data-wp-endpoint' => 'meta_keys',
+		);
+
+		if ( ! empty( $ts_config ) ) {
+			$attributes['data-ts-config'] = wp_json_encode( $ts_config );
+		}
+
+		return $attributes;
 	}
 }

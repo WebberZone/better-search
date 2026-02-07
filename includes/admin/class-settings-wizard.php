@@ -180,15 +180,19 @@ class Settings_Wizard extends Settings_Wizard_API {
 	 */
 	protected function get_translation_strings() {
 		return array(
-			'wizard_title'    => __( 'Better Search Setup Wizard', 'better-search' ),
-			'next_step'       => __( 'Continue', 'better-search' ),
-			'previous_step'   => __( 'Go Back', 'better-search' ),
-			'finish_setup'    => __( 'Complete Setup', 'better-search' ),
-			'skip_wizard'     => __( 'Skip Setup Wizard', 'better-search' ),
+			'wizard_title'          => __( 'Better Search Setup Wizard', 'better-search' ),
+			'next_step'             => __( 'Next Step', 'better-search' ),
+			'previous_step'         => __( 'Previous Step', 'better-search' ),
+			'finish_setup'          => __( 'Finish Setup', 'better-search' ),
+			'skip_wizard'           => __( 'Skip Wizard', 'better-search' ),
 			/* translators: %1$d: Current step number, %2$d: Total number of steps */
-			'step_of'         => __( 'Step %1$d of %2$d', 'better-search' ),
-			'wizard_complete' => __( 'Setup Complete!', 'better-search' ),
-			'setup_complete'  => __( 'Better Search has been configured successfully. Your search functionality is now ready to use!', 'better-search' ),
+			'step_of'               => __( 'Step %1$d of %2$d', 'better-search' ),
+			'steps_nav_aria_label'  => __( 'Setup Wizard Steps', 'better-search' ),
+			'wizard_complete'       => __( 'Setup Complete!', 'better-search' ),
+			'setup_complete'        => __( 'Better Search has been configured successfully. Your search functionality is now ready to use!', 'better-search' ),
+			'go_to_settings'        => __( 'Go to Settings', 'better-search' ),
+			/* translators: %s: Search query. */
+			'tom_select_no_results' => __( 'No results found for "%s"', 'better-search' ),
 		);
 	}
 
@@ -338,6 +342,8 @@ class Settings_Wizard extends Settings_Wizard_API {
 		?>
 		<div class="wrap wizard-wrap">
 			<h1><?php echo esc_html( $this->translation_strings['wizard_title'] ); ?></h1>
+
+			<?php $this->render_wizard_steps_navigation(); ?>
 
 			<div class="wizard-progress">
 				<div class="wizard-progress-bar">
@@ -574,7 +580,7 @@ class Settings_Wizard extends Settings_Wizard_API {
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=bsearch_dashboard' ) ); ?>" class="button button-secondary">
 						<?php esc_html_e( 'View Dashboard', 'better-search' ); ?>
 					</a>
-					<a href="<?php echo esc_url( home_url( '?s=test' ) ); ?>" class="button button-secondary" target="_blank">
+					<a href="<?php echo esc_url( home_url( '?s=about' ) ); ?>" class="button button-secondary" target="_blank">
 						<?php esc_html_e( 'Test Search', 'better-search' ); ?>
 					</a>
 				</div>

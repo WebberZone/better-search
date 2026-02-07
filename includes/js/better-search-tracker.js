@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     fetch(ajax_bsearch_tracker.ajax_url, {
         method: 'POST',
         headers: {
@@ -7,16 +7,16 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         body: new URLSearchParams({
             action: 'bsearch_tracker',
-			bsearch_search_query: ajax_bsearch_tracker.bsearch_search_query
+            bsearch_search_query: ajax_bsearch_tracker.bsearch_search_query
         }).toString()
     })
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(data) {
-        // handle the response data
-    })
-    .catch(function(error) {
-        console.error('Error:', error);
-    });
+        .then(function (response) {
+            return response.text();
+        })
+        .then(function (text) {
+            // handle the response text
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
 });
