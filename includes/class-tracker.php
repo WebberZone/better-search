@@ -119,6 +119,7 @@ class Tracker {
 	public static function query_vars( $vars ) {
 		// Add these to the list of queryvars that WP gathers.
 		$vars[] = 'bsearch_search_query';
+		$vars[] = 'bsearch_debug';
 
 		/**
 		 * Function to add additional queries to query_vars.
@@ -154,16 +155,14 @@ class Tracker {
 		if ( array_key_exists( 'bsearch_search_query', $wp->query_vars ) && ! empty( $wp->query_vars['bsearch_search_query'] ) ) {
 
 			$search_query = rawurldecode( wp_kses_data( wp_unslash( $wp->query_vars['bsearch_search_query'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$debug        = ( array_key_exists( 'bsearch_debug', $wp->query_vars ) && 1 === absint( $wp->query_vars['bsearch_debug'] ) );
 
 			$str = self::update_count( $search_query );
 
-			// If the debug parameter is set then we output $str else we send a No Content header.
-			if ( array_key_exists( 'bsearch_debug', $wp->query_vars ) && 1 === absint( $wp->query_vars['bsearch_debug'] ) ) {
-				header( 'content-type: application/x-javascript' );
-				wp_send_json( $str );
-			} else {
-				header( 'HTTP/1.0 204 No Content' );
+			if ( $debug ) {
+				header( 'Content-Type: text/plain; charset=UTF-8' );
 				header( 'Cache-Control: max-age=15, s-maxage=0' );
+				echo $str; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 
 			// Stop anything else from loading as it is not needed.
@@ -186,15 +185,13 @@ class Tracker {
 
 		$str = self::update_count( $search_query );
 
-		// If the debug parameter is set then we output $str else we send a No Content header.
 		if ( 1 === $debug ) {
-			echo esc_html( $str );
-		} else {
-			header( 'HTTP/1.0 204 No Content' );
-			header( 'Cache-Control: max-age=15, s-maxage=0' );
+			header( 'Content-Type: text/plain; charset=UTF-8' );
+			echo $str; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			wp_die();
 		}
 
-		wp_die();
+		wp_die( '', '', array( 'response' => 200 ) );
 	}
 
 	/**

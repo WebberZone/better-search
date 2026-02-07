@@ -209,15 +209,7 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 	$args = array_merge( $defaults, $args );
 
 	// Build a string containing an aria-label to use for the search form.
-	if ( $args['aria_label'] ) {
-		$aria_label = 'aria-label="' . esc_attr( $args['aria_label'] ) . '" ';
-	} else {
-		/*
-		 * If there's no custom aria-label, we can set a default here. At the
-		 * moment it's empty as there's uncertainty about what the default should be.
-		 */
-		$aria_label = '';
-	}
+	$aria_label = $args['aria_label'] ? 'aria-label="' . esc_attr( $args['aria_label'] ) . '" ' : '';
 
 	// Parse post_types.
 	$post_types          = wp_parse_slug_list( $args['post_types'] );
@@ -234,7 +226,12 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 
 		foreach ( $post_types as $post_type ) {
 			$post_type = get_post_type_object( $post_type );
-			$select   .= sprintf(
+
+			if ( ! $post_type instanceof WP_Post_Type ) {
+				continue;
+			}
+
+			$select .= sprintf(
 				'<option value="%1$s" %3$s>%2$s</option>',
 				$post_type->name,
 				$post_type->labels->singular_name,
@@ -918,7 +915,11 @@ function get_bsearch_post_type( $post = 0, $args = array() ) {
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
-	$obj    = get_post_type_object( $post->post_type );
+	$obj = get_post_type_object( $post->post_type );
+	if ( ! $obj instanceof \WP_Post_Type ) {
+		return '';
+	}
+
 	$output = $obj->labels->singular_name;
 	$output = $args['before'] . $output . $args['after'];
 
