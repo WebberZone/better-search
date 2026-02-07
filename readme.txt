@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.2.2
+Stable tag: 4.2.3
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -121,6 +121,18 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.2.3 =
+
+* Modifications:
+	* Added WooCommerce product indexing and custom meta field support.
+	* Modernized Tom Select implementation for taxonomy and meta key searches.
+	* Enhanced seamless mode logic and form generation.
+	* Improved tracker response handling with better regex patterns.
+	* Standardized Hook_Registry validation across WebberZone plugins.
+
+* Fixed:
+	* Some users would see no search results when seamless mode is off.
+
 = 4.2.2 =
 
 * Modifications:
@@ -180,5 +192,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
- = 4.2.2 =
-Better Search 4.2.2 improves text highlighting, cache efficiency, and security with bug fixes for boolean search mode and XSS vulnerability.
+ = 4.2.3 =
+Adds WooCommerce product indexing, modernizes taxonomy search with Tom Select, and enhances seamless mode logic with improved tracker response handling.
