@@ -193,4 +193,4 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 == Upgrade Notice ==
 
  = 4.2.3 =
-Adds WooCommerce product indexing, modernizes taxonomy search with Tom Select, and enhances seamless mode logic with improved tracker response handling.
+Adds WooCommerce product indexing (Pro only), modernizes taxonomy search with Tom Select, and enhances seamless mode logic with improved tracker response handling.
