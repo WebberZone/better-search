@@ -2,7 +2,7 @@
 /**
  * Class to display and save a Metabox.
  *
- * @package WebberZone\Better_Search
+ * @package WebberZone\Better_External_Links
  */
 
 namespace WebberZone\Better_Search\Admin\Settings;
@@ -15,7 +15,6 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Metabox API class.
  */
-#[\AllowDynamicProperties]
 class Metabox_API {
 
 	/**
@@ -122,40 +121,23 @@ class Metabox_API {
 	 */
 	public function admin_enqueue_scripts( $hook ) {
 		if ( in_array( $hook, array( 'post.php', 'post-new.php' ), true ) || get_current_screen()->post_type === $this->post_type ) {
-			self::enqueue_scripts_styles();
+			$args = array(
+				'strings' => array(
+					'no_results' => isset( $this->translation_strings['tom_select_no_results'] ) ? esc_html( $this->translation_strings['tom_select_no_results'] ) : 'No results found for "%s"',
+				),
+			);
+			self::enqueue_scripts_styles( $this->prefix, $args );
 		}
 	}
 
 	/**
 	 * Enqueues all scripts, styles, settings, and templates necessary to use the Settings API.
+	 *
+	 * @param string $prefix Prefix which is used for creating the unique filters and actions.
+	 * @param array  $args   Array of arguments.
 	 */
-	public static function enqueue_scripts_styles() {
-
-		$minimize = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-
-		wp_enqueue_style( 'wp-color-picker' );
-
-		wp_enqueue_media();
-		wp_enqueue_script( 'wp-color-picker' );
-		wp_enqueue_script( 'jquery' );
-		wp_enqueue_script( 'jquery-ui-autocomplete' );
-		wp_enqueue_script( 'jquery-ui-tabs' );
-
-		wp_enqueue_code_editor(
-			array(
-				'type'       => 'text/html',
-				'codemirror' => array(
-					'indentUnit' => 2,
-					'tabSize'    => 2,
-				),
-			)
-		);
-
-		// Enqueue WZ Admin JS.
-		wp_enqueue_script( 'wz-admin-js' );
-		wp_enqueue_script( 'wz-codemirror-js' );
-		wp_enqueue_script( 'wz-taxonomy-suggest-js' );
-		wp_enqueue_script( 'wz-media-selector-js' );
+	public static function enqueue_scripts_styles( $prefix, $args = array() ) {
+		Settings_API::enqueue_scripts_styles( $prefix, $args );
 	}
 
 	/**
@@ -204,7 +186,7 @@ class Metabox_API {
 			 *
 			 * @param array $non_setting_types Array of types which are not settings.
 			 */
-			$non_setting_types = apply_filters( $this->prefix . '_metabox_non_setting_types', array( 'header', 'descriptive_text' ) );
+			$non_setting_types = apply_filters( $this->prefix . '_metabox_non_setting_types', array( 'header', 'descriptive_text' ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 
 			if ( in_array( $type, $non_setting_types, true ) ) {
 				continue;
@@ -226,7 +208,7 @@ class Metabox_API {
 		 * @param array $post_meta Array of metabox settings.
 		 * @param int   $post_id   Post ID
 		 */
-		$post_meta = apply_filters( "{$this->prefix}_meta_key", $post_meta, $post_id );
+		$post_meta = apply_filters( "{$this->prefix}_meta_key", $post_meta, $post_id ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 
 		// Now loop through the settings array and either save or delete the meta key.
 		foreach ( $this->registered_settings as $setting ) {
@@ -264,24 +246,7 @@ class Metabox_API {
 		echo '<table class="form-table">';
 		foreach ( $this->registered_settings as $setting ) {
 
-			$args = wp_parse_args(
-				$setting,
-				array(
-					'id'               => null,
-					'name'             => '',
-					'desc'             => '',
-					'type'             => null,
-					'default'          => '',
-					'options'          => '',
-					'max'              => null,
-					'min'              => null,
-					'step'             => null,
-					'size'             => null,
-					'field_class'      => '',
-					'field_attributes' => '',
-					'placeholder'      => '',
-				)
-			);
+			$args = Settings_API::parse_field_args( $setting );
 
 			$id            = $args['id'];
 			$value         = get_post_meta( $post->ID, "_{$this->prefix}_{$id}", true );
@@ -303,7 +268,7 @@ class Metabox_API {
 		 *
 		 * @param object $post  Post object.
 		 */
-		do_action( $this->prefix . '_meta_box', $post );
+		do_action( $this->prefix . '_meta_box', $post ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 	}
 
 	/**
