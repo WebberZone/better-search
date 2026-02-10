@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.2.3
+Stable tag: 4.2.4
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
