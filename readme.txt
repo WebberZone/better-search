@@ -183,6 +183,7 @@ Release post: [https://webberzone.com/announcements/better-search-v4-2-0/](https
 	* Updated Freemius SDK.
 	* Live search displays a loading state while results are being fetched.
 	* Fulltext indexes are now named `wz_title_content`, `wz_title`, and `wz_content` to ensure compatibility and optimize database space, especially when using Contextual Related Posts. After updating to this version, please recreate the indexes to benefit from the changes—until then, the plugin will use the previous index names.
+	* Media Handler now supports the FIFU WordPress plugin for featured image detection.
 
 * Bug fix:
 	* Fixed an issue where the Live Search conflicted with Mega Menu Pro.
