@@ -1027,7 +1027,7 @@ class Settings {
 		if ( false !== strpos( $file, 'better-search.php' ) ) {
 			$new_links = array(
 				'support'    => '<a href = "https://wordpress.org/support/plugin/better-search">' . esc_html__( 'Support', 'better-search' ) . '</a>',
-				'donate'     => '<a href = "https://ajaydsouza.com/donate/">' . esc_html__( 'Donate', 'better-search' ) . '</a>',
+				'donate'     => '<a href = "https://wzn.io/donate-wz">' . esc_html__( 'Donate', 'better-search' ) . '</a>',
 				'contribute' => '<a href = "https://github.com/WebberZone/better-search">' . esc_html__( 'Contribute', 'better-search' ) . '</a>',
 			);
 

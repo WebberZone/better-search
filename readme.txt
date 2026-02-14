@@ -1,7 +1,7 @@
 === Better Search - Relevant search results for WordPress ===
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
-Donate link: https://ajaydsouza.com/donate/
+Donate link: https://wzn.io/donate-wz
 Stable tag: 4.2.4
 Requires at least: 6.6
 Tested up to: 6.9
