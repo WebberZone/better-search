@@ -121,6 +121,17 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.2.4 =
+
+* Features:
+	* Better Search form: The "any" post type option label can now be customised when the post type dropdown is enabled.
+
+* Fixed:
+	* Fixed an issue where selecting "any" post type would search through all post types instead of respecting the configured post types from settings.
+	* [Pro] Custom table searches now include post slug matching when “Search post slug” is enabled.
+    * [Pro] Fixed SQL syntax error in multisite search queries when custom tables are disabled, caused by malformed GROUP BY clause stripping.
+    * Fixed improper stripping of boolean mode operators in LIKE clauses, ensuring consistent behavior between FULLTEXT and LIKE searches.
+
 = 4.2.3 =
 
 * Modifications:
@@ -192,6 +203,9 @@ Release post: [https://webberzone.com/announcements/better-search-v4-2-0/](https
 For previous changelog entries, please refer to the separate changelog.txt file or [Github Releases page](https://github.com/WebberZone/better-search/releases)
 
 == Upgrade Notice ==
+
+ = 4.2.4 =
+Fixes post type selection to respect configured settings when "any" is selected.
 
  = 4.2.3 =
 Adds WooCommerce product indexing (Pro only), modernizes taxonomy search with Tom Select, and enhances seamless mode logic with improved tracker response handling.
