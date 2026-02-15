@@ -281,7 +281,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		}
 
 		// If post_types is empty or if we want all the post types.
-		if ( empty( $post_types ) || ( is_array( $post_types ) && in_array( 'any', $post_types, true ) ) || 'any' === $post_types ) {
+		if ( empty( $post_types ) || in_array( 'any', $post_types, true ) ) {
 			$post_types = wp_parse_list( bsearch_get_option( 'post_types' ) );
 		}
 
