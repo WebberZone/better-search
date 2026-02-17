@@ -855,7 +855,7 @@ function get_bsearch_term_list( $post = 0, $args = array() ) {
 	}
 	$output = array_filter( $output );
 
-	$output = $args['before'] . implode( $args['sep'], $output ) . $args['after'];
+	$output = $args['before'] . implode( $args['sep'], array_map( 'strval', $output ) ) . $args['after'];
 
 	/**
 	 * Filters the post terms for the current post.
