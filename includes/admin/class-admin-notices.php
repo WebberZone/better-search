@@ -164,9 +164,9 @@ class Admin_Notices {
 				'id'          => 'bsearch_missing_fulltext_index',
 				'message'     => sprintf(
 					'<p>%s <a href="%s">%s</a></p>',
-					esc_html__( 'Better Search: Some fulltext indexes are missing, which will affect search results.', 'better-search' ),
+					esc_html__( 'Better Search: Some FULLTEXT indexes are missing from your database, which will prevent search results from being found. Please run the recreate indexes tool from the Tools page to restore search functionality.', 'better-search' ),
 					esc_url( admin_url( 'admin.php?page=bsearch_tools_page#bsearch-recreate-index' ) ),
-					esc_html__( 'Click here to recreate indexes.', 'better-search' )
+					esc_html__( 'Go to Tools page', 'better-search' )
 				),
 				'type'        => 'warning',
 				'dismissible' => true,
@@ -203,9 +203,9 @@ class Admin_Notices {
 				'id'          => 'bsearch_missing_tables',
 				'message'     => sprintf(
 					'<p>%s <a href="%s">%s</a></p>',
-					esc_html__( 'Better Search: Some tables are missing, which will affect search results.', 'better-search' ),
+					esc_html__( 'Better Search: Some tables are missing, which will affect search results performance. Visit the Tools page to manually recreate the tables.', 'better-search' ),
 					esc_url( admin_url( 'admin.php?page=bsearch_tools_page#bsearch-recreate-tables' ) ),
-					esc_html__( 'Click here to recreate tables.', 'better-search' )
+					esc_html__( 'Go to Tools page', 'better-search' )
 				),
 				'type'        => 'warning',
 				'dismissible' => true,
