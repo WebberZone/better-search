@@ -1,6 +1,6 @@
 {
     "name": "@webberzone/better-search",
-    "version": "4.2.0",
+    "version": "4.2.3",
     "description": "Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.",
     "author": "WebberZone",
     "license": "GPL-2.0-or-later",
@@ -32,14 +32,14 @@
         "wpml-config.xml"
     ],
     "devDependencies": {
-        "@wordpress/prettier-config": "^4.37.0",
-        "@wordpress/scripts": "^31.2.0",
+        "@wordpress/prettier-config": "^4.39.0",
+        "@wordpress/scripts": "^31.4.0",
         "clean-css-cli": "^5.6.3",
         "rtlcss": "^4.3.0",
-        "terser": "^5.44.1"
+        "terser": "^5.46.0"
     },
     "dependencies": {
-        "@wordpress/icons": "^11.4.0",
+        "@wordpress/icons": "^11.6.0",
         "clsx": "^2.1.1",
         "uuid": "^13.0.0"
     }
