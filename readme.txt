@@ -206,6 +206,3 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
  = 4.2.4 =
 Fixes post type selection to respect configured settings when "any" is selected.
-
- = 4.2.3 =
-Adds WooCommerce product indexing (Pro only), modernizes taxonomy search with Tom Select, and enhances seamless mode logic with improved tracker response handling.
