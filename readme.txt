@@ -1,8 +1,8 @@
 === Better Search - Relevant search results for WordPress ===
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
-Donate link: https://ajaydsouza.com/donate/
-Stable tag: 4.2.3
+Donate link: https://wzn.io/donate-wz
+Stable tag: 4.2.4
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -121,10 +121,21 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.2.4 =
+
+* Features:
+	* Better Search form: The "any" post type option label can now be customised when the post type dropdown is enabled.
+
+* Fixed:
+	* Fixed an issue where selecting "any" post type would search through all post types instead of respecting the configured post types from settings.
+	* [Pro] Custom table searches now include post slug matching when “Search post slug” is enabled.
+    * [Pro] Fixed SQL syntax error in multisite search queries when custom tables are disabled, caused by malformed GROUP BY clause stripping.
+    * Fixed improper stripping of boolean mode operators in LIKE clauses, ensuring consistent behavior between FULLTEXT and LIKE searches.
+
 = 4.2.3 =
 
 * Modifications:
-	* Added WooCommerce product indexing and custom meta field support.
+	* [Pro] Added WooCommerce product indexing and custom meta field support.
 	* Modernized Tom Select implementation for taxonomy and meta key searches.
 	* Enhanced seamless mode logic and form generation.
 	* Improved tracker response handling with better regex patterns.
@@ -183,6 +194,7 @@ Release post: [https://webberzone.com/announcements/better-search-v4-2-0/](https
 	* Updated Freemius SDK.
 	* Live search displays a loading state while results are being fetched.
 	* Fulltext indexes are now named `wz_title_content`, `wz_title`, and `wz_content` to ensure compatibility and optimize database space, especially when using Contextual Related Posts. After updating to this version, please recreate the indexes to benefit from the changes—until then, the plugin will use the previous index names.
+	* Media Handler now supports the FIFU WordPress plugin for featured image detection.
 
 * Bug fix:
 	* Fixed an issue where the Live Search conflicted with Mega Menu Pro.
@@ -192,5 +204,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
- = 4.2.3 =
-Adds WooCommerce product indexing, modernizes taxonomy search with Tom Select, and enhances seamless mode logic with improved tracker response handling.
+ = 4.2.4 =
+Fixes post type selection to respect configured settings when "any" is selected.

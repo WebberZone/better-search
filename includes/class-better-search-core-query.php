@@ -281,12 +281,8 @@ class Better_Search_Core_Query extends \WP_Query {
 		}
 
 		// If post_types is empty or if we want all the post types.
-		if ( empty( $post_types ) ) {
-			$post_types = get_post_types(
-				array(
-					'public' => true,
-				)
-			);
+		if ( empty( $post_types ) || in_array( 'any', $post_types, true ) ) {
+			$post_types = wp_parse_list( bsearch_get_option( 'post_types' ) );
 		}
 
 		/**
@@ -536,17 +532,30 @@ class Better_Search_Core_Query extends \WP_Query {
 		if ( $use_fulltext ) {
 			$use_fulltext_proxy = false;
 			foreach ( $search_words as $search_word ) {
-				if ( strlen( $search_word ) >= (int) $min_char ) {
+				$clean_word = preg_replace( '/[^\w\s]/u', '', $search_word );
+				if ( strlen( $clean_word ) >= (int) $min_char ) {
 					$use_fulltext_proxy = true;
 				}
 			}
 			$use_fulltext = $use_fulltext_proxy;
 		}
 
-		$this->search_query     = $search_query;
-		$this->search_terms     = $search_words;
-		$this->use_fulltext     = $use_fulltext;
-		$this->is_boolean_mode  = $this->input_query_args['boolean_mode'] ?? bsearch_get_option( 'boolean_mode' );
+		$this->search_query    = $search_query;
+		$this->search_terms    = $search_words;
+		$this->use_fulltext    = $use_fulltext;
+		$this->is_boolean_mode = $this->input_query_args['boolean_mode'] ?? bsearch_get_option( 'boolean_mode' );
+
+		// If boolean mode is enabled, check if there are any terms long enough.
+		if ( $this->is_boolean_mode ) {
+			$boolean_proxy = false;
+			foreach ( $search_words as $search_word ) {
+				$clean_word = preg_replace( '/[^\w\s]/u', '', $search_word );
+				if ( strlen( $clean_word ) >= (int) $min_char ) {
+					$boolean_proxy = true;
+				}
+			}
+			$this->is_boolean_mode = $boolean_proxy;
+		}
 		$this->is_seamless_mode = $this->input_query_args['seamless'] ?? bsearch_get_option( 'seamless' );
 		$this->should_use_custom_table();
 	}
@@ -839,7 +848,7 @@ class Better_Search_Core_Query extends \WP_Query {
 			}
 
 			foreach ( (array) $search_terms as $term ) {
-				$term = str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $term );
+				$term = preg_replace( '/[+\-*"~<>()@\']/', '', $term );
 
 				// If there is an $exclusion_prefix, terms prefixed with it should be excluded.
 				$exclude = $exclusion_prefix && ( substr( $term, 0, 1 ) === $exclusion_prefix );
@@ -877,7 +886,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		// Let's do a LIKE search for all other fields.
 		$searchand = '';
 		foreach ( (array) $search_terms as $term ) {
-			$term   = str_replace( array( "'", '"', '&quot;', '\+', '\-' ), '', $term );
+			$term   = preg_replace( '/[+\-*"~<>()@\']/', '', $term );
 			$clause = array();
 
 			// If there is an $exclusion_prefix, terms prefixed with it should be excluded.

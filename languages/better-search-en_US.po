@@ -38,22 +38,6 @@ msgstr ""
 msgid "Update Database (Network)"
 msgstr ""
 
-#: includes/admin/class-admin-notices.php:167
-msgid "Better Search: Some fulltext indexes are missing, which will affect search results."
-msgstr ""
-
-#: includes/admin/class-admin-notices.php:169
-msgid "Click here to recreate indexes."
-msgstr ""
-
-#: includes/admin/class-admin-notices.php:206
-msgid "Better Search: Some tables are missing, which will affect search results."
-msgstr ""
-
-#: includes/admin/class-admin-notices.php:208
-msgid "Click here to recreate tables."
-msgstr ""
-
 #: includes/admin/class-admin.php:262
 msgid "Copied!"
 msgstr ""
@@ -785,22 +769,6 @@ msgstr ""
 msgid "Words in this list will be stripped out of the search results. Enter these as a comma-separated list."
 msgstr ""
 
-#: includes/admin/class-settings.php:639
-msgid "Filter whole words only"
-msgstr ""
-
-#: includes/admin/class-settings.php:640
-msgid "When activated, only whole words in the search query are filtered. Partial words are ignored. e.g. grow will not ban grown or grower."
-msgstr ""
-
-#: includes/admin/class-settings.php:646
-msgid "Stop query on banned words filter"
-msgstr ""
-
-#: includes/admin/class-settings.php:647
-msgid "When activated, this option will return no results if the search query includes any of the words in the box above. If you have seamless mode off, Better Search will display an error message. With seamless mode on, this will give a Nothing found message. You can customize it by editing your theme."
-msgstr ""
-
 #: includes/admin/class-settings.php:675
 msgid "Include heatmap on the search results"
 msgstr ""
@@ -1494,7 +1462,7 @@ msgstr ""
 msgid "Follow me"
 msgstr ""
 
-#: includes/class-better-search-core-query.php:1515
+#: includes/class-better-search-core-query.php:1524
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,what,when,where,who,will,with,www"
 msgstr ""
@@ -1625,71 +1593,67 @@ msgstr ""
 msgid "There is no excerpt because this is a protected post."
 msgstr ""
 
-#: includes/general-template.php:220
-msgid "Any Post Type"
-msgstr ""
-
-#: includes/general-template.php:223
+#: includes/general-template.php:235
 msgctxt "label"
 msgid "Post types:"
 msgstr ""
 
-#: includes/general-template.php:249
+#: includes/general-template.php:261
 msgctxt "label"
 msgid "Search for:"
 msgstr ""
 
-#: includes/general-template.php:250
+#: includes/general-template.php:262
 msgctxt "placeholder"
 msgid "Search &hellip;"
 msgstr ""
 
-#: includes/general-template.php:253
+#: includes/general-template.php:265
 msgctxt "submit button"
 msgid "Search"
 msgstr ""
 
 #. translators: 1: First, 2: Last, 3: Number of rows
-#: includes/general-template.php:407
+#: includes/general-template.php:419
 #, php-format
 msgid "Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</strong>"
 msgstr ""
 
 #. translators: 1: Current page number, 2: Total pages
-#: includes/general-template.php:413
+#: includes/general-template.php:425
 #, php-format
 msgid "Page <strong>%1$s</strong> of <strong>%2$s</strong>"
 msgstr ""
 
-#: includes/general-template.php:467
+#: includes/general-template.php:479
 msgid "All"
 msgstr ""
 
-#: includes/general-template.php:488
-#: includes/general-template.php:492
+#: includes/general-template.php:500
+#: includes/general-template.php:504
 msgid "Date"
 msgstr ""
 
-#: includes/general-template.php:489
-#: includes/general-template.php:491
+#: includes/general-template.php:501
+#: includes/general-template.php:503
 msgid "Relevance"
 msgstr ""
 
-#: includes/general-template.php:495
+#: includes/general-template.php:507
 msgid "Sorted by"
 msgstr ""
 
-#: includes/general-template.php:496
+#: includes/general-template.php:508
 msgid "Sort by"
 msgstr ""
 
 #. translators: 1: Results per page.
-#: includes/general-template.php:503
+#: includes/general-template.php:515
 #, php-format
 msgid "Results per-page: %s "
 msgstr ""
 
-#: includes/general-template.php:595
+#: includes/general-template.php:607
 msgid "Relevance:"
 msgstr ""
 
@@ -1854,4 +1818,37 @@ msgstr ""
 #: includes/admin/class-settings-wizard.php:195
 #, php-format
 msgid "No results found for \"%s\""
+msgstr ""
+
+#: includes/admin/class-settings.php:639
+msgid "Match whole words only"
+msgstr ""
+
+#: includes/admin/class-settings.php:640
+msgid "When enabled, a banned word must match as a complete word in the search query. When disabled, it can also match inside longer words. Example: if your banned list includes \"grow\", then \"grow\" will be blocked either way, but \"grown\" and \"grower\" will only be blocked when this setting is disabled."
+msgstr ""
+
+#: includes/admin/class-settings.php:646
+msgid "Block searches containing banned words"
+msgstr ""
+
+#: includes/admin/class-settings.php:647
+msgid "When enabled, if the search query contains any banned words, Better Search will stop and return no results. With Seamless mode disabled, an error message will be shown; with Seamless mode enabled, you will typically see a \"Nothing found\" message from your theme."
+msgstr ""
+
+#: includes/general-template.php:221
+msgid "Any"
+msgstr ""
+
+#: includes/admin/class-admin-notices.php:167
+msgid "Better Search: Some FULLTEXT indexes are missing from your database, which will prevent search results from being found. Please run the recreate indexes tool from the Tools page to restore search functionality."
+msgstr ""
+
+#: includes/admin/class-admin-notices.php:169
+#: includes/admin/class-admin-notices.php:208
+msgid "Go to Tools page"
+msgstr ""
+
+#: includes/admin/class-admin-notices.php:206
+msgid "Better Search: Some tables are missing, which will affect search results performance. Visit the Tools page to manually recreate the tables."
 msgstr ""

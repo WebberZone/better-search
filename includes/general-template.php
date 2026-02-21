@@ -187,6 +187,7 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 		'echo'                => false,
 		'aria_label'          => '',
 		'post_types'          => bsearch_get_option( 'post_types' ),
+		'any_post_type_label' => '',
 		'selected_post_types' => '',
 		'show_post_types'     => false,
 	);
@@ -217,7 +218,18 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 
 	$select = '';
 	if ( ! empty( $post_types ) && $args['show_post_types'] ) {
-		$any_post_type_label = apply_filters( 'bsearch_any_post_type_label', __( 'Any Post Type', 'better-search' ) );
+		$any_post_type_label = ! empty( $args['any_post_type_label'] ) ? $args['any_post_type_label'] : __( 'Any', 'better-search' );
+
+		/**
+		 * Filter the label used for the "any" post type option in the Better Search form.
+		 *
+		 * @since 3.0.0
+		 * @since 4.2.4 Added the $args parameter.
+		 *
+		 * @param string $any_post_type_label The label to display for the "any" post type option.
+		 * @param array  $args                Arguments used to generate the Better Search form.
+		 */
+		$any_post_type_label = apply_filters( 'bsearch_any_post_type_label', $any_post_type_label, $args );
 
 		$select  = '<div class="bsearch-form-post-types">';
 		$select .= '<span class="screen-reader-text">' . _x( 'Post types:', 'label', 'better-search' ) . '</span>';
@@ -843,7 +855,7 @@ function get_bsearch_term_list( $post = 0, $args = array() ) {
 	}
 	$output = array_filter( $output );
 
-	$output = $args['before'] . implode( $args['sep'], $output ) . $args['after'];
+	$output = $args['before'] . implode( $args['sep'], array_map( 'strval', $output ) ) . $args['after'];
 
 	/**
 	 * Filters the post terms for the current post.

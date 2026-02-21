@@ -636,15 +636,15 @@ class Settings {
 			),
 			'banned_whole_words'        => array(
 				'id'      => 'banned_whole_words',
-				'name'    => esc_html__( 'Filter whole words only', 'better-search' ),
-				'desc'    => esc_html__( 'When activated, only whole words in the search query are filtered. Partial words are ignored. e.g. grow will not ban grown or grower.', 'better-search' ),
+				'name'    => esc_html__( 'Match whole words only', 'better-search' ),
+				'desc'    => esc_html__( 'When enabled, a banned word must match as a complete word in the search query. When disabled, it can also match inside longer words. Example: if your banned list includes "grow", then "grow" will be blocked either way, but "grown" and "grower" will only be blocked when this setting is disabled.', 'better-search' ),
 				'type'    => 'checkbox',
 				'default' => true,
 			),
 			'banned_stop_search'        => array(
 				'id'      => 'banned_stop_search',
-				'name'    => esc_html__( 'Stop query on banned words filter', 'better-search' ),
-				'desc'    => esc_html__( 'When activated, this option will return no results if the search query includes any of the words in the box above. If you have seamless mode off, Better Search will display an error message. With seamless mode on, this will give a Nothing found message. You can customize it by editing your theme.', 'better-search' ),
+				'name'    => esc_html__( 'Block searches containing banned words', 'better-search' ),
+				'desc'    => esc_html__( 'When enabled, if the search query contains any banned words, Better Search will stop and return no results. With Seamless mode disabled, an error message will be shown; with Seamless mode enabled, you will typically see a "Nothing found" message from your theme.', 'better-search' ),
 				'type'    => 'checkbox',
 				'default' => false,
 			),
@@ -1027,7 +1027,7 @@ class Settings {
 		if ( false !== strpos( $file, 'better-search.php' ) ) {
 			$new_links = array(
 				'support'    => '<a href = "https://wordpress.org/support/plugin/better-search">' . esc_html__( 'Support', 'better-search' ) . '</a>',
-				'donate'     => '<a href = "https://ajaydsouza.com/donate/">' . esc_html__( 'Donate', 'better-search' ) . '</a>',
+				'donate'     => '<a href = "https://wzn.io/donate-wz">' . esc_html__( 'Donate', 'better-search' ) . '</a>',
 				'contribute' => '<a href = "https://github.com/WebberZone/better-search">' . esc_html__( 'Contribute', 'better-search' ) . '</a>',
 			);
 
