@@ -38,22 +38,6 @@ msgstr ""
 msgid "Update Database (Network)"
 msgstr ""
 
-#: includes/admin/class-admin-notices.php:167
-msgid "Better Search: Some fulltext indexes are missing, which will affect search results."
-msgstr ""
-
-#: includes/admin/class-admin-notices.php:169
-msgid "Click here to recreate indexes."
-msgstr ""
-
-#: includes/admin/class-admin-notices.php:206
-msgid "Better Search: Some tables are missing, which will affect search results."
-msgstr ""
-
-#: includes/admin/class-admin-notices.php:208
-msgid "Click here to recreate tables."
-msgstr ""
-
 #: includes/admin/class-admin.php:262
 msgid "Copied!"
 msgstr ""
@@ -1478,7 +1462,7 @@ msgstr ""
 msgid "Follow me"
 msgstr ""
 
-#: includes/class-better-search-core-query.php:1511
+#: includes/class-better-search-core-query.php:1524
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,what,when,where,who,will,with,www"
 msgstr ""
@@ -1854,4 +1838,17 @@ msgstr ""
 
 #: includes/general-template.php:221
 msgid "Any"
+msgstr ""
+
+#: includes/admin/class-admin-notices.php:167
+msgid "Better Search: Some FULLTEXT indexes are missing from your database, which will prevent search results from being found. Please run the recreate indexes tool from the Tools page to restore search functionality."
+msgstr ""
+
+#: includes/admin/class-admin-notices.php:169
+#: includes/admin/class-admin-notices.php:208
+msgid "Go to Tools page"
+msgstr ""
+
+#: includes/admin/class-admin-notices.php:206
+msgid "Better Search: Some tables are missing, which will affect search results performance. Visit the Tools page to manually recreate the tables."
 msgstr ""
