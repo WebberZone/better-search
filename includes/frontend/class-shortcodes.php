@@ -77,6 +77,7 @@ class Shortcodes {
 				'after'               => '',
 				'aria_label'          => '',
 				'post_types'          => bsearch_get_option( 'post_types' ),
+				'any_post_type_label' => '',
 				'selected_post_types' => '',
 				'show_post_types'     => false,
 			),

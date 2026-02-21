@@ -5,7 +5,7 @@
  * A reusable API class for creating multi-step settings wizards.
  * This class provides the framework for creating guided setup experiences.
  *
- * @package WebberZone\Better_Search
+ * @package WebberZone\Better_External_Links
  */
 
 namespace WebberZone\Better_Search\Admin\Settings;
@@ -126,6 +126,7 @@ class Settings_Wizard_API {
 	 *     @type string $page_slug            Wizard page slug.
 	 *     @type array  $menu_args           Menu arguments array with parent and capability.
 	 *     @type bool   $hide_when_completed Whether to hide the wizard submenu item after completion.
+	 *     @type bool   $show_in_menu        Whether to show the wizard in the admin menu.
 	 * }
 	 */
 	public function __construct( $settings_key, $prefix, $args = array() ) {
@@ -139,6 +140,7 @@ class Settings_Wizard_API {
 			'admin_menu_position' => 999,
 			'page_slug'           => "{$prefix}_wizard",
 			'hide_when_completed' => true,
+			'show_in_menu'        => true,
 			'menu_args'           => array(
 				'parent'     => '', // Empty for dashboard, or parent slug for submenu.
 				'capability' => 'manage_options',
@@ -233,8 +235,10 @@ class Settings_Wizard_API {
 			array( $this, 'render_wizard_page' )
 		);
 
-		$hide_when_completed = isset( $this->args['hide_when_completed'] ) ? (bool) $this->args['hide_when_completed'] : true;
-		if ( $hide_when_completed && $this->is_wizard_completed() ) {
+		$hide_submenu = ( isset( $this->args['show_in_menu'] ) && ! $this->args['show_in_menu'] ) ||
+			( ( $this->args['hide_when_completed'] ?? true ) && $this->is_wizard_completed() );
+
+		if ( $hide_submenu ) {
 			add_action( 'admin_head', array( $this, 'hide_completed_wizard_submenu' ) );
 		}
 	}
@@ -245,9 +249,6 @@ class Settings_Wizard_API {
 	 * @return void
 	 */
 	public function hide_completed_wizard_submenu() {
-		if ( ! $this->is_wizard_completed() ) {
-			return;
-		}
 		$slug = sanitize_key( $this->page_slug );
 		?>
 		<style>
@@ -405,7 +406,7 @@ class Settings_Wizard_API {
 		 * @param int   $step     Current step number.
 		 * @param array $settings Settings data for this step.
 		 */
-		do_action( $this->prefix . '_wizard_step_processed', $this->current_step, $settings );
+		do_action( $this->prefix . '_wizard_step_processed', $this->current_step, $settings ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 	}
 
 	/**
@@ -507,7 +508,7 @@ class Settings_Wizard_API {
 		 *
 		 * @param string $prefix Plugin prefix.
 		 */
-		do_action( "{$this->prefix}_wizard_completed", $this->prefix );
+		do_action( "{$this->prefix}_wizard_completed", $this->prefix ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 	}
 
 	/**
@@ -668,7 +669,7 @@ class Settings_Wizard_API {
 						 * @param int $current_step Current step number.
 						 * @param int $total_steps  Total number of steps.
 						 */
-						do_action( "{$this->prefix}_wizard_before_actions", $this->current_step, $this->total_steps );
+						do_action( "{$this->prefix}_wizard_before_actions", $this->current_step, $this->total_steps ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 						?>
 
 						<div class="wizard-actions">
@@ -737,7 +738,7 @@ class Settings_Wizard_API {
 		/**
 		 * Fires before the wizard completion page content.
 		 */
-		do_action( "{$this->prefix}_wizard_completion_before" );
+		do_action( "{$this->prefix}_wizard_completion_before" ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 		?>
 		<div class="wrap wizard-wrap wizard-complete">
 			<h1><?php echo esc_html( $this->translation_strings['wizard_complete'] ); ?></h1>
@@ -747,7 +748,7 @@ class Settings_Wizard_API {
 			/**
 			 * Fires after the wizard completion message.
 			 */
-			do_action( "{$this->prefix}_wizard_completion_message" );
+			do_action( "{$this->prefix}_wizard_completion_message" ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 			?>
 
 			<p class="wizard-actions">
@@ -766,7 +767,7 @@ class Settings_Wizard_API {
 		/**
 		 * Fires after the wizard completion page content.
 		 */
-		do_action( "{$this->prefix}_wizard_completion_after" );
+		do_action( "{$this->prefix}_wizard_completion_after" ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 	}
 
 	/**
@@ -781,8 +782,8 @@ class Settings_Wizard_API {
 		 * @param string $url    The URL to redirect to.
 		 * @param string $prefix Plugin prefix.
 		 */
-		return apply_filters(
-			"{$this->prefix}_wizard_completion_url",
+		return apply_filters( // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
+			"{$this->prefix}_wizard_completion_url", // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 			admin_url( "admin.php?page={$this->prefix}_settings" ),
 			$this->prefix
 		);
@@ -808,7 +809,7 @@ class Settings_Wizard_API {
 		 * @param array  $buttons Array of button configurations.
 		 * @param string $prefix  Plugin prefix.
 		 */
-		return apply_filters( "{$this->prefix}_wizard_completion_buttons", $buttons, $this->prefix );
+		return apply_filters( "{$this->prefix}_wizard_completion_buttons", $buttons, $this->prefix ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 	}
 
 	/**
@@ -823,7 +824,7 @@ class Settings_Wizard_API {
 		 * @param string $version Version number.
 		 * @param string $prefix  Plugin prefix.
 		 */
-		return apply_filters( "{$this->prefix}_wizard_version", self::VERSION, $this->prefix );
+		return apply_filters( "{$this->prefix}_wizard_version", self::VERSION, $this->prefix ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 	}
 
 	/**
@@ -832,7 +833,7 @@ class Settings_Wizard_API {
 	protected function render_wizard_steps_navigation() {
 		$step_keys = array_keys( $this->steps );
 		?>
-		<ol class="wizard-steps-nav" role="tablist" aria-label="<?php echo esc_attr( $this->translation_strings['steps_nav_aria_label'] ?? 'Setup Wizard Steps' ); ?>">
+		<ol class="wizard-steps-nav" aria-label="<?php echo esc_attr( $this->translation_strings['steps_nav_aria_label'] ?? 'Setup Wizard Steps' ); ?>">
 			<?php
 			foreach ( $step_keys as $index => $step_key ) :
 				$step_number  = $index + 1;
