@@ -4,7 +4,7 @@
  *
  * @link  https://webberzone.com
  *
- * @package WebberZone\Better_External_Links
+ * @package WebberZone\Better_Search
  */
 
 namespace WebberZone\Better_Search\Admin\Settings;
