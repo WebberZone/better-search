@@ -1025,10 +1025,33 @@ class Better_Search_Core_Query extends \WP_Query {
 
 		// If orderby is set, then this was done intentionally and we don't make any modifications.
 		if ( ! empty( $query->get( 'orderby' ) ) ) {
+			$orderby_clauses = array();
+
 			// if orderby is set to relevance, then we need to set the orderby to the match clause.
 			if ( ( 'relevance' === $query->get( 'orderby' ) || 'relatedness' === $query->get( 'orderby' ) ) && ! empty( $this->match_sql ) && $this->use_fulltext ) {
 				$orderby = ' score DESC ';
 			}
+
+			if ( ! empty( $orderby ) ) {
+				$orderby_clauses[] = $orderby;
+			}
+
+			/**
+			 * Filters the posts_orderby clauses of Better_Search before combining.
+			 *
+			 * @since 4.0.0
+			 * @since 4.2.0 Added $instance parameter.
+			 *
+			 * @param string[]                 $orderby_clauses The ORDER BY clauses of the query.
+			 * @param \WP_Query                $query           The WP_Query instance.
+			 * @param Better_Search_Core_Query $instance        The Better_Search_Core_Query instance (passed by reference).
+			 */
+			$orderby_clauses = apply_filters_ref_array( 'better_search_query_posts_orderby_clauses', array( $orderby_clauses, $query, &$this ) );
+
+			if ( ! empty( $orderby_clauses ) ) {
+				$orderby = implode( ', ', $orderby_clauses );
+			}
+
 			/**
 			 * Filters the ORDER BY clause of the Better_Search.
 			 *
@@ -1039,7 +1062,12 @@ class Better_Search_Core_Query extends \WP_Query {
 			 * @param \WP_Query                $query    The WP_Query instance.
 			 * @param Better_Search_Core_Query $instance The Better_Search_Core_Query instance (passed by reference).
 			 */
-			return apply_filters_ref_array( 'better_search_query_posts_orderby', array( $orderby, $query, &$this ) );
+			$orderby = apply_filters_ref_array( 'better_search_query_posts_orderby', array( $orderby, $query, &$this ) );
+
+			// Always remove the filter after use, even on early-return paths.
+			Hook_Registry::remove_filter( 'posts_orderby', array( $this, 'posts_orderby' ) );
+
+			return $orderby;
 		}
 
 		// Initialize an array to build the orderby clauses.

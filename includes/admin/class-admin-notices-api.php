@@ -2,7 +2,7 @@
 /**
  * Admin notices API.
  *
- * @package WebberZone\Better_Search\Admin
+ * @package WebberZone\Knowledge_Base\Admin
  */
 
 namespace WebberZone\Better_Search\Admin;
