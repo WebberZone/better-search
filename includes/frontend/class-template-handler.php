@@ -7,7 +7,6 @@
 
 namespace WebberZone\Better_Search\Frontend;
 
-use WebberZone\Better_Search\Util\Helpers;
 use WebberZone\Better_Search\Util\Hook_Registry;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -124,6 +123,12 @@ class Template_Handler {
 
 		// Early return if seamless integration mode is activated.
 		if ( bsearch_get_option( 'seamless' ) ) {
+			if ( $wp_query->is_404 ) {
+				$wp_query->is_404     = false;
+				$wp_query->is_archive = true;
+			}
+
+			status_header( 200 );
 			return $template;
 		}
 
