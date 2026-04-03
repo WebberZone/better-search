@@ -148,7 +148,7 @@ class Template_Handler {
 		$template_paths = array(
 			get_stylesheet_directory() . '/better-search-template.php',
 			get_template_directory() . '/better-search-template.php',
-			plugin_dir_path( dirname( __DIR__ ) ) . 'templates/better-search-template.php',
+			__DIR__ . '/templates/better-search-template.php',
 		);
 
 		foreach ( $template_paths as $template_path ) {
@@ -211,7 +211,7 @@ class Template_Handler {
 		if ( file_exists( $template_file_path ) ) {
 			$block_source = 'theme';
 		} else {
-			$template_file_path = plugin_dir_path( dirname( __DIR__ ) ) . '/templates/' . $template_name . '.html';
+			$template_file_path = __DIR__ . '/templates/' . $template_name . '.html';
 		}
 
 		$template_contents = self::get_template_content( $template_file_path );
