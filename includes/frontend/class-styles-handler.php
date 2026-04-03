@@ -39,7 +39,7 @@ class Styles_Handler {
 		// Register bsearch-style as a placeholder to insert other styles.
 		wp_register_style(
 			'bsearch-style',
-			plugins_url( 'includes/css/bsearch-styles' . $minimize . '.css', BETTER_SEARCH_PLUGIN_FILE ),
+			plugins_url( 'includes/frontend/css/bsearch-styles' . $minimize . '.css', BETTER_SEARCH_PLUGIN_FILE ),
 			array(),
 			BETTER_SEARCH_VERSION
 		);

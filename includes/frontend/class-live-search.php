@@ -75,7 +75,7 @@ class Live_Search {
 
 		wp_enqueue_style(
 			'bsearch-live-search-style',
-			plugins_url( 'includes/css/bsearch-live-search' . $minimize . '.css', BETTER_SEARCH_PLUGIN_FILE ),
+			plugins_url( 'includes/frontend/css/bsearch-live-search' . $minimize . '.css', BETTER_SEARCH_PLUGIN_FILE ),
 			array(),
 			BETTER_SEARCH_VERSION
 		);
