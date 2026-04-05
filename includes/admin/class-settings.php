@@ -453,7 +453,7 @@ class Settings {
 			'fuzzy_search_level'        => array(
 				'id'      => 'fuzzy_search_level',
 				'name'    => esc_html__( 'Fuzzy search level', 'better-search' ),
-				'desc'    => esc_html__( 'This option will allow you to enable fuzzy search. Adjust the level of flexibility for matching search terms. Higher levels may include more results with potential misspellings. Note that fuzzy searching can be computationally intensive, so it is recommended to have caching enabled, especially on high traffic sites.', 'better-search' ),
+				'desc'    => esc_html__( 'This option will allow you to enable fuzzy search. Adjust the level of flexibility for matching search terms. Higher levels may include more results with potential misspellings. Note that fuzzy searching can be computationally intensive, so it is recommended to have caching enabled, especially on high traffic sites. When BOOLEAN mode is active, fuzzy search is automatically disabled for queries containing boolean operators (+, -, ~, >, <, *) as these express explicit search intent.', 'better-search' ),
 				'type'    => 'select',
 				'options' => array(
 					'off'    => esc_html__( 'Off', 'better-search' ),
