@@ -25,6 +25,11 @@ class CustomTablesSyncTest extends WP_UnitTestCase {
 	public static function set_up_before_class(): void {
 		parent::set_up_before_class();
 
+		// Skip if pro classes don't exist (free version).
+		if ( ! class_exists( 'WebberZone\Better_Search\Pro\Custom_Tables\Table_Manager' ) ) {
+			return;
+		}
+
 		// Creates the real wz_posts table once for the whole test class.
 		// The temp-table filter is not yet active at this point, so the
 		// table is a real InnoDB table that supports FULLTEXT indexes.
@@ -36,6 +41,12 @@ class CustomTablesSyncTest extends WP_UnitTestCase {
 	}
 
 	public static function tear_down_after_class(): void {
+		// Skip if pro classes don't exist (free version).
+		if ( ! class_exists( 'WebberZone\Better_Search\Pro\Custom_Tables\Table_Manager' ) ) {
+			parent::tear_down_after_class();
+			return;
+		}
+
 		// Drop the real table created for this test class.
 		$table_manager = new Table_Manager();
 		$table_manager->drop_tables();
@@ -45,6 +56,11 @@ class CustomTablesSyncTest extends WP_UnitTestCase {
 
 	public function set_up(): void {
 		parent::set_up();
+
+		// Skip if pro classes don't exist (free version).
+		if ( ! class_exists( 'WebberZone\Better_Search\Pro\Custom_Tables\Table_Manager' ) ) {
+			$this->markTestSkipped( 'Custom Tables is a pro-only feature.' );
+		}
 
 		// WP 6.8+ CI installations may be missing script-loader-react-refresh-entry.php.
 		// This file is included (without @) from wp_default_scripts(), which is triggered
