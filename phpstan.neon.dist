@@ -7,14 +7,13 @@ parameters:
         - uninstaller.php
         - load-freemius.php
         - includes/
-        - templates/
     scanDirectories:
         - includes/
-        - templates/
         - vendor/freemius/
     scanFiles:
         - better-search.php
         - uninstaller.php
+        - vendor/php-stubs/acf-pro-stubs/acf-pro-stubs.php
     bootstrapFiles:
         - phpstan-bootstrap.php
     ignoreErrors:

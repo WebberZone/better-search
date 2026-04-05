@@ -28,7 +28,8 @@
         "wp-coding-standards/wpcs": "^3",
         "dealerdirect/phpcodesniffer-composer-installer": "^1",
         "yoast/phpunit-polyfills": "^3",
-        "phpunit/phpunit": "^9 || ^10 || ^11 || ^12"
+        "phpunit/phpunit": "^9 || ^10 || ^11 || ^12",
+        "php-stubs/acf-pro-stubs": "^6.5"
     },
     "config": {
         "allow-plugins": {
@@ -55,6 +56,7 @@
         ],
         "phpcompat:clean": "rm -rf phpcompat-tools",
         "test": [
+            "@phpcbf",
             "@phpcs",
             "@phpcompat",
             "@phpstan"

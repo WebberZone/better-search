@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://wzn.io/donate-wz
-Stable tag: 4.2.4
+Stable tag: 4.3.0
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -20,7 +20,7 @@ Make your search more intuitive and engaging with a search heatmap of popular qu
 
 Built with performance in mind, Better Search includes its own caching system and works smoothly with popular caching plugins like WP Super Cache and W3 Total Cache. It also features a profanity filter and is translation-ready for global use.
 
-Here are some of the main features of __Better Search__:
+## Awesome features in Better Search:
 
 * __Automatic__: Just activate the plugin and enjoy better search results right away
 * __Seamless integration__: No need to edit any code or create custom search templates
@@ -39,11 +39,14 @@ If you want to improve your site search, download Better Search today and experi
 
 [__Better Search Pro__](https://webberzone.com/plugins/better-search/pro/) gives you even more control and performance:
 
+* 🗄️ [Efficient Content Storage and Indexing](https://webberzone.com/support/knowledgebase/efficient-content-storage-and-indexing/)
 * 🔍 [Multisite Search](https://webberzone.com/support/knowledgebase/multisite-search/)
 * ✨ [Fuzzy Matches](https://webberzone.com/support/knowledgebase/fuzzy-matches/)
 * 🎯 [Relevance Threshold](https://webberzone.com/support/knowledgebase/better-search-settings-search/#minimum-relevance-percentage-pro-only)
 * 🔗 [Search Post Slugs](https://webberzone.com/support/knowledgebase/better-search-settings-search/#search-post-slug-pro-only)
 * ⚙️ [REST API Integration](https://webberzone.com/support/knowledgebase/better-search-rest-api/)
+* 🔄 [LIKE Fallback Search](https://webberzone.com/support/knowledgebase/better-search-settings-search/#enable-like-fallback-pro-only)
+* ⚖️ [Advanced Relevance Weighting](https://webberzone.com/support/knowledgebase/better-search-settings-search/#post-excerpt-pro-only)
 
 ## MySQL FULLTEXT indices
 
@@ -122,10 +125,34 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.3.0 =
+
+* Features:
+	* [Pro] New InnoDB conversion tool: convert the custom table engine with automatic FULLTEXT index recreation.
+	* [Pro] Scheduled reconciliation cron: a twicedaily job automatically syncs any published posts missing from the custom search index table.
+
+* Enhancements:
+	* [Pro] Improved short-term (≤3 character) LIKE searches to score full-word matches higher and order results by relevance.
+	* [Pro] Refactored fuzzy query shaping so `Query_Modifier` owns score construction and request shaping, with `Fuzzy_Search` acting as the fuzzy scoring service.
+	* [Pro] Rewrote soundex function, removed multisite LIMIT cap, and added content scoring for fuzzy search.
+	* [Pro] Added filters for fuzzy search truncation parameters.
+	* [Pro] Centralized exclusion term parsing logic in Helpers class.
+	* Hardened search sanitization and boolean mode validation for more consistent results.
+	* Escaped output in settings forms for improved security.
+
+* Bug fixes:
+	* [Pro] Fixed fuzzy LIKE query SQL issues that could generate duplicate `ID` fields in wrapped sub-queries.
+	* [Pro] Fixed fuzzy search bypassing FULLTEXT exclusions.
+	* [Pro] Fixed inconsistent indentation and table alias qualification in multisite query composition.
+	* [Pro] Disabled fuzzy search when boolean operators are present to prevent conflicts.
+	* Fixed placeholder attribute escaping in text field rendering.
+
+
 = 4.2.4 =
 
 * Features:
 	* Better Search form: The "any" post type option label can now be customised when the post type dropdown is enabled.
+	* Media Handler now detects featured images provided by the Featured Image from URL (FIFU) plugin.
 
 * Fixed:
 	* Fixed an issue where selecting "any" post type would search through all post types instead of respecting the configured post types from settings.
@@ -205,5 +232,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
- = 4.2.4 =
+ = 4.3.0 =
 Fixes post type selection to respect configured settings when "any" is selected.

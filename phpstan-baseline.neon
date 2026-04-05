@@ -6,11 +6,6 @@ parameters:
 			path: includes/admin/class-settings-wizard.php
 
 		-
-			message: "#^Variable \\$menu_page might not be defined\\.$#"
-			count: 1
-			path: includes/admin/settings/class-settings-api.php
-
-		-
 			message: "#^Access to an undefined property WP_Query\\:\\:\\$post_scores\\.$#"
 			count: 1
 			path: includes/class-better-search-core-query.php
@@ -51,27 +46,12 @@ parameters:
 			path: includes/class-tracker.php
 
 		-
-			message: "#^Parameter \\#2 \\$array of function implode expects array\\<string\\>, array\\<int\\<0, max\\>, string\\|WP_Error\\> given\\.$#"
-			count: 1
-			path: includes/general-template.php
-
-		-
 			message: "#^Variable \\$a might not be defined\\.$#"
 			count: 2
 			path: includes/heatmap.php
 
 		-
 			message: "#^Constant DB_NAME not found\\.$#"
-			count: 1
-			path: includes/pro/class-fuzzy-search.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 3
-			path: includes/pro/class-fuzzy-search.php
-
-		-
-			message: "#^Property Better_Search_Core_Query\\:\\:\\$match_sql \\(string\\) in isset\\(\\) is not nullable\\.$#"
 			count: 1
 			path: includes/pro/class-fuzzy-search.php
 
@@ -111,6 +91,11 @@ parameters:
 			path: includes/pro/class-multisite-search.php
 
 		-
+			message: "#^Constant DB_NAME not found\\.$#"
+			count: 1
+			path: includes/pro/custom-tables/class-table-manager.php
+
+		-
 			message: "#^Variable \\$query in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: includes/pro/class-pro.php
@@ -123,9 +108,9 @@ parameters:
 		-
 			message: "#^Access to an undefined property Better_Search_Query\\:\\:\\$topscore\\.$#"
 			count: 1
-			path: templates/better-search-template.php
+			path: includes/frontend/templates/better-search-template.php
 
 		-
 			message: "#^Variable \\$post might not be defined\\.$#"
 			count: 7
-			path: templates/better-search-template.php
+			path: includes/frontend/templates/better-search-template.php
