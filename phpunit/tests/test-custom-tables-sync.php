@@ -87,14 +87,16 @@ class CustomTablesSyncTest extends WP_UnitTestCase {
 		restore_error_handler();
 		// Explicit cleanup in case the WP transaction rollback doesn't cover
 		// rows inserted outside of the WP transaction (e.g. sync_post calls).
-		global $wpdb;
-		$blog_id = get_current_blog_id();
-		$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-			$wpdb->prepare(
-				"DELETE FROM {$this->table_manager->content_table} WHERE blog_id = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$blog_id
-			)
-		);
+		if ( isset( $this->table_manager ) ) {
+			global $wpdb;
+			$blog_id = get_current_blog_id();
+			$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+				$wpdb->prepare(
+					"DELETE FROM {$this->table_manager->content_table} WHERE blog_id = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					$blog_id
+				)
+			);
+		}
 
 		parent::tear_down();
 	}
