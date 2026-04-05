@@ -28,6 +28,20 @@ function _manually_load_plugin() {
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
+/**
+ * Create plugin DB tables and FULLTEXT indexes after WP finishes loading.
+ * This runs before any individual test's setUp(), so the tables are real
+ * (not temporary) and the FULLTEXT indexes are available for all tests.
+ */
+function _bsearch_create_tables_and_indexes() {
+	global $wpdb;
+	$wpdb->hide_errors();
+	\WebberZone\Better_Search\Db::create_tables();
+	\WebberZone\Better_Search\Db::create_fulltext_indexes();
+	$wpdb->show_errors();
+}
+tests_add_filter( 'wp_loaded', '_bsearch_create_tables_and_indexes' );
+
 // Include the PHPUnit Polyfills autoloader.
 require dirname( __DIR__ ) . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
 
