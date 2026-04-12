@@ -596,6 +596,22 @@ class Settings {
 				'type'    => 'checkbox',
 				'default' => true,
 			),
+			'exclude_front_page'        => array(
+				'id'      => 'exclude_front_page',
+				'name'    => esc_html__( 'Exclude Front page', 'better-search' ),
+				'desc'    => esc_html__( 'If you have designated a specific page for your Front page via Settings > Reading, enable this option to exclude it from appearing in the search results.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => false,
+				'pro'     => true,
+			),
+			'exclude_posts_page'        => array(
+				'id'      => 'exclude_posts_page',
+				'name'    => esc_html__( 'Exclude Posts page', 'better-search' ),
+				'desc'    => esc_html__( 'If you have designated a specific page for your Posts page via Settings > Reading, enable this option to exclude it from appearing in the search results.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => false,
+				'pro'     => true,
+			),
 			'exclude_post_ids'          => array(
 				'id'      => 'exclude_post_ids',
 				'name'    => esc_html__( 'Exclude post IDs', 'better-search' ),

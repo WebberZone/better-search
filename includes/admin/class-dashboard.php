@@ -97,8 +97,20 @@ class Dashboard {
 				<ul class="nav-tab-wrapper" style="padding:0; border-bottom: 1px solid #ccc;">
 					<?php
 					foreach ( $this->get_tabs() as $tab_id => $tab_name ) {
+							$tab_class = 'nav-tab';
+							$tab_style = '';
 
-						echo '<li style="padding:0; border:0; margin:0;"><a href="#' . esc_attr( $tab_id ) . '" title="' . esc_attr( $tab_name['title'] ) . '" class="nav-tab">';
+							// Check if this tab should be hidden initially.
+						if ( isset( $tab_name['hide'] ) && $tab_name['hide'] ) {
+							$tab_style = 'display:none;';
+						}
+
+							// Add custom class if specified.
+						if ( isset( $tab_name['class'] ) ) {
+							$tab_class .= ' ' . $tab_name['class'];
+						}
+
+						echo '<li style="padding:0; border:0; margin:0;"><a href="#' . esc_attr( $tab_id ) . '" title="' . esc_attr( $tab_name['title'] ) . '" class="' . esc_attr( $tab_class ) . '" style="' . esc_attr( $tab_style ) . '">';
 							echo esc_html( $tab_name['title'] );
 						echo '</a></li>';
 
@@ -208,10 +220,10 @@ class Dashboard {
 	public function admin_enqueue_scripts( $hook ) {
 
 		if ( $hook === $this->parent_id ) {
-			wp_enqueue_script( 'moment' );
+			wp_enqueue_script( 'better-search-luxon' );
 			wp_enqueue_script( 'better-search-chartjs' );
-			wp_enqueue_script( 'better-search-chart-datalabels-js' );
-			wp_enqueue_script( 'better-search-chartjs-adapter-moment-js' );
+			wp_enqueue_script( 'better-search-chartjs-plugin-datalabels' );
+			wp_enqueue_script( 'better-search-chartjs-adapter-luxon' );
 			wp_enqueue_script( 'better-search-chart-data-js' );
 			wp_enqueue_script( 'better-search-admin-js' );
 			wp_localize_script(
@@ -233,14 +245,10 @@ class Dashboard {
 	 * @since 3.3.0
 	 */
 	public function get_chart_data() {
-		global $wpdb;
-
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die();
 		}
 		check_ajax_referer( 'bsearch-dashboard', 'security' );
-
-		$blog_id = get_current_blog_id();
 
 		// Add date selector.
 		$to_date   = isset( $_REQUEST['to_date'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['to_date'] ) ) : current_time( 'd M Y' );
@@ -249,17 +257,59 @@ class Dashboard {
 		$post_date_from = gmdate( 'Y-m-d', strtotime( $from_date ) );
 		$post_date_to   = gmdate( 'Y-m-d', strtotime( $to_date ) );
 
-		$sql = $wpdb->prepare(
-			" SELECT SUM(cntaccess) AS searches, DATE(dp_date) as date
-			FROM {$wpdb->prefix}bsearch_daily
-			WHERE DATE(dp_date) >= DATE(%s)
-			AND DATE(dp_date) <= DATE(%s)
-			GROUP BY date
-			ORDER BY date ASC
-			",
-			$post_date_from,
-			$post_date_to,
-		);
+		$network_request = is_multisite() && isset( $_REQUEST['network'] ) && 1 === (int) $_REQUEST['network'];
+
+		$data = self::fetch_searches_by_date( $post_date_from, $post_date_to, $network_request );
+
+		echo wp_json_encode( $data );
+		wp_die();
+	}
+
+	/**
+	 * Fetch chart data for searches over time.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string $from_date Start date in Y-m-d format.
+	 * @param string $to_date   End date in Y-m-d format.
+	 * @param bool   $network   Whether to fetch network-wide data.
+	 * @return array Chart data with date and searches.
+	 */
+	public static function fetch_searches_by_date( $from_date, $to_date, $network = false ) {
+		global $wpdb;
+
+		if ( $network ) {
+			$unions = Statistics_Table::get_network_table_unions( 'bsearch_daily' );
+			if ( empty( $unions ) ) {
+				return array();
+			}
+			$union_sql = implode( ' UNION ALL ', $unions );
+
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $union_sql is built from table names.
+			$sql = $wpdb->prepare(
+				"SELECT SUM(cntaccess) AS searches, DATE(dp_date) as date
+				FROM ( {$union_sql} ) AS bsd
+				WHERE DATE(dp_date) >= DATE(%s)
+				AND DATE(dp_date) <= DATE(%s)
+				GROUP BY date
+				ORDER BY date ASC",
+				$from_date,
+				$to_date
+			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		} else {
+			$sql = $wpdb->prepare(
+				" SELECT SUM(cntaccess) AS searches, DATE(dp_date) as date
+				FROM {$wpdb->prefix}bsearch_daily
+				WHERE DATE(dp_date) >= DATE(%s)
+				AND DATE(dp_date) <= DATE(%s)
+				GROUP BY date
+				ORDER BY date ASC
+				",
+				$from_date,
+				$to_date,
+			);
+		}
 
 		$result = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
@@ -268,8 +318,7 @@ class Dashboard {
 			$data[] = $row;
 		}
 
-		echo wp_json_encode( $data );
-		wp_die();
+		return $data;
 	}
 
 
@@ -312,6 +361,15 @@ class Dashboard {
 				'daily' => false,
 			),
 		);
+
+		/**
+		 * Filter the dashboard tabs.
+		 *
+		 * @since 4.3.0
+		 *
+		 * @param array $tabs Array of tabs.
+		 */
+		$tabs = apply_filters( 'bsearch_admin_dashboard_tabs', $tabs );
 
 		return $tabs;
 	}
@@ -405,50 +463,86 @@ class Dashboard {
 		$defaults = array(
 			'daily'     => true,
 			'from_date' => null,
+			'network'   => false,
 			'number'    => 20,
 			'offset'    => 0,
 			'to_date'   => null,
 		);
 		$args     = wp_parse_args( $args, $defaults );
 
-		$table_name = Helpers::get_bsearch_table( $args['daily'] );
+		$explicit_network = isset( $args['network'] ) ? (bool) $args['network'] : null;
+		$is_network       = ( null !== $explicit_network ) ? $explicit_network : ( is_multisite() && is_network_admin() );
 
-		// Fields to return.
-		$fields[] = "{$table_name}.searchvar as name";
-		$fields[] = ( $args['daily'] ) ? "SUM({$table_name}.cntaccess) as searches" : "{$table_name}.cntaccess as searches";
+		if ( $is_network ) {
+			$table_suffix = $args['daily'] ? 'bsearch_daily' : 'bsearch';
+			$unions       = Statistics_Table::get_network_table_unions( $table_suffix );
+			if ( empty( $unions ) ) {
+				return array();
+			}
+			$union_sql  = implode( ' UNION ALL ', $unions );
+			$table_name = "( {$union_sql} ) AS bst";
 
-		$fields = implode( ', ', $fields );
+			$fields[] = 'bst.searchvar as name';
+			$fields[] = 'SUM(bst.cntaccess) as searches';
+			$fields   = implode( ', ', $fields );
 
-		// Create the base WHERE clause.
-		$where = " AND {$table_name}.searchvar != '' ";
+			$where = " AND bst.searchvar != '' ";
 
-		if ( isset( $args['from_date'] ) ) {
-			$from_date = gmdate( 'Y-m-d', strtotime( $args['from_date'] ) );
-			$where    .= $wpdb->prepare( " AND DATE({$table_name}.dp_date) >= DATE(%s) ", $from_date ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			if ( $args['daily'] && isset( $args['from_date'] ) ) {
+				$from_date = gmdate( 'Y-m-d', strtotime( $args['from_date'] ) );
+				$where    .= $wpdb->prepare( ' AND DATE(bst.dp_date) >= DATE(%s) ', $from_date );
+			}
+
+			if ( $args['daily'] && isset( $args['to_date'] ) ) {
+				$to_date = gmdate( 'Y-m-d', strtotime( $args['to_date'] ) );
+				$where  .= $wpdb->prepare( ' AND DATE(bst.dp_date) <= DATE(%s) ', $to_date );
+			}
+
+			$groupby = ' GROUP BY bst.searchvar ';
+			$orderby = ' ORDER BY searches DESC, name ASC ';
+			$limits  = $wpdb->prepare( ' LIMIT %d, %d ', $args['offset'], $args['number'] );
+
+			$sql = "SELECT {$fields} FROM {$table_name} WHERE 1=1 {$where} {$groupby} {$orderby} {$limits}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		} else {
+			$table_name = Helpers::get_bsearch_table( $args['daily'] );
+
+			// Fields to return.
+			$fields[] = "{$table_name}.searchvar as name";
+			$fields[] = ( $args['daily'] ) ? "SUM({$table_name}.cntaccess) as searches" : "{$table_name}.cntaccess as searches";
+
+			$fields = implode( ', ', $fields );
+
+			// Create the base WHERE clause.
+			$where = " AND {$table_name}.searchvar != '' ";
+
+			if ( isset( $args['from_date'] ) ) {
+				$from_date = gmdate( 'Y-m-d', strtotime( $args['from_date'] ) );
+				$where    .= $wpdb->prepare( " AND DATE({$table_name}.dp_date) >= DATE(%s) ", $from_date ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			}
+
+			if ( isset( $args['to_date'] ) ) {
+				$to_date = gmdate( 'Y-m-d', strtotime( $args['to_date'] ) );
+				$where  .= $wpdb->prepare( " AND DATE({$table_name}.dp_date) <= DATE(%s) ", $to_date ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			}
+
+			// Create the base GROUP BY clause.
+			if ( $args['daily'] ) {
+				$groupby = " {$table_name}.searchvar ";
+			}
+
+			// Create the base ORDER BY clause.
+			$orderby = ' searches DESC, name ASC ';
+			$orderby = " ORDER BY {$orderby} ";
+
+			// Create the base LIMITS clause.
+			$limits = $wpdb->prepare( ' LIMIT %d, %d ', $args['offset'], $args['number'] );
+
+			if ( ! empty( $groupby ) ) {
+				$groupby = " GROUP BY {$groupby} ";
+			}
+
+			$sql = "SELECT DISTINCT $fields FROM {$table_name} $join WHERE 1=1 $where $groupby $orderby $limits";
 		}
-
-		if ( isset( $args['to_date'] ) ) {
-			$to_date = gmdate( 'Y-m-d', strtotime( $args['to_date'] ) );
-			$where  .= $wpdb->prepare( " AND DATE({$table_name}.dp_date) <= DATE(%s) ", $to_date ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		}
-
-		// Create the base GROUP BY clause.
-		if ( $args['daily'] ) {
-			$groupby = " {$table_name}.searchvar ";
-		}
-
-		// Create the base ORDER BY clause.
-		$orderby = ' searches DESC, name ASC ';
-		$orderby = " ORDER BY {$orderby} ";
-
-		// Create the base LIMITS clause.
-		$limits = $wpdb->prepare( ' LIMIT %d, %d ', $args['offset'], $args['number'] );
-
-		if ( ! empty( $groupby ) ) {
-			$groupby = " GROUP BY {$groupby} ";
-		}
-
-		$sql = "SELECT DISTINCT $fields FROM {$table_name} $join WHERE 1=1 $where $groupby $orderby $limits";
 
 		$result = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 

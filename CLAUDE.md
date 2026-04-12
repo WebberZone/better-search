@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Plugin Overview
 
-Better Search Pro (v4.2.4.1) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, and more. It also tracks popular search queries and displays a search heatmap.
+Better Search Pro (v4.3.0) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, and more. It also tracks popular search queries and displays a search heatmap.
 
 Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.6+, PHP 7.4+.
 
@@ -12,7 +12,7 @@ Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.6
 
 Pro-only code lives exclusively in `includes/pro/`, declared as `@fs_premium_only /includes/pro/` in the plugin header. All files outside `includes/pro/` are identical to the free version.
 
-Constants defined in `better-search.php`: `BETTER_SEARCH_VERSION` (4.2.4.1), `BETTER_SEARCH_PLUGIN_DIR`, `BETTER_SEARCH_PLUGIN_URL`, `BETTER_SEARCH_PLUGIN_FILE`, `BETTER_SEARCH_DB_VERSION` (2.0), `BETTER_SEARCH_DEFAULT_THUMBNAIL_URL`.
+Constants defined in `better-search.php`: `BETTER_SEARCH_VERSION` (4.3.0), `BETTER_SEARCH_PLUGIN_DIR`, `BETTER_SEARCH_PLUGIN_URL`, `BETTER_SEARCH_PLUGIN_FILE`, `BETTER_SEARCH_DB_VERSION` (2.0), `BETTER_SEARCH_DEFAULT_THUMBNAIL_URL`.
 
 Settings are stored as a single `bsearch_settings` array in `wp_options`. Access via `bsearch_get_option($key)` / `bsearch_get_settings()`. The global `$bsearch_settings` is populated at plugin load.
 
@@ -72,7 +72,7 @@ Both the free and pro plugins include a `bsearch_deactivate_other_instances()` f
 
 ### Admin (`includes/admin/`)
 - **`Settings`** — Settings page (`bsearch_options_page`); tabs for General, Search, Output, Heatmap, etc.
-- **`Dashboard`** / **`Dashboard_Widgets`** — Search statistics dashboard page.
+- **`Dashboard`** / **`Dashboard_Widgets`** — Search statistics dashboard page. Dashboard tabs support custom CSS classes, hide attributes, and are extensible via the `bsearch_admin_dashboard_tabs` filter.
 - **`Statistics`** / **`Statistics_Table`** — Search query log table.
 - **`Tools_Page`** — Utility actions (reindex, reset stats, etc.).
 - **`Settings_Wizard`** — Guided setup wizard.
@@ -90,7 +90,7 @@ Both the free and pro plugins include a `bsearch_deactivate_other_instances()` f
 
 ### Pro Components (`includes/pro/`) [PRO ONLY]
 
-- **`Pro`** (`class-pro.php`) — Top-level pro orchestrator, instantiated as `Main::$pro`. Wires together all pro subsystems and registers additional hooks on `better_search_query_*` filters. Also handles minimum relevance threshold (`set_min_relevance`), LIKE fallback when FULLTEXT returns 0 results (`like_fallback_search`), slug search (`add_custom_clauses`), and REST API search integration.
+- **`Pro`** (`class-pro.php`) — Top-level pro orchestrator, instantiated as `Main::$pro`. Wires together all pro subsystems and registers additional hooks on `better_search_query_*` filters. Also handles minimum relevance threshold (`set_min_relevance`), LIKE fallback when FULLTEXT returns 0 results (`like_fallback_search`), slug search (`add_custom_clauses`), front/posts page exclusion (`exclude_special_pages` via `bsearch_exclude_post_ids` filter), and REST API search integration.
 
 - **`Query_Modifier`** (`class-query-modifier.php`) — Extends the core query via filter hooks (`better_search_query_posts_fields`, `_join`, `_where_match`, `_groupby`, `_orderby_clauses`). Adds: custom table JOIN, cornerstone posts pinning (`the_posts` filter), max execution time hint, and additional `ORDER BY` clause control.
 
@@ -99,12 +99,12 @@ Both the free and pro plugins include a `bsearch_deactivate_other_instances()` f
 - **`Multisite_Search`** (`class-multisite-search.php`) — Cross-site search across multiple blogs in a WordPress Multisite network. Uses `Custom_Tables\Posts_Search` to query across sites.
 
 - **`Custom_Tables\Custom_Tables`** (`custom-tables/class-custom-tables.php`) — Manages a dedicated search index table separate from `wp_posts`, enabling faster queries on large sites. Composed of:
-  - `Table_Manager` — Creates/manages the custom DB table schema.
-  - `Sync_Manager` — Keeps the custom table in sync with `wp_posts` (on save/delete hooks).
-  - `Custom_Tables_Admin` — Admin UI with a reindex action; enqueues `reindex.js` for AJAX reindexing progress.
+  - `Table_Manager` — Creates/manages the custom DB table schema (defaults to InnoDB). Includes `get_table_engine()` and `convert_to_innodb()` methods for engine management, with automatic FULLTEXT index recreation after conversion.
+  - `Sync_Manager` — Keeps the custom table in sync with `wp_posts` (on save/delete hooks). Includes a scheduled reconciliation cron job (twicedaily) that auto-syncs any published posts missing from the index.
+  - `Custom_Tables_Admin` — Admin UI with reindex action, InnoDB conversion tool (shows current engine status with conversion form), and enqueues `reindex.js` for AJAX reindexing progress.
   - `Posts_Search` — Executes search queries against the custom table.
 
-- **`Admin`** (`class-admin.php`) — Pro-specific admin additions (extra settings sections, tools).
+- **`Admin`** (`class-admin.php`) — Pro-specific admin additions (extra settings sections, tools). Includes dashboard chart drill-down feature: click a bar in the daily searches chart to view top 20 popular searches for that day (`bsearch_get_day_searches` AJAX action). Enqueues `includes/pro/js/chart-interactions.js` for Chart.js click/hover/tooltip handling.
 
 ### Pro Settings
 Pro settings are added to the existing `bsearch_settings` option. The `Pro\Admin` class registers additional fields into the shared settings page tabs. No separate options key.
@@ -130,3 +130,7 @@ Pro settings are added to the existing `bsearch_settings` option. The `Pro\Admin
 | Multisite cross-site search | No | Yes (`Multisite_Search`) |
 | REST API search integration | No | Yes (`Pro` REST hooks) |
 | Max SQL execution time hint | No | Yes (`Query_Modifier`) |
+| Exclude front/posts page | No | Yes (`Pro::exclude_special_pages`) |
+| Dashboard chart drill-down | No | Yes (`Pro\Admin` AJAX) |
+| InnoDB conversion tool | No | Yes (`Table_Manager`) |
+| Scheduled index reconciliation | No | Yes (`Sync_Manager` cron) |

@@ -341,6 +341,7 @@ class Admin {
 					'screen_ids' => array(
 						'toplevel_page_bsearch_dashboard',
 						'better-search_page_bsearch_dashboard',
+						'bsearch_dashboard_page_bsearch_dashboard',
 					),
 					'page_slugs' => array( 'bsearch_dashboard' ),
 				),

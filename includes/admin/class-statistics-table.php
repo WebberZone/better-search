@@ -23,15 +23,27 @@ if ( ! defined( 'WPINC' ) ) {
 class Statistics_Table extends \WP_List_Table {
 
 	/**
-	 * Class constructor.
+	 * Network wide flag.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @var bool
 	 */
-	public function __construct() {
+	public $network_wide;
+
+	/**
+	 * Class constructor.
+	 *
+	 * @param bool $network_wide Whether to show network-wide data.
+	 */
+	public function __construct( $network_wide = false ) {
 		parent::__construct(
 			array(
 				'singular' => __( 'popular_search', 'better-search' ), // Singular name of the listed records.
 				'plural'   => __( 'popular_searches', 'better-search' ), // plural name of the listed records.
 			)
 		);
+		$this->network_wide = $network_wide;
 	}
 
 	/**
@@ -51,6 +63,10 @@ class Statistics_Table extends \WP_List_Table {
 		$from_date = gmdate( 'Y-m-d', strtotime( $from_date ) );
 		$to_date   = isset( $args['search-date-filter-to'] ) ? $args['search-date-filter-to'] : current_time( 'd M Y' );
 		$to_date   = gmdate( 'Y-m-d', strtotime( $to_date ) );
+
+		if ( $this->network_wide ) {
+			return $this->get_network_popular_searches( $per_page, $page_number, $args, $from_date, $to_date );
+		}
 
 		/* Start creating the SQL */
 		$table_name_daily = $wpdb->prefix . 'bsearch_daily AS bsd';
@@ -87,33 +103,7 @@ class Statistics_Table extends \WP_List_Table {
 		$groupby = ' title ';
 
 		// Create the ORDER BY clause.
-		$orderby = '';
-		if ( ! empty( $_REQUEST['orderby'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$orderby = sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		} elseif ( ! empty( $args['orderby'] ) ) {
-			$orderby = $args['orderby'];
-		}
-
-		if ( $orderby ) {
-			if ( ! in_array( $orderby, array( 'title', 'daily_count', 'total_count' ) ) ) { //phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-				$orderby = ' total_count ';
-			}
-
-			$order = '';
-			if ( ! empty( $_REQUEST['order'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$order = sanitize_text_field( wp_unslash( $_REQUEST['order'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			} elseif ( ! empty( $args['order'] ) ) {
-				$order = $args['order'];
-			}
-
-			if ( $order && in_array( $order, array( 'asc', 'ASC', 'desc', 'DESC' ), true ) ) {
-				$orderby .= " {$order}";
-			} else {
-				$orderby .= ' DESC';
-			}
-		} else {
-			$orderby = ' total_count DESC ';
-		}
+		$orderby = $this->get_orderby_clause( $args );
 
 		// Create the base LIMITS clause.
 		$limits = $wpdb->prepare( ' LIMIT %d, %d ', ( $page_number - 1 ) * $per_page, $per_page );
@@ -126,6 +116,108 @@ class Statistics_Table extends \WP_List_Table {
 		$result = $wpdb->get_results( $sql, 'ARRAY_A' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
 		return $result;
+	}
+
+	/**
+	 * Get network-wide popular searches using UNION queries across all sites.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param int    $per_page    Posts per page.
+	 * @param int    $page_number Page number.
+	 * @param array  $args        Array of arguments.
+	 * @param string $from_date   From date in Y-m-d format.
+	 * @param string $to_date     To date in Y-m-d format.
+	 * @return array Array of popular search terms.
+	 */
+	private function get_network_popular_searches( $per_page, $page_number, $args, $from_date, $to_date ) {
+		global $wpdb;
+
+		$overall_unions = self::get_network_table_unions( 'bsearch' );
+		$daily_unions   = self::get_network_table_unions( 'bsearch_daily' );
+
+		if ( empty( $overall_unions ) ) {
+			return array();
+		}
+
+		$overall_union_sql = implode( ' UNION ALL ', $overall_unions );
+		$daily_union_sql   = ! empty( $daily_unions ) ? implode( ' UNION ALL ', $daily_unions ) : '';
+
+		// Fields to return.
+		$fields = 'bst.searchvar as title, SUM(bst.cntaccess) as total_count';
+		if ( $daily_union_sql ) {
+			$fields .= ', COALESCE(daily_agg.daily_count, 0) as daily_count';
+		} else {
+			$fields .= ', 0 as daily_count';
+		}
+
+		// Build daily aggregate subquery.
+		$daily_join = '';
+		if ( $daily_union_sql ) {
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $daily_union_sql is built from table names.
+			$daily_join = $wpdb->prepare(
+				" LEFT JOIN (
+					SELECT bsd.searchvar, SUM(bsd.cntaccess) as daily_count
+					FROM ( {$daily_union_sql} ) AS bsd
+					WHERE DATE(bsd.dp_date) >= DATE(%s) AND DATE(bsd.dp_date) <= DATE(%s)
+					GROUP BY bsd.searchvar
+				) AS daily_agg ON bst.searchvar = daily_agg.searchvar ",
+				$from_date,
+				$to_date
+			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		}
+
+		// WHERE clause.
+		$where = '';
+		if ( ! empty( $args['search'] ) ) {
+			$where .= $wpdb->prepare( ' AND bst.searchvar LIKE %s ', '%' . $wpdb->esc_like( $args['search'] ) . '%' );
+		}
+
+		// ORDER BY clause.
+		$orderby = $this->get_orderby_clause( $args );
+
+		// LIMITS clause.
+		$limits = $wpdb->prepare( ' LIMIT %d, %d ', ( $page_number - 1 ) * $per_page, $per_page );
+
+		$sql = "SELECT {$fields} FROM ( {$overall_union_sql} ) AS bst {$daily_join} WHERE 1=1 {$where} GROUP BY bst.searchvar ORDER BY {$orderby} {$limits}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		$result = $wpdb->get_results( $sql, 'ARRAY_A' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+
+		return $result;
+	}
+
+	/**
+	 * Get UNION SQL fragments for a table across all network sites.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string $table_suffix Table name suffix (e.g., 'bsearch' or 'bsearch_daily').
+	 * @return array Array of SELECT SQL strings for UNION.
+	 */
+	public static function get_network_table_unions( $table_suffix ) {
+		global $wpdb;
+
+		$unions = array();
+		$sites  = get_sites(
+			array(
+				'fields'   => 'ids',
+				'archived' => 0,
+				'spam'     => 0,
+				'deleted'  => 0,
+			)
+		);
+
+		foreach ( $sites as $site_id ) {
+			$prefix     = $wpdb->get_blog_prefix( $site_id );
+			$table_name = $prefix . $table_suffix;
+
+			if ( \WebberZone\Better_Search\Db::is_table_installed( $table_name ) ) {
+				$unions[] = "SELECT * FROM {$table_name}";
+			}
+		}
+
+		return $unions;
 	}
 
 
@@ -164,10 +256,23 @@ class Statistics_Table extends \WP_List_Table {
 
 		global $wpdb;
 
-		$sql = "SELECT COUNT(*) FROM {$wpdb->prefix}bsearch as bst";
+		if ( $this->network_wide ) {
+			$unions = self::get_network_table_unions( 'bsearch' );
+			if ( empty( $unions ) ) {
+				return 0;
+			}
+			$union_sql = implode( ' UNION ALL ', $unions );
+			$sql       = "SELECT COUNT(DISTINCT searchvar) FROM ( {$union_sql} ) AS bst"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		if ( isset( $args['search'] ) ) {
-			$sql .= $wpdb->prepare( ' WHERE bst.searchvar LIKE %s ', '%' . $wpdb->esc_like( $args['search'] ) . '%' );
+			if ( isset( $args['search'] ) ) {
+				$sql .= $wpdb->prepare( ' WHERE bst.searchvar LIKE %s ', '%' . $wpdb->esc_like( $args['search'] ) . '%' );
+			}
+		} else {
+			$sql = "SELECT COUNT(*) FROM {$wpdb->prefix}bsearch as bst";
+
+			if ( isset( $args['search'] ) ) {
+				$sql .= $wpdb->prepare( ' WHERE bst.searchvar LIKE %s ', '%' . $wpdb->esc_like( $args['search'] ) . '%' );
+			}
 		}
 
 		return intval( $wpdb->get_var( $sql ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
@@ -222,6 +327,10 @@ class Statistics_Table extends \WP_List_Table {
 	 */
 	public function column_title( $item ) {
 
+		if ( $this->network_wide ) {
+			return esc_html( $item['title'] );
+		}
+
 		$delete_nonce = wp_create_nonce( 'bsearch_delete_entry' );
 		$page         = isset( $_REQUEST['page'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
@@ -259,7 +368,7 @@ class Statistics_Table extends \WP_List_Table {
 			'cb'          => '<input type="checkbox" />',
 			'title'       => __( 'Search term', 'better-search' ),
 			'total_count' => __( 'Total searches', 'better-search' ),
-			'daily_count' => __( 'Daily searches', 'better-search' ),
+			'daily_count' => __( 'Searches in period', 'better-search' ),
 		);
 
 		/**
@@ -292,6 +401,9 @@ class Statistics_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	public function get_bulk_actions() {
+		if ( $this->network_wide ) {
+			return array();
+		}
 		$actions = array(
 			'bulk-delete' => __( 'Delete search term', 'better-search' ),
 		);
@@ -367,6 +479,46 @@ class Statistics_Table extends \WP_List_Table {
 				self::delete_search_entry( $id );
 			}
 		}
+	}
+
+	/**
+	 * Get the ORDER BY clause.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param array $args Array of arguments.
+	 * @return string ORDER BY clause without the ORDER BY keyword.
+	 */
+	private function get_orderby_clause( $args = null ) {
+		$orderby = '';
+		if ( ! empty( $_REQUEST['orderby'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$orderby = sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		} elseif ( ! empty( $args['orderby'] ) ) {
+			$orderby = $args['orderby'];
+		}
+
+		if ( $orderby ) {
+			if ( ! in_array( $orderby, array( 'title', 'daily_count', 'total_count' ), true ) ) {
+				$orderby = ' total_count ';
+			}
+
+			$order = '';
+			if ( ! empty( $_REQUEST['order'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$order = sanitize_text_field( wp_unslash( $_REQUEST['order'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			} elseif ( ! empty( $args['order'] ) ) {
+				$order = $args['order'];
+			}
+
+			if ( $order && in_array( $order, array( 'asc', 'ASC', 'desc', 'DESC' ), true ) ) {
+				$orderby .= " {$order}";
+			} else {
+				$orderby .= ' DESC';
+			}
+		} else {
+			$orderby = ' total_count DESC ';
+		}
+
+		return $orderby;
 	}
 
 	/**

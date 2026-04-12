@@ -112,6 +112,14 @@ class Admin {
 	 * @since 4.0.0
 	 */
 	public function render_page() {
+		$main = \WebberZone\Better_Search\Main::get_instance();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading page slug to route rendering in admin context.
+		$current_page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+
+		if ( 'bsearch_dashboard' === $current_page && $main->pro && $main->pro->network_dashboard ) {
+			$main->pro->network_dashboard->render_page();
+			return;
+		}
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Better Search Pro Multisite Settings', 'better-search' ); ?></h1>
@@ -189,10 +197,12 @@ class Admin {
 		}
 
 		// Redirect or display success notice.
+		// Use bsearch_network_settings if Pro is active (slug changed), fall back to bsearch_dashboard.
+		$settings_page = \WebberZone\Better_Search\bsearch_freemius()->can_use_premium_code() ? 'bsearch_network_settings' : 'bsearch_dashboard';
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page'                          => 'bsearch_dashboard',
+					'page'                          => $settings_page,
 					'settings_copied'               => 1,
 					'source_blog_id'                => $source_blog_id,
 					'target_blog_ids'               => implode( ',', array_diff( $target_blog_ids, array( $source_blog_id ) ) ),
