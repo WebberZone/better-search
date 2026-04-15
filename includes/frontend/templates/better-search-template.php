@@ -60,26 +60,32 @@ global $wp_query;
 $tmp_wpquery = $wp_query;
 
 // Set up Better_Search_Query to replace $wp_query.
-$args = array(
-	's'              => $search_query,
-	'posts_per_page' => $limit,
-	'paged'          => $current_page,
-	'orderby'        => $bydate ? 'date' : 'relevance',
-	'post_type'      => $post_types,
-);
+// Reuse results pre-fetched by Template_Handler::load_seamless_mode() when available; it builds
+// identical args (same GET params + bsearch_template_query_args filter) to avoid a double query.
+$search_results = \WebberZone\Better_Search\Frontend\Template_Handler::get_prefetched_results();
 
-/**
- * Filter the arguments that are passed to Better_Search_Query.
- *
- * @since 3.1.0
- *
- * @param array $args Arguments array.
- */
-$args = apply_filters( 'bsearch_template_query_args', $args );
+if ( null === $search_results ) {
+	$args = array(
+		's'              => $search_query,
+		'posts_per_page' => $limit,
+		'paged'          => $current_page,
+		'orderby'        => $bydate ? 'date' : 'relevance',
+		'post_type'      => $post_types,
+	);
 
-$search_results = new Better_Search_Query( $args );
-$wp_query       = $search_results; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-$topscore       = $wp_query->topscore;
+	/**
+	 * Filter the arguments that are passed to Better_Search_Query.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param array $args Arguments array.
+	 */
+	$args           = apply_filters( 'bsearch_template_query_args', $args );
+	$search_results = new Better_Search_Query( $args );
+}
+
+$wp_query = $search_results; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+$topscore = $wp_query->topscore;
 
 // Get Header.
 get_header();

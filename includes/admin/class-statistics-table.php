@@ -83,7 +83,7 @@ class Statistics_Table extends \WP_List_Table {
 		$join = $wpdb->prepare(
 			" LEFT JOIN (
 			SELECT * FROM {$table_name_daily} " . // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			'WHERE DATE(bsd.dp_date) >= DATE(%s) AND DATE(bsd.dp_date) <= DATE(%s)
+			'WHERE bsd.dp_date >= %s AND bsd.dp_date <= %s
 			) AS bsd
 			ON bst.searchvar=bsd.searchvar
 			',
@@ -159,7 +159,7 @@ class Statistics_Table extends \WP_List_Table {
 				" LEFT JOIN (
 					SELECT bsd.searchvar, SUM(bsd.cntaccess) as daily_count
 					FROM ( {$daily_union_sql} ) AS bsd
-					WHERE DATE(bsd.dp_date) >= DATE(%s) AND DATE(bsd.dp_date) <= DATE(%s)
+					WHERE bsd.dp_date >= %s AND bsd.dp_date <= %s
 					GROUP BY bsd.searchvar
 				) AS daily_agg ON bst.searchvar = daily_agg.searchvar ",
 				$from_date,
@@ -198,6 +198,12 @@ class Statistics_Table extends \WP_List_Table {
 	public static function get_network_table_unions( $table_suffix ) {
 		global $wpdb;
 
+		static $cache = array();
+
+		if ( isset( $cache[ $table_suffix ] ) ) {
+			return $cache[ $table_suffix ];
+		}
+
 		$unions = array();
 		$sites  = get_sites(
 			array(
@@ -216,6 +222,8 @@ class Statistics_Table extends \WP_List_Table {
 				$unions[] = "SELECT * FROM {$table_name}";
 			}
 		}
+
+		$cache[ $table_suffix ] = $unions;
 
 		return $unions;
 	}

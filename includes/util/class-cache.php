@@ -93,13 +93,12 @@ class Cache {
 
 		$keys = array();
 
-		$sql = "
-			SELECT option_name
-			FROM {$wpdb->options}
-			WHERE `option_name` LIKE '_transient_bs_%'
-		";
-
-		$results = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+		$results = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$wpdb->esc_like( '_transient_bs_' ) . '%'
+			)
+		);
 
 		if ( is_array( $results ) ) {
 			foreach ( $results as $result ) {

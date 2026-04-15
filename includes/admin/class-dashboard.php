@@ -287,10 +287,10 @@ class Dashboard {
 
 			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $union_sql is built from table names.
 			$sql = $wpdb->prepare(
-				"SELECT SUM(cntaccess) AS searches, DATE(dp_date) as date
+				"SELECT SUM(cntaccess) AS searches, dp_date as date
 				FROM ( {$union_sql} ) AS bsd
-				WHERE DATE(dp_date) >= DATE(%s)
-				AND DATE(dp_date) <= DATE(%s)
+				WHERE dp_date >= %s
+				AND dp_date <= %s
 				GROUP BY date
 				ORDER BY date ASC",
 				$from_date,
@@ -299,10 +299,10 @@ class Dashboard {
 			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		} else {
 			$sql = $wpdb->prepare(
-				" SELECT SUM(cntaccess) AS searches, DATE(dp_date) as date
+				" SELECT SUM(cntaccess) AS searches, dp_date as date
 				FROM {$wpdb->prefix}bsearch_daily
-				WHERE DATE(dp_date) >= DATE(%s)
-				AND DATE(dp_date) <= DATE(%s)
+				WHERE dp_date >= %s
+				AND dp_date <= %s
 				GROUP BY date
 				ORDER BY date ASC
 				",
@@ -490,12 +490,12 @@ class Dashboard {
 
 			if ( $args['daily'] && isset( $args['from_date'] ) ) {
 				$from_date = gmdate( 'Y-m-d', strtotime( $args['from_date'] ) );
-				$where    .= $wpdb->prepare( ' AND DATE(bst.dp_date) >= DATE(%s) ', $from_date );
+				$where    .= $wpdb->prepare( ' AND bst.dp_date >= %s ', $from_date );
 			}
 
 			if ( $args['daily'] && isset( $args['to_date'] ) ) {
 				$to_date = gmdate( 'Y-m-d', strtotime( $args['to_date'] ) );
-				$where  .= $wpdb->prepare( ' AND DATE(bst.dp_date) <= DATE(%s) ', $to_date );
+				$where  .= $wpdb->prepare( ' AND bst.dp_date <= %s ', $to_date );
 			}
 
 			$groupby = ' GROUP BY bst.searchvar ';
@@ -517,12 +517,12 @@ class Dashboard {
 
 			if ( isset( $args['from_date'] ) ) {
 				$from_date = gmdate( 'Y-m-d', strtotime( $args['from_date'] ) );
-				$where    .= $wpdb->prepare( " AND DATE({$table_name}.dp_date) >= DATE(%s) ", $from_date ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$where    .= $wpdb->prepare( " AND {$table_name}.dp_date >= %s ", $from_date ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			}
 
 			if ( isset( $args['to_date'] ) ) {
 				$to_date = gmdate( 'Y-m-d', strtotime( $args['to_date'] ) );
-				$where  .= $wpdb->prepare( " AND DATE({$table_name}.dp_date) <= DATE(%s) ", $to_date ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$where  .= $wpdb->prepare( " AND {$table_name}.dp_date <= %s ", $to_date ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			}
 
 			// Create the base GROUP BY clause.

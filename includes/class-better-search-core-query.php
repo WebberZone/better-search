@@ -1248,23 +1248,26 @@ class Better_Search_Core_Query extends \WP_Query {
 				);
 				// Set the score and blog_id for each of the posts.
 				if ( $posts ) {
+					$current_blog_id = get_current_blog_id();
 					foreach ( $posts as $post ) {
 						if ( isset( $cached_data[ $post->ID ] ) ) {
 							if ( is_array( $cached_data[ $post->ID ] ) ) {
 								$post->score   = isset( $cached_data[ $post->ID ]['score'] ) ? $cached_data[ $post->ID ]['score'] : 0;
-								$post->blog_id = isset( $cached_data[ $post->ID ]['blog_id'] ) ? $cached_data[ $post->ID ]['blog_id'] : get_current_blog_id();
+								$post->blog_id = isset( $cached_data[ $post->ID ]['blog_id'] ) ? $cached_data[ $post->ID ]['blog_id'] : $current_blog_id;
 							} else {
 								$post->score   = $cached_data[ $post->ID ];
-								$post->blog_id = get_current_blog_id();
+								$post->blog_id = $current_blog_id;
 							}
 						} else {
 							$post->score   = 0;
-							$post->blog_id = get_current_blog_id();
+							$post->blog_id = $current_blog_id;
 						}
 					}
 				}
 				$query->found_posts   = isset( $cached_data['found_posts'] ) ? $cached_data['found_posts'] : count( $posts );
 				$query->max_num_pages = intval( ceil( $query->found_posts / $query->get( 'posts_per_page' ) ) );
+				$query->topscore      = isset( $cached_data['topscore'] ) ? (float) $cached_data['topscore'] : 0;
+				$this->topscore       = $query->topscore;
 				$this->in_cache       = true;
 			}
 		}
@@ -1309,6 +1312,23 @@ class Better_Search_Core_Query extends \WP_Query {
 			}
 		}
 
+		// Derive topscore from page-1 scores for relevance ordering.
+		$orderby              = $query->get( 'orderby' );
+		$is_relevance_ordered = empty( $orderby ) || in_array( $orderby, array( 'relevance', 'relatedness' ), true );
+		$paged                = max( 1, (int) $query->get( 'paged' ) );
+
+		if ( empty( $this->topscore ) && $is_relevance_ordered && 1 === $paged && ! empty( $query->post_scores ) ) {
+			$this->topscore  = (float) max( $query->post_scores );
+			$query->topscore = $this->topscore;
+
+			if ( ! empty( $this->query_args['cache'] ) ) {
+				$ts_cache_key = $this->get_cache_key( $query, 'ts' );
+				$cache_time   = isset( $this->query_args['cache_time'] ) ? (int) $this->query_args['cache_time'] : 3600;
+				$cache_time   = apply_filters_ref_array( 'better_search_query_cache_time', array( $cache_time, $this->query_args, $query, &$this ) );
+				Cache::set( $ts_cache_key, $this->topscore, $cache_time );
+			}
+		}
+
 		// Support caching to speed up retrieval.
 		if ( ! empty( $posts ) && ! empty( $this->query_args['cache'] ) && ! $this->in_cache && ! ( $query->is_preview() || is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) ) {
 
@@ -1326,14 +1346,16 @@ class Better_Search_Core_Query extends \WP_Query {
 			$cache_time = apply_filters_ref_array( 'better_search_query_cache_time', array( $this->query_args['cache_time'], $this->query_args, $query, &$this ) );
 			$cache_name = $this->get_cache_key( $query );
 
-			$cached_data = array();
+			$cached_data     = array();
+			$current_blog_id = get_current_blog_id();
 			foreach ( $query->posts as $post ) {
 				$cached_data[ $post->ID ] = array(
 					'score'   => isset( $post->score ) ? floatval( $post->score ) : 0,
-					'blog_id' => isset( $post->blog_id ) ? intval( $post->blog_id ) : get_current_blog_id(),
+					'blog_id' => isset( $post->blog_id ) ? intval( $post->blog_id ) : $current_blog_id,
 				);
 			}
 			$cached_data['found_posts'] = $query->found_posts;
+			$cached_data['topscore']    = $this->topscore;
 
 			Cache::set( $cache_name, $cached_data, $cache_time );
 		}
@@ -1392,8 +1414,38 @@ class Better_Search_Core_Query extends \WP_Query {
 			return $request;
 		}
 
-		if ( $this->should_use_custom_table() && $instance->topscore >= 0 ) {
+		if ( $this->should_use_custom_table() && $instance->topscore > 0 ) {
 			return $request;
+		}
+
+		// If topscore was already derived from post scores (e.g. via the_posts), skip the extra query.
+		if ( isset( $query->topscore ) && $query->topscore > 0 ) {
+			$this->topscore = (float) $query->topscore;
+			return $request;
+		}
+
+		$min_relevance        = $this->query_args['min_relevance'] ?? bsearch_get_option( 'min_relevance' );
+		$display_relevance    = bsearch_get_option( 'display_relevance' );
+		$orderby              = $query->get( 'orderby' );
+		$is_relevance_ordered = empty( $orderby ) || in_array( $orderby, array( 'relevance', 'relatedness' ), true );
+		$paged                = max( 1, (int) $query->get( 'paged' ) );
+
+		// SQL-level topscore is required for min_relevance filtering, and for direct paged relevance display when page-1 topscore is unavailable.
+		if ( (int) $min_relevance < 1 ) {
+			if ( ! $display_relevance || ! $is_relevance_ordered || $paged <= 1 ) {
+				return $request;
+			}
+
+			// Cache enabled: try to serve topscore from the page-1 cache entry.
+			if ( ! empty( $this->query_args['cache'] ) ) {
+				$ts_cache_key = $this->get_cache_key( $query, 'ts' );
+				$cached_ts    = Cache::get( $ts_cache_key );
+				if ( false !== $cached_ts ) {
+					$this->topscore  = (float) $cached_ts;
+					$query->topscore = $this->topscore;
+					return $request;
+				}
+			}
 		}
 
 		// Initialize cache variables.
@@ -1468,6 +1520,11 @@ class Better_Search_Core_Query extends \WP_Query {
 		}
 		if ( isset( $query->query_vars['paged'] ) ) {
 			$cache_attr['paged'] = $query->query_vars['paged'];
+		}
+
+		if ( 'ts' === $context ) {
+			$cache_attr['paged'] = 1;
+			unset( $cache_attr['offset'] );
 		}
 
 		return Cache::get_key( $cache_attr, $context );
