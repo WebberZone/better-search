@@ -23,17 +23,23 @@ if ( ! defined( 'WPINC' ) ) {
  */
 function bsearch_get_settings() {
 
-	$settings = get_option( 'bsearch_settings', array() );
+	static $settings_cache = array();
 
-	/**
-	 * Settings array
-	 *
-	 * Retrieves all plugin settings
-	 *
-	 * @since 1.2.0
-	 * @param array $settings Settings array
-	 */
-	return apply_filters( 'bsearch_get_settings', $settings );
+	$cache_key = is_multisite() ? get_current_blog_id() : 0;
+
+	if ( ! array_key_exists( $cache_key, $settings_cache ) ) {
+		/**
+		 * Settings array
+		 *
+		 * Retrieves all plugin settings
+		 *
+		 * @since 1.2.0
+		 * @param array $settings Settings array
+		 */
+		$settings_cache[ $cache_key ] = apply_filters( 'bsearch_get_settings', get_option( 'bsearch_settings', array() ) );
+	}
+
+	return $settings_cache[ $cache_key ];
 }
 
 

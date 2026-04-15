@@ -21,6 +21,15 @@ if ( ! defined( 'WPINC' ) ) {
 class Template_Handler {
 
 	/**
+	 * Search results pre-fetched during load_seamless_mode() so the template can reuse them.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @var \Better_Search_Query|null
+	 */
+	private static $prefetched_results = null;
+
+	/**
 	 * Constructor class.
 	 *
 	 * @since 4.0.0
@@ -70,11 +79,15 @@ class Template_Handler {
 			return;
 		}
 
-		$search_args                            = $query->query_vars;
-		$search_args['better_search_query']     = true;
-		$search_args['is_better_search_loaded'] = true;
+		$search_args = self::build_search_args(
+			array(
+				'better_search_query'     => true,
+				'is_better_search_loaded' => true,
+			)
+		);
 
-		$search_results = new \Better_Search_Query( $search_args );
+		$search_results           = new \Better_Search_Query( $search_args );
+		self::$prefetched_results = $search_results;
 
 		$populate_main_query = null;
 		$populate_main_query = static function ( $posts, $current_query ) use ( &$populate_main_query, $search_results, $query ) {
@@ -232,6 +245,83 @@ class Template_Handler {
 		$query_result[] = $new_block;
 
 		return $query_result;
+	}
+
+	/**
+	 * Return pre-fetched search results cached during load_seamless_mode().
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return \Better_Search_Query|null
+	 */
+	public static function get_prefetched_results() {
+		return self::$prefetched_results;
+	}
+
+	/**
+	 * Build search args from GET params using the same logic as better-search-template.php.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param array $extra_args Additional args to merge (take precedence).
+	 * @return array
+	 */
+	private static function build_search_args( array $extra_args = array() ) {
+		$bsearch_settings = bsearch_get_settings();
+
+		$limit = filter_input(
+			INPUT_GET,
+			'limit',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'default'   => $bsearch_settings['limit'],
+					'min_range' => 1,
+				),
+			)
+		);
+
+		$bydate = filter_input(
+			INPUT_GET,
+			'bydate',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'default'   => 0,
+					'min_range' => 0,
+				),
+			)
+		);
+
+		$current_page     = (int) get_query_var( 'paged', 1 );
+		$post_types_param = filter_input( INPUT_GET, 'post_types', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$post_type_param  = filter_input( INPUT_GET, 'post_type', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+
+		$selected_post_types = 'any';
+		if ( $post_types_param ) {
+			$selected_post_types = sanitize_text_field( wp_unslash( $post_types_param ) );
+		} elseif ( $post_type_param ) {
+			$selected_post_types = sanitize_key( wp_unslash( $post_type_param ) );
+		}
+
+		$post_types = ( 'any' === $selected_post_types ) ? bsearch_get_option( 'post_types' ) : $selected_post_types;
+		$post_types = wp_parse_list( $post_types );
+
+		$args = array(
+			's'              => get_search_query(),
+			'posts_per_page' => $limit,
+			'paged'          => $current_page,
+			'orderby'        => $bydate ? 'date' : 'relevance',
+			'post_type'      => $post_types,
+		);
+
+		/**
+		 * Filter the arguments that are passed to Better_Search_Query.
+		 * Documented in includes/frontend/templates/better-search-template.php
+		 */
+		$args = apply_filters( 'bsearch_template_query_args', $args );
+
+		return array_merge( $args, $extra_args );
 	}
 
 	/**

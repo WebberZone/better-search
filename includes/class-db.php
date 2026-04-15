@@ -300,7 +300,8 @@ class Db {
 			searchvar VARCHAR(100) NOT NULL,
 			cntaccess int NOT NULL,
 			dp_date date NOT NULL,
-			PRIMARY KEY  (searchvar, dp_date)
+			PRIMARY KEY  (searchvar, dp_date),
+			KEY dp_date (dp_date)
 		) $charset_collate;";
 
 		return $sql;
