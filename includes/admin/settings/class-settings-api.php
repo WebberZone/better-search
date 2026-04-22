@@ -5,7 +5,7 @@
  * Functions to register, read, write and update settings.
  * Portions of this code have been inspired by Easy Digital Downloads, WordPress Settings Sandbox, WordPress Settings API class, etc.
  *
- * @package WebberZone\Better_Search
+ * @package    Better_Search
  */
 
 namespace WebberZone\Better_Search\Admin\Settings;
@@ -997,7 +997,7 @@ class Settings_API {
 
 		$html .= '</ul>';
 
-		echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses_post( $html );
 	}
 
 	/**
