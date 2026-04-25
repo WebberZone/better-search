@@ -361,7 +361,7 @@ class Template_Handler {
 	 * @param string $template_name Template name to add.
 	 * @return array Updated array of found templates.
 	 */
-	private function add_custom_template( $templates, $type, $template_name ) {
+	protected function add_custom_template( $templates, $type, $template_name ) {
 		if ( in_array( $type, array( 'archive', 'index', 'search' ), true ) ) {
 			array_unshift( $templates, $template_name );
 		}

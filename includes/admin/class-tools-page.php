@@ -218,11 +218,6 @@ class Tools_Page {
 							<?php $sql_queries = self::recreate_indices_sql(); ?>
 							<pre id="bsearch-indices-sql"><code><?php echo implode( "\n", array_map( 'esc_html', $sql_queries ) ); ?></code></pre>
 						</div>
-						<script>
-							jQuery(document).ready(function($) {
-								bsearchAddCopyButton('bsearch-indices-sql');
-							});
-						</script>
 
 					</div>
 				</div>

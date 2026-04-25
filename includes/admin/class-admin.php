@@ -317,7 +317,7 @@ class Admin {
 	 *
 	 * @return array<string, mixed>
 	 */
-	private function get_admin_banner_config(): array {
+	protected function get_admin_banner_config(): array {
 		$dashboard_url = admin_url( 'admin.php?page=bsearch_dashboard' );
 		$popular_url   = admin_url( 'admin.php?page=bsearch_popular_searches' );
 		$settings_url  = admin_url( 'admin.php?page=bsearch_options_page' );

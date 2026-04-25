@@ -728,7 +728,9 @@ class Better_Search_Core_Query extends \WP_Query {
 		if ( $this->is_better_search( $query ) ) {
 
 			// Check for duplicate joins to prevent adding the same join multiple times.
-			if ( false === strpos( $join, 'bsq_tr' ) && ! empty( $this->query_args['search_taxonomies'] ) ) {
+			// In FULLTEXT mode the taxonomy WHERE clause uses a correlated EXISTS subquery instead
+			// of a JOIN, so no aliases are needed here. The JOIN is only added for non-FULLTEXT mode.
+			if ( false === strpos( $join, 'bsq_tr' ) && ! empty( $this->query_args['search_taxonomies'] ) && ! $this->use_fulltext ) {
 				$join .= " LEFT JOIN $wpdb->term_relationships AS bsq_tr ON ($wpdb->posts.ID = bsq_tr.object_id) ";
 				$join .= " LEFT JOIN $wpdb->term_taxonomy AS bsq_tt ON (bsq_tr.term_taxonomy_id = bsq_tt.term_taxonomy_id) ";
 				$join .= " LEFT JOIN $wpdb->terms AS bsq_t ON (bsq_t.term_id = bsq_tt.term_id) ";
@@ -903,8 +905,30 @@ class Better_Search_Core_Query extends \WP_Query {
 			$term = $n . $wpdb->esc_like( $term ) . $n;
 
 			if ( ! empty( $this->query_args['search_taxonomies'] ) ) {
-				$clause[] = $wpdb->prepare( "(bsq_t.name $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$clause[] = $wpdb->prepare( "(bsq_tt.description $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				if ( $this->use_fulltext ) {
+					// In FULLTEXT mode use a correlated EXISTS subquery instead of a JOIN.
+					// A JOIN multiplies rows (one per taxonomy term per post) and LIKE '%number%'
+					// on term names can match thousands of rows, causing execution-time timeouts.
+					// EXISTS checks only the terms belonging to each candidate post and
+					// short-circuits on the first match, so row count stays bounded.
+					$exists_op = ( 'NOT LIKE' === $like_op ) ? 'NOT EXISTS' : 'EXISTS';
+					$clause[]  = $wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"{$exists_op} (
+							SELECT 1
+							FROM {$wpdb->term_relationships} AS bsq_sub_tr
+							INNER JOIN {$wpdb->term_taxonomy} AS bsq_sub_tt ON bsq_sub_tr.term_taxonomy_id = bsq_sub_tt.term_taxonomy_id
+							INNER JOIN {$wpdb->terms} AS bsq_sub_t ON bsq_sub_t.term_id = bsq_sub_tt.term_id
+							WHERE bsq_sub_tr.object_id = {$wpdb->posts}.ID
+							AND (bsq_sub_t.name LIKE %s OR bsq_sub_tt.description LIKE %s)
+						)",
+						$term,
+						$term
+					);
+				} else {
+					$clause[] = $wpdb->prepare( "(bsq_t.name $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					$clause[] = $wpdb->prepare( "(bsq_tt.description $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				}
 			}
 
 			if ( ! empty( $this->query_args['search_excerpt'] ) ) {
@@ -1250,10 +1274,13 @@ class Better_Search_Core_Query extends \WP_Query {
 				if ( $posts ) {
 					$current_blog_id = get_current_blog_id();
 					foreach ( $posts as $post ) {
+						if ( ! $post instanceof \WP_Post ) {
+							continue;
+						}
 						if ( isset( $cached_data[ $post->ID ] ) ) {
 							if ( is_array( $cached_data[ $post->ID ] ) ) {
-								$post->score   = isset( $cached_data[ $post->ID ]['score'] ) ? $cached_data[ $post->ID ]['score'] : 0;
-								$post->blog_id = isset( $cached_data[ $post->ID ]['blog_id'] ) ? $cached_data[ $post->ID ]['blog_id'] : $current_blog_id;
+								$post->score   = $cached_data[ $post->ID ]['score'] ?? 0;
+								$post->blog_id = $cached_data[ $post->ID ]['blog_id'] ?? $current_blog_id;
 							} else {
 								$post->score   = $cached_data[ $post->ID ];
 								$post->blog_id = $current_blog_id;
