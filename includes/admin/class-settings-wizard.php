@@ -160,7 +160,7 @@ class Settings_Wizard extends Settings_Wizard_API {
 	 * @param array $all_settings All settings array.
 	 * @return array
 	 */
-	private function build_step_settings( $keys, $all_settings ) {
+	protected function build_step_settings( $keys, $all_settings ) {
 		$settings = array();
 		foreach ( $keys as $key ) {
 			if ( isset( $all_settings[ $key ] ) ) {

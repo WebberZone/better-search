@@ -74,9 +74,21 @@ class Admin {
 				'better-search-admin-js',
 				'bsearch_admin_data',
 				array(
-					'ajax_url' => admin_url( 'admin-ajax.php' ),
-					'security' => wp_create_nonce( 'bsearch-admin' ),
+					'ajax_url'             => admin_url( 'admin-ajax.php' ),
+					'security'             => wp_create_nonce( 'bsearch-admin' ),
+					'confirm_message'      => esc_html__( 'Are you sure you want to clear the cache?', 'better-search' ),
+					'fail_message'         => esc_html__( 'Failed to clear cache. Please try again.', 'better-search' ),
+					'request_fail_message' => esc_html__( 'Request failed: ', 'better-search' ),
 				)
+			);
+
+			$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+			wp_enqueue_script(
+				'better-search-multisite-admin-js',
+				BETTER_SEARCH_PLUGIN_URL . "includes/pro/js/multisite-admin{$suffix}.js",
+				array(),
+				BETTER_SEARCH_VERSION,
+				true
 			);
 		}
 	}
@@ -242,18 +254,6 @@ class Admin {
 				$message = __( 'Better Search settings copied successfully.', 'better-search' );
 			}
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( $message ) . '</p></div>';
-			?>
-			<script>
-			if (window.history.replaceState) {
-				var url = new URL(window.location.href);
-				url.searchParams.delete('settings_copied');
-				url.searchParams.delete('source_blog_id');
-				url.searchParams.delete('target_blog_ids');
-				url.searchParams.delete('bsearch_settings_copied_nonce');
-				window.history.replaceState({}, document.title, url.pathname + url.search);
-			}
-			</script>
-			<?php
 		}
 	}
 }

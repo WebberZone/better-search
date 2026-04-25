@@ -198,7 +198,7 @@ class Admin_Notices_API {
 	 * @param string $notice_id Notice ID.
 	 * @return bool Whether the notice has been dismissed.
 	 */
-	private function is_notice_dismissed( $notice_id ) {
+	protected function is_notice_dismissed( $notice_id ) {
 		$notice = $this->notices[ $notice_id ] ?? null;
 
 		if ( ! $notice ) {

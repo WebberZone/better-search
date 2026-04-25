@@ -130,7 +130,7 @@ class Statistics_Table extends \WP_List_Table {
 	 * @param string $to_date     To date in Y-m-d format.
 	 * @return array Array of popular search terms.
 	 */
-	private function get_network_popular_searches( $per_page, $page_number, $args, $from_date, $to_date ) {
+	protected function get_network_popular_searches( $per_page, $page_number, $args, $from_date, $to_date ) {
 		global $wpdb;
 
 		$overall_unions = self::get_network_table_unions( 'bsearch' );
@@ -497,7 +497,7 @@ class Statistics_Table extends \WP_List_Table {
 	 * @param array $args Array of arguments.
 	 * @return string ORDER BY clause without the ORDER BY keyword.
 	 */
-	private function get_orderby_clause( $args = null ) {
+	protected function get_orderby_clause( $args = null ) {
 		$orderby = '';
 		if ( ! empty( $_REQUEST['orderby'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$orderby = sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended

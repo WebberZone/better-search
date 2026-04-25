@@ -70,7 +70,7 @@ class Admin_Notices {
 	 *
 	 * @since 4.2.0
 	 */
-	private function register_db_update_notice() {
+	protected function register_db_update_notice() {
 		$is_upgrader_page = isset( $_GET['page'] ) && 'bsearch-upgrader' === $_GET['page']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		if ( $is_upgrader_page ) {
@@ -138,7 +138,7 @@ class Admin_Notices {
 	 *
 	 * @since 4.2.0
 	 */
-	private function register_notices() {
+	protected function register_notices() {
 		// Only register notices if the API is available.
 		if ( ! $this->admin_notices_api ) {
 			return;
@@ -153,7 +153,7 @@ class Admin_Notices {
 	 *
 	 * @since 4.2.0
 	 */
-	private function register_fulltext_index_notice() {
+	protected function register_fulltext_index_notice() {
 		// Check if admin_notices_api is available.
 		if ( ! $this->admin_notices_api ) {
 			return;
@@ -187,7 +187,7 @@ class Admin_Notices {
 	 *
 	 * @since 4.2.0
 	 */
-	private function register_missing_table_notice() {
+	protected function register_missing_table_notice() {
 		// Check if admin_notices_api is available.
 		if ( ! $this->admin_notices_api ) {
 			return;

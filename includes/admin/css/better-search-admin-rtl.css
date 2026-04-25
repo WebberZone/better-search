@@ -1513,6 +1513,12 @@ a.bsearch_button.bsearch_button_gold:hover {
 	}
 }
 
+button .spinner {
+	float: none;
+	vertical-align: middle;
+	margin: 0 4px 0 0;
+}
+
 /* Copy to clipboard button */
 .bsearch-code-wrapper {
 	position: relative;
