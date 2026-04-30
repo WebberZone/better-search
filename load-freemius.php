@@ -23,22 +23,23 @@ function bsearch_freemius() {
 		require_once __DIR__ . '/vendor/freemius/start.php';
 		$bsearch_freemius = \fs_dynamic_init(
 			array(
-				'id'             => '17020',
-				'slug'           => 'better-search',
-				'premium_slug'   => 'better-search-pro',
-				'type'           => 'plugin',
-				'public_key'     => 'pk_40525301bca835d9836ec4d946693',
-				'is_premium'     => false,
-				'premium_suffix' => 'Pro',
-				'has_addons'     => false,
-				'has_paid_plans' => true,
-				'menu'           => array(
+				'id'               => '17020',
+				'slug'             => 'better-search',
+				'premium_slug'     => 'better-search-pro',
+				'type'             => 'plugin',
+				'public_key'       => 'pk_40525301bca835d9836ec4d946693',
+				'is_premium'       => false,
+				'premium_suffix'   => 'Pro',
+				'has_addons'       => false,
+				'has_paid_plans'   => true,
+				'menu'             => array(
 					'slug'    => 'bsearch_dashboard',
 					'contact' => false,
 					'support' => false,
 					'network' => true,
 				),
-				'is_live'        => true,
+				'is_live'          => true,
+				'is_org_compliant' => true,
 			)
 		);
 	}

@@ -128,34 +128,50 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 = 4.3.0 =
 
 * Features:
+	* [Pro] New: WP-CLI support with comprehensive command-line interface (search, cache, db, stats, settings, tables, status, stopwords commands).
+	* [Pro] Dashboard chart drill-down: click any bar in the daily searches chart to view the popular searches for that day.
 	* [Pro] New InnoDB conversion tool: convert the custom table engine with automatic FULLTEXT index recreation.
 	* [Pro] Scheduled reconciliation cron: a twicedaily job automatically syncs any published posts missing from the custom search index table.
+	* [Pro] New exclusion options: Exclude Front page and Exclude Posts page settings to optionally remove these pages from search results.
+	* [Pro] Network dashboard with popular searches chart and statistics table for multisite networks, accessible from the network admin menu.
 
 * Enhancements:
+	* [Pro] Multisite admin select-all checkboxes and post-copy URL cleanup are now handled by an external JavaScript file (via `wp_enqueue_script`) instead of inline `<script>` blocks — improves compatibility with strict Content Security Policies.
+	* [Pro] Copy-to-clipboard buttons on the tools and custom tables pages are now initialized automatically; no per-block inline script needed.
 	* [Pro] Improved short-term (≤3 character) LIKE searches to score full-word matches higher and order results by relevance.
 	* [Pro] Refactored fuzzy query shaping so `Query_Modifier` owns score construction and request shaping, with `Fuzzy_Search` acting as the fuzzy scoring service.
 	* [Pro] Rewrote soundex function, removed multisite LIMIT cap, and added content scoring for fuzzy search.
 	* [Pro] Added filters for fuzzy search truncation parameters.
 	* [Pro] Centralized exclusion term parsing logic in Helpers class.
+	* [Pro] Custom tables search now supports a FULLTEXT toggle, with improved LIKE-only relevance scoring when FULLTEXT is disabled.
+	* [Pro] Improved multisite search query composition: correctly unwraps fuzzy subqueries before UNION assembly and strips only top-level ORDER BY clauses, preventing malformed SQL.
+	* [Pro] LIKE term matching in custom tables search now uses an EXISTS subquery to avoid unbounded JOINs when the terms table is not already in scope.
+	* [Pro] Database check results are now cached within a request, reducing redundant `SHOW TABLES` queries on pages that check table status multiple times.
+	* [Pro] Dashboard popular searches query result is now cached within a request to avoid repeated database hits.
+	* Refactored Media Handler with a strategy-based thumbnail resolution chain; now also supports ACF Image fields (Image Array, Image ID, Image URL) and plain text URL fields.
 	* Hardened search sanitization and boolean mode validation for more consistent results.
 	* Escaped output in settings forms for improved security.
 
 * Bug fixes:
+	* [Pro] Fixed localized admin script data keys: removed erroneous `.strings.` nesting that caused the cache-clear confirmation and error dialogs to display `undefined`.
+	* Fixed spinner alignment inside action buttons (now displays inline rather than floating).
 	* [Pro] Fixed fuzzy LIKE query SQL issues that could generate duplicate `ID` fields in wrapped sub-queries.
 	* [Pro] Fixed fuzzy search bypassing FULLTEXT exclusions.
 	* [Pro] Fixed inconsistent indentation and table alias qualification in multisite query composition.
 	* [Pro] Disabled fuzzy search when boolean operators are present to prevent conflicts.
+	* Fixed duplicate search query being executed on every non-seamless search page load.
+	* Fixed relevance percentages on paginated search results by stabilizing topscore handling across pages, while reducing unnecessary topscore queries when minimum relevance filtering is not in use.
 	* Fixed placeholder attribute escaping in text field rendering.
 
 
 = 4.2.4 =
 
 * Features:
-	* Better Search form: The "any" post type option label can now be customised when the post type dropdown is enabled.
+	* Better Search form: The “any” post type option label can now be customised when the post type dropdown is enabled.
 	* Media Handler now detects featured images provided by the Featured Image from URL (FIFU) plugin.
 
 * Fixed:
-	* Fixed an issue where selecting "any" post type would search through all post types instead of respecting the configured post types from settings.
+	* Fixed an issue where selecting “any” post type would search through all post types instead of respecting the configured post types from settings.
 	* [Pro] Custom table searches now include post slug matching when “Search post slug” is enabled.
     * [Pro] Fixed SQL syntax error in multisite search queries when custom tables are disabled, caused by malformed GROUP BY clause stripping.
     * Fixed improper stripping of boolean mode operators in LIKE clauses, ensuring consistent behavior between FULLTEXT and LIKE searches.
@@ -232,5 +248,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
- = 4.3.0 =
-Fixes post type selection to respect configured settings when "any" is selected.
+= 4.3.0 =
+Adds WP-CLI support, dashboard chart drill-down, an InnoDB conversion tool, scheduled index reconciliation, and a network admin dashboard for multisite. Includes a fuzzy search refactor and a long list of stability fixes.
