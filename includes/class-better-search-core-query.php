@@ -850,14 +850,21 @@ class Better_Search_Core_Query extends \WP_Query {
 			}
 
 			foreach ( (array) $search_terms as $term ) {
+				// If there is an $exclusion_prefix, terms prefixed with it should be excluded.
+				// Check BEFORE stripping operators so the prefix is still present.
+				$exclude = $exclusion_prefix && ( substr( $term, 0, 1 ) === $exclusion_prefix );
+				if ( $exclude ) {
+					$term = substr( $term, strlen( $exclusion_prefix ) );
+				}
 				$term = preg_replace( '/[+\-*"~<>()@\']/', '', $term );
 
-				// If there is an $exclusion_prefix, terms prefixed with it should be excluded.
-				$exclude = $exclusion_prefix && ( substr( $term, 0, 1 ) === $exclusion_prefix );
+				if ( '' === $term ) {
+					continue;
+				}
+
 				if ( $exclude ) {
 					$like_op  = 'NOT LIKE';
 					$andor_op = 'AND';
-					$term     = substr( $term, 1 );
 				} else {
 					$like_op  = 'LIKE';
 					$andor_op = 'OR';
@@ -886,17 +893,25 @@ class Better_Search_Core_Query extends \WP_Query {
 		}
 
 		// Let's do a LIKE search for all other fields.
-		$searchand = '';
+		$searchand        = '';
+		$negative_clauses = array();
 		foreach ( (array) $search_terms as $term ) {
-			$term   = preg_replace( '/[+\-*"~<>()@\']/', '', $term );
+			// Check exclusion BEFORE stripping operators so the prefix is still present.
+			$exclude = $exclusion_prefix && ( substr( $term, 0, 1 ) === $exclusion_prefix );
+			if ( $exclude ) {
+				$term = substr( $term, strlen( $exclusion_prefix ) );
+			}
+			$term = preg_replace( '/[+\-*"~<>()@\']/', '', $term );
+
+			if ( '' === $term ) {
+				continue;
+			}
+
 			$clause = array();
 
-			// If there is an $exclusion_prefix, terms prefixed with it should be excluded.
-			$exclude = $exclusion_prefix && ( substr( $term, 0, 1 ) === $exclusion_prefix );
 			if ( $exclude ) {
 				$like_op  = 'NOT LIKE';
 				$andor_op = ' AND ';
-				$term     = substr( $term, 1 );
 			} else {
 				$like_op  = 'LIKE';
 				$andor_op = ' OR ';
@@ -963,13 +978,26 @@ class Better_Search_Core_Query extends \WP_Query {
 			$clause = apply_filters_ref_array( 'better_search_query_posts_search_clauses', array( $clause, $term, $like_op, $andor_op, $query, &$this ) );
 
 			if ( ! empty( $clause ) ) {
-				$search_clause .= " {$searchand} (" . implode( $andor_op, (array) $clause ) . ') ';
-				$searchand      = ' AND ';
+				if ( $exclude ) {
+					$negative_clauses[] = '(' . implode( $andor_op, (array) $clause ) . ')';
+				} else {
+					$search_clause .= " {$searchand} (" . implode( $andor_op, (array) $clause ) . ') ';
+					$searchand      = ' AND ';
+				}
 			}
 		}
 
 		if ( ! empty( $search_clause ) ) {
 			$search .= " OR ({$search_clause}) ";
+		}
+
+		if ( ! empty( $negative_clauses ) ) {
+			// Wrap the entire positive expression before appending negations, so that
+			// SQL AND-before-OR precedence does not let the FULLTEXT branch bypass the
+			// exclusion clauses (e.g. "-tiger" failing to exclude posts that pass FULLTEXT).
+			// When there are no positive terms, use 1=1 as a neutral base to avoid malformed SQL.
+			$search  = ! empty( $search ) ? '(' . $search . ')' : '1=1';
+			$search .= ' AND ' . implode( ' AND ', $negative_clauses );
 		}
 
 		if ( ! empty( $search ) ) {
