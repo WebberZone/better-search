@@ -7,13 +7,17 @@ parameters:
         - uninstaller.php
         - load-freemius.php
         - includes/
-    scanDirectories:
-        - includes/
-        - vendor/freemius/
     scanFiles:
         - better-search.php
         - uninstaller.php
         - vendor/php-stubs/acf-pro-stubs/acf-pro-stubs.php
+        - vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
+        - vendor/php-stubs/wp-cli-stubs/wp-cli-commands-stubs.php
+        - vendor/php-stubs/wp-cli-stubs/wp-cli-i18n-stubs.php
+        - vendor/php-stubs/wp-cli-stubs/wp-cli-tools-stubs.php
+    scanDirectories:
+        - includes/
+        - vendor/freemius/
     bootstrapFiles:
         - phpstan-bootstrap.php
     ignoreErrors:

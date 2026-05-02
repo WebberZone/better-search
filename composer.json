@@ -1,5 +1,5 @@
 {
-    "name": "webberzone/better-search",
+    "name": "webberzone/better-search-pro",
     "description": "Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.",
     "type": "wordpress-plugin",
     "keywords": [
@@ -29,7 +29,8 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^1",
         "yoast/phpunit-polyfills": "^3",
         "phpunit/phpunit": "^9 || ^10 || ^11 || ^12",
-        "php-stubs/acf-pro-stubs": "^6.5"
+        "php-stubs/acf-pro-stubs": "^6.5",
+        "php-stubs/wp-cli-stubs": "^2.12"
     },
     "config": {
         "allow-plugins": {
@@ -56,7 +57,6 @@
         ],
         "phpcompat:clean": "rm -rf phpcompat-tools",
         "test": [
-            "@phpcbf",
             "@phpcs",
             "@phpcompat",
             "@phpstan"

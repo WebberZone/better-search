@@ -12,16 +12,16 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property WP_Query\\:\\:\\$topscore\\.$#"
+			count: 6
+			path: includes/class-better-search-core-query.php
+
+		-
+			message: "#^Access to an undefined property WP_Post\\:\\:\\$blog_id\\.$#"
 			count: 3
 			path: includes/class-better-search-core-query.php
 
 		-
-			message: "#^Cannot access property \\$blog_id on int\\|WP_Post\\.$#"
-			count: 3
-			path: includes/class-better-search-core-query.php
-
-		-
-			message: "#^Cannot access property \\$score on int\\|WP_Post\\.$#"
+			message: "#^Access to an undefined property WP_Post\\:\\:\\$score\\.$#"
 			count: 3
 			path: includes/class-better-search-core-query.php
 
@@ -44,6 +44,16 @@ parameters:
 			message: "#^Variable \\$wp in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: includes/class-tracker.php
+
+		-
+			message: "#^Access to an undefined property Better_Search_Query\\:\\:\\$topscore\\.$#"
+			count: 1
+			path: includes/frontend/templates/better-search-template.php
+
+		-
+			message: "#^Variable \\$post might not be defined\\.$#"
+			count: 7
+			path: includes/frontend/templates/better-search-template.php
 
 		-
 			message: "#^Variable \\$a might not be defined\\.$#"
@@ -91,11 +101,6 @@ parameters:
 			path: includes/pro/class-multisite-search.php
 
 		-
-			message: "#^Constant DB_NAME not found\\.$#"
-			count: 1
-			path: includes/pro/custom-tables/class-table-manager.php
-
-		-
 			message: "#^Variable \\$query in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: includes/pro/class-pro.php
@@ -106,11 +111,6 @@ parameters:
 			path: includes/pro/custom-tables/class-posts-search.php
 
 		-
-			message: "#^Access to an undefined property Better_Search_Query\\:\\:\\$topscore\\.$#"
+			message: "#^Constant DB_NAME not found\\.$#"
 			count: 1
-			path: includes/frontend/templates/better-search-template.php
-
-		-
-			message: "#^Variable \\$post might not be defined\\.$#"
-			count: 7
-			path: includes/frontend/templates/better-search-template.php
+			path: includes/pro/custom-tables/class-table-manager.php
