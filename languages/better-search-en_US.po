@@ -117,7 +117,7 @@ msgstr ""
 
 #: includes/admin/class-admin.php:338
 #: includes/admin/class-dashboard.php:204
-#: includes/admin/class-dashboard.php:577
+#: includes/admin/class-dashboard.php:585
 msgid "Dashboard"
 msgstr ""
 
@@ -130,7 +130,7 @@ msgstr ""
 #: includes/admin/class-admin.php:358
 #: includes/admin/class-settings.php:152
 #: includes/admin/class-settings.php:1026
-#: includes/admin/network/class-admin.php:102
+#: includes/admin/network/class-admin.php:114
 msgid "Settings"
 msgstr ""
 
@@ -179,7 +179,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #: better-search.php
 #: includes/admin/class-dashboard.php:194
-#: includes/admin/network/class-admin.php:92
+#: includes/admin/network/class-admin.php:104
 #: includes/frontend/class-template-handler.php:184
 msgid "Better Search"
 msgstr ""
@@ -221,29 +221,29 @@ msgid "Sorry, no popular searches found."
 msgstr ""
 
 #. translators: 1: Support link.
-#: includes/admin/class-dashboard.php:563
-#: includes/admin/class-tools-page.php:579
+#: includes/admin/class-dashboard.php:571
+#: includes/admin/class-tools-page.php:574
 #, php-format
 msgid "For more information or how to get support visit the <a href=\"%1$s\">WebberZone support site</a>."
 msgstr ""
 
 #. translators: 1: Forum link.
-#: includes/admin/class-dashboard.php:565
-#: includes/admin/class-tools-page.php:581
+#: includes/admin/class-dashboard.php:573
+#: includes/admin/class-tools-page.php:576
 #, php-format
 msgid "Support queries should be posted in the <a href=\"%1$s\">WordPress.org support forums</a>."
 msgstr ""
 
 #. translators: 1: Github Issues link, 2: Github page.
 #. translators: 1: Github issues link, 2: Github plugin page link.
-#: includes/admin/class-dashboard.php:568
+#: includes/admin/class-dashboard.php:576
 #: includes/admin/class-settings.php:1068
-#: includes/admin/class-tools-page.php:584
+#: includes/admin/class-tools-page.php:579
 #, php-format
 msgid "<a href=\"%1$s\">Post an issue</a> on <a href=\"%2$s\">GitHub</a> (bug reports only)."
 msgstr ""
 
-#: includes/admin/class-dashboard.php:579
+#: includes/admin/class-dashboard.php:587
 msgid "The Admin Dashboard gives you instant insights into your site's search behaviour. At a glance, you'll see the number of searches performed, along with the top searches for the day, week, month, and even all time. "
 msgstr ""
 
@@ -472,7 +472,7 @@ msgstr ""
 
 #: includes/admin/class-settings.php:168
 #: includes/admin/class-settings.php:1092
-#: includes/admin/class-tools-page.php:593
+#: includes/admin/class-tools-page.php:588
 msgid "General"
 msgstr ""
 
@@ -1091,6 +1091,7 @@ msgstr ""
 
 #: includes/admin/class-settings.php:1168
 #: includes/admin/class-tools-page.php:84
+#: includes/admin/network/class-admin.php:79
 msgid "Are you sure you want to clear the cache?"
 msgstr ""
 
@@ -1105,11 +1106,13 @@ msgstr ""
 
 #: includes/admin/class-settings.php:1171
 #: includes/admin/class-tools-page.php:86
+#: includes/admin/network/class-admin.php:80
 msgid "Failed to clear cache. Please try again."
 msgstr ""
 
 #: includes/admin/class-settings.php:1172
 #: includes/admin/class-tools-page.php:87
+#: includes/admin/network/class-admin.php:81
 msgid "Request failed: "
 msgstr ""
 
@@ -1263,127 +1266,127 @@ msgstr ""
 msgid "If the Recreate Index button fails, please run the following queries in phpMyAdmin or Adminer"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:235
+#: includes/admin/class-tools-page.php:230
 msgid "Create tables"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:238
+#: includes/admin/class-tools-page.php:233
 msgid "These buttons will create the tables in which Better Search stores its data."
 msgstr ""
 
-#: includes/admin/class-tools-page.php:244
+#: includes/admin/class-tools-page.php:239
 msgid "This will create the overall tables. Have you backed up your database?"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:245
+#: includes/admin/class-tools-page.php:240
 msgid "Create overall tables"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:257
+#: includes/admin/class-tools-page.php:252
 msgid "Recreate Tables"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:260
+#: includes/admin/class-tools-page.php:255
 msgid "These buttons will recreate the tables in which Better Search stores its data. This is particularly useful if you are noticing issues with tracking or if there was a problem with the database upgrade"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:266
+#: includes/admin/class-tools-page.php:261
 msgid "This will recreate the overall tables. Have you backed up your database?"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:267
+#: includes/admin/class-tools-page.php:262
 msgid "Recreate overall tables"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:271
+#: includes/admin/class-tools-page.php:266
 msgid "This will recreate the daily tables. Have you backed up your database?"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:272
+#: includes/admin/class-tools-page.php:267
 msgid "Recreate daily tables"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:284
+#: includes/admin/class-tools-page.php:279
 msgid "Reset database"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:290
+#: includes/admin/class-tools-page.php:285
 msgid "Are you sure you want to reset the popular searches?"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:291
+#: includes/admin/class-tools-page.php:286
 msgid "Reset Popular searches table"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:295
+#: includes/admin/class-tools-page.php:290
 msgid "Are you sure you want to reset the daily popular searches?"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:296
+#: includes/admin/class-tools-page.php:291
 msgid "Reset Daily Popular searches table"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:301
+#: includes/admin/class-tools-page.php:296
 msgid "This will reset the Better Search tables. If you are running Better Search on multisite then it will delete the popular posts across the entire network. This cannot be reversed. Make sure that your database has been backed up before proceeding"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:311
+#: includes/admin/class-tools-page.php:306
 msgid "Backup Tables"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:314
+#: includes/admin/class-tools-page.php:309
 msgid "From v3.3, Better Search uses a new database table format."
 msgstr ""
 
-#: includes/admin/class-tools-page.php:317
+#: includes/admin/class-tools-page.php:312
 msgid "As part of the upgrade process, the plugin backed up the older tables. Restoring any of the tables will also reset the database version so you will once again be prompted to upgrade the tables."
 msgstr ""
 
-#: includes/admin/class-tools-page.php:320
+#: includes/admin/class-tools-page.php:315
 msgid "You will need to restore both tables and delete the backup tables before you can begin the upgrade process."
 msgstr ""
 
-#: includes/admin/class-tools-page.php:323
+#: includes/admin/class-tools-page.php:318
 msgid "Are you sure you want to restore the popular searches table from the backup?"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:323
+#: includes/admin/class-tools-page.php:318
 msgid "Restore Popular searches table"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:324
+#: includes/admin/class-tools-page.php:319
 msgid "Are you sure you want to restore the daily popular searches table from the backup?"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:324
+#: includes/admin/class-tools-page.php:319
 msgid "Restore Daily Popular searches table"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:328
+#: includes/admin/class-tools-page.php:323
 msgid "If your site has been working fine and populating with new information, then you can delete these backed up tables to save database space."
 msgstr ""
 
-#: includes/admin/class-tools-page.php:334
+#: includes/admin/class-tools-page.php:329
 msgid "This will delete the backup tables of Better Search. Have you backed up your database?"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:335
+#: includes/admin/class-tools-page.php:330
 msgid "Delete backup tables"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:543
+#: includes/admin/class-tools-page.php:538
 msgid "Please upload a valid .json file"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:549
+#: includes/admin/class-tools-page.php:544
 msgid "Please upload a file to import"
 msgstr ""
 
-#: includes/admin/class-tools-page.php:595
+#: includes/admin/class-tools-page.php:590
 msgid "This screen provides some tools that help maintain certain features of Better Search."
 msgstr ""
 
-#: includes/admin/class-tools-page.php:596
+#: includes/admin/class-tools-page.php:591
 msgid "Clear the cache, reset the popular posts tables plus some miscellaneous fixes for older versions of Better Search."
 msgstr ""
 
@@ -1429,57 +1432,57 @@ msgstr ""
 msgid "Database is already up to date on site %s"
 msgstr ""
 
-#: includes/admin/network/class-admin.php:91
+#: includes/admin/network/class-admin.php:103
 msgid "Better Search Multisite Dashboard"
 msgstr ""
 
-#: includes/admin/network/class-admin.php:101
+#: includes/admin/network/class-admin.php:113
 msgid "Better Search Multisite Settings"
 msgstr ""
 
-#: includes/admin/network/class-admin.php:125
+#: includes/admin/network/class-admin.php:137
 msgid "Better Search Pro Multisite Settings"
 msgstr ""
 
-#: includes/admin/network/class-admin.php:128
+#: includes/admin/network/class-admin.php:140
 msgid "This page allows you to configure the settings for Better Search on your multisite network."
 msgstr ""
 
 #. translators: 1: link to Network Plugins page, 2: link to account page
-#: includes/admin/network/class-admin.php:140
+#: includes/admin/network/class-admin.php:152
 #, php-format
 msgid "If you are running Better Search Pro and see the upgrade banner instead of the settings, you may need to activate your license. Go to the %1$s, locate Better Search Pro, and activate your license from there. View your %2$s to check the status of your license after activation."
 msgstr ""
 
-#: includes/admin/network/class-admin.php:141
+#: includes/admin/network/class-admin.php:153
 #: includes/admin/network/class-tools-page.php:89
 msgid "Network Plugins page"
 msgstr ""
 
-#: includes/admin/network/class-admin.php:142
+#: includes/admin/network/class-admin.php:154
 #: includes/admin/network/class-tools-page.php:90
 msgid "account page"
 msgstr ""
 
-#: includes/admin/network/class-admin.php:170
+#: includes/admin/network/class-admin.php:182
 msgid "Security check failed."
 msgstr ""
 
-#: includes/admin/network/class-admin.php:175
+#: includes/admin/network/class-admin.php:187
 msgid "Missing required data."
 msgstr ""
 
-#: includes/admin/network/class-admin.php:183
+#: includes/admin/network/class-admin.php:195
 msgid "Invalid blog IDs provided."
 msgstr ""
 
 #. translators: 1: source blog ID, 2: comma-separated target blog IDs
-#: includes/admin/network/class-admin.php:237
+#: includes/admin/network/class-admin.php:249
 #, php-format
 msgid "Better Search settings copied from site ID %1$s to %2$s."
 msgstr ""
 
-#: includes/admin/network/class-admin.php:242
+#: includes/admin/network/class-admin.php:254
 msgid "Better Search settings copied successfully."
 msgstr ""
 
@@ -1570,7 +1573,7 @@ msgstr ""
 msgid "Follow me"
 msgstr ""
 
-#: includes/class-better-search-core-query.php:1609
+#: includes/class-better-search-core-query.php:1664
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,what,when,where,who,will,with,www"
 msgstr ""
@@ -1800,13 +1803,13 @@ msgid "Powered by %1$s plugin%2$s"
 msgstr ""
 
 #. translators: 1: Database type (MySQL/MariaDB) 2: Current database version 3: Required database version
-#: includes/util/class-helpers.php:953
+#: includes/util/class-helpers.php:959
 #, php-format
 msgid "⚠️ Your %1$s version (%2$s) does not support all custom table features. %1$s %3$s or higher is required for optimal performance. The plugin might not be able to deliver the best results. Please consider upgrading your database version."
 msgstr ""
 
 #. translators: 1: Database type (MySQL/MariaDB) 2: Current database version 3: Recommended database version
-#: includes/util/class-helpers.php:963
+#: includes/util/class-helpers.php:970
 #, php-format
 msgid "⚠️ Your %1$s version (%2$s) is below the recommended version %3$s. While the plugin will work, upgrading your database is recommended for better performance."
 msgstr ""
