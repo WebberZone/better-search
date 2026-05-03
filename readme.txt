@@ -127,6 +127,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.3.0 =
 
+*Release Date - 3 May 2026*
+
+Read more in the [Better Search 4.3.0 release post](https://webberzone.com/announcements/better-search-v4-3-0/).
+
 * Features:
 	* [Pro] New: WP-CLI support with comprehensive command-line interface (search, cache, db, stats, settings, tables, status, stopwords commands).
 	* [Pro] Dashboard chart drill-down: click any bar in the daily searches chart to view the popular searches for that day.
