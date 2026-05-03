@@ -1016,7 +1016,7 @@ msgstr ""
 msgid "Custom CSS"
 msgstr ""
 
-#. translators: 1: Opening a tag, 2: Closing a tag, 3: Opening code tage, 4. Closing code tag.
+#. translators: 1: Opening a tag, 2: Closing a tag, 3: Opening code tag, 4. Closing code tag.
 #: includes/admin/class-settings.php:903
 #, php-format
 msgid "Do not include %3$sstyle%4$s tags. Check out the %1$sFAQ%2$s for available CSS classes to style."
