@@ -10,6 +10,7 @@
 	<exclude-pattern>*/index.php</exclude-pattern>
 	<exclude-pattern>*/index.asset.php</exclude-pattern>
 	<exclude-pattern>*/freemius/*</exclude-pattern>
+	<exclude-pattern>*/phpstan-bootstrap.php</exclude-pattern>
 
 	<!-- Only check PHP files. -->
 	<arg name="extensions" value="php"/>
