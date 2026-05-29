@@ -11,6 +11,7 @@
 	<exclude-pattern>*/index.asset.php</exclude-pattern>
 	<exclude-pattern>*/freemius/*</exclude-pattern>
 	<exclude-pattern>*/phpstan-bootstrap.php</exclude-pattern>
+	<exclude-pattern>*/.playground/*</exclude-pattern>
 
 	<!-- Only check PHP files. -->
 	<arg name="extensions" value="php"/>
@@ -31,6 +32,7 @@
 	</rule>
 	<rule ref="WordPress.Files.FileName">
 		<exclude-pattern>*/phpunit/tests/*\.php$</exclude-pattern>
+	<exclude-pattern>*/.playground/*</exclude-pattern>
 	</rule>
 
 	<!-- Add in some extra rules from other standards. -->
