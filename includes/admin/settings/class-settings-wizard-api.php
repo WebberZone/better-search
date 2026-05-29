@@ -5,7 +5,7 @@
  * A reusable API class for creating multi-step settings wizards.
  * This class provides the framework for creating guided setup experiences.
  *
- * @package    Better_Search
+ * @package    WebberZone\Better_Search
  */
 
 namespace WebberZone\Better_Search\Admin\Settings;
