@@ -4,12 +4,13 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## Plugin Overview
 
-Better Search (v4.3.0) replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine. It also tracks popular search queries and displays a search heatmap.
+Better Search Pro (v4.3.0) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, and more. It also tracks popular search queries and displays a search heatmap.
 
 Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.6+, PHP 7.4+.
 
-WordPress.org: https://wordpress.org/plugins/better-search/
-webberzone.com: https://webberzone.com/plugins/better-search/
+**This is the pro version.** Activating Better Search Pro auto-deactivates the free Better Search plugin (and vice versa). Both plugins share the same text domain (`better-search`) and settings key (`bsearch_settings`) so settings are preserved when switching between them.
+
+Pro-only code lives exclusively in `includes/pro/`, declared as `@fs_premium_only /includes/pro/` in the plugin header. All files outside `includes/pro/` are identical to the free version.
 
 Constants defined in `better-search.php`: `BETTER_SEARCH_VERSION` (4.3.0), `BETTER_SEARCH_PLUGIN_DIR`, `BETTER_SEARCH_PLUGIN_URL`, `BETTER_SEARCH_PLUGIN_FILE`, `BETTER_SEARCH_DB_VERSION` (2.0), `BETTER_SEARCH_DEFAULT_THUMBNAIL_URL`.
 
