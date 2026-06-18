@@ -39,7 +39,7 @@ namespace {
 // so PHPStan can resolve the ?Pro\Pro $pro property and any shared code that accesses
 // pro properties (e.g. ->pro->custom_tables, ->pro->network_dashboard).
 namespace WebberZone\Better_Search\Pro\Custom_Tables {
-	if ( ! is_dir( dirname( __FILE__ ) . '/includes/pro' ) ) {
+	if ( ! is_dir( __DIR__ . '/includes/pro' ) ) {
 		class Table_Manager { // phpcs:ignore
 			public static string $db_version_option = ''; // phpcs:ignore
 			/** @return int|float */
@@ -60,7 +60,7 @@ namespace WebberZone\Better_Search\Pro\Custom_Tables {
 }
 
 namespace WebberZone\Better_Search\Pro\Network {
-	if ( ! is_dir( dirname( __FILE__ ) . '/includes/pro' ) ) {
+	if ( ! is_dir( __DIR__ . '/includes/pro' ) ) {
 		class Dashboard { // phpcs:ignore
 			public function render_page(): void {} // phpcs:ignore
 		}
@@ -68,7 +68,7 @@ namespace WebberZone\Better_Search\Pro\Network {
 }
 
 namespace WebberZone\Better_Search\Pro {
-	if ( ! is_dir( dirname( __FILE__ ) . '/includes/pro' ) ) {
+	if ( ! is_dir( __DIR__ . '/includes/pro' ) ) {
 		class Pro { // phpcs:ignore
 			public ?\WebberZone\Better_Search\Pro\Custom_Tables\Custom_Tables $custom_tables = null; // phpcs:ignore
 			public ?\WebberZone\Better_Search\Pro\Network\Dashboard $network_dashboard = null; // phpcs:ignore
