@@ -125,6 +125,14 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.3.1 =
+
+*Release Date - 20 Jun 2026*
+
+* Bug fixes:
+	* Fixed phrase search: double-quoted terms (e.g. `"WordPress"` or `"WordPress plugin"`) now always perform a phrase search by automatically enabling boolean mode when quoted terms are detected.
+	* Fixed LIKE search stripping hyphens from compound terms (e.g. `b-26` was incorrectly searched as `b26`). Internal hyphens are now preserved; only leading/trailing hyphens used as boolean operators are stripped.
+
 = 4.3.0 =
 
 *Release Date - 3 May 2026*
