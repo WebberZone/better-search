@@ -556,6 +556,16 @@ class Better_Search_Core_Query extends \WP_Query {
 			}
 			$this->is_boolean_mode = $boolean_proxy;
 		}
+		// Phrase search: if the query contains double-quoted terms, boolean mode is required.
+		// MySQL NATURAL LANGUAGE FULLTEXT ignores quotes; BOOLEAN mode is needed for phrase matching.
+		if ( $this->use_fulltext && ! $this->is_boolean_mode ) {
+			foreach ( $search_words as $search_word ) {
+				if ( preg_match( '/^"[^"]+"$/', $search_word ) ) {
+					$this->is_boolean_mode = true;
+					break;
+				}
+			}
+		}
 		$this->is_seamless_mode = $this->input_query_args['seamless'] ?? bsearch_get_option( 'seamless' );
 		$this->should_use_custom_table();
 	}
@@ -856,7 +866,7 @@ class Better_Search_Core_Query extends \WP_Query {
 				if ( $exclude ) {
 					$term = substr( $term, strlen( $exclusion_prefix ) );
 				}
-				$term = preg_replace( '/[+\-*"~<>()@\']/', '', $term );
+				$term = preg_replace( '/[+*"~<>()@\']|(?<!\w)-|-(?!\w)/u', '', $term );
 
 				if ( '' === $term ) {
 					continue;
@@ -901,7 +911,7 @@ class Better_Search_Core_Query extends \WP_Query {
 			if ( $exclude ) {
 				$term = substr( $term, strlen( $exclusion_prefix ) );
 			}
-			$term = preg_replace( '/[+\-*"~<>()@\']/', '', $term );
+			$term = preg_replace( '/[+*"~<>()@\']|(?<!\w)-|-(?!\w)/u', '', $term );
 
 			if ( '' === $term ) {
 				continue;
