@@ -132,6 +132,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Bug fixes:
 	* Fixed phrase search: double-quoted terms (e.g. `"WordPress"` or `"WordPress plugin"`) now always perform a phrase search by automatically enabling boolean mode when quoted terms are detected.
 	* Fixed LIKE search stripping hyphens from compound terms (e.g. `b-26` was incorrectly searched as `b26`). Internal hyphens are now preserved; only leading/trailing hyphens used as boolean operators are stripped.
+	* [Pro] Fixed: short search terms (below the FULLTEXT minimum character threshold) now target the custom table columns (`ct.title`, `ct.content`, `ct.excerpt`) instead of `wp_posts` when custom tables are enabled. Previously the LIKE fallback always searched against `wp_posts` even with a fully indexed custom table.
 
 = 4.3.0 =
 
