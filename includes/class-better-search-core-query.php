@@ -837,6 +837,29 @@ class Better_Search_Core_Query extends \WP_Query {
 		$search_clause = '';
 
 		/**
+		 * Filters the column references used in LIKE search clauses.
+		 *
+		 * When custom tables are active, this lets pro code swap wp_posts
+		 * columns for the custom table (ct.title, ct.content, ct.excerpt).
+		 *
+		 * @since 4.3.1
+		 *
+		 * @param array                    $like_columns Column references array.
+		 * @param Better_Search_Core_Query $instance     The Better_Search_Core_Query instance.
+		 */
+		$like_columns = apply_filters_ref_array(
+			'better_search_query_like_columns',
+			array(
+				array(
+					'title'   => "{$wpdb->posts}.post_title",
+					'content' => "{$wpdb->posts}.post_content",
+					'excerpt' => "{$wpdb->posts}.post_excerpt",
+				),
+				&$this,
+			)
+		);
+
+		/**
 		 * Filters the prefix that indicates that a search term should be excluded from results.
 		 *
 		 * @since 3.0.0
@@ -881,7 +904,7 @@ class Better_Search_Core_Query extends \WP_Query {
 				}
 
 				$like      = $n . $wpdb->esc_like( $term ) . $n;
-				$search   .= $wpdb->prepare( "{$searchand}(({$wpdb->posts}.post_title $like_op %s) $andor_op ({$wpdb->posts}.post_content $like_op %s))", $like, $like ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$search   .= $wpdb->prepare( "{$searchand}(({$like_columns['title']} $like_op %s) $andor_op ({$like_columns['content']} $like_op %s))", $like, $like ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				$searchand = ' AND ';
 			}
 		} else {
@@ -957,7 +980,7 @@ class Better_Search_Core_Query extends \WP_Query {
 			}
 
 			if ( ! empty( $this->query_args['search_excerpt'] ) ) {
-				$clause[] = $wpdb->prepare( "({$wpdb->posts}.post_excerpt $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$clause[] = $wpdb->prepare( "({$like_columns['excerpt']} $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			}
 
 			if ( ! empty( $this->query_args['search_meta'] ) ) {
