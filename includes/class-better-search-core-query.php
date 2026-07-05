@@ -80,6 +80,17 @@ class Better_Search_Core_Query extends \WP_Query {
 	public $use_custom_table = false;
 
 	/**
+	 * Whether post_excerpt/ct.excerpt was folded into the FULLTEXT MATCH clause.
+	 *
+	 * Set by Query_Modifier::query_posts_where_match() so the LIKE-based excerpt
+	 * check can be skipped when it's redundant.
+	 *
+	 * @since 4.3.1
+	 * @var bool
+	 */
+	public $excerpt_in_fulltext_match = false;
+
+	/**
 	 * Holds the search terms.
 	 *
 	 * @since 3.0.0
@@ -388,7 +399,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		 *
 		 * @since 3.2.2
 		 *
-		 * @param array   $meta_query Array of meta_query parameters.
+		 * @param mixed   $meta_query Array of meta_query parameters.
 		 * @param array   $args       Arguments array.
 		 */
 		$meta_query = apply_filters( 'better_search_query_meta_query', $meta_query, $args ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
@@ -979,7 +990,7 @@ class Better_Search_Core_Query extends \WP_Query {
 				}
 			}
 
-			if ( ! empty( $this->query_args['search_excerpt'] ) ) {
+			if ( ! empty( $this->query_args['search_excerpt'] ) && ! $this->excerpt_in_fulltext_match ) {
 				$clause[] = $wpdb->prepare( "({$like_columns['excerpt']} $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			}
 
