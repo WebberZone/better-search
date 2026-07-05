@@ -538,7 +538,7 @@ class Settings {
 			'inclusion_header'          => array(
 				'id'   => 'inclusion_header',
 				'name' => '<h3>' . esc_html__( 'Inclusion options', 'better-search' ) . '</h3>',
-				'desc' => '',
+				'desc' => esc_html__( 'These options control which parts of posts are searched explicitly irrespective of the weight settings above.', 'better-search' ),
 				'type' => 'header',
 			),
 			'search_slug'               => array(
@@ -587,7 +587,7 @@ class Settings {
 			'exclude_header'            => array(
 				'id'   => 'exclude_header',
 				'name' => '<h3>' . esc_html__( 'Exclusion options', 'better-search' ) . '</h3>',
-				'desc' => '',
+				'desc' => esc_html__( 'These options control which posts are excluded from search results.', 'better-search' ),
 				'type' => 'header',
 			),
 			'exclude_protected_posts'   => array(
@@ -641,7 +641,7 @@ class Settings {
 			'banned_header'             => array(
 				'id'   => 'banned_header',
 				'name' => '<h3>' . esc_html__( 'Banned words options', 'better-search' ) . '</h3>',
-				'desc' => '',
+				'desc' => esc_html__( 'These options control which words are filtered out of search results.', 'better-search' ),
 				'type' => 'header',
 			),
 			'badwords'                  => array(
@@ -1278,11 +1278,7 @@ class Settings {
 			$taxonomy   = array();
 			$tax        = null;
 
-			foreach ( $taxonomies as $taxonomy_name => $taxonomy_object ) {
-				if ( ! is_string( $taxonomy_name ) || '' === $taxonomy_name ) {
-					continue;
-				}
-
+			foreach ( $taxonomies as $taxonomy_object ) {
 				if ( empty( $taxonomy_object->cap->assign_terms ) ) {
 					continue;
 				}
@@ -1291,7 +1287,7 @@ class Settings {
 					continue;
 				}
 
-				$taxonomy[] = $taxonomy_name;
+				$taxonomy[] = $taxonomy_object->name;
 			}
 
 			if ( empty( $taxonomy ) ) {

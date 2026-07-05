@@ -136,6 +136,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 	* Fixed SQL syntax error when search query contains only negative terms.
 	* Fixed exclusion prefix handling and SQL precedence for negative search terms.
 
+* Enhancements:
+	* [Pro] Removed a redundant `excerpt LIKE` clause from search queries when the excerpt is already covered by the FULLTEXT `MATCH` clause, reducing unnecessary query overhead.
+	* [Pro] The excerpt column is now only pulled into the FULLTEXT `MATCH` clause (native or custom tables) when the excerpt weight is greater than zero or "Search Excerpt" is explicitly enabled, instead of unconditionally.
+
 = 4.3.0 =
 
 *Release Date - 3 May 2026*

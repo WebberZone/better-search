@@ -57,11 +57,7 @@ class Template_Handler {
 	 *
 	 * @param \WP_Query $query Query object.
 	 */
-	public function load_seamless_mode( $query ) {
-		if ( ! $query instanceof \WP_Query ) {
-			return;
-		}
-
+	public function load_seamless_mode( \WP_Query $query ) {
 		$is_seamless           = (bool) bsearch_get_option( 'seamless' );
 		$should_force_seamless = $query->get( 'better_search_query' ) ||
 			( wp_is_block_theme() && $query->is_search() ) ||
