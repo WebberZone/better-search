@@ -180,7 +180,7 @@ msgstr ""
 #: better-search.php
 #: includes/admin/class-dashboard.php:194
 #: includes/admin/network/class-admin.php:104
-#: includes/frontend/class-template-handler.php:184
+#: includes/frontend/class-template-handler.php:180
 msgid "Better Search"
 msgstr ""
 
@@ -1573,7 +1573,7 @@ msgstr ""
 msgid "Follow me"
 msgstr ""
 
-#: includes/class-better-search-core-query.php:1664
+#: includes/class-better-search-core-query.php:1708
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,what,when,where,who,will,with,www"
 msgstr ""
@@ -1797,19 +1797,19 @@ msgid "Your search query consists banned words. Please remove these and try agai
 msgstr ""
 
 #. translators: 1: Opening a tag and Better Search, 2: Closing a tag.
-#: includes/util/class-helpers.php:438
+#: includes/util/class-helpers.php:435
 #, php-format
 msgid "Powered by %1$s plugin%2$s"
 msgstr ""
 
 #. translators: 1: Database type (MySQL/MariaDB) 2: Current database version 3: Required database version
-#: includes/util/class-helpers.php:959
+#: includes/util/class-helpers.php:956
 #, php-format
 msgid "⚠️ Your %1$s version (%2$s) does not support all custom table features. %1$s %3$s or higher is required for optimal performance. The plugin might not be able to deliver the best results. Please consider upgrading your database version."
 msgstr ""
 
 #. translators: 1: Database type (MySQL/MariaDB) 2: Current database version 3: Recommended database version
-#: includes/util/class-helpers.php:970
+#: includes/util/class-helpers.php:967
 #, php-format
 msgid "⚠️ Your %1$s version (%2$s) is below the recommended version %3$s. While the plugin will work, upgrading your database is recommended for better performance."
 msgstr ""
@@ -1874,4 +1874,16 @@ msgstr ""
 
 #: includes/admin/class-statistics-table.php:379
 msgid "Searches in period"
+msgstr ""
+
+#: includes/admin/class-settings.php:541
+msgid "These options control which parts of posts are searched explicitly irrespective of the weight settings above."
+msgstr ""
+
+#: includes/admin/class-settings.php:590
+msgid "These options control which posts are excluded from search results."
+msgstr ""
+
+#: includes/admin/class-settings.php:644
+msgid "These options control which words are filtered out of search results."
 msgstr ""
