@@ -127,7 +127,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.3.1 =
 
-*Release Date - 20 Jun 2026*
+*Release Date - 8 July 2026*
 
 * Bug fixes:
 	* Fixed phrase search: double-quoted terms (e.g. `"WordPress"` or `"WordPress plugin"`) now always perform a phrase search by automatically enabling boolean mode when quoted terms are detected.
