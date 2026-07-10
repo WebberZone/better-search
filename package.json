@@ -1,6 +1,6 @@
 {
     "name": "@webberzone/better-search-pro",
-    "version": "4.3.1",
+    "version": "4.3.2",
     "description": "Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.",
     "author": "WebberZone",
     "license": "GPL-2.0-or-later",
@@ -36,7 +36,7 @@
         "@wordpress/scripts": "^32.6.0",
         "clean-css-cli": "^5.6.3",
         "rtlcss": "^4.3.0",
-        "terser": "^5.48.0"
+        "terser": "^5.49.0"
     },
     "dependencies": {
         "@wordpress/icons": "^15.1.0",

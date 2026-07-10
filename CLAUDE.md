@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Plugin Overview
 
-Better Search Pro (v4.3.0) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, and more. It also tracks popular search queries and displays a search heatmap.
+Better Search Pro (v4.3.2) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, and more. It also tracks popular search queries and displays a search heatmap.
 
 Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.6+, PHP 7.4+.
 
@@ -14,7 +14,7 @@ webberzone.com: https://webberzone.com/plugins/better-search/
 
 Pro-only code lives exclusively in `includes/pro/`, declared as `@fs_premium_only /includes/pro/` in the plugin header. All files outside `includes/pro/` are identical to the free version.
 
-Constants defined in `better-search.php`: `BETTER_SEARCH_VERSION` (4.3.0), `BETTER_SEARCH_PLUGIN_DIR`, `BETTER_SEARCH_PLUGIN_URL`, `BETTER_SEARCH_PLUGIN_FILE`, `BETTER_SEARCH_DB_VERSION` (2.0), `BETTER_SEARCH_DEFAULT_THUMBNAIL_URL`.
+Constants defined in `better-search.php`: `BETTER_SEARCH_VERSION` (4.3.2), `BETTER_SEARCH_PLUGIN_DIR`, `BETTER_SEARCH_PLUGIN_URL`, `BETTER_SEARCH_PLUGIN_FILE`, `BETTER_SEARCH_DB_VERSION` (2.0), `BETTER_SEARCH_DEFAULT_THUMBNAIL_URL`.
 
 Settings are stored as a single `bsearch_settings` array in `wp_options`. Access via `bsearch_get_option($key)` / `bsearch_get_settings()`. The global `$bsearch_settings` is populated at plugin load.
 
@@ -63,7 +63,7 @@ Both the free and pro plugins include a `bsearch_deactivate_other_instances()` f
 - **`Better_Search_Query`** (`includes/class-better-search-query.php`) — Thin wrapper around `Better_Search_Core_Query` for template use.
 
 ### Frontend (`includes/frontend/`)
-- **`Display`** — Renders search results HTML.
+- **`Display`** — Renders search results HTML and highlights search terms on results pages and followed links (referer check is scheme-agnostic). `extract_highlight_terms()` keeps double-quoted phrases intact and skips `-excluded` terms; actual highlighting is done by `Helpers::highlight()`.
 - **`Live_Search`** — AJAX live search (enqueues `better-search-live-search.js`).
 - **`Template_Handler`** — Loads theme template overrides from `templates/` directory.
 - **`Shortcodes`** — `[better_search]` shortcode.
