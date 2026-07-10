@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://wzn.io/donate-wz
-Stable tag: 4.3.1
+Stable tag: 4.3.2
 Requires at least: 6.6
 Tested up to: 7.0
 Requires PHP: 7.4
@@ -124,6 +124,17 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 
 == Changelog ==
+
+= 4.3.2 =
+
+*Release Date - TBD*
+
+* Enhancements:
+	* Search term highlighting now keeps double-quoted phrases intact: searching for `"richard harding"` highlights the whole phrase instead of its individual words. Mixed queries (e.g. `"richard harding" smith`) highlight the phrase plus the remaining words, and phrases match across whitespace variations, including non-breaking spaces.
+	* Terms excluded with the `-` operator are no longer highlighted, since they cannot appear in the results.
+
+* Bug fixes:
+	* Fixed "Highlight followed links" silently not working when the site's Home URL scheme differs from the scheme visitors use (e.g. an `http://` Home URL on a site served over `https://`, common behind SSL-terminating proxies).
 
 = 4.3.1 =
 

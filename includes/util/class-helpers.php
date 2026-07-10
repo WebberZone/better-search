@@ -485,6 +485,9 @@ class Helpers {
 		// Escape special regex characters in each term.
 		$escaped_terms = array_map( 'preg_quote', $terms, array_fill( 0, count( $terms ), '/' ) );
 
+		// Multi-word phrases must match across whitespace variations, including non-breaking spaces.
+		$escaped_terms = preg_replace( '/\s+/', '(?:\s|&nbsp;|\x{00a0})+', $escaped_terms );
+
 		// Sort by length (longest first) to match longer phrases before shorter ones.
 		$length_func = function_exists( 'mb_strlen' ) ? 'mb_strlen' : 'strlen';
 		usort(
