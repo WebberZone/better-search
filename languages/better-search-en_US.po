@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Better Search\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/better-search-pro\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/better-search\n"
 "Last-Translator: Ajay D'Souza\n"
 "Language-Team: WebberZone\n"
 "MIME-Version: 1.0\n"
@@ -968,10 +968,6 @@ msgstr ""
 msgid "Highlight followed links"
 msgstr ""
 
-#: includes/admin/class-settings.php:833
-msgid "If enabled, the plugin will highlight the search terms on posts/pages when visits them from the search results page."
-msgstr ""
-
 #: includes/admin/class-settings.php:839
 msgid "Display thumbnail"
 msgstr ""
@@ -1803,13 +1799,13 @@ msgid "Powered by %1$s plugin%2$s"
 msgstr ""
 
 #. translators: 1: Database type (MySQL/MariaDB) 2: Current database version 3: Required database version
-#: includes/util/class-helpers.php:956
+#: includes/util/class-helpers.php:959
 #, php-format
 msgid "⚠️ Your %1$s version (%2$s) does not support all custom table features. %1$s %3$s or higher is required for optimal performance. The plugin might not be able to deliver the best results. Please consider upgrading your database version."
 msgstr ""
 
 #. translators: 1: Database type (MySQL/MariaDB) 2: Current database version 3: Recommended database version
-#: includes/util/class-helpers.php:967
+#: includes/util/class-helpers.php:970
 #, php-format
 msgid "⚠️ Your %1$s version (%2$s) is below the recommended version %3$s. While the plugin will work, upgrading your database is recommended for better performance."
 msgstr ""
@@ -1886,4 +1882,8 @@ msgstr ""
 
 #: includes/admin/class-settings.php:644
 msgid "These options control which words are filtered out of search results."
+msgstr ""
+
+#: includes/admin/class-settings.php:833
+msgid "If enabled, search terms are highlighted on posts/pages visited from the search results page. A JavaScript fallback ensures highlighting works even when the page is served from a full-page cache (e.g. LiteSpeed Cache)."
 msgstr ""

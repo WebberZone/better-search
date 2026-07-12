@@ -830,7 +830,7 @@ class Settings {
 			'highlight_followed_links' => array(
 				'id'      => 'highlight_followed_links',
 				'name'    => esc_html__( 'Highlight followed links', 'better-search' ),
-				'desc'    => esc_html__( 'If enabled, the plugin will highlight the search terms on posts/pages when visits them from the search results page.', 'better-search' ),
+				'desc'    => esc_html__( 'If enabled, search terms are highlighted on posts/pages visited from the search results page. A JavaScript fallback ensures highlighting works even when the page is served from a full-page cache (e.g. LiteSpeed Cache).', 'better-search' ),
 				'type'    => 'checkbox',
 				'default' => true,
 			),

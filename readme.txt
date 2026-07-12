@@ -127,11 +127,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.3.2 =
 
-*Release Date - TBD*
+*Release Date - 12 July 2026*
 
 * Enhancements:
 	* Search term highlighting now keeps double-quoted phrases intact: searching for `"richard harding"` highlights the whole phrase instead of its individual words. Mixed queries (e.g. `"richard harding" smith`) highlight the phrase plus the remaining words, and phrases match across whitespace variations, including non-breaking spaces.
 	* Terms excluded with the `-` operator are no longer highlighted, since they cannot appear in the results.
+	* Added client-side JavaScript highlighting for cached pages. When a full-page cache (e.g. LiteSpeed Cache, WP Super Cache) serves a cached response, PHP-based highlighting is skipped. The new script reads `document.referrer` in the browser and applies the same highlighting logic client-side, covering singular post/page views where "Highlight followed links" is enabled.
 
 * Bug fixes:
 	* Fixed "Highlight followed links" silently not working when the site's Home URL scheme differs from the scheme visitors use (e.g. an `http://` Home URL on a site served over `https://`, common behind SSL-terminating proxies).
