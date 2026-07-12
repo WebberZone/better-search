@@ -198,5 +198,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
-= 4.3.0 =
-Adds WP-CLI support, dashboard chart drill-down, an InnoDB conversion tool, scheduled index reconciliation, and a network admin dashboard for multisite. Includes a fuzzy search refactor and a long list of stability fixes.
+= 4.3.2 =
+Search highlighting now preserves quoted phrases and skips excluded terms, and adds client-side highlighting for cached pages. Also fixes "Highlight followed links" silently failing behind SSL-terminating proxies.
