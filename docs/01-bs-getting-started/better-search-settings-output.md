@@ -10,7 +10,7 @@ order: 0
 
 [kbtoc]
 
-The **Output** tab of the Better Search settings page lets you fine-tune how search results are displayed and styled.
+The **Output** tab of the [Better Search](https://webberzone.com/plugins/better-search/) settings page lets you fine-tune how search results are displayed and styled.
 
 ## Display options
 

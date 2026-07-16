@@ -8,11 +8,11 @@ status: publish
 order: 0
 ---
 
-## **What is Fuzzy Search?**
+## What is Fuzzy Search?
 
 Fuzzy search helps users find results even if their query contains typos, misspellings, or partial matches. By loosening the search criteria, fuzzy search improves accuracy and user satisfaction, especially for sites with a diverse audience or complex search terms.
 
-## **Why Use Fuzzy Search?**
+## Why Use Fuzzy Search?
 
 - **Handles errors**: Captures results for common misspellings or typos.
 - **Improves flexibility**: Matches variations of terms (e.g., “color” and “color”).
@@ -20,21 +20,21 @@ Fuzzy search helps users find results even if their query contains typos, misspe
 
 This is ideal for e-commerce sites, educational resources, or content-heavy platforms where users might not always type exact keywords.
 
-## **How to Enable Fuzzy Search**
+## How to Enable Fuzzy Search
 
 [Better Search Pro](https://webberzone.com/plugins/better-search/pro/) includes a setting to enable and customize fuzzy search levels:
 
-1.  Go to **Better Search → Settings** in the WordPress admin.
-2.  Under the **Search** tab, locate the setting **Fuzzy search level**.
-3.  Select the desired level of weightage that fuzzy matches add to the Better Search algorithm:
+1. Go to **Better Search → Settings** in the WordPress admin.
+2. Under the **Search** tab, locate the setting **Fuzzy search level**.
+3. Select the desired level of weightage that fuzzy matches add to the Better Search algorithm:
     - **Off**: Disables fuzzy search.
     - **Low**: Slightly relaxed matching criteria.
     - **Medium**: Moderately relaxed criteria for broader matches.
     - **High**: Most flexible, fuzzy searches are given the highest weightage.
-4.  If this is the first time that you’ve enabled this feature, then hit the button **‘Create fuzzy search indexes’** to add the necessary functions to your WordPress database. Without these, the fuzzy searching will fail!
-5.  Save your changes.
+4. If this is the first time that you’ve enabled this feature, then hit the button **‘Create fuzzy search indexes’** to add the necessary functions to your WordPress database. Without these, the fuzzy searching will fail!
+5. Save your changes.
 
-## **Important Considerations**
+## Important Considerations
 
 - **Searches titles only**: To maintain speed and performance, the fuzzy search only checks the words against the post title.
 - **Resource-intensive**: Fuzzy search can be computationally intensive, especially at higher levels. On high-traffic sites, this could impact performance.

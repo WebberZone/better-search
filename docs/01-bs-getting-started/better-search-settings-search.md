@@ -120,8 +120,7 @@ Enter a comma-separated list of post/page/custom post type IDs to exclude (e.g.,
 
 ### Exclude Categories
 
-Comma-separated list of category slugs to exclude. Autocomplete is available.\
-**Note:** Does not support custom taxonomies.
+Comma-separated list of category slugs to exclude. Autocomplete is available. Does not support custom taxonomies.
 
 ### Exclude category IDs
 

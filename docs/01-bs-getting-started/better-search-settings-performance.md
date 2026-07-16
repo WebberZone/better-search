@@ -14,7 +14,7 @@ The **Performance** tab in <a href="https://webberzone.com/plugins/better-search
 
 ## Efficient Content Storage and Indexing (ECSI)
 
-Efficient Content Storage and Indexing (ECSI) is a <a href="https://webberzone.com/plugins/better-search/pro/" data-type="page" data-id="8486">Better Search Pro</a> feature that creates a dedicated database table optimized for related content queries. This enhances performance, particularly on sites with a large number of posts or high traffic.
+Efficient Content Storage and Indexing (ECSI) is a <a href="https://webberzone.com/plugins/better-search/pro/" data-type="page" data-id="8486">Better Search Pro</a> feature that creates a dedicated database table optimized for search queries. This enhances performance, particularly on sites with a large number of posts or high traffic.
 
 To create the ECSI tables, visit the **Tools** page.
 
@@ -22,7 +22,7 @@ If your database does not support the required features, a compatibility message
 
 ### Use Custom Tables *(Pro only)*
 
-Use dedicated custom tables for related posts queries. This can significantly improve performance on large sites with many posts.
+Use dedicated custom tables for search queries. This can significantly improve performance on large sites with many posts.
 
 ## Optimization
 
@@ -34,6 +34,6 @@ Caching helps improve search performance by storing results temporarily. When en
 
 This setting allows you to specify the duration (in seconds) for caching search results. By default, it is set to 1 hour (`3600 seconds`). Adjust the time as needed based on your site’s traffic and content update frequency.
 
-### Max Execution Time (Pro)
+### Max Execution Time *(Pro only)*
 
 Maximum time (in milliseconds) allowed for MySQL queries to execute. Setting to 0 disables this limit. Default is 3000 (3 seconds). If a query exceeds this time, Better Search will terminate it and display no results. Setting this value too low may prevent legitimate searches from completing.

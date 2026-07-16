@@ -8,17 +8,17 @@ status: publish
 order: 0
 ---
 
-Better Search provides a powerful search experience by leveraging <a href="https://dev.mysql.com/doc/refman/8.4/en/fulltext-search.html" target="_blank" rel="noreferrer noopener">MySQL Full-Text search</a>. The algorithm prioritizes relevance, ensuring users get the most appropriate search results. This article explains how Better Search processes search queries, ranks posts, and calculates relevance.
+[Better Search](https://webberzone.com/plugins/better-search/) uses <a href="https://dev.mysql.com/doc/refman/8.4/en/fulltext-search.html" target="_blank" rel="noreferrer noopener">MySQL Full-Text search</a> to rank results by relevance. Here is how Better Search processes search queries, ranks posts, and calculates relevance.
 
 ## Overview of the Search Algorithm
 
-1.  **Fulltext Search**:\
+1. **Fulltext Search**:\
     Better Search uses MySQL’s FULLTEXT search capabilities to identify matching content. This allows for features like:
     - **Phrase Search**: Exact matches for terms enclosed in quotes (e.g., `"custom templates"`).
     - **Boolean Operators**: Support for advanced queries using `+` (must include), `-` (must exclude), and wildcard `*` operators when [“Boolean mode” is activated](https://webberzone.com/support/knowledgebase/better-search-settings-search/#activate-boolean-mode).
-2.  **Result Scoring**:\
+2. **Result Scoring**:\
     The MySQL engine calculates a **score** for each post based on how closely the content matches the search terms. Posts with higher scores are more relevant to the query.
-3.  **Ranking by Relevance**:\
+3. **Ranking by Relevance**:\
     Posts are sorted in descending order of score, ensuring the most relevant results appear at the top of the list.
 
 ## Calculating Relevance
@@ -35,7 +35,5 @@ This percentage is displayed in the search results when using the advanced templ
 ## Additional Features of the Algorithm
 
 - **Customizable Templates**: The search results template can be tailored to show relevance scores, excerpts, and other metadata.
-- **Compatibility with WordPress Themes**: Works seamlessly with both classic and block themes.
+- **Compatibility with WordPress Themes**: Works with both classic and block themes.
 - **Dynamic Switching**: When search terms have fewer characters than the configurable **Minimum characters** setting (default: 4), the algorithm dynamically switches between full-text search and LIKE-based fallback.
-
-Better Search combines accuracy and flexibility, making it a robust solution for enhancing WordPress search functionality.

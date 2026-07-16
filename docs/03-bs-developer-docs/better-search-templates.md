@@ -8,11 +8,11 @@ status: publish
 order: 0
 ---
 
-<a href="https://webberzone.com/plugins/better-search/" data-type="wzkb_category" data-id="46">Better Search</a> works out of the box. Install and activate it and you’re ready to go. By default, Better Search seamlessly integrates with your theme by overriding the main query to display relevant search results.
+<a href="https://webberzone.com/plugins/better-search/" data-type="wzkb_category" data-id="46">Better Search</a> works out of the box. Install and activate it and you’re ready to go. By default, Better Search integrates with your theme by overriding the main query to display relevant search results.
 
 If you turn [Seamless Mode off](https://webberzone.com/support/knowledgebase/better-search-settings-general/#enable-seamless-integration), then Better Search will look for a file called `better-search-template.php` in your current themes folder. If this is found, the plugin will use this file, otherwise, it will default to the one hardcoded into the plugin. If you’re using a block theme aka Full Site Editing (FSE), then Better Search will look for `better-search-template.html` instead.
 
-The classic theme layout included within the plugin differs from the block theme template, primarily driven by the limitations of the extensive use of PHP. Let’s dive into each.
+The classic theme layout included within the plugin differs from the block theme template, primarily driven by the limitations of the extensive use of PHP.
 
 ## For Classic Themes
 
