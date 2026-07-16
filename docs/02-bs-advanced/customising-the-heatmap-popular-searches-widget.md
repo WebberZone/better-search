@@ -1,9 +1,9 @@
 ---
 slug: customising-the-heatmap-popular-searches-widget
-title: "Customising the Heatmap and Popular Searches Widget"
+title: "Customizing the Heatmap and Popular Searches Widget"
 products: [better-search]
 sections: [02-bs-advanced]
-tags: [better-search,customisation]
+tags: [better-search,customization]
 status: publish
 order: 0
 ---
@@ -14,11 +14,11 @@ Each term links to the search results page for that query.
 
 ## Add the widget
 
-1.  Go to **Appearance \> Widgets**.
-2.  Add **the “Popular Searches \[Better Search\]”** to a widget area.
-3.  Enter a widget title.
-4.  Choose **Overall** or **Custom time period**.
-5.  If you choose **Custom time period**, enter the number of days to include.
+1. Go to **Appearance \> Widgets**.
+2. Add **the “Popular Searches \[Better Search\]”** to a widget area.
+3. Enter a widget title.
+4. Choose **Overall** or **Custom time period**.
+5. If you choose **Custom time period**, enter the number of days to include.
 
 For example, `7` shows searches from the last seven days.
 

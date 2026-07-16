@@ -8,7 +8,7 @@ status: publish
 order: 0
 ---
 
-Better Search provides two powerful shortcodes: `[bsearch_heatmap]` and `[bsearch_form]`. These are available in both the free and pro versions of the plugin and can display a heatmap of popular searches or embed a customizable search form.
+Better Search provides two shortcodes: `[bsearch_heatmap]` and `[bsearch_form]`. These are available in both the free and pro versions of the plugin and can display a heatmap of popular searches or embed a customizable search form.
 
 ## 1. \[bsearch_form\]
 

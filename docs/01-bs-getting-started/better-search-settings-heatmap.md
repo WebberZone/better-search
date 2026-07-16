@@ -10,7 +10,7 @@ order: 0
 
 [kbtoc]
 
-The **Heatmap** tab of the Better Search settings page lets you fine-tune how popular search terms are generated and displayed. Below is an explanation of each available setting.
+The **Heatmap** tab of the [Better Search](https://webberzone.com/plugins/better-search/) settings page lets you fine-tune how popular search terms are generated and displayed. Below is an explanation of each available setting.
 
 ## Include heatmap on the search results
 

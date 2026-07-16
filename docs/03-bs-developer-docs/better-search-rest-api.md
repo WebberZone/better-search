@@ -83,7 +83,4 @@ You can enable this by navigating to the plugin settings page under **Better Sea
 </table>
 </figure>
 
-### Notes:
-
-- All parameters are optional. If not provided, Better Search will use its default configuration.
-- You can use these parameters to fine-tune search behavior for specific REST API requests.
+All parameters are optional. If not provided, Better Search will use its default configuration. You can use these parameters to fine-tune search behavior for specific REST API requests.

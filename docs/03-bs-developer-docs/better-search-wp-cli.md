@@ -14,7 +14,7 @@ Better Search Pro CLI (BSP-CLI) was introduced in <a href="https://webberzone.co
 
 ## About WP-CLI
 
-WP-CLI is a powerful set of command-line tools for managing WordPress installations. You can update plugins, configure multisite installations, and much more, all without using a web browser. For more information, visit the <a href="http://wp-cli.org/" target="_blank" rel="noreferrer noopener">official WP-CLI website</a>.
+WP-CLI is a set of command-line tools for managing WordPress installations. You can update plugins, configure multisite installations, and much more, all without using a web browser. For more information, visit the <a href="http://wp-cli.org/" target="_blank" rel="noreferrer noopener">official WP-CLI website</a>.
 
 ## Getting Started with BSP-CLI
 
@@ -544,7 +544,7 @@ Wait for the current operation to finish or use `--force` to override the lock
 
 ### Use Dry Run
 
-I always preview destructive operations first:
+Always preview destructive operations first:
 
 ``` bash
 wp bsearch stats clear --dry-run
