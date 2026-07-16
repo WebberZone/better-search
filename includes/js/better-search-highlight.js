@@ -41,7 +41,7 @@
 		// Same tokeniser pattern as the PHP version.
 		// Built via new RegExp() so that engines without lookbehind support
 		// throw at runtime (catchable) instead of at parse time (fatal).
-		var simplePattern = /"[^"]*"|[^\t ",+]+/g;
+		var simplePattern = /"[^"]*(?:"|$)|[^\t ",+]+/g;
 		var tokens = [];
 		var m;
 
