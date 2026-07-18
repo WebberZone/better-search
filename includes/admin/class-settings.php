@@ -95,6 +95,7 @@ class Settings {
 			'help_tabs'         => $this->get_help_tabs(),
 			'admin_footer_text' => $this->get_admin_footer_text(),
 			'menus'             => $this->get_menus(),
+			'version'           => BETTER_SEARCH_VERSION,
 		);
 
 		$args = array(
@@ -123,7 +124,10 @@ class Settings {
 			'save_changes'         => esc_html__( 'Save Changes', 'better-search' ),
 			'reset_settings'       => esc_html__( 'Reset all settings', 'better-search' ),
 			'reset_button_confirm' => esc_html__( 'Do you really want to reset all these settings to their default values?', 'better-search' ),
-			'checkbox_modified'    => esc_html__( 'Modified from default setting', 'better-search' ),
+			'modified_field'       => esc_html__( 'Modified from default setting', 'better-search' ),
+			'modified_legend'      => esc_html__( 'Setting modified from its default value', 'better-search' ),
+			'default_label'        => esc_html__( 'Default', 'better-search' ),
+			'default_none'         => esc_html__( 'None', 'better-search' ),
 		);
 
 		/**
