@@ -326,6 +326,9 @@ class Admin {
 		return array(
 			'capability' => 'manage_options',
 			'prefix'     => 'bsearch',
+			'style'      => array(
+				'version' => BETTER_SEARCH_VERSION,
+			),
 			'strings'    => array(
 				'region_label' => esc_html__( 'Better Search quick links', 'better-search' ),
 				'nav_label'    => esc_html__( 'Better Search admin shortcuts', 'better-search' ),
