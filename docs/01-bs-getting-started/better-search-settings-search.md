@@ -129,6 +129,14 @@ Read-only field automatically populated based on the above input.
 > [!NOTE]
 > ⓘ Uses term_taxonomy_id, which may differ from the IDs on the Categories page.
 
+### Exclude Front page *(Pro only)*
+
+When enabled, excludes the front page from search results.
+
+### Exclude Posts page *(Pro only)*
+
+When enabled, excludes the Posts page from search results.
+
 ## Banned words options
 
 ### Filter these words
@@ -143,11 +151,3 @@ When enabled, only whole words in the search query are filtered. Partial matches
 
 When enabled, no results are returned if the search query includes any banned words.\
 If Seamless mode is disabled, an error message is displayed. With Seamless mode enabled, a “Nothing found” message is shown (customizable via your theme).
-
-### Exclude Front page *(Pro only)*
-
-When enabled, excludes the front page from search results.
-
-### Exclude Posts page *(Pro only)*
-
-When enabled, excludes the Posts page from search results.
