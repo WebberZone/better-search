@@ -52,6 +52,25 @@ Enable [fuzzy search](https://webberzone.com/support/knowledgebase/fuzzy-matches
 > [!WARNING]
 > ⚠️ Fuzzy searching can be computationally intensive; caching is recommended for high-traffic sites.
 
+### Enable "Did you mean" suggestions *(Pro only)*
+
+Suggest a corrected search term, drawn from your own search log, when a search returns zero results. See [Did You Mean Spelling Suggestions](https://webberzone.com/support/knowledgebase/did-you-mean-spelling-suggestions/) for full details.
+
+### Minimum searches to qualify as a suggestion *(Pro only)*
+
+A term must have been searched at least this many times before it can be suggested as a correction. Default: `3`.
+
+### "Did you mean" mode *(Pro only)*
+
+Choose how a suggestion is presented:
+
+- **Suggest ("Did you mean")**: Shows a "Did you mean" link but still displays the original (empty) results.
+- **Auto-correct**: Transparently re-runs the search with the corrected term when it actually returns results, showing a link back to the original query.
+
+### Use pspell/enchant as a fallback *(Pro only)*
+
+Falls back to the server's pspell/enchant spellchecker if your search log and site content have no close match. No effect if the extension isn't installed.
+
 ## Weighting
 
 ### Post title

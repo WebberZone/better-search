@@ -30,6 +30,7 @@ Better Search is free to use and replaces WordPress search with relevance-ranked
 | Search query tracking (daily and total) | ✅ | ✅ |
 | **Search Quality & Relevance** | | |
 | Fuzzy / phonetic matching | ❌ | ✅ |
+| "Did you mean" spelling suggestions | ❌ | ✅ |
 | Minimum relevance threshold | ❌ | ✅ |
 | Minimum characters before FULLTEXT search (configurable) | ❌ | ✅ |
 | Taxonomy weight configuration (categories, tags, precomputed score) | ❌ | ✅ |
