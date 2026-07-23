@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Plugin Overview
 
-Better Search Pro (v4.3.2) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, and more. It also tracks popular search queries and displays a search heatmap.
+**Better Search 4.4.0 is a work in progress** — not yet released. The current stable release is 4.3.2 (see `readme.txt`'s `Stable tag`); 4.4.0 is what's on this branch.
+
+Better Search Pro (v4.4.0-dev) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, "Did you mean" spelling suggestions, and more. It also tracks popular search queries and displays a search heatmap.
 
 Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.6+, PHP 7.4+.
 
@@ -12,7 +14,7 @@ Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.6
 
 Pro-only code lives exclusively in `includes/pro/`, declared as `@fs_premium_only /includes/pro/` in the plugin header. All files outside `includes/pro/` are identical to the free version.
 
-Constants defined in `better-search.php`: `BETTER_SEARCH_VERSION` (4.3.2), `BETTER_SEARCH_PLUGIN_DIR`, `BETTER_SEARCH_PLUGIN_URL`, `BETTER_SEARCH_PLUGIN_FILE`, `BETTER_SEARCH_DB_VERSION` (2.0), `BETTER_SEARCH_DEFAULT_THUMBNAIL_URL`.
+Constants defined in `better-search.php`: `BETTER_SEARCH_VERSION` (4.4.0), `BETTER_SEARCH_PLUGIN_DIR`, `BETTER_SEARCH_PLUGIN_URL`, `BETTER_SEARCH_PLUGIN_FILE`, `BETTER_SEARCH_DB_VERSION` (2.0), `BETTER_SEARCH_DEFAULT_THUMBNAIL_URL`.
 
 Settings are stored as a single `bsearch_settings` array in `wp_options`. Access via `bsearch_get_option($key)` / `bsearch_get_settings()`. The global `$bsearch_settings` is populated at plugin load.
 
@@ -103,11 +105,13 @@ Both the free and pro plugins include a `bsearch_deactivate_other_instances()` f
 
 ### Pro Components (`includes/pro/`) [PRO ONLY]
 
-- **`Pro`** (`class-pro.php`) — Top-level pro orchestrator, instantiated as `Main::$pro`. Wires together all pro subsystems and registers additional hooks on `better_search_query_*` filters. Also handles minimum relevance threshold (`set_min_relevance`), LIKE fallback when FULLTEXT returns 0 results (`like_fallback_search`), slug search (`add_custom_clauses`), front/posts page exclusion (`exclude_special_pages` via `bsearch_exclude_post_ids` filter), and REST API search integration.
+- **`Pro`** (`class-pro.php`) — Top-level pro orchestrator, instantiated as `Main::$pro`. Wires together all pro subsystems and registers additional hooks on `better_search_query_*` filters. Also handles minimum relevance threshold (`set_min_relevance`), LIKE fallback when FULLTEXT returns 0 results (`like_fallback_search`), "Did you mean" spelling suggestions (`suggest_did_you_mean`, registered at a later priority than `like_fallback_search` on the same `better_search_query_the_posts` filter so it isn't skipped by that method's early returns), slug search (`add_custom_clauses`), front/posts page exclusion (`exclude_special_pages` via `bsearch_exclude_post_ids` filter), and REST API search integration.
 
 - **`Query_Modifier`** (`class-query-modifier.php`) — Extends the core query via filter hooks (`better_search_query_posts_fields`, `_join`, `_where_match`, `_groupby`, `_orderby_clauses`). Adds: custom table JOIN, cornerstone posts pinning (`the_posts` filter), max execution time hint, and additional `ORDER BY` clause control.
 
-- **`Fuzzy_Search`** (`class-fuzzy-search.php`) — Creates MySQL stored functions (`wz_phrase_similarity_soundex`, `wz_phrase_similarity_levenshtein`, `wz_levenshtein`) for phonetic/similarity matching and exposes `get_fuzzy_score_sql()` which `Query_Modifier` injects into the FULLTEXT `posts_fields` / `posts_where_match` clauses. Shows an admin notice if the fuzzy index is missing.
+- **`Fuzzy_Search`** (`class-fuzzy-search.php`) — Creates MySQL stored functions (`wz_phrase_similarity_soundex`, `wz_phrase_similarity_levenshtein`, `wz_levenshtein`) for phonetic/similarity matching and exposes `get_fuzzy_score_sql()` which `Query_Modifier` injects into the FULLTEXT `posts_fields` / `posts_where_match` clauses. Shows an admin notice if the fuzzy index is missing. Also exposes `get_did_you_mean_suggestion()`, the search-log-corpus lookup for "Did you mean" (first-letter + length-window prefilter, then `wz_levenshtein` — not `SOUNDEX()`, which rejects some single-edit typos it should catch).
+
+- **`Spell_Dictionary`** (`class-spell-dictionary.php`) — Content-index corpus for "Did you mean": a `wp_bsearch_dictionary` table (word, frequency) built from published post titles + public taxonomy term names, rebuilt twicedaily via cron and on activation, kept additive-fresh via `save_post`. Same prefilter + `wz_levenshtein` lookup as `Fuzzy_Search`, used as the second-tier corpus when the search log has no match.
 
 - **`Multisite_Search`** (`class-multisite-search.php`) — Cross-site search across multiple blogs in a WordPress Multisite network. Uses `Custom_Tables\Posts_Search` to query across sites.
 
@@ -154,6 +158,7 @@ Pro settings are added to the existing `bsearch_settings` option. The `Pro\Admin
 | Scheduled index reconciliation | No | Yes (`Sync_Manager` cron) |
 | WP-CLI commands | No | Yes (`CLI_Manager`, 8 subcommands incl. `ecsi`) |
 | Network admin dashboard & stats | No | Yes (`Network\Dashboard`, `Network\Statistics`) |
+| "Did you mean" spelling suggestions | No | Yes (`Pro::suggest_did_you_mean`, `Fuzzy_Search`, `Spell_Dictionary`) |
 
 ## Shared framework files: `@since` convention
 
@@ -171,4 +176,3 @@ The Settings API (`includes/admin/settings/*.php`) and the Admin Banner (`includ
 | `includes/admin/settings/class-settings-wizard-api.php` | 4.2.0 |
 | `includes/admin/settings/class-metabox-api.php` | 4.0.0 |
 | `includes/admin/class-admin-banner.php` | 4.2.2 |
-

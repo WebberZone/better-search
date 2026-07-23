@@ -626,6 +626,137 @@ function get_bsearch_score( $args = array() ) {
 	return $output;
 }
 
+/**
+ * Display the "Did you mean" spelling suggestion for a zero-result search.
+ *
+ * @since 4.4.0
+ *
+ * @param string|array $args See get_bsearch_did_you_mean() for accepted arguments.
+ */
+function the_bsearch_did_you_mean( $args = array() ) {
+	echo get_bsearch_did_you_mean( $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+
+/**
+ * Retrieve the "Did you mean" spelling suggestion for a zero-result search.
+ *
+ * Reads the suggestion computed by Pro::suggest_did_you_mean() and stored on the current
+ * query object. Provided as a template tag (rather than only inline in the classic
+ * template) so seamless-mode themes — which render their own search.php, not Better
+ * Search's template — can opt in by calling it directly.
+ *
+ * @since 4.4.0
+ *
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type string $before Markup to prepend. Default '<p class="bsearch-did-you-mean">'.
+ *     @type string $after  Markup to append. Default '</p>'.
+ * }
+ * @return string Markup for the suggestion, or an empty string if none is available.
+ */
+function get_bsearch_did_you_mean( $args = array() ) {
+	global $wp_query;
+
+	if ( empty( $wp_query->did_you_mean ) ) {
+		return '';
+	}
+
+	$defaults = array(
+		'before' => '<p class="bsearch-did-you-mean">',
+		'after'  => '</p>',
+	);
+	$args     = wp_parse_args( $args, $defaults );
+
+	$link = '<a href="' . esc_url( add_query_arg( 's', rawurlencode( $wp_query->did_you_mean ), home_url( '/' ) ) ) . '">' . esc_html( $wp_query->did_you_mean ) . '</a>';
+
+	$output = $args['before'] . sprintf(
+		/* translators: %s: Suggested search term link. */
+		esc_html__( 'Did you mean: %s?', 'better-search' ),
+		$link // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	) . $args['after'];
+
+	/**
+	 * Filter the "Did you mean" suggestion markup.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @param string $output Suggestion markup.
+	 * @param array  $args   Array of arguments.
+	 */
+	return apply_filters( 'get_bsearch_did_you_mean', $output, $args );
+}
+
+/**
+ * Display the auto-correct notice ("Showing results for X — search instead for original").
+ *
+ * @since 4.4.0
+ *
+ * @param string|array $args See get_bsearch_autocorrect_notice() for accepted arguments.
+ */
+function the_bsearch_autocorrect_notice( $args = array() ) {
+	echo get_bsearch_autocorrect_notice( $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+
+/**
+ * Retrieve the auto-correct notice for a search whose term was transparently corrected.
+ *
+ * Reads the original query stashed by Pro::try_autocorrect() when "Did you mean" mode is
+ * set to auto-correct and the corrected term actually returned results.
+ *
+ * @since 4.4.0
+ *
+ * @param string|array $args {
+ *     Optional. Array or string of parameters.
+ *
+ *     @type string $before Markup to prepend. Default '<p class="bsearch-autocorrect-notice">'.
+ *     @type string $after  Markup to append. Default '</p>'.
+ * }
+ * @return string Markup for the notice, or an empty string if the search wasn't auto-corrected.
+ */
+function get_bsearch_autocorrect_notice( $args = array() ) {
+	global $wp_query;
+
+	if ( empty( $wp_query->did_you_mean_from ) ) {
+		return '';
+	}
+
+	$defaults = array(
+		'before' => '<p class="bsearch-autocorrect-notice">',
+		'after'  => '</p>',
+	);
+	$args     = wp_parse_args( $args, $defaults );
+
+	$original_term  = $wp_query->did_you_mean_from;
+	$corrected_term = ! empty( $wp_query->did_you_mean_to ) ? $wp_query->did_you_mean_to : get_search_query();
+
+	$original_url = add_query_arg(
+		array(
+			's'               => rawurlencode( $original_term ),
+			'bsearch_literal' => 1,
+		),
+		home_url( '/' )
+	);
+	$link         = '<a href="' . esc_url( $original_url ) . '">' . esc_html( $original_term ) . '</a>';
+
+	$output = $args['before'] . sprintf(
+		/* translators: 1: Corrected search term, 2: Link to search for the original term instead. */
+		esc_html__( 'Showing results for %1$s — search instead for %2$s', 'better-search' ),
+		'<strong>' . esc_html( $corrected_term ) . '</strong>',
+		$link // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	) . $args['after'];
+
+	/**
+	 * Filter the auto-correct notice markup.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @param string $output Notice markup.
+	 * @param array  $args   Array of arguments.
+	 */
+	return apply_filters( 'get_bsearch_autocorrect_notice', $output, $args );
+}
+
 
 /**
  * Display the Better Search Post Thumbnail.

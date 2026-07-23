@@ -125,6 +125,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.4.0 =
+
+*In development*
+
+* [Pro] Added "Did you mean" spelling suggestions for zero-result searches, with Suggest and Auto-correct modes and an optional pspell/enchant fallback.
+
 = 4.3.2 =
 
 *Release Date - 12 July 2026*
