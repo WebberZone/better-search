@@ -228,7 +228,7 @@ class Settings {
 			'seamless'            => array(
 				'id'      => 'seamless',
 				'name'    => esc_html__( 'Enable seamless integration', 'better-search' ),
-				'desc'    => esc_html__( "Seamlessly integrate Better Search results with your theme's native search template. When enabled, Better Search will use your theme's layout for search results while still sorting them by relevance. Note: relevance percentages will not be shown in this mode and the custom better-search-template.php will be ignored.", 'better-search' ),
+				'desc'    => esc_html__( "Use your theme's native search template instead of the plugin's own layout, while still sorting results by relevance.", 'better-search' ),
 				'type'    => 'checkbox',
 				'default' => true,
 			),
@@ -285,7 +285,7 @@ class Settings {
 			'show_credit'         => array(
 				'id'      => 'show_credit',
 				'name'    => esc_html__( 'Link to Better Search plugin page', 'better-search' ),
-				'desc'    => esc_html__( "When enabled, this setting adds a nofollow link to the Better Search plugin page at the bottom of the popular searches list. It's not mandatory, but it's a nice way to support the plugin's development.", 'better-search' ),
+				'desc'    => esc_html__( 'Adds a nofollow link to the Better Search plugin page at the bottom of the popular searches list.', 'better-search' ),
 				'type'    => 'checkbox',
 				'default' => false,
 			),
@@ -362,7 +362,7 @@ class Settings {
 			'max_execution_time'   => array(
 				'id'      => 'max_execution_time',
 				'name'    => esc_html__( 'Max Execution Time', 'better-search' ),
-				'desc'    => esc_html__( 'Maximum time (in milliseconds) allowed for MySQL queries to execute. Setting to 0 disables this limit. Default is 3000 (3 seconds). If a query exceeds this time, Better Search will terminate it and display no results. Setting this value too low may prevent legitimate searches from completing.', 'better-search' ),
+				'desc'    => esc_html__( 'Maximum time (in milliseconds) allowed for MySQL queries to execute. Setting to 0 disables this limit. If a query exceeds this time, Better Search will terminate it and display no results. Setting this value too low may prevent legitimate searches from completing.', 'better-search' ),
 				'type'    => 'number',
 				'default' => 3000,
 				'min'     => 0,
@@ -455,10 +455,16 @@ class Settings {
 				'max'     => 100,
 				'min'     => 0,
 			),
+			'fuzzy_header'              => array(
+				'id'   => 'fuzzy_header',
+				'name' => '<h3>' . esc_html__( 'Fuzzy search', 'better-search' ) . '</h3>',
+				'desc' => '',
+				'type' => 'header',
+			),
 			'fuzzy_search_level'        => array(
 				'id'      => 'fuzzy_search_level',
 				'name'    => esc_html__( 'Fuzzy search level', 'better-search' ),
-				'desc'    => esc_html__( 'This option will allow you to enable fuzzy search. Adjust the level of flexibility for matching search terms. Higher levels may include more results with potential misspellings. Note that fuzzy searching can be computationally intensive, so it is recommended to have caching enabled, especially on high traffic sites. When BOOLEAN mode is active, fuzzy search is automatically disabled for queries containing boolean operators (+, -, ~, >, <, *) as these express explicit search intent.', 'better-search' ),
+				'desc'    => esc_html__( 'How loosely to match misspelled search terms; higher levels catch more typos but cost more to compute, so enable caching on high-traffic sites. Automatically disabled for queries using boolean operators (+, -, ~, >, <, *).', 'better-search' ),
 				'type'    => 'select',
 				'options' => array(
 					'off'    => esc_html__( 'Off', 'better-search' ),
@@ -467,6 +473,44 @@ class Settings {
 					'high'   => esc_html__( 'High', 'better-search' ),
 				),
 				'default' => 'off',
+				'pro'     => true,
+			),
+			'enable_did_you_mean'       => array(
+				'id'      => 'enable_did_you_mean',
+				'name'    => esc_html__( 'Enable "Did you mean" suggestions', 'better-search' ),
+				'desc'    => esc_html__( 'Suggest a corrected search term, drawn from your own search log, when a search returns zero results.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => false,
+				'pro'     => true,
+			),
+			'did_you_mean_min_searches' => array(
+				'id'      => 'did_you_mean_min_searches',
+				'name'    => esc_html__( 'Minimum searches to qualify as a suggestion', 'better-search' ),
+				'desc'    => esc_html__( 'A term must have been searched at least this many times before it can be suggested as a correction.', 'better-search' ),
+				'type'    => 'number',
+				'default' => '3',
+				'size'    => 'small',
+				'min'     => 1,
+				'pro'     => true,
+			),
+			'did_you_mean_mode'         => array(
+				'id'      => 'did_you_mean_mode',
+				'name'    => esc_html__( '"Did you mean" mode', 'better-search' ),
+				'desc'    => esc_html__( 'Suggest shows a "Did you mean" link but still displays the original (empty) results. Auto-correct transparently re-runs the search with the corrected term when it actually returns results, showing a link back to the original query.', 'better-search' ),
+				'type'    => 'select',
+				'options' => array(
+					'suggest'     => esc_html__( 'Suggest ("Did you mean")', 'better-search' ),
+					'autocorrect' => esc_html__( 'Auto-correct', 'better-search' ),
+				),
+				'default' => 'suggest',
+				'pro'     => true,
+			),
+			'did_you_mean_use_pspell'   => array(
+				'id'      => 'did_you_mean_use_pspell',
+				'name'    => esc_html__( 'Use pspell/enchant as a fallback', 'better-search' ),
+				'desc'    => esc_html__( "Falls back to the server's pspell/enchant spellchecker if your search log and site content have no close match. No effect if the extension isn't installed.", 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => false,
 				'pro'     => true,
 			),
 			'weighting_header'          => array(
@@ -478,7 +522,7 @@ class Settings {
 			'weight_title'              => array(
 				'id'      => 'weight_title',
 				'name'    => esc_html__( 'Post title', 'better-search' ),
-				'desc'    => esc_html__( 'The weight to give to the post content when calculating the relevance of the post. Set this to a higher number than the following option to prioritize the post title in the relevance calculation. ', 'better-search' ),
+				'desc'    => esc_html__( 'Weight given to the post title in the relevance calculation. Set higher than Post content to prioritize title matches.', 'better-search' ),
 				'type'    => 'number',
 				'default' => '10',
 				'size'    => 'small',
@@ -658,14 +702,14 @@ class Settings {
 			'banned_whole_words'        => array(
 				'id'      => 'banned_whole_words',
 				'name'    => esc_html__( 'Match whole words only', 'better-search' ),
-				'desc'    => esc_html__( 'When enabled, a banned word must match as a complete word in the search query. When disabled, it can also match inside longer words. Example: if your banned list includes "grow", then "grow" will be blocked either way, but "grown" and "grower" will only be blocked when this setting is disabled.', 'better-search' ),
+				'desc'    => esc_html__( 'When enabled, banned words must match as complete words (e.g. blocks "grow" but not "grown"). When disabled, they can also match inside longer words.', 'better-search' ),
 				'type'    => 'checkbox',
 				'default' => true,
 			),
 			'banned_stop_search'        => array(
 				'id'      => 'banned_stop_search',
 				'name'    => esc_html__( 'Block searches containing banned words', 'better-search' ),
-				'desc'    => esc_html__( 'When enabled, if the search query contains any banned words, Better Search will stop and return no results. With Seamless mode disabled, an error message will be shown; with Seamless mode enabled, you will typically see a "Nothing found" message from your theme.', 'better-search' ),
+				'desc'    => esc_html__( 'When enabled, if the search query contains any banned words, Better Search will stop and return no results.', 'better-search' ),
 				'type'    => 'checkbox',
 				'default' => false,
 			),
@@ -883,7 +927,7 @@ class Settings {
 			'styles_header'            => array(
 				'id'   => 'styles_header',
 				'name' => '<h3>' . esc_html__( 'Styles options', 'better-search' ) . '</h3>',
-				'desc' => esc_html__( 'These settings allow you to customize the output of the search results page. Except for the highlight setting, these only apply when Seamless mode is off.', 'better-search' ),
+				'desc' => esc_html__( 'These settings only apply when Seamless mode is off.', 'better-search' ),
 				'type' => 'header',
 			),
 			'excerpt_length'           => array(

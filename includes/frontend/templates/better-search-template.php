@@ -115,6 +115,7 @@ get_header();
 			// Loop through the results.
 			if ( have_posts() ) {
 
+				the_bsearch_autocorrect_notice();
 				the_bsearch_header();
 
 				while ( have_posts() ) :
@@ -238,6 +239,7 @@ get_header();
 				?>
 				<p class="no-posts"><?php ( '' !== $bsearch_error->get_error_message( 'bsearch_banned' ) ) ? esc_html( $bsearch_error->get_error_message( 'bsearch_banned' ) ) : esc_html_e( 'No results found.', 'better-search' ); ?></p>
 				<?php
+				the_bsearch_did_you_mean();
 			}
 
 			// Reset wp_query back to what it was.
