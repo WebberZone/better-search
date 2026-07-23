@@ -48,4 +48,4 @@ Enable this setting to format search counts according to your site’s locale. F
 
 ## Link to Better Search Plugin Page
 
-When enabled, this setting adds a nofollow link to the Better Search plugin page at the bottom of the popular searches list. It’s not mandatory, but it’s a nice way to support the plugin’s development.
+Adds a nofollow link to the Better Search plugin page at the bottom of the popular searches list.
