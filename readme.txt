@@ -129,7 +129,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 *In development*
 
-* [Pro] Added "Did you mean" spelling suggestions for zero-result searches, with Suggest and Auto-correct modes and an optional pspell/enchant fallback.
+* [Pro] Added "Did you mean" spelling suggestions for zero-result searches, with Suggest and Auto-correct modes and an optional enchant fallback.
 
 = 4.3.2 =
 
