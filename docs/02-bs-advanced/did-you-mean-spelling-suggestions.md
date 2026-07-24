@@ -32,7 +32,7 @@ This is especially useful for sites with long-tail search traffic, where visitor
     - **Suggest ("Did you mean")**: Shows a "Did you mean" link on the zero-results page. The original (empty) results are still displayed.
     - **Auto-correct**: Transparently re-runs the search with the corrected term when it actually returns results, and shows a link back to the original query.
 4. Set **Minimum searches to qualify as a suggestion** — a term must have been searched at least this many times in your search log before it can be suggested as a correction. Default: `3`.
-5. Optionally, enable **Use pspell/enchant as a fallback** to fall back to the server's pspell/enchant spellchecker when neither your search log nor your site content has a close match. This has no effect if the extension isn't installed on your server (pspell was also removed from PHP entirely in PHP 8.4, so the fallback is unavailable on 8.4+).
+5. Optionally, enable **Use enchant as a fallback** to fall back to the server's enchant spellchecker when neither your search log nor your site content has a close match. The setting shows the extension's detected status and is disabled if enchant isn't installed on your server — see [Installing enchant on your server](#installing-enchant-on-your-server) below.
 6. Save your changes.
 
 ## How Suggestions Are Found
@@ -41,12 +41,69 @@ Better Search checks each unmatched search term against three corpora, in order,
 
 1. **Search log corpus**: Terms your visitors have searched at least the number of times set in **Minimum searches to qualify as a suggestion**.
 2. **Content-index corpus**: Words drawn from published post titles and public taxonomy term names, kept in a dedicated dictionary table that refreshes automatically twice daily and whenever a post is saved.
-3. **pspell/enchant fallback**: The server's spellchecker, if the setting is enabled and the extension is available.
+3. **Enchant fallback**: The server's enchant spellchecker, if the setting is enabled and the extension is available.
 
 Quoted phrases (`"like this"`) and terms shorter than the **Minimum characters** setting (Search tab, default `4`) are left alone — there's too little signal in a short token to correct safely.
 
 > [!NOTE]
 > ⓘ "Did you mean" is automatically skipped for a search that already returned results — it only activates on zero-result searches.
+
+## Installing enchant on your server
+
+The enchant fallback needs PHP's `enchant` extension. Most managed WordPress hosts don't enable it, but if you run your own dedicated server or VPS, you can install it yourself.
+
+### Check whether it's already installed
+
+The **Use enchant as a fallback** setting shows a live status message: green if the extension is detected, red if it isn't. You can also check from the command line:
+
+```bash
+php -m | grep enchant
+```
+
+### Install the extension
+
+Enchant itself is a spellchecking library; PHP's `enchant` extension is a wrapper around it, and it also needs at least one backend dictionary provider (`aspell` or `hunspell`) plus a language dictionary package to have anything to suggest from.
+
+**Ubuntu/Debian**
+
+```bash
+sudo apt install php-enchant enchant-2 aspell aspell-en
+```
+
+Swap `aspell-en` for the package matching your site's language (e.g. `aspell-fr` for French, `hunspell-de-de` for German).
+
+**RHEL/CentOS/AlmaLinux**
+
+```bash
+sudo yum install php-enchant enchant2 aspell aspell-en
+```
+
+**macOS (Herd / Homebrew PHP)**
+
+```bash
+brew install enchant
+pecl install enchant
+```
+
+Then add `extension=enchant.so` to your `php.ini` if the install doesn't do it automatically.
+
+After installing, restart PHP-FPM (or Apache/`mod_php`) so the extension loads:
+
+```bash
+sudo systemctl restart php8.3-fpm   # match your PHP version
+```
+
+Then reload the plugin's **Search** settings tab — the status message should switch to "The enchant extension is installed on this server."
+
+### Choosing a dictionary locale
+
+Enchant looks up a dictionary matching the locale from the `bsearch_did_you_mean_enchant_locale` filter (default `en_US`). If your site's content is in another language, make sure the matching dictionary package is installed (e.g. `aspell-de` for German) and filter the locale to match:
+
+```php
+add_filter( 'bsearch_did_you_mean_enchant_locale', fn() => 'de_DE' );
+```
+
+If no dictionary exists for the requested locale, the fallback silently returns no suggestion rather than erroring — the search-log and content-index corpora are unaffected either way.
 
 ## Theme Integration
 
@@ -76,9 +133,9 @@ Accepts the same `before` / `after` arguments, defaulting to `<p class="bsearch-
 
 ## Developer Filters
 
-- `bsearch_spelling_suggestion` — Filters the final suggestion resolved for a single search token, after the search log, content index, and pspell/enchant fallback have all been tried.
+- `bsearch_spelling_suggestion` — Filters the final suggestion resolved for a single search token, after the search log, content index, and enchant fallback have all been tried.
 - `bsearch_did_you_mean_min_searches` — Filters the minimum search-log count required for a term to qualify as a suggestion, overriding the **Minimum searches to qualify as a suggestion** setting.
-- `bsearch_did_you_mean_pspell_locale` — Filters the locale (default `en`) passed to `pspell_new()` for the pspell/enchant fallback.
+- `bsearch_did_you_mean_enchant_locale` — Filters the locale (default `en_US`) used to request a dictionary from enchant for the fallback.
 - `get_bsearch_did_you_mean` / `get_bsearch_autocorrect_notice` — Filter the generated markup for each notice.
 
 ## Important Considerations
