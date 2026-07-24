@@ -67,9 +67,9 @@ Choose how a suggestion is presented:
 - **Suggest ("Did you mean")**: Shows a "Did you mean" link but still displays the original (empty) results.
 - **Auto-correct**: Transparently re-runs the search with the corrected term when it actually returns results, showing a link back to the original query.
 
-### Use pspell/enchant as a fallback *(Pro only)*
+### Use enchant as a fallback *(Pro only)*
 
-Falls back to the server's pspell/enchant spellchecker if your search log and site content have no close match. No effect if the extension isn't installed.
+Falls back to the server's enchant spellchecker if your search log and site content have no close match. Disabled if the extension isn't installed — see [Installing enchant on your server](https://webberzone.com/support/knowledgebase/did-you-mean-spelling-suggestions/#installing-enchant-on-your-server).
 
 ## Weighting
 
