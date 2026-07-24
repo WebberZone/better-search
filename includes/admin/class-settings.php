@@ -505,13 +505,14 @@ class Settings {
 				'default' => 'suggest',
 				'pro'     => true,
 			),
-			'did_you_mean_use_pspell'   => array(
-				'id'      => 'did_you_mean_use_pspell',
-				'name'    => esc_html__( 'Use pspell/enchant as a fallback', 'better-search' ),
-				'desc'    => esc_html__( "Falls back to the server's pspell/enchant spellchecker if your search log and site content have no close match. No effect if the extension isn't installed.", 'better-search' ),
-				'type'    => 'checkbox',
-				'default' => false,
-				'pro'     => true,
+			'did_you_mean_use_enchant'  => array(
+				'id'       => 'did_you_mean_use_enchant',
+				'name'     => esc_html__( 'Use enchant as a fallback', 'better-search' ),
+				'desc'     => esc_html__( "Falls back to the server's enchant spellchecker if your search log and site content have no close match.", 'better-search' ),
+				'type'     => 'checkbox',
+				'default'  => false,
+				'pro'      => true,
+				'disabled' => ! function_exists( 'enchant_broker_init' ),
 			),
 			'weighting_header'          => array(
 				'id'   => 'weighting_header',
