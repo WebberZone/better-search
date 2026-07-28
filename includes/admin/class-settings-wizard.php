@@ -11,6 +11,7 @@
 
 namespace WebberZone\Better_Search\Admin;
 
+use WebberZone\Better_Search\Feature_Manager;
 use WebberZone\Better_Search\Util\Hook_Registry;
 use WebberZone\Better_Search\Admin\Settings\Settings_Wizard_API;
 use WebberZone\Better_Search\Admin\Settings;
@@ -79,7 +80,6 @@ class Settings_Wizard extends Settings_Wizard_API {
 
 		$basic_search_keys = array(
 			'seamless',
-			'enable_live_search',
 			'use_fulltext',
 			'limit',
 			'highlight',
@@ -107,6 +107,11 @@ class Settings_Wizard extends Settings_Wizard_API {
 		);
 
 		$steps = array(
+			'features'       => array(
+				'title'       => __( 'Choose Your Features', 'better-search' ),
+				'description' => __( 'Turn off anything you do not need. The rest of this wizard, and the settings page, will only show settings for features you keep on. You can change these anytime from the Features tab.', 'better-search' ),
+				'settings'    => $all_settings_grouped['features'] ?? array(),
+			),
 			'welcome'        => array(
 				'title'       => __( 'Welcome to Better Search', 'better-search' ),
 				'description' => __( 'Thank you for installing Better Search! This wizard will help you configure the essential settings to get started quickly.', 'better-search' ),
@@ -129,8 +134,8 @@ class Settings_Wizard extends Settings_Wizard_API {
 			),
 		);
 
-		// Add custom tables indexing step if custom tables are enabled.
-		if ( bsearch_get_option( 'use_custom_tables', false ) ) {
+		// Add custom tables indexing step if the feature is enabled and turned on.
+		if ( Feature_Manager::is_enabled( 'custom_tables' ) && bsearch_get_option( 'use_custom_tables', false ) ) {
 			$steps['custom_tables_index'] = array(
 				'title'       => __( 'Index Custom Tables', 'better-search' ),
 				'description' => __( 'Custom tables have been enabled. Index your content to improve search performance and enable advanced features.', 'better-search' ),

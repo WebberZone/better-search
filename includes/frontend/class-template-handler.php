@@ -7,6 +7,7 @@
 
 namespace WebberZone\Better_Search\Frontend;
 
+use WebberZone\Better_Search\Feature_Manager;
 use WebberZone\Better_Search\Util\Hook_Registry;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -175,6 +176,10 @@ class Template_Handler {
 	 * @since 4.0.0
 	 */
 	public function register_patterns() {
+		if ( ! Feature_Manager::is_enabled( 'block_patterns' ) ) {
+			return;
+		}
+
 		register_block_pattern_category(
 			'better-search',
 			array( 'label' => esc_html__( 'Better Search', 'better-search' ) )

@@ -7,6 +7,8 @@
 
 namespace WebberZone\Better_Search\Frontend;
 
+use WebberZone\Better_Search\Feature_Manager;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -24,6 +26,10 @@ class Shortcodes {
 	 * @since 3.3.0
 	 */
 	public function __construct() {
+		if ( ! Feature_Manager::is_enabled( 'shortcodes' ) ) {
+			return;
+		}
+
 		add_shortcode( 'bsearch_heatmap', array( $this, 'bsearch_heatmap' ) );
 		add_shortcode( 'bsearch_form', array( $this, 'bsearch_form' ) );
 	}
