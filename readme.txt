@@ -140,6 +140,8 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 	* Fixed pro-only settings being silently discarded when saving the settings page in the free plugin. Fields that render disabled are no longer deleted just because the browser does not submit them.
 	* Fixed pro-only repeater fields rendering as fully editable in the free plugin: the individual rows, their inputs and the add/remove/reorder buttons are now correctly disabled.
 	* Fixed the settings page silently refusing to save when a collapsed repeater row had an empty required field. Browsers block submission of a required field they cannot show, without reporting an error, so required repeater fields are now validated after saving instead.
+	* [Pro] Fixed the setup wizard's "Index Custom Tables" step appearing or disappearing mid-run, which skipped or mis-recorded the final step. It is now always shown.
+	* Corrected the wizard's Features step description, which claimed settings for disabled features would be hidden.
 
 = 4.3.2 =
 

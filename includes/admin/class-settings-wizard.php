@@ -109,7 +109,7 @@ class Settings_Wizard extends Settings_Wizard_API {
 		$steps = array(
 			'features'       => array(
 				'title'       => __( 'Choose Your Features', 'better-search' ),
-				'description' => __( 'Turn off anything you do not need. The rest of this wizard, and the settings page, will only show settings for features you keep on. You can change these anytime from the Features tab.', 'better-search' ),
+				'description' => __( "Turn off anything you do not need and the plugin will not load that feature's code. Settings that belong to a feature you turn off remain visible in this wizard and on the settings page - they simply have no effect, and are marked as such. You can change these anytime from the Features tab.", 'better-search' ),
 				'settings'    => $all_settings_grouped['features'] ?? array(),
 			),
 			'welcome'        => array(
@@ -134,11 +134,11 @@ class Settings_Wizard extends Settings_Wizard_API {
 			),
 		);
 
-		// Add custom tables indexing step if the feature is enabled and turned on.
-		if ( Feature_Manager::is_enabled( 'custom_tables' ) && bsearch_get_option( 'use_custom_tables', false ) ) {
+		// Included whenever the pro indexer exists so the step count cannot change while the wizard is in progress.
+		if ( class_exists( '\WebberZone\Better_Search\Pro\Custom_Tables\Custom_Tables_Admin' ) ) {
 			$steps['custom_tables_index'] = array(
 				'title'       => __( 'Index Custom Tables', 'better-search' ),
-				'description' => __( 'Custom tables have been enabled. Index your content to improve search performance and enable advanced features.', 'better-search' ),
+				'description' => __( 'Custom index tables (ECSI) store your content in a dedicated table for faster searches. If you are using them, index your content here.', 'better-search' ),
 				'settings'    => array(),
 				'custom_step' => true, // Flag to indicate this needs custom rendering.
 			);
@@ -282,7 +282,7 @@ class Settings_Wizard extends Settings_Wizard_API {
 
 		// Check if we're on the custom tables indexing step.
 		$step_config = $this->get_current_step_config();
-		if ( ! empty( $step_config['custom_step'] ) ) {
+		if ( ! empty( $step_config['custom_step'] ) && '' === $this->get_custom_tables_step_notice() ) {
 			// Enqueue the reindex script from custom tables admin.
 			wp_enqueue_script(
 				'bsearch-reindex',
@@ -391,32 +391,50 @@ class Settings_Wizard extends Settings_Wizard_API {
 	}
 
 	/**
+	 * Reason the custom tables step cannot offer indexing, if any.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @return string Message to show instead of the indexer, or an empty string when indexing is available.
+	 */
+	protected function get_custom_tables_step_notice() {
+		if ( ! class_exists( '\WebberZone\Better_Search\Pro\Custom_Tables\Custom_Tables_Admin' ) ) {
+			return __( 'Custom tables functionality is not available.', 'better-search' );
+		}
+
+		if ( ! Feature_Manager::is_enabled( 'custom_tables' ) ) {
+			return __( 'Custom index tables are turned off on the Features tab, so there is nothing to index. Turn the feature back on to use them, then index from the Tools page.', 'better-search' );
+		}
+
+		if ( ! bsearch_get_option( 'use_custom_tables', false ) ) {
+			return __( 'Custom index tables are not in use. Turn on "Use Custom Tables" on the Performance tab of the settings page, then index your content from the Tools page.', 'better-search' );
+		}
+
+		if ( ! ( better_search()->pro->custom_tables ?? null ) ) {
+			return __( 'Custom tables are not available.', 'better-search' );
+		}
+
+		return '';
+	}
+
+	/**
 	 * Render the custom tables indexing interface.
 	 *
 	 * @since 4.2.0
 	 */
 	protected function render_custom_tables_interface() {
-		// Get custom tables admin instance if available.
-		if ( ! class_exists( '\WebberZone\Better_Search\Pro\Custom_Tables\Custom_Tables_Admin' ) ) {
+		$notice = $this->get_custom_tables_step_notice();
+
+		if ( '' !== $notice ) {
 			?>
-			<div class="notice notice-error inline">
-				<p><?php esc_html_e( 'Custom tables functionality is not available.', 'better-search' ); ?></p>
+			<div class="notice notice-info inline">
+				<p><?php echo esc_html( $notice ); ?></p>
 			</div>
 			<?php
 			return;
 		}
 
-		// Get table manager instance with lazy admin initialization.
-		$custom_tables = better_search()->pro->custom_tables ?? null;
-		if ( ! $custom_tables ) {
-			?>
-			<div class="notice notice-error inline">
-				<p><?php esc_html_e( 'Custom tables are not available.', 'better-search' ); ?></p>
-			</div>
-			<?php
-			return;
-		}
-
+		$custom_tables = better_search()->pro->custom_tables;
 		$table_manager = $custom_tables->admin->table_manager;
 		$percentage    = $table_manager->get_indexing_percentage();
 		$content_count = $table_manager->get_content_count();
