@@ -7,6 +7,7 @@
  * @since 4.0.0
  */
 
+use WebberZone\Better_Search\Feature_Manager;
 use WebberZone\Better_Search\Util\Cache;
 use WebberZone\Better_Search\Util\Helpers;
 use WebberZone\Better_Search\Util\Hook_Registry;
@@ -504,7 +505,9 @@ class Better_Search_Core_Query extends \WP_Query {
 	 * @return bool Whether to use custom tables.
 	 */
 	public function should_use_custom_table(): bool {
-		$use_custom_table = \bsearch_get_option( 'use_custom_tables', false ) && get_option( 'wz_posts_custom_tables_ready', false );
+		$use_custom_table = Feature_Manager::is_enabled( 'custom_tables' )
+			&& \bsearch_get_option( 'use_custom_tables', false )
+			&& get_option( 'wz_posts_custom_tables_ready', false );
 
 		/**
 		 * Filter whether to use custom tables.

@@ -9,6 +9,7 @@
 
 namespace WebberZone\Better_Search\Admin;
 
+use WebberZone\Better_Search\Feature_Manager;
 use WebberZone\Better_Search\Util\Helpers;
 use WebberZone\Better_Search\Util\Hook_Registry;
 
@@ -170,9 +171,11 @@ class Settings {
 	 */
 	public static function get_settings_sections() {
 		$settings_sections = array(
+			'features'    => __( 'Features', 'better-search' ),
 			'general'     => __( 'General', 'better-search' ),
 			'performance' => __( 'Performance', 'better-search' ),
 			'search'      => __( 'Search', 'better-search' ),
+			'redirects'   => __( 'Redirects', 'better-search' ),
 			'output'      => __( 'Output', 'better-search' ),
 			'heatmap'     => __( 'Heatmap', 'better-search' ),
 		);
@@ -217,6 +220,29 @@ class Settings {
 	}
 
 	/**
+	 * Note on a setting field when its governing feature is turned off on the Features tab.
+	 *
+	 * The field is left fully interactive and its stored value untouched - the actual gating
+	 * happens where the setting is consulted at runtime. This is just an explanatory note so the
+	 * setting isn't confusing to find still switched on while its feature is off.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @param array  $field   Field arguments.
+	 * @param string $feature Feature ID, see Feature_Manager::get_features().
+	 * @return array Field arguments.
+	 */
+	private static function gate_field_to_feature( array $field, string $feature ) {
+		if ( Feature_Manager::is_enabled( $feature ) ) {
+			return $field;
+		}
+
+		$field['desc'] = trim( $field['desc'] ?? '' ) . ' <strong>' . esc_html__( 'This has no effect while the feature is turned off on the Features tab.', 'better-search' ) . '</strong>';
+
+		return $field;
+	}
+
+	/**
 	 * Retrieve the array of General settings
 	 *
 	 * @since 3.3.0
@@ -231,13 +257,6 @@ class Settings {
 				'desc'    => esc_html__( "Use your theme's native search template instead of the plugin's own layout, while still sorting results by relevance.", 'better-search' ),
 				'type'    => 'checkbox',
 				'default' => true,
-			),
-			'enable_live_search'  => array(
-				'id'      => 'enable_live_search',
-				'name'    => esc_html__( 'Enable live search', 'better-search' ),
-				'desc'    => esc_html__( 'This option will enable the live search feature on the search form.', 'better-search' ),
-				'type'    => 'checkbox',
-				'default' => false,
 			),
 			'enable_rest_api'     => array(
 				'id'      => 'enable_rest_api',
@@ -302,6 +321,126 @@ class Settings {
 	}
 
 	/**
+	 * Retrieve the array of Features settings
+	 *
+	 * All features are enabled by default. Disabling a feature stops its
+	 * classes from being loaded on any request.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @return array Features settings array
+	 */
+	public static function settings_features() {
+		$settings = array(
+			'features_header'         => array(
+				'id'   => 'features_header',
+				'name' => '<h3>' . esc_html__( 'Features', 'better-search' ) . '</h3>',
+				'desc' => esc_html__( 'Turn off any features you do not use and the plugin will not load their code.', 'better-search' ),
+				'type' => 'header',
+			),
+			'enable_widgets'          => array(
+				'id'      => 'enable_widgets',
+				'name'    => esc_html__( 'Classic widgets', 'better-search' ),
+				'desc'    => esc_html__( 'Registers the classic Search Box and Search Heatmap widgets.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => 1,
+			),
+			'enable_shortcodes'       => array(
+				'id'      => 'enable_shortcodes',
+				'name'    => esc_html__( 'Shortcodes', 'better-search' ),
+				'desc'    => esc_html__( 'Registers the [bsearch_form] and [bsearch_heatmap] shortcodes.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => 1,
+			),
+			'enable_block_patterns'   => array(
+				'id'      => 'enable_block_patterns',
+				'name'    => esc_html__( 'Block patterns', 'better-search' ),
+				'desc'    => esc_html__( 'Registers the Better Search block patterns (search form, search results, query loop) for the block editor.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => 1,
+			),
+			'enable_live_search'      => array(
+				'id'      => 'enable_live_search',
+				'name'    => esc_html__( 'Live search', 'better-search' ),
+				'desc'    => esc_html__( 'Enables the live search feature on the search form, including its AJAX endpoint.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => false,
+			),
+			'pro_features_header'     => array(
+				'id'   => 'pro_features_header',
+				'name' => '<h3>' . esc_html__( 'Pro Features', 'better-search' ) . '</h3>',
+				'desc' => '',
+				'type' => 'header',
+			),
+			'enable_fuzzy_search'     => array(
+				'id'      => 'enable_fuzzy_search',
+				'name'    => esc_html__( 'Fuzzy search', 'better-search' ),
+				'desc'    => esc_html__( 'Loads the fuzzy search subsystem (MySQL functions, index tools and admin notices). Use the Fuzzy search level setting on the Search tab to control how loosely it matches.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => 1,
+				'pro'     => true,
+			),
+			'enable_search_redirects' => array(
+				'id'      => 'enable_search_redirects',
+				'name'    => esc_html__( 'Search redirects', 'better-search' ),
+				'desc'    => esc_html__( 'Lets you send searches for chosen keywords straight to a specific post, page or URL. Configure the rules on the Redirects tab.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => 1,
+				'pro'     => true,
+			),
+			'enable_custom_tables'    => array(
+				'id'      => 'enable_custom_tables',
+				'name'    => esc_html__( 'Custom index tables (ECSI)', 'better-search' ),
+				'desc'    => esc_html__( 'Enables the dedicated search index table subsystem, including the Tools tab reindexing and InnoDB conversion tools.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => 1,
+				'pro'     => true,
+			),
+			'enable_multisite_search' => array(
+				'id'      => 'enable_multisite_search',
+				'name'    => esc_html__( 'Multisite search', 'better-search' ),
+				'desc'    => esc_html__( 'Enables cross-site search across multiple blogs in a WordPress Multisite network.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => 1,
+				'pro'     => true,
+			),
+			'enable_network_admin'    => array(
+				'id'      => 'enable_network_admin',
+				'name'    => esc_html__( 'Network admin dashboard & stats', 'better-search' ),
+				'desc'    => esc_html__( 'Adds the network admin dashboard and statistics pages on Multisite installs.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => 1,
+				'pro'     => true,
+			),
+			'enable_chart_drilldown'  => array(
+				'id'      => 'enable_chart_drilldown',
+				'name'    => esc_html__( 'Dashboard chart drill-down', 'better-search' ),
+				'desc'    => esc_html__( 'Lets you click a bar in the daily searches chart to view the top searches for that day.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => 1,
+				'pro'     => true,
+			),
+			'enable_cli'              => array(
+				'id'      => 'enable_cli',
+				'name'    => esc_html__( 'WP-CLI commands', 'better-search' ),
+				'desc'    => esc_html__( 'Registers the bsearch WP-CLI commands.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => 1,
+				'pro'     => true,
+			),
+		);
+
+		/**
+		 * Filters the Features settings array
+		 *
+		 * @since 4.4.0
+		 *
+		 * @param array $settings Features settings array
+		 */
+		return apply_filters( self::$prefix . '_settings_features', $settings );
+	}
+
+	/**
 	 * Retrieve the array of Performance settings
 	 *
 	 * @since 4.2.0
@@ -331,13 +470,16 @@ class Settings {
 				'desc' => $custom_tables_desc,
 				'type' => 'header',
 			),
-			'use_custom_tables'    => array(
-				'id'      => 'use_custom_tables',
-				'name'    => esc_html__( 'Use Custom Tables', 'better-search' ),
-				'desc'    => esc_html__( 'Use dedicated custom tables for related posts queries. This can significantly improve performance on large sites with many posts.', 'better-search' ),
-				'type'    => 'checkbox',
-				'default' => false,
-				'pro'     => true,
+			'use_custom_tables'    => self::gate_field_to_feature(
+				array(
+					'id'      => 'use_custom_tables',
+					'name'    => esc_html__( 'Use Custom Tables', 'better-search' ),
+					'desc'    => esc_html__( 'Use dedicated custom tables for related posts queries. This can significantly improve performance on large sites with many posts.', 'better-search' ),
+					'type'    => 'checkbox',
+					'default' => false,
+					'pro'     => true,
+				),
+				'custom_tables'
 			),
 			'optimization_header'  => array(
 				'id'   => 'optimization_header',
@@ -461,19 +603,22 @@ class Settings {
 				'desc' => '',
 				'type' => 'header',
 			),
-			'fuzzy_search_level'        => array(
-				'id'      => 'fuzzy_search_level',
-				'name'    => esc_html__( 'Fuzzy search level', 'better-search' ),
-				'desc'    => esc_html__( 'How loosely to match misspelled search terms; higher levels catch more typos but cost more to compute, so enable caching on high-traffic sites. Automatically disabled for queries using boolean operators (+, -, ~, >, <, *).', 'better-search' ),
-				'type'    => 'select',
-				'options' => array(
-					'off'    => esc_html__( 'Off', 'better-search' ),
-					'low'    => esc_html__( 'Low', 'better-search' ),
-					'medium' => esc_html__( 'Medium', 'better-search' ),
-					'high'   => esc_html__( 'High', 'better-search' ),
+			'fuzzy_search_level'        => self::gate_field_to_feature(
+				array(
+					'id'      => 'fuzzy_search_level',
+					'name'    => esc_html__( 'Fuzzy search level', 'better-search' ),
+					'desc'    => esc_html__( 'How loosely to match misspelled search terms; higher levels catch more typos but cost more to compute, so enable caching on high-traffic sites. Automatically disabled for queries using boolean operators (+, -, ~, >, <, *).', 'better-search' ),
+					'type'    => 'select',
+					'options' => array(
+						'off'    => esc_html__( 'Off', 'better-search' ),
+						'low'    => esc_html__( 'Low', 'better-search' ),
+						'medium' => esc_html__( 'Medium', 'better-search' ),
+						'high'   => esc_html__( 'High', 'better-search' ),
+					),
+					'default' => 'off',
+					'pro'     => true,
 				),
-				'default' => 'off',
-				'pro'     => true,
+				'fuzzy_search'
 			),
 			'enable_did_you_mean'       => array(
 				'id'      => 'enable_did_you_mean',
@@ -483,36 +628,45 @@ class Settings {
 				'default' => false,
 				'pro'     => true,
 			),
-			'did_you_mean_min_searches' => array(
-				'id'      => 'did_you_mean_min_searches',
-				'name'    => esc_html__( 'Minimum searches to qualify as a suggestion', 'better-search' ),
-				'desc'    => esc_html__( 'A term must have been searched at least this many times before it can be suggested as a correction.', 'better-search' ),
-				'type'    => 'number',
-				'default' => '3',
-				'size'    => 'small',
-				'min'     => 1,
-				'pro'     => true,
-			),
-			'did_you_mean_mode'         => array(
-				'id'      => 'did_you_mean_mode',
-				'name'    => esc_html__( '"Did you mean" mode', 'better-search' ),
-				'desc'    => esc_html__( 'Suggest shows a "Did you mean" link but still displays the original (empty) results. Auto-correct transparently re-runs the search with the corrected term when it actually returns results, showing a link back to the original query.', 'better-search' ),
-				'type'    => 'select',
-				'options' => array(
-					'suggest'     => esc_html__( 'Suggest ("Did you mean")', 'better-search' ),
-					'autocorrect' => esc_html__( 'Auto-correct', 'better-search' ),
+			'did_you_mean_min_searches' => self::gate_field_to_feature(
+				array(
+					'id'      => 'did_you_mean_min_searches',
+					'name'    => esc_html__( 'Minimum searches to qualify as a suggestion', 'better-search' ),
+					'desc'    => esc_html__( 'A term must have been searched at least this many times before it can be suggested as a correction.', 'better-search' ),
+					'type'    => 'number',
+					'default' => '3',
+					'size'    => 'small',
+					'min'     => 1,
+					'pro'     => true,
 				),
-				'default' => 'suggest',
-				'pro'     => true,
+				'did_you_mean'
 			),
-			'did_you_mean_use_enchant'  => array(
-				'id'       => 'did_you_mean_use_enchant',
-				'name'     => esc_html__( 'Use enchant as a fallback', 'better-search' ),
-				'desc'     => esc_html__( "Falls back to the server's enchant spellchecker if your search log and site content have no close match.", 'better-search' ),
-				'type'     => 'checkbox',
-				'default'  => false,
-				'pro'      => true,
-				'disabled' => ! function_exists( 'enchant_broker_init' ),
+			'did_you_mean_mode'         => self::gate_field_to_feature(
+				array(
+					'id'      => 'did_you_mean_mode',
+					'name'    => esc_html__( '"Did you mean" mode', 'better-search' ),
+					'desc'    => esc_html__( 'Suggest shows a "Did you mean" link but still displays the original (empty) results. Auto-correct transparently re-runs the search with the corrected term when it actually returns results, showing a link back to the original query.', 'better-search' ),
+					'type'    => 'select',
+					'options' => array(
+						'suggest'     => esc_html__( 'Suggest ("Did you mean")', 'better-search' ),
+						'autocorrect' => esc_html__( 'Auto-correct', 'better-search' ),
+					),
+					'default' => 'suggest',
+					'pro'     => true,
+				),
+				'did_you_mean'
+			),
+			'did_you_mean_use_enchant'  => self::gate_field_to_feature(
+				array(
+					'id'       => 'did_you_mean_use_enchant',
+					'name'     => esc_html__( 'Use enchant as a fallback', 'better-search' ),
+					'desc'     => esc_html__( "Falls back to the server's enchant spellchecker if your search log and site content have no close match.", 'better-search' ),
+					'type'     => 'checkbox',
+					'default'  => false,
+					'pro'      => true,
+					'disabled' => ! function_exists( 'enchant_broker_init' ),
+				),
+				'did_you_mean'
 			),
 			'weighting_header'          => array(
 				'id'   => 'weighting_header',
@@ -576,13 +730,16 @@ class Settings {
 				'size'    => 'small',
 				'pro'     => true,
 			),
-			'use_precomputed_tax_score' => array(
-				'id'      => 'use_precomputed_tax_score',
-				'name'    => esc_html__( 'Use precomputed taxonomy score', 'better-search' ),
-				'desc'    => esc_html__( 'Enable to use precomputed taxonomy score for relevance calculation. This can improve performance but will ignore the above weights for taxonomies when running live queries.', 'better-search' ),
-				'type'    => 'checkbox',
-				'default' => false,
-				'pro'     => true,
+			'use_precomputed_tax_score' => self::gate_field_to_feature(
+				array(
+					'id'      => 'use_precomputed_tax_score',
+					'name'    => esc_html__( 'Use precomputed taxonomy score', 'better-search' ),
+					'desc'    => esc_html__( 'Enable to use precomputed taxonomy score for relevance calculation. This can improve performance but will ignore the above weights for taxonomies when running live queries.', 'better-search' ),
+					'type'    => 'checkbox',
+					'default' => false,
+					'pro'     => true,
+				),
+				'custom_tables'
 			),
 			'inclusion_header'          => array(
 				'id'   => 'inclusion_header',
@@ -724,6 +881,105 @@ class Settings {
 		 * @param array $settings Counter settings array
 		 */
 		return apply_filters( self::$prefix . '_settings_counter', $settings );
+	}
+
+
+	/**
+	 * Retrieve the array of Redirects settings
+	 *
+	 * @since 4.4.0
+	 *
+	 * @return array Redirects settings array
+	 */
+	public static function settings_redirects() {
+		$settings = array(
+			'search_redirects_header' => array(
+				'id'   => 'search_redirects_header',
+				'name' => '<h3>' . esc_html__( 'Search Redirects', 'better-search' ) . '</h3>',
+				'desc' => esc_html__( 'Send searches for specific keywords straight to a post, page or URL instead of showing the results page. Redirected searches are still recorded in your search statistics.', 'better-search' ),
+				'type' => 'header',
+			),
+			'search_redirects'        => self::gate_field_to_feature(
+				array(
+					'id'                => 'search_redirects',
+					'name'              => esc_html__( 'Redirect rules', 'better-search' ),
+					'desc'              => esc_html__( 'Rules are checked in order, with exact matches taking priority over "contains" matches. Matching ignores case, leading and trailing spaces, and repeated spaces. The same keyword may appear in more than one rule; the first rule that matches wins, so put the rule you want to take precedence higher up the list. Add bsearch_no_redirect=1 to a search URL to see the results page instead; this works for administrators only.', 'better-search' ),
+					'type'              => 'repeater',
+					'default'           => array(),
+					'pro'               => true,
+					'live_update_field' => 'keywords',
+					'new_item_text'     => esc_html__( 'New redirect', 'better-search' ),
+					'add_button_text'   => esc_html__( 'Add redirect', 'better-search' ),
+					'required_one_of'   => array( 'destination_post', 'destination_url' ),
+					'fields'            => array(
+						'keywords'         => array(
+							'id'       => 'keywords',
+							'name'     => esc_html__( 'Keywords', 'better-search' ),
+							'desc'     => esc_html__( 'Comma-separated list of search terms that trigger this redirect. e.g. support, help, contact us', 'better-search' ),
+							'type'     => 'csv',
+							'required' => true,
+							'default'  => '',
+							'size'     => 'large',
+						),
+						'destination_post' => array(
+							'id'      => 'destination_post',
+							'name'    => esc_html__( 'Send visitors to this post or page', 'better-search' ),
+							'desc'    => esc_html__( 'Enter the ID of the post or page. You can see it in the address bar while editing it, as post=123. The post must be published and not password protected. Leave this blank to use the URL below instead.', 'better-search' ),
+							'type'    => 'postids',
+							'default' => '',
+							'size'    => 'small',
+						),
+						'destination_url'  => array(
+							'id'      => 'destination_url',
+							'name'    => esc_html__( 'Or send them to this URL', 'better-search' ),
+							'desc'    => esc_html__( 'Only used when the post or page above is blank. Enter a full address such as https://example.com/help/, or a path on this site such as /contact/.', 'better-search' ),
+							'type'    => 'url',
+							'default' => '',
+							'size'    => 'large',
+						),
+						'match_type'       => array(
+							'id'      => 'match_type',
+							'name'    => esc_html__( 'Match type', 'better-search' ),
+							'desc'    => esc_html__( 'Exact matches the whole search phrase. Contains matches when the keyword appears anywhere in the search phrase.', 'better-search' ),
+							'type'    => 'select',
+							'default' => 'exact',
+							'options' => array(
+								'exact'    => esc_html__( 'Exact match', 'better-search' ),
+								'contains' => esc_html__( 'Contains', 'better-search' ),
+							),
+						),
+						'redirect_type'    => array(
+							'id'      => 'redirect_type',
+							'name'    => esc_html__( 'Redirect type', 'better-search' ),
+							'desc'    => esc_html__( 'Use a temporary redirect unless you are certain the rule is permanent, because browsers cache permanent redirects aggressively.', 'better-search' ),
+							'type'    => 'select',
+							'default' => '302',
+							'options' => array(
+								'302' => esc_html__( '302 - Temporary', 'better-search' ),
+								'301' => esc_html__( '301 - Permanent', 'better-search' ),
+							),
+						),
+						'enabled'          => array(
+							'id'      => 'enabled',
+							'name'    => esc_html__( 'Enabled', 'better-search' ),
+							'desc'    => esc_html__( 'Uncheck to switch this rule off without deleting it.', 'better-search' ),
+							'type'    => 'checkbox',
+							'default' => 1,
+						),
+					),
+				),
+				'search_redirects'
+			),
+		);
+
+		/**
+		 * Filters the Redirects settings array
+		 *
+		 * @since 4.4.0
+		 *
+		 * @param array $settings Redirects settings array
+		 */
+		return apply_filters( self::$prefix . '_settings_redirects', $settings );
 	}
 
 
@@ -1238,10 +1494,88 @@ class Settings {
 		// Sanitize exclude_cat_slugs to save a new entry of exclude_categories.
 		Settings\Settings_Sanitize::sanitize_tax_slugs( $settings, 'exclude_cat_slugs', 'exclude_categories' );
 
+		self::flag_incomplete_repeater_rows( $settings );
+
 		// Delete the cache.
 		\WebberZone\Better_Search\Util\Cache::delete();
 
 		return $settings;
+	}
+
+	/**
+	 * Warn about repeater rows that fail their own required-field rules.
+	 *
+	 * Runs across every registered repeater field (found via `type => 'repeater'` in
+	 * get_registered_settings()), not just Search Redirects, so a repeater added later
+	 * gets this validation for free - no per-field wiring needed. The rows are kept: a
+	 * half-finished row is inert wherever it's consumed, and deleting the admin's
+	 * typing to enforce that would be worse.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @param array $settings Sanitized settings.
+	 * @return void
+	 */
+	public static function flag_incomplete_repeater_rows( $settings ) {
+		foreach ( self::get_registered_settings() as $section_settings ) {
+			foreach ( $section_settings as $field ) {
+				if ( ! isset( $field['type'], $field['id'] ) || 'repeater' !== $field['type'] ) {
+					continue;
+				}
+
+				if ( empty( $settings[ $field['id'] ] ) || ! is_array( $settings[ $field['id'] ] ) ) {
+					continue;
+				}
+
+				$incomplete_rows = Settings\Settings_Sanitize::get_incomplete_repeater_rows( $settings[ $field['id'] ], $field );
+
+				foreach ( $incomplete_rows as $index => $issue ) {
+					add_settings_error( self::$prefix . '-notices', '', self::get_incomplete_repeater_row_message( $field, $index, $issue ), 'error' );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Build the admin notice for one incomplete repeater row.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @param array $field Repeater field configuration.
+	 * @param int   $index Row position, zero-based.
+	 * @param array $issue Issue data from Settings_Sanitize::get_incomplete_repeater_rows().
+	 * @return string Message.
+	 */
+	private static function get_incomplete_repeater_row_message( array $field, $index, array $issue ) {
+		$subfields  = ! empty( $field['fields'] ) && is_array( $field['fields'] ) ? $field['fields'] : array();
+		$field_name = wp_strip_all_tags( (string) ( $field['name'] ?? '' ) );
+
+		$labels = array();
+		foreach ( $subfields as $subfield_id => $subfield ) {
+			$labels[ $subfield['id'] ?? $subfield_id ] = wp_strip_all_tags( (string) ( $subfield['name'] ?? '' ) );
+		}
+
+		$label_of_id = static function ( $subfield_id ) use ( $labels ) {
+			return empty( $labels[ $subfield_id ] ) ? $subfield_id : $labels[ $subfield_id ];
+		};
+
+		if ( ! empty( $issue['missing'] ) ) {
+			return sprintf(
+				/* translators: 1: repeater field name, 2: row position, 3: comma-separated list of missing subfield names. */
+				__( '%1$s row %2$d is missing %3$s, so it will be ignored.', 'better-search' ),
+				$field_name,
+				$index + 1,
+				implode( ', ', array_map( $label_of_id, $issue['missing'] ) )
+			);
+		}
+
+		return sprintf(
+			/* translators: 1: repeater field name, 2: row position, 3: comma/or-separated list of alternative subfield names. */
+			__( '%1$s row %2$d needs at least one of %3$s, so it will be ignored.', 'better-search' ),
+			$field_name,
+			$index + 1,
+			implode( ' or ', array_map( $label_of_id, $issue['missing_one_of'] ) )
+		);
 	}
 
 	/**

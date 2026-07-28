@@ -67,6 +67,10 @@ final class Hook_Loader {
 	 * @since 3.3.0
 	 */
 	public function register_widgets(): void {
+		if ( ! Feature_Manager::is_enabled( 'widgets' ) ) {
+			return;
+		}
+
 		register_widget( '\WebberZone\Better_Search\Frontend\Widgets\Search_Box' );
 		register_widget( '\WebberZone\Better_Search\Frontend\Widgets\Search_Heatmap' );
 	}

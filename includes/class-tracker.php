@@ -40,30 +40,7 @@ class Tracker {
 	 * @return void
 	 */
 	public static function enqueue_scripts() {
-		$include_code = true;
-
-		if ( ! is_search() ) {
-			$include_code = false;
-		}
-
-		$bpaged = ( isset( $_GET['bpaged'] ) ) ? absint( $_GET['bpaged'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-		if ( $bpaged || ! \bsearch_get_option( 'track_popular' ) || is_paged() ) {
-			$include_code = false;
-		}
-
-		$current_user_admin  = ( current_user_can( 'manage_options' ) ) ? true : false;  // Is the current user an admin?
-		$current_user_editor = ( ( current_user_can( 'edit_others_posts' ) ) && ( ! current_user_can( 'manage_options' ) ) ) ? true : false;    // Is the current user pure editor?
-
-		// If user is an admin.
-		if ( ( $current_user_admin ) && ( ! \bsearch_get_option( 'track_admins' ) ) ) {
-			$include_code = false;
-		}
-
-		// If user is an editor.
-		if ( ( $current_user_editor ) && ( ! \bsearch_get_option( 'track_editors' ) ) ) {
-			$include_code = false;
-		}
+		$include_code = is_search() && self::should_track();
 
 		if ( $include_code ) {
 			$search_query = rawurlencode( get_bsearch_query() );
@@ -106,6 +83,49 @@ class Tracker {
 			wp_localize_script( 'bsearch_tracker', 'ajax_bsearch_tracker', $ajax_bsearch_tracker );
 
 		}
+	}
+
+	/**
+	 * Whether the current request should have its search query tracked.
+	 *
+	 * Callers must establish that the request is a search themselves.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @return bool Whether the search query should be tracked.
+	 */
+	public static function should_track() {
+		if ( ! \bsearch_get_option( 'track_popular' ) ) {
+			return false;
+		}
+
+		$bpaged = ( isset( $_GET['bpaged'] ) ) ? absint( $_GET['bpaged'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if ( $bpaged || is_paged() ) {
+			return false;
+		}
+
+		$current_user_admin  = ( current_user_can( 'manage_options' ) ) ? true : false;  // Is the current user an admin?
+		$current_user_editor = ( ( current_user_can( 'edit_others_posts' ) ) && ( ! current_user_can( 'manage_options' ) ) ) ? true : false;    // Is the current user pure editor?
+
+		// If user is an admin.
+		if ( ( $current_user_admin ) && ( ! \bsearch_get_option( 'track_admins' ) ) ) {
+			return false;
+		}
+
+		// If user is an editor.
+		if ( ( $current_user_editor ) && ( ! \bsearch_get_option( 'track_editors' ) ) ) {
+			return false;
+		}
+
+		/**
+		 * Filter whether the current request should have its search query tracked.
+		 *
+		 * @since 4.4.0
+		 *
+		 * @param bool $should_track Whether the search query should be tracked.
+		 */
+		return (bool) apply_filters( 'bsearch_should_track', true );
 	}
 
 	/**

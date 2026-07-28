@@ -129,7 +129,17 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 *In development*
 
-* [Pro] Added "Did you mean" spelling suggestions for zero-result searches, with Suggest and Auto-correct modes and an optional enchant fallback.
+* Features:
+	* New: Feature Manager. Toggle individual features on/off from a new Features tab.
+	* [Pro] Added "Did you mean" spelling suggestions for zero-result searches, with Suggest and Auto-correct modes and an optional enchant fallback.
+	* [Pro] Added search redirects. Send visitors searching for chosen keywords straight to a post, page or URL instead of the search results page, configured from a new Redirects tab. Each rule takes a comma-separated keyword list, a destination and a 301 or 302 status, and can be switched off without being deleted. Find the destination post or page by typing its title, or enter any URL. Keywords match on the whole phrase ("Exact match") or anywhere within it ("Contains"), ignoring case and extra spaces; every exact rule is checked before any contains rule, and the first rule that matches wins. Redirected searches are still counted in your search statistics, and administrators can append `bsearch_no_redirect=1` to a search URL to see the normal results page.
+
+* Bug fixes:
+	* Fixed settings page layout overlapping the sidebar on wide viewports.
+	* Fixed the Search tab's label column rendering noticeably narrower than other tabs, caused by the "Filter these words" default value not wrapping.
+	* Fixed pro-only settings being silently discarded when saving the settings page in the free plugin. Fields that render disabled are no longer deleted just because the browser does not submit them.
+	* Fixed pro-only repeater fields rendering as fully editable in the free plugin: the individual rows, their inputs and the add/remove/reorder buttons are now correctly disabled.
+	* Fixed the settings page silently refusing to save when a collapsed repeater row had an empty required field. Browsers block submission of a required field they cannot show, without reporting an error, so required repeater fields are now validated after saving instead.
 
 = 4.3.2 =
 

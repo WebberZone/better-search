@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Better Search 4.4.0 is a work in progress** — not yet released. The current stable release is 4.3.2 (see `readme.txt`'s `Stable tag`); 4.4.0 is what's on this branch.
 
-Better Search Pro (v4.4.0-dev) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, "Did you mean" spelling suggestions, and more. It also tracks popular search queries and displays a search heatmap.
+Better Search Pro (v4.4.0-dev) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, "Did you mean" spelling suggestions, search redirects, and more. It also tracks popular search queries and displays a search heatmap.
 
 Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.6+, PHP 7.4+.
 
@@ -83,7 +83,7 @@ Both the free and pro plugins include a `bsearch_deactivate_other_instances()` f
 
 ### Admin (`includes/admin/`)
 
-- **`Settings`** — Settings page (`bsearch_options_page`); tabs for General, Search, Output, Heatmap, etc. Uses the WebberZone Settings API framework in `includes/admin/settings/` (`Settings_API`, `Settings_Form`, `Settings_Sanitize`, `Metabox_API`, `Settings_Wizard_API`).
+- **`Settings`** — Settings page (`bsearch_options_page`); tabs for Features, General, Performance, Search, Redirects, Output and Heatmap. Uses the WebberZone Settings API framework in `includes/admin/settings/` (`Settings_API`, `Settings_Form`, `Settings_Sanitize`, `Metabox_API`, `Settings_Wizard_API`).
 - **`Dashboard`** / **`Dashboard_Widgets`** — Search statistics dashboard page. Dashboard tabs support custom CSS classes, hide attributes, and are extensible via the `bsearch_admin_dashboard_tabs` filter.
 - **`Statistics`** / **`Statistics_Table`** — Search query log table.
 - **`Tools_Page`** — Utility actions (reindex, reset stats, etc.).
@@ -105,13 +105,17 @@ Both the free and pro plugins include a `bsearch_deactivate_other_instances()` f
 
 ### Pro Components (`includes/pro/`) [PRO ONLY]
 
-- **`Pro`** (`class-pro.php`) — Top-level pro orchestrator, instantiated as `Main::$pro`. Wires together all pro subsystems and registers additional hooks on `better_search_query_*` filters. Also handles minimum relevance threshold (`set_min_relevance`), LIKE fallback when FULLTEXT returns 0 results (`like_fallback_search`), "Did you mean" spelling suggestions (`suggest_did_you_mean`, registered at a later priority than `like_fallback_search` on the same `better_search_query_the_posts` filter so it isn't skipped by that method's early returns), slug search (`add_custom_clauses`), front/posts page exclusion (`exclude_special_pages` via `bsearch_exclude_post_ids` filter), and REST API search integration.
+- **`Pro`** (`class-pro.php`) — Top-level pro orchestrator, instantiated as `Main::$pro`. Wires together all pro subsystems and registers additional hooks on `better_search_query_*` filters. Also handles minimum relevance threshold (`set_min_relevance`), LIKE fallback when FULLTEXT returns 0 results (`like_fallback_search`), slug search (`add_custom_clauses`), front/posts page exclusion (`exclude_special_pages` via `bsearch_exclude_post_ids` filter), and REST API search integration.
 
 - **`Query_Modifier`** (`class-query-modifier.php`) — Extends the core query via filter hooks (`better_search_query_posts_fields`, `_join`, `_where_match`, `_groupby`, `_orderby_clauses`). Adds: custom table JOIN, cornerstone posts pinning (`the_posts` filter), max execution time hint, and additional `ORDER BY` clause control.
 
 - **`Fuzzy_Search`** (`class-fuzzy-search.php`) — Creates MySQL stored functions (`wz_phrase_similarity_soundex`, `wz_phrase_similarity_levenshtein`, `wz_levenshtein`) for phonetic/similarity matching and exposes `get_fuzzy_score_sql()` which `Query_Modifier` injects into the FULLTEXT `posts_fields` / `posts_where_match` clauses. Shows an admin notice if the fuzzy index is missing. Also exposes `get_did_you_mean_suggestion()`, the search-log-corpus lookup for "Did you mean" (first-letter + length-window prefilter, then `wz_levenshtein` — not `SOUNDEX()`, which rejects some single-edit typos it should catch).
 
 - **`Spell_Dictionary`** (`class-spell-dictionary.php`) — Content-index corpus for "Did you mean": a `wp_bsearch_dictionary` table (word, frequency) built from published post titles + public taxonomy term names, rebuilt twicedaily via cron and on activation, kept additive-fresh via `save_post`. Same prefilter + `wz_levenshtein` lookup as `Fuzzy_Search`, used as the second-tier corpus when the search log has no match.
+
+- **`Did_You_Mean`** (`class-did-you-mean.php`) — Owns the "Did you mean" flow on `better_search_query_the_posts` (priority 20, after `Pro::like_fallback_search`). Resolves each zero-result token through `Fuzzy_Search` → `Spell_Dictionary` → optional enchant, then either sets `$query->did_you_mean` (Suggest mode) or re-queries with the corrected phrase (Auto-correct mode).
+
+- **`Search_Redirects`** (`class-search-redirects.php`) — Redirects searches for configured keywords to a post, page or URL. Hooks `template_redirect` (not `pre_get_posts`) so `is_search()` and the search query are resolved and no output has been sent; explicitly excludes admin/AJAX/CLI/cron/REST/feed/robots/embed/trackback and non-main queries, since `template_redirect` fires ahead of the template loader's feed and robots branches. Matching normalises to lower-case, trimmed, whitespace-collapsed and runs all `exact` rules before any `contains` rule. Each rule has two separate destination fields — `destination_post` (a `postids` field) and `destination_url` (a `url` field) — and `get_configured_destination()` picks the post whenever it is filled in, with no fallback to the URL if that post cannot be resolved. Both fields are registered in the free `Admin\Settings`; `Pro\Admin::add_destination_post_lookup()` upgrades `destination_post` to a Tom Select post lookup via the `bsearch_settings_redirects` filter, so the free file carries no pro-only AJAX references. `resolve_destination()` still takes a single string and treats a numeric one as a post ID, resolved only when published and not password protected; the scheme allowlist in `esc_url_raw()` is what blocks `javascript:`/`data:`. `wp_http_validate_url()` is deliberately not used — it is for outbound requests and would reject valid non-standard ports and private IPs. Off-site destinations work by adding **only that one host** to `allowed_redirect_hosts` for the duration of the single `wp_safe_redirect()` call, and can be refused outright with `add_filter( 'bsearch_allow_offsite_redirect', '__return_false' )` — worth setting on Multisite, where every subsite admin has `manage_options` and could otherwise point searches off-site. Rules are stored per site in that site's `bsearch_settings`; there is no network-level rule list, and the network admin Settings page is a licence/info screen with no settings form. "Off-site" means a different **host**, so on a subdirectory network a redirect from one subsite to another counts as on-site and the filter above will not stop it; on a subdomain network it will. Because the JS tracker never runs on a redirected request, the search is recorded server-side via `Tracker::update_count()`, gated on `Tracker::should_track()`. `?bsearch_no_redirect=1` bypasses redirection for testing.
 
 - **`Multisite_Search`** (`class-multisite-search.php`) — Cross-site search across multiple blogs in a WordPress Multisite network. Uses `Custom_Tables\Posts_Search` to query across sites.
 
@@ -121,7 +125,7 @@ Both the free and pro plugins include a `bsearch_deactivate_other_instances()` f
   - `Custom_Tables_Admin` — Admin UI with reindex action, InnoDB conversion tool (shows current engine status with conversion form), and enqueues `reindex.js` for AJAX reindexing progress.
   - `Posts_Search` — Executes search queries against the custom table.
 
-- **`Admin`** (`class-admin.php`) — Pro-specific admin additions (extra settings sections, tools). Includes dashboard chart drill-down feature: click a bar in the daily searches chart to view top 20 popular searches for that day (`bsearch_get_day_searches` AJAX action). Enqueues `includes/pro/js/chart-interactions.js` for Chart.js click/hover/tooltip handling.
+- **`Admin`** (`class-admin.php`) — Pro-specific admin additions (extra settings sections, tools). Includes dashboard chart drill-down feature: click a bar in the daily searches chart to view top 20 popular searches for that day (`bsearch_get_day_searches` AJAX action). Enqueues `includes/pro/js/chart-interactions.js` for Chart.js click/hover/tooltip handling. Also owns the redirect destination post lookup (`bsearch_destination_post_search` AJAX action, admin-only — no `nopriv` registration — behind a nonce and `manage_options`, returning published, unprotected posts matched on title only via `search_columns`). It reuses the Settings API's Tom Select assets without touching them: the field carries `data-wp-prefix="BSEARCHREDIRECTS"`, so `tom-select-init.js` reads `window.BSEARCHREDIRECTSTomSelectSettings` — a separate localised object — instead of the shared `WZTomSelectSettings`, which is also how already-saved IDs get preloaded with their titles rather than showing a bare number.
 
 - **`Network`** (`network/`) — Multisite network admin pages. `Dashboard` registers a network-admin dashboard page and reuses the base `Admin\Dashboard` internally. `Statistics` reuses `Statistics_Table` to display cross-network search stats under the network admin menu.
 
@@ -158,7 +162,8 @@ Pro settings are added to the existing `bsearch_settings` option. The `Pro\Admin
 | Scheduled index reconciliation | No | Yes (`Sync_Manager` cron) |
 | WP-CLI commands | No | Yes (`CLI_Manager`, 8 subcommands incl. `ecsi`) |
 | Network admin dashboard & stats | No | Yes (`Network\Dashboard`, `Network\Statistics`) |
-| "Did you mean" spelling suggestions | No | Yes (`Pro::suggest_did_you_mean`, `Fuzzy_Search`, `Spell_Dictionary`) |
+| "Did you mean" spelling suggestions | No | Yes (`Did_You_Mean`, `Fuzzy_Search`, `Spell_Dictionary`) |
+| Search redirects (keyword → page/URL) | No | Yes (`Search_Redirects`) |
 
 ## Shared framework files: `@since` convention
 
