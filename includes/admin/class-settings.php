@@ -380,6 +380,14 @@ class Settings {
 				'default' => 1,
 				'pro'     => true,
 			),
+			'enable_did_you_mean'     => array(
+				'id'      => 'enable_did_you_mean',
+				'name'    => esc_html__( '"Did you mean" suggestions', 'better-search' ),
+				'desc'    => esc_html__( 'Suggest a corrected search term, drawn from your own search log, when a search returns zero results. Configure the mode and thresholds on the Search tab.', 'better-search' ),
+				'type'    => 'checkbox',
+				'default' => false,
+				'pro'     => true,
+			),
 			'enable_search_redirects' => array(
 				'id'      => 'enable_search_redirects',
 				'name'    => esc_html__( 'Search redirects', 'better-search' ),
@@ -619,14 +627,6 @@ class Settings {
 					'pro'     => true,
 				),
 				'fuzzy_search'
-			),
-			'enable_did_you_mean'       => array(
-				'id'      => 'enable_did_you_mean',
-				'name'    => esc_html__( 'Enable "Did you mean" suggestions', 'better-search' ),
-				'desc'    => esc_html__( 'Suggest a corrected search term, drawn from your own search log, when a search returns zero results.', 'better-search' ),
-				'type'    => 'checkbox',
-				'default' => false,
-				'pro'     => true,
 			),
 			'did_you_mean_min_searches' => self::gate_field_to_feature(
 				array(
