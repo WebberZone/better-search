@@ -19,6 +19,14 @@ if ( ! defined( 'WPINC' ) ) {
 class Db {
 
 	/**
+	 * FULLTEXT index schema version. Bump whenever the registered index set changes.
+	 *
+	 * @since 4.4.0
+	 * @var int
+	 */
+	const INDEX_VERSION = 2;
+
+	/**
 	 * Name of the main table.
 	 *
 	 * @since 4.2.0
@@ -62,7 +70,7 @@ class Db {
 		$indexes = array_merge( self::get_fulltext_indexes(), self::get_old_fulltext_indexes() );
 
 		foreach ( $indexes as $index => $columns ) {
-			if ( self::is_index_installed( $index ) ) {
+			if ( self::index_exists( $index ) ) {
 				$index = esc_sql( $index );
 				$wpdb->query( "ALTER TABLE {$wpdb->posts} DROP INDEX $index" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			}
@@ -78,30 +86,37 @@ class Db {
 	 * @return bool True if the index exists, false otherwise.
 	 */
 	public static function is_index_installed( $index ) {
+		$aliases = self::get_legacy_index_aliases();
+
+		return self::index_exists( $index ) || self::index_exists( $aliases[ $index ] ?? '' );
+	}
+
+	/**
+	 * Check if an index with this exact name exists on the posts table.
+	 *
+	 * Unlike is_index_installed(), this ignores legacy aliases - use it when acting on the
+	 * index itself, e.g. building DROP statements.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @param string $index Index name.
+	 * @return bool True if the index exists, false otherwise.
+	 */
+	public static function index_exists( $index ) {
 		global $wpdb;
 
-		$new_indexes = self::get_fulltext_indexes();
-		$old_indexes = self::get_old_fulltext_indexes();
-
-		// Find the corresponding old index name if the given index is a new one.
-		$old_index_name = '';
-		if ( in_array( $index, array_keys( $new_indexes ), true ) ) {
-			$key            = array_search( $index, array_keys( $new_indexes ), true );
-			$old_index_keys = array_keys( $old_indexes );
-			if ( isset( $old_index_keys[ $key ] ) ) {
-				$old_index_name = $old_index_keys[ $key ];
-			}
+		if ( '' === $index ) {
+			return false;
 		}
 
-		$index_exists = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$exists = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->prepare(
-				"SHOW INDEX FROM {$wpdb->posts} WHERE Key_name = %s OR Key_name = %s",
-				$index,
-				$old_index_name
+				"SHOW INDEX FROM {$wpdb->posts} WHERE Key_name = %s",
+				$index
 			)
 		);
 
-		return (bool) $index_exists;
+		return (bool) $exists;
 	}
 
 	/**
@@ -160,11 +175,69 @@ class Db {
 	}
 
 	/**
+	 * Get the map of current index names to the legacy index name each one replaces.
+	 *
+	 * The wz_ indexes are shared across WebberZone plugins, so a sibling plugin's index on the
+	 * same columns satisfies ours.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @return array Map of current index name => legacy index name.
+	 */
+	public static function get_legacy_index_aliases() {
+		$aliases = array(
+			'wz_title_content' => 'bsearch',
+			'wz_title'         => 'bsearch_title',
+			'wz_content'       => 'bsearch_content',
+			'wz_excerpt'       => 'crp_related_excerpt',
+		);
+
+		/**
+		 * Filter the map of current index names to legacy index names.
+		 *
+		 * @since 4.4.0
+		 *
+		 * @param array $aliases Map of current index name => legacy index name.
+		 */
+		return apply_filters( 'bsearch_legacy_index_aliases', $aliases );
+	}
+
+	/**
+	 * Create any missing FULLTEXT indexes once per index schema version.
+	 *
+	 * Existing installs never re-run activation, so a newly registered index would otherwise
+	 * wait on the user clicking through the missing-index notice.
+	 *
+	 * @since 4.4.0
+	 */
+	public static function maybe_heal_fulltext_indexes() {
+		global $wpdb;
+
+		if ( (int) get_option( 'bsearch_index_version', 0 ) >= self::INDEX_VERSION ) {
+			return;
+		}
+
+		if ( ! bsearch_get_option( 'use_fulltext' ) ) {
+			return;
+		}
+
+		$wpdb->hide_errors();
+		self::create_fulltext_indexes();
+		$wpdb->show_errors();
+
+		// Only mark the version as healed if every index is actually in place, so a
+		// failed ALTER is retried instead of being silently recorded as done.
+		if ( self::is_fulltext_index_installed() ) {
+			update_option( 'bsearch_index_version', self::INDEX_VERSION );
+		}
+	}
+
+	/**
 	 * Check the status of all fulltext indexes.
 	 *
 	 * @since 4.0.0
 	 *
-	 * @return array Array of index statuses indicating whether they are installed.
+	 * @return array Array of index statuses with 'installed' boolean flag and 'status' text.
 	 */
 	public static function check_fulltext_indexes() {
 		// Get the list of fulltext indexes.
@@ -176,8 +249,9 @@ class Db {
 			$is_installed = self::is_index_installed( $index );
 
 			$statuses[ $index ] = array(
-				'columns' => $columns,
-				'status'  => $is_installed
+				'columns'   => $columns,
+				'installed' => $is_installed,
+				'status'    => $is_installed
 					? '<span style="color: #006400;">' . __( 'Installed', 'better-search' ) . '</span>'
 					: '<span style="color: #8B0000;">' . __( 'Not Installed', 'better-search' ) . '</span>',
 			);
