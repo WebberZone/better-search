@@ -93,9 +93,9 @@ class Activator {
 		$table_name_daily = $wpdb->prefix . self::$table_name_daily;
 
 		// Create FULLTEXT indexes.
-		$wpdb->hide_errors();
+		$show_errors = $wpdb->hide_errors();
 		Db::create_fulltext_indexes();
-		$wpdb->show_errors();
+		$wpdb->show_errors( $show_errors );
 
 		// Create tables if not exists.
 		Db::maybe_create_table( $table_name, Db::create_full_table_sql() );

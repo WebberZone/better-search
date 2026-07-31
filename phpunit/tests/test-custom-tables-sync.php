@@ -34,10 +34,10 @@ class CustomTablesSyncTest extends WP_UnitTestCase {
 		// The temp-table filter is not yet active at this point, so the
 		// table is a real InnoDB table that supports FULLTEXT indexes.
 		global $wpdb;
-		$wpdb->hide_errors();
+		$show_errors = $wpdb->hide_errors();
 		$table_manager = new Table_Manager();
 		$table_manager->create_tables();
-		$wpdb->show_errors();
+		$wpdb->show_errors( $show_errors );
 	}
 
 	public static function tear_down_after_class(): void {
