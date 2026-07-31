@@ -2,6 +2,13 @@
 
 This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
+## Response Rules
+
+- Return only the changed function or section, not the full file
+- No explanation unless asked
+- No suggestions outside the scope of what was asked
+- Skip preamble and trailing summaries
+
 ## Plugin Overview
 
 **Better Search 4.4.0 is a work in progress** — not yet released. The current stable release is 4.3.2 (see `readme.txt`'s `Stable tag`); 4.4.0 is what's on this branch.
