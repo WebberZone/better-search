@@ -35,10 +35,10 @@ tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
  */
 function _bsearch_create_tables_and_indexes() {
 	global $wpdb;
-	$wpdb->hide_errors();
+	$show_errors = $wpdb->hide_errors();
 	\WebberZone\Better_Search\Db::create_tables();
 	\WebberZone\Better_Search\Db::create_fulltext_indexes();
-	$wpdb->show_errors();
+	$wpdb->show_errors( $show_errors );
 }
 tests_add_filter( 'wp_loaded', '_bsearch_create_tables_and_indexes' );
 
