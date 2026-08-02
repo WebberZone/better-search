@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://wzn.io/donate-wz
-Stable tag: 4.3.2
+Stable tag: 4.4.0
 Requires at least: 6.6
 Tested up to: 7.0
 Requires PHP: 7.4
@@ -127,21 +127,28 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.4.0 =
 
-*In development*
+*Release Date - 2 August 2026*
+
+Read more in the [Better Search v4.4.0 release post](https://webberzone.com/announcements/better-search-v4-4-0/).
 
 * Features:
-	* New: Feature Manager. Toggle individual features on/off from a new Features tab.
-	* [Pro] Added "Did you mean" spelling suggestions for zero-result searches, with Suggest and Auto-correct modes and an optional enchant fallback.
-	* [Pro] Added search redirects. Send visitors searching for chosen keywords straight to a post, page or URL instead of the search results page, configured from a new Redirects tab. Each rule takes a comma-separated keyword list, a destination and a 301 or 302 status, and can be switched off without being deleted. Find the destination post or page by typing its title, or enter any URL. Keywords match on the whole phrase ("Exact match") or anywhere within it ("Contains"), ignoring case and extra spaces; every exact rule is checked before any contains rule, and the first rule that matches wins. Redirected searches are still counted in your search statistics, and administrators can append `bsearch_no_redirect=1` to a search URL to see the normal results page.
+	* Added a Feature Manager to toggle optional features from a new Features tab.
+	* [Pro] Added "Did you mean" suggestions for zero-result searches, with Suggest and Auto-correct modes.
+	* [Pro] Added search redirects with exact or contains matching and 301 or 302 status codes.
+	* Added search to quickly find options across settings tabs.
+
+* Enhancements:
+	* Added the `bsearch_pre_index_content_parts` filter to modify content before it is stored in custom search tables.
+	* Standardized FULLTEXT index names across database tools.
+	* Updated the Settings API to version 2.10.1 and refreshed admin assets.
 
 * Bug fixes:
-	* Fixed settings page layout overlapping the sidebar on wide viewports.
-	* Fixed the Search tab's label column rendering noticeably narrower than other tabs, caused by the "Filter these words" default value not wrapping.
-	* Fixed pro-only settings being silently discarded when saving the settings page in the free plugin. Fields that render disabled are no longer deleted just because the browser does not submit them.
-	* Fixed pro-only repeater fields rendering as fully editable in the free plugin: the individual rows, their inputs and the add/remove/reorder buttons are now correctly disabled.
-	* Fixed the settings page silently refusing to save when a collapsed repeater row had an empty required field. Browsers block submission of a required field they cannot show, without reporting an error, so required repeater fields are now validated after saving instead.
-	* [Pro] Fixed the setup wizard's "Index Custom Tables" step appearing or disappearing mid-run, which skipped or mis-recorded the final step. It is now always shown.
-	* Corrected the wizard's Features step description, which claimed settings for disabled features would be hidden.
+	* Fixed settings page layout and field rendering issues.
+	* Fixed disabled Pro settings being discarded or remaining editable in the free plugin.
+	* Fixed validation preventing settings from saving when required fields were inside collapsed repeater rows.
+	* [Pro] Fixed the setup wizard changing steps while custom tables were being indexed.
+	* Fixed database checks not restoring the previous error display state.
+	* Fixed highlighting fallback behavior for queries containing an unclosed quote.
 
 = 4.3.2 =
 
@@ -216,5 +223,5 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 == Upgrade Notice ==
 
-= 4.3.2 =
-Search highlighting now preserves quoted phrases and skips excluded terms, and adds client-side highlighting for cached pages. Also fixes "Highlight followed links" silently failing behind SSL-terminating proxies.
+= 4.4.0 =
+Adds the Feature Manager, settings search, "Did you mean" suggestions and search redirects, alongside Settings API improvements and bug fixes.
