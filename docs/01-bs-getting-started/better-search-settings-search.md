@@ -34,6 +34,29 @@ Minimum characters required for a fulltext search. If the search term has fewer 
 
 Use MySQL BOOLEAN mode for FULLTEXT searches. Allows advanced operators, but may limit some relevancy features. <a href="https://dev.mysql.com/doc/refman/8.0/en/fulltext-boolean.html" target="_blank" rel="noreferrer noopener">MySQL BOOLEAN Mode Documentation</a>.
 
+#### BOOLEAN mode operators
+
+With BOOLEAN mode active, visitors can use the following operators in the search box. They are passed straight through to MySQL.
+
+| Operator | Example | What it does |
+|---|---|---|
+| `+` | `+wordpress plugin` | The word **must** be present in every result. |
+| `-` | `wordpress -theme` | The word must **not** be present. Posts containing it are removed from the results entirely. |
+| `~` | `wordpress ~beta` | **Demotes** rather than excludes. The post is still returned, but the word contributes negatively to its relevance score, so it ranks lower. |
+| `>` | `>plugin` | Increases the word's contribution to the relevance score, pushing matching posts **higher** up the results. |
+| `<` | `<theme` | Decreases the word's contribution, pushing matching posts **lower** down the results. |
+| `*` | `plug*` | Trailing wildcard. Matches `plugin`, `plugins`, `plugged`, and so on. |
+| `""` | `"wordpress plugin"` | Exact phrase match. |
+| `( )` | `+wordpress +(plugin theme)` | Groups words into a subexpression, so operators can be applied to the group. |
+
+A few things worth knowing:
+
+- **`-` and `~` are not the same.** `-` filters a post out of the results; `~` keeps it but ranks it lower. Use `~` for "noise" words that shouldn't disqualify a post.
+- **`>` and `<` only affect ranking, not matching.** They change the relevance score, so the effect is only visible when results are sorted by relevance (the default). They also do not make a word required — a word with no `+` in front of it stays optional. A typical use is inside a group: `+wordpress +(>plugin <theme)` returns posts containing "wordpress" plus at least one of "plugin" or "theme", ranking the "plugin" matches higher.
+- **Very short words are ignored.** MySQL skips words below its minimum token length — 3 characters for InnoDB (`innodb_ft_min_token_size`) and 4 for MyISAM (`ft_min_word_len`) by default.
+- **Phrase searches work even with BOOLEAN mode off.** If a query contains double-quoted text, Better Search enables BOOLEAN mode automatically for that query so the phrase is matched correctly.
+- **Fuzzy search is skipped for these queries.** If a search uses any of `+ - ~ > < *`, [fuzzy matching](https://webberzone.com/support/knowledgebase/fuzzy-matches/) is automatically disabled for it, since the visitor has asked for a precise query.
+
 ### Enable LIKE fallback *(Pro only)*
 
 If FULLTEXT returns zero results, a LIKE search is performed instead.
