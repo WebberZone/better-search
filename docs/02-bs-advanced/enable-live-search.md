@@ -22,13 +22,12 @@ Enabling live search improves the user experience by:
 
 It benefits content-heavy sites where users frequently search for specific posts, products, or pages.
 
-## How to Enable Live Search in Better Search Pro
+## How to Enable Live Search
 
-[Better Search Pro](https://webberzone.com/plugins/better-search/pro/) makes enabling live search simple. Follow these steps:
+[Better Search](https://webberzone.com/plugins/better-search/) includes live search in both the free and Pro versions. Follow these steps:
 
 1. Go to **Better Search → Settings** in your WordPress admin.
-2. Under the **General** tab, locate the setting **Enable live search**.
-3. Check the box to activate the feature.
-4. Save your changes.
+2. Open the **Features** tab and turn on **Live search**.
+3. Save your changes.
 
-Once enabled, Better Search Pro automatically takes over your search forms and applies live Ajax functionality. You don’t need to add extra code or scripts.
+Once enabled, Better Search automatically takes over your search forms and applies live Ajax functionality. You don't need to add extra code or scripts.
