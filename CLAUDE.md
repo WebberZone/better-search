@@ -11,9 +11,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Plugin Overview
 
-**Better Search 4.4.0 is a work in progress** — not yet released. The current stable release is 4.3.2 (see `readme.txt`'s `Stable tag`); 4.4.0 is what's on this branch.
+**Better Search 4.4.0 is the current stable release.**
 
-Better Search Pro (v4.4.0-dev) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, "Did you mean" spelling suggestions, search redirects, and more. It also tracks popular search queries and displays a search heatmap.
+Better Search Pro (v4.4.0) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, "Did you mean" spelling suggestions, search redirects, and more. It also tracks popular search queries and displays a search heatmap.
 
 Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.6+, PHP 7.4+.
 
