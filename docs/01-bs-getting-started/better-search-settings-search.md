@@ -52,24 +52,15 @@ Enable [fuzzy search](https://webberzone.com/support/knowledgebase/fuzzy-matches
 > [!WARNING]
 > ⚠️ Fuzzy searching can be computationally intensive; caching is recommended for high-traffic sites.
 
-### Enable "Did you mean" suggestions *(Pro only)*
+### "Did you mean" suggestions *(Pro only)*
 
-Suggest a corrected search term, drawn from your own search log, when a search returns zero results. See [Did You Mean Spelling Suggestions](https://webberzone.com/support/knowledgebase/did-you-mean-spelling-suggestions/) for full details.
+These settings only appear when **"Did you mean" suggestions** is turned on in the [Features tab](https://webberzone.com/support/knowledgebase/better-search-feature-manager/). See [Did You Mean Spelling Suggestions](https://webberzone.com/support/knowledgebase/did-you-mean-spelling-suggestions/) for full configuration details.
 
-### Minimum searches to qualify as a suggestion *(Pro only)*
+**Minimum searches to qualify as a suggestion** — a term must have been searched at least this many times before it can be suggested as a correction. Default: `3`.
 
-A term must have been searched at least this many times before it can be suggested as a correction. Default: `3`.
+**"Did you mean" mode** — **Suggest ("Did you mean")** shows a "Did you mean" link but still displays the original (empty) results. **Auto-correct** transparently re-runs the search with the corrected term when it actually returns results, showing a link back to the original query.
 
-### "Did you mean" mode *(Pro only)*
-
-Choose how a suggestion is presented:
-
-- **Suggest ("Did you mean")**: Shows a "Did you mean" link but still displays the original (empty) results.
-- **Auto-correct**: Transparently re-runs the search with the corrected term when it actually returns results, showing a link back to the original query.
-
-### Use enchant as a fallback *(Pro only)*
-
-Falls back to the server's enchant spellchecker if your search log and site content have no close match. Disabled if the extension isn't installed — see [Installing enchant on your server](https://webberzone.com/support/knowledgebase/did-you-mean-spelling-suggestions/#installing-enchant-on-your-server).
+**Use enchant as a fallback** — falls back to the server's enchant spellchecker if your search log and site content have no close match. Disabled if the extension isn't installed. See [Installing enchant on your server](https://webberzone.com/support/knowledgebase/did-you-mean-spelling-suggestions/#installing-enchant-on-your-server).
 
 ## Weighting
 

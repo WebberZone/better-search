@@ -28,9 +28,11 @@ Better Search is free to use and replaces WordPress search with relevance-ranked
 | Popular searches heatmap (widget + shortcode) | ✅ | ✅ |
 | Custom search results template | ✅ | ✅ |
 | Search query tracking (daily and total) | ✅ | ✅ |
+| Feature Manager (toggle optional features on/off) | ✅ | ✅ |
 | **Search Quality & Relevance** | | |
 | Fuzzy / phonetic matching | ❌ | ✅ |
 | "Did you mean" spelling suggestions | ❌ | ✅ |
+| Search redirects (keyword → destination) | ❌ | ✅ |
 | Minimum relevance threshold | ❌ | ✅ |
 | Minimum characters before FULLTEXT search (configurable) | ❌ | ✅ |
 | Taxonomy weight configuration (categories, tags, precomputed score) | ❌ | ✅ |

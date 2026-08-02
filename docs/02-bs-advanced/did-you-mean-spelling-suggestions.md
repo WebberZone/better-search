@@ -24,16 +24,17 @@ This is especially useful for sites with long-tail search traffic, where visitor
 
 ## How to Enable "Did You Mean"
 
-[Better Search Pro](https://webberzone.com/plugins/better-search/pro/) adds these settings under the **Search** tab:
+[Better Search Pro](https://webberzone.com/plugins/better-search/pro/) adds these settings:
 
 1. Go to **Better Search → Settings** in the WordPress admin.
-2. Under the **Search** tab, check **Enable "Did you mean" suggestions**.
-3. Choose a **"Did you mean" mode**:
+2. Open the **Features** tab and turn on **"Did you mean" suggestions**.
+3. Save your changes. The **Search** tab will show the remaining "Did you mean" settings.
+4. Open the **Search** tab and choose a **"Did you mean" mode**:
     - **Suggest ("Did you mean")**: Shows a "Did you mean" link on the zero-results page. The original (empty) results are still displayed.
     - **Auto-correct**: Transparently re-runs the search with the corrected term when it actually returns results, and shows a link back to the original query.
-4. Set **Minimum searches to qualify as a suggestion** — a term must have been searched at least this many times in your search log before it can be suggested as a correction. Default: `3`.
-5. Optionally, enable **Use enchant as a fallback** to fall back to the server's enchant spellchecker when neither your search log nor your site content has a close match. The setting shows the extension's detected status and is disabled if enchant isn't installed on your server — see [Installing enchant on your server](#installing-enchant-on-your-server) below.
-6. Save your changes.
+5. Set **Minimum searches to qualify as a suggestion** — a term must have been searched at least this many times in your search log before it can be suggested as a correction. Default: `3`.
+6. Optionally, enable **Use enchant as a fallback** to fall back to the server's enchant spellchecker when neither your search log nor your site content has a close match. The setting shows the extension's detected status and is disabled if enchant isn't installed on your server — see [Installing enchant on your server](#installing-enchant-on-your-server) below.
+7. Save your changes.
 
 ## How Suggestions Are Found
 

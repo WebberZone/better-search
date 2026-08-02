@@ -20,7 +20,7 @@ Disabling this will use the plugin’s in-built advanced search results page, wh
 
 ## Enable Live Search
 
-Turn this on to [enable live search functionality](https://webberzone.com/support/knowledgebase/enable-live-search/). Live search dynamically displays results as users type into the search box, providing an interactive experience.
+Turn this on to [enable live search functionality](https://webberzone.com/support/knowledgebase/enable-live-search/). Live search dynamically displays results as users type into the search box, providing an interactive experience. This setting lives on the [Features tab](https://webberzone.com/support/knowledgebase/better-search-feature-manager/).
 
 ## Enable REST API *(Pro only)*
 
