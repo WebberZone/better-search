@@ -18,10 +18,6 @@ This setting integrates Better Search completely with your theme. When enabled, 
 
 Disabling this will use the plugin’s in-built advanced search results page, which you can override by creating the `better-search-template.php` file in your theme’s folder. If you’re using FSE, you can create the block template with the name `better-search-template.html`.
 
-## Enable Live Search
-
-Turn this on to [enable live search functionality](https://webberzone.com/support/knowledgebase/enable-live-search/). Live search dynamically displays results as users type into the search box, providing an interactive experience. This setting lives on the [Features tab](https://webberzone.com/support/knowledgebase/better-search-feature-manager/).
-
 ## Enable REST API *(Pro only)*
 
 When enabled, this option integrates Better Search with the search REST API endpoint. It allows developers to fetch relevant search results programmatically via the API, offering flexibility for custom integrations. Read the [REST API documentation](https://webberzone.com/support/knowledgebase/better-search-rest-api/) on which parameters you can use.
