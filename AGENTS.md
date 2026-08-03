@@ -9,6 +9,13 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 - No suggestions outside the scope of what was asked
 - Skip preamble and trailing summaries
 
+## Links
+
+- GitHub: <https://github.com/WebberZone/better-search>
+- WordPress.org: <https://wordpress.org/plugins/better-search/>
+- Documentation: <https://webberzone.com/support/product/better-search/>
+- webberzone.com: <https://webberzone.com/plugins/better-search/>
+
 ## Plugin Overview
 
 **Better Search 4.4.0 is the current stable release.**
