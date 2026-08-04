@@ -78,7 +78,7 @@ order="RAND"
 
 ## Customize the widget with code
 
-Use the `widget_bsearch_heatmap_args` filter to override the widget output:
+Use the [`widget_bsearch_heatmap_args`](https://webberzone.dev/better-search/hooks/widget_bsearch_heatmap_args/) filter to override the widget output:
 
 ``` php
 add_filter(
@@ -126,3 +126,7 @@ If counts are enabled with `show_count`, use:
  opacity: 0.75;
 }
 ```
+
+## See also
+
+- [`widget_bsearch_heatmap_args`](https://webberzone.dev/better-search/hooks/widget_bsearch_heatmap_args/)

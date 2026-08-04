@@ -21,7 +21,7 @@ Both settings work together with two different mechanisms depending on where the
 
 ### Server-side highlighting (search results page)
 
-On the search results page itself, Better Search highlights terms server-side. The `Display` class hooks into `the_title`, `the_content`, `get_the_excerpt`, and `the_bsearch_excerpt` and wraps each matched term while the page is being generated. Because this only runs on `is_search()`, it always works — it doesn't depend on the visitor's browser or any caching layer.
+On the search results page itself, Better Search highlights terms server-side. The `Display` class hooks into `the_title`, `the_content`, `get_the_excerpt`, and [`the_bsearch_excerpt`](https://webberzone.dev/better-search/hooks/the_bsearch_excerpt/) and wraps each matched term while the page is being generated. Because this only runs on `is_search()`, it always works — it doesn't depend on the visitor's browser or any caching layer.
 
 ### Client-side highlighting (followed links)
 
@@ -41,7 +41,7 @@ The client-side script is deliberately dependency-free (no jQuery, no build step
 
 ### Filters
 
-#### `bsearch_highlight_tag`
+#### [`bsearch_highlight_tag`](https://webberzone.dev/better-search/hooks/bsearch_highlight_tag/)
 
 Filters the HTML tag used to wrap each highlighted term.
 
@@ -53,7 +53,7 @@ add_filter( 'bsearch_highlight_tag', function () {
 
 Allowed values: `mark`, `span`, `strong`, `em`. Anything else falls back to `mark`. Default: `mark`.
 
-#### `bsearch_highlight_class`
+#### [`bsearch_highlight_class`](https://webberzone.dev/better-search/hooks/bsearch_highlight_class/)
 
 Filters the CSS class applied to each highlight wrapper.
 
@@ -65,7 +65,7 @@ add_filter( 'bsearch_highlight_class', function () {
 
 The value is passed through `sanitize_html_class()`. Default: `bsearch_highlight`.
 
-#### `bsearch_highlight_max_terms`
+#### [`bsearch_highlight_max_terms`](https://webberzone.dev/better-search/hooks/bsearch_highlight_max_terms/)
 
 Filters the maximum number of search terms the client-side script will highlight.
 
@@ -77,7 +77,7 @@ add_filter( 'bsearch_highlight_max_terms', function () {
 
 Default: `50`.
 
-#### `bsearch_highlight_js_selectors`
+#### [`bsearch_highlight_js_selectors`](https://webberzone.dev/better-search/hooks/bsearch_highlight_js_selectors/)
 
 Filters the CSS selector(s) the script uses to scope where it looks for text to highlight.
 
@@ -102,3 +102,8 @@ It is not enqueued on archives, the homepage, or the search results page itself 
 ## See also
 
 - [Better Search Settings – Output](/knowledgebase/better-search-settings-output/)
+- [`the_bsearch_excerpt`](https://webberzone.dev/better-search/hooks/the_bsearch_excerpt/)
+- [`bsearch_highlight_tag`](https://webberzone.dev/better-search/hooks/bsearch_highlight_tag/)
+- [`bsearch_highlight_class`](https://webberzone.dev/better-search/hooks/bsearch_highlight_class/)
+- [`bsearch_highlight_max_terms`](https://webberzone.dev/better-search/hooks/bsearch_highlight_max_terms/)
+- [`bsearch_highlight_js_selectors`](https://webberzone.dev/better-search/hooks/bsearch_highlight_js_selectors/)
