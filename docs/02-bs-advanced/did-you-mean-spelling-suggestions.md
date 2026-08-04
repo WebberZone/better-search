@@ -98,7 +98,7 @@ Then reload the plugin's **Search** settings tab — the status message should s
 
 ### Choosing a dictionary locale
 
-Enchant looks up a dictionary matching the locale from the `bsearch_did_you_mean_enchant_locale` filter (default `en_US`). If your site's content is in another language, make sure the matching dictionary package is installed (e.g. `aspell-de` for German) and filter the locale to match:
+Enchant looks up a dictionary matching the locale from the [`bsearch_did_you_mean_enchant_locale`](https://webberzone.dev/better-search/hooks/bsearch_did_you_mean_enchant_locale/) filter (default `en_US`). If your site's content is in another language, make sure the matching dictionary package is installed (e.g. `aspell-de` for German) and filter the locale to match:
 
 ```php
 add_filter( 'bsearch_did_you_mean_enchant_locale', fn() => 'de_DE' );
@@ -120,7 +120,7 @@ Displays a "Did you mean: `<suggested term>`?" link when Suggest mode found a co
 <?php the_bsearch_did_you_mean(); ?>
 ```
 
-Accepts an optional `$args` array with `before` and `after` markup, defaulting to `<p class="bsearch-did-you-mean">` / `</p>`. Returns an empty string when there's no suggestion for the current query — safe to call unconditionally. A `get_bsearch_did_you_mean()` variant returns the markup instead of echoing it.
+Accepts an optional `$args` array with `before` and `after` markup, defaulting to `<p class="bsearch-did-you-mean">` / `</p>`. Returns an empty string when there's no suggestion for the current query — safe to call unconditionally. A [`get_bsearch_did_you_mean()`](https://webberzone.dev/better-search/hooks/get_bsearch_did_you_mean/) variant returns the markup instead of echoing it.
 
 ### `the_bsearch_autocorrect_notice()`
 
@@ -130,12 +130,12 @@ Displays a "Showing results for **`<corrected term>`** — search instead for `<
 <?php the_bsearch_autocorrect_notice(); ?>
 ```
 
-Accepts the same `before` / `after` arguments, defaulting to `<p class="bsearch-autocorrect-notice">` / `</p>`. A `get_bsearch_autocorrect_notice()` variant returns the markup instead of echoing it.
+Accepts the same `before` / `after` arguments, defaulting to `<p class="bsearch-autocorrect-notice">` / `</p>`. A [`get_bsearch_autocorrect_notice()`](https://webberzone.dev/better-search/hooks/get_bsearch_autocorrect_notice/) variant returns the markup instead of echoing it.
 
 ## Developer Filters
 
-- `bsearch_spelling_suggestion` — Filters the final suggestion resolved for a single search token, after the search log, content index, and enchant fallback have all been tried.
-- `bsearch_did_you_mean_min_searches` — Filters the minimum search-log count required for a term to qualify as a suggestion, overriding the **Minimum searches to qualify as a suggestion** setting.
+- [`bsearch_spelling_suggestion`](https://webberzone.dev/better-search/hooks/bsearch_spelling_suggestion/) — Filters the final suggestion resolved for a single search token, after the search log, content index, and enchant fallback have all been tried.
+- [`bsearch_did_you_mean_min_searches`](https://webberzone.dev/better-search/hooks/bsearch_did_you_mean_min_searches/) — Filters the minimum search-log count required for a term to qualify as a suggestion, overriding the **Minimum searches to qualify as a suggestion** setting.
 - `bsearch_did_you_mean_enchant_locale` — Filters the locale (default `en_US`) used to request a dictionary from enchant for the fallback.
 - `get_bsearch_did_you_mean` / `get_bsearch_autocorrect_notice` — Filter the generated markup for each notice.
 
@@ -149,3 +149,8 @@ Accepts the same `before` / `after` arguments, defaulting to `<p class="bsearch-
 
 - [Fuzzy Searches in Better Search Pro](https://webberzone.com/support/knowledgebase/fuzzy-matches/)
 - [Understanding Better Search Templates](https://webberzone.com/support/knowledgebase/better-search-templates/)
+- [`bsearch_did_you_mean_enchant_locale`](https://webberzone.dev/better-search/hooks/bsearch_did_you_mean_enchant_locale/)
+- [`get_bsearch_did_you_mean`](https://webberzone.dev/better-search/hooks/get_bsearch_did_you_mean/)
+- [`get_bsearch_autocorrect_notice`](https://webberzone.dev/better-search/hooks/get_bsearch_autocorrect_notice/)
+- [`bsearch_spelling_suggestion`](https://webberzone.dev/better-search/hooks/bsearch_spelling_suggestion/)
+- [`bsearch_did_you_mean_min_searches`](https://webberzone.dev/better-search/hooks/bsearch_did_you_mean_min_searches/)

@@ -47,11 +47,15 @@ Append `?bsearch_no_redirect=1` to any search URL to see the results page instea
 
 ## Developer hooks
 
-- `bsearch_before_search_redirect` — fires before a search query is redirected. Receives the destination URL, matched rule array, and search query.
-- `bsearch_search_redirects` — filters the array of redirect rules before matching.
-- `bsearch_is_redirectable_search` — filters whether the current request may be redirected by search rules. Return `false` to skip redirection for the current request.
-- `bsearch_allow_offsite_redirect` — filters whether a redirect may send visitors off-site. Default `true`. Return `false` to restrict redirects to the current site only.
+- [`bsearch_before_search_redirect`](https://webberzone.dev/better-search/hooks/bsearch_before_search_redirect/) — fires before a search query is redirected. Receives the destination URL, matched rule array, and search query.
+- [`bsearch_search_redirects`](https://webberzone.dev/better-search/hooks/bsearch_search_redirects/) — filters the array of redirect rules before matching.
+- [`bsearch_is_redirectable_search`](https://webberzone.dev/better-search/hooks/bsearch_is_redirectable_search/) — filters whether the current request may be redirected by search rules. Return `false` to skip redirection for the current request.
+- [`bsearch_allow_offsite_redirect`](https://webberzone.dev/better-search/hooks/bsearch_allow_offsite_redirect/) — filters whether a redirect may send visitors off-site. Default `true`. Return `false` to restrict redirects to the current site only.
 
 ## See also
 
 - [Better Search Feature Manager](/knowledgebase/better-search-feature-manager/)
+- [`bsearch_before_search_redirect`](https://webberzone.dev/better-search/hooks/bsearch_before_search_redirect/)
+- [`bsearch_search_redirects`](https://webberzone.dev/better-search/hooks/bsearch_search_redirects/)
+- [`bsearch_is_redirectable_search`](https://webberzone.dev/better-search/hooks/bsearch_is_redirectable_search/)
+- [`bsearch_allow_offsite_redirect`](https://webberzone.dev/better-search/hooks/bsearch_allow_offsite_redirect/)
