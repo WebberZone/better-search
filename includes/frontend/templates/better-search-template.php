@@ -92,14 +92,28 @@ get_header();
 
 ?>
 
-	<?php do_action( 'bsearch_before_content' ); ?>
+	<?php
+	/**
+	 * Fires before the Better Search results page content, immediately after the theme header.
+	 *
+	 * @since 3.0.0
+	 */
+	do_action( 'bsearch_before_content' );
+	?>
 
 	<div id="content" class="bsearch_results_page">
 
 		<?php the_bsearch_form( $search_query, array( 'selected_post_types' => $selected_post_types ) ); ?>
 
 		<div id="bsearchresults">
-			<?php do_action( 'bsearch_before_page_title' ); ?>
+			<?php
+			/**
+			 * Fires before the search results page title.
+			 *
+			 * @since 3.0.0
+			 */
+			do_action( 'bsearch_before_page_title' );
+			?>
 			<h1 class="page-title">
 				<?php
 				printf(
@@ -109,7 +123,14 @@ get_header();
 				);
 				?>
 			</h1>
-			<?php do_action( 'bsearch_after_page_title' ); ?>
+			<?php
+			/**
+			 * Fires after the search results page title.
+			 *
+			 * @since 3.0.0
+			 */
+			do_action( 'bsearch_after_page_title' );
+			?>
 
 			<?php
 			// Loop through the results.
@@ -123,7 +144,14 @@ get_header();
 					$post_score = $post->score ?? bsearch_get_post_score( $post->ID );
 					?>
 
-					<?php do_action( 'bsearch_before_article' ); ?>
+					<?php
+					/**
+					 * Fires before each search result article in the results loop.
+					 *
+					 * @since 3.0.0
+					 */
+					do_action( 'bsearch_before_article' );
+					?>
 
 					<article id="post-<?php the_ID(); ?>" <?php post_class( 'bsearch-post' ); ?>>
 
@@ -155,18 +183,39 @@ get_header();
 							</div><!-- .thumbnail -->
 						<?php endif; ?>
 
-						<?php do_action( 'bsearch_before_entry_header' ); ?>
+						<?php
+						/**
+						 * Fires before the entry header of each search result, after the post thumbnail.
+						 *
+						 * @since 3.0.0
+						 */
+						do_action( 'bsearch_before_entry_header' );
+						?>
 
 						<header class="entry-header bsearch-entry-header">
 
-							<?php do_action( 'bsearch_before_entry_header_inner' ); ?>
+							<?php
+							/**
+							 * Fires inside the entry header of each search result, before the result title.
+							 *
+							 * @since 3.0.0
+							 */
+							do_action( 'bsearch_before_entry_header_inner' );
+							?>
 
 							<h2 class="search-entry-title entry-title bsearch-entry-title">
 								<a href="<?php the_bsearch_permalink( $post ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"><?php the_title(); ?></a>
 							</h2>
 
 							<ul class="bsearch_post_meta">
-								<?php do_action( 'bsearch_before_post_meta' ); ?>
+								<?php
+								/**
+								 * Fires before the first item in the post meta list of each search result.
+								 *
+								 * @since 3.0.0
+								 */
+								do_action( 'bsearch_before_post_meta' );
+								?>
 								<?php if ( bsearch_get_option( 'display_relevance' ) && $post_score > 0 && $topscore > 0 ) : ?>
 								<li class="meta-relevance">
 									<?php
@@ -192,14 +241,35 @@ get_header();
 								<?php if ( bsearch_get_option( 'display_taxonomies' ) ) : ?>
 									<li class="meta-cat"><?php esc_html_e( 'Terms', 'better-search' ); ?>: <?php the_bsearch_term_list( $post ); ?></li>
 								<?php endif; ?>
-								<?php do_action( 'bsearch_after_post_meta' ); ?>
+								<?php
+								/**
+								 * Fires after the last item in the post meta list of each search result.
+								 *
+								 * @since 3.0.0
+								 */
+								do_action( 'bsearch_after_post_meta' );
+								?>
 							</ul>
 
-							<?php do_action( 'bsearch_after_entry_header_inner' ); ?>
+							<?php
+							/**
+							 * Fires inside the entry header of each search result, after the post meta list.
+							 *
+							 * @since 3.0.0
+							 */
+							do_action( 'bsearch_after_entry_header_inner' );
+							?>
 
 						</header><!-- .entry-header -->
 
-						<?php do_action( 'bsearch_after_entry_header' ); ?>
+						<?php
+						/**
+						 * Fires after the entry header of each search result, before the excerpt.
+						 *
+						 * @since 3.0.0
+						 */
+						do_action( 'bsearch_after_entry_header' );
+						?>
 
 						<div class="entry-content">
 							<?php the_bsearch_excerpt(); ?>
@@ -212,11 +282,25 @@ get_header();
 							</div><!-- .search-entry-readmore -->
 						</footer><!-- .entry-footer -->
 
-						<?php do_action( 'bsearch_after_article_inner' ); ?>
+						<?php
+						/**
+						 * Fires inside each search result article, after the entry footer.
+						 *
+						 * @since 3.0.0
+						 */
+						do_action( 'bsearch_after_article_inner' );
+						?>
 
 					</article><!-- #post-${ID} -->
 
-					<?php do_action( 'bsearch_after_article' ); ?>
+					<?php
+					/**
+					 * Fires after each search result article in the results loop.
+					 *
+					 * @since 3.0.0
+					 */
+					do_action( 'bsearch_after_article' );
+					?>
 
 				<?php endwhile; ?>
 				
@@ -267,7 +351,14 @@ get_header();
 
 	</div>	<!-- Close id="content" -->
 
-	<?php do_action( 'bsearch_after_content' ); ?>
+	<?php
+	/**
+	 * Fires after the Better Search results page content, before the theme footer.
+	 *
+	 * @since 3.0.0
+	 */
+	do_action( 'bsearch_after_content' );
+	?>
 
 <?php
 	// Get footer.

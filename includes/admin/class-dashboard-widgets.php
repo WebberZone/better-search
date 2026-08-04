@@ -15,7 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Admin Columns Class.
+ * Registers the Better Search dashboard widgets.
  *
  * @since 3.3.0
  */

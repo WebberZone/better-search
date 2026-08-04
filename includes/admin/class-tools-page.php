@@ -339,7 +339,7 @@ class Tools_Page {
 
 			<?php
 			/**
-			 * Action hook to add additional tools page content.
+			 * Action hook to add additional content to the Better Search tools page.
 			 *
 			 * @since 4.2.0
 			 */

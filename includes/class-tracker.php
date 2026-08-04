@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Admin Columns Class.
+ * Tracks search queries via the tracker endpoint and its AJAX handlers.
  *
  * @since 3.3.0
  */

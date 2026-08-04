@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 
 /**
- * Display the header table on the search results page.
+ * Display the search heatmap.
  *
  * @since 3.0.0
  *

@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Admin Columns Class.
+ * Registers and enqueues the Better Search front-end styles.
  *
  * @since 3.3.0
  */
