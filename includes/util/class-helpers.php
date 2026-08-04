@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Admin Columns Class.
+ * Static utility helpers used throughout Better Search.
  *
  * @since 3.3.0
  */

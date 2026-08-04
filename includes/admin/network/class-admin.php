@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Class to register the settings.
+ * Registers the network admin pages and handles copying settings across the network.
  *
  * @since 4.0.0
  */

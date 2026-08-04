@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Admin Columns Class.
+ * Registers the Better Search shortcodes.
  *
  * @since 3.3.0
  */

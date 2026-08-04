@@ -136,13 +136,13 @@ class Search_Heatmap extends \WP_Widget {
 
 		the_bsearch_heatmap(
 			/**
-			* Filters the arguments for the Better Search form widget.
+			* Filters the arguments for the Better Search heatmap widget.
 			*
 			* @since 3.0.0
 			*
 			* @see the_bsearch_heatmap()
 			*
-			* @param array $args     An array of arguments used to retrieve the Better Search form.
+			* @param array $args     An array of arguments used to retrieve the Better Search heatmap.
 			* @param array $instance Array of settings for the current widget.
 			*/
 			apply_filters(

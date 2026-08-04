@@ -15,7 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Display Class.
+ * Handles the search results template, seamless mode and block template registration.
  *
  * @since 4.0.0
  */
