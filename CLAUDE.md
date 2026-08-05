@@ -49,16 +49,17 @@ composer zip            # Create distribution zip in build/ (runs build-zip.sh)
 ### JavaScript/CSS
 
 ```bash
-npm run build           # Build free blocks (src: includes/frontend/blocks/src/, output: includes/frontend/blocks/build/)
-npm start               # Watch free blocks
-npm run build:assets    # Minify CSS/JS, generate RTL CSS via build-assets.js
-npm run lint:js         # ESLint (covers both includes/pro/blocks/src/ and includes/frontend/blocks/src/)
-npm run lint:css        # Stylelint (same scope)
-npm run format          # Prettier format (same scope)
-npm run zip             # Create plugin zip via wp-scripts plugin-zip
+pnpm run build           # Build free blocks (src: includes/frontend/blocks/src/, output: includes/frontend/blocks/build/)
+pnpm start               # Watch free blocks
+pnpm run build:assets    # Minify CSS/JS, generate RTL CSS via build-assets.js
+pnpm run lint:js         # ESLint (covers both includes/pro/blocks/src/ and includes/frontend/blocks/src/)
+pnpm run lint:css        # Stylelint (same scope)
+pnpm run format          # Prettier format (same scope)
+pnpm run zip             # Create plugin zip via wp-scripts plugin-zip
+ncu -u && pnpm install   # Update dependencies to latest and reinstall
 ```
 
-Note: There is no `build:pro` or `start:pro` npm script — there are no Gutenberg blocks in `includes/pro/`. The pro JS lives in `includes/pro/custom-tables/admin/js/` (plain JS, already built: `reindex.js` / `reindex.min.js`).
+Note: There is no `build:pro` or `start:pro` pnpm script — there are no Gutenberg blocks in `includes/pro/`. The pro JS lives in `includes/pro/custom-tables/admin/js/` (plain JS, already built: `reindex.js` / `reindex.min.js`).
 
 ## Architecture
 
