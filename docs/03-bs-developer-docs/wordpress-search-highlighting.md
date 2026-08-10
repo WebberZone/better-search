@@ -101,7 +101,7 @@ It is not enqueued on archives, the homepage, or the search results page itself 
 
 ## See also
 
-- [Better Search Settings – Output](/knowledgebase/better-search-settings-output/)
+- [Better Search Settings – Output](https://webberzone.com/support/knowledgebase/better-search-settings-output/)
 - [`the_bsearch_excerpt`](https://webberzone.dev/better-search/hooks/the_bsearch_excerpt/)
 - [`bsearch_highlight_tag`](https://webberzone.dev/better-search/hooks/bsearch_highlight_tag/)
 - [`bsearch_highlight_class`](https://webberzone.dev/better-search/hooks/bsearch_highlight_class/)
