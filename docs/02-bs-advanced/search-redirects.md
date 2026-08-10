@@ -54,7 +54,7 @@ Append `?bsearch_no_redirect=1` to any search URL to see the results page instea
 
 ## See also
 
-- [Better Search Feature Manager](/knowledgebase/better-search-feature-manager/)
+- [Better Search Feature Manager](https://webberzone.com/support/knowledgebase/better-search-feature-manager/)
 - [`bsearch_before_search_redirect`](https://webberzone.dev/better-search/hooks/bsearch_before_search_redirect/)
 - [`bsearch_search_redirects`](https://webberzone.dev/better-search/hooks/bsearch_search_redirects/)
 - [`bsearch_is_redirectable_search`](https://webberzone.dev/better-search/hooks/bsearch_is_redirectable_search/)
