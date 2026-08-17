@@ -29,6 +29,7 @@ class Settings {
 
 
 
+
 	/**
 	 * Settings API.
 	 *
@@ -192,6 +193,118 @@ class Settings {
 
 
 	/**
+	 * Raw defaults for every registered setting, keyed by option ID.
+	 *
+	 * Must exactly match what `bsearch_settings_defaults()` computes from
+	 * {@see self::get_registered_settings()}, but without building the full
+	 * (translated) field definitions. Values are pre-normalized: checkboxes are
+	 * `1`/`0`, not `true`/`false`.
+	 *
+	 * @since 4.4.4
+	 *
+	 * @return array<string, mixed> Default value for every option ID.
+	 */
+	public static function get_defaults() {
+		return array(
+			'features_header'           => '',
+			'enable_widgets'            => 1,
+			'enable_shortcodes'         => 1,
+			'enable_block_patterns'     => 1,
+			'enable_live_search'        => 0,
+			'pro_features_header'       => '',
+			'enable_fuzzy_search'       => 1,
+			'enable_did_you_mean'       => 0,
+			'enable_search_redirects'   => 1,
+			'enable_custom_tables'      => 1,
+			'enable_multisite_search'   => 1,
+			'enable_network_admin'      => 1,
+			'enable_chart_drilldown'    => 1,
+			'enable_cli'                => 1,
+			'seamless'                  => 1,
+			'enable_rest_api'           => 0,
+			'track_popular'             => 1,
+			'track_admins'              => 1,
+			'track_editors'             => 1,
+			'meta_noindex'              => 1,
+			'number_format_count'       => 1,
+			'show_credit'               => 0,
+			'custom_tables_header'      => '',
+			'use_custom_tables'         => 0,
+			'optimization_header'       => '',
+			'cache'                     => 1,
+			'cache_time'                => 3600,
+			'max_execution_time'        => 3000,
+			'search_config_header'      => '',
+			'limit'                     => '10',
+			'post_types'                => 'post,page',
+			'use_fulltext'              => 1,
+			'min_char'                  => '4',
+			'boolean_mode'              => 0,
+			'enable_like_fallback'      => 0,
+			'min_relevance'             => '0',
+			'fuzzy_header'              => '',
+			'fuzzy_search_level'        => 'off',
+			'did_you_mean_min_searches' => '3',
+			'did_you_mean_mode'         => 'suggest',
+			'did_you_mean_use_enchant'  => 0,
+			'weighting_header'          => '',
+			'weight_title'              => '10',
+			'weight_content'            => '1',
+			'weight_excerpt'            => 0,
+			'weight_taxonomy_category'  => 0,
+			'weight_taxonomy_post_tag'  => 0,
+			'weight_taxonomy_default'   => 0,
+			'use_precomputed_tax_score' => 0,
+			'inclusion_header'          => '',
+			'search_slug'               => 0,
+			'search_excerpt'            => 1,
+			'search_taxonomies'         => 0,
+			'search_meta'               => 0,
+			'search_authors'            => 0,
+			'search_comments'           => 0,
+			'exclude_header'            => '',
+			'exclude_protected_posts'   => 1,
+			'exclude_front_page'        => 0,
+			'exclude_posts_page'        => 0,
+			'exclude_post_ids'          => '',
+			'exclude_cat_slugs'         => '',
+			'exclude_categories'        => '',
+			'banned_header'             => '',
+			'badwords'                  => 'anal,anus,bastard,beastiality,bestiality,bewb,bitch,blow,blumpkin,boob,cawk,cock,choad,cooter,cornhole,cum,cunt,dick,dildo,dong,dyke,douche,fag,faggot,fart,foreskin,fuck,fuk,gangbang,gook,handjob,homo,honkey,humping,jiz,jizz,kike,kunt,labia,muff,nigger,nutsack,pen1s,penis,piss,poon,poop,porn,punani,pussy,queef,quim,rimjob,rape,rectal,rectum,semen,shit,slut,spick,spoo,spooge,taint,titty,titties,twat,vagina,vulva,wank,whore',
+			'banned_whole_words'        => 1,
+			'banned_stop_search'        => 0,
+			'search_redirects_header'   => '',
+			'search_redirects'          => array(),
+			'display_header'            => '',
+			'highlight'                 => 1,
+			'highlight_followed_links'  => 1,
+			'include_thumb'             => 1,
+			'display_relevance'         => 1,
+			'display_post_type'         => 1,
+			'display_author'            => 1,
+			'display_date'              => 1,
+			'display_taxonomies'        => 1,
+			'styles_header'             => '',
+			'excerpt_length'            => '100',
+			'include_styles'            => 1,
+			'custom_css'                => '',
+			'include_heatmap'           => 0,
+			'title'                     => '<h3>Popular searches:</h3>',
+			'title_daily'               => '<h3>Currently trending searches:</h3>',
+			'daily_range'               => '7',
+			'heatmap_limit'             => '20',
+			'heatmap_smallest'          => '10',
+			'heatmap_largest'           => '20',
+			'heatmap_cold'              => '#cccccc',
+			'heatmap_hot'               => '#000000',
+			'heatmap_before'            => '',
+			'heatmap_after'             => '&nbsp;',
+			'link_new_window'           => 0,
+			'link_nofollow'             => 1,
+		);
+	}
+
+	/**
 	 * Retrieve the array of plugin settings
 	 *
 	 * @since 3.3.0
@@ -228,8 +341,8 @@ class Settings {
 	 *
 	 * @since 4.4.0
 	 *
-	 * @param array  $field   Field arguments.
-	 * @param string $feature Feature ID, see Feature_Manager::get_features().
+	 * @param  array  $field   Field arguments.
+	 * @param  string $feature Feature ID, see Feature_Manager::get_features().
 	 * @return array Field arguments.
 	 */
 	private static function gate_field_to_feature( array $field, string $feature ) {
@@ -1405,21 +1518,21 @@ class Settings {
 				'title'   => __( 'Search', 'better-search' ),
 				'content' =>
 				'<p>' . __( 'This screen provides settings to tweak the search algorithm.', 'better-search' ) . '</p>' .
-							'<p>' . __( 'Configure number of search results, enable FULLTEXT and BOOLEAN mode, tweak the weight of title and content and block words.', 'better-search' ) . '</p>',
+									'<p>' . __( 'Configure number of search results, enable FULLTEXT and BOOLEAN mode, tweak the weight of title and content and block words.', 'better-search' ) . '</p>',
 			),
 			array(
 				'id'      => 'bsearch-settings-heatmap',
 				'title'   => __( 'Heatmap', 'better-search' ),
 				'content' =>
 				'<p>' . __( 'This screen provides settings to tweak the output of the search heatmap to display popular searches.', 'better-search' ) . '</p>' .
-							'<p>' . __( 'Configure title of the searches, period of trending searches, color and font sizes of the heatmap.', 'better-search' ) . '</p>',
+									'<p>' . __( 'Configure title of the searches, period of trending searches, color and font sizes of the heatmap.', 'better-search' ) . '</p>',
 			),
 			array(
 				'id'      => 'bsearch-settings-styles',
 				'title'   => __( 'Styles', 'better-search' ),
 				'content' =>
 				'<p>' . __( 'This screen provides options to control the look and feel of the search page.', 'better-search' ) . '</p>' .
-							'<p>' . __( 'Choose for default set of styles or add your own custom CSS to tweak the display of the search results page.', 'better-search' ) . '</p>',
+									'<p>' . __( 'Choose for default set of styles or add your own custom CSS to tweak the display of the search results page.', 'better-search' ) . '</p>',
 			),
 		);
 
@@ -1513,7 +1626,7 @@ class Settings {
 	 *
 	 * @since 4.4.0
 	 *
-	 * @param array $settings Sanitized settings.
+	 * @param  array $settings Sanitized settings.
 	 * @return void
 	 */
 	public static function flag_incomplete_repeater_rows( $settings ) {
@@ -1541,9 +1654,9 @@ class Settings {
 	 *
 	 * @since 4.4.0
 	 *
-	 * @param array $field Repeater field configuration.
-	 * @param int   $index Row position, zero-based.
-	 * @param array $issue Issue data from Settings_Sanitize::get_incomplete_repeater_rows().
+	 * @param  array $field Repeater field configuration.
+	 * @param  int   $index Row position, zero-based.
+	 * @param  array $issue Issue data from Settings_Sanitize::get_incomplete_repeater_rows().
 	 * @return string Message.
 	 */
 	private static function get_incomplete_repeater_row_message( array $field, $index, array $issue ) {
@@ -1561,7 +1674,7 @@ class Settings {
 
 		if ( ! empty( $issue['missing'] ) ) {
 			return sprintf(
-				/* translators: 1: repeater field name, 2: row position, 3: comma-separated list of missing subfield names. */
+			/* translators: 1: repeater field name, 2: row position, 3: comma-separated list of missing subfield names. */
 				__( '%1$s row %2$d is missing %3$s, so it will be ignored.', 'better-search' ),
 				$field_name,
 				$index + 1,
@@ -1570,7 +1683,7 @@ class Settings {
 		}
 
 		return sprintf(
-			/* translators: 1: repeater field name, 2: row position, 3: comma/or-separated list of alternative subfield names. */
+		/* translators: 1: repeater field name, 2: row position, 3: comma/or-separated list of alternative subfield names. */
 			__( '%1$s row %2$d needs at least one of %3$s, so it will be ignored.', 'better-search' ),
 			$field_name,
 			$index + 1,
@@ -1692,7 +1805,7 @@ class Settings {
 		}
 
 		/**
-	* This filter has been defined in /wp-admin/includes/ajax-actions.php
+		* This filter has been defined in /wp-admin/includes/ajax-actions.php
 */
 		$term_search_min_chars = (int) apply_filters( 'term_search_min_chars', 2, $tax, $search_term );
 

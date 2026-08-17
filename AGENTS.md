@@ -11,10 +11,11 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## Links
 
-- GitHub: <https://github.com/WebberZone/better-search>
-- WordPress.org: <https://wordpress.org/plugins/better-search/>
+- GitHub (pro): <https://github.com/WebberZone/better-search-pro>
+- GitHub (free): <https://github.com/WebberZone/better-search>
 - Documentation: <https://webberzone.com/support/product/better-search/>
-- webberzone.com: <https://webberzone.com/plugins/better-search/>
+- webberzone.com (free): <https://webberzone.com/plugins/better-search/>
+- webberzone.com (pro): <https://webberzone.com/plugins/better-search/pro/>
 
 ## Plugin Overview
 
