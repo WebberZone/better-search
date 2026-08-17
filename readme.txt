@@ -125,6 +125,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.4.1 =
+
+* Improvements:
+	* Setting defaults are now resolved from a single lightweight list instead of building every settings field, so reading an option early in the page load no longer risks loading translations too early.
+
 = 4.4.0 =
 
 *Release Date - 2 August 2026*
