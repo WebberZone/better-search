@@ -37,16 +37,11 @@ class Display {
 	/**
 	 * Enqueue the client-side highlight script on singular pages.
 	 *
-	 * PHP-based highlighting relies on HTTP_REFERER being available during PHP
-	 * execution. When a full-page cache (e.g. LiteSpeed Cache) serves a cached
-	 * response, PHP never runs and the server-side highlighting is skipped. This
-	 * script reads document.referrer in the browser and applies the same
-	 * highlighting logic client-side, covering cached-page scenarios.
-	 *
-	 * Only enqueued on singular views where highlight_followed_links is enabled.
-	 * Search results are handled server-side by content() via the_title /
-	 * the_content filters; archives and the homepage have no followed-link
-	 * scenario to highlight.
+	 * Covers full-page-cache scenarios (e.g. LiteSpeed) where PHP never runs, so
+	 * server-side highlighting via HTTP_REFERER is skipped; this script reads
+	 * document.referrer client-side instead. Only enqueued on singular views — search
+	 * results are already handled server-side by content(), and archives/the homepage have
+	 * no followed-link scenario to highlight.
 	 *
 	 * @since 4.3.2
 	 *

@@ -1,14 +1,8 @@
 /**
  * Client-side search term highlighting for Better Search.
  *
- * When a page is served from a full-page cache (e.g. LiteSpeed Cache) the PHP
- * filters that normally inject <mark> wrappers never run.  This script reads
- * the search query from document.referrer (or the bsearch_highlight config
- * object injected by PHP), extracts the terms to highlight using the same
- * logic as the PHP extract_highlight_terms() function, and applies highlighting
- * directly in the DOM via a TreeWalker over text nodes.
- *
- * No third-party libraries are required.
+ * Covers full-page-cache scenarios where the PHP <mark>-wrapping filters never run, by
+ * mirroring the same logic client-side via a TreeWalker.
  */
 (function () {
 	'use strict';
@@ -16,10 +10,8 @@
 	/**
 	 * Extract terms to highlight from a raw search query string.
 	 *
-	 * Mirrors the PHP Display::extract_highlight_terms() logic:
-	 *  - Double-quoted phrases are kept intact.
-	 *  - Terms prefixed with "-" are excluded (boolean NOT).
-	 *  - Boolean mode operators (+ ~ < > ( ) * !) surrounding a token are stripped.
+	 * Mirrors PHP Display::extract_highlight_terms(): keeps quoted phrases intact, excludes
+	 * "-"-prefixed terms, strips boolean-mode operators.
 	 *
 	 * @param {string} searchQuery Raw search query.
 	 * @return {string[]} Unique, non-empty terms/phrases.
