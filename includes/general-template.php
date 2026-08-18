@@ -640,10 +640,9 @@ function the_bsearch_did_you_mean( $args = array() ) {
 /**
  * Retrieve the "Did you mean" spelling suggestion for a zero-result search.
  *
- * Reads the suggestion computed by Pro::suggest_did_you_mean() and stored on the current
- * query object. Provided as a template tag (rather than only inline in the classic
- * template) so seamless-mode themes — which render their own search.php, not Better
- * Search's template — can opt in by calling it directly.
+ * Reads the suggestion computed by Pro::suggest_did_you_mean() and stored on the query
+ * object. Exposed as a template tag so seamless-mode themes — which render their own
+ * search.php, not Better Search's template — can opt in directly.
  *
  * @since 4.4.0
  *
