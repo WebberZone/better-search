@@ -130,6 +130,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Improvements:
 	* Setting defaults are now resolved from a single lightweight list instead of building every settings field, so reading an option early in the page load no longer risks loading translations too early.
 
+* Bug fixes:
+	* Fixed the settings wizard silently dropping repeater field rows on save.
+
 = 4.4.0 =
 
 *Release Date - 2 August 2026*
