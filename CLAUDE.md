@@ -41,7 +41,7 @@ Settings are stored as a single `bsearch_settings` array in `wp_options`. Access
 composer phpcs          # Lint PHP (WordPress coding standards)
 composer phpcbf         # Auto-fix PHP code style
 composer phpstan        # Static analysis
-composer phpcompat      # Check PHP 7.4–8.5 compatibility
+composer phpcompat      # Check PHP 7.4–8.6 compatibility
 composer test           # Run all checks (phpcs + phpcompat + phpstan)
 composer build:vendor   # Install production dependencies (no-dev, optimized autoloader)
 composer zip            # Create distribution zip in build/ (runs build-zip.sh)
