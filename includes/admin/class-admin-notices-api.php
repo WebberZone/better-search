@@ -24,19 +24,19 @@ class Admin_Notices_API {
 	 *
 	 * @var string
 	 */
-	private string $prefix;
+	protected string $prefix;
 
 	/**
 	 * Array of registered notices.
 	 *
 	 * @var array Registered notices.
 	 */
-	private array $notices = array();
+	protected array $notices = array();
 
 	/**
 	 * Constructor class.
 	 *
-	 * @param string $prefix Plugin prefix for AJAX actions, nonces, and storage keys. Default 'wzkb'.
+	 * @param string $prefix Plugin prefix for AJAX actions, nonces, and storage keys. Default 'bsearch'.
 	 */
 	public function __construct( string $prefix = 'bsearch' ) {
 		$this->prefix = $prefix;
