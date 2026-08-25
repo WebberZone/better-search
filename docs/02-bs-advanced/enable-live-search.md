@@ -2,10 +2,9 @@
 slug: enable-live-search
 title: "Enable AJAX Live Search"
 products: [better-search]
-sections: [02-bs-advanced]
-tags: [better-search,live-search,search]
+sections: ["02-bs-advanced"]
+tags: [better-search, live-search, search]
 status: publish
-order: 0
 ---
 
 ## What is Live Search?

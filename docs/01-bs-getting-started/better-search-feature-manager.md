@@ -2,13 +2,13 @@
 slug: better-search-feature-manager
 title: "Better Search Feature Manager"
 products: [better-search]
-sections: [01-bs-getting-started]
-tags: [better-search, settings, features]
+sections: ["01-bs-getting-started"]
+tags: [better-search, features, settings]
 status: publish
-order: 0
+toc: true
 ---
 
-[kbtoc]
+[toc]
 
 The Feature Manager, introduced in [Better Search](https://webberzone.com/plugins/better-search/) 4.4.0, lets you turn off optional features you are not using. When a feature is turned off, its code never loads — saving memory and removing its settings from the rest of the interface.
 
@@ -24,7 +24,7 @@ Registers the classic Search Box and Search Heatmap widgets. Turn this off if yo
 
 ### Shortcodes
 
-Registers the `[bsearch_form]` and `[bsearch_heatmap]` shortcodes.
+Registers the `[[bsearch_form]]` and `[[bsearch_heatmap]]` shortcodes.
 
 ### Block patterns
 

@@ -2,19 +2,20 @@
 slug: better-search-settings-performance
 title: "Better Search Settings – Performance"
 products: [better-search]
-sections: [01-bs-getting-started]
-tags: [better-search,search,settings]
+sections: ["01-bs-getting-started"]
+tags: [better-search, search, settings]
 status: publish
-order: 0
+toc: true
+featured_image: "https://webberzone.com/wp-content/uploads/2025/08/Better-Search-Performance-Settings.webp"
 ---
 
-[kbtoc]
+[toc]
 
-The **Performance** tab in <a href="https://webberzone.com/plugins/better-search/" data-type="page" data-id="168">Better Search</a> includes options designed to optimize how the search results are queried and displayed, especially for high-traffic or large sites. This section provides options for using custom database tables, caching, and fine-tuning query performance.
+The **Performance** tab in [Better Search](https://webberzone.com/plugins/better-search/) includes options designed to optimize how the search results are queried and displayed, especially for high-traffic or large sites. This section provides options for using custom database tables, caching, and fine-tuning query performance.
 
 ## Efficient Content Storage and Indexing (ECSI)
 
-Efficient Content Storage and Indexing (ECSI) is a <a href="https://webberzone.com/plugins/better-search/pro/" data-type="page" data-id="8486">Better Search Pro</a> feature that creates a dedicated database table optimized for search queries. This enhances performance, particularly on sites with a large number of posts or high traffic.
+Efficient Content Storage and Indexing (ECSI) is a [Better Search Pro](https://webberzone.com/plugins/better-search/pro/) feature that creates a dedicated database table optimized for search queries. This enhances performance, particularly on sites with a large number of posts or high traffic.
 
 To create the ECSI tables, visit the **Tools** page.
 

@@ -2,10 +2,10 @@
 slug: better-search-query
 title: "Building an Advanced WordPress Search with Better_Search_Query"
 products: [better-search]
-sections: [03-bs-developer-docs]
-tags: [better-search,developer,query]
+sections: ["03-bs-developer-docs"]
+tags: [better-search, developer, query]
 status: publish
-order: 0
+featured_image: "https://webberzone.com/wp-content/uploads/2023/12/Better-Search-Banner.png"
 ---
 
 [Better Search](https://webberzone.com/plugins/better-search/) enhances WordPress’s native search capabilities to deliver more relevant results to visitors. At the heart of this functionality is the `Better_Search_Query` class, which you can use for optimal search performance on your site.
@@ -45,7 +45,7 @@ $search_results = $better_search_query->get_posts();
 
 if ( $search_results ) :
     echo '<div class="search-results">';
-    
+
     foreach ( $search_results as $post ) :
         setup_postdata( $post );
         ?>
@@ -55,18 +55,18 @@ if ( $search_results ) :
                     <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                 </h2>
             </header>
-            
+
             <div class="entry-summary">
                 <?php the_excerpt(); ?>
             </div>
-            
+
             <div class="search-relevance">
                 <?php echo esc_html( $post->score ); ?> relevance
             </div>
         </article>
         <?php
     endforeach;
-    
+
     wp_reset_postdata();
     echo '</div>';
 else :

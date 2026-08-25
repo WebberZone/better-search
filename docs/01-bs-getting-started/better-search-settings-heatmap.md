@@ -1,14 +1,15 @@
 ---
 slug: better-search-settings-heatmap
-title: "Better Search Settings &#8211; Heatmap"
+title: "Better Search Settings – Heatmap"
 products: [better-search]
-sections: [01-bs-getting-started]
-tags: [better-search,search,settings]
+sections: ["01-bs-getting-started"]
+tags: [better-search, search, settings]
 status: publish
-order: 0
+toc: true
+featured_image: "https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Settings-Heatmap.webp"
 ---
 
-[kbtoc]
+[toc]
 
 The **Heatmap** tab of the [Better Search](https://webberzone.com/plugins/better-search/) settings page lets you fine-tune how popular search terms are generated and displayed. Below is an explanation of each available setting.
 

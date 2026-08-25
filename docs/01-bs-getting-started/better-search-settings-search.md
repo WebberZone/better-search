@@ -1,16 +1,17 @@
 ---
 slug: better-search-settings-search
-title: "Better Search Settings &#8211; Search"
+title: "Better Search Settings – Search"
 products: [better-search]
-sections: [01-bs-getting-started]
-tags: [better-search,search,settings]
+sections: ["01-bs-getting-started"]
+tags: [better-search, search, settings]
 status: publish
-order: 0
+toc: true
+featured_image: "https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Search-Settings.webp"
 ---
 
-[kbtoc]
+[toc]
 
-The **Search** tab of the <a href="https://webberzone.com/plugins/better-search/" data-type="page" data-id="168">Better Search</a> settings page offers a collection of options that allow you to fine-tune how search results are generated, displayed, and filtered. Below is an explanation of each available setting.
+The **Search** tab of the [Better Search](https://webberzone.com/plugins/better-search/) settings page offers a collection of options that allow you to fine-tune how search results are generated, displayed, and filtered. Below is an explanation of each available setting.
 
 ## Search Configuration
 
@@ -39,7 +40,7 @@ Use MySQL BOOLEAN mode for FULLTEXT searches. Allows advanced operators, but may
 With BOOLEAN mode active, visitors can use the following operators in the search box. They are passed straight through to MySQL.
 
 | Operator | Example | What it does |
-|---|---|---|
+| --- | --- | --- |
 | `+` | `+wordpress plugin` | The word **must** be present in every result. |
 | `-` | `wordpress -theme` | The word must **not** be present. Posts containing it are removed from the results entirely. |
 | `~` | `wordpress ~beta` | **Demotes** rather than excludes. The post is still returned, but the word contributes negatively to its relevance score, so it ranks lower. |
@@ -113,7 +114,7 @@ Weight to give other taxonomy matches when calculating relevance.
 
 ### Use precomputed taxonomy score *(Pro only)*
 
-Enable the use of precomputed taxonomy scores for relevance calculation. Improves performance but ignores the above taxonomy weights for live queries. This only works when ECSI is enabled in the <a href="https://webberzone.com/support/knowledgebase/better-search-settings-performance/" data-type="wz_knowledgebase" data-id="9146">Performance tab</a>.
+Enable the use of precomputed taxonomy scores for relevance calculation. Improves performance but ignores the above taxonomy weights for live queries. This only works when ECSI is enabled in the [Performance tab](https://webberzone.com/support/knowledgebase/better-search-settings-performance/).
 
 ## Inclusion options
 
@@ -182,5 +183,5 @@ When enabled, only whole words in the search query are filtered. Partial matches
 
 ### Block searches containing banned words
 
-When enabled, no results are returned if the search query includes any banned words.\
+When enabled, no results are returned if the search query includes any banned words.
 If Seamless mode is disabled, an error message is displayed. With Seamless mode enabled, a “Nothing found” message is shown (customizable via your theme).

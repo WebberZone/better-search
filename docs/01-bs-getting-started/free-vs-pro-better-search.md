@@ -5,7 +5,6 @@ products: [better-search]
 sections: ["01-bs-getting-started"]
 tags: [better-search, pro, upgrade]
 status: publish
-order: 0
 ---
 
 Better Search is free to use and replaces WordPress search with relevance-ranked FULLTEXT results right out of the box. The Pro upgrade adds fuzzy matching, a custom search index, multisite cross-site search, and WP-CLI integration for those who need more control.
@@ -13,8 +12,8 @@ Better Search is free to use and replaces WordPress search with relevance-ranked
 ## Free vs Pro
 
 | Feature | Free | Pro |
-|---------|:----:|:---:|
-| **Core Search** | | |
+| --- | --- | --- |
+| **Core Search** |  |  |
 | FULLTEXT relevance-ranked search | ✅ | ✅ |
 | Seamless mode (intercepts default WP search) | ✅ | ✅ |
 | Search within title, content, excerpt | ✅ | ✅ |
@@ -29,7 +28,7 @@ Better Search is free to use and replaces WordPress search with relevance-ranked
 | Custom search results template | ✅ | ✅ |
 | Search query tracking (daily and total) | ✅ | ✅ |
 | Feature Manager (toggle optional features on/off) | ✅ | ✅ |
-| **Search Quality & Relevance** | | |
+| **Search Quality & Relevance** |  |  |
 | Fuzzy / phonetic matching | ❌ | ✅ |
 | "Did you mean" spelling suggestions | ❌ | ✅ |
 | Search redirects (keyword → destination) | ❌ | ✅ |
@@ -40,23 +39,23 @@ Better Search is free to use and replaces WordPress search with relevance-ranked
 | Search post slugs | ❌ | ✅ |
 | Cornerstone / pinned posts (fixed top results) | ❌ | ✅ |
 | Exclude front page and Posts page from results | ❌ | ✅ |
-| **Performance & Indexing** | | |
+| **Performance & Indexing** |  |  |
 | MySQL FULLTEXT indexes on `wp_posts` | ✅ | ✅ |
 | Internal output caching | ✅ | ✅ |
 | Custom high-performance search index table | ❌ | ✅ |
 | InnoDB conversion tool with FULLTEXT index rebuild | ❌ | ✅ |
 | Scheduled index reconciliation cron job | ❌ | ✅ |
 | MySQL `MAX_EXECUTION_TIME` query guard | ❌ | ✅ |
-| **Integration** | | |
+| **Integration** |  |  |
 | REST API search integration | ❌ | ✅ |
 | Dashboard search chart with daily drill-down | ❌ | ✅ |
-| **Multisite** | | |
+| **Multisite** |  |  |
 | Per-site search | ✅ | ✅ |
 | Cross-site search across the entire network | ❌ | ✅ |
 | Network admin dashboard and statistics | ❌ | ✅ |
-| **Developer Tools** | | |
+| **Developer Tools** |  |  |
 | WP-CLI commands (search, cache, db, stats, settings, ecsi, status, stopwords) | ❌ | ✅ |
-| **Support** | | |
+| **Support** |  |  |
 | Community forum | ✅ | ✅ |
 | Priority email support | ❌ | ✅ |
 
@@ -66,8 +65,8 @@ Better Search is free to use and replaces WordPress search with relevance-ranked
 
 All paid plans include the same Pro features. The difference is the number of sites and who you can use them on.
 
-| | Pro | Pro Multi | Agency |
-|--|:---:|:---------:|:------:|
+|  | Pro | Pro Multi | Agency |
+| --- | --- | --- | --- |
 | All Pro features | ✅ | ✅ | ✅ |
 | Number of sites | 1 site | 5 to unlimited | Unlimited |
 | Use on client sites | ❌ | ❌ | ✅ |

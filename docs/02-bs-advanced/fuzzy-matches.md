@@ -2,10 +2,9 @@
 slug: fuzzy-matches
 title: "Fuzzy Searches in Better Search Pro"
 products: [better-search]
-sections: [02-bs-advanced]
-tags: [better-search,search]
+sections: ["02-bs-advanced"]
+tags: [better-search, search]
 status: publish
-order: 0
 ---
 
 ## What is Fuzzy Search?
@@ -43,7 +42,7 @@ This is ideal for e-commerce sites, educational resources, or content-heavy plat
 
 ## Fuzzy Match Threshold (Custom Tables)
 
-When fuzzy search is enabled with <a href="https://webberzone.com/support/knowledgebase/efficient-content-storage-and-indexing/" data-type="wz_knowledgebase" data-id="8902">Custom Tables</a>, Better Search applies a minimum fuzzy similarity threshold in the SQL WHERE clause:
+When fuzzy search is enabled with [Custom Tables](https://webberzone.com/support/knowledgebase/efficient-content-storage-and-indexing/), Better Search applies a minimum fuzzy similarity threshold in the SQL WHERE clause:
 
 ```text
 wz_phrase_similarity_soundex(title, <term>) * <multiplier> >= <threshold>
@@ -66,6 +65,6 @@ Where fuzzy_multiplier depends on fuzzy level:
 - Medium: 5.0
 - High: 10.0
 
-This avoids overly permissive matching (\> 0) while retaining common typo matches (for example, spagheti matching spaghetti).
+This avoids overly permissive matching (> 0) while retaining common typo matches (for example, spagheti matching spaghetti).
 
 Developers can override the threshold with: `better_search_custom_tables_fuzzy_where_threshold`

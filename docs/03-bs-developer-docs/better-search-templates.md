@@ -2,13 +2,12 @@
 slug: better-search-templates
 title: "Understanding Better Search Templates"
 products: [better-search]
-sections: [03-bs-developer-docs]
-tags: [better-search,developer,search]
+sections: ["03-bs-developer-docs"]
+tags: [better-search, developer, search]
 status: publish
-order: 0
 ---
 
-<a href="https://webberzone.com/plugins/better-search/" data-type="wzkb_category" data-id="46">Better Search</a> works out of the box. Install and activate it and you’re ready to go. By default, Better Search integrates with your theme by overriding the main query to display relevant search results.
+[Better Search](https://webberzone.com/plugins/better-search/) works out of the box. Install and activate it and you’re ready to go. By default, Better Search integrates with your theme by overriding the main query to display relevant search results.
 
 If you turn [Seamless Mode off](https://webberzone.com/support/knowledgebase/better-search-settings-general/#enable-seamless-integration), then Better Search will look for a file called `better-search-template.php` in your current themes folder. If this is found, the plugin will use this file, otherwise, it will default to the one hardcoded into the plugin. If you’re using a block theme aka Full Site Editing (FSE), then Better Search will look for `better-search-template.html` instead.
 
@@ -26,6 +25,4 @@ The template uses custom block patterns: `better-search/search-form` and `better
 
 Alternatively, you can keep seamless mode enabled and edit the search template for your site. The plugin registers a design called **Better Search Results** which you can find in the sidebar.
 
-<figure class="wp-block-image size-large">
-<img src="https://webberzone.com/wp-content/uploads/2024/11/Edit-the-Search-Template-1024x492.webp" class="wp-image-8482" loading="lazy" decoding="async" srcset="https://webberzone.com/wp-content/uploads/2024/11/Edit-the-Search-Template-1024x492.webp 1024w, https://webberzone.com/wp-content/uploads/2024/11/Edit-the-Search-Template-300x144.webp 300w, https://webberzone.com/wp-content/uploads/2024/11/Edit-the-Search-Template-768x369.webp 768w, https://webberzone.com/wp-content/uploads/2024/11/Edit-the-Search-Template-1536x738.webp 1536w, https://webberzone.com/wp-content/uploads/2024/11/Edit-the-Search-Template-2048x984.webp 2048w" sizes="auto, (max-width: 1024px) 100vw, 1024px" width="1024" height="492" />
-</figure>
+![](https://webberzone.com/wp-content/uploads/2024/11/Edit-the-Search-Template-1024x492.webp)

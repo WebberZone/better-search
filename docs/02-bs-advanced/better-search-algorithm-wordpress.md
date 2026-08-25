@@ -2,24 +2,24 @@
 slug: better-search-algorithm-wordpress
 title: "How the Better Search Algorithm Works"
 products: [better-search]
-sections: [02-bs-advanced]
-tags: [better-search,search]
+sections: ["02-bs-advanced"]
+tags: [better-search, search]
 status: publish
-order: 0
+featured_image: "https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Pro-Search-everything.webp"
 ---
 
 [Better Search](https://webberzone.com/plugins/better-search/) uses <a href="https://dev.mysql.com/doc/refman/8.4/en/fulltext-search.html" target="_blank" rel="noreferrer noopener">MySQL Full-Text search</a> to rank results by relevance. Here is how Better Search processes search queries, ranks posts, and calculates relevance.
 
 ## Overview of the Search Algorithm
 
-1. **Fulltext Search**:\
-    Better Search uses MySQL’s FULLTEXT search capabilities to identify matching content. This allows for features like:
+1. **Fulltext Search**:
+Better Search uses MySQL’s FULLTEXT search capabilities to identify matching content. This allows for features like:
     - **Phrase Search**: Exact matches for terms enclosed in quotes (e.g., `"custom templates"`).
     - **Boolean Operators**: Support for advanced queries using `+` (must include), `-` (must exclude), and wildcard `*` operators when [“Boolean mode” is activated](https://webberzone.com/support/knowledgebase/better-search-settings-search/#activate-boolean-mode).
-2. **Result Scoring**:\
-    The MySQL engine calculates a **score** for each post based on how closely the content matches the search terms. Posts with higher scores are more relevant to the query.
-3. **Ranking by Relevance**:\
-    Posts are sorted in descending order of score, ensuring the most relevant results appear at the top of the list.
+2. **Result Scoring**:
+The MySQL engine calculates a **score** for each post based on how closely the content matches the search terms. Posts with higher scores are more relevant to the query.
+3. **Ranking by Relevance**:
+Posts are sorted in descending order of score, ensuring the most relevant results appear at the top of the list.
 
 ## Calculating Relevance
 

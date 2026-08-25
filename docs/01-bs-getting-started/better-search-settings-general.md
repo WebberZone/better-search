@@ -1,14 +1,15 @@
 ---
 slug: better-search-settings-general
-title: "Better Search Settings &#8211; General"
+title: "Better Search Settings – General"
 products: [better-search]
-sections: [01-bs-getting-started]
-tags: [better-search,search,settings]
+sections: ["01-bs-getting-started"]
+tags: [better-search, search, settings]
 status: publish
-order: 0
+toc: true
+featured_image: "https://webberzone.com/wp-content/uploads/2024/11/Better-Search-General-Settings.webp"
 ---
 
-[kbtoc]
+[toc]
 
 The **General** section is the first in the [Better Search](https://webberzone.com/plugins/better-search/) settings screen. It gives you the main options for configuring Better Search on your WordPress blog.
 
