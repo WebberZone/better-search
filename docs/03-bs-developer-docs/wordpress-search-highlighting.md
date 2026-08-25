@@ -2,10 +2,9 @@
 slug: wordpress-search-highlighting
 title: "WordPress Search Term Highlighting in Better Search"
 products: [better-search]
-sections: [03-bs-developer-docs]
-tags: [better-search,search,highlighting,developer]
+sections: ["03-bs-developer-docs"]
+tags: [better-search, developer, highlighting, search]
 status: publish
-order: 0
 ---
 
 [Better Search](https://webberzone.com/plugins/better-search/) can highlight the terms a visitor searched for, both on the search results page and on the post or page they click through to. This makes it easy for visitors to spot why a result matched their query.

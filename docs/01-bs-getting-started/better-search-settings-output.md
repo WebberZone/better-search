@@ -2,13 +2,14 @@
 slug: better-search-settings-output
 title: "Better Search Settings – Output"
 products: [better-search]
-sections: [01-bs-getting-started]
-tags: [better-search,search,settings]
+sections: ["01-bs-getting-started"]
+tags: [better-search, search, settings]
 status: publish
-order: 0
+toc: true
+featured_image: "https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Output-Settings.webp"
 ---
 
-[kbtoc]
+[toc]
 
 The **Output** tab of the [Better Search](https://webberzone.com/plugins/better-search/) settings page lets you fine-tune how search results are displayed and styled.
 

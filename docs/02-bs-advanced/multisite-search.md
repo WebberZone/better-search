@@ -2,10 +2,10 @@
 slug: multisite-search
 title: "Multisite Search"
 products: [better-search]
-sections: [02-bs-advanced]
-tags: [better-search,multisite,search]
+sections: ["02-bs-advanced"]
+tags: [better-search, multisite, search]
 status: publish
-order: 0
+featured_image: "https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Pro-Multisite-Settings.webp"
 ---
 
 [Better Search Pro](https://webberzone.com/plugins/better-search/pro/) supports multisite search, enabling you to search across multiple WordPress sites within your network. This feature enhances search functionality for multisite installations, making it easier for users to find content distributed across different sites.
@@ -31,14 +31,12 @@ Multisite search is a **Pro Multi** feature. Ensure you have the **Pro version o
 
 ### 1. Enable Multisite Search
 
-<figure class="wp-block-image size-large">
-<img src="https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Pro-Multisite-Settings-1024x586.webp" class="wp-image-8444" loading="lazy" decoding="async" srcset="https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Pro-Multisite-Settings-1024x586.webp 1024w, https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Pro-Multisite-Settings-300x172.webp 300w, https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Pro-Multisite-Settings-768x440.webp 768w, https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Pro-Multisite-Settings-1536x879.webp 1536w, https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Pro-Multisite-Settings.webp 1544w" sizes="auto, (max-width: 1024px) 100vw, 1024px" width="1024" height="586" alt="Better Search Pro - Multisite Settings" />
-</figure>
+![Better Search Pro - Multisite Settings](https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Pro-Multisite-Settings-1024x586.webp)
 
 Follow these steps to enable and configure multisite search:
 
-1. Go to **Network Admin \> Plugins** and activate Better Search Pro.
-2. Navigate to **Network Admin \> Better Search \> Settings**.
+1. Go to **Network Admin > Plugins** and activate Better Search Pro.
+2. Navigate to **Network Admin > Better Search > Settings**.
 3. You will see a list of all subsites in the network.
 4. Check the boxes for the sites you want to include in the search or select **All Sites** for a global search.
 5. Save your changes.

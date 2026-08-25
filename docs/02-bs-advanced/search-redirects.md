@@ -2,13 +2,13 @@
 slug: search-redirects
 title: "Search Redirects in Better Search Pro"
 products: [better-search]
-sections: [02-bs-advanced]
-tags: [better-search, search, pro]
+sections: ["02-bs-advanced"]
+tags: [better-search, pro, search]
 status: publish
-order: 0
+toc: true
 ---
 
-[kbtoc]
+[toc]
 
 Search redirects, introduced in [Better Search Pro](https://webberzone.com/plugins/better-search/pro/) 4.4.0, send visitors straight to a specific post, page or URL when they search for a matching keyword — before the search results page loads. Redirected searches are still recorded in your search statistics.
 
