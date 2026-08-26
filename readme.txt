@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://wzn.io/donate-wz
-Stable tag: 4.4.1
+Stable tag: 4.4.2
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -124,6 +124,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 
 == Changelog ==
+
+= 4.4.2 =
+
+* Bug fixes:
+	* [Pro] Fixed the ORDER BY clause being silently rewritten to `score DESC` when full-text search was unavailable, which discarded the "Sort by date" ordering on short-term and LIKE-based searches.
 
 = 4.4.1 =
 
