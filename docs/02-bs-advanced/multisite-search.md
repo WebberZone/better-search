@@ -5,6 +5,7 @@ products: [better-search]
 sections: ["02-bs-advanced"]
 tags: [better-search, multisite, search]
 status: publish
+order: 0
 featured_image: "https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Pro-Multisite-Settings.webp"
 ---
 

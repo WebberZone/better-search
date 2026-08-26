@@ -5,6 +5,7 @@ products: [better-search]
 sections: ["02-bs-advanced"]
 tags: [better-search, customization]
 status: publish
+order: 0
 ---
 
 The **Popular Searches [Better Search]** widget displays a heatmap of searches made on your site. More popular terms appear larger and use the “hot” color, while less popular terms appear smaller and use the “cold” color.
