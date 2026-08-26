@@ -5,6 +5,7 @@ products: [better-search]
 sections: ["03-bs-developer-docs"]
 tags: [better-search, wp-rest-api]
 status: publish
+order: 0
 ---
 
 [Better Search Pro](https://webberzone.com/plugins/better-search/pro/) enhances the <a href="https://developer.wordpress.org/rest-api/reference/search-results/" target="_blank" rel="noreferrer noopener">WordPress REST API search results</a> to show posts ordered by relevance. When you enable this feature, a REST API search is performed, and Better Search Pro applies the default search configuration, just as it does for standard WordPress search requests.

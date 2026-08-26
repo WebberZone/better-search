@@ -5,6 +5,7 @@ products: [better-search]
 sections: ["01-bs-getting-started"]
 tags: [better-search, installation]
 status: publish
+order: 0
 featured_image: "https://webberzone.com/wp-content/uploads/2015/12/better-search-install-1.png"
 ---
 

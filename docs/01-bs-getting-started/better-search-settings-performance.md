@@ -5,6 +5,7 @@ products: [better-search]
 sections: ["01-bs-getting-started"]
 tags: [better-search, search, settings]
 status: publish
+order: 0
 toc: true
 featured_image: "https://webberzone.com/wp-content/uploads/2025/08/Better-Search-Performance-Settings.webp"
 ---

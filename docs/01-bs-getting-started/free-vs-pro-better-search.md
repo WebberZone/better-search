@@ -5,6 +5,7 @@ products: [better-search]
 sections: ["01-bs-getting-started"]
 tags: [better-search, pro, upgrade]
 status: publish
+order: 0
 ---
 
 Better Search is free to use and replaces WordPress search with relevance-ranked FULLTEXT results right out of the box. The Pro upgrade adds fuzzy matching, a custom search index, multisite cross-site search, and WP-CLI integration for those who need more control.

@@ -5,6 +5,7 @@ products: [better-search]
 sections: ["03-bs-developer-docs"]
 tags: [better-search, developer, search]
 status: publish
+order: 0
 ---
 
 [Better Search](https://webberzone.com/plugins/better-search/) works out of the box. Install and activate it and you’re ready to go. By default, Better Search integrates with your theme by overriding the main query to display relevant search results.
