@@ -9,7 +9,7 @@ status: publish
 
 Better Search provides two shortcodes: `[[bsearch_heatmap]]` and `[[bsearch_form]]`. These are available in both the free and pro versions of the plugin and can display a heatmap of popular searches or embed a customizable search form.
 
-## 1. [bsearch_form]
+## 1. [[bsearch_form]]
 
 Better Search can work with any search form on your site. However, it also includes its own advanced search form that allows you to display and pass post types where you’d like to allow users to search only within one or more post types.
 
@@ -34,7 +34,7 @@ This example wraps the search form in a custom `div` and includes a dropdown for
 [[bsearch_form before="<div class='search-wrapper'>" after="</div>" show_post_types="true"]]
 ```
 
-## 2. [bsearch_heatmap]
+## 2. [[bsearch_heatmap]]
 
 This shortcode generates a heatmap of your site’s popular search terms. Various attributes allow you to customize its appearance and functionality.
 
