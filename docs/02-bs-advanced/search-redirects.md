@@ -5,6 +5,7 @@ products: [better-search]
 sections: ["02-bs-advanced"]
 tags: [better-search, pro, search]
 status: publish
+order: 0
 toc: true
 ---
 

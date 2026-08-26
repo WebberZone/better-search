@@ -5,6 +5,7 @@ products: [better-search]
 sections: ["03-bs-developer-docs"]
 tags: [better-search, pro, wp-cli]
 status: publish
+order: 0
 toc: true
 ---
 

@@ -5,6 +5,7 @@ products: [better-search]
 sections: ["01-bs-getting-started"]
 tags: [better-search, features, settings]
 status: publish
+order: 0
 toc: true
 ---
 

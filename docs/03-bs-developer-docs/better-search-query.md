@@ -5,6 +5,7 @@ products: [better-search]
 sections: ["03-bs-developer-docs"]
 tags: [better-search, developer, query]
 status: publish
+order: 0
 featured_image: "https://webberzone.com/wp-content/uploads/2023/12/Better-Search-Banner.png"
 ---
 
