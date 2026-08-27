@@ -128,6 +128,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 = 4.4.2 =
 
 * Bug fixes:
+	* Fixed stopword stripping breaking with a PHP `preg_replace()` warning, and silently leaving stopwords in place, when the translated stopword list or the `wp_search_stopwords` filter contained a `/`.
 	* [Pro] Fixed the ORDER BY clause being silently rewritten to `score DESC` when full-text search was unavailable, which discarded the "Sort by date" ordering on short-term and LIKE-based searches.
 
 = 4.4.1 =
