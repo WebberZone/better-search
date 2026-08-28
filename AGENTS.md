@@ -19,9 +19,9 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## Plugin Overview
 
-**Better Search 4.4.0 is the current stable release.**
+**Better Search 4.4.2 is in development; 4.4.1 is the current stable release.**
 
-Better Search Pro (v4.4.0) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, "Did you mean" spelling suggestions, and more. It also tracks popular search queries and displays a search heatmap.
+Better Search Pro (v4.4.2) is the premium version of Better Search. It replaces the default WordPress search with a FULLTEXT-powered, relevance-ranked search engine, and adds pro-only features such as fuzzy search, custom index tables, multisite search, "Did you mean" spelling suggestions, and more. It also tracks popular search queries and displays a search heatmap.
 
 Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.6+, PHP 7.4+.
 
@@ -29,7 +29,7 @@ Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.6
 
 Pro-only code lives exclusively in `includes/pro/`, declared as `@fs_premium_only /includes/pro/` in the plugin header. All files outside `includes/pro/` are identical to the free version.
 
-Constants defined in `better-search.php`: `BETTER_SEARCH_VERSION` (4.4.0), `BETTER_SEARCH_PLUGIN_DIR`, `BETTER_SEARCH_PLUGIN_URL`, `BETTER_SEARCH_PLUGIN_FILE`, `BETTER_SEARCH_DB_VERSION` (2.0), `BETTER_SEARCH_DEFAULT_THUMBNAIL_URL`.
+Constants defined in `better-search.php`: `BETTER_SEARCH_VERSION` (4.4.2), `BETTER_SEARCH_PLUGIN_DIR`, `BETTER_SEARCH_PLUGIN_URL`, `BETTER_SEARCH_PLUGIN_FILE`, `BETTER_SEARCH_DB_VERSION` (2.0), `BETTER_SEARCH_DEFAULT_THUMBNAIL_URL`.
 
 Settings are stored as a single `bsearch_settings` array in `wp_options`. Access via `bsearch_get_option($key)` / `bsearch_get_settings()`. The global `$bsearch_settings` is populated at plugin load.
 

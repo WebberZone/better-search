@@ -757,7 +757,12 @@ class Helpers {
 		}
 
 		// Drop empty entries so a trailing comma in a translated list cannot create an empty alternation branch.
-		$search = array_filter( array_map( 'trim', array_map( 'strval', (array) $search ) ), 'strlen' );
+		$search = array_filter(
+			array_map( 'trim', array_map( 'strval', (array) $search ) ),
+			static function ( $word ) {
+				return '' !== $word;
+			}
+		);
 
 		$output = (string) $subject;
 
