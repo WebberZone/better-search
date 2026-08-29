@@ -41,7 +41,7 @@ if ( is_multisite() ) {
 function bsearch_delete_data() {
 	global $wpdb;
 
-	if ( is_plugin_active( 'better-search-pro/better-search.php' ) ) {
+	if ( is_plugin_active( 'better-search/better-search.php' ) ) {
 		return;
 	}
 
