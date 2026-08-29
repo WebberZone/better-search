@@ -10,7 +10,12 @@ namespace WebberZone\Better_Search;
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
+if ( ! function_exists( 'fs_dynamic_init' ) ) {
+	$fs_start = __DIR__ . '/vendor/freemius/wordpress-sdk/start.php';
+	if ( file_exists( $fs_start ) ) {
+		require $fs_start;
+	}
+}
 if ( ! function_exists( __NAMESPACE__ . '\\bsearch_freemius' ) ) {
 	/**
 	 * Initialize Freemius SDK.
