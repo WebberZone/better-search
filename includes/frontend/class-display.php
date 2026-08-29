@@ -90,9 +90,9 @@ class Display {
 			'bsearch-highlight',
 			'bsearch_highlight',
 			array(
-				'site_url'  => preg_replace( '#^https?://#i', '', (string) get_option( 'home' ) ),
-				'tag'       => $tag,
-				'cls'       => $cls,
+				'site_url'       => preg_replace( '#^https?://#i', '', (string) get_option( 'home' ) ),
+				'tag'            => $tag,
+				'cls'            => $cls,
 				/**
 				 * Filters the maximum number of search terms passed to the JS highlighter.
 				 *
@@ -100,7 +100,7 @@ class Display {
 				 *
 				 * @param int $max_terms Maximum number of terms. Default 50.
 				 */
-				'max_terms' => (int) apply_filters( 'bsearch_highlight_max_terms', 50 ),
+				'max_terms'      => (int) apply_filters( 'bsearch_highlight_max_terms', 50 ),
 				/**
 				 * Filters the CSS selector(s) used to scope JS highlighting.
 				 *
@@ -108,7 +108,8 @@ class Display {
 				 *
 				 * @param string $selectors A valid CSS selector string. Default targets standard WordPress content landmarks.
 				 */
-				'selectors' => apply_filters( 'bsearch_highlight_js_selectors', '.entry-content, .entry-title, .entry-summary' ),
+				'selectors'      => apply_filters( 'bsearch_highlight_js_selectors', '.entry-content, .entry-title, .entry-summary' ),
+				'use_boundaries' => (bool) apply_filters( 'bsearch_highlight_use_boundaries', false ),
 			)
 		);
 	}

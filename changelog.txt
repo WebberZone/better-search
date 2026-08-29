@@ -1,5 +1,74 @@
 This file holds the archive of changelog entries
 
+= 4.3.2 =
+
+*Release Date - 12 July 2026*
+
+* Enhancements:
+	* Search term highlighting now keeps double-quoted phrases intact: searching for `"richard harding"` highlights the whole phrase instead of its individual words. Mixed queries (e.g. `"richard harding" smith`) highlight the phrase plus the remaining words, and phrases match across whitespace variations, including non-breaking spaces.
+	* Terms excluded with the `-` operator are no longer highlighted, since they cannot appear in the results.
+	* Added client-side JavaScript highlighting for cached pages. When a full-page cache (e.g. LiteSpeed Cache, WP Super Cache) serves a cached response, PHP-based highlighting is skipped. The new script reads `document.referrer` in the browser and applies the same highlighting logic client-side, covering singular post/page views where "Highlight followed links" is enabled.
+
+* Bug fixes:
+	* Fixed "Highlight followed links" silently not working when the site's Home URL scheme differs from the scheme visitors use (e.g. an `http://` Home URL on a site served over `https://`, common behind SSL-terminating proxies).
+
+= 4.3.1 =
+
+*Release Date - 8 July 2026*
+
+* Bug fixes:
+	* Fixed phrase search: double-quoted terms (e.g. `"WordPress"` or `"WordPress plugin"`) now always perform a phrase search by automatically enabling boolean mode when quoted terms are detected.
+	* Fixed LIKE search stripping hyphens from compound terms (e.g. `b-26` was incorrectly searched as `b26`). Internal hyphens are now preserved; only leading/trailing hyphens used as boolean operators are stripped.
+	* [Pro] Fixed: short search terms (below the FULLTEXT minimum character threshold) now target the custom table columns (`ct.title`, `ct.content`, `ct.excerpt`) instead of `wp_posts` when custom tables are enabled. Previously the LIKE fallback always searched against `wp_posts` even with a fully indexed custom table.
+	* Fixed SQL syntax error when search query contains only negative terms.
+	* Fixed exclusion prefix handling and SQL precedence for negative search terms.
+
+* Enhancements:
+	* [Pro] Removed a redundant `excerpt LIKE` clause from search queries when the excerpt is already covered by the FULLTEXT `MATCH` clause, reducing unnecessary query overhead.
+	* [Pro] The excerpt column is now only pulled into the FULLTEXT `MATCH` clause (native or custom tables) when the excerpt weight is greater than zero or "Search Excerpt" is explicitly enabled, instead of unconditionally.
+
+= 4.3.0 =
+
+*Release Date - 3 May 2026*
+
+Read more in the [Better Search Pro 4.3.0 release post](https://webberzone.com/announcements/better-search-pro-v4-3-0/).
+
+* Features:
+	* [Pro] New: WP-CLI support with comprehensive command-line interface (search, cache, db, stats, settings, tables, status, stopwords commands).
+	* [Pro] Dashboard chart drill-down: click any bar in the daily searches chart to view the popular searches for that day.
+	* [Pro] New InnoDB conversion tool: convert the custom table engine with automatic FULLTEXT index recreation.
+	* [Pro] Scheduled reconciliation cron: a twicedaily job automatically syncs any published posts missing from the custom search index table.
+	* [Pro] New exclusion options: Exclude Front page and Exclude Posts page settings to optionally remove these pages from search results.
+	* [Pro] Network dashboard with popular searches chart and statistics table for multisite networks, accessible from the network admin menu.
+
+* Enhancements:
+	* [Pro] Multisite admin select-all checkboxes and post-copy URL cleanup are now handled by an external JavaScript file (via `wp_enqueue_script`) instead of inline `<script>` blocks — improves compatibility with strict Content Security Policies.
+	* [Pro] Copy-to-clipboard buttons on the tools and custom tables pages are now initialized automatically; no per-block inline script needed.
+	* [Pro] Improved short-term (≤3 character) LIKE searches to score full-word matches higher and order results by relevance.
+	* [Pro] Refactored fuzzy query shaping so `Query_Modifier` owns score construction and request shaping, with `Fuzzy_Search` acting as the fuzzy scoring service.
+	* [Pro] Rewrote soundex function, removed multisite LIMIT cap, and added content scoring for fuzzy search.
+	* [Pro] Added filters for fuzzy search truncation parameters.
+	* [Pro] Centralized exclusion term parsing logic in Helpers class.
+	* [Pro] Custom tables search now supports a FULLTEXT toggle, with improved LIKE-only relevance scoring when FULLTEXT is disabled.
+	* [Pro] Improved multisite search query composition: correctly unwraps fuzzy subqueries before UNION assembly and strips only top-level ORDER BY clauses, preventing malformed SQL.
+	* [Pro] LIKE term matching in custom tables search now uses an EXISTS subquery to avoid unbounded JOINs when the terms table is not already in scope.
+	* [Pro] Database check results are now cached within a request, reducing redundant `SHOW TABLES` queries on pages that check table status multiple times.
+	* [Pro] Dashboard popular searches query result is now cached within a request to avoid repeated database hits.
+	* Refactored Media Handler with a strategy-based thumbnail resolution chain; now also supports ACF Image fields (Image Array, Image ID, Image URL) and plain text URL fields.
+	* Hardened search sanitization and boolean mode validation for more consistent results.
+	* Escaped output in settings forms for improved security.
+
+* Bug fixes:
+	* [Pro] Fixed localized admin script data keys: removed erroneous `.strings.` nesting that caused the cache-clear confirmation and error dialogs to display `undefined`.
+	* Fixed spinner alignment inside action buttons (now displays inline rather than floating).
+	* [Pro] Fixed fuzzy LIKE query SQL issues that could generate duplicate `ID` fields in wrapped sub-queries.
+	* [Pro] Fixed fuzzy search bypassing FULLTEXT exclusions.
+	* [Pro] Fixed inconsistent indentation and table alias qualification in multisite query composition.
+	* [Pro] Disabled fuzzy search when boolean operators are present to prevent conflicts.
+	* Fixed duplicate search query being executed on every non-seamless search page load.
+	* Fixed relevance percentages on paginated search results by stabilizing topscore handling across pages, while reducing unnecessary topscore queries when minimum relevance filtering is not in use.
+	* Fixed placeholder attribute escaping in text field rendering.
+
 = 4.2.4 =
 
 * Features:

@@ -137,7 +137,7 @@
 	 * @param {string} tag      HTML tag to use for highlight wrapper.
 	 * @param {string} cls      CSS class to apply to the wrapper.
 	 */
-	function highlightTextNode(textNode, pattern, tag, cls) {
+	function highlightTextNode(textNode, pattern, tag, cls, useBoundaries) {
 		var text = textNode.nodeValue;
 		if (!pattern.test(text)) {
 			return;
@@ -150,18 +150,22 @@
 		var m;
 
 		while ((m = pattern.exec(text)) !== null) {
+			// In boundary mode, group 1 is the (unwrapped) separator and group 2 is the term.
+			var matchStart = useBoundaries ? m.index + m[1].length : m.index;
+			var matchText = useBoundaries ? m[2] : m[0];
+
 			// Text before the match.
-			if (m.index > lastIndex) {
-				frag.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
+			if (matchStart > lastIndex) {
+				frag.appendChild(document.createTextNode(text.slice(lastIndex, matchStart)));
 			}
 
 			// Highlighted match.
 			var mark = document.createElement(tag);
 			mark.className = cls;
-			mark.appendChild(document.createTextNode(m[0]));
+			mark.appendChild(document.createTextNode(matchText));
 			frag.appendChild(mark);
 
-			lastIndex = m.index + m[0].length;
+			lastIndex = matchStart + matchText.length;
 
 			// Prevent infinite loop on zero-width matches.
 			if (m[0].length === 0) {
@@ -187,7 +191,7 @@
 	 * @param {string}  tag     HTML tag to use for highlight wrapper.
 	 * @param {string}  cls     CSS class to apply to the wrapper.
 	 */
-	function highlightInElement(root, pattern, tag, cls) {
+	function highlightInElement(root, pattern, tag, cls, useBoundaries) {
 		var skipTags = { SCRIPT: true, STYLE: true, NOSCRIPT: true, TEXTAREA: true, SELECT: true };
 		var walker = document.createTreeWalker(
 			root,
@@ -223,7 +227,7 @@
 		}
 
 		for (var i = 0; i < textNodes.length; i++) {
-			highlightTextNode(textNodes[i], pattern, tag, cls);
+			highlightTextNode(textNodes[i], pattern, tag, cls, useBoundaries);
 		}
 	}
 
@@ -240,6 +244,7 @@
 		var cls = config.cls || 'bsearch_highlight';
 		var siteUrl = (config.site_url || '').replace(/^https?:\/\//i, '');
 		var maxTerms = parseInt(config.max_terms, 10) || 50;
+		var useBoundaries = !!config.use_boundaries;
 
 		// Selectors for elements to highlight within (content area only).
 		var selectors = config.selectors || '.entry-content, .entry-title, .entry-summary';
@@ -283,9 +288,24 @@
 		});
 		var pattern;
 		try {
-			pattern = new RegExp(escapedTerms.join('|'), 'gi');
+			if (useBoundaries) {
+				// Mirrors PHP Helpers::highlight(): group 1 is the separator (not wrapped),
+				// group 2 is the term (wrapped). Requires Unicode property escape support.
+				pattern = new RegExp(
+					'(^|[\\s\\p{P}\\p{Z}])(' + escapedTerms.join('|') + ')(?=[\\s\\p{P}\\p{Z}]|$)',
+					'giu'
+				);
+			} else {
+				pattern = new RegExp(escapedTerms.join('|'), 'gi');
+			}
 		} catch (e) {
-			return;
+			// Unicode property escapes unsupported (old engines) — fall back to unbounded matching.
+			useBoundaries = false;
+			try {
+				pattern = new RegExp(escapedTerms.join('|'), 'gi');
+			} catch (e2) {
+				return;
+			}
 		}
 
 		// 6. Apply highlighting to each matching element.
@@ -309,7 +329,7 @@
 			});
 		});
 		for (var i = 0; i < roots.length; i++) {
-			highlightInElement(roots[i], pattern, tag, cls);
+			highlightInElement(roots[i], pattern, tag, cls, useBoundaries);
 		}
 	}
 
