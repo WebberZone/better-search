@@ -145,6 +145,12 @@ if ( ! has_action( 'admin_notices', __NAMESPACE__ . '\bsearch_show_deactivation_
 	);
 }
 
+// Load the Composer autoloader (includes the Freemius SDK).
+$composer_autoload = plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+if ( file_exists( $composer_autoload ) ) {
+	require_once $composer_autoload;
+}
+
 if ( ! function_exists( __NAMESPACE__ . '\bsearch_freemius' ) ) {
 	// Finally load Freemius integration.
 	require_once BETTER_SEARCH_PLUGIN_DIR . 'load-freemius.php';
