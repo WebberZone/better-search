@@ -1,5 +1,5 @@
 {
-    "name": "webberzone/better-search-pro",
+    "name": "webberzone/better-search",
     "description": "Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.",
     "type": "wordpress-plugin",
     "keywords": [
@@ -34,6 +34,7 @@
         "php-stubs/wp-cli-stubs": "^2.12"
     },
     "config": {
+        "autoloader-suffix": "BetterSearch",
         "allow-plugins": {
             "phpstan/extension-installer": true,
             "dealerdirect/phpcodesniffer-composer-installer": true
