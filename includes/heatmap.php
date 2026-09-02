@@ -366,6 +366,24 @@ function get_bsearch_heatmap_counts( $args = array() ) {
 
 	$table_name = Helpers::get_bsearch_table( $args['daily'] );
 
+	/**
+	 * Filters how long heatmap counts are cached, in seconds. 0 disables caching.
+	 *
+	 * @since 4.4.3
+	 *
+	 * @param int   $cache_time Cache time in seconds.
+	 * @param array $args       Heatmap arguments.
+	 */
+	$cache_time = (int) apply_filters( 'bsearch_heatmap_cache_time', 15 * MINUTE_IN_SECONDS, $args );
+	$cache_key  = 'bs_heatmap_' . md5( wp_json_encode( $args ) );
+
+	if ( $cache_time > 0 ) {
+		$cached = get_transient( $cache_key );
+		if ( false !== $cached ) {
+			return apply_filters( 'get_bsearch_heatmap_counts', $cached, $args );
+		}
+	}
+
 	if ( ! $args['daily'] ) {
 		$sargs = array(
 			$args['number'],
@@ -397,6 +415,10 @@ function get_bsearch_heatmap_counts( $args = array() ) {
 	}
 
 	$results = $wpdb->get_results( $wpdb->prepare( $sql, $sargs ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+
+	if ( $cache_time > 0 ) {
+		set_transient( $cache_key, $results, $cache_time );
+	}
 
 	/**
 	 * Filter formatted string with the search heatmap

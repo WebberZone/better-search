@@ -653,7 +653,14 @@ class Better_Search_Core_Query extends \WP_Query {
 		$weight_title   = $args['weight_title'] ?? bsearch_get_option( 'weight_title' );
 		$weight_content = $args['weight_content'] ?? bsearch_get_option( 'weight_content' );
 		$boolean_mode   = $this->is_boolean_mode ? ' IN BOOLEAN MODE' : '';
+		$search_query   = $this->get_positive_search_query();
 		$search_query   = wp_specialchars_decode( $search_query, ENT_QUOTES );
+
+		if ( '' === trim( $search_query ) ) {
+			$this->match_sql = '';
+			return '';
+		}
+
 		if ( $this->use_fulltext && $this->is_boolean_mode ) {
 			$search_query = preg_replace( '/[<>]/u', ' ', $search_query );
 			$search_query = trim( preg_replace( '/\s+/u', ' ', $search_query ) );
@@ -691,6 +698,32 @@ class Better_Search_Core_Query extends \WP_Query {
 		$this->match_sql = $field_score;
 
 		return $field_score;
+	}
+
+	/**
+	 * Get the search query without excluded terms.
+	 *
+	 * Negative terms are applied separately to every enabled search field. Keeping
+	 * them out of MATCH prevents a negative-only search from requiring a positive
+	 * full-text match and keeps natural-language mode consistent with boolean mode.
+	 *
+	 * @since 4.4.3
+	 *
+	 * @return string Search query containing only positive terms.
+	 */
+	public function get_positive_search_query(): string {
+		$exclusion_prefix = apply_filters( 'better_search_query_exclusion_prefix', '-' );
+		$positive_terms   = array();
+
+		foreach ( $this->search_terms as $term ) {
+			if ( $exclusion_prefix && 0 === strpos( $term, $exclusion_prefix ) ) {
+				continue;
+			}
+
+			$positive_terms[] = $term;
+		}
+
+		return implode( ' ', $positive_terms );
 	}
 
 	/**
@@ -754,21 +787,23 @@ class Better_Search_Core_Query extends \WP_Query {
 			// Check for duplicate joins to prevent adding the same join multiple times.
 			// In FULLTEXT mode the taxonomy WHERE clause uses a correlated EXISTS subquery instead
 			// of a JOIN, so no aliases are needed here. The JOIN is only added for non-FULLTEXT mode.
-			if ( false === strpos( $join, 'bsq_tr' ) && ! empty( $this->query_args['search_taxonomies'] ) && ! $this->use_fulltext ) {
+			if ( false === strpos( $join, 'bsq_tr' ) && ! empty( $this->query_args['search_taxonomies'] ) && ! $this->use_fulltext && ! empty( $this->get_positive_search_query() ) ) {
 				$join .= " LEFT JOIN $wpdb->term_relationships AS bsq_tr ON ($wpdb->posts.ID = bsq_tr.object_id) ";
 				$join .= " LEFT JOIN $wpdb->term_taxonomy AS bsq_tt ON (bsq_tr.term_taxonomy_id = bsq_tt.term_taxonomy_id) ";
 				$join .= " LEFT JOIN $wpdb->terms AS bsq_t ON (bsq_t.term_id = bsq_tt.term_id) ";
 			}
 
-			if ( false === strpos( $join, 'bsq_meta' ) && ! empty( $this->query_args['search_meta'] ) ) {
+			// As with taxonomies above, postmeta and comments use correlated EXISTS subqueries in
+			// FULLTEXT mode; joining them multiplies rows by every meta row and comment on a post.
+			if ( false === strpos( $join, 'bsq_meta' ) && ! empty( $this->query_args['search_meta'] ) && ! $this->use_fulltext && ! empty( $this->get_positive_search_query() ) ) {
 				$join .= " LEFT JOIN $wpdb->postmeta AS bsq_meta ON ($wpdb->posts.ID = bsq_meta.post_id) ";
 			}
 
-			if ( false === strpos( $join, 'bsq_users' ) && ! empty( $this->query_args['search_authors'] ) ) {
+			if ( false === strpos( $join, 'bsq_users' ) && ! empty( $this->query_args['search_authors'] ) && ! empty( $this->get_positive_search_query() ) ) {
 				$join .= " LEFT JOIN $wpdb->users AS bsq_users ON ($wpdb->posts.post_author = bsq_users.ID) ";
 			}
 
-			if ( false === strpos( $join, 'bsq_comments' ) && ! empty( $this->query_args['search_comments'] ) ) {
+			if ( false === strpos( $join, 'bsq_comments' ) && ! empty( $this->query_args['search_comments'] ) && ! $this->use_fulltext && ! empty( $this->get_positive_search_query() ) ) {
 				$join .= " LEFT JOIN $wpdb->comments AS bsq_comments ON ($wpdb->posts.ID = bsq_comments.comment_post_ID) ";
 			}
 
@@ -845,10 +880,11 @@ class Better_Search_Core_Query extends \WP_Query {
 			return $where;
 		}
 
-		$n             = ! empty( $this->query_args['exact'] ) ? '' : '%';
-		$searchand     = '';
-		$search        = '';
-		$search_clause = '';
+		$n                = ! empty( $this->query_args['exact'] ) ? '' : '%';
+		$searchand        = '';
+		$search           = '';
+		$search_clause    = '';
+		$negative_clauses = array();
 
 		/**
 		 * Filters the column references used in LIKE search clauses.
@@ -917,12 +953,23 @@ class Better_Search_Core_Query extends \WP_Query {
 					$andor_op = 'OR';
 				}
 
-				$like      = $n . $wpdb->esc_like( $term ) . $n;
+				$like = $n . $wpdb->esc_like( $term ) . $n;
+				if ( $exclude ) {
+					$negative_clauses[] = '(' . implode(
+						' AND ',
+						array(
+							$wpdb->prepare( "({$like_columns['title']} NOT LIKE %s)", $like ), // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+							$wpdb->prepare( "({$like_columns['content']} NOT LIKE %s)", $like ), // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						)
+					) . ')';
+					continue;
+				}
+
 				$search   .= $wpdb->prepare( "{$searchand}(({$like_columns['title']} $like_op %s) $andor_op ({$like_columns['content']} $like_op %s))", $like, $like ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				$searchand = ' AND ';
 			}
 		} else {
-			$match_clause = $this->get_match_sql( $this->search_query, $this->query_args );
+			$match_clause = $this->get_match_sql( $this->get_positive_search_query(), $this->query_args );
 
 			/**
 			 * Filter the MATCH clause of the WHERE clause of the query.
@@ -940,8 +987,30 @@ class Better_Search_Core_Query extends \WP_Query {
 		}
 
 		// Let's do a LIKE search for all other fields.
-		$searchand        = '';
-		$negative_clauses = array();
+		$searchand = '';
+
+		/**
+		 * Filters the meta keys searched when "Search meta fields" is enabled.
+		 *
+		 * An empty array searches every meta key, which on sites with large postmeta
+		 * tables is the dominant cost of the query. Return a list of keys to restrict it.
+		 *
+		 * @since 4.4.3
+		 *
+		 * @param string[]                 $meta_keys Meta keys to search. Empty array for all keys.
+		 * @param \WP_Query                $query     The WP_Query instance.
+		 * @param Better_Search_Core_Query $instance  The Better_Search_Core_Query instance.
+		 */
+		$meta_keys = (array) apply_filters_ref_array( 'bsearch_search_meta_keys', array( array(), $query, &$this ) );
+		$meta_keys = array_filter( array_map( 'strval', $meta_keys ) );
+
+		$meta_key_clause = '';
+		if ( ! empty( $meta_keys ) ) {
+			$meta_key_clause = $wpdb->prepare(
+				' AND bsq_sub_meta.meta_key IN (' . implode( ', ', array_fill( 0, count( $meta_keys ), '%s' ) ) . ')', // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$meta_keys
+			);
+		}
 		foreach ( (array) $search_terms as $term ) {
 			// Check exclusion BEFORE stripping operators so the prefix is still present.
 			$exclude = $exclusion_prefix && ( substr( $term, 0, 1 ) === $exclusion_prefix );
@@ -966,8 +1035,17 @@ class Better_Search_Core_Query extends \WP_Query {
 
 			$term = $n . $wpdb->esc_like( $term ) . $n;
 
+			if ( $exclude && $this->use_fulltext ) {
+				$clause[] = $wpdb->prepare( "({$like_columns['title']} NOT LIKE %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$clause[] = $wpdb->prepare( "({$like_columns['content']} NOT LIKE %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+				if ( ! empty( $this->query_args['search_excerpt'] ) ) {
+					$clause[] = $wpdb->prepare( "({$like_columns['excerpt']} NOT LIKE %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				}
+			}
+
 			if ( ! empty( $this->query_args['search_taxonomies'] ) ) {
-				if ( $this->use_fulltext ) {
+				if ( $this->use_fulltext || $exclude ) {
 					// In FULLTEXT mode use a correlated EXISTS subquery instead of a JOIN.
 					// A JOIN multiplies rows (one per taxonomy term per post) and LIKE '%number%'
 					// on term names can match thousands of rows, causing execution-time timeouts.
@@ -998,15 +1076,54 @@ class Better_Search_Core_Query extends \WP_Query {
 			}
 
 			if ( ! empty( $this->query_args['search_meta'] ) ) {
-				$clause[] = $wpdb->prepare( "(bsq_meta.meta_value $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				if ( $this->use_fulltext || $exclude ) {
+					$exists_op       = ( 'NOT LIKE' === $like_op ) ? 'NOT EXISTS' : 'EXISTS';
+					$meta_search_sql = "{$exists_op} (
+							SELECT 1
+							FROM {$wpdb->postmeta} AS bsq_sub_meta
+							WHERE bsq_sub_meta.post_id = {$wpdb->posts}.ID"
+							. $meta_key_clause . '
+							AND bsq_sub_meta.meta_value LIKE %s
+						)';
+					$clause[]        = $wpdb->prepare( $meta_search_sql, $term ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				} else {
+					$clause[] = $wpdb->prepare( "(bsq_meta.meta_value $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				}
 			}
 
 			if ( ! empty( $this->query_args['search_authors'] ) ) {
-				$clause[] = $wpdb->prepare( "(bsq_users.display_name $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				if ( $exclude ) {
+					$clause[] = $wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"NOT EXISTS (
+							SELECT 1
+							FROM {$wpdb->users} AS bsq_sub_users
+							WHERE bsq_sub_users.ID = {$wpdb->posts}.post_author
+							AND bsq_sub_users.display_name LIKE %s
+						)",
+						$term
+					);
+				} else {
+					$clause[] = $wpdb->prepare( "(bsq_users.display_name $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				}
 			}
 
 			if ( ! empty( $this->query_args['search_comments'] ) ) {
-				$clause[] = $wpdb->prepare( "(bsq_comments.comment_content $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				if ( $this->use_fulltext || $exclude ) {
+					$exists_op = ( 'NOT LIKE' === $like_op ) ? 'NOT EXISTS' : 'EXISTS';
+					$clause[]  = $wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"{$exists_op} (
+							SELECT 1
+							FROM {$wpdb->comments} AS bsq_sub_comments
+							WHERE bsq_sub_comments.comment_post_ID = {$wpdb->posts}.ID
+							AND bsq_sub_comments.comment_content LIKE %s
+						)",
+						$term
+					);
+				} else {
+					$clause[] = $wpdb->prepare( "(bsq_comments.comment_content $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				}
 			}
 
 			/**
