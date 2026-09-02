@@ -139,6 +139,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 * Bug fixes:
 	* Fixed negative-only searches returning no results and negative terms being ignored in natural-language FULLTEXT searches.
+	* Fixed the dashboard's "Last 7 days", "Last 14 days" and "Last 30 days" tabs covering one day more than their labels, since the date range is inclusive of both endpoints.
 	* [Pro] Preserved negative-term exclusions when fuzzy LIKE matching is enabled.
 	* [Pro] Fixed spelling-dictionary rebuilds temporarily emptying the dictionary and ensured invalid batch sizes cannot stall a rebuild.
 	* [Pro] Fixed spelling-dictionary rebuild failures when words differ only by case or accents.

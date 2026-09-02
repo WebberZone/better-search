@@ -365,17 +365,17 @@ class Dashboard {
 			),
 			'lastweek'      => array(
 				'title'     => __( 'Last 7 days', 'better-search' ),
-				'from_date' => gmdate( 'd M Y', strtotime( '-1 week' ) ),
+				'from_date' => gmdate( 'd M Y', strtotime( '-6 days' ) ),
 				'to_date'   => current_time( 'd M Y' ),
 			),
 			'lastfortnight' => array(
 				'title'     => __( 'Last 14 days', 'better-search' ),
-				'from_date' => gmdate( 'd M Y', strtotime( '-2 weeks' ) ),
+				'from_date' => gmdate( 'd M Y', strtotime( '-13 days' ) ),
 				'to_date'   => current_time( 'd M Y' ),
 			),
 			'lastmonth'     => array(
 				'title'     => __( 'Last 30 days', 'better-search' ),
-				'from_date' => gmdate( 'd M Y', strtotime( '-30 days' ) ),
+				'from_date' => gmdate( 'd M Y', strtotime( '-29 days' ) ),
 				'to_date'   => current_time( 'd M Y' ),
 			),
 			'overall'       => array(
