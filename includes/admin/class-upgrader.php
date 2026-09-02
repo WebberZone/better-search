@@ -166,6 +166,7 @@ class Upgrader {
 			}
 
 			update_option( 'bsearch_db_version', BETTER_SEARCH_DB_VERSION );
+			Db::clear_network_table_status_cache();
 
 			/* translators: %s: Site URL. */
 			return sprintf( esc_html__( 'Database upgraded on site %s', 'better-search' ), get_site_url() );
@@ -202,6 +203,7 @@ class Upgrader {
 
 			// Switch back to the current blog.
 			restore_current_blog();
+			Db::clear_network_table_status_cache();
 
 		} else {
 			$status[] = self::upgrade_db();

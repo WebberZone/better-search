@@ -8,6 +8,7 @@
 namespace WebberZone\Better_Search\Admin;
 
 use WebberZone\Better_Search\Util\Helpers;
+use WebberZone\Better_Search\Db;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -32,6 +33,14 @@ class Statistics_Table extends \WP_List_Table {
 	public $network_wide;
 
 	/**
+	 * In-request cache of network UNION fragments.
+	 *
+	 * @since 4.4.3
+	 * @var array
+	 */
+	private static $network_table_unions_cache = array();
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param bool $network_wide Whether to show network-wide data.
@@ -44,6 +53,56 @@ class Statistics_Table extends \WP_List_Table {
 			)
 		);
 		$this->network_wide = $network_wide;
+	}
+
+	/**
+	 * Run a network statistics query with one safe recovery attempt.
+	 *
+	 * If a table was removed outside WordPress after the network table cache was built, the
+	 * first query can fail. Clear the stale registry, rediscover tables live, rebuild the
+	 * UNION fragments, and retry once. A second failure returns the supplied fallback so an
+	 * admin dashboard request remains usable.
+	 *
+	 * @since 4.4.3
+	 *
+	 * @param callable $query_callback Query callback that rebuilds SQL on every invocation.
+	 * @param mixed    $fallback       Value returned after an unsuccessful recovery attempt.
+	 * @return mixed Query result or fallback value.
+	 */
+	public static function get_network_query_results( $query_callback, $fallback = array() ) {
+		global $wpdb;
+
+		$result = call_user_func( $query_callback );
+		if ( empty( $wpdb->last_error ) && false !== $result && null !== $result ) {
+			return $result;
+		}
+
+		if ( empty( $wpdb->last_error ) ) {
+			return $fallback;
+		}
+
+		Db::clear_network_table_status_cache();
+		self::clear_network_table_unions_cache();
+		Db::get_network_table_status( true );
+
+		$result = call_user_func( $query_callback );
+		if ( ! empty( $wpdb->last_error ) || false === $result || null === $result ) {
+			Db::clear_network_table_status_cache();
+			self::clear_network_table_unions_cache();
+
+			return $fallback;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Clear the in-request network UNION cache.
+	 *
+	 * @since 4.4.3
+	 */
+	public static function clear_network_table_unions_cache() {
+		self::$network_table_unions_cache = array();
 	}
 
 	/**
@@ -114,6 +173,11 @@ class Statistics_Table extends \WP_List_Table {
 		$sql = "SELECT $fields FROM {$table_name} $join WHERE 1=1 $where $groupby $orderby $limits";
 
 		$result = $wpdb->get_results( $sql, 'ARRAY_A' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! empty( $wpdb->last_error ) || false === $result || null === $result ) {
+			Db::clear_table_status_cache();
+
+			return array();
+		}
 
 		return $result;
 	}
@@ -133,58 +197,61 @@ class Statistics_Table extends \WP_List_Table {
 	protected function get_network_popular_searches( $per_page, $page_number, $args, $from_date, $to_date ) {
 		global $wpdb;
 
-		$overall_unions = self::get_network_table_unions( 'bsearch' );
-		$daily_unions   = self::get_network_table_unions( 'bsearch_daily' );
+		return self::get_network_query_results(
+			function () use ( $args, $from_date, $to_date, $page_number, $per_page, $wpdb ) {
+				$overall_unions = self::get_network_table_unions( 'bsearch' );
+				$daily_unions   = self::get_network_table_unions( 'bsearch_daily' );
 
-		if ( empty( $overall_unions ) ) {
-			return array();
-		}
+				if ( empty( $overall_unions ) ) {
+					return array();
+				}
 
-		$overall_union_sql = implode( ' UNION ALL ', $overall_unions );
-		$daily_union_sql   = ! empty( $daily_unions ) ? implode( ' UNION ALL ', $daily_unions ) : '';
+				$overall_union_sql = implode( ' UNION ALL ', $overall_unions );
+				$daily_union_sql   = ! empty( $daily_unions ) ? implode( ' UNION ALL ', $daily_unions ) : '';
 
-		// Fields to return.
-		$fields = 'bst.searchvar as title, SUM(bst.cntaccess) as total_count';
-		if ( $daily_union_sql ) {
-			$fields .= ', COALESCE(daily_agg.daily_count, 0) as daily_count';
-		} else {
-			$fields .= ', 0 as daily_count';
-		}
+				// Fields to return.
+				$fields = 'bst.searchvar as title, SUM(bst.cntaccess) as total_count';
+				if ( $daily_union_sql ) {
+					$fields .= ', COALESCE(daily_agg.daily_count, 0) as daily_count';
+				} else {
+					$fields .= ', 0 as daily_count';
+				}
 
-		// Build daily aggregate subquery.
-		$daily_join = '';
-		if ( $daily_union_sql ) {
-			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $daily_union_sql is built from table names.
-			$daily_join = $wpdb->prepare(
-				" LEFT JOIN (
-					SELECT bsd.searchvar, SUM(bsd.cntaccess) as daily_count
-					FROM ( {$daily_union_sql} ) AS bsd
-					WHERE bsd.dp_date >= %s AND bsd.dp_date <= %s
-					GROUP BY bsd.searchvar
-				) AS daily_agg ON bst.searchvar = daily_agg.searchvar ",
-				$from_date,
-				$to_date
-			);
-			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		}
+				// Build daily aggregate subquery.
+				$daily_join = '';
+				if ( $daily_union_sql ) {
+					// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $daily_union_sql is built from table names.
+					$daily_join = $wpdb->prepare(
+						" LEFT JOIN (
+							SELECT bsd.searchvar, SUM(bsd.cntaccess) as daily_count
+							FROM ( {$daily_union_sql} ) AS bsd
+							WHERE bsd.dp_date >= %s AND bsd.dp_date <= %s
+							GROUP BY bsd.searchvar
+						) AS daily_agg ON bst.searchvar = daily_agg.searchvar ",
+						$from_date,
+						$to_date
+					);
+					// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				}
 
-		// WHERE clause.
-		$where = '';
-		if ( ! empty( $args['search'] ) ) {
-			$where .= $wpdb->prepare( ' AND bst.searchvar LIKE %s ', '%' . $wpdb->esc_like( $args['search'] ) . '%' );
-		}
+				// WHERE clause.
+				$where = '';
+				if ( ! empty( $args['search'] ) ) {
+					$where .= $wpdb->prepare( ' AND bst.searchvar LIKE %s ', '%' . $wpdb->esc_like( $args['search'] ) . '%' );
+				}
 
-		// ORDER BY clause.
-		$orderby = $this->get_orderby_clause( $args );
+				// ORDER BY clause.
+				$orderby = $this->get_orderby_clause( $args );
 
-		// LIMITS clause.
-		$limits = $wpdb->prepare( ' LIMIT %d, %d ', ( $page_number - 1 ) * $per_page, $per_page );
+				// LIMITS clause.
+				$limits = $wpdb->prepare( ' LIMIT %d, %d ', ( $page_number - 1 ) * $per_page, $per_page );
 
-		$sql = "SELECT {$fields} FROM ( {$overall_union_sql} ) AS bst {$daily_join} WHERE 1=1 {$where} GROUP BY bst.searchvar ORDER BY {$orderby} {$limits}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$sql = "SELECT {$fields} FROM ( {$overall_union_sql} ) AS bst {$daily_join} WHERE 1=1 {$where} GROUP BY bst.searchvar ORDER BY {$orderby} {$limits}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		$result = $wpdb->get_results( $sql, 'ARRAY_A' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
-
-		return $result;
+				return $wpdb->get_results( $sql, 'ARRAY_A' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			},
+			array()
+		);
 	}
 
 	/**
@@ -198,10 +265,8 @@ class Statistics_Table extends \WP_List_Table {
 	public static function get_network_table_unions( $table_suffix ) {
 		global $wpdb;
 
-		static $cache = array();
-
-		if ( isset( $cache[ $table_suffix ] ) ) {
-			return $cache[ $table_suffix ];
+		if ( isset( self::$network_table_unions_cache[ $table_suffix ] ) ) {
+			return self::$network_table_unions_cache[ $table_suffix ];
 		}
 
 		$unions = array();
@@ -213,17 +278,19 @@ class Statistics_Table extends \WP_List_Table {
 				'deleted'  => 0,
 			)
 		);
+		$status = \WebberZone\Better_Search\Db::get_network_table_status();
+		$tables = isset( $status['tables'][ $table_suffix ] ) ? $status['tables'][ $table_suffix ] : array();
 
 		foreach ( $sites as $site_id ) {
 			$prefix     = $wpdb->get_blog_prefix( $site_id );
 			$table_name = $prefix . $table_suffix;
 
-			if ( \WebberZone\Better_Search\Db::is_table_installed( $table_name ) ) {
+			if ( isset( $tables[ $table_name ] ) ) {
 				$unions[] = "SELECT * FROM {$table_name}";
 			}
 		}
 
-		$cache[ $table_suffix ] = $unions;
+		self::$network_table_unions_cache[ $table_suffix ] = $unions;
 
 		return $unions;
 	}
@@ -265,16 +332,26 @@ class Statistics_Table extends \WP_List_Table {
 		global $wpdb;
 
 		if ( $this->network_wide ) {
-			$unions = self::get_network_table_unions( 'bsearch' );
-			if ( empty( $unions ) ) {
-				return 0;
-			}
-			$union_sql = implode( ' UNION ALL ', $unions );
-			$sql       = "SELECT COUNT(DISTINCT searchvar) FROM ( {$union_sql} ) AS bst"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			return intval(
+				self::get_network_query_results(
+					function () use ( $args, $wpdb ) {
+						$unions = self::get_network_table_unions( 'bsearch' );
+						if ( empty( $unions ) ) {
+							return 0;
+						}
 
-			if ( isset( $args['search'] ) ) {
-				$sql .= $wpdb->prepare( ' WHERE bst.searchvar LIKE %s ', '%' . $wpdb->esc_like( $args['search'] ) . '%' );
-			}
+						$union_sql = implode( ' UNION ALL ', $unions );
+						$sql       = "SELECT COUNT(DISTINCT searchvar) FROM ( {$union_sql} ) AS bst"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+						if ( isset( $args['search'] ) ) {
+							$sql .= $wpdb->prepare( ' WHERE bst.searchvar LIKE %s ', '%' . $wpdb->esc_like( $args['search'] ) . '%' );
+						}
+
+						return $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+					},
+					0
+				)
+			);
 		} else {
 			$sql = "SELECT COUNT(*) FROM {$wpdb->prefix}bsearch as bst";
 
@@ -283,7 +360,14 @@ class Statistics_Table extends \WP_List_Table {
 			}
 		}
 
-		return intval( $wpdb->get_var( $sql ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+		$result = $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! empty( $wpdb->last_error ) || false === $result || null === $result ) {
+			Db::clear_table_status_cache();
+
+			return 0;
+		}
+
+		return intval( $result );
 	}
 
 	/**

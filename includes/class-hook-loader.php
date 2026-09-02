@@ -50,6 +50,7 @@ final class Hook_Loader {
 	private function register_init_hooks(): void {
 		Hook_Registry::add_action( 'init', array( $this, 'initiate_plugin' ) );
 		Hook_Registry::add_action( 'widgets_init', array( $this, 'register_widgets' ) );
+		Hook_Registry::add_action( Db::NETWORK_TABLE_STATUS_CRON, array( Db::class, 'refresh_network_table_status' ) );
 	}
 
 	/**
