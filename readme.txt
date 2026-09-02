@@ -125,6 +125,24 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.4.3 =
+
+* Improvements:
+	* Improved multisite and admin performance by caching Better Search table-existence checks, network table discovery, and FULLTEXT index status checks, eliminating repeated `SHOW TABLES` and `SHOW INDEX` metadata queries while adding live health checks and safe recovery when tables change outside WordPress.
+	* Reduced database work for FULLTEXT searches that include post meta or comments by using existence checks instead of row-multiplying joins.
+	* Improved negative searches by separating excluded terms from the FULLTEXT match and applying them across the enabled search fields.
+	* Added the `bsearch_search_meta_keys` filter to limit meta searches to selected keys.
+	* Added short-lived caching for live-search responses and heatmap counts, and avoided unnecessary result-count queries for live search.
+	* [Pro] Reduced memory usage during spelling-dictionary rebuilds by processing titles in batches and keeping the existing dictionary available until the replacement is ready.
+	* [Pro] Prevented repeated saves of the same post from inflating spelling-dictionary frequencies.
+	* [Pro] Optimized custom-table result counts by skipping relevance-score calculation when no relevance threshold is applied.
+
+* Bug fixes:
+	* Fixed negative-only searches returning no results and negative terms being ignored in natural-language FULLTEXT searches.
+	* [Pro] Preserved negative-term exclusions when fuzzy LIKE matching is enabled.
+	* [Pro] Fixed spelling-dictionary rebuilds temporarily emptying the dictionary and ensured invalid batch sizes cannot stall a rebuild.
+	* [Pro] Fixed spelling-dictionary rebuild failures when words differ only by case or accents.
+
 = 4.4.2 =
 
 * Improvements:

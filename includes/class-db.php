@@ -27,6 +27,89 @@ class Db {
 	const INDEX_VERSION = 2;
 
 	/**
+	 * Option used to cache local table status.
+	 *
+	 * @since 4.4.3
+	 * @var string
+	 */
+	const TABLE_STATUS_OPTION = 'bsearch_table_status';
+
+	/**
+	 * Option used to cache FULLTEXT index status.
+	 *
+	 * @since 4.4.3
+	 * @var string
+	 */
+	const INDEX_STATUS_OPTION = 'bsearch_index_status';
+
+	/**
+	 * Option used to cache network table status.
+	 *
+	 * @since 4.4.3
+	 * @var string
+	 */
+	const NETWORK_TABLE_STATUS_OPTION = 'bsearch_network_table_status';
+
+	/**
+	 * Hook used to refresh the network table-status cache.
+	 *
+	 * @since 4.4.3
+	 * @var string
+	 */
+	const NETWORK_TABLE_STATUS_CRON = 'bsearch_refresh_network_table_status';
+
+	/**
+	 * Option used to rate-limit the admin health check.
+	 *
+	 * @since 4.4.3
+	 * @var string
+	 */
+	const NETWORK_TABLE_HEALTH_OPTION = 'bsearch_network_table_health_check';
+
+	/**
+	 * Lifetime of schema status caches.
+	 *
+	 * Lifecycle events invalidate the caches immediately. The expiry is a backstop for
+	 * tables changed outside WordPress.
+	 *
+	 * @since 4.4.3
+	 * @var int
+	 */
+	const TABLE_STATUS_CACHE_TTL = DAY_IN_SECONDS;
+
+	/**
+	 * In-request local table status cache.
+	 *
+	 * @since 4.4.3
+	 * @var array|null
+	 */
+	private static $table_status_cache = null;
+
+	/**
+	 * In-request FULLTEXT index status cache.
+	 *
+	 * @since 4.4.3
+	 * @var array|null
+	 */
+	private static $index_status_cache = null;
+
+	/**
+	 * Cache key for the in-request FULLTEXT index status cache.
+	 *
+	 * @since 4.4.3
+	 * @var string|null
+	 */
+	private static $index_status_cache_key = null;
+
+	/**
+	 * In-request network table status cache.
+	 *
+	 * @since 4.4.3
+	 * @var array|null
+	 */
+	private static $network_table_status_cache = null;
+
+	/**
 	 * Name of the main table.
 	 *
 	 * @since 4.2.0
@@ -48,6 +131,8 @@ class Db {
 	 * @since 3.3.0
 	 */
 	public static function create_fulltext_indexes() {
+		self::clear_index_status_cache();
+
 		// Get the list of fulltext indexes.
 		$indexes = self::get_fulltext_indexes();
 
@@ -57,6 +142,8 @@ class Db {
 				self::install_fulltext_index( $index, $columns );
 			}
 		}
+
+		self::clear_index_status_cache();
 	}
 
 	/**
@@ -75,6 +162,8 @@ class Db {
 				$wpdb->query( "ALTER TABLE {$wpdb->posts} DROP INDEX $index" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			}
 		}
+
+		self::clear_index_status_cache();
 	}
 
 	/**
@@ -133,6 +222,7 @@ class Db {
 
 		// Install the fulltext index if it doesn't exist.
 		$wpdb->query( "ALTER TABLE {$wpdb->posts} ADD FULLTEXT {$index} {$columns};" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		self::clear_index_status_cache();
 	}
 
 	/**
@@ -272,13 +362,34 @@ class Db {
 	 *
 	 * @since 4.0.0
 	 *
+	 * @param bool $use_cache Whether to use the persistent status cache.
 	 * @return bool True if all fulltext indexes are installed, false if any are missing.
 	 */
-	public static function is_fulltext_index_installed() {
+	public static function is_fulltext_index_installed( $use_cache = false ) {
 		$indexes = self::get_fulltext_indexes();
 
+		if ( ! $use_cache ) {
+			foreach ( $indexes as $index => $columns ) {
+				if ( ! self::is_index_installed( $index ) ) {
+					return false; // Return false if any index is missing.
+				}
+			}
+
+			return true; // Return true if all indexes are installed.
+		}
+
+		$aliases     = self::get_legacy_index_aliases();
+		$index_names = array_unique(
+			array_merge(
+				array_keys( $indexes ),
+				array_values( $aliases )
+			)
+		);
+		$cache_key   = self::get_index_status_cache_key( $index_names );
+		$statuses    = self::get_index_status_cache( $cache_key, $index_names );
+
 		foreach ( $indexes as $index => $columns ) {
-			if ( ! self::is_index_installed( $index ) ) {
+			if ( empty( $statuses[ $index ] ) && empty( $statuses[ $aliases[ $index ] ?? '' ] ) ) {
 				return false; // Return false if any index is missing.
 			}
 		}
@@ -287,21 +398,361 @@ class Db {
 	}
 
 	/**
+	 * Get a cache key for the configured FULLTEXT index names and current site.
+	 *
+	 * @since 4.4.3
+	 *
+	 * @param array $index_names Index names included in the status scan.
+	 * @return string Cache key.
+	 */
+	private static function get_index_status_cache_key( $index_names ) {
+		global $wpdb;
+
+		return implode(
+			'|',
+			array(
+				BETTER_SEARCH_DB_VERSION,
+				self::INDEX_VERSION,
+				$wpdb->posts,
+				implode( '|', $index_names ),
+			)
+		);
+	}
+
+	/**
+	 * Get the cached FULLTEXT index status.
+	 *
+	 * One metadata query discovers all relevant index names on a cold cache. The status is
+	 * persisted because the fulltext-index notice is evaluated on ordinary admin requests.
+	 *
+	 * @since 4.4.3
+	 *
+	 * @param string   $cache_key   Cache key.
+	 * @param string[] $index_names Index names to include in the cache.
+	 * @return array Index status keyed by index name.
+	 */
+	private static function get_index_status_cache( $cache_key, $index_names ) {
+		global $wpdb;
+
+		if ( self::$index_status_cache_key === $cache_key && is_array( self::$index_status_cache ) ) {
+			return self::$index_status_cache;
+		}
+
+		$cache = get_option( self::INDEX_STATUS_OPTION, array() );
+
+		if (
+			is_array( $cache ) &&
+			( $cache['key'] ?? null ) === $cache_key &&
+			isset( $cache['generated'], $cache['indexes'] ) &&
+			is_array( $cache['indexes'] ) &&
+			( time() - (int) $cache['generated'] ) < self::TABLE_STATUS_CACHE_TTL
+		) {
+			self::$index_status_cache_key = $cache_key;
+			self::$index_status_cache     = $cache['indexes'];
+
+			return self::$index_status_cache;
+		}
+
+		$statuses = array_fill_keys( $index_names, false );
+		$indexes  = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->posts}" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( ! empty( $wpdb->last_error ) ) {
+			self::clear_index_status_cache();
+
+			return $statuses;
+		}
+
+		foreach ( (array) $indexes as $index ) {
+			$index_data = (array) $index;
+			if ( isset( $index_data['Key_name'] ) && array_key_exists( $index_data['Key_name'], $statuses ) ) {
+				$statuses[ $index_data['Key_name'] ] = true;
+			}
+		}
+
+		self::$index_status_cache_key = $cache_key;
+		self::$index_status_cache     = $statuses;
+		update_option(
+			self::INDEX_STATUS_OPTION,
+			array(
+				'key'       => $cache_key,
+				'generated' => time(),
+				'indexes'   => $statuses,
+			),
+			true
+		);
+
+		return $statuses;
+	}
+
+	/**
+	 * Clear the FULLTEXT index status cache.
+	 *
+	 * @since 4.4.3
+	 */
+	public static function clear_index_status_cache() {
+		self::$index_status_cache_key = null;
+		self::$index_status_cache     = null;
+		delete_option( self::INDEX_STATUS_OPTION );
+	}
+
+	/**
 	 * Check if the Better Search table is installed.
 	 *
 	 * @since 4.0.2
 	 *
 	 * @param string $table_name Table name.
+	 * @param bool   $use_cache Whether to use the persistent table-status cache.
 	 * @return bool True if the table exists, false otherwise.
 	 */
-	public static function is_table_installed( $table_name ) {
+	public static function is_table_installed( $table_name, $use_cache = true ) {
 		global $wpdb;
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) === $table_name ) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-			return true;
+		if ( $use_cache ) {
+			if (
+				null === self::$table_status_cache ||
+				( self::$table_status_cache['prefix'] ?? null ) !== $wpdb->prefix
+			) {
+				self::$table_status_cache = self::get_table_status_cache();
+			}
+
+			if ( array_key_exists( $table_name, self::$table_status_cache['tables'] ) ) {
+				return self::$table_status_cache['tables'][ $table_name ];
+			}
 		}
 
-		return false;
+		$is_installed = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				'SHOW TABLES LIKE %s',
+				$wpdb->esc_like( $table_name )
+			)
+		) === $table_name;
+
+		if ( ! empty( $wpdb->last_error ) ) {
+			self::clear_table_status_cache();
+
+			return false;
+		}
+
+		if ( ! $use_cache ) {
+			return $is_installed;
+		}
+
+		self::$table_status_cache['tables'][ $table_name ] = $is_installed;
+		self::$table_status_cache['version']               = BETTER_SEARCH_DB_VERSION;
+		self::$table_status_cache['prefix']                = $wpdb->prefix;
+		self::$table_status_cache['generated']             = time();
+		update_option( self::TABLE_STATUS_OPTION, self::$table_status_cache, true );
+
+		return $is_installed;
+	}
+
+	/**
+	 * Get the cached status of local Better Search tables.
+	 *
+	 * @since 4.4.3
+	 *
+	 * @return array Table-status cache.
+	 */
+	private static function get_table_status_cache() {
+		global $wpdb;
+
+		$cache = get_option( self::TABLE_STATUS_OPTION, array() );
+
+		if (
+			! is_array( $cache ) ||
+			( $cache['version'] ?? null ) !== BETTER_SEARCH_DB_VERSION ||
+			( $cache['prefix'] ?? null ) !== $wpdb->prefix ||
+			! isset( $cache['generated'], $cache['tables'] ) ||
+			! is_array( $cache['tables'] ) ||
+			( time() - (int) $cache['generated'] ) >= self::TABLE_STATUS_CACHE_TTL
+		) {
+			$cache = array(
+				'version'   => BETTER_SEARCH_DB_VERSION,
+				'prefix'    => $wpdb->prefix,
+				'generated' => 0,
+				'tables'    => array(),
+			);
+		}
+
+		return $cache;
+	}
+
+	/**
+	 * Clear the local table-status cache.
+	 *
+	 * @since 4.4.3
+	 */
+	public static function clear_table_status_cache() {
+		self::$table_status_cache = null;
+		delete_option( self::TABLE_STATUS_OPTION );
+	}
+
+	/**
+	 * Get the network-wide status of Better Search tables.
+	 *
+	 * A single SHOW TABLES query discovers both Better Search table families. The result is
+	 * persisted because the per-site network statistics code otherwise performs one metadata
+	 * query for every site and table suffix on each request.
+	 *
+	 * @since 4.4.3
+	 *
+	 * @param bool $force Whether to bypass the persistent and in-request caches.
+	 * @return array Network table-status cache.
+	 */
+	public static function get_network_table_status( $force = false ) {
+		global $wpdb;
+
+		if ( ! $force && null !== self::$network_table_status_cache ) {
+			return self::$network_table_status_cache;
+		}
+
+		$cache = get_site_option( self::NETWORK_TABLE_STATUS_OPTION, array() );
+
+		if (
+			! $force &&
+			is_array( $cache ) &&
+			( $cache['version'] ?? null ) === BETTER_SEARCH_DB_VERSION &&
+			( $cache['base_prefix'] ?? null ) === $wpdb->base_prefix &&
+			isset( $cache['generated'], $cache['tables'] ) &&
+			is_array( $cache['tables'] ) &&
+			( time() - (int) $cache['generated'] ) < self::TABLE_STATUS_CACHE_TTL
+		) {
+			self::$network_table_status_cache = $cache;
+			return $cache;
+		}
+
+		$tables = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				'SHOW TABLES LIKE %s',
+				$wpdb->esc_like( $wpdb->base_prefix ) . '%bsearch%'
+			)
+		);
+
+		if ( ! empty( $wpdb->last_error ) ) {
+			self::clear_network_table_status_cache();
+
+			return self::get_empty_network_table_status();
+		}
+
+		$cache = array(
+			'version'     => BETTER_SEARCH_DB_VERSION,
+			'base_prefix' => $wpdb->base_prefix,
+			'generated'   => time(),
+			'tables'      => array(
+				self::$table_name       => array(),
+				self::$table_name_daily => array(),
+			),
+		);
+
+		foreach ( (array) $tables as $table ) {
+			foreach ( array_keys( $cache['tables'] ) as $table_suffix ) {
+				if ( substr( $table, -strlen( $table_suffix ) ) === $table_suffix ) {
+					$cache['tables'][ $table_suffix ][ $table ] = true;
+				}
+			}
+		}
+
+		self::$network_table_status_cache = $cache;
+		update_site_option( self::NETWORK_TABLE_STATUS_OPTION, $cache );
+
+		return $cache;
+	}
+
+	/**
+	 * Refresh the network-wide table-status cache from the database.
+	 *
+	 * This is intentionally a live check. It is used by the scheduled health check and
+	 * diagnostic tools, while normal dashboard requests use the cached status.
+	 *
+	 * @since 4.4.3
+	 *
+	 * @return array Network table-status cache.
+	 */
+	public static function refresh_network_table_status() {
+		$status = self::get_network_table_status( true );
+
+		if ( ! empty( $status['generated'] ) ) {
+			update_site_option( self::NETWORK_TABLE_HEALTH_OPTION, time() );
+		}
+
+		return $status;
+	}
+
+	/**
+	 * Run the live network table check when the admin health interval has elapsed.
+	 *
+	 * @since 4.4.3
+	 *
+	 * @return array Network table-status cache.
+	 */
+	public static function maybe_refresh_network_table_status() {
+		self::schedule_network_table_status_check();
+
+		$last_check = (int) get_site_option( self::NETWORK_TABLE_HEALTH_OPTION, 0 );
+
+		if ( $last_check > 0 && ( time() - $last_check ) < self::TABLE_STATUS_CACHE_TTL ) {
+			return self::get_network_table_status();
+		}
+
+		return self::refresh_network_table_status();
+	}
+
+	/**
+	 * Return the empty network table-status structure used when discovery fails.
+	 *
+	 * An empty result keeps network reports safe during a transient database failure and
+	 * avoids persisting a false all-clear state over a previously valid cache.
+	 *
+	 * @since 4.4.3
+	 *
+	 * @return array Empty network table-status cache.
+	 */
+	private static function get_empty_network_table_status() {
+		global $wpdb;
+
+		return array(
+			'version'     => BETTER_SEARCH_DB_VERSION,
+			'base_prefix' => $wpdb->base_prefix,
+			'generated'   => 0,
+			'tables'      => array(
+				self::$table_name       => array(),
+				self::$table_name_daily => array(),
+			),
+		);
+	}
+
+	/**
+	 * Schedule the network table-status health check if it is not already scheduled.
+	 *
+	 * @since 4.4.3
+	 */
+	public static function schedule_network_table_status_check() {
+		if ( ! wp_next_scheduled( self::NETWORK_TABLE_STATUS_CRON ) ) {
+			wp_schedule_event( time() + self::TABLE_STATUS_CACHE_TTL, 'daily', self::NETWORK_TABLE_STATUS_CRON );
+		}
+	}
+
+	/**
+	 * Unschedule the network table-status health check.
+	 *
+	 * @since 4.4.3
+	 */
+	public static function unschedule_network_table_status_check() {
+		wp_clear_scheduled_hook( self::NETWORK_TABLE_STATUS_CRON );
+	}
+
+	/**
+	 * Clear the network-wide table-status cache.
+	 *
+	 * @since 4.4.3
+	 */
+	public static function clear_network_table_status_cache() {
+		self::$network_table_status_cache = null;
+
+		if ( is_multisite() ) {
+			delete_site_option( self::NETWORK_TABLE_STATUS_OPTION );
+			delete_site_option( self::NETWORK_TABLE_HEALTH_OPTION );
+		}
 	}
 
 	/**
@@ -314,12 +765,13 @@ class Db {
 	 */
 	public static function maybe_create_table( $table_name, $sql ) {
 		global $wpdb;
-		if ( ! self::is_table_installed( $table_name ) ) {
+		if ( ! self::is_table_installed( $table_name, false ) ) {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 			$show_errors = $wpdb->hide_errors();
 			dbDelta( $sql );
 			$wpdb->show_errors( $show_errors );
+			self::clear_table_status_cache();
 		}
 	}
 
@@ -329,8 +781,11 @@ class Db {
 	 * @since 4.2.0
 	 */
 	public static function create_tables() {
-		self::maybe_create_table( self::$table_name, self::create_full_table_sql() );
-		self::maybe_create_table( self::$table_name_daily, self::create_daily_table_sql() );
+		global $wpdb;
+
+		self::maybe_create_table( $wpdb->prefix . self::$table_name, self::create_full_table_sql() );
+		self::maybe_create_table( $wpdb->prefix . self::$table_name_daily, self::create_daily_table_sql() );
+		self::clear_network_table_status_cache();
 	}
 
 	/**
@@ -421,6 +876,7 @@ class Db {
 
 		if ( false !== $success ) {
 			$wpdb->query( "DROP TABLE IF EXISTS $table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			self::clear_table_status_cache();
 			self::maybe_create_table( $table_name, $create_table_sql );
 			$insert_fields_sql = 'bs.' . implode( ', bs.', $fields );
 
@@ -435,6 +891,8 @@ class Db {
 		if ( ! $backup ) {
 			$wpdb->query( "DROP TABLE $backup_table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}
+
+		self::clear_network_table_status_cache();
 
 		return $success;
 	}

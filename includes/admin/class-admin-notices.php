@@ -58,6 +58,10 @@ class Admin_Notices {
 	 * @since 3.3.0
 	 */
 	public function update_db_check() {
+		if ( is_multisite() && is_network_admin() ) {
+			Db::maybe_refresh_network_table_status();
+		}
+
 		$current_db_version = get_option( 'bsearch_db_version' );
 
 		if ( $current_db_version && version_compare( $current_db_version, BETTER_SEARCH_DB_VERSION, '<' ) ) {
@@ -175,7 +179,7 @@ class Admin_Notices {
 					function () {
 						return current_user_can( 'manage_options' ) &&
 								\bsearch_get_option( 'use_fulltext' ) &&
-								! Db::is_fulltext_index_installed();
+								! Db::is_fulltext_index_installed( true );
 					},
 				),
 			)

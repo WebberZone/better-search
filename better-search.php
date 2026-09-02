@@ -202,6 +202,7 @@ if ( ! function_exists( 'bsearch_get_settings' ) ) {
 
 // Register activation hook.
 register_activation_hook( __FILE__, __NAMESPACE__ . '\Admin\Activator::activation_hook' );
+register_deactivation_hook( __FILE__, __NAMESPACE__ . '\Admin\Activator::deactivation_hook' );
 
 /**
  * Declare $bsearch_settings global so that it can be accessed in every function

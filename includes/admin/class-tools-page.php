@@ -100,6 +100,10 @@ class Tools_Page {
 	public function render_page() {
 		global $wpdb;
 
+		if ( is_multisite() && is_network_admin() ) {
+			Db::refresh_network_table_status();
+		}
+
 		/* Recreate index */
 		if ( ( isset( $_POST['bsearch_recreate'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
 			self::recreate_index();
@@ -121,16 +125,19 @@ class Tools_Page {
 		/* Create tables */
 		if ( ( isset( $_POST['bsearch_create_tables'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
 			Db::create_tables();
+			Db::clear_network_table_status_cache();
 			add_settings_error( 'bsearch-notices', '', esc_html__( 'Tables have been created', 'better-search' ), 'success' );
 		}
 
 		/* Recreate tables */
 		if ( ( isset( $_POST['bsearch_recreate_overall'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
 			Db::recreate_overall_table( false );
+			Db::clear_network_table_status_cache();
 			add_settings_error( 'bsearch-notices', '', esc_html__( 'Overall tables have been recreated', 'better-search' ), 'success' );
 		}
 		if ( ( isset( $_POST['bsearch_recreate_daily'] ) ) && ( check_admin_referer( 'bsearch-tools-settings' ) ) ) {
 			Db::recreate_daily_table( false );
+			Db::clear_network_table_status_cache();
 			add_settings_error( 'bsearch-notices', '', esc_html__( 'Daily tables have been recreated', 'better-search' ), 'success' );
 		}
 
@@ -477,6 +484,8 @@ class Tools_Page {
 		$wpdb->query( "RENAME TABLE $backup_table_name TO $table_name;" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		$wpdb->query( 'COMMIT;' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		Db::clear_table_status_cache();
+		Db::clear_network_table_status_cache();
 
 		// Restore the database version.
 		update_option( 'bsearch_db_version', '1.0' );

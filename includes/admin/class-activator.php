@@ -79,6 +79,21 @@ class Activator {
 		} else {
 			self::single_activate();
 		}
+
+		Db::clear_network_table_status_cache();
+		Db::schedule_network_table_status_check();
+	}
+
+	/**
+	 * Fired when the plugin is deactivated.
+	 *
+	 * @since 4.4.3
+	 */
+	public static function deactivation_hook() {
+		Db::clear_table_status_cache();
+		Db::clear_index_status_cache();
+		Db::clear_network_table_status_cache();
+		Db::unschedule_network_table_status_check();
 	}
 
 	/**
@@ -152,6 +167,7 @@ class Activator {
 		switch_to_blog( $blog );
 		self::single_activate();
 		restore_current_blog();
+		Db::clear_network_table_status_cache();
 	}
 
 	/**
@@ -166,6 +182,7 @@ class Activator {
 
 		$tables[] = $wpdb->prefix . self::$table_name;
 		$tables[] = $wpdb->prefix . self::$table_name_daily;
+		Db::clear_network_table_status_cache();
 
 		return $tables;
 	}

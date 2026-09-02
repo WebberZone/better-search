@@ -11,6 +11,7 @@ namespace WebberZone\Better_Search\Admin;
 
 use WebberZone\Better_Search\Util\Helpers;
 use WebberZone\Better_Search\Util\Hook_Registry;
+use WebberZone\Better_Search\Db;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -22,6 +23,14 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 3.3.0
  */
 class Dashboard {
+
+	/**
+	 * Prevent repeated recovery attempts for one network dashboard request.
+	 *
+	 * @since 4.4.3
+	 * @var bool
+	 */
+	private static $network_query_retry = false;
 
 	/**
 	 * Parent Menu ID.
@@ -279,24 +288,32 @@ class Dashboard {
 		global $wpdb;
 
 		if ( $network ) {
-			$unions = Statistics_Table::get_network_table_unions( 'bsearch_daily' );
-			if ( empty( $unions ) ) {
-				return array();
-			}
-			$union_sql = implode( ' UNION ALL ', $unions );
+			$result = Statistics_Table::get_network_query_results(
+				function () use ( $from_date, $to_date, $wpdb ) {
+					$unions = Statistics_Table::get_network_table_unions( 'bsearch_daily' );
+					if ( empty( $unions ) ) {
+						return array();
+					}
 
-			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $union_sql is built from table names.
-			$sql = $wpdb->prepare(
-				"SELECT SUM(cntaccess) AS searches, dp_date as date
-				FROM ( {$union_sql} ) AS bsd
-				WHERE dp_date >= %s
-				AND dp_date <= %s
-				GROUP BY date
-				ORDER BY date ASC",
-				$from_date,
-				$to_date
+					$union_sql = implode( ' UNION ALL ', $unions );
+
+					// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $union_sql is built from table names.
+					$sql = $wpdb->prepare(
+						"SELECT SUM(cntaccess) AS searches, dp_date as date
+						FROM ( {$union_sql} ) AS bsd
+						WHERE dp_date >= %s
+						AND dp_date <= %s
+						GROUP BY date
+						ORDER BY date ASC",
+						$from_date,
+						$to_date
+					);
+					// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+					return $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+				},
+				array()
 			);
-			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		} else {
 			$sql = $wpdb->prepare(
 				" SELECT SUM(cntaccess) AS searches, dp_date as date
@@ -309,9 +326,14 @@ class Dashboard {
 				$from_date,
 				$to_date,
 			);
-		}
 
-		$result = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			$result = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			if ( ! empty( $wpdb->last_error ) || false === $result || null === $result ) {
+				Db::clear_table_status_cache();
+
+				return array();
+			}
+		}
 
 		$data = array();
 		foreach ( $result as $row ) {
@@ -551,7 +573,27 @@ class Dashboard {
 			return $cache[ $cache_key ];
 		}
 
-		$result              = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+		$result = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! empty( $wpdb->last_error ) || false === $result || null === $result ) {
+			if ( $is_network && ! self::$network_query_retry && ! empty( $wpdb->last_error ) ) {
+				self::$network_query_retry = true;
+				Db::clear_network_table_status_cache();
+				Statistics_Table::clear_network_table_unions_cache();
+				Db::get_network_table_status( true );
+				$retry_result              = $this->get_popular_searches( $args );
+				self::$network_query_retry = false;
+
+				return $retry_result;
+			}
+
+			if ( $is_network ) {
+				Db::clear_network_table_status_cache();
+			} else {
+				Db::clear_table_status_cache();
+			}
+
+			return array();
+		}
 		$cache[ $cache_key ] = $result;
 
 		return $result;
