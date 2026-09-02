@@ -87,9 +87,21 @@ class Live_Search {
 	 */
 	public function live_search() {
 		$search_query = isset( $_POST['s'] ) ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$search_query = trim( mb_substr( $search_query, 0, 128 ) );
 
-		if ( empty( $search_query ) ) {
+		// The minimum length was previously enforced only in the browser, so a crafted
+		// one-character request still ran a full search on every keystroke.
+		$min_char = (int) \bsearch_get_option( 'min_char', 3 );
+
+		if ( '' === $search_query || mb_strlen( $search_query ) < $min_char ) {
 			wp_send_json( array() );
+		}
+
+		$cache_key = 'bsearch_ls_' . md5( $search_query . '|' . get_locale() . '|' . get_current_blog_id() );
+		$cached    = get_transient( $cache_key );
+
+		if ( false !== $cached ) {
+			wp_send_json( $cached );
 		}
 
 		/**
@@ -108,6 +120,7 @@ class Live_Search {
 				'posts_per_page'      => $posts_per_page,
 				'post_type'           => wp_parse_list( \bsearch_get_option( 'post_types' ) ),
 				'post_status'         => 'publish',
+				'no_found_rows'       => true,
 			)
 		);
 
@@ -128,6 +141,20 @@ class Live_Search {
 			'total'   => count( $results ),
 			'query'   => $search_query,
 		);
+
+		/**
+		 * Filters how long a live search response is cached, in seconds. 0 disables caching.
+		 *
+		 * @since 4.4.3
+		 *
+		 * @param int    $cache_time   Cache time in seconds.
+		 * @param string $search_query The search query.
+		 */
+		$cache_time = (int) apply_filters( 'bsearch_live_search_cache_time', 5 * MINUTE_IN_SECONDS, $search_query );
+
+		if ( $cache_time > 0 ) {
+			set_transient( $cache_key, $response, $cache_time );
+		}
 
 		wp_send_json( $response );
 	}
