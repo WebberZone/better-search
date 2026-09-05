@@ -564,6 +564,8 @@ class Statistics_Table extends \WP_List_Table {
 		if ( ( isset( $_REQUEST['action'] ) && 'bulk-delete' === $_REQUEST['action'] )
 			|| ( isset( $_REQUEST['action2'] ) && 'bulk-delete' === $_REQUEST['action2'] )
 		) {
+			check_admin_referer( 'bulk-' . $this->_args['plural'] );
+
 			$delete_ids = isset( $_REQUEST['search'] ) ? array_map( 'wp_kses_post', (array) wp_unslash( $_REQUEST['search'] ) ) : array();
 
 			// Loop over the array of record IDs and delete them.
