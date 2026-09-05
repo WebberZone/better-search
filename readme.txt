@@ -127,7 +127,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.4.3 =
 
-*Release Date - 3 September 2026*
+*Release Date - 5 September 2026*
 
 * Improvements:
 	* Improved multisite and admin performance by caching Better Search table-existence checks, network table discovery, and FULLTEXT index status checks, eliminating repeated `SHOW TABLES` and `SHOW INDEX` metadata queries while adding live health checks and safe recovery when tables change outside WordPress.
