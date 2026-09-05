@@ -90,6 +90,8 @@ class Activator {
 	 * @since 4.4.3
 	 */
 	public static function deactivation_hook() {
+		wp_unschedule_hook( 'bsearch_refresh_term_posts' );
+
 		Db::clear_table_status_cache();
 		Db::clear_index_status_cache();
 		Db::clear_network_table_status_cache();
