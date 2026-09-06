@@ -479,6 +479,7 @@ class Helpers {
 		}
 
 		// Cap term count to prevent regex explosion.
+		/** This filter is documented in includes/frontend/class-display.php */
 		$max_terms = apply_filters( 'bsearch_highlight_max_terms', 50 );
 		$terms     = array_slice( $terms, 0, $max_terms );
 
@@ -498,6 +499,7 @@ class Helpers {
 		);
 
 		// Allow filtering whether to use word boundaries.
+		/** This filter is documented in includes/frontend/class-display.php */
 		$use_boundaries = apply_filters( 'bsearch_highlight_use_boundaries', false );
 
 		// Build the regex pattern once.
@@ -519,11 +521,13 @@ class Helpers {
 		$parts = preg_split( '/(<(?:script|style)[^>]*>.*?<\/(?:script|style)>|<[^>]+>)/is', $content, -1, PREG_SPLIT_DELIM_CAPTURE );
 
 		// Get highlight tag and sanitize.
+		/** This filter is documented in includes/frontend/class-display.php */
 		$tag          = apply_filters( 'bsearch_highlight_tag', 'mark' );
 		$allowed_tags = array( 'mark', 'span', 'strong', 'em' );
 		$tag          = in_array( $tag, $allowed_tags, true ) ? $tag : 'mark';
 
 		// Get highlight class and sanitize.
+		/** This filter is documented in includes/frontend/class-display.php */
 		$class = apply_filters( 'bsearch_highlight_class', 'bsearch_highlight' );
 		$class = sanitize_html_class( $class );
 

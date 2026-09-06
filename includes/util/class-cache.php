@@ -106,6 +106,13 @@ class Cache {
 			}
 		}
 
+		/**
+		 * Filters the list of Better Search cache keys found in the options table.
+		 *
+		 * @since 4.0.0
+		 *
+		 * @param string[] $keys Cache keys without the transient prefix.
+		 */
 		return apply_filters( 'bsearch_cache_get_keys', $keys );
 	}
 

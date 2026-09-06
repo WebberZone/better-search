@@ -432,12 +432,12 @@ class Better_Search_Core_Query extends \WP_Query {
 		$exclude_post_ids = empty( $args['exclude_post_ids'] ) ? array() : wp_parse_id_list( $args['exclude_post_ids'] );
 
 		/**
-		 * Filter exclude post IDs array.
+		 * Filters the post IDs excluded from search results.
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param int[] $exclude_post_ids Array of post IDs.
-		 * @param array $args             Arguments array.
+		 * @param int[] $exclude_post_ids Array of post IDs to exclude.
+		 * @param array $args             Query variables.
 		 */
 		$exclude_post_ids = apply_filters( 'bsearch_exclude_post_ids', $exclude_post_ids, $args );
 
@@ -712,6 +712,7 @@ class Better_Search_Core_Query extends \WP_Query {
 	 * @return string Search query containing only positive terms.
 	 */
 	public function get_positive_search_query(): string {
+		/** This filter is documented in includes/class-better-search-core-query.php */
 		$exclusion_prefix = apply_filters( 'better_search_query_exclusion_prefix', '-' );
 		$positive_terms   = array();
 
@@ -1298,16 +1299,7 @@ class Better_Search_Core_Query extends \WP_Query {
 			$orderby_clauses[]            = " $wpdb->posts.post_date DESC ";
 		}
 
-		/**
-		 * Filters the posts_orderby of Better_Search after processing and before returning.
-		 *
-		 * @since 4.0.0
-		 * @since 4.2.0 Added $instance parameter.
-		 *
-		 * @param string[]                 $orderby_clauses The SELECT clause of the query.
-		 * @param \WP_Query                $query           The WP_Query instance.
-		 * @param Better_Search_Core_Query $instance        The Better_Search_Core_Query instance (passed by reference).
-		 */
+		/** This filter is documented in includes/class-better-search-core-query.php */
 		$orderby_clauses = apply_filters_ref_array( 'better_search_query_posts_orderby_clauses', array( $orderby_clauses, $query, &$this ) );
 
 		// Combine all the orderby clauses.
@@ -1315,16 +1307,7 @@ class Better_Search_Core_Query extends \WP_Query {
 			$orderby = implode( ', ', $orderby_clauses );
 		}
 
-		/**
-		 * Filters the GROUP BY clause of the Better_Search.
-		 *
-		 * @since 3.0.0
-		 * @since 4.2.0 Added $instance parameter.
-		 *
-		 * @param string                   $orderby  The ORDER BY clause of the query.
-		 * @param \WP_Query                $query    The WP_Query instance.
-		 * @param Better_Search_Core_Query $instance The Better_Search_Core_Query instance (passed by reference).
-		 */
+		/** This filter is documented in includes/class-better-search-core-query.php */
 		$orderby = apply_filters_ref_array( 'better_search_query_posts_orderby', array( $orderby, $query, &$this ) );
 
 		Hook_Registry::remove_filter( 'posts_orderby', array( $this, 'posts_orderby' ) );
@@ -1543,7 +1526,8 @@ class Better_Search_Core_Query extends \WP_Query {
 			if ( ! empty( $this->query_args['cache'] ) ) {
 				$ts_cache_key = $this->get_cache_key( $query, 'ts' );
 				$cache_time   = isset( $this->query_args['cache_time'] ) ? (int) $this->query_args['cache_time'] : 3600;
-				$cache_time   = apply_filters_ref_array( 'better_search_query_cache_time', array( $cache_time, $this->query_args, $query, &$this ) );
+				/** This filter is documented in includes/class-better-search-core-query.php */
+				$cache_time = apply_filters_ref_array( 'better_search_query_cache_time', array( $cache_time, $this->query_args, $query, &$this ) );
 				Cache::set( $ts_cache_key, $this->topscore, $cache_time );
 			}
 		}
@@ -1674,6 +1658,7 @@ class Better_Search_Core_Query extends \WP_Query {
 
 		// Check cache first.
 		if ( ! empty( $this->query_args['cache'] ) ) {
+			/** This filter is documented in includes/class-better-search-core-query.php */
 			$cache_time = apply_filters( 'better_search_query_cache_time', $this->query_args['cache_time'], $this->query_args );
 			$cache_name = $this->get_cache_key( $query, 'ts' );
 			$topscore   = Cache::get( $cache_name );

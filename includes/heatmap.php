@@ -380,6 +380,7 @@ function get_bsearch_heatmap_counts( $args = array() ) {
 	if ( $cache_time > 0 ) {
 		$cached = get_transient( $cache_key );
 		if ( false !== $cached ) {
+			/** This filter is documented in includes/heatmap.php */
 			return apply_filters( 'get_bsearch_heatmap_counts', $cached, $args );
 		}
 	}

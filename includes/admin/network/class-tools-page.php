@@ -70,7 +70,14 @@ class Tools_Page {
 		?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Better Search Pro Multisite Tools', 'better-search' ); ?></h1>
-		<?php do_action( 'bsearch_tools_network_page_header' ); ?>
+		<?php
+		/**
+		 * Fires at the top of the network admin Tools page, after the heading.
+		 *
+		 * @since 4.2.0
+		 */
+		do_action( 'bsearch_tools_network_page_header' );
+		?>
 
 		<p><?php esc_html_e( 'This page allows you to run tools for Better Search on your multisite network.', 'better-search' ); ?></p>
 

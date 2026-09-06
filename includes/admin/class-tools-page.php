@@ -617,6 +617,13 @@ class Tools_Page {
 			)
 		);
 
+		/**
+		 * Fires after the Tools page help tabs have been registered.
+		 *
+		 * @since 4.0.0
+		 *
+		 * @param \WP_Screen $screen The current screen object.
+		 */
 		do_action( 'bsearch_settings_tools_help', $screen );
 	}
 }

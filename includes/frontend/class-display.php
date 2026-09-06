@@ -109,6 +109,13 @@ class Display {
 				 * @param string $selectors A valid CSS selector string. Default targets standard WordPress content landmarks.
 				 */
 				'selectors'      => apply_filters( 'bsearch_highlight_js_selectors', '.entry-content, .entry-title, .entry-summary' ),
+				/**
+				 * Filters whether search term highlighting matches whole words only.
+				 *
+				 * @since 4.2.2
+				 *
+				 * @param bool $use_boundaries Whether to require word boundaries. Default false.
+				 */
 				'use_boundaries' => (bool) apply_filters( 'bsearch_highlight_use_boundaries', false ),
 			)
 		);

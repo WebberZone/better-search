@@ -135,7 +135,14 @@ class Admin {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Better Search Pro Multisite Settings', 'better-search' ); ?></h1>
-			<?php do_action( 'bsearch_network_admin_settings_page_content_header' ); ?>
+			<?php
+			/**
+			 * Fires at the top of the network admin settings page, after the heading.
+			 *
+			 * @since 4.2.0
+			 */
+			do_action( 'bsearch_network_admin_settings_page_content_header' );
+			?>
 
 			<p><?php esc_html_e( 'This page allows you to configure the settings for Better Search on your multisite network.', 'better-search' ); ?></p>
 
@@ -155,7 +162,14 @@ class Admin {
 							)
 						);
 						?>
-						<?php do_action( 'bsearch_network_admin_settings_page_content' ); ?>
+						<?php
+						/**
+						 * Fires inside the network admin settings page content area.
+						 *
+						 * @since 4.2.0
+						 */
+						do_action( 'bsearch_network_admin_settings_page_content' );
+						?>
 					</div><!-- /#post-body-content -->
 
 					<div id="postbox-container-1" class="postbox-container">
