@@ -15,26 +15,27 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Fetch the search query for Better Search.
  *
- * @since   2.0.0
+ * @since 2.0.0
  *
- * @param bool $escaped Whether the result is escaped. Default true.
- *                      Always escape this if you are going to display it.
- * @return  string  Better Search query
+ * @param  bool $escaped Whether the result is escaped. Default true.
+ *                       Always escape this if you are going to display it.
+ * @return string  Better Search query
  */
 function get_bsearch_query( $escaped = true ) {
 
 	$search_query = trim(
 		Helpers::clean_terms(
 			get_search_query( $escaped )
-		)
+		),
+		''
 	);
 
 	/**
 	 * Filter search terms string
 	 *
-	 * @since   2.0.0
+	 * @since 2.0.0
 	 *
-	 * @param   string  $search_query   Search query
+	 * @param string  $search_query   Search query
 	 */
 	return apply_filters( 'get_bsearch_query', $search_query );
 }
@@ -45,11 +46,17 @@ function get_bsearch_query( $escaped = true ) {
  *
  * @since 1.2
  *
- * @param mixed $search_query   The search term.
- * @param array $args {
- *      Optional. Array or string of Query parameters.
+ * @param mixed $search_query The search term.
+ * @param array $args         {
+ *                            Optional.
+ *                            Array
+ *                            or
+ *                            string
+ *                            of
+ *                            Query
+ *                            parameters.
  *
- *      @type bool $use_fulltext Use fulltext flag.
+ * @type   bool $use_fulltext Use fulltext flag.
  * }
  * @return array Cleaned up search string. Search query is at [0], array of terms at [1], fulltext status at [2].
  */

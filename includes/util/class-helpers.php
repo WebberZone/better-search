@@ -540,7 +540,7 @@ class Helpers {
 				continue;
 			}
 
-			$part_ltrimmed = ltrim( $part );
+			$part_ltrimmed = ltrim( $part, '' );
 			if ( '' === $part_ltrimmed ) {
 				continue;
 			}
@@ -789,7 +789,7 @@ class Helpers {
 		$output = preg_replace( '/\b[a-z\-]\b/i', '', $output );
 		$output = preg_replace( '/\s+/', ' ', $output );
 
-		return trim( $output );
+		return trim( $output, '' );
 	}
 
 	/**

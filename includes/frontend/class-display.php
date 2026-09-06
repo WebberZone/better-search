@@ -174,7 +174,7 @@ class Display {
 		}
 
 		foreach ( $matches[0] as $token ) {
-			$token = trim( $token );
+			$token = trim( $token, '' );
 			if ( '' === $token ) {
 				continue;
 			}
