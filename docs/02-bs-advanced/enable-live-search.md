@@ -31,3 +31,19 @@ It benefits content-heavy sites where users frequently search for specific posts
 3. Save your changes.
 
 Once enabled, Better Search automatically takes over your search forms and applies live Ajax functionality. You don't need to add extra code or scripts.
+
+## Performance and limits
+
+Live search fires on every keystroke, so Better Search keeps each request cheap.
+
+- **Responses are cached.** A successful live search response is stored in a transient for five minutes, keyed on the query, the site locale, and the blog ID. Repeat searches for the same term are served from that cache without touching the database.
+- **Short queries are rejected on the server.** A query shorter than the **Minimum characters** setting returns an empty response immediately. That setting is Pro only; on the free plugin the floor is three characters. This check used to run only in the browser, so a crafted request could still run a full search.
+- **Queries are capped at 128 characters.** Anything longer is truncated before the search runs.
+- **No result count is calculated.** Live search asks only for the posts it will show, skipping the extra count query a normal search performs.
+
+Change the cache duration with the `bsearch_live_search_cache_time` filter. Return `0` to disable live search caching.
+
+```php
+// Cache live search responses for one minute instead of five.
+add_filter( 'bsearch_live_search_cache_time', fn() => MINUTE_IN_SECONDS );
+```

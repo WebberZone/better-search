@@ -133,18 +133,32 @@ Displays a "Showing results for **`<corrected term>`** — search instead for `<
 
 Accepts the same `before` / `after` arguments, defaulting to `<p class="bsearch-autocorrect-notice">` / `</p>`. A [`get_bsearch_autocorrect_notice()`](https://webberzone.dev/better-search/hooks/get_bsearch_autocorrect_notice/) variant returns the markup instead of echoing it.
 
+## Rebuilding the dictionary
+
+The content dictionary is built from your published post titles. Rebuilds read titles in batches of 2,000 posts rather than loading every title at once, which keeps memory use flat on large sites. Use the `bsearch_spell_dictionary_batch_size` filter to change the batch size.
+
+```php
+add_filter( 'bsearch_spell_dictionary_batch_size', fn() => 500 );
+```
+
+A rebuild fills a shadow table and swaps it in when it is complete, so the existing dictionary keeps serving suggestions for the whole of the rebuild. Earlier versions emptied the table first, which left "Did you mean" returning nothing until the rebuild finished.
+
+Words that differ only by letter case or accents are combined into a single entry with their frequencies added together, matching the dictionary table's collation. Rebuilding no longer fails when your content contains such pairs.
+
 ## Developer Filters
 
 - [`bsearch_spelling_suggestion`](https://webberzone.dev/better-search/hooks/bsearch_spelling_suggestion/) — Filters the final suggestion resolved for a single search token, after the search log, content index, and enchant fallback have all been tried.
 - [`bsearch_did_you_mean_min_searches`](https://webberzone.dev/better-search/hooks/bsearch_did_you_mean_min_searches/) — Filters the minimum search-log count required for a term to qualify as a suggestion, overriding the **Minimum searches to qualify as a suggestion** setting.
 - `bsearch_did_you_mean_enchant_locale` — Filters the locale (default `en_US`) used to request a dictionary from enchant for the fallback.
 - `get_bsearch_did_you_mean` / `get_bsearch_autocorrect_notice` — Filter the generated markup for each notice.
+- `bsearch_spell_dictionary_batch_size` — Filters the number of posts read in each dictionary rebuild batch. Default `2000`.
 
 ## Important Considerations
 
 - **Zero-result searches only**: Suggestions are only computed when a search returns no results — there's no performance impact on normal searches.
 - **Auto-correct is re-run, not guessed**: In Auto-correct mode, the corrected phrase is only adopted if re-running the search with it actually returns results; otherwise Better Search falls back to showing the normal zero-results page.
 - **Accepted corrections reinforce your search log**: When Auto-correct mode succeeds, the corrected term is logged as a search, strengthening future suggestions.
+- **Repeated saves no longer skew frequencies**: When you save a post, its title words are added to the dictionary only if they are missing, rather than having their counts incremented again. Frequencies now reflect how common a word is, not how often a post was edited. The scheduled rebuild recomputes true frequencies twice a day.
 
 ## See also
 

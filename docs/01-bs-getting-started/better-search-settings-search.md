@@ -58,6 +58,7 @@ A few things worth knowing:
 - **Very short words are ignored.** MySQL skips words below its minimum token length — 3 characters for InnoDB (`innodb_ft_min_token_size`) and 4 for MyISAM (`ft_min_word_len`) by default.
 - **Phrase searches work even with BOOLEAN mode off.** If a query contains double-quoted text, Better Search enables BOOLEAN mode automatically for that query so the phrase is matched correctly.
 - **Fuzzy search is skipped for these queries.** If a search uses any of `+ - ~ > < *`, [fuzzy matching](https://webberzone.com/support/knowledgebase/fuzzy-matches/) is automatically disabled for it, since the visitor has asked for a precise query.
+- **A query can be nothing but exclusions.** `-theme` on its own returns every post that does not contain "theme", rather than no results. Exclusions are applied across each of the search fields you have enabled below, and are preserved when fuzzy LIKE matching is in use.
 
 ### Enable LIKE fallback *(Pro only)*
 
@@ -134,6 +135,17 @@ Include posts where all taxonomies (categories, tags, custom taxonomies) match t
 ### Search Meta
 
 Include posts where meta values match the search terms.
+
+On sites with a large `postmeta` table this is often the most expensive part of the query, because every meta key is searched. Use the `bsearch_search_meta_keys` filter to restrict the search to the keys you actually want. Returning an empty array keeps the default behavior of searching all keys.
+
+```php
+add_filter(
+	'bsearch_search_meta_keys',
+	function ( $meta_keys ) {
+		return array( 'subtitle', 'sku' );
+	}
+);
+```
 
 ### Search Authors
 

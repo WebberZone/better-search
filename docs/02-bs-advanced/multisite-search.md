@@ -50,3 +50,7 @@ Multisite search can query large datasets, which may impact performance on large
 - Use a caching plugin like **WP Rocket** or **W3 Total Cache**.
 - Enable **Object Cache** if your host supports it.
 - Consider using **server-level caching** (e.g., Redis or Memcached).
+
+## Exclusions across the network
+
+The exclusion settings you configure on each site apply to network results as well. From 4.4.3, **Exclude password-protected posts** is honored when results are collected from other sites in the network. Earlier versions applied it only to the current site, so password-protected posts from other sites could appear in network-wide results.
