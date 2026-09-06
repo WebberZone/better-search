@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://wzn.io/donate-wz
-Stable tag: 4.4.3
+Stable tag: 4.4.4
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -125,6 +125,14 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.4.4 =
+
+* Bug fixes:
+	* Fixed `the_bsearch_post_type()` and `get_bsearch_post_type()` filtering their output through the term list hooks. They now use the `the_bsearch_post_type` and `get_bsearch_post_type` filters.
+
+* Other:
+	* Documented the plugin's filter and action hooks that previously had no docblock, and pointed repeated call sites at a single canonical docblock.
+
 = 4.4.3 =
 
 *Release Date - 5 September 2026*
@@ -197,6 +205,9 @@ Read more in the [Better Search v4.4.0 release post](https://webberzone.com/anno
 For previous changelog entries, please refer to the separate changelog.txt file or [Github Releases page](https://github.com/WebberZone/better-search/releases)
 
 == Upgrade Notice ==
+
+= 4.4.4 =
+Fixes the post type template functions using the wrong filter hooks.
 
 = 4.4.3 =
 Improves search and multisite performance, strengthens negative-term handling, adds configurable meta-key filtering, and fixes spelling-dictionary and dashboard issues.

@@ -1019,15 +1019,15 @@ function get_bsearch_term_list( $post = 0, $args = array() ) {
 function the_bsearch_post_type( $post = 0, $args = array() ) {
 
 	/**
-	 * Filters the post type for the current post.
+	 * Filters the post type displayed for the current post.
 	 *
-	 * @since 3.0.0
+	 * @since 4.4.4
 	 *
-	 * @param string      $output The post type.
-	 * @param int|WP_Post $post   WP_Post object.
-	 * @param array       $args   Array of arguments.
+	 * @param string       $output The post type.
+	 * @param int|\WP_Post $post   WP_Post object.
+	 * @param array        $args   Array of arguments.
 	 */
-	echo apply_filters( 'the_bsearch_term_list', get_bsearch_post_type( $post, $args ), $post, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo apply_filters( 'the_bsearch_post_type', get_bsearch_post_type( $post, $args ), $post, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 /**
@@ -1068,13 +1068,13 @@ function get_bsearch_post_type( $post = 0, $args = array() ) {
 	/**
 	 * Filters the post type label for the current post.
 	 *
-	 * @since 3.3.0
+	 * @since 4.4.4
 	 *
-	 * @param string      $output The post type.
+	 * @param string       $output The post type label.
 	 * @param int|\WP_Post $post   WP_Post object.
-	 * @param array       $args   Array of arguments.
+	 * @param array        $args   Array of arguments.
 	 */
-	$output = apply_filters( 'get_bsearch_term_list', $output, $post, $args );
+	$output = apply_filters( 'get_bsearch_post_type', $output, $post, $args );
 
 	return $output;
 }
