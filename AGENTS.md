@@ -6,7 +6,7 @@ Guidance for AI coding agents working in this repository.
 
 - Return only the changed function or section, not the full file
 - No explanation unless asked
-- No suggestions outside the scope of what was asked
+- No out-of-scope suggestions
 - Skip preamble and trailing summaries
 
 ## Release Notes
@@ -23,17 +23,19 @@ See `dev-tools/CLAUDE.md`'s Changelog convention.
 
 ## Plugin Overview
 
-**Better Search 4.4.2 is in development; 4.4.1 is current stable.**
+**This file is identical in `better-search` (free) and `better-search-pro` (pro).** To tell which repo you are in: `includes/pro/` exists in the pro repo only, and the git remote is `WebberZone/better-search-pro` rather than `WebberZone/better-search`. The pro repo is the source of truth for both — make every change there, including free-tier code, then regenerate the free repo with `dev-tools/sync-pro-to-free.sh`. Never edit the free repo directly.
 
-Better Search Pro (v4.4.2), the premium version, replaces default WordPress search with a FULLTEXT-powered, relevance-ranked engine, adding fuzzy search, custom index tables, multisite search, "Did you mean" spelling suggestions, and more; also tracks popular search queries and displays a search heatmap.
+Better Search replaces WordPress's default search with a FULLTEXT-powered, relevance-ranked engine, and tracks popular search queries and displays a search heatmap. Better Search Pro is the premium version, adding fuzzy search, custom index tables, multisite search, "Did you mean" spelling suggestions, search redirects, and more.
 
-Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.6+, PHP 7.4+.
+Activating either plugin auto-deactivates the other; both share text domain `better-search` and settings key `bsearch_settings`, so settings persist across the switch.
 
-**This is the pro version.** Activating it auto-deactivates the free plugin (and vice versa); both share text domain `better-search` and settings key `bsearch_settings`, so settings persist when switching.
+Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.8+, PHP 7.4+.
 
-Pro-only code lives exclusively in `includes/pro/`, declared as `@fs_premium_only /includes/pro/` in the plugin header; all files outside it are identical to the free version.
+Versions: `readme.txt`'s `Stable tag` is the released version; `BETTER_SEARCH_VERSION` in `better-search.php` is the working version — use it for new `@since` tags. Do not bump either unless asked.
 
-Constants defined in `better-search.php`: `BETTER_SEARCH_VERSION` (4.4.2), `BETTER_SEARCH_PLUGIN_DIR`, `BETTER_SEARCH_PLUGIN_URL`, `BETTER_SEARCH_PLUGIN_FILE`, `BETTER_SEARCH_DB_VERSION` (2.0), `BETTER_SEARCH_DEFAULT_THUMBNAIL_URL`.
+Pro-only code lives exclusively in `includes/pro/`, declared as `@fs_premium_only /includes/pro/` in the plugin header; all files outside it are identical in the two repos.
+
+Constants defined in `better-search.php`: `BETTER_SEARCH_VERSION`, `BETTER_SEARCH_PLUGIN_DIR`, `BETTER_SEARCH_PLUGIN_URL`, `BETTER_SEARCH_PLUGIN_FILE`, `BETTER_SEARCH_DB_VERSION` (2.0), `BETTER_SEARCH_DEFAULT_THUMBNAIL_URL`.
 
 Settings are stored as a single `bsearch_settings` array in `wp_options`. Access via `bsearch_get_option($key)` / `bsearch_get_settings()`. The global `$bsearch_settings` is populated at plugin load.
 
@@ -64,7 +66,7 @@ pnpm run zip             # Create plugin zip via wp-scripts plugin-zip
 ncu -u && pnpm install   # Update dependencies to latest and reinstall
 ```
 
-Note: no `build:pro`/`start:pro` pnpm script — no Gutenberg blocks in `includes/pro/`. Pro JS lives in `includes/pro/custom-tables/admin/js/` (plain JS, already built: `reindex.js` / `reindex.min.js`).
+No `build:pro`/`start:pro` pnpm script — no Gutenberg blocks in `includes/pro/`. Pro JS lives in `includes/pro/custom-tables/admin/js/` (plain JS, prebuilt: `reindex.js` / `reindex.min.js`).
 
 ## Distribution zip vendor invariant
 
@@ -80,7 +82,7 @@ Verify a change by building the zip and loading the classes from the extracted t
 
 ### Entry Point
 
-`better-search.php` defines constants, loads Freemius (`load-freemius.php`), registers the custom PSR-4 autoloader (`includes/autoloader.php`), then calls `\WebberZone\Better_Search\load()` on `plugins_loaded`. It also `require`s several legacy-style global files directly (not autoloaded): `options-api.php`, `class-better-search-core-query.php`, `class-better-search-query.php`, `functions.php`, `general-template.php`, `heatmap.php`.
+`better-search.php` defines constants, loads Freemius (`load-freemius.php`), registers the custom PSR-4 autoloader (`includes/autoloader.php`), then calls `\WebberZone\Better_Search\load()` on `plugins_loaded`. It also requires several legacy-style global files directly (not autoloaded): `options-api.php`, `class-better-search-core-query.php`, `class-better-search-query.php`, `functions.php`, `general-template.php`, `heatmap.php`.
 
 `Pro\Pro` is instantiated inside `Main::init()` only when `bsearch_freemius()->is__premium_only()` and `can_use_premium_code()` are both true (Freemius gates via the `@fs_premium_only` header directive). `Pro\Pro::free_hooks()` always runs when `is__premium_only()` is true, regardless of whether premium code can be used.
 
@@ -90,19 +92,19 @@ Both plugins include a `bsearch_deactivate_other_instances()` function (in-file,
 
 ### Core Components
 
-- **`includes/class-main.php`** — Singleton (`Main::get_instance()`); instantiates all subsystems, admin initialized on `init` hook. Has `?Pro\Pro $pro` (set when pro license active) and `?Admin\Network\Admin $network_admin` (set on multisite installs).
+- **`includes/class-main.php`** — Singleton (`Main::get_instance()`); instantiates all subsystems, admin on `init`. Has a `?Pro\Pro $pro` property set when the pro license is active, and a `?Admin\Network\Admin $network_admin` property set on multisite.
 - **`includes/class-hook-loader.php`** — Registers plugin-wide hooks (`init`, `widgets_init`).
 - **`includes/class-tracker.php`** — Tracks search queries via AJAX and `parse_request`; stores results in `bsearch` / `bsearch_daily` DB tables.
 - **`includes/class-db.php`** — Static class managing the `bsearch` / `bsearch_daily` search-tracking tables and FULLTEXT indexes on `wp_posts`.
 
 ### Query Engine
 
-- **`Better_Search_Core_Query`** (`includes/class-better-search-core-query.php`) — Extends `WP_Query`; builds FULLTEXT SQL with configurable title/content weighting, boolean mode, seamless mode, and custom-table support. Global class outside the autoloaded namespace, required directly.
+- **`Better_Search_Core_Query`** (`includes/class-better-search-core-query.php`) — Extends `WP_Query`; builds FULLTEXT SQL with configurable title/content weighting, boolean mode, seamless mode, and custom-table support. Outside the autoloaded namespace (global class, required directly).
 - **`Better_Search_Query`** (`includes/class-better-search-query.php`) — Thin wrapper around `Better_Search_Core_Query` for template use.
 
 ### Frontend (`includes/frontend/`)
 
-- **`Display`** — Renders search results HTML and highlights search terms on results pages and followed links (scheme-agnostic referer check). `extract_highlight_terms()` keeps double-quoted phrases intact and skips `-excluded` terms; highlighting itself is done by `Helpers::highlight()`.
+- **`Display`** — Renders search results HTML and highlights search terms on results pages and followed links (referer check is scheme-agnostic). `extract_highlight_terms()` keeps double-quoted phrases intact and skips `-excluded` terms; highlighting itself is done by `Helpers::highlight()`.
 - **`Live_Search`** — AJAX live search (enqueues `better-search-live-search.js`).
 - **`Template_Handler`** — Loads theme template overrides from `templates/`.
 - **`Shortcodes`** — `[better_search]` shortcode.
@@ -114,7 +116,7 @@ Both plugins include a `bsearch_deactivate_other_instances()` function (in-file,
 ### Admin (`includes/admin/`)
 
 - **`Settings`** — Settings page (`bsearch_options_page`); tabs for General, Search, Output, Heatmap, etc. Uses the WebberZone Settings API framework in `includes/admin/settings/` (`Settings_API`, `Settings_Form`, `Settings_Sanitize`, `Metabox_API`, `Settings_Wizard_API`).
-- **`Dashboard`** / **`Dashboard_Widgets`** — Search statistics dashboard page; tabs support custom CSS classes and hide attributes, extensible via `bsearch_admin_dashboard_tabs` filter.
+- **`Dashboard`** / **`Dashboard_Widgets`** — Search statistics dashboard page; tabs support custom CSS classes and hide attributes, extensible via the `bsearch_admin_dashboard_tabs` filter.
 - **`Statistics`** / **`Statistics_Table`** — Search query log table.
 - **`Tools_Page`** — Utility actions (reindex, reset stats, etc.).
 - **`Settings_Wizard`** — Guided setup wizard.
@@ -131,31 +133,31 @@ Both plugins include a `bsearch_deactivate_other_instances()` function (in-file,
 
 ### Heatmap
 
-`includes/heatmap.php` — procedural functions rendering the search heatmap (list of popular queries); also exposed as a widget and shortcode.
+`includes/heatmap.php` has procedural functions rendering the search heatmap (popular-query list); also exposed as a widget and shortcode.
 
 ### Pro Components (`includes/pro/`) [PRO ONLY]
 
-- **`Pro`** (`class-pro.php`) — Top-level pro orchestrator, instantiated as `Main::$pro`; wires together all pro subsystems and registers additional hooks on `better_search_query_*` filters. Also handles minimum relevance threshold (`set_min_relevance`), LIKE fallback when FULLTEXT returns 0 results (`like_fallback_search`), "Did you mean" spelling suggestions (`suggest_did_you_mean`, registered at a later priority than `like_fallback_search` on the same `better_search_query_the_posts` filter so it isn't skipped by that method's early returns), slug search (`add_custom_clauses`), front/posts page exclusion (`exclude_special_pages` via `bsearch_exclude_post_ids` filter), and REST API search integration.
+- **`Pro`** (`class-pro.php`) — Top-level pro orchestrator, instantiated as `Main::$pro`. Wires together all pro subsystems and registers additional hooks on `better_search_query_*` filters. Also handles minimum relevance threshold (`set_min_relevance`), LIKE fallback when FULLTEXT returns 0 results (`like_fallback_search`), "Did you mean" spelling suggestions (`suggest_did_you_mean`, registered at a later priority than `like_fallback_search` on the same `better_search_query_the_posts` filter so it isn't skipped by that method's early returns), slug search (`add_custom_clauses`), front/posts page exclusion (`exclude_special_pages` via `bsearch_exclude_post_ids` filter), and REST API search integration.
 
-- **`Query_Modifier`** (`class-query-modifier.php`) — Extends the core query via filter hooks (`better_search_query_posts_fields`, `_join`, `_where_match`, `_groupby`, `_orderby_clauses`). Adds custom table JOIN, cornerstone posts pinning (`the_posts` filter), max execution time hint, and additional `ORDER BY` clause control.
+- **`Query_Modifier`** (`class-query-modifier.php`) — Extends the core query via filter hooks (`better_search_query_posts_fields`, `_join`, `_where_match`, `_groupby`, `_orderby_clauses`): custom table JOIN, cornerstone posts pinning (`the_posts` filter), max execution time hint, and additional `ORDER BY` clause control.
 
-- **`Fuzzy_Search`** (`class-fuzzy-search.php`) — Creates MySQL stored functions (`wz_phrase_similarity_soundex`, `wz_phrase_similarity_levenshtein`, `wz_levenshtein`) for phonetic/similarity matching and exposes `get_fuzzy_score_sql()` which `Query_Modifier` injects into the FULLTEXT `posts_fields` / `posts_where_match` clauses. Shows an admin notice if the fuzzy index is missing. Also exposes `get_did_you_mean_suggestion()`, the search-log-corpus lookup for "Did you mean" (first-letter + length-window prefilter, then `wz_levenshtein` — not `SOUNDEX()`, which rejects some single-edit typos it should catch).
+- **`Fuzzy_Search`** (`class-fuzzy-search.php`) — Creates MySQL stored functions (`wz_phrase_similarity_soundex`, `wz_phrase_similarity_levenshtein`, `wz_levenshtein`) for phonetic/similarity matching and exposes `get_fuzzy_score_sql()`, which `Query_Modifier` injects into the FULLTEXT `posts_fields` / `posts_where_match` clauses. Shows an admin notice if the fuzzy index is missing. Also exposes `get_did_you_mean_suggestion()`, the search-log-corpus lookup for "Did you mean" (first-letter + length-window prefilter, then `wz_levenshtein` — not `SOUNDEX()`, which rejects some single-edit typos it should catch).
 
-- **`Spell_Dictionary`** (`class-spell-dictionary.php`) — Content-index corpus for "Did you mean": a `wp_bsearch_dictionary` table (word, frequency) built from published post titles + public taxonomy term names, rebuilt twicedaily via cron and on activation, kept additive-fresh via `save_post`. Same prefilter + `wz_levenshtein` lookup as `Fuzzy_Search`, used as the second-tier corpus when the search log has no match.
+- **`Spell_Dictionary`** (`class-spell-dictionary.php`) — Content-index corpus for "Did you mean": a `wp_bsearch_dictionary` table (word, frequency) built from published post titles + public taxonomy term names, rebuilt twicedaily via cron and on activation, kept additive-fresh via `save_post`. Same prefilter + `wz_levenshtein` lookup as `Fuzzy_Search`; used as the second-tier corpus when the search log has no match.
 
 - **`Multisite_Search`** (`class-multisite-search.php`) — Cross-site search across multiple blogs in a WordPress Multisite network. Uses `Custom_Tables\Posts_Search` to query across sites.
 
-- **`Custom_Tables\Custom_Tables`** (`custom-tables/class-custom-tables.php`) — Manages a dedicated search index table separate from `wp_posts`, enabling faster queries on large sites. Composed of:
-  - `Table_Manager` — Creates/manages the custom DB table schema (defaults to InnoDB). Includes `get_table_engine()` and `convert_to_innodb()` methods for engine management, with automatic FULLTEXT index recreation after conversion.
-  - `Sync_Manager` — Keeps the custom table in sync with `wp_posts` (on save/delete hooks). Includes a scheduled reconciliation cron job (twicedaily) that auto-syncs any published posts missing from the index.
-  - `Custom_Tables_Admin` — Admin UI with reindex action, InnoDB conversion tool (shows current engine status with conversion form), and enqueues `reindex.js` for AJAX reindexing progress.
+- **`Custom_Tables\Custom_Tables`** (`custom-tables/class-custom-tables.php`) — Manages a dedicated search index table separate from `wp_posts` for faster queries on large sites. Composed of:
+  - `Table_Manager` — Creates/manages the custom DB table schema (defaults to InnoDB); `get_table_engine()` and `convert_to_innodb()` for engine management, with automatic FULLTEXT index recreation after conversion.
+  - `Sync_Manager` — Keeps the custom table in sync with `wp_posts` (on save/delete hooks); scheduled reconciliation cron (twicedaily) auto-syncs published posts missing from the index.
+  - `Custom_Tables_Admin` — Admin UI with reindex action, InnoDB conversion tool (shows current engine status with conversion form), enqueues `reindex.js` for AJAX reindexing progress.
   - `Posts_Search` — Executes search queries against the custom table.
 
-- **`Admin`** (`class-admin.php`) — Pro-specific admin additions (extra settings sections, tools), including a dashboard chart drill-down: click a bar in the daily searches chart to view top 20 popular searches for that day (`bsearch_get_day_searches` AJAX action). Enqueues `includes/pro/js/chart-interactions.js` for Chart.js click/hover/tooltip handling.
+- **`Admin`** (`class-admin.php`) — Pro-specific admin additions (extra settings sections, tools). Includes dashboard chart drill-down: click a bar in the daily searches chart to view top 20 popular searches for that day (`bsearch_get_day_searches` AJAX action). Enqueues `includes/pro/js/chart-interactions.js` for Chart.js click/hover/tooltip handling.
 
 - **`Network`** (`network/`) — Multisite network admin pages. `Dashboard` registers a network-admin dashboard page and reuses the base `Admin\Dashboard` internally. `Statistics` reuses `Statistics_Table` to display cross-network search stats under the network admin menu.
 
-- **`CLI`** (`cli/`) — WP-CLI integration. `CLI_Manager` registers all subcommands under the `bsearch` top-level command. Subcommands: `search`, `cache`, `db`, `stats`, `settings`, `ecsi`, `status`, `stopwords`, all extending `Base_Command`. The `ecsi` command manages the custom index table (create/reindex/delete).
+- **`CLI`** (`cli/`) — WP-CLI integration. `CLI_Manager` registers all subcommands under the `bsearch` top-level command. Subcommands: `search`, `cache`, `db`, `stats`, `settings`, `ecsi`, `status`, `stopwords`. All extend `Base_Command`. The `ecsi` command manages the custom index table (create/reindex/delete).
 
 ### Pro Settings
 
@@ -164,9 +166,9 @@ Pro settings are added to the existing `bsearch_settings` option; `Pro\Admin` re
 ## Key Patterns
 
 - **Pro directory** — All pro-exclusive code lives in `includes/pro/`. `Main` has a `?Pro\Pro $pro` property set only when the pro license is active (Freemius gating).
-- **Legacy globals** — Several core files are `require_once`'d rather than autoloaded; global `$bsearch_settings` is set at load time and accessible everywhere, but prefer `bsearch_get_option()` over direct access.
-- **FULLTEXT indexes** — `Db::create_fulltext_indexes()` runs on activation, adding FULLTEXT indexes to `wp_posts(post_title, post_content)`; both InnoDB and MyISAM variants handled.
-- **Seamless mode** — When enabled, Better Search intercepts the native WordPress search query (via `pre_get_posts`) rather than requiring a separate template; controlled by the `seamless` setting.
+- **Legacy globals** — Several core files are `require_once`'d rather than autoloaded; the global `$bsearch_settings` is set at load time and accessible everywhere, but prefer `bsearch_get_option()` over direct access.
+- **FULLTEXT indexes** — `Db::create_fulltext_indexes()`, called on activation, adds FULLTEXT indexes to `wp_posts(post_title, post_content)`, handling both InnoDB and MyISAM.
+- **Seamless mode** — When enabled, Better Search intercepts the native WordPress search query (via `pre_get_posts`) instead of requiring a separate template; controlled by the `seamless` setting.
 
 ## Free vs Pro Feature Comparison
 
@@ -192,9 +194,9 @@ Pro settings are added to the existing `bsearch_settings` option; `Pro\Admin` re
 
 ## Shared framework files: `@since` convention
 
-The Settings API (`includes/admin/settings/*.php`) and Admin Banner (`includes/admin/class-admin-banner.php`) are copy-pasted, shared framework files whose canonical source is the `Settings_API` repo. To keep `@since` tags meaningful and stable across syncs, these files follow special rules:
+The Settings API (`includes/admin/settings/*.php`) and Admin Banner (`includes/admin/class-admin-banner.php`) are copy-pasted, shared framework files whose canonical source is the `Settings_API` repo. To keep `@since` tags meaningful and stable across syncs:
 
-- Each file carries **exactly one** `@since` tag, on its **class docblock**, set to the plugin version at which that class was **first introduced into this plugin**. Per-file (wizard, metabox and banner classes were generally added later than the core Settings API classes).
+- Each file carries **exactly one** `@since` tag, on its **class docblock**, set to the plugin version at which that class was **first introduced into this plugin** — per-file (wizard, metabox and banner classes were generally added later than the core Settings API classes).
 - **Do not** add `@since` to methods, functions or properties in these files.
 - When syncing/updating these files from another plugin or the canonical `Settings_API` repo, **do not overwrite the class-level `@since`** — it's plugin-specific. Re-apply the values below after any sync.
 
