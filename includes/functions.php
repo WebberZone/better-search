@@ -27,7 +27,7 @@ function get_bsearch_query( $escaped = true ) {
 		Helpers::clean_terms(
 			get_search_query( $escaped )
 		),
-		''
+		" \t\n\r\0\x0B"
 	);
 
 	/**

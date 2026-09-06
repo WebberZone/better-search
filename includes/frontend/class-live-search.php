@@ -87,7 +87,7 @@ class Live_Search {
 	 */
 	public function live_search() {
 		$search_query = isset( $_POST['s'] ) ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$search_query = trim( mb_substr( $search_query, 0, 128 ), '' );
+		$search_query = trim( mb_substr( $search_query, 0, 128 ), " \t\n\r\0\x0B" );
 
 		// The minimum length was previously enforced only in the browser, so a crafted
 		// one-character request still ran a full search on every keystroke.
