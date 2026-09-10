@@ -127,11 +127,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.4.4 =
 
-* Bug fixes:
-	* Fixed `the_bsearch_post_type()` and `get_bsearch_post_type()` filtering their output through the term list hooks. They now use the `the_bsearch_post_type` and `get_bsearch_post_type` filters.
+Release date: 10 September 2026
 
-* Other:
-	* Documented the plugin's filter and action hooks that previously had no docblock, and pointed repeated call sites at a single canonical docblock.
+**Fixed**
+
+* `the_bsearch_post_type()` and `get_bsearch_post_type()` filtered their output through the term list hooks instead of the `the_bsearch_post_type` and `get_bsearch_post_type` filters.
 
 = 4.4.3 =
 
@@ -208,6 +208,3 @@ For previous changelog entries, please refer to the separate changelog.txt file 
 
 = 4.4.4 =
 Fixes the post type template functions using the wrong filter hooks.
-
-= 4.4.3 =
-Improves search and multisite performance, strengthens negative-term handling, adds configurable meta-key filtering, and fixes spelling-dictionary and dashboard issues.
