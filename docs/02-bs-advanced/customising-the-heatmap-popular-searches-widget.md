@@ -84,15 +84,15 @@ Use the [`widget_bsearch_heatmap_args`](https://webberzone.dev/better-search/hoo
 add_filter(
  'widget_bsearch_heatmap_args',
  function ( $args, $instance ) {
-  $args[['number']]     = 30;
-  $args[['smallest']]   = 12;
-  $args[['largest']]    = 24;
-  $args[['unit']]       = 'px';
-  $args[['cold']]       = '#777777';
-  $args[['hot']]        = '#111111';
-  $args[['show_count']] = 1;
-  $args[['orderby']]    = 'count';
-  $args[['order']]      = 'DESC';
+  $args['number']     = 30;
+  $args['smallest']   = 12;
+  $args['largest']    = 24;
+  $args['unit']       = 'px';
+  $args['cold']       = '#777777';
+  $args['hot']        = '#111111';
+  $args['show_count'] = 1;
+  $args['orderby']    = 'count';
+  $args['order']      = 'DESC';
 
   return $args;
  },

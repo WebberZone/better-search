@@ -26,7 +26,7 @@ To begin using BSP-CLI, ensure that WP-CLI is installed and that you are running
 All commands use the `wp bsearch` namespace:
 
 ```bash
-wp bsearch <command> <subcommand> [[options]]
+wp bsearch <command> <subcommand> [options]
 ```
 
 ## Available Commands
@@ -45,8 +45,8 @@ wp bsearch search "search term"
 
 - `--limit=<number>` — Number of results (default: 10)
 - `--post-type=<types>` — Comma-separated post types (default: post)
-- `--[[no-]]use-fulltext` — Force FULLTEXT search ON or OFF
-- `--[[no-]]boolean-mode` — Use boolean mode for FULLTEXT ON or OFF
+- `--[no-]use-fulltext` — Force FULLTEXT search ON or OFF
+- `--[no-]boolean-mode` — Use boolean mode for FULLTEXT ON or OFF
 - `--format=<format>` — Output format: table, json, csv (default: table)
 - `--verbose` — Show detailed output
 
