@@ -126,4 +126,82 @@ class Language_Handler {
 		 */
 		return apply_filters( 'bsearch_object_id_cur_lang', $post );
 	}
+
+	/**
+	 * Whether TranslatePress is active and exposes the API this integration needs.
+	 *
+	 * @since 4.4.5
+	 *
+	 * @return bool True if TranslatePress can be used.
+	 */
+	public static function is_translatepress_active(): bool {
+		return function_exists( 'trp_translate' ) && class_exists( 'TRP_Translate_Press' );
+	}
+
+	/**
+	 * Get the TranslatePress settings array.
+	 *
+	 * @since 4.4.5
+	 *
+	 * @return array TranslatePress settings.
+	 */
+	public static function get_trp_settings(): array {
+		$settings = get_option( 'trp_settings', array() );
+
+		return is_array( $settings ) ? $settings : array();
+	}
+
+	/**
+	 * Get the TranslatePress language the current front-end request is rendering in.
+	 *
+	 * @since 4.4.5
+	 *
+	 * @return string Language code, or an empty string when TranslatePress is inactive
+	 *                or the request is in the default language.
+	 */
+	public static function get_trp_current_language(): string {
+		if ( ! self::is_translatepress_active() ) {
+			return '';
+		}
+
+		global $TRP_LANGUAGE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- TranslatePress global.
+
+		$language = is_string( $TRP_LANGUAGE ) ? $TRP_LANGUAGE : ''; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- TranslatePress global.
+		$settings = self::get_trp_settings();
+		$default  = isset( $settings['default-language'] ) ? (string) $settings['default-language'] : '';
+
+		return ( '' === $language || $language === $default ) ? '' : $language;
+	}
+
+	/**
+	 * Get a language identifier for cache keys.
+	 *
+	 * Rendered output is language-specific — TranslatePress filters `home_url()`, and
+	 * WPML/Polylang resolve different post IDs — so cached HTML and post lists must not
+	 * be shared between languages.
+	 *
+	 * @since 4.4.5
+	 *
+	 * @return string Current language code, or an empty string when the site is monolingual.
+	 */
+	public static function get_cache_language(): string {
+		$language = self::get_trp_current_language();
+
+		if ( '' === $language && function_exists( 'pll_current_language' ) ) {
+			$language = (string) \pll_current_language( 'locale' );
+		}
+
+		if ( '' === $language && class_exists( 'SitePress' ) ) {
+			$language = (string) apply_filters( 'wpml_current_language', null );
+		}
+
+		/**
+		 * Filters the language component added to Better Search cache keys.
+		 *
+		 * @since 4.4.5
+		 *
+		 * @param string $language Current language code, or an empty string.
+		 */
+		return (string) apply_filters( 'bsearch_cache_language', $language );
+	}
 }

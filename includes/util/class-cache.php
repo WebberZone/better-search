@@ -9,6 +9,8 @@
 
 namespace WebberZone\Better_Search\Util;
 
+use WebberZone\Better_Search\Frontend\Language_Handler;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -208,7 +210,7 @@ class Cache {
 		}
 
 		// Generate cache key.
-		return sprintf( 'bs_cache_%1$s_%2$s', md5( wp_json_encode( $args ) ), $context );
+		return sprintf( 'bs_cache_%1$s_%2$s', md5( Language_Handler::get_cache_language() . '|' . wp_json_encode( $args ) ), $context );
 	}
 
 	/**

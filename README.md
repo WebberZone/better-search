@@ -63,6 +63,14 @@ Better Search adds the following MySQL FULLTEXT indices to the `wp_posts` table:
 
 On multisite, these are added to each blog upon activation. These indices power the relevance-based search and are required for full functionality.
 
+### Multilingual sites
+
+Better Search supports WPML and Polylang and detects TranslatePress's current language when caching search results. Caches are separated by language so results from one language are not reused in another.
+
+TranslatePress translates the displayed results with the rest of the page; it does not create a separate search index of translated text. Better Search Pro's core WordPress REST search responses use TranslatePress's built-in REST translation.
+
+Search-term highlighting can prevent TranslatePress from translating a complete title because it splits the text with markup. Disable search-term highlighting if translated titles remain in the default language.
+
 ## Screenshots
 
 ![General Options](https://raw.github.com/ajaydsouza/better-search/master/wporg-assets/screenshot-1.png)
