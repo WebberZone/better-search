@@ -52,6 +52,7 @@ class Live_Search {
 			'bsearch_live_search',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'language' => Language_Handler::get_trp_current_language(),
 				'strings'  => array(
 					'no_results'         => __( 'No results found', 'better-search-pro' ),
 					'searching'          => __( 'Searching...', 'better-search-pro' ),
@@ -86,6 +87,7 @@ class Live_Search {
 	 * Live search function.
 	 */
 	public function live_search() {
+		$language     = Language_Handler::get_trp_ajax_language();
 		$search_query = isset( $_POST['s'] ) ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$search_query = trim( mb_substr( $search_query, 0, 128 ), " \t\n\r\0\x0B" );
 
@@ -97,7 +99,7 @@ class Live_Search {
 			wp_send_json( array() );
 		}
 
-		$cache_key = 'bsearch_ls_' . md5( $search_query . '|' . get_locale() . '|' . get_current_blog_id() );
+		$cache_key = 'bsearch_ls_' . md5( $search_query . '|' . $language . '|' . get_locale() . '|' . get_current_blog_id() );
 		$cached    = get_transient( $cache_key );
 
 		if ( false !== $cached ) {
@@ -128,9 +130,15 @@ class Live_Search {
 		if ( $query->have_posts() ) {
 			while ( $query->have_posts() ) {
 				$query->the_post();
+				$title = html_entity_decode( get_the_title(), ENT_QUOTES, 'UTF-8' );
+				$link  = (string) get_permalink();
+				if ( '' !== $language ) {
+					$title = Language_Handler::trp_translate_content( $title, $language );
+					$link  = Language_Handler::trp_translate_url( $link, $language );
+				}
 				$results[] = array(
-					'title' => html_entity_decode( get_the_title(), ENT_QUOTES, 'UTF-8' ),
-					'link'  => get_permalink(),
+					'title' => $title,
+					'link'  => $link,
 				);
 			}
 		}

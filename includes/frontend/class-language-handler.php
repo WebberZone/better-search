@@ -174,6 +174,144 @@ class Language_Handler {
 	}
 
 	/**
+	 * Fetch a TranslatePress component instance.
+	 *
+	 * @since 4.4.5
+	 *
+	 * @param string $component Component name, e.g. `url_converter`.
+	 * @return object|null Component instance or null when unavailable.
+	 */
+	public static function get_trp_component( string $component ) {
+		if ( ! self::is_translatepress_active() ) {
+			return null;
+		}
+
+		$trp = \TRP_Translate_Press::get_trp_instance();
+		if ( ! is_object( $trp ) || ! method_exists( $trp, 'get_component' ) ) {
+			return null;
+		}
+
+		$instance = $trp->get_component( $component );
+
+		return is_object( $instance ) ? $instance : null;
+	}
+
+	/**
+	 * Get the referring URL, but only when it points at this site.
+	 *
+	 * @since 4.4.5
+	 *
+	 * @return string Referring URL on this host, or an empty string.
+	 */
+	protected static function get_same_origin_referer(): string {
+		$referer = function_exists( 'wp_get_raw_referer' ) ? wp_get_raw_referer() : '';
+
+		if ( ! is_string( $referer ) || '' === $referer ) {
+			return '';
+		}
+
+		$referer_host = wp_parse_url( $referer, PHP_URL_HOST );
+		$home_host    = wp_parse_url( home_url(), PHP_URL_HOST );
+
+		if ( empty( $referer_host ) || empty( $home_host ) || strtolower( (string) $referer_host ) !== strtolower( (string) $home_host ) ) {
+			return '';
+		}
+
+		return $referer;
+	}
+
+	/**
+	 * Resolve the TranslatePress language for an admin-ajax request.
+	 *
+	 * @since 4.4.5
+	 *
+	 * @return string Language code, or an empty string when no translation is needed.
+	 */
+	public static function get_trp_ajax_language(): string {
+		if ( ! self::is_translatepress_active() ) {
+			return '';
+		}
+
+		$settings  = self::get_trp_settings();
+		$default   = isset( $settings['default-language'] ) ? (string) $settings['default-language'] : '';
+		$available = isset( $settings['publish-languages'] ) ? (array) $settings['publish-languages'] : array();
+
+		if ( current_user_can( (string) apply_filters( 'trp_translating_capability', 'manage_options' ) ) ) {
+			$available = array_merge( $available, isset( $settings['translation-languages'] ) ? (array) $settings['translation-languages'] : array() );
+		}
+		$available = array_values( array_unique( array_map( 'strval', $available ) ) );
+
+		$raw_language = isset( $_POST['lang'] ) && is_string( $_POST['lang'] ) ? sanitize_text_field( wp_unslash( $_POST['lang'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Language is a read-only transport value.
+		$language     = $raw_language;
+		$url_slugs    = isset( $settings['url-slugs'] ) && is_array( $settings['url-slugs'] ) ? $settings['url-slugs'] : array();
+		foreach ( $url_slugs as $locale => $slug ) {
+			if ( is_string( $slug ) && $slug === $language ) {
+				$language = (string) $locale;
+				break;
+			}
+		}
+
+		if ( '' === $language ) {
+			$url_converter = self::get_trp_component( 'url_converter' );
+			if ( $url_converter && method_exists( $url_converter, 'get_lang_from_url_string' ) ) {
+				$referer = self::get_same_origin_referer();
+				if ( '' !== $referer ) {
+					$language = (string) $url_converter->get_lang_from_url_string( $referer );
+				}
+			}
+		}
+
+		$language = (string) apply_filters( 'bsearch_trp_ajax_language', $language );
+
+		if ( '' === $language || $language === $default || ! in_array( $language, $available, true ) ) {
+			return '';
+		}
+
+		return $language;
+	}
+
+	/**
+	 * Translate a string with TranslatePress.
+	 *
+	 * @since 4.4.5
+	 *
+	 * @param string $content  Content in the default language.
+	 * @param string $language Target language code.
+	 * @return string Translated content.
+	 */
+	public static function trp_translate_content( string $content, string $language ): string {
+		if ( '' === $content || '' === $language || ! self::is_translatepress_active() ) {
+			return $content;
+		}
+
+		return (string) \trp_translate( $content, $language, false );
+	}
+
+	/**
+	 * Convert a URL to its TranslatePress equivalent in the given language.
+	 *
+	 * @since 4.4.5
+	 *
+	 * @param string $url      URL in the default language.
+	 * @param string $language Target language code.
+	 * @return string Converted URL.
+	 */
+	public static function trp_translate_url( string $url, string $language ): string {
+		if ( '' === $url || '' === $language ) {
+			return $url;
+		}
+
+		$url_converter = self::get_trp_component( 'url_converter' );
+		if ( ! $url_converter || ! method_exists( $url_converter, 'get_url_for_language' ) ) {
+			return $url;
+		}
+
+		$converted = $url_converter->get_url_for_language( $language, $url, '' );
+
+		return is_string( $converted ) && '' !== $converted ? $converted : $url;
+	}
+
+	/**
 	 * Get a language identifier for cache keys.
 	 *
 	 * Rendered output is language-specific — TranslatePress filters `home_url()`, and

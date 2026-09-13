@@ -544,7 +544,8 @@ class SearchAutocomplete {
                 },
                 body: new URLSearchParams({
                     action: 'bsearch_live_search',
-                    s: searchTerm
+                    s: searchTerm,
+                    lang: bsearch_live_search.language || ''
                 }).toString()
             });
 

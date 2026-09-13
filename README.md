@@ -67,7 +67,7 @@ On multisite, these are added to each blog upon activation. These indices power 
 
 Better Search supports WPML and Polylang and detects TranslatePress's current language when caching search results. Caches are separated by language so results from one language are not reused in another.
 
-TranslatePress translates the displayed results with the rest of the page; it does not create a separate search index of translated text. Better Search Pro's core WordPress REST search responses use TranslatePress's built-in REST translation.
+TranslatePress translates the displayed results with the rest of the page; it does not create a separate search index of translated text. Better Search Pro's core WordPress REST search responses and live-search suggestions are translated using the active TranslatePress language.
 
 Search-term highlighting can prevent TranslatePress from translating a complete title because it splits the text with markup. Disable search-term highlighting if translated titles remain in the default language.
 
