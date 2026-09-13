@@ -8,9 +8,11 @@
 [![Required PHP](https://img.shields.io/wordpress/plugin/required-php/better-search?style=flat-square)](https://wordpress.org/plugins/better-search/)
 [![Active installs](https://img.shields.io/wordpress/plugin/installs/better-search?style=flat-square)](https://wordpress.org/plugins/better-search/)
 
-__Requires:__ 6.6
+__Requires:__ 6.8
 
-__Tested up to:__ 7.0
+__Tested up to:__ 7.1
+
+__Requires PHP:__ 7.4
 
 __License:__ [GPL-2.0+](https://www.gnu.org/licenses/gpl-2.0.html)
 
