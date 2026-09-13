@@ -48,6 +48,7 @@ Better Search is free to use and replaces WordPress search with relevance-ranked
 | Scheduled index reconciliation cron job | ❌ | ✅ |
 | MySQL `MAX_EXECUTION_TIME` query guard | ❌ | ✅ |
 | **Integration** |  |  |
+| Multilingual support (WPML, Polylang and TranslatePress) | ✅ | ✅ |
 | REST API search integration | ❌ | ✅ |
 | Dashboard search chart with daily drill-down | ❌ | ✅ |
 | **Multisite** |  |  |

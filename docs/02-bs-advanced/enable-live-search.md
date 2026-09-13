@@ -36,7 +36,7 @@ Once enabled, Better Search automatically takes over your search forms and appli
 
 Live search fires on every keystroke, so Better Search keeps each request cheap.
 
-- **Responses are cached.** A successful live search response is stored in a transient for five minutes, keyed on the query, the site locale, and the blog ID. Repeat searches for the same term are served from that cache without touching the database.
+- **Responses are cached.** A successful live search response is stored in a transient for five minutes, keyed on the query, the active TranslatePress language, the site locale, and the blog ID. On TranslatePress sites the result titles and URLs are translated before the response is sent. Repeat searches for the same term are served from that cache without touching the database.
 - **Short queries are rejected on the server.** A query shorter than the **Minimum characters** setting returns an empty response immediately. That setting is Pro only; on the free plugin the floor is three characters. This check used to run only in the browser, so a crafted request could still run a full search.
 - **Queries are capped at 128 characters.** Anything longer is truncated before the search runs.
 - **No result count is calculated.** Live search asks only for the posts it will show, skipping the extra count query a normal search performs.

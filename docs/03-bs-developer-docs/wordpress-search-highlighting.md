@@ -37,7 +37,7 @@ If the referrer isn't a search on your site, or no search terms can be extracted
 
 ## Developer reference
 
-The client-side script is deliberately dependency-free (no jQuery, no build step) and mirrors the term-extraction logic used server-side, so the two stay in sync. It reads its configuration from a small `bsearch_highlight` object injected via `wp_localize_script()`, which is populated from four filters.
+The client-side script is deliberately dependency-free (no jQuery, no build step) and mirrors the term-extraction logic used server-side, so the two stay in sync. It reads its configuration from a small `bsearch_highlight` object injected via `wp_localize_script()`, which is populated from five filters.
 
 ### Filters
 
@@ -89,6 +89,18 @@ add_filter( 'bsearch_highlight_js_selectors', function () {
 
 Default: `.entry-content, .entry-title, .entry-summary`. Use this if your theme wraps post content in different markup — anything not matched by the selector is left untouched.
 
+#### [`bsearch_highlight_use_boundaries`](https://webberzone.dev/better-search/hooks/bsearch_highlight_use_boundaries/)
+
+Filters whether search-term highlighting requires whole-word matches. When enabled, a term is wrapped only when it is surrounded by word boundaries instead of appearing inside a larger word.
+
+```php
+add_filter( 'bsearch_highlight_use_boundaries', function () {
+    return true;
+} );
+```
+
+Default: `false`, which matches terms inside larger words so CJK and emoji content still highlights correctly. The filter affects both the server-side highlighter and the client-side script.
+
 ### When the script is enqueued
 
 `better-search-highlight.js` (or its minified build, unless `SCRIPT_DEBUG` is on) is only enqueued when all of the following are true:
@@ -107,3 +119,4 @@ It is not enqueued on archives, the homepage, or the search results page itself 
 - [`bsearch_highlight_class`](https://webberzone.dev/better-search/hooks/bsearch_highlight_class/)
 - [`bsearch_highlight_max_terms`](https://webberzone.dev/better-search/hooks/bsearch_highlight_max_terms/)
 - [`bsearch_highlight_js_selectors`](https://webberzone.dev/better-search/hooks/bsearch_highlight_js_selectors/)
+- [`bsearch_highlight_use_boundaries`](https://webberzone.dev/better-search/hooks/bsearch_highlight_use_boundaries/)
