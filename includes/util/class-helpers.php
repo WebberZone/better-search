@@ -942,6 +942,23 @@ class Helpers {
 	}
 
 	/**
+	 * Check if the site runs on SQLite rather than MySQL/MariaDB.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @return bool True when the database layer is SQLite.
+	 */
+	public static function is_sqlite(): bool {
+		global $wpdb;
+
+		if ( defined( 'DB_ENGINE' ) && 'sqlite' === constant( 'DB_ENGINE' ) ) {
+			return true;
+		}
+
+		return false !== stripos( get_class( $wpdb ), 'sqlite' );
+	}
+
+	/**
 	 * Get a message about MySQL/MariaDB compatibility issues.
 	 *
 	 * @since 4.2.0

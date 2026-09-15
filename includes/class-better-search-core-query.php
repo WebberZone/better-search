@@ -156,6 +156,44 @@ class Better_Search_Core_Query extends \WP_Query {
 	public $post_scores = array();
 
 	/**
+	 * The WP_Query instance these hooks belong to.
+	 *
+	 * Hooks are global, so a nested Better Search query fires every registered instance's callbacks,
+	 * not only its own. Knowing the owner lets one-shot callbacks ignore other instances' queries.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @var \WP_Query|null
+	 */
+	protected ?\WP_Query $owner = null;
+
+	/**
+	 * Declare which WP_Query instance this object's hooks serve.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @param \WP_Query $query Owning query.
+	 */
+	public function set_owner( \WP_Query $query ): void {
+		$this->owner = $query;
+	}
+
+	/**
+	 * Whether a query reaching a callback is the one this instance was created for.
+	 *
+	 * Returns true when no owner was declared, so seamless mode and any direct use of this class
+	 * keep behaving exactly as before.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @param \WP_Query $query Query passed to the callback.
+	 * @return bool True when the callback should act on this query.
+	 */
+	protected function owns_query( $query ): bool {
+		return ! $this->owner instanceof \WP_Query || $query === $this->owner;
+	}
+
+	/**
 	 * Main constructor.
 	 *
 	 * @since 3.0.0
@@ -593,6 +631,12 @@ class Better_Search_Core_Query extends \WP_Query {
 	 */
 	public function pre_get_posts( $query ) {
 
+		// Hooks are global and this callback removes itself when it finishes, so a nested Better
+		// Search query must not consume the owning query's callback before it has run.
+		if ( ! $this->owns_query( $query ) ) {
+			return $query;
+		}
+
 		if ( $this->is_better_search( $query ) ) {
 			$query_args = $this->query_args;
 
@@ -737,6 +781,12 @@ class Better_Search_Core_Query extends \WP_Query {
 	 * @return string  Updated Fields
 	 */
 	public function posts_fields( $fields, $query ) {
+
+		// Hooks are global and this callback removes itself when it finishes, so a nested Better
+		// Search query must not consume the owning query's callback before it has run.
+		if ( ! $this->owns_query( $query ) ) {
+			return $fields;
+		}
 		global $wpdb;
 
 		if ( ! $this->is_better_search( $query ) ) {
@@ -781,32 +831,19 @@ class Better_Search_Core_Query extends \WP_Query {
 	 * @return string  Updated JOIN
 	 */
 	public function posts_join( $join, $query ) {
+
+		// Hooks are global and this callback removes itself when it finishes, so a nested Better
+		// Search query must not consume the owning query's callback before it has run.
+		if ( ! $this->owns_query( $query ) ) {
+			return $join;
+		}
 		global $wpdb;
 
 		if ( $this->is_better_search( $query ) ) {
 
-			// Check for duplicate joins to prevent adding the same join multiple times.
-			// In FULLTEXT mode the taxonomy WHERE clause uses a correlated EXISTS subquery instead
-			// of a JOIN, so no aliases are needed here. The JOIN is only added for non-FULLTEXT mode.
-			if ( false === strpos( $join, 'bsq_tr' ) && ! empty( $this->query_args['search_taxonomies'] ) && ! $this->use_fulltext && ! empty( $this->get_positive_search_query() ) ) {
-				$join .= " LEFT JOIN $wpdb->term_relationships AS bsq_tr ON ($wpdb->posts.ID = bsq_tr.object_id) ";
-				$join .= " LEFT JOIN $wpdb->term_taxonomy AS bsq_tt ON (bsq_tr.term_taxonomy_id = bsq_tt.term_taxonomy_id) ";
-				$join .= " LEFT JOIN $wpdb->terms AS bsq_t ON (bsq_t.term_id = bsq_tt.term_id) ";
-			}
-
-			// As with taxonomies above, postmeta and comments use correlated EXISTS subqueries in
-			// FULLTEXT mode; joining them multiplies rows by every meta row and comment on a post.
-			if ( false === strpos( $join, 'bsq_meta' ) && ! empty( $this->query_args['search_meta'] ) && ! $this->use_fulltext && ! empty( $this->get_positive_search_query() ) ) {
-				$join .= " LEFT JOIN $wpdb->postmeta AS bsq_meta ON ($wpdb->posts.ID = bsq_meta.post_id) ";
-			}
-
-			if ( false === strpos( $join, 'bsq_users' ) && ! empty( $this->query_args['search_authors'] ) && ! empty( $this->get_positive_search_query() ) ) {
-				$join .= " LEFT JOIN $wpdb->users AS bsq_users ON ($wpdb->posts.post_author = bsq_users.ID) ";
-			}
-
-			if ( false === strpos( $join, 'bsq_comments' ) && ! empty( $this->query_args['search_comments'] ) && ! $this->use_fulltext && ! empty( $this->get_positive_search_query() ) ) {
-				$join .= " LEFT JOIN $wpdb->comments AS bsq_comments ON ($wpdb->posts.ID = bsq_comments.comment_post_ID) ";
-			}
+			// Taxonomies, postmeta, authors and comments are all matched with correlated EXISTS
+			// subqueries. Joining them multiplies rows by every term, meta row and comment on a post,
+			// which on a LIKE search over every field reached the statement time limit.
 
 			/**
 			 * Filters the JOIN clause of Better_Search.
@@ -838,6 +875,12 @@ class Better_Search_Core_Query extends \WP_Query {
 	 * @return string  Updated WHERE
 	 */
 	public function posts_where( $where, $query ) {
+
+		// Hooks are global and this callback removes itself when it finishes, so a nested Better
+		// Search query must not consume the owning query's callback before it has run.
+		if ( ! $this->owns_query( $query ) ) {
+			return $where;
+		}
 		global $bsearch_error;
 
 		if ( ! $this->is_better_search( $query ) ) {
@@ -875,6 +918,12 @@ class Better_Search_Core_Query extends \WP_Query {
 	 * @return string  Updated WHERE
 	 */
 	public function posts_search( $where, $query ) {
+
+		// Hooks are global and this callback removes itself when it finishes, so a nested Better
+		// Search query must not consume the owning query's callback before it has run.
+		if ( ! $this->owns_query( $query ) ) {
+			return $where;
+		}
 		global $wpdb;
 
 		if ( ! $this->is_better_search( $query ) ) {
@@ -1046,30 +1095,24 @@ class Better_Search_Core_Query extends \WP_Query {
 			}
 
 			if ( ! empty( $this->query_args['search_taxonomies'] ) ) {
-				if ( $this->use_fulltext || $exclude ) {
-					// In FULLTEXT mode use a correlated EXISTS subquery instead of a JOIN.
-					// A JOIN multiplies rows (one per taxonomy term per post) and LIKE '%number%'
-					// on term names can match thousands of rows, causing execution-time timeouts.
-					// EXISTS checks only the terms belonging to each candidate post and
-					// short-circuits on the first match, so row count stays bounded.
-					$exists_op = ( 'NOT LIKE' === $like_op ) ? 'NOT EXISTS' : 'EXISTS';
-					$clause[]  = $wpdb->prepare(
-						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-						"{$exists_op} (
-							SELECT 1
-							FROM {$wpdb->term_relationships} AS bsq_sub_tr
-							INNER JOIN {$wpdb->term_taxonomy} AS bsq_sub_tt ON bsq_sub_tr.term_taxonomy_id = bsq_sub_tt.term_taxonomy_id
-							INNER JOIN {$wpdb->terms} AS bsq_sub_t ON bsq_sub_t.term_id = bsq_sub_tt.term_id
-							WHERE bsq_sub_tr.object_id = {$wpdb->posts}.ID
-							AND (bsq_sub_t.name LIKE %s OR bsq_sub_tt.description LIKE %s)
-						)",
-						$term,
-						$term
-					);
-				} else {
-					$clause[] = $wpdb->prepare( "(bsq_t.name $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					$clause[] = $wpdb->prepare( "(bsq_tt.description $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				}
+				// A JOIN multiplies rows (one per taxonomy term per post) and LIKE '%number%'
+				// on term names can match thousands of rows, causing execution-time timeouts.
+				// EXISTS checks only the terms belonging to each candidate post and
+				// short-circuits on the first match, so row count stays bounded.
+				$exists_op = ( 'NOT LIKE' === $like_op ) ? 'NOT EXISTS' : 'EXISTS';
+				$clause[]  = $wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"{$exists_op} (
+						SELECT 1
+						FROM {$wpdb->term_relationships} AS bsq_sub_tr
+						INNER JOIN {$wpdb->term_taxonomy} AS bsq_sub_tt ON bsq_sub_tr.term_taxonomy_id = bsq_sub_tt.term_taxonomy_id
+						INNER JOIN {$wpdb->terms} AS bsq_sub_t ON bsq_sub_t.term_id = bsq_sub_tt.term_id
+						WHERE bsq_sub_tr.object_id = {$wpdb->posts}.ID
+						AND (bsq_sub_t.name LIKE %s OR bsq_sub_tt.description LIKE %s)
+					)",
+					$term,
+					$term
+				);
 			}
 
 			if ( ! empty( $this->query_args['search_excerpt'] ) && ! $this->excerpt_in_fulltext_match ) {
@@ -1077,54 +1120,43 @@ class Better_Search_Core_Query extends \WP_Query {
 			}
 
 			if ( ! empty( $this->query_args['search_meta'] ) ) {
-				if ( $this->use_fulltext || $exclude ) {
-					$exists_op       = ( 'NOT LIKE' === $like_op ) ? 'NOT EXISTS' : 'EXISTS';
-					$meta_search_sql = "{$exists_op} (
-							SELECT 1
-							FROM {$wpdb->postmeta} AS bsq_sub_meta
-							WHERE bsq_sub_meta.post_id = {$wpdb->posts}.ID"
-							. $meta_key_clause . '
-							AND bsq_sub_meta.meta_value LIKE %s
-						)';
-					$clause[]        = $wpdb->prepare( $meta_search_sql, $term ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				} else {
-					$clause[] = $wpdb->prepare( "(bsq_meta.meta_value $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				}
+				$exists_op       = ( 'NOT LIKE' === $like_op ) ? 'NOT EXISTS' : 'EXISTS';
+				$meta_search_sql = "{$exists_op} (
+						SELECT 1
+						FROM {$wpdb->postmeta} AS bsq_sub_meta
+						WHERE bsq_sub_meta.post_id = {$wpdb->posts}.ID"
+						. $meta_key_clause . '
+						AND bsq_sub_meta.meta_value LIKE %s
+					)';
+				$clause[]        = $wpdb->prepare( $meta_search_sql, $term ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			}
 
 			if ( ! empty( $this->query_args['search_authors'] ) ) {
-				if ( $exclude ) {
-					$clause[] = $wpdb->prepare(
-						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-						"NOT EXISTS (
-							SELECT 1
-							FROM {$wpdb->users} AS bsq_sub_users
-							WHERE bsq_sub_users.ID = {$wpdb->posts}.post_author
-							AND bsq_sub_users.display_name LIKE %s
-						)",
-						$term
-					);
-				} else {
-					$clause[] = $wpdb->prepare( "(bsq_users.display_name $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				}
+				$exists_op = ( 'NOT LIKE' === $like_op ) ? 'NOT EXISTS' : 'EXISTS';
+				$clause[]  = $wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"{$exists_op} (
+						SELECT 1
+						FROM {$wpdb->users} AS bsq_sub_users
+						WHERE bsq_sub_users.ID = {$wpdb->posts}.post_author
+						AND bsq_sub_users.display_name LIKE %s
+					)",
+					$term
+				);
 			}
 
 			if ( ! empty( $this->query_args['search_comments'] ) ) {
-				if ( $this->use_fulltext || $exclude ) {
-					$exists_op = ( 'NOT LIKE' === $like_op ) ? 'NOT EXISTS' : 'EXISTS';
-					$clause[]  = $wpdb->prepare(
-						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-						"{$exists_op} (
-							SELECT 1
-							FROM {$wpdb->comments} AS bsq_sub_comments
-							WHERE bsq_sub_comments.comment_post_ID = {$wpdb->posts}.ID
-							AND bsq_sub_comments.comment_content LIKE %s
-						)",
-						$term
-					);
-				} else {
-					$clause[] = $wpdb->prepare( "(bsq_comments.comment_content $like_op %s)", $term ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				}
+				$exists_op = ( 'NOT LIKE' === $like_op ) ? 'NOT EXISTS' : 'EXISTS';
+				$clause[]  = $wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"{$exists_op} (
+						SELECT 1
+						FROM {$wpdb->comments} AS bsq_sub_comments
+						WHERE bsq_sub_comments.comment_post_ID = {$wpdb->posts}.ID
+						AND bsq_sub_comments.comment_content LIKE %s
+					)",
+					$term
+				);
 			}
 
 			/**
@@ -1205,6 +1237,12 @@ class Better_Search_Core_Query extends \WP_Query {
 			return $distinct;
 		}
 
+		// Hooks are global and this callback removes itself when it finishes, so a nested Better
+		// Search query must not consume the owning query's callback before it has run.
+		if ( ! $this->owns_query( $query ) ) {
+			return $distinct;
+		}
+
 		$distinct = 'DISTINCT';
 
 		/**
@@ -1234,6 +1272,12 @@ class Better_Search_Core_Query extends \WP_Query {
 	 * @return string  Updated ORDER BY
 	 */
 	public function posts_orderby( $orderby, $query ) {
+
+		// Hooks are global and this callback removes itself when it finishes, so a nested Better
+		// Search query must not consume the owning query's callback before it has run.
+		if ( ! $this->owns_query( $query ) ) {
+			return $orderby;
+		}
 		global $wpdb;
 
 		if ( ! $this->is_better_search( $query ) ) {
@@ -1330,6 +1374,12 @@ class Better_Search_Core_Query extends \WP_Query {
 			return $groupby;
 		}
 
+		// Hooks are global and this callback removes itself when it finishes, so a nested Better
+		// Search query must not consume the owning query's callback before it has run.
+		if ( ! $this->owns_query( $query ) ) {
+			return $groupby;
+		}
+
 		/**
 		 * Filters the GROUP BY clause of the Better_Search.
 		 *
@@ -1360,6 +1410,12 @@ class Better_Search_Core_Query extends \WP_Query {
 	public function posts_clauses( $clauses, $query ) {
 
 		if ( ! $this->is_better_search( $query ) ) {
+			return $clauses;
+		}
+
+		// Hooks are global and this callback removes itself when it finishes, so a nested Better
+		// Search query must not consume the owning query's callback before it has run.
+		if ( ! $this->owns_query( $query ) ) {
 			return $clauses;
 		}
 
@@ -1396,6 +1452,12 @@ class Better_Search_Core_Query extends \WP_Query {
 			return $request;
 		}
 
+		// Hooks are global and this callback removes itself when it finishes, so a nested Better
+		// Search query must not consume the owning query's callback before it has run.
+		if ( ! $this->owns_query( $query ) ) {
+			return $request;
+		}
+
 		/**
 		 * Filters the posts_request of Better_Search after processing and before returning.
 		 *
@@ -1414,6 +1476,76 @@ class Better_Search_Core_Query extends \WP_Query {
 	}
 
 	/**
+	 * Rebuild a cached page of results, fetching each site's posts on that site.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @param array     $items Ordered cache entries with ID, blog_id and score keys.
+	 * @param \WP_Query $query The WP_Query instance.
+	 * @return array Posts in their cached order.
+	 */
+	protected function restore_cached_posts( array $items, $query ): array {
+		$current_blog_id = get_current_blog_id();
+		$fields          = (string) $query->get( 'fields' );
+		$grouped         = array();
+
+		foreach ( $items as $item ) {
+			$grouped[ (int) ( $item['blog_id'] ?? $current_blog_id ) ][] = (int) $item['ID'];
+		}
+
+		$fetched = array();
+
+		foreach ( $grouped as $blog_id => $post_ids ) {
+			$switched = is_multisite() && $blog_id !== $current_blog_id;
+
+			if ( $switched ) {
+				switch_to_blog( $blog_id );
+			}
+
+			foreach ( (array) get_posts(
+				array(
+					'post__in'       => $post_ids,
+					'fields'         => $fields,
+					'orderby'        => 'post__in',
+					'post_type'      => $query->get( 'post_type' ),
+					'posts_per_page' => count( $post_ids ),
+					'lang'           => '',
+				)
+			) as $post ) {
+				$id = $post instanceof \WP_Post ? (int) $post->ID : (int) $post;
+
+				$fetched[ $blog_id . '_' . $id ] = $post;
+			}
+
+			if ( $switched ) {
+				restore_current_blog();
+			}
+		}
+
+		$posts = array();
+
+		foreach ( $items as $item ) {
+			$blog_id = (int) ( $item['blog_id'] ?? $current_blog_id );
+			$key     = $blog_id . '_' . (int) $item['ID'];
+
+			if ( ! isset( $fetched[ $key ] ) ) {
+				continue;
+			}
+
+			$post = $fetched[ $key ];
+
+			if ( $post instanceof \WP_Post ) {
+				$post->score   = (float) ( $item['score'] ?? 0 );
+				$post->blog_id = $blog_id;
+			}
+
+			$posts[] = $post;
+		}
+
+		return $posts;
+	}
+
+	/**
 	 * Filter posts_pre_query to allow caching to work.
 	 *
 	 * @since 3.0.0
@@ -1428,41 +1560,51 @@ class Better_Search_Core_Query extends \WP_Query {
 			return $posts;
 		}
 
+		// Hooks are global and this callback removes itself when it finishes, so a nested Better
+		// Search query must not consume the owning query's callback before it has run.
+		if ( ! $this->owns_query( $query ) ) {
+			return $posts;
+		}
+
 		// Check the cache if there are any posts saved.
 		if ( ! empty( $this->query_args['cache'] ) && ! ( $query->is_preview() || is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) ) {
 			$cache_name  = $this->get_cache_key( $query );
 			$cached_data = Cache::get( $cache_name );
 
 			if ( false !== $cached_data ) {
-				$post__in = $cached_data;
-				unset( $post__in['found_posts'] );
-				$posts = get_posts(
-					array(
-						'post__in'       => array_keys( $post__in ),
-						'fields'         => $query->get( 'fields' ),
-						'orderby'        => 'post__in',
-						'post_type'      => $query->get( 'post_type' ),
-						'posts_per_page' => $query->get( 'posts_per_page' ),
-					)
-				);
-				// Set the score and blog_id for each of the posts.
-				if ( $posts ) {
-					$current_blog_id = get_current_blog_id();
-					foreach ( $posts as $post ) {
-						if ( ! $post instanceof \WP_Post ) {
-							continue;
-						}
-						if ( isset( $cached_data[ $post->ID ] ) ) {
-							if ( is_array( $cached_data[ $post->ID ] ) ) {
-								$post->score   = $cached_data[ $post->ID ]['score'] ?? 0;
-								$post->blog_id = $cached_data[ $post->ID ]['blog_id'] ?? $current_blog_id;
+				if ( ! empty( $cached_data['items'] ) && is_array( $cached_data['items'] ) ) {
+					$posts = $this->restore_cached_posts( $cached_data['items'], $query );
+				} else {
+					$post__in = $cached_data;
+					unset( $post__in['found_posts'], $post__in['topscore'], $post__in['items'] );
+					$posts = get_posts(
+						array(
+							'post__in'       => array_keys( $post__in ),
+							'fields'         => $query->get( 'fields' ),
+							'orderby'        => 'post__in',
+							'post_type'      => $query->get( 'post_type' ),
+							'posts_per_page' => $query->get( 'posts_per_page' ),
+						)
+					);
+					// Set the score and blog_id for each of the posts.
+					if ( $posts ) {
+						$current_blog_id = get_current_blog_id();
+						foreach ( $posts as $post ) {
+							if ( ! $post instanceof \WP_Post ) {
+								continue;
+							}
+							if ( isset( $cached_data[ $post->ID ] ) ) {
+								if ( is_array( $cached_data[ $post->ID ] ) ) {
+									$post->score   = $cached_data[ $post->ID ]['score'] ?? 0;
+									$post->blog_id = $cached_data[ $post->ID ]['blog_id'] ?? $current_blog_id;
+								} else {
+									$post->score   = $cached_data[ $post->ID ];
+									$post->blog_id = $current_blog_id;
+								}
 							} else {
-								$post->score   = $cached_data[ $post->ID ];
+								$post->score   = 0;
 								$post->blog_id = $current_blog_id;
 							}
-						} else {
-							$post->score   = 0;
-							$post->blog_id = $current_blog_id;
 						}
 					}
 				}
@@ -1506,6 +1648,12 @@ class Better_Search_Core_Query extends \WP_Query {
 			return $posts;
 		}
 
+		// This callback removes itself when it finishes, so it must not be consumed by a nested
+		// query's the_posts: that leaves the owning query with no callback left to cache its results.
+		if ( ! $this->owns_query( $query ) ) {
+			return $posts;
+		}
+
 		// Store scores in the query object for template access.
 		$query->post_scores = array();
 		foreach ( $posts as $post ) {
@@ -1520,14 +1668,14 @@ class Better_Search_Core_Query extends \WP_Query {
 		$paged                = max( 1, (int) $query->get( 'paged' ) );
 
 		if ( empty( $this->topscore ) && $is_relevance_ordered && 1 === $paged && ! empty( $query->post_scores ) ) {
-			$this->topscore  = (float) max( $query->post_scores );
+			$this->topscore  = $this->derive_page_one_topscore( $query, $query->post_scores );
 			$query->topscore = $this->topscore;
 
 			if ( ! empty( $this->query_args['cache'] ) ) {
 				$ts_cache_key = $this->get_cache_key( $query, 'ts' );
 				$cache_time   = isset( $this->query_args['cache_time'] ) ? (int) $this->query_args['cache_time'] : 3600;
 				/** This filter is documented in includes/class-better-search-core-query.php */
-				$cache_time = apply_filters_ref_array( 'better_search_query_cache_time', array( $cache_time, $this->query_args, $query, &$this ) );
+				$cache_time = apply_filters_ref_array( 'better_search_query_cache_time', array( $cache_time, $this->query_args, $query, &$this, 'ts' ) );
 				Cache::set( $ts_cache_key, $this->topscore, $cache_time );
 			}
 		}
@@ -1540,23 +1688,39 @@ class Better_Search_Core_Query extends \WP_Query {
 			 *
 			 * @since 3.0.0
 			 * @since 4.2.0 Added $instance parameter.
+			 * @since 4.5.0 Added $context parameter.
 			 *
 			 * @param int                       $cache_time Cache time in seconds
 			 * @param array                     $args       Array of all the arguments
 			 * @param \WP_Query                 $query The WP_Query instance (passed by reference).
 			 * @param Better_Search_Core_Query  $instance The Better_Search instance (passed by reference).
+			 * @param string                    $context Cache being timed: 'query' for the result set, 'ts' for the topscore.
 			 */
-			$cache_time = apply_filters_ref_array( 'better_search_query_cache_time', array( $this->query_args['cache_time'], $this->query_args, $query, &$this ) );
+			$cache_time = apply_filters_ref_array( 'better_search_query_cache_time', array( $this->query_args['cache_time'], $this->query_args, $query, &$this, 'query' ) );
+			$cache_time = $this->cap_result_cache_time( $cache_time );
 			$cache_name = $this->get_cache_key( $query );
 
 			$cached_data     = array();
+			$items           = array();
 			$current_blog_id = get_current_blog_id();
 			foreach ( $query->posts as $post ) {
+				$blog_id = isset( $post->blog_id ) ? intval( $post->blog_id ) : $current_blog_id;
+				$score   = isset( $post->score ) ? floatval( $post->score ) : 0;
+
+				// A post ID is only unique within its own blog, so the flat map loses one of any two
+				// same-ID results from different sites. The ordered list is what restores the page.
+				$items[] = array(
+					'ID'      => (int) $post->ID,
+					'blog_id' => $blog_id,
+					'score'   => $score,
+				);
+
 				$cached_data[ $post->ID ] = array(
-					'score'   => isset( $post->score ) ? floatval( $post->score ) : 0,
-					'blog_id' => isset( $post->blog_id ) ? intval( $post->blog_id ) : $current_blog_id,
+					'score'   => $score,
+					'blog_id' => $blog_id,
 				);
 			}
+			$cached_data['items']       = $items;
 			$cached_data['found_posts'] = $query->found_posts;
 			$cached_data['topscore']    = $this->topscore;
 
@@ -1609,6 +1773,10 @@ class Better_Search_Core_Query extends \WP_Query {
 	 * @return string   The SQL query.
 	 */
 	public function set_topscore( $request, $query, $instance ) {
+		if ( ! $this->owns_query( $query ) ) {
+			return $request;
+		}
+
 		global $wpdb;
 
 		if ( ! $this->is_better_search( $query ) || ! $this->use_fulltext || ! empty( $query->query_args['is_nested_query'] ) || ! empty( $query->query_vars['is_nested_query'] ) ) {
@@ -1659,7 +1827,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		// Check cache first.
 		if ( ! empty( $this->query_args['cache'] ) ) {
 			/** This filter is documented in includes/class-better-search-core-query.php */
-			$cache_time = apply_filters( 'better_search_query_cache_time', $this->query_args['cache_time'], $this->query_args );
+			$cache_time = apply_filters( 'better_search_query_cache_time', $this->query_args['cache_time'], $this->query_args, $query, $this, 'ts' );
 			$cache_name = $this->get_cache_key( $query, 'ts' );
 			$topscore   = Cache::get( $cache_name );
 		}
@@ -1668,6 +1836,36 @@ class Better_Search_Core_Query extends \WP_Query {
 			$this->topscore  = $topscore;
 			$query->topscore = $topscore;
 			return $request;
+		}
+
+		$this->topscore  = $this->query_raw_topscore( $request );
+		$query->topscore = $this->topscore;
+
+		if ( ! empty( $this->query_args['cache'] ) && ! empty( $cache_name ) ) {
+			Cache::set( $cache_name, $this->topscore, $cache_time );
+		}
+
+		return $request;
+	}
+
+	/**
+	 * Run a request as a maximum-raw-relevance lookup.
+	 *
+	 * Rewrites the request to return a single row ordered by the unboosted `score`, so the value
+	 * is the true maximum relevance regardless of how results are actually ranked.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @param string $request The complete SQL query.
+	 * @return float Highest raw relevance score, 0 when nothing matched.
+	 */
+	public function query_raw_topscore( $request ) {
+		global $wpdb;
+
+		$request = (string) $request;
+
+		if ( '' === $request ) {
+			return 0;
 		}
 
 		// Take $request. Check if there is a LIMIT clause. If so, make sure it's limited to a single entry only. If there is no LIMIT then add it to extract a single entry only. Also, check if there is an ORDER BY clause. If so, make sure it's ordered by the score column. If there is no ORDER BY clause then add one.
@@ -1698,14 +1896,100 @@ class Better_Search_Core_Query extends \WP_Query {
 
 		$topscore = $wpdb->get_results( $score_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
-		$this->topscore  = ! empty( $topscore ) ? (float) wp_list_pluck( $topscore, 'score' )[0] : 0;
-		$query->topscore = $this->topscore;
+		return ! empty( $topscore ) ? (float) wp_list_pluck( $topscore, 'score' )[0] : 0;
+	}
 
-		if ( ! empty( $this->query_args['cache'] ) && ! empty( $cache_name ) ) {
-			Cache::set( $cache_name, $this->topscore, $cache_time );
+	/**
+	 * Derive the page-one topscore.
+	 *
+	 * Without a recency boost the first page holds the highest raw score, so its maximum is the
+	 * answer for free. Under a boost it does not, and the value has to come from an explicit
+	 * maximum-relevance query - but only when the percentage is actually displayed.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @param \WP_Query $query       The WP_Query instance.
+	 * @param float[]   $post_scores Raw relevance scores for the current page.
+	 * @return float Highest raw relevance score.
+	 */
+	protected function derive_page_one_topscore( $query, array $post_scores ) {
+		if ( $this->has_recency_boost() && bsearch_get_option( 'display_relevance' ) ) {
+			if ( ! empty( $this->query_args['cache'] ) ) {
+				$cached_ts = Cache::get( $this->get_cache_key( $query, 'ts' ) );
+				if ( false !== $cached_ts ) {
+					return (float) $cached_ts;
+				}
+			}
+
+			$topscore = $this->query_raw_topscore( $query->request );
+
+			if ( $topscore > 0 ) {
+				return $topscore;
+			}
 		}
 
-		return $request;
+		return (float) max( $post_scores );
+	}
+
+	/**
+	 * Cap how long a result set may be cached.
+	 *
+	 * A recency-boosted ordering is computed against a fixed reference date, so a cached result
+	 * set has to expire at least as often as that reference moves. A configured lifetime of 0
+	 * means "never expire", so the cap replaces it outright rather than winning a min().
+	 *
+	 * @since 4.5.0
+	 *
+	 * @param int $cache_time Configured cache lifetime in seconds.
+	 * @return int Cache lifetime in seconds.
+	 */
+	public function cap_result_cache_time( $cache_time ) {
+		/**
+		 * Filters the maximum lifetime of a cached Better Search result set.
+		 *
+		 * Return 0 for no cap. Topscore caches hold raw scores and are never capped here.
+		 *
+		 * @since 4.5.0
+		 *
+		 * @param int                      $cap      Maximum cache lifetime in seconds, 0 for no cap.
+		 * @param array                    $args     Query arguments.
+		 * @param Better_Search_Core_Query $instance The Better_Search_Core_Query instance.
+		 */
+		$cap = (int) apply_filters( 'better_search_query_result_cache_cap', 0, $this->query_args, $this );
+
+		if ( $cap <= 0 ) {
+			return $cache_time;
+		}
+
+		$cache_time = (int) $cache_time;
+
+		return $cache_time <= 0 ? $cap : min( $cache_time, $cap );
+	}
+
+	/**
+	 * Whether result ordering carries a recency boost.
+	 *
+	 * Always false on its own; Better Search Pro answers this through the filter when the
+	 * recency boost is configured, supported and the query is ranked by relevance.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @return bool True when ordering no longer follows the raw relevance score.
+	 */
+	public function has_recency_boost(): bool {
+		/**
+		 * Filters whether result ordering carries a recency boost.
+		 *
+		 * When true, topscore cannot be taken from the first page of results or from the first
+		 * row of the ordered query, and must be obtained as an explicit maximum raw score.
+		 *
+		 * @since 4.5.0
+		 *
+		 * @param bool                     $has_boost Whether the ordering is recency boosted.
+		 * @param array                    $args      Query arguments.
+		 * @param Better_Search_Core_Query $instance  The Better_Search_Core_Query instance.
+		 */
+		return (bool) apply_filters( 'better_search_query_has_recency_boost', false, $this->query_args, $this );
 	}
 
 	/**
@@ -1729,6 +2013,9 @@ class Better_Search_Core_Query extends \WP_Query {
 		if ( 'ts' === $context ) {
 			$cache_attr['paged'] = 1;
 			unset( $cache_attr['offset'] );
+
+			// The topscore is the raw maximum, so it must not vary with the recency settings.
+			unset( $cache_attr['weight_recency'], $cache_attr['recency_halflife'] );
 		}
 
 		return Cache::get_key( $cache_attr, $context );

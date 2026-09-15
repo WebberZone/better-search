@@ -32,6 +32,7 @@ if ( ! class_exists( 'Better_Search_Query' ) ) :
 		public function __construct( $args = array() ) {
 			$args       = wp_parse_args( $args, array( 'is_better_search_loaded' => true ) );
 			$core_query = new Better_Search_Core_Query( $args );
+			$core_query->set_owner( $this );
 
 			Hook_Registry::add_filter( 'pre_get_posts', array( $core_query, 'pre_get_posts' ), 10 );
 			Hook_Registry::add_filter( 'posts_fields', array( $core_query, 'posts_fields' ), 10, 2 );

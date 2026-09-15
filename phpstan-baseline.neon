@@ -17,12 +17,12 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property WP_Post\\:\\:\\$blog_id\\.$#"
-			count: 3
+			count: 4
 			path: includes/class-better-search-core-query.php
 
 		-
 			message: "#^Access to an undefined property WP_Post\\:\\:\\$score\\.$#"
-			count: 3
+			count: 4
 			path: includes/class-better-search-core-query.php
 
 		-

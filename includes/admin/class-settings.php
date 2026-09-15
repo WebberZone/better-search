@@ -254,6 +254,8 @@ class Settings {
 			'weight_taxonomy_category'  => 0,
 			'weight_taxonomy_post_tag'  => 0,
 			'weight_taxonomy_default'   => 0,
+			'weight_recency'            => 0,
+			'recency_halflife'          => 180,
 			'use_precomputed_tax_score' => 0,
 			'inclusion_header'          => '',
 			'search_slug'               => 0,
@@ -353,6 +355,22 @@ class Settings {
 		$field['desc'] = trim( $field['desc'] ?? '', " \t\n\r\0\x0B" ) . ' <strong>' . esc_html__( 'This has no effect while the feature is turned off on the Features tab.', 'better-search' ) . '</strong>';
 
 		return $field;
+	}
+
+	/**
+	 * Append an availability note to the recency settings when the database cannot support them.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @param  string $desc Field description.
+	 * @return string Field description.
+	 */
+	private static function recency_field_desc( string $desc ): string {
+		if ( ! Helpers::is_sqlite() ) {
+			return $desc;
+		}
+
+		return $desc . ' <strong>' . esc_html__( 'Unavailable on SQLite: the date calculation this uses is not supported, so the setting is ignored.', 'better-search' ) . '</strong>';
 	}
 
 	/**
@@ -842,6 +860,30 @@ class Settings {
 				'min'     => '0',
 				'size'    => 'small',
 				'pro'     => true,
+			),
+			'weight_recency'            => array(
+				'id'       => 'weight_recency',
+				'name'     => esc_html__( 'Recency boost (%)', 'better-search' ),
+				'desc'     => self::recency_field_desc( esc_html__( 'Blend post age into the ranking. 0 ranks purely by relevance. Raise it to favor fresher content: at a high enough boost a newer result with lower relevance will outrank an older, more relevant one. A strongly relevant old result can still outrank a weakly relevant new one, so raise the boost to favor freshness and raise the half-life below to keep older content competitive for longer. Relevance percentages and the minimum relevance filter keep using the unboosted score.', 'better-search' ) ),
+				'type'     => 'number',
+				'default'  => 0,
+				'min'      => '0',
+				'max'      => '200',
+				'size'     => 'small',
+				'pro'      => true,
+				'disabled' => Helpers::is_sqlite(),
+			),
+			'recency_halflife'          => array(
+				'id'       => 'recency_halflife',
+				'name'     => esc_html__( 'Recency half-life (days)', 'better-search' ),
+				'desc'     => self::recency_field_desc( esc_html__( 'Post age at which half of the recency boost has decayed. Larger values keep older content competitive for longer. Minimum 1 day. Values below 7 days recalculate hourly instead of daily.', 'better-search' ) ),
+				'type'     => 'number',
+				'default'  => 180,
+				'min'      => '1',
+				'max'      => '36500',
+				'size'     => 'small',
+				'pro'      => true,
+				'disabled' => Helpers::is_sqlite(),
 			),
 			'use_precomputed_tax_score' => self::gate_field_to_feature(
 				array(
