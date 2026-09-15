@@ -132,15 +132,30 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= Unreleased =
+= 4.5.0 =
+
+Release date: 15 September 2026
 
 **Added**
 
+* [Pro] Added recency boosting to search ranking, with a configurable boost percentage and half-life, off by default and with relevance percentages and the minimum relevance filter still using the unboosted score.
+* [Pro] Added `post_date_gmt` to the custom tables, with a batched backfill tool on the Tools page; the recency boost stays off on custom-table searches until the backfill finishes, and only network administrators can run it on Multisite.
 * Added TranslatePress language detection for search cache keys.
 
 **Fixed**
 
+* LIKE searches over taxonomies, metadata, authors and comments multiplied rows and could time out.
 * Cached search results were shared across languages on WPML, Polylang and TranslatePress sites.
+* Nested Better Search queries consumed callbacks belonging to their parent query, so repeated multisite searches never reused their cached results.
+* [Pro] Custom table schema changes were never applied to existing installs, because `dbDelta` only ran when the table was missing.
+* [Pro] Custom-table multisite pagination repeated and skipped results, and returned short pages, when post-type filtering removed index rows; reported totals still come from the index, so the last pages can now be empty instead of repeating results.
+* [Pro] Multisite searches using the custom tables index returned no results at all for `posts_per_page` of `-1`.
+* [Pro] Multisite cached results collided when posts on different sites shared an ID.
+* [Pro] Custom-table searches ignored the metadata, author and comment search settings and per-query overrides.
+* [Pro] Custom-table taxonomy relevance read obsolete option names and applied unintended default weights.
+* [Pro] Custom-table fuzzy matching stayed active for Boolean-operator queries.
+* [Pro] Custom-table searches ran an extra maximum-score query even when relevance percentages were hidden and no minimum relevance was set.
+* The hook registry called `spl_object_hash()`, which is deprecated as of PHP 8.6.
 
 = 4.4.4 =
 
@@ -241,5 +256,5 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 
 == Upgrade Notice ==
 
-= 4.4.4 =
-Fixes the post type template functions using the wrong filter hooks.
+= 4.5.0 =
+Adds recency boosting to search ranking, off by default. Fixes multisite pagination and caching on the custom tables index, a possible timeout when searching every field, and a PHP 8.6 deprecation. Pro sites using the custom tables should run the backfill on the Tools page.
