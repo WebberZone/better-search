@@ -156,7 +156,7 @@ class Tracker {
 	 *
 	 * @since   2.0.0
 	 *
-	 * @param \WP $wp Current WordPress environment instance.
+	 * @param \WP|null $wp Current WordPress environment instance.
 	 */
 	public static function parse_request( $wp ) {
 
@@ -164,7 +164,7 @@ class Tracker {
 			global $wp;
 		}
 
-		if ( ! isset( $wp->query_vars ) || ! is_array( $wp->query_vars ) ) {
+		if ( ! $wp instanceof \WP ) {
 			return;
 		}
 

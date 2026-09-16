@@ -19,4 +19,9 @@ parameters:
         - includes/
     bootstrapFiles:
         - phpstan-bootstrap.php
+    # Core marks both #[AllowDynamicProperties], and the plugin attaches its own
+    # score/blog_id/topscore values to them.
+    universalObjectCratesClasses:
+        - WP_Post
+        - WP_Query
     ignoreErrors:

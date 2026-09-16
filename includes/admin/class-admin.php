@@ -164,7 +164,7 @@ class Admin {
 	 *
 	 * @since 4.2.0
 	 *
-	 * @var object Admin Notices API.
+	 * @var object|null Admin Notices API. Null until the constructor assigns it.
 	 */
 	public $admin_notices_api;
 

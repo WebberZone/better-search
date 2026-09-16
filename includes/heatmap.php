@@ -244,6 +244,8 @@ function get_bsearch_heatmap( $args = array() ) {
 		$aria_label = true;
 	}
 
+	$a = array();
+
 	foreach ( $results as $key => $result ) {
 		$count     = $result->count;
 		$searchvar = $result->name;

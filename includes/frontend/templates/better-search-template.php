@@ -9,7 +9,7 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-global $bsearch_error;
+global $bsearch_error, $post;
 
 // Initialise some variables.
 $bsearch_settings = bsearch_get_settings();
