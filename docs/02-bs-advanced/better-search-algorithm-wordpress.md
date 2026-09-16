@@ -22,6 +22,16 @@ The MySQL engine calculates a **score** for each post based on how closely the c
 3. **Ranking by Relevance**:
 Posts are sorted in descending order of score, ensuring the most relevant results appear at the top of the list.
 
+## Recency weighting *(Pro only)*
+
+When **Recency boost (%)** is above 0 and results are ordered by relevance or relatedness, Better Search multiplies each raw relevance score by an age-decay multiplier. Newer results receive a larger multiplier, while older results move closer to their original score. The default boost is 0, so existing relevance ordering stays unchanged until you enable it.
+
+**Recency half-life (days)** controls the decay. At the half-life, a result receives half of the available recency boost. Values below 7 days use hourly age calculations; larger values use daily calculations. Better Search uses the UTC publish date in `post_date_gmt`. A missing or zero date receives no boost, and a future date receives no more than the maximum boost.
+
+The boost changes `ORDER BY` only. Better Search keeps the raw score for relevance percentages and **Minimum relevance percentage** filtering. Date, title, and random ordering skip the boost. SQLite does not run the date calculation.
+
+When **Use Custom Tables** is enabled, run **Recency Ranking Backfill** from the Tools page after upgrading an existing index. The backfill copies UTC publish dates into older index rows, and custom-table recency ordering remains disabled until it finishes. On multisite, the shared index requires a network administrator to run the backfill.
+
 ## Calculating Relevance
 
 When **Seamless Mode** is disabled (i.e., the advanced search template is used), Better Search displays a **relevance percentage** to each result:

@@ -114,6 +114,14 @@ Set the weight for tag matches in relevance calculation.
 
 Weight to give other taxonomy matches when calculating relevance.
 
+### Recency boost (%) *(Pro only)*
+
+Blend post age into relevance ordering. The default is `0`, which disables the boost. Set a value from 0 to 200 to favor newer results. A higher value gives freshness more influence, but a strongly relevant older result can still outrank a weakly relevant newer result. This setting applies when results are ordered by relevance or relatedness and has no effect on date, title, or random ordering. It is unavailable on SQLite.
+
+### Recency half-life (days) *(Pro only)*
+
+Set how quickly the recency boost decays. The default is `180` days and the accepted range is 1 to 36,500 days. At the half-life, a result receives half of its available recency boost. Larger values keep older content competitive for longer. Values below 7 days recalculate hourly; values of 7 days or more recalculate daily.
+
 ### Use precomputed taxonomy score *(Pro only)*
 
 Enable the use of precomputed taxonomy scores for relevance calculation. Improves performance but ignores the above taxonomy weights for live queries. This only works when ECSI is enabled in the [Performance tab](https://webberzone.com/support/knowledgebase/better-search-settings-performance/).

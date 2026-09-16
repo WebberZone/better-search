@@ -32,6 +32,8 @@ Use dedicated custom tables for search queries. This can significantly improve p
 
 Caching helps improve search performance by storing results temporarily. When enabled, Better Search uses the WordPress Transients API to cache search results for faster retrieval. It is highly recommended to have this turned on if you have enabled [Fuzzy searches](https://webberzone.com/support/knowledgebase/fuzzy-matches/) or [Multisite Search](https://webberzone.com/support/knowledgebase/multisite-search/).
 
+When recency weighting is active, Better Search caps result-cache lifetimes at one hour for half-lives below 7 days and one day for half-lives of 7 days or more. Saving the Search settings clears the cache so ranking changes take effect immediately.
+
 ### Time to cache
 
 This setting allows you to specify the duration (in seconds) for caching search results. By default, it is set to 1 hour (`3600 seconds`). Adjust the time as needed based on your site’s traffic and content update frequency.

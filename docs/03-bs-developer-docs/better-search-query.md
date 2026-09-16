@@ -90,9 +90,11 @@ $args = array(
     's'                      => get_search_query(), // This tells WP_Query that it is a search result.
     'post_type'              => array( 'post', 'page', 'product' ),
     'posts_per_page'         => 20,
-    'orderby'                => 'date', // Order by date instead of relevance.
-    'order'                  => 'DESC', // Descending order of dates i.e. newest first.
+    'orderby'                => 'relevance', // Order by relevance so recency can influence ranking.
+    'order'                  => 'DESC', // Descending order of relevance.
     'boolean_mode'           => true, // Enable Boolean mode.
+    'weight_recency'         => 50, // Favor newer results while preserving relevance.
+    'recency_halflife'       => 180, // Decay period in days.
 );
 
 $better_search_query = new Better_Search_Query( $args );
