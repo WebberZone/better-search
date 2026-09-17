@@ -157,7 +157,8 @@ function bsearch_update_option( $key = '', $value = false ) {
 	}
 
 	// First let's grab the current settings.
-	$options = get_option( 'bsearch_settings' );
+	$options = get_option( 'bsearch_settings', array() );
+	$options = is_array( $options ) ? $options : array();
 
 	/**
 	 * Filters the value before it is updated
@@ -200,7 +201,8 @@ function bsearch_delete_option( $key = '' ) {
 	}
 
 	// First let's grab the current settings.
-	$options = get_option( 'bsearch_settings' );
+	$options = get_option( 'bsearch_settings', array() );
+	$options = is_array( $options ) ? $options : array();
 
 	// Next let's try to update the value.
 	if ( isset( $options[ $key ] ) ) {
