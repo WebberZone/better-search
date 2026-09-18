@@ -264,6 +264,9 @@ class Settings {
 			'search_meta'               => 0,
 			'search_authors'            => 0,
 			'search_comments'           => 0,
+			'include_header'            => '',
+			'include_cat_slugs'         => '',
+			'include_cat_ids'           => '',
 			'exclude_header'            => '',
 			'exclude_protected_posts'   => 1,
 			'exclude_front_page'        => 0,
@@ -944,6 +947,30 @@ class Settings {
 				'desc'    => esc_html__( 'Select to include posts where comments include the search term(s).', 'better-search' ),
 				'type'    => 'checkbox',
 				'default' => false,
+			),
+			'include_header'            => array(
+				'id'   => 'include_header',
+				'name' => '<h3>' . esc_html__( 'Inclusion options', 'better-search' ) . '</h3>',
+				'desc' => esc_html__( 'These options restrict search results to the selected terms. Leave blank to search everything.', 'better-search' ),
+				'type' => 'header',
+			),
+			'include_cat_slugs'         => array(
+				'id'               => 'include_cat_slugs',
+				'name'             => esc_html__( 'Only include Categories', 'better-search' ),
+				'desc'             => esc_html__( 'The field above has an autocomplete. Start typing in the starting letters, and it will prompt you with options. This field requires a specific format as displayed by the autocomplete. Leave blank to search posts from all categories.', 'better-search' ),
+				'type'             => 'csv',
+				'default'          => '',
+				'size'             => 'large',
+				'field_class'      => 'ts_autocomplete',
+				'field_attributes' => self::get_taxonomy_search_field_attributes( 'category' ),
+			),
+			'include_cat_ids'           => array(
+				'id'       => 'include_cat_ids',
+				'name'     => esc_html__( 'Include category IDs', 'better-search' ),
+				'desc'     => esc_html__( 'This is a readonly field that is automatically populated based on the above input when the settings are saved. These might differ from the IDs visible in the Categories page which use the term_id. Better Search uses the term_taxonomy_id which is unique to this taxonomy.', 'better-search' ),
+				'type'     => 'text',
+				'default'  => '',
+				'readonly' => true,
 			),
 			'exclude_header'            => array(
 				'id'   => 'exclude_header',
@@ -1649,6 +1676,9 @@ class Settings {
 		// Sanitize exclude_cat_slugs to save a new entry of exclude_categories.
 		Settings\Settings_Sanitize::sanitize_tax_slugs( $settings, 'exclude_cat_slugs', 'exclude_categories' );
 
+		// Sanitize include_cat_slugs to save a new entry of include_cat_ids.
+		Settings\Settings_Sanitize::sanitize_tax_slugs( $settings, 'include_cat_slugs', 'include_cat_ids' );
+
 		self::flag_incomplete_repeater_rows( $settings );
 
 		// Delete the cache.
@@ -1863,6 +1893,9 @@ class Settings {
 			array(
 				'taxonomy'   => $taxonomy,
 				'name__like' => $search_term,
+				'orderby'    => 'name',
+				'order'      => 'ASC',
+				'number'     => 20,
 				'hide_empty' => false,
 			)
 		);
@@ -1883,12 +1916,13 @@ class Settings {
 	 * Get field attributes for Tom Select taxonomy search fields.
 	 *
 	 * @since 4.2.0
+	 * @since 4.5.0 Made public so Pro can swap the endpoint to all public taxonomies.
 	 *
 	 * @param  string $taxonomy  The taxonomy to search.
 	 * @param  array  $ts_config Optional Tom Select configuration.
 	 * @return array Field attributes array.
 	 */
-	private static function get_taxonomy_search_field_attributes( $taxonomy, $ts_config = array() ) {
+	public static function get_taxonomy_search_field_attributes( $taxonomy, $ts_config = array() ) {
 		$attributes = array(
 			'data-wp-prefix'   => strtoupper( (string) self::$prefix ),
 			'data-wp-action'   => self::$prefix . '_taxonomy_search_tom_select',

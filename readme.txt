@@ -139,6 +139,8 @@ Release date: 15 September 2026
 **Added**
 
 * [Pro] Added configurable recency weighting to search ranking, disabled by default; existing custom-table indexes needed a one-time backfill from Tools before it could be used.
+* Added an inclusion setting that restricts search results to the selected terms.
+* [Pro] Include and exclude settings now accepted terms from any public taxonomy, not just categories. On multisite searches these terms apply to the site they were set on; other sites in the network are not filtered.
 * TranslatePress live-search suggestions now used translated titles and language-specific links.
 
 **Changed**
@@ -159,6 +161,7 @@ Release date: 15 September 2026
 * [Pro] Fuzzy matching could override explicit Boolean search operators in custom-table searches.
 * [Pro] Recency weighting left search results ranked by relevance alone on MySQL 8.4.
 * [Pro] Custom-table searches ran slower than necessary when relevance percentages were hidden and no minimum relevance was set.
+* [Pro] Term include and exclude settings were ignored when custom tables were used to serve the search.
 
 = Earlier versions =
 
