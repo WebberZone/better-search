@@ -138,117 +138,27 @@ Release date: 15 September 2026
 
 **Added**
 
-* [Pro] Added recency boosting to search ranking, with a configurable boost percentage and half-life, off by default and with relevance percentages and the minimum relevance filter still using the unboosted score.
-* [Pro] Added `post_date_gmt` to the custom tables, with a batched backfill tool on the Tools page; the recency boost stays off on custom-table searches until the backfill finishes, and only network administrators can run it on Multisite.
-* Added TranslatePress language detection for search cache keys.
-
-**Fixed**
-
-* LIKE searches over taxonomies, metadata, authors and comments multiplied rows and could time out.
-* Cached search results were shared across languages on WPML, Polylang and TranslatePress sites.
-* Nested Better Search queries consumed callbacks belonging to their parent query, so repeated multisite searches never reused their cached results.
-* [Pro] Custom table schema changes were never applied to existing installs, because `dbDelta` only ran when the table was missing.
-* [Pro] Custom-table multisite pagination repeated and skipped results, and returned short pages, when post-type filtering removed index rows; reported totals still come from the index, so the last pages can now be empty instead of repeating results.
-* [Pro] Multisite searches using the custom tables index returned no results at all for `posts_per_page` of `-1`.
-* [Pro] Multisite cached results collided when posts on different sites shared an ID.
-* [Pro] Custom-table searches ignored the metadata, author and comment search settings and per-query overrides.
-* [Pro] Custom-table taxonomy relevance read obsolete option names and applied unintended default weights.
-* [Pro] Custom-table fuzzy matching stayed active for Boolean-operator queries.
-* [Pro] Custom-table searches ran an extra maximum-score query even when relevance percentages were hidden and no minimum relevance was set.
-* The hook registry called `spl_object_hash()`, which is deprecated as of PHP 8.6.
-
-= 4.4.4 =
-
-Release date: 10 September 2026
-
-**Fixed**
-
-* `the_bsearch_post_type()` and `get_bsearch_post_type()` filtered their output through the term list hooks instead of the `the_bsearch_post_type` and `get_bsearch_post_type` filters.
-
-= 4.4.3 =
-
-Release date: 5 September 2026
-
-**Added**
-
-* Added the `bsearch_search_meta_keys` filter to limit meta searches to selected keys.
-* Added short-lived caching for live-search responses and heatmap counts, and avoided unnecessary result-count queries for live search.
+* [Pro] Added configurable recency weighting to search ranking, disabled by default; existing custom-table indexes needed a one-time backfill from Tools before it could be used.
+* TranslatePress live-search suggestions now used translated titles and language-specific links.
 
 **Changed**
 
-* Improved multisite and admin performance by caching Better Search table-existence checks, network table discovery, and FULLTEXT index status checks, eliminating repeated `SHOW TABLES` and `SHOW INDEX` metadata queries while adding live health checks and safe recovery when tables change outside WordPress.
-* Reduced database work for FULLTEXT searches that include post meta or comments by using existence checks instead of row-multiplying joins.
-* Improved negative searches by separating excluded terms from the FULLTEXT match and applying them across the enabled search fields.
-* [Pro] Reduced memory usage during spelling-dictionary rebuilds by processing titles in batches and keeping the existing dictionary available until the replacement is ready.
-* [Pro] Prevented repeated saves of the same post from inflating spelling-dictionary frequencies.
-* [Pro] Optimized custom-table result counts by skipping relevance-score calculation when no relevance threshold is applied.
+* Improved keyboard and screen reader access to settings fields and repeater controls.
 
 **Fixed**
 
-* Fixed negative-only searches returning no results and negative terms being ignored in natural-language FULLTEXT searches.
-* Fixed the dashboard's "Last 7 days", "Last 14 days" and "Last 30 days" tabs covering one day more than their labels, since the date range is inclusive of both endpoints.
-* [Pro] Preserved negative-term exclusions when fuzzy LIKE matching is enabled.
-* [Pro] Fixed spelling-dictionary rebuilds temporarily emptying the dictionary and ensured invalid batch sizes cannot stall a rebuild.
-* [Pro] Fixed spelling-dictionary rebuild failures when words differ only by case or accents.
-* [Pro] Fixed custom-table indexing missing taxonomy and indexed-meta changes made outside a post save (quick edit, SEO plugin primary-term changes), and moved large term refreshes to bounded background batches.
-
-= 4.4.2 =
-
-Release date: 29 August 2026
-
-**Added**
-
-* Added the `bsearch_highlight_use_boundaries` filter to the client-side highlighter, allowing themes to enable whole-word-only matching on cached pages.
-
-**Changed**
-
-* Updated the Settings API to version 3.0.0, adding missing sanitizers for radio, select, wysiwyg, file, password, css, html and other field types, and preventing unregistered submitted settings from being saved raw.
-
-**Fixed**
-
-* Fixed stopword stripping breaking with a PHP `preg_replace()` warning, and silently leaving stopwords in place, when the translated stopword list or the `wp_search_stopwords` filter contained a `/`.
-* [Pro] Fixed the ORDER BY clause being silently rewritten to `score DESC` when full-text search was unavailable, which discarded the "Sort by date" ordering on short-term and LIKE-based searches.
-* Fixed plugin data being deleted when uninstalling one version while its paired free or Pro counterpart was active.
-
-= 4.4.1 =
-
-Release date: 20 August 2026
-
-**Changed**
-
-* Setting defaults are now resolved from a single lightweight list instead of building every settings field, so reading an option early in the page load no longer risks loading translations too early.
-
-**Fixed**
-
-* Fixed the settings wizard silently dropping repeater field rows on save.
-* Fixed settings not saving when submitted without a referer (e.g. via REST or WP-CLI).
-
-= 4.4.0 =
-
-Release date: 2 August 2026
-Release post: https://webberzone.com/announcements/better-search-v4-4-0/
-
-**Added**
-
-* Added a Feature Manager to toggle optional features from a new Features tab.
-* [Pro] Added "Did you mean" suggestions for zero-result searches, with Suggest and Auto-correct modes.
-* [Pro] Added search redirects with exact or contains matching and 301 or 302 status codes.
-* Added search to quickly find options across settings tabs.
-* Added the `bsearch_pre_index_content_parts` filter to modify content before it is stored in custom search tables.
-
-**Changed**
-
-* Standardized FULLTEXT index names across database tools.
-* Updated the Settings API to version 2.10.1 and refreshed admin assets.
-
-**Fixed**
-
-* Fixed settings page layout and field rendering issues.
-* Fixed disabled Pro settings being discarded or remaining editable in the free plugin.
-* Fixed validation preventing settings from saving when required fields were inside collapsed repeater rows.
-* [Pro] Fixed the setup wizard changing steps while custom tables were being indexed.
-* Fixed database checks not restoring the previous error display state.
-* Fixed highlighting fallback behavior for queries containing an unclosed quote.
+* Search result caches could return results from another language on WPML, Polylang and TranslatePress sites.
+* LIKE searches that included taxonomies, metadata, authors or comments could time out on large sites.
+* Nested Better Search queries could prevent a parent multisite search from caching, so repeated searches did unnecessary work.
+* [Pro] Existing custom tables did not receive schema upgrades needed by newer search features.
+* [Pro] Multisite custom-table searches could repeat or skip results across pages when post-type filters were active.
+* [Pro] Multisite searches using custom tables returned no results when `posts_per_page` was `-1`.
+* [Pro] Multisite searches could return a post from the wrong site when different sites had the same post ID.
+* [Pro] Custom-table searches ignored enabled metadata, author, comment and per-query search settings.
+* [Pro] Custom-table searches could rank taxonomy matches using defaults instead of configured weights.
+* [Pro] Fuzzy matching could override explicit Boolean search operators in custom-table searches.
+* [Pro] Recency weighting left search results ranked by relevance alone on MySQL 8.4.
+* [Pro] Custom-table searches ran slower than necessary when relevance percentages were hidden and no minimum relevance was set.
 
 = Earlier versions =
 
@@ -257,4 +167,4 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 == Upgrade Notice ==
 
 = 4.5.0 =
-Adds recency boosting to search ranking, off by default. Fixes multisite pagination and caching on the custom tables index, a possible timeout when searching every field, and a PHP 8.6 deprecation. Pro sites using the custom tables should run the backfill on the Tools page.
+Adds optional Pro recency weighting and TranslatePress live-search translations. Existing Pro custom-table sites need a one-time Tools-page backfill before using recency weighting.
