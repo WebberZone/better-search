@@ -140,12 +140,16 @@ Release date: 15 September 2026
 
 * [Pro] Added configurable recency weighting to search ranking, disabled by default; existing custom-table indexes needed a one-time backfill from Tools before it could be used.
 * Added an inclusion setting that restricts search results to the selected terms.
-* [Pro] Include and exclude settings now accepted terms from any public taxonomy, not just categories. On multisite searches these terms apply to the site they were set on; other sites in the network are not filtered.
+* [Pro] Include and exclude settings now accepted terms from any public taxonomy, not just categories, scoped to the site they were set on.
 * TranslatePress live-search suggestions now used translated titles and language-specific links.
 
 **Changed**
 
 * Improved keyboard and screen reader access to settings fields and repeater controls.
+
+**Security**
+
+* Hardened thumbnail dimension output so custom image sizes cannot inject markup into search results.
 
 **Fixed**
 
@@ -170,4 +174,4 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 == Upgrade Notice ==
 
 = 4.5.0 =
-Adds optional Pro recency weighting and TranslatePress live-search translations. Existing Pro custom-table sites need a one-time Tools-page backfill before using recency weighting.
+Security release. Hardens thumbnail dimension output in search results. Also adds Pro recency weighting and include/exclude filtering by any public taxonomy. Existing Pro custom-table sites need a one-time Tools-page backfill before using recency weighting.
