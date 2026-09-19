@@ -163,6 +163,16 @@ Include posts from authors that match the search terms.
 
 Include posts where comments include the search terms.
 
+## Term inclusion options
+
+These options restrict search results to the selected terms. Leave blank to search everything.
+
+### Only include Categories
+
+Comma-separated list of category slugs to include. Only posts assigned to these categories are returned in search results. Autocomplete is available.
+
+In Pro this setting is labeled **Only include Terms** and accepts terms from any public taxonomy, not just categories. On a multisite network, the settings apply to the site where they are configured.
+
 ## Exclusion options
 
 ### Exclude password-protected posts
@@ -175,14 +185,13 @@ Enter a comma-separated list of post/page/custom post type IDs to exclude (e.g.,
 
 ### Exclude Categories
 
-Comma-separated list of category slugs to exclude. Autocomplete is available. Does not support custom taxonomies.
+Comma-separated list of category slugs to exclude. Autocomplete is available.
+
+In Pro this setting is labeled **Exclude Terms** and accepts terms from any public taxonomy, not just categories. On a multisite network, the settings apply to the site where they are configured.
 
 ### Exclude category IDs
 
-Read-only field automatically populated based on the above input.
-
-> [!NOTE]
-> ⓘ Uses term_taxonomy_id, which may differ from the IDs on the Categories page.
+> **Removed in v4.5.0.** This readonly field no longer exists. The category slugs entered above are converted to internal category IDs automatically when the settings are saved. These IDs use term_taxonomy_id, which may differ from the IDs on the Categories page.
 
 ### Exclude Front page *(Pro only)*
 
