@@ -146,6 +146,7 @@ Release date: 15 September 2026
 **Changed**
 
 * Improved keyboard and screen reader access to settings fields and repeater controls.
+* [Pro] Improved custom-table search performance for taxonomy and fuzzy searches on large sites.
 
 **Security**
 
@@ -166,6 +167,8 @@ Release date: 15 September 2026
 * [Pro] Recency weighting left search results ranked by relevance alone on MySQL 8.4.
 * [Pro] Custom-table searches ran slower than necessary when relevance percentages were hidden and no minimum relevance was set.
 * [Pro] Term include and exclude settings were ignored when custom tables were used to serve the search.
+* [Pro] Custom-table taxonomy indexes were not created on supported MySQL versions or refreshed when public taxonomies changed.
+* [Pro] Custom-table pagination could advertise ineligible posts, resulting in empty result pages.
 
 = Earlier versions =
 
@@ -174,4 +177,4 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 == Upgrade Notice ==
 
 = 4.5.0 =
-Security release. Hardens thumbnail dimension output in search results. Also adds Pro recency weighting and include/exclude filtering by any public taxonomy. Existing Pro custom-table sites need a one-time Tools-page backfill before using recency weighting.
+Security and performance release. Fixes Pro custom-table indexes, pagination and large-site searches, and adds recency weighting and public-taxonomy filters. Existing Pro custom-table sites need a one-time Tools-page backfill before using recency weighting.
