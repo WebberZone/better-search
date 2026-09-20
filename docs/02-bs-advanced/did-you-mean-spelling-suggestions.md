@@ -160,8 +160,13 @@ Words that differ only by letter case or accents are combined into a single entr
 - **Accepted corrections reinforce your search log**: When Auto-correct mode succeeds, the corrected term is logged as a search, strengthening future suggestions.
 - **Repeated saves no longer skew frequencies**: When you save a post, its title words are added to the dictionary only if they are missing, rather than having their counts incremented again. Frequencies now reflect how common a word is, not how often a post was edited. The scheduled rebuild recomputes true frequencies twice a day.
 
+## Available to AI assistants
+
+When this feature is enabled, Better Search Pro also registers the `better-search/suggest-search-term` ability, so a connected AI assistant can ask your site for a correction after a search returns nothing. Switching the feature off removes the ability entirely, rather than leaving a tool that always answers with nothing. See [Better Search Abilities API](https://webberzone.com/support/knowledgebase/better-search-abilities-api/).
+
 ## See also
 
+- [Better Search Abilities API](https://webberzone.com/support/knowledgebase/better-search-abilities-api/)
 - [Fuzzy Searches in Better Search Pro](https://webberzone.com/support/knowledgebase/fuzzy-matches/)
 - [Understanding Better Search Templates](https://webberzone.com/support/knowledgebase/better-search-templates/)
 - [`bsearch_did_you_mean_enchant_locale`](https://webberzone.dev/better-search/hooks/bsearch_did_you_mean_enchant_locale/)
