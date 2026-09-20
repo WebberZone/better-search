@@ -107,6 +107,15 @@ final class Main {
 	public Frontend\Template_Handler $template_handler;
 
 	/**
+	 * Abilities API.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @var Abilities
+	 */
+	public Abilities $abilities;
+
+	/**
 	 * Pro modules.
 	 *
 	 * @since 4.0.0
@@ -154,6 +163,7 @@ final class Main {
 		$this->display          = new Frontend\Display();
 		$this->live_search      = new Frontend\Live_Search();
 		$this->template_handler = new Frontend\Template_Handler();
+		$this->abilities        = new Abilities();
 
 		// Load all hooks.
 		new Hook_Loader();

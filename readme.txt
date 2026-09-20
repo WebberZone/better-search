@@ -3,7 +3,7 @@ Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://wzn.io/donate-wz
 Stable tag: 4.4.4
-Requires at least: 6.8
+Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
@@ -138,6 +138,7 @@ Release date: 15 September 2026
 
 **Added**
 
+* Added WordPress Abilities API support so AI agents can run site searches; Pro adds popular search terms and cache clearing. Requires WordPress 6.9 or later.
 * [Pro] Added configurable recency weighting to search ranking, disabled by default; existing custom-table indexes needed a one-time backfill from Tools before it could be used.
 * Added an inclusion setting that restricts search results to the selected terms.
 * [Pro] Include and exclude settings now accepted terms from any public taxonomy, not just categories, scoped to the site they were set on.
@@ -177,4 +178,4 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 == Upgrade Notice ==
 
 = 4.5.0 =
-Security and performance release. Fixes Pro custom-table indexes, pagination and large-site searches, and adds recency weighting and public-taxonomy filters. Existing Pro custom-table sites need a one-time Tools-page backfill before using recency weighting.
+Security and performance release. Requires WordPress 6.9 or later. Fixes Pro custom-table indexes, pagination and large-site searches, and adds Abilities API support, recency weighting and public-taxonomy filters. Existing Pro custom-table sites need a one-time Tools-page backfill before using recency weighting.
