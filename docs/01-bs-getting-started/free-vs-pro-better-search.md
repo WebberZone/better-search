@@ -58,6 +58,8 @@ Better Search is free to use and replaces WordPress search with relevance-ranked
 | Network admin dashboard and statistics | ❌ | ✅ |
 | **Developer Tools** |  |  |
 | WP-CLI commands (search, cache, db, stats, settings, ecsi, status, stopwords) | ❌ | ✅ |
+| Abilities API: search ability for AI assistants | ✅ | ✅ |
+| Abilities API: popular search terms, spelling suggestions and cache clearing | ❌ | ✅ |
 | **Support** |  |  |
 | Community forum | ✅ | ✅ |
 | Priority email support | ❌ | ✅ |

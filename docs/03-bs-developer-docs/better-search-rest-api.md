@@ -35,3 +35,7 @@ You can enable this by navigating to the plugin settings page under **Better Sea
 | `min_relevance` | Filters results to only include those with a relevance score equal to or greater than this value. |
 
 All parameters are optional. If not provided, Better Search will use its default configuration. You can use these parameters to fine-tune search behavior for specific REST API requests.
+
+## See also
+
+- [Better Search Abilities API](https://webberzone.com/support/knowledgebase/better-search-abilities-api/) — a separate endpoint under `wp-abilities/v1` that exposes Better Search to AI assistants. It does not change the WordPress search endpoint described on this page.
