@@ -59,7 +59,7 @@ class Abilities {
 			'better-search/search',
 			array(
 				'label'               => __( 'Search Site Content', 'better-search' ),
-				'description'         => __( 'Runs a relevance-weighted search of the site content and returns the best matching posts. Use this to find content matching a search phrase, optionally limited to given post types. Results are ordered by relevance and include each post ID, title, URL, excerpt, and a relevance score that is only comparable within the same result set.', 'better-search' ),
+				'description'         => __( 'Runs a relevance-weighted search of the site content and returns the best matching posts. Use this to find content matching a search phrase, optionally limited to given post types. Returns the matching results plus the total number of matches, so use total with limit and offset to page through everything. Results are ordered by relevance and include each post ID, title, URL, excerpt, and a relevance score that is only comparable within the same result set.', 'better-search' ),
 				'category'            => 'webberzone',
 				'input_schema'        => array(
 					'type'                 => 'object',
@@ -93,24 +93,36 @@ class Abilities {
 					),
 				),
 				'output_schema'       => array(
-					'type'  => 'array',
-					'items' => array(
-						'type'                 => 'object',
-						'required'             => array( 'id', 'title', 'url', 'excerpt', 'relevance' ),
-						'additionalProperties' => false,
-						'properties'           => array(
-							'id'        => array( 'type' => 'integer' ),
-							'title'     => array( 'type' => 'string' ),
-							'url'       => array(
-								'type'   => 'string',
-								'format' => 'uri',
+					'type'                 => 'object',
+					'required'             => array( 'results', 'total' ),
+					'additionalProperties' => false,
+					'properties'           => array(
+						'results' => array(
+							'type'  => 'array',
+							'items' => array(
+								'type'                 => 'object',
+								'required'             => array( 'id', 'title', 'url', 'excerpt', 'relevance' ),
+								'additionalProperties' => false,
+								'properties'           => array(
+									'id'        => array( 'type' => 'integer' ),
+									'title'     => array( 'type' => 'string' ),
+									'url'       => array(
+										'type'   => 'string',
+										'format' => 'uri',
+									),
+									'excerpt'   => array( 'type' => 'string' ),
+									'relevance' => array(
+										'type'        => 'number',
+										'minimum'     => 0,
+										'description' => __( 'Raw relevance score. Comparable only against other results for the same search.', 'better-search' ),
+									),
+								),
 							),
-							'excerpt'   => array( 'type' => 'string' ),
-							'relevance' => array(
-								'type'        => 'number',
-								'minimum'     => 0,
-								'description' => __( 'Raw relevance score. Comparable only against other results for the same search.', 'better-search' ),
-							),
+						),
+						'total'   => array(
+							'type'        => 'integer',
+							'minimum'     => 0,
+							'description' => __( 'Total number of posts matching the search, ignoring limit and offset.', 'better-search' ),
 						),
 					),
 				),
@@ -198,7 +210,10 @@ class Abilities {
 			);
 		}
 
-		return $results;
+		return array(
+			'results' => $results,
+			'total'   => (int) $query->found_posts,
+		);
 	}
 
 	/**

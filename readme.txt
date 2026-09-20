@@ -138,7 +138,7 @@ Release date: 15 September 2026
 
 **Added**
 
-* Added WordPress Abilities API support so AI agents can run site searches; Pro adds popular search terms and cache clearing. Requires WordPress 6.9 or later.
+* Added WordPress Abilities API support so AI agents can run site searches; Pro adds popular search terms, spelling suggestions and cache clearing. Requires WordPress 6.9 or later.
 * [Pro] Added configurable recency weighting to search ranking, disabled by default; existing custom-table indexes needed a one-time backfill from Tools before it could be used.
 * Added an inclusion setting that restricts search results to the selected terms.
 * [Pro] Include and exclude settings now accepted terms from any public taxonomy, not just categories, scoped to the site they were set on.
