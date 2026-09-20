@@ -59,7 +59,7 @@ class Abilities {
 			'better-search/search',
 			array(
 				'label'               => __( 'Search Site Content', 'better-search' ),
-				'description'         => __( 'Runs a relevance-weighted search of the site content and returns the best matching posts. Use this to find content matching a search phrase, optionally limited to given post types. Returns the matching results plus the total number of matches, so use total with limit and offset to page through everything. Results are ordered by relevance and include each post ID, title, URL, excerpt, and a relevance score that is only comparable within the same result set.', 'better-search' ),
+				'description'         => __( 'Runs a relevance-weighted search of the site content and returns the best matching posts. Pass a few distinctive keywords rather than a sentence or question: search terms are combined with AND, so a long natural-language question usually matches nothing while its keywords match well. Optionally limit the search to given post types. Returns the matching results plus the total number of matches, so use total with limit and offset to page through everything. Results are ordered by relevance and include each post ID, title, URL, excerpt, and a relevance score that is only comparable within the same result set.', 'better-search' ),
 				'category'            => 'webberzone',
 				'input_schema'        => array(
 					'type'                 => 'object',
@@ -210,9 +210,73 @@ class Abilities {
 			);
 		}
 
+		if ( empty( $results ) && 0 === (int) $query->found_posts ) {
+			$prose_error = $this->maybe_prose_query_error( $args['s'], $query );
+
+			if ( is_wp_error( $prose_error ) ) {
+				return $prose_error;
+			}
+		}
+
 		return array(
 			'results' => $results,
 			'total'   => (int) $query->found_posts,
+		);
+	}
+
+	/**
+	 * Flag a zero-result search whose phrase looks like prose rather than keywords.
+	 *
+	 * Search terms are combined with AND, and a phrase over the term ceiling is matched
+	 * literally, so a natural-language question reliably matches nothing on a site that holds
+	 * plenty about its subject. Returning the empty result set alone would tell an agent the
+	 * content does not exist, so say what happened instead.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @param  string               $phrase Search phrase as supplied.
+	 * @param  \Better_Search_Query $query  Executed search query.
+	 * @return \WP_Error|null Error when the phrase is too long to match, otherwise null.
+	 */
+	private function maybe_prose_query_error( string $phrase, \Better_Search_Query $query ): ?\WP_Error {
+		$terms = (array) ( $query->query_vars['search_terms'] ?? array() );
+		$words = preg_split( '/\s+/u', trim( $phrase, " \t\n\r\0\x0B" ), -1, PREG_SPLIT_NO_EMPTY );
+		$words = is_array( $words ) ? $words : array();
+
+		/**
+		 * Filters the number of search terms above which a zero-result search is reported as too long.
+		 *
+		 * @since 4.5.0
+		 *
+		 * @param int $max_terms Maximum search terms. Default 4.
+		 */
+		$max_terms = (int) apply_filters( 'bsearch_abilities_max_search_terms', 4 );
+
+		/**
+		 * Filters the number of words above which a zero-result search is reported as too long.
+		 *
+		 * @since 4.5.0
+		 *
+		 * @param int $max_words Maximum words. Default 9.
+		 */
+		$max_words = (int) apply_filters( 'bsearch_abilities_max_search_words', 9 );
+
+		if ( count( $terms ) <= $max_terms && count( $words ) <= $max_words ) {
+			return null;
+		}
+
+		return new \WP_Error(
+			'bsearch_search_query_too_long',
+			sprintf(
+				/* translators: 1: number of search terms, 2: maximum number of keywords to use. */
+				__( 'The search ran and matched nothing, but the phrase was too long to match reliably: it produced %1$d search terms, which are combined with AND. Search again with at most %2$d distinctive keywords instead of a sentence or question. A zero result here does not mean the site has no content on the subject.', 'better-search' ),
+				count( $terms ),
+				$max_terms
+			),
+			array(
+				'status'       => 400,
+				'search_terms' => array_values( $terms ),
+			)
 		);
 	}
 
