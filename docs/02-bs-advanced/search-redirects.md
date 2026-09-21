@@ -24,23 +24,42 @@ Search redirects, introduced in [Better Search Pro](https://webberzone.com/plugi
 
 Click **Add redirect** and fill in these fields:
 
-- **Keywords** — comma-separated list of search terms that trigger this redirect (e.g. `support, help, contact us`).
+- **Keywords** — comma-separated list of search terms that trigger this redirect (e.g. `support, help, contact us`). With the **Wildcard** match type, `*` stands for any characters.
 - **Send visitors to this post or page** — enter the ID of the post or page. The post must be published and not password protected. Leave this blank to use a URL instead.
 - **Or send them to this URL** — a full address such as `https://example.com/help/`, or a path on this site such as `/contact/`. Only used when the post or page field is blank.
-- **Match type** — **Exact match** matches the whole search phrase. **Contains** matches when the keyword appears anywhere in the phrase.
+- **Match type** — **Exact match** matches the whole search phrase. **Wildcard (\*)** matches the whole search phrase with `*` standing for any characters. **Contains** matches when the keyword appears anywhere in the phrase.
 - **Redirect type** — **302 (Temporary)** or **301 (Permanent)**. Use 302 unless you are certain the rule is permanent — browsers cache 301 redirects aggressively.
 - **Enabled** — uncheck to switch a rule off without deleting it.
 
-You can add as many rules as you need. Rules are checked in order, with exact matches always taking priority over "contains" matches. Matching ignores case, leading/trailing spaces, and repeated spaces.
+You can add as many rules as you need. Rules are checked in order, with exact matches always taking priority over wildcard matches, and wildcard matches over "contains" matches. Matching ignores case, leading/trailing spaces, and repeated spaces.
 
 ## How matching works
 
 When a visitor performs a search, Better Search Pro checks every redirect rule before the search runs. Matching respects these behaviors:
 
-- **Exact rules first**: all exact-match rules are tried before any "contains" rule, regardless of list order.
+- **Exact rules first**: all exact-match rules are tried first, then wildcard rules, then "contains" rules, regardless of list order.
 - **First match wins**: when multiple rules could match, the first one in the list takes effect. Reorder rules so more specific matches are higher up.
 - **Case and whitespace**: matching is case-insensitive and collapses repeated spaces. Leading and trailing spaces are ignored.
 - **Search statistics**: even when redirected, the original search query is recorded so your search statistics and "Did you mean" suggestions stay accurate.
+
+### Wildcard matching
+
+Added in Better Search Pro 4.5.0, the **Wildcard (\*)** match type lets a single keyword cover a range of search phrases. The `*` character stands for any characters, including none.
+
+Wildcard keywords are anchored, so the pattern has to cover the whole search phrase:
+
+| Keyword | Matches | Does not match |
+| --- | --- | --- |
+| `help*` | help, help me, helpdesk | please help me |
+| `*help*` | help, please help me, self-help guide | — |
+| `*guide` | buying guide, style guide | guide to WordPress |
+| `*` | every search | — |
+
+A few things to keep in mind:
+
+- A keyword with no `*` behaves exactly like an exact match.
+- A bare `*` is a catch-all. Because wildcard rules are checked before "contains" rules, a catch-all rule stops any "contains" rule further down the list from ever running.
+- Characters that have a special meaning in patterns elsewhere — such as `.`, `(` or `+` — are treated literally, so a keyword like `f(x)*` matches the text you typed.
 
 ### Bypassing redirects for testing
 
