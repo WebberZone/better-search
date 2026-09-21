@@ -143,6 +143,7 @@ Release date: 15 September 2026
 * Added an inclusion setting that restricts search results to the selected terms.
 * [Pro] Include and exclude settings now accepted terms from any public taxonomy, not just categories, scoped to the site they were set on.
 * TranslatePress live-search suggestions now used translated titles and language-specific links.
+* [Pro] Added a wildcard match type to search redirects, so a keyword such as `help*` can match a range of search phrases.
 
 **Changed**
 

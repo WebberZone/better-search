@@ -1067,7 +1067,7 @@ class Settings {
 				array(
 					'id'                => 'search_redirects',
 					'name'              => esc_html__( 'Redirect rules', 'better-search' ),
-					'desc'              => esc_html__( 'Rules are checked in order, with exact matches taking priority over "contains" matches. Matching ignores case, leading and trailing spaces, and repeated spaces. The same keyword may appear in more than one rule; the first rule that matches wins, so put the rule you want to take precedence higher up the list. Add bsearch_no_redirect=1 to a search URL to see the results page instead; this works for administrators only.', 'better-search' ),
+					'desc'              => esc_html__( 'Rules are checked in order, with exact matches taking priority over wildcard matches, and wildcard matches over "contains" matches. Matching ignores case, leading and trailing spaces, and repeated spaces. The same keyword may appear in more than one rule; the first rule that matches wins, so put the rule you want to take precedence higher up the list. Add bsearch_no_redirect=1 to a search URL to see the results page instead; this works for administrators only.', 'better-search' ),
 					'type'              => 'repeater',
 					'default'           => array(),
 					'pro'               => true,
@@ -1079,7 +1079,7 @@ class Settings {
 						'keywords'         => array(
 							'id'       => 'keywords',
 							'name'     => esc_html__( 'Keywords', 'better-search' ),
-							'desc'     => esc_html__( 'Comma-separated list of search terms that trigger this redirect. e.g. support, help, contact us', 'better-search' ),
+							'desc'     => esc_html__( 'Comma-separated list of search terms that trigger this redirect. e.g. support, help, contact us', 'better-search' ) . '. ' . esc_html__( 'With the wildcard match type, * stands for any characters, so help* matches "help me" and *help* matches "please help me".', 'better-search' ),
 							'type'     => 'csv',
 							'required' => true,
 							'default'  => '',
@@ -1104,11 +1104,12 @@ class Settings {
 						'match_type'       => array(
 							'id'      => 'match_type',
 							'name'    => esc_html__( 'Match type', 'better-search' ),
-							'desc'    => esc_html__( 'Exact matches the whole search phrase. Contains matches when the keyword appears anywhere in the search phrase.', 'better-search' ),
+							'desc'    => esc_html__( 'Exact matches the whole search phrase. Wildcard matches the whole search phrase with * standing for any characters. Contains matches when the keyword appears anywhere in the search phrase.', 'better-search' ),
 							'type'    => 'select',
 							'default' => 'exact',
 							'options' => array(
 								'exact'    => esc_html__( 'Exact match', 'better-search' ),
+								'wildcard' => esc_html__( 'Wildcard (*)', 'better-search' ),
 								'contains' => esc_html__( 'Contains', 'better-search' ),
 							),
 						),
