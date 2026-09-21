@@ -16,7 +16,7 @@ toc: true
 ## Requirements
 
 - Better Search 4.5.0 or later.
-- WordPress 6.9 or later, which provides the Abilities API. On older versions the abilities are not registered and the rest of the plugin is unaffected.
+- WordPress 6.9 or later, which provides the Abilities API used by the plugin.
 - Better Search Pro for the Pro abilities, and the `manage_options` capability for the management ones.
 
 ## Using an AI assistant

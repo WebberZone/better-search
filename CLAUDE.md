@@ -34,7 +34,7 @@ Better Search replaces WordPress's default search with a FULLTEXT-powered, relev
 
 Activating either plugin auto-deactivates the other; both share text domain `better-search` and settings key `bsearch_settings`, so settings persist across the switch.
 
-Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.8+, PHP 7.4+.
+Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.9+, PHP 7.4+.
 
 Versions: `readme.txt`'s `Stable tag` is the released version; `BETTER_SEARCH_VERSION` in `better-search.php` is the working version — use it for new `@since` tags. Do not bump either unless asked.
 
