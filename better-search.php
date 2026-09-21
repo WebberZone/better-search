@@ -14,7 +14,7 @@
  * Plugin URI:  https://webberzone.com/plugins/better-search/
  * Description: Replace the default WordPress search with a contextual search. Search results are sorted by relevancy ensuring a better visitor search experience.
  * Version:     4.5.0
- * Requires at least: 6.9
+ * Requires at least: 6.8
  * Requires PHP: 7.4
  * Author:      WebberZone
  * Author URI:  https://webberzone.com/

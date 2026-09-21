@@ -8,7 +8,7 @@ status: publish
 order: 0
 ---
 
-The **Popular Searches [Better Search]** widget displays a heatmap of searches made on your site. More popular terms appear larger and use the “hot” color, while less popular terms appear smaller and use the “cold” color.
+The **Popular Searches [Better Search]** widget from [Better Search](https://webberzone.com/plugins/better-search/) displays a heatmap of searches made on your site. More popular terms appear larger and use the “hot” color, while less popular terms appear smaller and use the “cold” color.
 
 Each term links to the search results page for that query.
 
