@@ -43,7 +43,7 @@ class Cache {
 		}
 		check_ajax_referer( 'bsearch-admin', 'security' );
 
-		$count = $this->delete();
+		$count = self::delete_all();
 
 		wp_send_json_success(
 			array(
@@ -80,6 +80,21 @@ class Cache {
 			}
 		}
 		return $loop;
+	}
+
+	/**
+	 * Delete every Better Search cache entry, in both the blog and the network scope.
+	 *
+	 * Search results are cached as blog transients by the ordinary query path and as site
+	 * transients by the custom-table path, so clearing only one scope leaves the other serving
+	 * results built from superseded settings.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @return int Number of transients deleted.
+	 */
+	public static function delete_all() {
+		return self::delete() + self::delete( array(), true );
 	}
 
 	/**

@@ -79,12 +79,13 @@ class Tools_Page {
 				'better-search-admin-js',
 				'bsearch_admin_data',
 				array(
-					'ajax_url'             => admin_url( 'admin-ajax.php' ),
-					'security'             => wp_create_nonce( 'bsearch-admin' ),
-					'confirm_message'      => esc_html__( 'Are you sure you want to clear the cache?', 'better-search' ),
-					'success_message'      => esc_html__( 'Cache cleared successfully!', 'better-search' ),
-					'fail_message'         => esc_html__( 'Failed to clear cache. Please try again.', 'better-search' ),
-					'request_fail_message' => esc_html__( 'Request failed: ', 'better-search' ),
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
+					'security' => wp_create_nonce( 'bsearch-admin' ),
+					'strings'  => array(
+						'confirm_message'      => esc_html__( 'Are you sure you want to clear the cache?', 'better-search' ),
+						'fail_message'         => esc_html__( 'Failed to clear cache. Please try again.', 'better-search' ),
+						'request_fail_message' => esc_html__( 'Request failed: ', 'better-search' ),
+					),
 				)
 			);
 		}

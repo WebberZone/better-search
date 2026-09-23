@@ -6,7 +6,7 @@ jQuery(document).ready(
 		});
 
 		$('button[name="bsearch_cache_clear"]').on('click', function () {
-			if (confirm(bsearch_admin_data.confirm_message)) {
+			if (confirm(bsearch_admin_data.strings.confirm_message)) {
 				var $button = $(this);
 				$button.prop('disabled', true).append(' <span class="spinner is-active"></span>');
 				clearCache($button);
@@ -22,10 +22,10 @@ jQuery(document).ready(
 				if (response.success) {
 					alert(response.data.message);
 				} else {
-					alert(bsearch_admin_data.fail_message);
+					alert(bsearch_admin_data.strings.fail_message);
 				}
 			}).fail(function (jqXHR, textStatus) {
-				alert(bsearch_admin_data.request_fail_message + textStatus);
+				alert(bsearch_admin_data.strings.request_fail_message + textStatus);
 			}).always(function () {
 				$button.prop('disabled', false).find('.spinner').remove();
 			});

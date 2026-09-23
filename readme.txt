@@ -144,11 +144,14 @@ Release date: 15 September 2026
 * [Pro] Include and exclude settings now accepted terms from any public taxonomy, not just categories, scoped to the site they were set on.
 * TranslatePress live-search suggestions now used translated titles and language-specific links.
 * [Pro] Added a wildcard match type to search redirects, so a keyword such as `help*` can match a range of search phrases.
+* [Pro] Added ranking weights for post slug, meta field, author and comment matches, disabled by default and applied only when the matching search setting is on.
+* Added a Features tab setting to turn off the WordPress Abilities API integration.
 
 **Changed**
 
 * Improved keyboard and screen reader access to settings fields and repeater controls.
 * [Pro] Improved custom-table search performance for taxonomy and fuzzy searches on large sites.
+* [Pro] Moved the REST API search setting to the Features tab, alongside the Abilities API setting.
 
 **Security**
 
@@ -171,6 +174,13 @@ Release date: 15 September 2026
 * [Pro] Term include and exclude settings were ignored when custom tables were used to serve the search.
 * [Pro] Custom-table taxonomy indexes were not created on supported MySQL versions or refreshed when public taxonomies changed.
 * [Pro] Custom-table pagination could advertise ineligible posts, resulting in empty result pages.
+* [Pro] Search terms containing a dollar sign followed by a digit were dropped from the relevance calculation.
+* [Pro] Multisite custom-table searches matched post slugs against the whole search phrase, so multi-word searches never found a post by its slug.
+* [Pro] Multisite searches without custom tables, and fuzzy searches with FULLTEXT off, dropped posts that matched only in their slug, taxonomies, meta fields, authors or comments.
+* [Pro] Fuzzy search counted common words such as "the" as matches, so a query containing one could return almost every post and slow the search down.
+* Sites in languages without a Better Search translation had common words such as "el" or "de" treated as search terms instead of stopwords.
+* Saving the settings, clearing the cache from the settings screen or running `wp bsearch cache clear` left the network-level search cache in place, so custom-table results kept using the previous settings until the cache expired.
+* The confirmation dialog for clearing the cache showed "undefined" instead of its message, and the two failure notices were empty for the same reason.
 
 = Earlier versions =
 
@@ -179,4 +189,4 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 == Upgrade Notice ==
 
 = 4.5.0 =
-Security and performance release. Requires WordPress 6.9 or later. Fixes Pro custom-table indexes, pagination and large-site searches, and adds Abilities API support, recency weighting and public-taxonomy filters. Existing Pro custom-table sites need a one-time Tools-page backfill before using recency weighting.
+Security and performance release. Requires WordPress 6.9 or later. Fixes Pro custom-table indexes, pagination and large-site searches, and adds Abilities API support and recency weighting. Pro custom-table sites need a one-time Tools-page backfill before using recency weighting.

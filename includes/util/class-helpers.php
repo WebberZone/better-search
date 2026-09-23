@@ -741,6 +741,20 @@ class Helpers {
 	}
 
 	/**
+	 * Get WordPress's search stopwords, translated for the site's locale.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @return string[] Stopwords.
+	 */
+	public static function get_wp_search_stopwords(): array {
+		$get_search_stopwords = new \ReflectionMethod( 'WP_Query', 'get_search_stopwords' );
+		$get_search_stopwords->setAccessible( true );
+
+		return (array) $get_search_stopwords->invoke( new WP_Query() );
+	}
+
+	/**
 	 * Strip stopwords from text.
 	 *
 	 * @since 4.2.0
@@ -754,10 +768,7 @@ class Helpers {
 	public static function strip_stopwords( $subject = '', $search = '', $replace = '' ): string {
 		// If no search terms provided, get WordPress stopwords.
 		if ( empty( $search ) ) {
-			$get_search_stopwords = new \ReflectionMethod( 'WP_Query', 'get_search_stopwords' );
-			$get_search_stopwords->setAccessible( true );
-			$search = $get_search_stopwords->invoke( new WP_Query() );
-			$search = array_merge( $search, array( 'from', 'where' ) );
+			$search = array_merge( self::get_wp_search_stopwords(), array( 'from', 'where' ) );
 		}
 
 		// Drop empty entries so a trailing comma in a translated list cannot create an empty alternation branch.

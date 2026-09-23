@@ -256,6 +256,10 @@ class Settings {
 			'weight_taxonomy_category'  => 0,
 			'weight_taxonomy_post_tag'  => 0,
 			'weight_taxonomy_default'   => 0,
+			'weight_slug'               => 0,
+			'weight_meta'               => 0,
+			'weight_authors'            => 0,
+			'weight_comments'           => 0,
 			'weight_recency'            => 0,
 			'recency_halflife'          => 180,
 			'use_precomputed_tax_score' => 0,
@@ -871,6 +875,46 @@ class Settings {
 				'id'      => 'weight_taxonomy_default',
 				'name'    => esc_html__( 'Default taxonomy weight', 'better-search' ),
 				'desc'    => esc_html__( 'Weight to give other taxonomy matches when calculating relevance.', 'better-search' ),
+				'type'    => 'number',
+				'default' => 0,
+				'min'     => '0',
+				'size'    => 'small',
+				'pro'     => true,
+			),
+			'weight_slug'               => array(
+				'id'      => 'weight_slug',
+				'name'    => esc_html__( 'Post slug', 'better-search' ),
+				'desc'    => esc_html__( 'Score added when the post slug matches. Requires Search Post slug below. Unlike the title and content weights, this adds a flat score to any post whose slug matches.', 'better-search' ),
+				'type'    => 'number',
+				'default' => 0,
+				'min'     => '0',
+				'size'    => 'small',
+				'pro'     => true,
+			),
+			'weight_meta'               => array(
+				'id'      => 'weight_meta',
+				'name'    => esc_html__( 'Meta fields', 'better-search' ),
+				'desc'    => esc_html__( 'Score added when a meta value matches. Requires Search Meta below. Scoring meta matches adds a subquery for every candidate post, so leave this at 0 on sites with a large postmeta table.', 'better-search' ),
+				'type'    => 'number',
+				'default' => 0,
+				'min'     => '0',
+				'size'    => 'small',
+				'pro'     => true,
+			),
+			'weight_authors'            => array(
+				'id'      => 'weight_authors',
+				'name'    => esc_html__( 'Authors', 'better-search' ),
+				'desc'    => esc_html__( 'Score added when the author name matches. Requires Search Authors below.', 'better-search' ),
+				'type'    => 'number',
+				'default' => 0,
+				'min'     => '0',
+				'size'    => 'small',
+				'pro'     => true,
+			),
+			'weight_comments'           => array(
+				'id'      => 'weight_comments',
+				'name'    => esc_html__( 'Comments', 'better-search' ),
+				'desc'    => esc_html__( 'Score added when a comment matches. Requires Search Comments below. Scoring comment matches adds a subquery for every candidate post, so leave this at 0 on sites with a large comments table.', 'better-search' ),
 				'type'    => 'number',
 				'default' => 0,
 				'min'     => '0',
@@ -1652,8 +1696,6 @@ class Settings {
 				'security' => wp_create_nonce( 'bsearch-admin' ),
 				'strings'  => array(
 					'confirm_message'      => esc_html__( 'Are you sure you want to clear the cache?', 'better-search' ),
-					'clearing_text'        => esc_html__( 'Clearing...', 'better-search' ),
-					'success_message'      => esc_html__( 'Cache cleared successfully!', 'better-search' ),
 					'fail_message'         => esc_html__( 'Failed to clear cache. Please try again.', 'better-search' ),
 					'request_fail_message' => esc_html__( 'Request failed: ', 'better-search' ),
 				),
@@ -1679,8 +1721,8 @@ class Settings {
 
 		self::flag_incomplete_repeater_rows( $settings );
 
-		// Delete the cache.
-		\WebberZone\Better_Search\Util\Cache::delete();
+		// Both scopes: the custom-table path caches as site transients, the ordinary path as blog ones.
+		\WebberZone\Better_Search\Util\Cache::delete_all();
 
 		return $settings;
 	}

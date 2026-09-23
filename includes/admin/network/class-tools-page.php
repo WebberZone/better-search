@@ -144,9 +144,7 @@ class Tools_Page {
 				'better-search-admin-js',
 				'bsearch_admin_data',
 				array(
-					'security'       => wp_create_nonce( 'bsearch-admin' ),
-					'clear_cache'    => __( 'Clear cache', 'better-search' ),
-					'clearing_cache' => __( 'Clearing cache', 'better-search' ),
+					'security' => wp_create_nonce( 'bsearch-admin' ),
 				)
 			);
 		}

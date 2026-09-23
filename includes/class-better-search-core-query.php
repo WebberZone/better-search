@@ -100,6 +100,14 @@ class Better_Search_Core_Query extends \WP_Query {
 	public $search_terms = array();
 
 	/**
+	 * Holds the terms matched against the non-FULLTEXT fields, once the search clause is built.
+	 *
+	 * @since 4.5.0
+	 * @var string[]|null
+	 */
+	public $field_search_terms = null;
+
+	/**
 	 * Holds the search query.
 	 *
 	 * @since 3.0.0
@@ -1037,7 +1045,8 @@ class Better_Search_Core_Query extends \WP_Query {
 		}
 
 		// Let's do a LIKE search for all other fields.
-		$searchand = '';
+		$searchand                = '';
+		$this->field_search_terms = (array) $search_terms;
 
 		/**
 		 * Filters the meta keys searched when "Search meta fields" is enabled.
@@ -2104,6 +2113,9 @@ class Better_Search_Core_Query extends \WP_Query {
 			)
 		);
 
+		// WordPress core's copy of the same list is translated for far more locales than the plugin's.
+		$words = array_merge( $words, Helpers::get_wp_search_stopwords() );
+
 		$stopwords = array();
 		foreach ( $words as $word ) {
 			$word = trim( $word, "\r\n\t " );
@@ -2115,7 +2127,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		/**
 		 * This filter is documented in class-wp-query.php.
 		 */
-		$this->stopwords = apply_filters( 'wp_search_stopwords', $stopwords );
+		$this->stopwords = apply_filters( 'wp_search_stopwords', array_values( array_unique( $stopwords ) ) );
 		return $this->stopwords;
 	}
 }
