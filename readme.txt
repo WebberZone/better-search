@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://wzn.io/donate-wz
-Stable tag: 4.4.4
+Stable tag: 4.5.0
 Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -138,11 +138,12 @@ Release date: 15 September 2026
 
 **Added**
 
-* Added WordPress Abilities API support so AI agents can run site searches; Pro adds popular search terms, spelling suggestions and cache clearing. Requires WordPress 6.9 or later.
+* Added WordPress Abilities API support so AI agents can run site searches.
+* [Pro] Added abilities for popular search terms, spelling suggestions and cache clearing.
 * [Pro] Added configurable recency weighting to search ranking, disabled by default; existing custom-table indexes needed a one-time backfill from Tools before it could be used.
 * Added an inclusion setting that restricts search results to the selected terms.
-* [Pro] Include and exclude settings now accepted terms from any public taxonomy, not just categories, scoped to the site they were set on.
-* TranslatePress live-search suggestions now used translated titles and language-specific links.
+* [Pro] Expanded include and exclude settings to terms from any public taxonomy, scoped to the site they were set on.
+* Added translated titles and language-specific links to TranslatePress live-search suggestions.
 * [Pro] Added a wildcard match type to search redirects, so a keyword such as `help*` can match a range of search phrases.
 * Added `*` wildcard support to filtered words, so `spam*` also blocks "spammer"; other characters in filtered words were matched literally.
 * [Pro] Added ranking weights for post slug, meta field, author and comment matches, disabled by default and applied only when the matching search setting is on.
@@ -150,6 +151,7 @@ Release date: 15 September 2026
 
 **Changed**
 
+* Raised the minimum WordPress version to 6.9 for the Abilities API.
 * Improved keyboard and screen reader access to settings fields and repeater controls.
 * [Pro] Improved custom-table search performance for taxonomy and fuzzy searches on large sites.
 * [Pro] Moved the REST API search setting to the Features tab, alongside the Abilities API setting.
