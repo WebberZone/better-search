@@ -144,6 +144,7 @@ Release date: 15 September 2026
 * [Pro] Include and exclude settings now accepted terms from any public taxonomy, not just categories, scoped to the site they were set on.
 * TranslatePress live-search suggestions now used translated titles and language-specific links.
 * [Pro] Added a wildcard match type to search redirects, so a keyword such as `help*` can match a range of search phrases.
+* Added `*` wildcard support to filtered words, so `spam*` also blocks "spammer"; other characters in filtered words were matched literally.
 * [Pro] Added ranking weights for post slug, meta field, author and comment matches, disabled by default and applied only when the matching search setting is on.
 * Added a Features tab setting to turn off the WordPress Abilities API integration.
 

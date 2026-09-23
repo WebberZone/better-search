@@ -1076,7 +1076,7 @@ class Settings {
 			'badwords'                  => array(
 				'id'      => 'badwords',
 				'name'    => esc_html__( 'Filter these words', 'better-search' ),
-				'desc'    => esc_html__( 'Words in this list will be stripped out of the search results. Enter these as a comma-separated list.', 'better-search' ),
+				'desc'    => esc_html__( 'Words in this list will be stripped out of the search results. Enter these as a comma-separated list. Use * as a wildcard for any run of letters or digits, e.g. spam* also matches spammer.', 'better-search' ),
 				'type'    => 'textarea',
 				'default' => implode( ',', self::get_badwords() ),
 			),
