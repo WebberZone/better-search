@@ -138,52 +138,42 @@ Release date: 15 September 2026
 
 **Added**
 
-* Added WordPress Abilities API support so AI agents can run site searches.
-* [Pro] Added abilities for popular search terms, spelling suggestions and cache clearing.
-* [Pro] Added configurable recency weighting to search ranking, disabled by default; existing custom-table indexes needed a one-time backfill from Tools before it could be used.
-* Added an inclusion setting that restricts search results to the selected terms.
-* [Pro] Expanded include and exclude settings to terms from any public taxonomy, scoped to the site they were set on.
+* Added WordPress Abilities API support for site searches, with an option to disable it in the Features tab.
+* Added a setting to restrict search results to selected terms.
+* Added `*` wildcard support to filtered words, so `spam*` also blocked "spammer".
 * Added translated titles and language-specific links to TranslatePress live-search suggestions.
-* [Pro] Added a wildcard match type to search redirects, so a keyword such as `help*` can match a range of search phrases.
-* Added `*` wildcard support to filtered words, so `spam*` also blocks "spammer"; other characters in filtered words were matched literally.
-* [Pro] Added ranking weights for post slug, meta field, author and comment matches, disabled by default and applied only when the matching search setting is on.
-* Added a Features tab setting to turn off the WordPress Abilities API integration.
+* [Pro] Added abilities for popular search terms, spelling suggestions and cache clearing.
+* [Pro] Added optional recency weighting, disabled by default; existing custom-table indexes required a one-time backfill from Tools.
+* [Pro] Added optional ranking weights for slug, metadata, author and comment matches.
+* [Pro] Added wildcard search redirects, so `help*` could match multiple search phrases.
 
 **Changed**
 
 * Raised the minimum WordPress version to 6.9 for the Abilities API.
-* Improved keyboard and screen reader access to settings fields and repeater controls.
-* [Pro] Improved custom-table search performance for taxonomy and fuzzy searches on large sites.
-* [Pro] Moved the REST API search setting to the Features tab, alongside the Abilities API setting.
+* Improved keyboard and screen reader access to settings and repeater controls.
+* [Pro] Expanded include and exclude settings to all public taxonomies.
+* [Pro] Improved custom-table search performance on large sites.
+* [Pro] Moved the REST API search setting to the Features tab.
 
 **Security**
 
-* Hardened thumbnail dimension output so custom image sizes cannot inject markup into search results.
+* Hardened thumbnail dimensions to prevent markup injection through custom image sizes.
 
 **Fixed**
 
-* Search result caches could return results from another language on WPML, Polylang and TranslatePress sites.
-* LIKE searches that included taxonomies, metadata, authors or comments could time out on large sites.
-* Nested Better Search queries could prevent a parent multisite search from caching, so repeated searches did unnecessary work.
-* [Pro] Existing custom tables did not receive schema upgrades needed by newer search features.
-* [Pro] Multisite custom-table searches could repeat or skip results across pages when post-type filters were active.
-* [Pro] Multisite searches using custom tables returned no results when `posts_per_page` was `-1`.
-* [Pro] Multisite searches could return a post from the wrong site when different sites had the same post ID.
-* [Pro] Custom-table searches ignored enabled metadata, author, comment and per-query search settings.
-* [Pro] Custom-table searches could rank taxonomy matches using defaults instead of configured weights.
-* [Pro] Fuzzy matching could override explicit Boolean search operators in custom-table searches.
-* [Pro] Recency weighting left search results ranked by relevance alone on MySQL 8.4.
-* [Pro] Custom-table searches ran slower than necessary when relevance percentages were hidden and no minimum relevance was set.
-* [Pro] Term include and exclude settings were ignored when custom tables were used to serve the search.
-* [Pro] Custom-table taxonomy indexes were not created on supported MySQL versions or refreshed when public taxonomies changed.
-* [Pro] Custom-table pagination could advertise ineligible posts, resulting in empty result pages.
-* [Pro] Search terms containing a dollar sign followed by a digit were dropped from the relevance calculation.
-* [Pro] Multisite custom-table searches matched post slugs against the whole search phrase, so multi-word searches never found a post by its slug.
-* [Pro] Multisite searches without custom tables, and fuzzy searches with FULLTEXT off, dropped posts that matched only in their slug, taxonomies, meta fields, authors or comments.
-* [Pro] Fuzzy search counted common words such as "the" as matches, so a query containing one could return almost every post and slow the search down.
-* Sites in languages without a Better Search translation had common words such as "el" or "de" treated as search terms instead of stopwords.
-* Saving the settings, clearing the cache from the settings screen or running `wp bsearch cache clear` left the network-level search cache in place, so custom-table results kept using the previous settings until the cache expired.
-* The confirmation dialog for clearing the cache showed "undefined" instead of its message, and the two failure notices were empty for the same reason.
+* Cached search results could appear in the wrong language on WPML, Polylang and TranslatePress sites.
+* Searches covering taxonomies, metadata, authors or comments could time out on large sites.
+* Common words were not excluded on sites without a Better Search translation.
+* Network search caches remained stale after settings changes or manual cache clearing, and nested queries could prevent caching.
+* Cache-clearing confirmation and error messages were missing.
+* [Pro] Custom-table searches ignored some search settings, taxonomy weights and term restrictions.
+* [Pro] Custom-table searches could show empty pages, and multisite searches could repeat, skip or return posts from the wrong site.
+* [Pro] Multisite custom-table searches returned no results when `posts_per_page` was `-1`.
+* [Pro] Custom-table schema and taxonomy indexes were not reliably updated.
+* [Pro] Fuzzy searches could ignore Boolean operators or match common words, returning too many results.
+* [Pro] Multisite and fuzzy searches could omit posts matching slugs, taxonomies, metadata, authors or comments.
+* [Pro] Recency weighting did not affect ranking on MySQL 8.4.
+* [Pro] Search terms containing a dollar sign followed by a digit were omitted from relevance scoring.
 
 = Earlier versions =
 
@@ -192,4 +182,4 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 == Upgrade Notice ==
 
 = 4.5.0 =
-Security and performance release. Requires WordPress 6.9 or later. Fixes Pro custom-table indexes, pagination and large-site searches, and adds Abilities API support and recency weighting. Pro custom-table sites need a one-time Tools-page backfill before using recency weighting.
+Security and performance release. Fixes multilingual caching and Pro search accuracy. Requires WordPress 6.9 or later. Pro custom-table sites must backfill their index from Tools before using recency weighting.
