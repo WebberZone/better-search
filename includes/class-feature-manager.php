@@ -65,6 +65,10 @@ class Feature_Manager {
 			),
 			'did_you_mean'     => array(
 				'setting' => 'enable_did_you_mean',
+				'default' => false,
+			),
+			'abilities_api'    => array(
+				'setting' => 'enable_abilities_api',
 				'default' => true,
 			),
 			'search_redirects' => array(

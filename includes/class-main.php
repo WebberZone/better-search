@@ -113,7 +113,7 @@ final class Main {
 	 *
 	 * @var Abilities
 	 */
-	public Abilities $abilities;
+	public ?Abilities $abilities = null;
 
 	/**
 	 * Pro modules.
@@ -163,7 +163,9 @@ final class Main {
 		$this->display          = new Frontend\Display();
 		$this->live_search      = new Frontend\Live_Search();
 		$this->template_handler = new Frontend\Template_Handler();
-		$this->abilities        = new Abilities();
+		if ( Feature_Manager::is_enabled( 'abilities_api' ) ) {
+			$this->abilities = new Abilities();
+		}
 
 		// Load all hooks.
 		new Hook_Loader();
