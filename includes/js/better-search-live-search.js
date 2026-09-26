@@ -3,6 +3,8 @@
  */
 class SearchAutocomplete {
     static SELECTOR = '.search-form, form[role="search"]';
+    // Forms with their own live search, for example the Knowledge Base search form, opt out with this attribute.
+    static OPT_OUT = '[data-bsearch-live-search="off"]';
     static DEBOUNCE_DELAY = 300;
 
     static CACHE_TIMEOUT = 5 * 60 * 1000; // 5 minutes.
@@ -13,6 +15,7 @@ class SearchAutocomplete {
         this.submitButton = form.querySelector('input[type="submit"], button[type="submit"]');
         this.selectedIndex = -1;
         this.debounceTimer = null;
+        this.requestId = 0;
         this.cache = new Map();
         this.observer = null;
 
@@ -123,7 +126,11 @@ class SearchAutocomplete {
      * Binds all event listeners
      */
     bindEvents() {
-        this.form.addEventListener('submit', () => this.clearCache());
+        this.form.addEventListener('submit', () => {
+            this.clearCache();
+            this.cancelPending();
+            this.clearResults();
+        });
         this.searchInput.addEventListener('input', this.handleInput.bind(this));
         this.searchInput.addEventListener('keydown', this.handleInputKeydown.bind(this));
         this.searchInput.addEventListener('focus', this.handleInputFocus.bind(this));
@@ -149,7 +156,7 @@ class SearchAutocomplete {
      * Handles input changes with debouncing
      */
     handleInput() {
-        clearTimeout(this.debounceTimer);
+        this.cancelPending();
         this.debounceTimer = setTimeout(() => {
             const searchTerm = this.searchInput.value.trim();
 
@@ -173,6 +180,7 @@ class SearchAutocomplete {
         switch (event.key) {
             case 'Escape':
                 event.preventDefault();
+                this.cancelPending();
                 this.clearResults();
                 this.announce(bsearch_live_search.strings.suggestions_closed);
                 break;
@@ -242,6 +250,7 @@ class SearchAutocomplete {
                 window.location.href = selectedItem.href;
             }
         } else {
+            this.cancelPending();
             this.announce(bsearch_live_search.strings.submitting_search);
             this.form.submit();
         }
@@ -521,10 +530,22 @@ class SearchAutocomplete {
     }
 
     /**
+     * Cancels a pending search so a late response can't reopen the results
+     */
+    cancelPending() {
+        clearTimeout(this.debounceTimer);
+        this.requestId++;
+        this.hideLoadingSpinner();
+    }
+
+    /**
      * Fetches search results
      * @param {string} searchTerm
      */
     async fetchResults(searchTerm) {
+        this.requestId++;
+        const requestId = this.requestId;
+
         try {
             // Check cache first
             const cachedResults = this.getCachedResults(searchTerm);
@@ -554,14 +575,21 @@ class SearchAutocomplete {
             const results = Array.isArray(responseJson) ? responseJson : responseJson.results;
             const total = Array.isArray(responseJson) ? responseJson.length : responseJson.total;
             this.cacheResults(searchTerm, results);
+            if (requestId !== this.requestId) {
+                return;
+            }
             this.displayResults(results, total);
         } catch (error) {
+            if (requestId !== this.requestId) {
+                return;
+            }
             console.error('Error:', error);
             this.clearResults();
             this.announce(bsearch_live_search.strings.error_loading);
         } finally {
-            // Always hide loading spinner
-            this.hideLoadingSpinner();
+            if (requestId === this.requestId) {
+                this.hideLoadingSpinner();
+            }
         }
     }
 
@@ -655,5 +683,9 @@ class SearchAutocomplete {
  */
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll(SearchAutocomplete.SELECTOR)
-        .forEach(form => new SearchAutocomplete(form));
+        .forEach(form => {
+            if (!form.matches(SearchAutocomplete.OPT_OUT)) {
+                new SearchAutocomplete(form);
+            }
+        });
 });

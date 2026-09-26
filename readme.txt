@@ -146,6 +146,7 @@ Release date: 15 September 2026
 * [Pro] Added optional recency weighting, disabled by default; existing custom-table indexes required a one-time backfill from Tools.
 * [Pro] Added optional ranking weights for slug, metadata, author and comment matches.
 * [Pro] Added wildcard search redirects, so `help*` could match multiple search phrases.
+* Added the `data-bsearch-live-search="off"` form attribute, so search forms with their own live search, such as the Knowledge Base search form, don't show a second list of suggestions.
 
 **Changed**
 
@@ -166,6 +167,7 @@ Release date: 15 September 2026
 * Common words were not excluded on sites without a Better Search translation.
 * Network search caches remained stale after settings changes or manual cache clearing, and nested queries could prevent caching.
 * Cache-clearing confirmation and error messages were missing.
+* Live search suggestions could reopen after pressing Escape or submitting the search.
 * [Pro] Custom-table searches ignored some search settings, taxonomy weights and term restrictions.
 * [Pro] Custom-table searches could show empty pages, and multisite searches could repeat, skip or return posts from the wrong site.
 * [Pro] Multisite custom-table searches returned no results when `posts_per_page` was `-1`.
