@@ -32,6 +32,17 @@ It benefits content-heavy sites where users frequently search for specific posts
 
 Once enabled, Better Search automatically takes over your search forms and applies live Ajax functionality. You don't need to add extra code or scripts.
 
+To leave live search enabled globally but exclude one form, add `data-bsearch-live-search="off"` to its `<form>` element:
+
+```html
+<form role="search" method="get" action="/" data-bsearch-live-search="off">
+    <input type="search" name="s">
+    <button type="submit">Search</button>
+</form>
+```
+
+Better Search ignores the form and lets it submit as a regular search. This is useful when another script controls the form or when the form provides a different search experience.
+
 ## Performance and limits
 
 Live search fires on every keystroke, so Better Search keeps each request cheap.

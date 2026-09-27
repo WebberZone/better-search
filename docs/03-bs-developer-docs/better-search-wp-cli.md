@@ -118,3 +118,53 @@ wp bsearch cache status
 Options:
 
 - `--format=<format>` — Output format: table, json, csv
+
+### AI Answers
+
+Inspect and operate Better Search Pro AI Answers from WP-CLI.
+
+#### AI Status
+
+```bash
+wp bsearch ai status
+wp bsearch ai status --format=json
+```
+
+The status includes whether AI Answers is enabled, provider availability, selected and fallback providers, provider cooldown state, cached-answer count, today's provider requests, the daily cap, and the number of recorded questions.
+
+#### Check Provider
+
+Force a live provider availability check:
+
+```bash
+wp bsearch ai check-provider
+```
+
+#### Ask a Question
+
+```bash
+wp bsearch ai ask "How do I configure search?"
+wp bsearch ai ask "How do I configure search?" --format=json
+```
+
+The command uses the configured provider chain and returns the answer, sources, cache state, and failure reason.
+
+#### Clear the AI Cache
+
+```bash
+wp bsearch ai cache clear
+```
+
+This removes cached answers and provider state.
+
+#### Content Gaps
+
+```bash
+wp bsearch ai gaps list
+wp bsearch ai gaps list --from=2026-09-01 --to=2026-09-30 --format=json
+wp bsearch ai gaps export > content-gaps.csv
+wp bsearch ai gaps export --format=json
+wp bsearch ai gaps clear --yes
+```
+
+The list command supports `--from`, `--to`, `--limit`, `--page`, and `--format`. Export supports CSV and JSON. Clear deletes every recorded question and prompts for confirmation unless `--yes` is supplied.

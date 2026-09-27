@@ -3,7 +3,7 @@ slug: better-search-ai-answers
 title: "AI Answers in Better Search Pro"
 products: [better-search]
 sections: ["02-bs-advanced"]
-tags: [better-search, pro, ai, search]
+tags: [ai, better-search, pro, search]
 status: publish
 order: 0
 toc: true
@@ -11,12 +11,13 @@ toc: true
 
 [toc]
 
-Better Search Pro 4.5.0 can answer a visitor's question using published content from the current site. It finds relevant posts with Better Search, sends limited excerpts to a configured WordPress AI Client provider, and shows an answer with source links. If the content does not support an answer, visitors get a link to ordinary search results. AI answers are off by default.
+[Better Search Pro](https://webberzone.com/plugins/better-search/pro/) 4.5.0 can answer a visitor's question using published content from the current site. It finds relevant posts with Better Search, sends limited excerpts to a configured WordPress AI Client provider, and shows an answer with source links. If the content does not support an answer, visitors get a link to ordinary search results. AI answers are off by default.
 
 ## Set up AI answers
 
 1. Install and configure a provider that supports text generation through the WordPress AI Client. Check that the provider is connected and its credentials are valid.
 2. Go to **Better Search → Settings → AI (Beta)**. Select the **AI provider**, turn on **Enable AI answers**, and save.
+   If you have more than one configured provider, you can choose a **Fallback provider**. Better Search tries it when the primary provider has a temporary server or rate-limit error.
 3. Choose how many articles and characters per article can be sent as context. Set a daily request cap and per-visitor hourly limit that fit your provider budget.
 4. Leave **Show Ask AI in search forms** enabled to add an explicit **Ask AI** button to Better Search forms. Visitors can still run a normal search at any time.
 
@@ -24,7 +25,7 @@ The provider status appears on the AI settings tab. AI controls only appear when
 
 ## Place the question panel
 
-Use the `[bsearch_ai]` shortcode on a page, or call `do_action( 'bsearch_ai_answer_panel' )` in a theme template. The panel and search-form button submit questions only when a visitor chooses **Ask AI**. They do not turn regular searches into AI requests.
+Use the `[[bsearch_ai]]` shortcode on a page, or call `do_action( 'bsearch_ai_answer_panel' )` in a theme template. The panel and search-form button submit questions only when a visitor chooses **Ask AI**. They do not turn regular searches into AI requests.
 
 Answers include links to the articles used when **Show sources** is enabled. A reminder tells visitors to check those sources because AI answers can contain mistakes. The fallback message can be customized on the AI settings tab.
 
@@ -35,3 +36,13 @@ The module searches public, published, non-password-protected posts from the pos
 Question recording is optional and off by default. Enable **Record questions for Content gaps** to see frequently unanswered questions in the admin report. Set **Log retention (days)** to control how long those records remain. Disabling recording stops new records; existing records expire according to the retention setting. Better Search's privacy policy text describes this processing.
 
 Answers are cached and invalidated when relevant content or settings change. The daily cap and per-visitor limit include provider requests, so cached answers do not use another provider request.
+
+## Content gaps
+
+Open **Better Search → Content gaps** to review grouped unanswered questions. Filter the report by date, export it as CSV, or use **Empty log** to permanently delete every recorded question. Emptying the log removes answered and unanswered records across all dates.
+
+## Provider failures and cache controls
+
+Better Search temporarily pauses a provider after qualifying network, rate-limit, or server errors. If a fallback provider is configured, it is tried next. A successful request clears that provider's failure state.
+
+Open **Better Search → Tools** and use **Clear cache** to clear cached AI answers along with the regular search cache. This also clears provider availability and cooldown state, so the next request checks the providers again.
