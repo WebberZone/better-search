@@ -139,15 +139,18 @@ Release date: 15 September 2026
 **Added**
 
 * Added WordPress Abilities API support for site searches, with an option to disable it in the Features tab.
+* Added a Status section to Tools showing database, index and cache health.
 * Added a setting to restrict search results to selected terms.
 * Added `*` wildcard support to filtered words, so `spam*` also blocked "spammer".
 * Added translated titles and language-specific links to TranslatePress live-search suggestions.
+* Added the `data-bsearch-live-search="off"` form attribute, so forms with their own live search did not show a second list of suggestions.
 * [Pro] Added abilities for popular search terms, spelling suggestions and cache clearing.
 * [Pro] Added optional AI answers grounded in Better Search results, with source links, usage limits and a Content gaps report.
+* [Pro] Added WP-CLI commands for AI questions, answer-cache management and Content gaps.
+* [Pro] Expanded Tools status with custom-table and AI-provider health.
 * [Pro] Added optional recency weighting, disabled by default; existing custom-table indexes required a one-time backfill from Tools.
 * [Pro] Added optional ranking weights for slug, metadata, author and comment matches.
 * [Pro] Added wildcard search redirects, so `help*` could match multiple search phrases.
-* Added the `data-bsearch-live-search="off"` form attribute, so search forms with their own live search, such as the Knowledge Base search form, don't show a second list of suggestions.
 
 **Changed**
 
@@ -185,4 +188,4 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 == Upgrade Notice ==
 
 = 4.5.0 =
-Security and performance release. Fixes multilingual caching and Pro search accuracy. Requires WordPress 6.9 or later. Pro custom-table sites must backfill their index from Tools before using recency weighting.
+Security and performance release. Adds optional Pro AI answers and ranking controls, and fixes multilingual caching and search accuracy. Requires WordPress 6.9 or later.
