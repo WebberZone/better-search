@@ -141,6 +141,7 @@ class Activator {
 	 * @since 4.2.0
 	 */
 	public static function single_deactivate() {
+		wp_clear_scheduled_hook( 'bsearch_ai_cleanup_log' );
 		$settings = get_option( 'bsearch_settings' );
 
 		if ( ! empty( $settings['uninstall_indices_deactivate'] ) ) {

@@ -24,10 +24,13 @@ if ( ! defined( 'WPINC' ) ) {
 function bsearch_get_settings() {
 
 	static $settings_cache = array();
+	static $stored_cache   = array();
 
 	$cache_key = is_multisite() ? get_current_blog_id() : 0;
+	$stored    = get_option( 'bsearch_settings', array() );
 
-	if ( ! array_key_exists( $cache_key, $settings_cache ) ) {
+	if ( ! array_key_exists( $cache_key, $settings_cache ) || $stored_cache[ $cache_key ] !== $stored ) {
+		$stored_cache[ $cache_key ] = $stored;
 		/**
 		 * Settings array
 		 *
@@ -36,7 +39,7 @@ function bsearch_get_settings() {
 		 * @since 1.2.0
 		 * @param array $settings Settings array
 		 */
-		$settings_cache[ $cache_key ] = apply_filters( 'bsearch_get_settings', get_option( 'bsearch_settings', array() ) );
+		$settings_cache[ $cache_key ] = apply_filters( 'bsearch_get_settings', $stored );
 	}
 
 	return $settings_cache[ $cache_key ];

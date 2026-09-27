@@ -47,6 +47,16 @@ function bsearch_delete_data() {
 
 	$settings = get_option( 'bsearch_settings' );
 
+	$ai_log_class = '\\WebberZone\\Better_Search\\Pro\\AI\\Question_Log';
+	$ai_log_file  = __DIR__ . '/includes/pro/ai/class-question-log.php';
+	if ( ! class_exists( $ai_log_class ) && file_exists( $ai_log_file ) ) {
+		require_once $ai_log_file;
+	}
+	if ( class_exists( $ai_log_class ) ) {
+		$ai_log_class::uninstall();
+	}
+	delete_option( 'bsearch_ai_content_version' );
+
 	if ( defined( 'BETTER_SEARCH_DELETE_DATA' ) && BETTER_SEARCH_DELETE_DATA ) {
 		$wpdb->query( 'DROP TABLE ' . $wpdb->prefix . 'bsearch' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( 'DROP TABLE ' . $wpdb->prefix . 'bsearch_daily' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery

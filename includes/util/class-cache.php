@@ -79,6 +79,7 @@ class Cache {
 				++$loop;
 			}
 		}
+		do_action( 'bsearch_cache_cleared', $network );
 		return $loop;
 	}
 

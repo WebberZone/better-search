@@ -116,3 +116,70 @@ namespace {
 		}
 	}
 }
+
+namespace {
+	if ( ! class_exists( 'WP_AI_Client_Prompt_Builder' ) ) {
+		class WP_AI_Client_Prompt_Builder {
+			/**
+			 * @param string $instruction System instruction.
+			 * @return self
+			 */
+			public function using_system_instruction( string $instruction ) {
+				unset( $instruction );
+				return $this;
+			}
+
+			/**
+			 * @param array<string, mixed>|null $schema JSON schema.
+			 * @return self
+			 */
+			public function as_json_response( ?array $schema = null ) {
+				unset( $schema );
+				return $this;
+			}
+
+			/**
+			 * @param string $provider Provider ID.
+			 * @return self
+			 */
+			public function using_provider( string $provider ) {
+				unset( $provider );
+				return $this;
+			}
+
+			/**
+			 * @param mixed ...$models Model preferences.
+			 * @return self
+			 */
+			public function using_model_preference( ...$models ) {
+				unset( $models );
+				return $this;
+			}
+
+			/**
+			 * @return bool
+			 */
+			public function is_supported_for_text_generation() {
+				return false;
+			}
+
+			/**
+			 * @return string|\WP_Error
+			 */
+			public function generate_text() {
+				return '';
+			}
+		}
+	}
+
+	if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
+		/**
+		 * @param mixed $prompt Prompt.
+		 * @return \WP_AI_Client_Prompt_Builder
+		 */
+		function wp_ai_client_prompt( $prompt = null ) {
+			unset( $prompt );
+			return new \WP_AI_Client_Prompt_Builder();
+		}
+	}
+}

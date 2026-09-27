@@ -143,6 +143,7 @@ Release date: 15 September 2026
 * Added `*` wildcard support to filtered words, so `spam*` also blocked "spammer".
 * Added translated titles and language-specific links to TranslatePress live-search suggestions.
 * [Pro] Added abilities for popular search terms, spelling suggestions and cache clearing.
+* [Pro] Added optional AI answers grounded in Better Search results, with source links, usage limits and a Content gaps report.
 * [Pro] Added optional recency weighting, disabled by default; existing custom-table indexes required a one-time backfill from Tools.
 * [Pro] Added optional ranking weights for slug, metadata, author and comment matches.
 * [Pro] Added wildcard search redirects, so `help*` could match multiple search phrases.
