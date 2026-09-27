@@ -182,6 +182,13 @@ class Tools_Page {
 		<div id="post-body" class="metabox-holder columns-2">
 		<div id="post-body-content">
 
+			<div class="postbox">
+				<h2><span><?php esc_html_e( 'Status', 'better-search' ); ?></span></h2>
+				<div class="inside">
+					<?php echo self::get_db_status_report(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in the report. ?>
+				</div>
+			</div>
+
 			<form method="post">
 
 				<div class="postbox">
@@ -371,6 +378,61 @@ class Tools_Page {
 
 		<?php
 		echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
+	 * Report database table and index status without changing the schema.
+	 *
+	 * @since 4.5.0
+	 *
+	 * @return string Status table HTML.
+	 */
+	public static function get_db_status_report(): string {
+		global $wpdb;
+
+		$tables            = apply_filters(
+			'bsearch_tools_status_tables',
+			array(
+				$wpdb->prefix . 'bsearch'       => __( 'Popular searches', 'better-search' ),
+				$wpdb->prefix . 'bsearch_daily' => __( 'Daily searches', 'better-search' ),
+			)
+		);
+		$indexes_installed = Db::is_fulltext_index_installed( false );
+
+		ob_start();
+		?>
+		<table class="form-table">
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Database version', 'better-search' ); ?></th>
+				<td><?php echo esc_html( sprintf( /* translators: 1: installed database version, 2: current database version. */ __( 'Installed version: %1$s / Current version: %2$s', 'better-search' ), (string) get_option( 'bsearch_db_version', '0' ), BETTER_SEARCH_DB_VERSION ) ); ?></td>
+			</tr>
+			<?php foreach ( $tables as $table => $label ) : ?>
+				<?php
+				$installed = Db::is_table_installed( $table, false );
+				$metadata  = null;
+				if ( $installed ) {
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Live diagnostic table metadata.
+					$metadata = $wpdb->get_row( $wpdb->prepare( 'SHOW TABLE STATUS LIKE %s', $wpdb->esc_like( $table ) ), ARRAY_A );
+				}
+				?>
+				<tr>
+					<th scope="row"><?php echo esc_html( $label ); ?> <code><?php echo esc_html( $table ); ?></code></th>
+					<td>
+						<span style="color: <?php echo esc_attr( $installed ? '#006400' : '#8b0000' ); ?>;"><?php echo esc_html( $installed ? __( 'Installed', 'better-search' ) : __( 'Not installed', 'better-search' ) ); ?></span>
+						<?php if ( $metadata ) : ?>
+							<br><span class="description"><?php echo esc_html( sprintf( /* translators: 1: estimated number of rows, 2: estimated table size. */ __( 'Estimated entries: %1$s | Estimated size: %2$s', 'better-search' ), number_format_i18n( (int) $metadata['Rows'] ), size_format( (int) $metadata['Data_length'] + (int) $metadata['Index_length'] ) ) ); ?></span>
+						<?php endif; ?>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'FULLTEXT indexes', 'better-search' ); ?></th>
+				<td><span style="color: <?php echo esc_attr( $indexes_installed ? '#006400' : '#8b0000' ); ?>;"><?php echo esc_html( $indexes_installed ? __( 'Installed', 'better-search' ) : __( 'Not installed', 'better-search' ) ); ?></span></td>
+			</tr>
+		</table>
+		<?php
+
+		return (string) ob_get_clean();
 	}
 
 	/**

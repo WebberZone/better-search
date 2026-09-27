@@ -185,6 +185,7 @@ class Activator {
 
 		$tables[] = $wpdb->prefix . self::$table_name;
 		$tables[] = $wpdb->prefix . self::$table_name_daily;
+		$tables[] = $wpdb->prefix . 'bsearch_ai_questions';
 		Db::clear_network_table_status_cache();
 
 		return $tables;

@@ -54,6 +54,19 @@ function bsearch_delete_data() {
 	}
 	if ( class_exists( $ai_log_class ) ) {
 		$ai_log_class::uninstall();
+	} else {
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'bsearch_ai_questions' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
+		delete_option( 'bsearch_ai_db_version' );
+		$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s",
+				$wpdb->esc_like( '_transient_bsearch_ai_' ) . '%',
+				$wpdb->esc_like( '_transient_timeout_bsearch_ai_' ) . '%',
+				$wpdb->esc_like( 'bsearch_ai_daily_usage_' ) . '%',
+				$wpdb->esc_like( 'bsearch_ai_rl_' ) . '%'
+			)
+		);
+		wp_clear_scheduled_hook( 'bsearch_ai_cleanup_log' );
 	}
 	delete_option( 'bsearch_ai_content_version' );
 

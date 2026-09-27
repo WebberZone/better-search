@@ -190,6 +190,8 @@ function get_bsearch_form( $search_query = '', $args = array() ) {
 		'any_post_type_label' => '',
 		'selected_post_types' => '',
 		'show_post_types'     => false,
+		'ai_mode'             => 'default',
+		'ai_text'             => '',
 	);
 	$args     = wp_parse_args( $args, $defaults );
 

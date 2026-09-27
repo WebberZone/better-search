@@ -58,6 +58,7 @@ class Search_Box extends \WP_Widget {
 
 		$show_post_types = isset( $instance['show_post_types'] ) ? $instance['show_post_types'] : '';
 		$post_types      = $show_post_types ? bsearch_get_option( 'post_types' ) : '';
+		$ai_mode         = isset( $instance['ai_mode'] ) ? $instance['ai_mode'] : 'default';
 
 		echo $args['before_widget']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		if ( $title ) {
@@ -81,6 +82,7 @@ class Search_Box extends \WP_Widget {
 				array(
 					'post_types'      => $post_types,
 					'show_post_types' => $show_post_types,
+					'ai_mode'         => $ai_mode,
 				),
 				$instance
 			)
@@ -99,11 +101,23 @@ class Search_Box extends \WP_Widget {
 	public function form( $instance ) {
 		$title           = isset( $instance['title'] ) ? $instance['title'] : '';
 		$show_post_types = isset( $instance['show_post_types'] ) ? (bool) $instance['show_post_types'] : false;
+		$ai_mode         = isset( $instance['ai_mode'] ) ? $instance['ai_mode'] : 'default';
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title', 'better-search' ); ?>:</label>
 			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
 		</p>
+		<?php if ( class_exists( '\\WebberZone\\Better_Search\\Pro\\AI\\AI' ) ) : ?>
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'ai_mode' ) ); ?>"><?php esc_html_e( 'Ask AI button', 'better-search' ); ?></label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'ai_mode' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'ai_mode' ) ); ?>">
+				<option value="default" <?php selected( $ai_mode, 'default' ); ?>><?php esc_html_e( 'Use global setting', 'better-search' ); ?></option>
+				<option value="alongside" <?php selected( $ai_mode, 'alongside' ); ?>><?php esc_html_e( 'Search and Ask AI', 'better-search' ); ?></option>
+				<option value="replace" <?php selected( $ai_mode, 'replace' ); ?>><?php esc_html_e( 'Ask AI only', 'better-search' ); ?></option>
+				<option value="off" <?php selected( $ai_mode, 'off' ); ?>><?php esc_html_e( 'Search only', 'better-search' ); ?></option>
+			</select>
+		</p>
+		<?php endif; ?>
 		<p>
 			<input class="checkbox" type="checkbox"<?php checked( $show_post_types ); ?> id="<?php echo esc_attr( $this->get_field_id( 'show_post_types' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'show_post_types' ) ); ?>" />
 			<label for="<?php echo esc_attr( $this->get_field_id( 'show_post_types' ) ); ?>"><?php esc_html_e( 'Display post types dropdown?', 'better-search' ); ?></label>
@@ -127,6 +141,7 @@ class Search_Box extends \WP_Widget {
 		$new_instance                = wp_parse_args( (array) $new_instance, array( 'title' => '' ) );
 		$instance['title']           = sanitize_text_field( $new_instance['title'] );
 		$instance['show_post_types'] = isset( $new_instance['show_post_types'] ) ? (bool) $new_instance['show_post_types'] : false;
+		$instance['ai_mode']         = isset( $new_instance['ai_mode'] ) && in_array( $new_instance['ai_mode'], array( 'default', 'alongside', 'replace', 'off' ), true ) ? $new_instance['ai_mode'] : 'default';
 
 		/**
 		 * Filters Update widget options array for the Search box.

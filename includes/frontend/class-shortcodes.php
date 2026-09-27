@@ -86,6 +86,8 @@ class Shortcodes {
 				'any_post_type_label' => '',
 				'selected_post_types' => '',
 				'show_post_types'     => false,
+				'ai_mode'             => 'default',
+				'ai_text'             => '',
 			),
 			$atts,
 			'bsearch_form'
