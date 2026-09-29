@@ -134,7 +134,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.5.0 =
 
-Release date: 15 September 2026
+Release date: 1 October 2026
 
 **Added**
 
@@ -145,7 +145,7 @@ Release date: 15 September 2026
 * Added translated titles and language-specific links to TranslatePress live-search suggestions.
 * Added the `data-bsearch-live-search="off"` form attribute, so forms with their own live search did not show a second list of suggestions.
 * [Pro] Added abilities for popular search terms, spelling suggestions and cache clearing.
-* [Pro] Added optional AI answers grounded in Better Search results, with source links, usage limits and a Content gaps report.
+* [Pro] Added optional AI answers grounded in Better Search results, with source links, cached answers, usage limits and a Content gaps report.
 * [Pro] Added WP-CLI commands for AI questions, answer-cache management and Content gaps.
 * [Pro] Expanded Tools status with custom-table and AI-provider health.
 * [Pro] Added optional recency weighting, disabled by default; existing custom-table indexes required a one-time backfill from Tools.
