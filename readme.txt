@@ -134,7 +134,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.5.0 =
 
-Release date: 1 October 2026
+Release date: 2 October 2026
 
 **Added**
 
