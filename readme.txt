@@ -178,7 +178,6 @@ Release date: 1 October 2026
 * [Pro] Custom-table schema and taxonomy indexes were not reliably updated.
 * [Pro] Fuzzy searches could ignore Boolean operators or match common words, returning too many results.
 * [Pro] Multisite and fuzzy searches could omit posts matching slugs, taxonomies, metadata, authors or comments.
-* [Pro] Recency weighting did not affect ranking on MySQL 8.4.
 * [Pro] Search terms containing a dollar sign followed by a digit were omitted from relevance scoring.
 
 = Earlier versions =
