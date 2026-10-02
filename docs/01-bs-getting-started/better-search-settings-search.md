@@ -114,6 +114,22 @@ Set the weight for tag matches in relevance calculation.
 
 Weight to give other taxonomy matches when calculating relevance.
 
+### Post slug *(Pro only)*
+
+Score added when the post slug matches. Requires **Search Post slug** under Inclusion options. Unlike the title and content weights, this adds a flat score to any post whose slug matches. Default: `0`.
+
+### Meta fields *(Pro only)*
+
+Score added when a meta value matches. Requires **Search Meta** under Inclusion options. Scoring meta matches adds a subquery for every candidate post, so leave this at `0` on sites with a large postmeta table. Default: `0`.
+
+### Authors *(Pro only)*
+
+Score added when the author name matches. Requires **Search Authors** under Inclusion options. Default: `0`.
+
+### Comments *(Pro only)*
+
+Score added when a comment matches. Requires **Search Comments** under Inclusion options. Scoring comment matches adds a subquery for every candidate post, so leave this at `0` on sites with a large comments table. Default: `0`.
+
 ### Recency boost (%) *(Pro only)*
 
 Blend post age into relevance ordering. The default is `0`, which disables the boost. Set a value from 0 to 200 to favor newer results. A higher value gives freshness more influence, but a strongly relevant older result can still outrank a weakly relevant newer result. This setting applies when results are ordered by relevance or relatedness and has no effect on date, title, or random ordering. It is unavailable on SQLite.
@@ -205,7 +221,7 @@ When enabled, excludes the Posts page from search results.
 
 ### Filter these words
 
-Words in this list will be stripped out of the search results. Enter as a comma-separated list.
+Words in this list will be stripped out of the search results. Enter as a comma-separated list. Use `*` as a wildcard for any run of letters or digits: `spam*` also matches "spammer". Other characters are matched literally, and an entry made only of wildcards is ignored.
 
 ### Match whole words only
 

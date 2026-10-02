@@ -36,6 +36,7 @@ Better Search is free to use and replaces WordPress search with relevance-ranked
 | Minimum relevance threshold | ❌ | ✅ |
 | Minimum characters before FULLTEXT search (configurable) | ❌ | ✅ |
 | Taxonomy weight configuration (categories, tags, precomputed score) | ❌ | ✅ |
+| [Slug, meta field, author and comment weights](https://webberzone.com/support/knowledgebase/better-search-settings-search/) | ❌ | ✅ |
 | [Recency weighting](https://webberzone.com/support/knowledgebase/better-search-algorithm-wordpress/) | ❌ | ✅ |
 | LIKE fallback when FULLTEXT returns no results | ❌ | ✅ |
 | Search post slugs | ❌ | ✅ |

@@ -22,7 +22,7 @@ Disabling this will use the plugin’s in-built advanced search results page, wh
 
 ## Enable REST API *(Pro only)*
 
-When enabled, this option integrates Better Search with the search REST API endpoint. It allows developers to fetch relevant search results programmatically via the API, offering flexibility for custom integrations. Read the [REST API documentation](https://webberzone.com/support/knowledgebase/better-search-rest-api/) on which parameters you can use.
+> **Moved in v4.5.0.** This setting is now **REST API search integration** on the [Features tab](https://webberzone.com/support/knowledgebase/better-search-feature-manager/).
 
 ## Enable Search Tracking
 

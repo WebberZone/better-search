@@ -14,9 +14,9 @@ WordPress core utilizes the REST API in various scenarios, including the ‘Add 
 
 ## Enable REST API support
 
-You can enable this by navigating to the plugin settings page under **Better Search > Settings**. Enable ‘Enable REST API’ and save the settings. Alternatively, you can pass `better_search_query` as the parameter to enable relevance searching.
+You can enable this by navigating to **Better Search > Settings** and turning on **REST API search integration** on the [Features tab](https://webberzone.com/support/knowledgebase/better-search-feature-manager/), then saving the settings. Before v4.5.0 this was the **Enable REST API** setting on the General tab. Alternatively, you can pass `better_search_query` as the parameter to enable relevance searching.
 
-## Better Search REST API Parameters
+## REST API parameters
 
 | **Parameter** | **Description** |
 | --- | --- |

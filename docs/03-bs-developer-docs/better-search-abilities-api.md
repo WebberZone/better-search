@@ -18,6 +18,7 @@ toc: true
 - Better Search 4.5.0 or later.
 - WordPress 6.9 or later, which provides the Abilities API used by the plugin.
 - Better Search Pro for the Pro abilities, and the `manage_options` capability for the management ones.
+- **WordPress Abilities API** turned on in the [Features tab](https://webberzone.com/support/knowledgebase/better-search-feature-manager/). It is on by default.
 
 ## Using an AI assistant
 

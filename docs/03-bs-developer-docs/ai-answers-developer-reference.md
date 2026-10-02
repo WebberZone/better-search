@@ -17,7 +17,7 @@ toc: true
 
 Send a JSON body with `question`, a plain-language question of 3–300 characters. The frontend may also send its signed `context` token and a `post_types` array limited to the site's configured searchable types. The browser endpoint checks the request origin and client before handling it; it is intended for the site's visitor interface.
 
-The response contains `answered`, `answer`, `sources`, `sources_title`, `related`, `related_title`, `cached`, `message`, `search_url`, and `reason`. An unanswered response has `answered: false` and a fallback or unavailable message. Source and related entries contain an ID, title, and URL. `reason` can be `daily_cap`, `provider_error`, `provider_paused`, `provider_unavailable`, or `invalid_response`. Clients should display linked sources and preserve ordinary search as a fallback.
+The response contains `answered`, `answer`, `sources`, `sources_title`, `related`, `related_title`, `cached`, `message`, `search_url`, and `reason`. An unanswered response has `answered: false` and a fallback or unavailable message. Source and related entries contain an ID, title, and URL. `reason` can be `daily_cap`, `provider_error`, `provider_paused`, `provider_unavailable`, `provider_busy`, or `invalid_response`. `provider_busy` means another request for the same uncached question was still waiting on the provider; concurrent identical questions share one provider call instead of paying twice. Clients should display linked sources and preserve ordinary search as a fallback.
 
 ## WordPress ability
 

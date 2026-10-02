@@ -8,7 +8,7 @@ status: publish
 order: 0
 ---
 
-[Better Search](https://webberzone.com/plugins/better-search/) provides two shortcodes: `[[bsearch_heatmap]]` and `[[bsearch_form]]`. These are available in both the free and pro versions of the plugin and can display a heatmap of popular searches or embed a customizable search form.
+[Better Search](https://webberzone.com/plugins/better-search/) provides two shortcodes: `[[bsearch_heatmap]]` and `[[bsearch_form]]`. These are available in both the free and pro versions of the plugin and can display a heatmap of popular searches or embed a customizable search form. Better Search Pro adds `[[bsearch_ai]]` for AI answers.
 
 ## 1. [[bsearch_form]]
 
@@ -26,6 +26,8 @@ This shortcode embeds a customizable Better Search form anywhere on your site.
 | `post_types` | String (csv) | Post types to search (comma-separated list). |
 | `selected_post_types` | String (csv) | Preselect post types in the dropdown (comma-separated list). |
 | `show_post_types` | Boolean | Show a dropdown to select post types (`1` or `0`). |
+| `ai_mode` *(pro only)* | String | Ask AI button for this form: `default` (use the global setting), `alongside`, `replace` or `off`. |
+| `ai_text` *(pro only)* | String | Ask AI button text for this form. |
 
 ### **Example Usage**
 
@@ -69,4 +71,12 @@ This example shows a heatmap of the top 10 daily searches with custom font sizes
 
 ```text
 [[bsearch_heatmap daily="1" number="10" smallest="10" largest="20" hot="#ff0000" cold="#cccccc"]]
+```
+
+## 3. [[bsearch_ai]] *(Pro only)*
+
+This shortcode shows a standalone question box for [AI answers](https://webberzone.com/support/knowledgebase/better-search-ai-answers/). It has no attributes and uses the **Search form buttons** and **Ask AI button text** settings on the AI settings tab. Nothing is shown when AI answers are off or WordPress has no AI Client.
+
+```text
+[[bsearch_ai]]
 ```

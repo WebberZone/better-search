@@ -13,7 +13,7 @@ toc: true
 
 The Feature Manager, introduced in [Better Search](https://webberzone.com/plugins/better-search/) 4.4.0, lets you turn off optional features you are not using. When a feature is turned off, its code never loads — saving memory and removing its settings from the rest of the interface.
 
-Live search is the only feature that starts turned off. All other features are enabled by default. The Features tab appears at **Better Search → Settings**.
+Live search, REST API search integration and "Did you mean" suggestions start turned off. All other features are enabled by default. The Features tab appears at **Better Search → Settings**.
 
 ## Features
 
@@ -35,7 +35,19 @@ Registers the Better Search block patterns (search form, search results, query l
 
 Enables the live search feature on the search form, including its AJAX endpoint. Default: off.
 
-## Pro Features
+## API integrations
+
+These toggles control the Better Search integrations exposed through WordPress APIs.
+
+### REST API search integration *(Pro only)*
+
+Uses Better Search relevance for WordPress REST API search requests. Before v4.5.0 this was the **Enable REST API** setting on the General tab. Read the [REST API documentation](https://webberzone.com/support/knowledgebase/better-search-rest-api/) for the parameters you can use. Default: off.
+
+### WordPress Abilities API
+
+Registers Better Search abilities with WordPress when the Abilities API is available. See [Better Search Abilities API](https://webberzone.com/support/knowledgebase/better-search-abilities-api/). Default: on.
+
+## Pro features
 
 These features require [Better Search Pro](https://webberzone.com/plugins/better-search/pro/).
 
