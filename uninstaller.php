@@ -110,6 +110,13 @@ function bsearch_delete_data() {
 	// Delete all plugin transients.
 	bsearch_delete_transients();
 
+	/**
+	 * Fires after the plugin data for the current site has been deleted on uninstall.
+	 *
+	 * On multisite this runs once per site.
+	 *
+	 * @since 4.2.0
+	 */
 	do_action( 'bsearch_delete_data' );
 }
 
