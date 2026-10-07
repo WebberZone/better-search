@@ -763,7 +763,9 @@ class Helpers {
 	 */
 	public static function get_wp_search_stopwords(): array {
 		$get_search_stopwords = new \ReflectionMethod( 'WP_Query', 'get_search_stopwords' );
-		$get_search_stopwords->setAccessible( true );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$get_search_stopwords->setAccessible( true );
+		}
 
 		return (array) $get_search_stopwords->invoke( new WP_Query() );
 	}
