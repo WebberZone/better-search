@@ -132,6 +132,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= Unreleased =
+
+**Changed**
+
+* Updated Freemius SDK to the latest version.
+
 = 4.5.0 =
 
 Release date: 2 October 2026
