@@ -81,6 +81,7 @@ function bsearch_delete_data() {
 	delete_option( 'ald_bsearch_settings' );
 	delete_option( 'bsearch_settings' );
 	delete_option( 'bsearch_db_version' );
+	delete_option( 'bsearch_empty_results_version' );
 	delete_site_option( 'better_search_selected_sites' );
 
 	// Delete wizard-related options.

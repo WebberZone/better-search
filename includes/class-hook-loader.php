@@ -40,6 +40,7 @@ final class Hook_Loader {
 	 */
 	private function register_hooks(): void {
 		$this->register_init_hooks();
+		Hook_Registry::add_action( 'clean_post_cache', array( Util\Cache::class, 'invalidate_empty_results' ) );
 	}
 
 	/**

@@ -32,6 +32,15 @@ class Cache {
 	}
 
 	/**
+	 * Invalidate empty result sets after posts change.
+	 *
+	 * @since 4.5.0
+	 */
+	public static function invalidate_empty_results(): void {
+		update_option( 'bsearch_empty_results_version', wp_generate_uuid4() );
+	}
+
+	/**
 	 * Function to clear the Better Search Cache with Ajax.
 	 *
 	 * @since 3.3.0

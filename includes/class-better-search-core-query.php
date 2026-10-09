@@ -1580,8 +1580,12 @@ class Better_Search_Core_Query extends \WP_Query {
 			$cache_name  = $this->get_cache_key( $query );
 			$cached_data = Cache::get( $cache_name );
 
+			if ( is_array( $cached_data ) && isset( $cached_data['empty_results_version'] ) && get_option( 'bsearch_empty_results_version', '' ) !== $cached_data['empty_results_version'] ) {
+				$cached_data = false;
+			}
+
 			if ( false !== $cached_data ) {
-				if ( ! empty( $cached_data['items'] ) && is_array( $cached_data['items'] ) ) {
+				if ( isset( $cached_data['items'] ) && is_array( $cached_data['items'] ) ) {
 					$posts = $this->restore_cached_posts( $cached_data['items'], $query );
 				} else {
 					$post__in = $cached_data;
@@ -1690,7 +1694,7 @@ class Better_Search_Core_Query extends \WP_Query {
 		}
 
 		// Support caching to speed up retrieval.
-		if ( ! empty( $posts ) && ! empty( $this->query_args['cache'] ) && ! $this->in_cache && ! ( $query->is_preview() || is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) ) {
+		if ( ! empty( $this->query_args['cache'] ) && ! $this->in_cache && ! ( $query->is_preview() || is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) ) {
 
 			/**
 			 * Filter the cache time which allows a function to override this
@@ -1732,6 +1736,9 @@ class Better_Search_Core_Query extends \WP_Query {
 			$cached_data['items']       = $items;
 			$cached_data['found_posts'] = $query->found_posts;
 			$cached_data['topscore']    = $this->topscore;
+			if ( empty( $items ) ) {
+				$cached_data['empty_results_version'] = get_option( 'bsearch_empty_results_version', '' );
+			}
 
 			Cache::set( $cache_name, $cached_data, $cache_time );
 		}
