@@ -40,7 +40,7 @@ Better Search never stores API keys; WordPress sends each request through your c
 | **Show sources** | On | Lists links to the posts the answer is based on. |
 | **Fallback message** | Built-in text | Shown with a search results link when your content does not answer the question. |
 | **Unavailable message** | Built-in text | Shown with a search results link when the provider cannot be reached or is paused. |
-| **Show Ask AI in search forms** | On | Adds an **Ask AI** button to Better Search forms. |
+| **Show Ask AI in search forms** | On | Adds an **Ask AI** button to Better Search forms, the Search block and theme search forms. |
 | **Search form buttons** | Search and Ask AI | Show both buttons, or **Ask AI only**. Search results stay available from the answer. |
 | **Ask AI button text** | Ask AI | Custom label for the button. |
 | **Daily request cap** | `200` | Provider requests per day across the site. Once reached, visitors are sent to the search results until the next day in site time. |
@@ -50,12 +50,13 @@ Better Search never stores API keys; WordPress sends each request through your c
 
 ## Where visitors ask
 
-With **Show Ask AI in search forms** on, the **Ask AI** button appears on the `[[bsearch_form]]` shortcode, the **Search Form [Better Search]** widget and the core Search block. Only **Ask AI** sends a question to the provider; **Search** runs a normal search.
+With **Show Ask AI in search forms** on, the **Ask AI** button appears on the `[[bsearch_form]]` shortcode, the **Search Form [Better Search]** widget, the core Search block and theme search forms built with `get_search_form()`, such as a classic theme's header or sidebar search. Only **Ask AI** sends a question to the provider; **Search** runs a normal search.
 
 Override the setting for a single form:
 
 - **Shortcode:** `[[bsearch_form ai_mode="replace" ai_text="Ask a question"]]`. `ai_mode` accepts `default`, `alongside`, `replace` or `off`.
 - **Widget:** choose an **Ask AI button** option in the widget settings.
+- **Theme search form:** pass `ai_mode` and `ai_text` in the arguments, for example `get_search_form( array( 'ai_mode' => 'off' ) )`.
 - **Search block:** add the CSS class `bsearch-ai-alongside`, `bsearch-ai-replace` or `bsearch-ai-off` under **Advanced → Additional CSS class(es)**.
 
 The button is not added to Knowledge Base search forms, or to forms marked `data-bsearch-live-search="off"`.

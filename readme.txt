@@ -143,6 +143,8 @@ Release date: TBD
 **Fixed**
 
 * Searches raised a PHP 8.5 deprecation warning while loading stopwords.
+* [Pro] The Ask AI button was missing from theme search forms built with `get_search_form()`, so sites using a classic theme's header, drawer or sidebar search could not reach AI answers. The button is added after the theme's form, leaving its layout intact.
+* [Pro] With **Search form buttons** set to **Ask AI only**, pressing Enter in a form with live search ran a normal search instead of asking, and theme search buttons without a `type` attribute stayed visible.
 
 = 4.5.0 =
 
