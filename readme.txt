@@ -132,11 +132,17 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= Unreleased =
+= 4.5.1 =
+
+Release date: TBD
 
 **Changed**
 
-* Updated Freemius SDK to the latest version.
+* Reused cached search results with no matches, refreshing them when posts were published or updated.
+
+**Fixed**
+
+* Searches raised a PHP 8.5 deprecation warning while loading stopwords.
 
 = 4.5.0 =
 
@@ -193,5 +199,5 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 
 == Upgrade Notice ==
 
-= 4.5.0 =
-Security and performance release. Adds optional Pro AI answers and ranking controls, and fixes multilingual caching and search accuracy. Requires WordPress 6.9 or later.
+= 4.5.1 =
+Reduces repeated database queries for searches with no matches and fixes PHP 8.5 deprecation warnings. New and updated posts remain discoverable.
