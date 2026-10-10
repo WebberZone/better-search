@@ -148,7 +148,6 @@ Release date: 10 October 2026
 
 **Fixed**
 
-* [Pro] AI answers crashed on single sites with ECSI, could cite another company's article, and Enter ran a normal search in Ask AI only mode.
 * Searches raised a PHP 8.5 deprecation warning while loading stopwords.
 
 = 4.5.0 =
@@ -192,13 +191,6 @@ Release post: https://webberzone.com/announcements/better-search-v4-5/
 * Network search caches remained stale after settings changes or manual cache clearing, and nested queries could prevent caching.
 * Cache-clearing confirmation and error messages were missing.
 * Live search suggestions could reopen after pressing Escape or submitting the search.
-* [Pro] Custom-table searches ignored some search settings, taxonomy weights and term restrictions.
-* [Pro] Custom-table searches could show empty pages, and multisite searches could repeat, skip or return posts from the wrong site.
-* [Pro] Multisite custom-table searches returned no results when `posts_per_page` was `-1`.
-* [Pro] Custom-table schema and taxonomy indexes were not reliably updated.
-* [Pro] Fuzzy searches could ignore Boolean operators or match common words, returning too many results.
-* [Pro] Multisite and fuzzy searches could omit posts matching slugs, taxonomies, metadata, authors or comments.
-* [Pro] Search terms containing a dollar sign followed by a digit were omitted from relevance scoring.
 
 = Earlier versions =
 
