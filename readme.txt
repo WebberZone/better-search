@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://wzn.io/donate-wz
-Stable tag: 4.5.0
+Stable tag: 4.5.1
 Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -134,17 +134,29 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.5.1 =
 
-Release date: TBD
+Release date: 10 October 2026
+
+**Added**
+
+* [Pro] Ask AI support for theme search forms built with `get_search_form()`.
+* [Pro] AI answers: Model settings for the AI provider and the fallback provider. Models without reasoning answer in a few seconds instead of up to a minute.
+* [Pro] AI answers: A Compare models button under the AI provider setting opens a window that asks one question with two models side by side and shows each answer, its sources and how long it took.
 
 **Changed**
 
-* Reused cached search results with no matches, refreshing them when posts were published or updated.
+* Cached searches with no matches, refreshing them when posts changed.
+* [Pro] Renamed ECSI to Efficient Content Storage and Indexing.
+* [Pro] AI answers share a cached answer between rephrasings of a question, such as "How does the cache work?" and "how do caches work please". Question words and negations are kept apart.
+* [Pro] Editing a post retires only the cached AI answers built from it, and publishing or updating content retires only cached unanswered questions. Cached answers are kept for a week instead of a day.
+* [Pro] Each AI provider gets 20 seconds to answer before the fallback provider is tried (`bsearch_ai_request_timeout` filter). The answer lock and the browser's wait now last as long as the providers can take.
 
 **Fixed**
 
+* [Pro] AI questions crashed on single-site installations with ECSI enabled.
+* [Pro] AI answers could come from an article about a different product or account, such as a LinkedIn password article for "How do I reset my password". Answers cached before this change are retired.
+* [Pro] Saving a menu, changing meta on a draft or editing a term outside the searched post types cleared every cached AI answer.
+* [Pro] Pressing Enter with live search enabled ran a normal search when Ask AI only was selected.
 * Searches raised a PHP 8.5 deprecation warning while loading stopwords.
-* [Pro] The Ask AI button was missing from theme search forms built with `get_search_form()`, so sites using a classic theme's header, drawer or sidebar search could not reach AI answers. The button is added after the theme's form, leaving its layout intact.
-* [Pro] With **Search form buttons** set to **Ask AI only**, pressing Enter in a form with live search ran a normal search instead of asking, and theme search buttons without a `type` attribute stayed visible.
 
 = 4.5.0 =
 
@@ -202,4 +214,4 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 == Upgrade Notice ==
 
 = 4.5.1 =
-Reduces repeated database queries for searches with no matches and fixes PHP 8.5 deprecation warnings. New and updated posts remain discoverable.
+Fixes Pro AI crashes on single-site installations using ECSI, adds Ask AI to theme search forms, and reduces repeated queries for searches with no matches. Update recommended if you use AI answers.

@@ -157,6 +157,15 @@ namespace {
 			}
 
 			/**
+			 * @param \WordPress\AiClient\Providers\Http\DTO\RequestOptions $options Request options.
+			 * @return self
+			 */
+			public function using_request_options( $options ) {
+				unset( $options );
+				return $this;
+			}
+
+			/**
 			 * @return bool
 			 */
 			public function is_supported_for_text_generation() {
@@ -180,6 +189,23 @@ namespace {
 		function wp_ai_client_prompt( $prompt = null ) {
 			unset( $prompt );
 			return new \WP_AI_Client_Prompt_Builder();
+		}
+	}
+}
+
+namespace WordPress\AiClient\Providers\Http\DTO {
+	if ( ! class_exists( 'WordPress\AiClient\Providers\Http\DTO\RequestOptions' ) ) {
+		class RequestOptions {
+			public const KEY_TIMEOUT = 'timeout';
+
+			/**
+			 * @param array<string, mixed> $data Options.
+			 * @return self
+			 */
+			public static function fromArray( array $data ) {
+				unset( $data );
+				return new self();
+			}
 		}
 	}
 }

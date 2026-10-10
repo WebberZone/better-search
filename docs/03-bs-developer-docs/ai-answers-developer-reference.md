@@ -36,6 +36,12 @@ The module provides these filters:
 | `bsearch_ai_provider_cooldown` | Adjust how long a provider is paused after a qualifying error. |
 | `bsearch_ai_provider_options` | Adjust the providers offered in the primary and fallback settings. |
 | `bsearch_ai_configured_providers` | Adjust the providers considered configured for fallback selection. |
+| `bsearch_ai_model_options` | Adjust the models offered for a provider. Receives the options and the provider ID. |
+| `bsearch_ai_model` | Adjust the model used for a provider. Receives the model ID (empty for the provider default) and the provider ID. |
+| `bsearch_ai_request_timeout` | Adjust how many seconds each provider is given to answer. Default `20`. The answer lock, the wait for a concurrent request and the browser's timeout follow from it. |
+| `bsearch_ai_canonical_question` | Adjust the canonical form of a question. Questions with the same canonical form share a cached answer. |
+| `bsearch_ai_answer_cache_ttl` | Adjust how long answers are cached, in seconds. Default one week. |
+| `bsearch_ai_lock_wait` | Adjust how long a request waits for a concurrent request to answer the same question. |
 | `bsearch_ai_answer` | Inspect or adjust the validated answer result. |
 | `bsearch_ai_is_bot` | Adjust browser-client detection for the public REST route. |
 | `bsearch_ai_allowed_origins` | Extend the allowed browser origins for the REST route. |
@@ -50,4 +56,6 @@ Qualifying failures increase the cooldown from five minutes up to one hour. Netw
 
 ## Cache operations
 
-AI answers use transients prefixed with `bsearch_ai_answer_`. Clearing the AI cache also removes keyword-count caches, the provider availability result, and every provider cooldown and failure counter.
+AI answers use transients prefixed with `bsearch_ai_answer_`, keyed by the canonical question (`Ask_Handler::canonical_question()`), the settings that affect answers, the provider and model, the locale and the search context. Clearing the AI cache also removes keyword-count caches, the provider availability result, and every provider cooldown and failure counter.
+
+Each cached answer stores a fingerprint of every post sent to the provider: its modified date plus the `_bsearch_ai_rev` post meta, which changes when the post is updated or its terms, indexed meta keys or approved comments change. The answer is a cache miss once a fingerprint differs or a post is no longer public. The fingerprints are taken before the provider request, so an edit made while the provider answers still retires the answer. Two options act as versions: `bsearch_ai_content_version` retires every answer, and `bsearch_ai_publish_version`, changed when a searched post is published or updated, retires only unanswered results. `Answer_Cache::touch_post()` retires the answers built from a post when it changes in a way the plugin cannot see.

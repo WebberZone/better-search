@@ -33,7 +33,9 @@ Better Search never stores API keys; WordPress sends each request through your c
 | --- | --- | --- |
 | **Enable AI answers** | Off | Lets visitors ask questions answered from your site. |
 | **AI provider** | Automatic | The connected provider that answers. Automatic lets WordPress choose, and is used if the chosen provider is removed. |
+| **Model** | Provider default | The model used with the chosen provider. Shown when a provider is chosen; save after changing the provider to list its models. Models without reasoning usually answer in a second or two; reasoning models can take ten seconds or more. |
 | **Fallback provider** | No fallback | Tried when the main provider fails. Shown only when two or more providers are connected. |
+| **Fallback model** | Provider default | The model used with the fallback provider. Shown when a fallback provider is chosen. |
 | **Articles sent as context** | `4` | Matching posts sent with each question, from 1 to 8. More posts improve coverage but cost more. |
 | **Maximum characters per article** | `3000` | Each post is converted to plain text and trimmed to this length, from 500 to 10,000. |
 | **Answer length** | Short | **Short** gives two or three sentences. **Medium** gives one or two paragraphs. |
@@ -47,6 +49,8 @@ Better Search never stores API keys; WordPress sends each request through your c
 | **Questions per visitor per hour** | `10` | Per-visitor limit, from 1 to 1,000. |
 | **Record questions for Content gaps** | Off | Stores question text for the **Content gaps** report. |
 | **Log retention (days)** | `90` | Recorded questions are deleted after this many days. |
+
+**Compare models.** The **Compare models** button under **AI provider** opens a window where you ask one question with two models side by side and see each answer, its sources and how long it took. **Use this model** fills in the matching **Model** setting; close the window and save to keep it. Each model costs one provider request, counted towards the daily request cap. These answers are not cached or recorded.
 
 ## Where visitors ask
 
@@ -73,7 +77,11 @@ Requests from bots, scripts and other sites are refused.
 
 ## Costs and limits
 
-Each uncached question costs one provider request. Cached answers cost nothing and do not count towards either limit. They are cleared when relevant content or settings change. When several visitors ask the same new question at once, only one provider request is made.
+Each uncached question costs one provider request. Cached answers cost nothing and do not count towards either limit. Rephrasings of a question share a cached answer: "How does the cache work?" and "how do caches work please" get the same answer, while question words and negations are kept apart, so "Why does X not work?" is asked separately from "Why does X work?". When several visitors ask the same new question at once, only one provider request is made.
+
+Cached answers are kept for a week. An answer is retired as soon as one of the posts it was built from is edited, unpublished or deleted, or its terms, indexed custom fields or (when comments are searched) approved comments change. Publishing or updating any searched post retires only cached "no answer" results, since the new content may answer them. Changing the AI or search settings, or a term in a searched taxonomy, retires every cached answer.
+
+Each provider gets 20 seconds to answer before the fallback provider is tried. Some connectors allow reasoning models longer.
 
 If the provider returns a qualifying error, such as a network, rate-limit, quota or server error, Better Search pauses it for 5 minutes, increasing up to an hour on repeated failures. The fallback provider is used during the pause, if one is set. A successful request clears the pause.
 
