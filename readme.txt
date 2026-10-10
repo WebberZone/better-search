@@ -138,24 +138,17 @@ Release date: 10 October 2026
 
 **Added**
 
-* [Pro] Ask AI support for theme search forms built with `get_search_form()`.
-* [Pro] AI answers: Model settings for the AI provider and the fallback provider. Models without reasoning answer in a few seconds instead of up to a minute.
-* [Pro] AI answers: A Compare models button under the AI provider setting opens a window that asks one question with two models side by side and shows each answer, its sources and how long it took.
+* [Pro] Ask AI in theme search forms, plus model settings for AI answers with a Compare models window.
 
 **Changed**
 
 * Cached searches with no matches, refreshing them when posts changed.
 * [Pro] Renamed ECSI to Efficient Content Storage and Indexing.
-* [Pro] AI answers share a cached answer between rephrasings of a question, such as "How does the cache work?" and "how do caches work please". Question words and negations are kept apart.
-* [Pro] Editing a post retires only the cached AI answers built from it, and publishing or updating content retires only cached unanswered questions. Cached answers are kept for a week instead of a day.
-* [Pro] Each AI provider gets 20 seconds to answer before the fallback provider is tried (`bsearch_ai_request_timeout` filter). The answer lock and the browser's wait now last as long as the providers can take.
+* [Pro] Reused cached AI answers for reworded questions until their source posts change.
 
 **Fixed**
 
-* [Pro] AI questions crashed on single-site installations with ECSI enabled.
-* [Pro] AI answers could come from an article about a different product or account, such as a LinkedIn password article for "How do I reset my password". Answers cached before this change are retired.
-* [Pro] Saving a menu, changing meta on a draft or editing a term outside the searched post types cleared every cached AI answer.
-* [Pro] Pressing Enter with live search enabled ran a normal search when Ask AI only was selected.
+* [Pro] AI answers crashed on single sites with ECSI, could cite another company's article, and Enter ran a normal search in Ask AI only mode.
 * Searches raised a PHP 8.5 deprecation warning while loading stopwords.
 
 = 4.5.0 =
@@ -214,4 +207,4 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 == Upgrade Notice ==
 
 = 4.5.1 =
-Fixes Pro AI crashes on single-site installations using ECSI, adds Ask AI to theme search forms, and reduces repeated queries for searches with no matches. Update recommended if you use AI answers.
+Faster Pro AI answers with a choice of model, better answer caching, and fixes for Pro AI crashes with ECSI. Adds Ask AI to theme search forms. Update recommended if you use AI answers.
