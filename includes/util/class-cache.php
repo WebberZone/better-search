@@ -34,7 +34,7 @@ class Cache {
 	/**
 	 * Invalidate empty result sets after posts change.
 	 *
-	 * @since 4.5.0
+	 * @since 4.5.1
 	 */
 	public static function invalidate_empty_results(): void {
 		update_option( 'bsearch_empty_results_version', wp_generate_uuid4() );
