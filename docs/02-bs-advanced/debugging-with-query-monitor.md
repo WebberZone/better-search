@@ -1,13 +1,13 @@
 ---
 slug: debugging-with-query-monitor
 title: "Debugging with Query Monitor"
-products: [better-search]
+products: [better-search, contextual-related-posts, top-10]
 sections: ["02-bs-advanced", "02-crp-advanced", "02-top-10-advanced"]
 tags: [debugging, query-monitor]
 status: publish
 order: 0
-toc: true
 featured_image: "https://webberzone.com/wp-content/uploads/2021/02/Install-Query-Monitor.png"
+toc: true
 ---
 
 [toc]
@@ -34,7 +34,7 @@ Uncheck the relevant setting in the corresponding plugin’s settings page to tu
 
 Navigate to the post where you noticed the problem, hit the new menu item, and select Queries. This will split your screen horizontally (or vertically), and you’ll see a set of menus to the left along with a complete set of queries.
 
-[](https://webberzone.com/wp-content/uploads/2021/02/Query-Monitor-Menu.png)
+[![](https://webberzone.com/wp-content/uploads/2021/02/Query-Monitor-Menu.png)](https://webberzone.com/wp-content/uploads/2021/02/Query-Monitor-Menu.png)
 
 Next, select Queries by Component. This screen gives you a list of queries based on the “component” that generated them. These will be plugins, the theme, and the WordPress Core.
 
