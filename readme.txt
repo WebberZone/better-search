@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://wzn.io/donate-wz
-Stable tag: 4.5.1
+Stable tag: 4.5.2
 Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -132,6 +132,19 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.5.2 =
+
+Release date: 15 October 2026
+
+**Security**
+
+* Prevented thumbnail fallbacks from using images inside or attached to password-protected posts before the password was entered.
+* Hardened thumbnail URLs to reject unsafe protocols.
+
+**Fixed**
+
+* Malformed custom thumbnail dimensions caused PHP errors during image-size selection.
+
 = 4.5.1 =
 
 Release date: 12 October 2026
@@ -199,5 +212,5 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 
 == Upgrade Notice ==
 
-= 4.5.1 =
-Faster Pro AI answers with a choice of model, better answer caching, and fixes for Pro AI crashes with ECSI. Adds Ask AI to theme search forms. Update recommended for all users.
+= 4.5.2 =
+Security release. Hardens password protection in thumbnail fallbacks and rejects unsafe thumbnail URLs. Also fixes errors with malformed thumbnail dimensions. Update recommended.
