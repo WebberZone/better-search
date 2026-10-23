@@ -305,11 +305,11 @@ class Better_Search_Core_Query extends \WP_Query {
 		$search_query = isset( $args['s'] ) ? $args['s'] : '';
 		$this->set_class_variables( $search_query );
 
-		// In seamless mode, check for post_type from URL if not already in args.
-		if ( empty( $args['post_type'] ) ) {
-			$post_type_param = filter_input( INPUT_GET, 'post_type', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		// In seamless mode, check for post_type from the parsed request if not already in args.
+		if ( empty( $args['post_type'] ) && isset( $GLOBALS['wp_query'] ) && $GLOBALS['wp_query'] instanceof \WP_Query ) {
+			$post_type_param = get_query_var( 'post_type' );
 			if ( ! empty( $post_type_param ) ) {
-				$args['post_type'] = sanitize_title( wp_unslash( $post_type_param ) );
+				$args['post_type'] = is_array( $post_type_param ) ? array_map( 'sanitize_key', $post_type_param ) : sanitize_key( $post_type_param );
 			}
 		}
 
@@ -342,6 +342,9 @@ class Better_Search_Core_Query extends \WP_Query {
 		if ( empty( $post_types ) || in_array( 'any', $post_types, true ) ) {
 			$post_types = wp_parse_list( bsearch_get_option( 'post_types' ) );
 		}
+
+		// Restrict to searchable post types so request input cannot pull in revisions or other internal types.
+		$post_types = self::get_allowed_post_types( $post_types );
 
 		/**
 		 * Filter the post_types passed to the query.
@@ -471,8 +474,10 @@ class Better_Search_Core_Query extends \WP_Query {
 
 		$args['meta_query'] = $meta_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 
-		// Set post_status.
-		$args['post_status'] = empty( $args['post_status'] ) ? array( 'publish', 'inherit' ) : $args['post_status'];
+		// Set post_status. Only attachments use the inherit status; revisions must never be searchable.
+		if ( empty( $args['post_status'] ) ) {
+			$args['post_status'] = in_array( 'attachment', (array) $args['post_type'], true ) ? array( 'publish', 'inherit' ) : array( 'publish' );
+		}
 
 		// Set post__not_in for WP_Query using exclude_post_ids.
 		$exclude_post_ids = empty( $args['exclude_post_ids'] ) ? array() : wp_parse_id_list( $args['exclude_post_ids'] );
@@ -502,6 +507,26 @@ class Better_Search_Core_Query extends \WP_Query {
 		 * @param Better_Search_Core_Query $query The Better_Search instance (passed by reference).
 		 */
 		$this->query_args = apply_filters_ref_array( 'better_search_query_args', array( $args, &$this ) );
+	}
+
+	/**
+	 * Restrict post types to those that can be searched.
+	 *
+	 * Allowed post types are those not excluded from search plus the post types selected in the settings.
+	 * Revisions are always removed. If nothing is left, the post types selected in the settings are used.
+	 *
+	 * @since 4.5.3
+	 *
+	 * @param array $post_types Requested post types.
+	 * @return array Allowed post types.
+	 */
+	public static function get_allowed_post_types( $post_types ) {
+		$configured = array_diff( array_filter( wp_parse_list( bsearch_get_option( 'post_types' ) ), 'post_type_exists' ), array( 'revision' ) );
+		$allowed    = array_diff( array_merge( get_post_types( array( 'exclude_from_search' => false ) ), $configured ), array( 'revision' ) );
+
+		$post_types = array_values( array_intersect( array_map( 'sanitize_key', (array) $post_types ), $allowed ) );
+
+		return empty( $post_types ) ? array_values( $configured ) : $post_types;
 	}
 
 	/**
@@ -909,6 +934,12 @@ class Better_Search_Core_Query extends \WP_Query {
 		 * @param \WP_Query                $query    The WP_Query instance.
 		 * @param Better_Search_Core_Query $instance The Better_Search_Core_Query instance (passed by reference).
 		 */
+		// Attachments use the inherit status, so only return those that are unattached or whose parent is published.
+		if ( in_array( 'inherit', (array) $query->get( 'post_status' ), true ) ) {
+			global $wpdb;
+			$where .= " AND ( {$wpdb->posts}.post_status <> 'inherit' OR {$wpdb->posts}.post_parent = 0 OR {$wpdb->posts}.post_parent IN ( SELECT bsearch_parent.ID FROM {$wpdb->posts} AS bsearch_parent WHERE bsearch_parent.post_status = 'publish' ) )";
+		}
+
 		$where = apply_filters_ref_array( 'better_search_query_posts_where', array( $where, $query, &$this ) );
 
 		Hook_Registry::remove_filter( 'posts_where', array( $this, 'posts_where' ) );
