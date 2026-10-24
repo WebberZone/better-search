@@ -1517,6 +1517,54 @@ class Better_Search_Core_Query extends \WP_Query {
 	}
 
 	/**
+	 * Get the arguments that limit cached post IDs to posts the current query can return.
+	 *
+	 * Cached IDs may predate a change to the query rules, so they are re-checked against the current post types,
+	 * statuses and password setting. Without an explicit status, get_posts() would drop every attachment.
+	 *
+	 * @since 4.5.3
+	 *
+	 * @param \WP_Query $query The WP_Query instance.
+	 * @return array Arguments for get_posts().
+	 */
+	protected function get_cache_restore_args( $query ): array {
+		$args = array(
+			'post_type'   => $query->get( 'post_type' ),
+			'post_status' => $query->get( 'post_status' ) ? $query->get( 'post_status' ) : 'publish',
+		);
+
+		if ( ! empty( $this->query_args['exclude_protected_posts'] ) ) {
+			$args['has_password'] = false;
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Check that an attachment restored from the cache has a parent visitors can see.
+	 *
+	 * Mirrors the attachment parent check in posts_where().
+	 *
+	 * @since 4.5.3
+	 *
+	 * @param \WP_Post|int $post Post object or ID.
+	 * @return bool False for an attachment whose parent is not published, or is password protected when protected posts are excluded.
+	 */
+	public function has_visible_parent( $post ): bool {
+		$post = get_post( $post );
+
+		if ( ! $post instanceof \WP_Post || 'attachment' !== $post->post_type || ! $post->post_parent ) {
+			return true;
+		}
+
+		$parent = get_post( $post->post_parent );
+
+		return $parent instanceof \WP_Post
+			&& 'publish' === $parent->post_status
+			&& ( empty( $this->query_args['exclude_protected_posts'] ) || '' === $parent->post_password );
+	}
+
+	/**
 	 * Rebuild a cached page of results, fetching each site's posts on that site.
 	 *
 	 * @since 4.5.0
@@ -1543,17 +1591,30 @@ class Better_Search_Core_Query extends \WP_Query {
 				switch_to_blog( $blog_id );
 			}
 
-			foreach ( (array) get_posts(
-				array(
-					'post__in'       => $post_ids,
-					'fields'         => $fields,
-					'orderby'        => 'post__in',
-					'post_type'      => $query->get( 'post_type' ),
-					'posts_per_page' => count( $post_ids ),
-					'lang'           => '',
+			/**
+			 * Posts, or IDs when fields is 'ids'.
+			 *
+			 * @var array<int, \WP_Post|int> $restored
+			 */
+			$restored = get_posts(
+				array_merge(
+					array(
+						'post__in'       => $post_ids,
+						'fields'         => $fields,
+						'orderby'        => 'post__in',
+						'posts_per_page' => count( $post_ids ),
+						'lang'           => '',
+					),
+					$this->get_cache_restore_args( $query )
 				)
-			) as $post ) {
+			);
+
+			foreach ( $restored as $post ) {
 				$id = $post instanceof \WP_Post ? (int) $post->ID : (int) $post;
+
+				if ( ! $this->has_visible_parent( $id ) ) {
+					continue;
+				}
 
 				$fetched[ $blog_id . '_' . $id ] = $post;
 			}
@@ -1622,15 +1683,23 @@ class Better_Search_Core_Query extends \WP_Query {
 				} else {
 					$post__in = $cached_data;
 					unset( $post__in['found_posts'], $post__in['topscore'], $post__in['items'] );
+					/**
+					 * Posts, or IDs when fields is 'ids'.
+					 *
+					 * @var array<int, \WP_Post|int> $posts
+					 */
 					$posts = get_posts(
-						array(
-							'post__in'       => array_keys( $post__in ),
-							'fields'         => $query->get( 'fields' ),
-							'orderby'        => 'post__in',
-							'post_type'      => $query->get( 'post_type' ),
-							'posts_per_page' => $query->get( 'posts_per_page' ),
+						array_merge(
+							array(
+								'post__in'       => array_keys( $post__in ),
+								'fields'         => $query->get( 'fields' ),
+								'orderby'        => 'post__in',
+								'posts_per_page' => $query->get( 'posts_per_page' ),
+							),
+							$this->get_cache_restore_args( $query )
 						)
 					);
+					$posts = array_values( array_filter( $posts, array( $this, 'has_visible_parent' ) ) );
 					// Set the score and blog_id for each of the posts.
 					if ( $posts ) {
 						$current_blog_id = get_current_blog_id();

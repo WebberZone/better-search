@@ -2,6 +2,8 @@
 
 declare( strict_types=1 );
 
+use WebberZone\Better_Search\Util\Cache;
+
 /**
  * Front-end search must never expose revisions, internal post types or
  * attachments of non-public parents, whatever post_type the request asks for.
@@ -256,5 +258,106 @@ class PostTypeAccessTest extends WP_UnitTestCase {
 		$this->assertSame( array( 'post', 'page' ), Better_Search_Core_Query::get_allowed_post_types( array( 'revision' ) ) );
 		$this->assertSame( array( 'post', 'page' ), Better_Search_Core_Query::get_allowed_post_types( array() ) );
 		$this->assertSame( array( 'post', 'page' ), Better_Search_Core_Query::get_allowed_post_types( 'revision' ) );
+	}
+
+	/**
+	 * Run a cached search once and return the key of the stored result set.
+	 */
+	private function warm_cache( array $args ): string {
+		Cache::delete_all();
+		$this->search( array_merge( array( 'cache' => true ), $args ) );
+
+		foreach ( Cache::get_keys() as $key ) {
+			$value = Cache::get( $key );
+			if ( is_array( $value ) && isset( $value['items'] ) ) {
+				return $key;
+			}
+		}
+
+		$this->fail( 'No cached result set was stored.' );
+	}
+
+	/**
+	 * Cached items as Better Search 4.5.2 could have stored them for this search.
+	 */
+	private function poisoned_items(): array {
+		$items = array();
+		foreach ( array( 'revision_draft', 'revision_private', 'revision_protected', 'revision_real', 'draft', 'private', 'attachment_draft', 'attachment_private', 'attachment_protected', 'attachment_public', 'attachment_unattached', 'public', 'nav_menu_item' ) as $label ) {
+			$items[] = array( 'ID' => $this->ids[ $label ], 'blog_id' => get_current_blog_id(), 'score' => 1 );
+		}
+		return $items;
+	}
+
+	public function test_cached_attachment_search_matches_uncached(): void {
+		$args = array( 'post_type' => 'attachment' );
+		$cold = $this->search( array_merge( array( 'cache' => true ), $args ) );
+		$warm = $this->search( array_merge( array( 'cache' => true ), $args ) );
+
+		$this->assertSame( array( 'attachment_public', 'attachment_unattached' ), $cold );
+		$this->assertSame( $cold, $warm );
+		Cache::delete_all();
+	}
+
+	public function test_cached_mixed_search_matches_uncached(): void {
+		$args = array( 'post_type' => array( 'post', 'page', 'attachment' ) );
+		$cold = $this->search( array_merge( array( 'cache' => true ), $args ) );
+		$warm = $this->search( array_merge( array( 'cache' => true ), $args ) );
+
+		$this->assertSame( $cold, $warm );
+		$this->assertContains( 'attachment_public', $warm );
+		Cache::delete_all();
+	}
+
+	public function poisoned_cache_cases(): array {
+		return array(
+			'revision request'   => array( array( 'post_type' => 'revision' ), array( 'public' ) ),
+			'attachment request' => array( array( 'post_type' => 'attachment' ), array( 'attachment_public', 'attachment_unattached' ) ),
+			'mixed request'      => array( array( 'post_type' => array( 'post', 'attachment' ) ), array( 'attachment_public', 'attachment_unattached', 'public' ) ),
+			'protected allowed'  => array( array( 'post_type' => 'attachment', 'exclude_protected_posts' => false ), array( 'attachment_protected', 'attachment_public', 'attachment_unattached' ) ),
+		);
+	}
+
+	/**
+	 * @dataProvider poisoned_cache_cases
+	 */
+	public function test_stale_cache_entries_are_rechecked( array $args, array $expected ): void {
+		$key   = $this->warm_cache( $args );
+		$value = Cache::get( $key );
+
+		$value['items'] = $this->poisoned_items();
+		Cache::set( $key, $value );
+
+		$this->assertSame( $expected, $this->search( array_merge( array( 'cache' => true ), $args ) ) );
+		Cache::delete_all();
+	}
+
+	/**
+	 * @dataProvider poisoned_cache_cases
+	 */
+	public function test_stale_legacy_cache_entries_are_rechecked( array $args, array $expected ): void {
+		$key    = $this->warm_cache( $args );
+		$legacy = array();
+		foreach ( $this->poisoned_items() as $item ) {
+			$legacy[ $item['ID'] ] = 1;
+		}
+		Cache::set( $key, $legacy );
+
+		$this->assertSame( $expected, $this->search( array_merge( array( 'cache' => true ), $args ) ) );
+		Cache::delete_all();
+	}
+
+	public function test_stale_cache_is_rechecked_for_id_fields(): void {
+		$core = new Better_Search_Core_Query( array( 'is_better_search_loaded' => true ) );
+		$core->query_args['exclude_protected_posts'] = true;
+
+		$query = new WP_Query();
+		$query->set( 'fields', 'ids' );
+		$query->set( 'post_type', array( 'post', 'attachment' ) );
+		$query->set( 'post_status', array( 'publish', 'inherit' ) );
+
+		$restore = new ReflectionMethod( $core, 'restore_cached_posts' );
+		$restore->setAccessible( true );
+
+		$this->assertSame( array( 'attachment_public', 'attachment_unattached', 'public' ), $this->labels( $restore->invoke( $core, $this->poisoned_items(), $query ) ) );
 	}
 }
