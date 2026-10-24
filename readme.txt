@@ -139,8 +139,7 @@ Release date: 24 October 2026
 **Security**
 
 * Restricted the `post_type` search parameter to searchable post types, so revisions of draft, private and password-protected posts no longer appeared in front-end search results.
-* Excluded attachments of unpublished posts from search results, and attachments of password-protected posts when "Exclude password protected posts" is enabled.
-* Re-checked cached search results against the current post type and visibility rules.
+* Excluded attachments of unpublished posts from search results, and attachments of password-protected posts when "Exclude password protected posts" was enabled.
 
 **Fixed**
 
@@ -186,19 +185,19 @@ Release post: https://webberzone.com/announcements/better-search-v4-5/
 
 **Added**
 
-* Added WordPress Abilities API support for site searches, with an option to disable it in the Features tab.
-* Added a Status section to Tools showing database, index and cache health.
-* Added a setting to restrict search results to selected terms.
-* Added `*` wildcard support to filtered words, so `spam*` also blocked "spammer".
-* Added translated titles and language-specific links to TranslatePress live-search suggestions.
-* Added the `data-bsearch-live-search="off"` form attribute, so forms with their own live search did not show a second list of suggestions.
-* [Pro] Added abilities for popular search terms, spelling suggestions and cache clearing.
-* [Pro] Added optional AI answers grounded in Better Search results, with source links, cached answers, usage limits and a Content gaps report.
-* [Pro] Added WP-CLI commands for AI questions, answer-cache management and Content gaps.
+* WordPress Abilities API support for site searches, with an option to disable it in the Features tab.
+* Status section in Tools showing database, index and cache health.
+* Setting to restrict search results to selected terms.
+* `*` wildcard support in filtered words, so `spam*` also blocked "spammer".
+* Translated titles and language-specific links in TranslatePress live-search suggestions.
+* `data-bsearch-live-search="off"` form attribute, so forms with their own live search did not show a second list of suggestions.
+* [Pro] Abilities for popular search terms, spelling suggestions and cache clearing.
+* [Pro] Optional AI answers grounded in Better Search results, with source links, cached answers, usage limits and a Content gaps report.
+* [Pro] WP-CLI commands for AI questions, answer-cache management and Content gaps.
 * [Pro] Expanded Tools status with custom-table and AI-provider health.
-* [Pro] Added optional recency weighting, disabled by default; existing custom-table indexes required a one-time backfill from Tools.
-* [Pro] Added optional ranking weights for slug, metadata, author and comment matches.
-* [Pro] Added wildcard search redirects, so `help*` could match multiple search phrases.
+* [Pro] Optional recency weighting, disabled by default; existing custom-table indexes required a one-time backfill from Tools.
+* [Pro] Optional ranking weights for slug, metadata, author and comment matches.
+* [Pro] Wildcard search redirects, so `help*` could match multiple search phrases.
 
 **Changed**
 
