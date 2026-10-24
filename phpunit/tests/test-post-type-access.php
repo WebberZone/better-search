@@ -24,6 +24,7 @@ class PostTypeAccessTest extends WP_UnitTestCase {
 
 		register_post_type( 'bs_private_cpt', array( 'public' => false ) );
 		register_post_type( 'bs_hidden_cpt', array( 'public' => true, 'exclude_from_search' => true ) );
+		register_post_type( 'bs_internal_cpt', array( 'public' => true, 'publicly_queryable' => false, 'exclude_from_search' => true ) );
 		register_post_type( 'bs_public_cpt', array( 'public' => true ) );
 
 		$post = function ( string $label, array $args ) {
@@ -83,12 +84,14 @@ class PostTypeAccessTest extends WP_UnitTestCase {
 		$post( 'customize_changeset', array( 'post_type' => 'customize_changeset' ) );
 		$post( 'bs_private_cpt', array( 'post_type' => 'bs_private_cpt' ) );
 		$post( 'bs_hidden_cpt', array( 'post_type' => 'bs_hidden_cpt' ) );
+		$post( 'bs_internal_cpt', array( 'post_type' => 'bs_internal_cpt' ) );
 		$post( 'bs_public_cpt', array( 'post_type' => 'bs_public_cpt' ) );
 	}
 
 	public function tear_down(): void {
 		unregister_post_type( 'bs_private_cpt' );
 		unregister_post_type( 'bs_hidden_cpt' );
+		unregister_post_type( 'bs_internal_cpt' );
 		unregister_post_type( 'bs_public_cpt' );
 		parent::tear_down();
 	}
@@ -121,6 +124,11 @@ class PostTypeAccessTest extends WP_UnitTestCase {
 		return $this->labels( wp_list_pluck( $query->posts, 'ID' ) );
 	}
 
+	private function sorted( array $values ): array {
+		sort( $values );
+		return $values;
+	}
+
 	private function labels( array $ids ): array {
 		$labels = array_map(
 			function ( $id ) {
@@ -134,7 +142,7 @@ class PostTypeAccessTest extends WP_UnitTestCase {
 	}
 
 	private function assert_only_public_content( array $labels, string $context ): void {
-		$allowed = array( 'public', 'public_page', 'bs_public_cpt', 'attachment_unattached', 'attachment_public' );
+		$allowed = array( 'public', 'public_page', 'bs_public_cpt', 'bs_hidden_cpt', 'attachment_unattached', 'attachment_public' );
 		$this->assertSame( array(), array_values( array_diff( $labels, $allowed ) ), "Leaked via {$context}" );
 	}
 
@@ -149,7 +157,7 @@ class PostTypeAccessTest extends WP_UnitTestCase {
 			'wp_block'              => array( 'wp_block' ),
 			'customize_changeset'   => array( 'customize_changeset' ),
 			'non-public cpt'        => array( 'bs_private_cpt' ),
-			'excluded cpt'          => array( 'bs_hidden_cpt' ),
+			'not publicly queryable' => array( 'bs_internal_cpt' ),
 			'unregistered'          => array( 'does_not_exist' ),
 			'any'                   => array( 'any' ),
 			'sql-ish'               => array( "revision') OR 1=1 -- " ),
@@ -236,12 +244,27 @@ class PostTypeAccessTest extends WP_UnitTestCase {
 		$this->assertSame( array( 'attachment_public', 'attachment_unattached', 'public' ), $labels );
 	}
 
+	public function test_excluded_but_publicly_queryable_cpt_can_be_requested(): void {
+		// Matches WP::parse_request(): a dedicated search form for a post type hidden from general search works.
+		$this->assertSame( array( 'bs_hidden_cpt' ), $this->search( array( 'post_type' => 'bs_hidden_cpt' ) ) );
+		$this->assertSame( array( 'public', 'public_page' ), $this->search(), 'It stays out of general searches.' );
+	}
+
+	public function test_configured_post_types_need_not_be_registered(): void {
+		// On multisite another site's post types are not registered while it is searched.
+		$this->set_settings( array( 'post_types' => 'post,another_sites_type' ) );
+
+		$this->assertSame( array( 'another_sites_type', 'post' ), $this->sorted( Better_Search_Core_Query::get_allowed_post_types( array( 'post', 'another_sites_type', 'revision' ) ) ) );
+		$this->assertNotContains( 'another_unconfigured_type', Better_Search_Core_Query::get_searchable_post_types() );
+	}
+
 	public function test_configured_excluded_cpt_is_allowed(): void {
 		$this->set_settings( array( 'post_types' => 'post,bs_hidden_cpt,revision' ) );
 
 		$this->assertSame( array( 'bs_hidden_cpt' ), $this->search( array( 'post_type' => 'bs_hidden_cpt' ) ) );
 		$this->assertSame( array( 'bs_hidden_cpt', 'public' ), $this->search(), 'Configured revision must be dropped.' );
 		$this->assertSame( array( 'bs_hidden_cpt', 'public' ), $this->search( array( 'post_type' => 'revision' ) ) );
+		$this->assertSame( array( 'bs_hidden_cpt', 'public' ), $this->search( array( 'post_type' => 'bs_internal_cpt' ) ), 'Not publicly queryable falls back.' );
 	}
 
 	public function test_public_cpt_can_be_requested(): void {

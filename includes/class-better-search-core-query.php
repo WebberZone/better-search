@@ -512,8 +512,8 @@ class Better_Search_Core_Query extends \WP_Query {
 	/**
 	 * Restrict post types to those that can be searched.
 	 *
-	 * Allowed post types are those not excluded from search plus the post types selected in the settings.
-	 * Revisions are always removed. If nothing is left, the post types selected in the settings are used.
+	 * Allowed post types are those returned by get_searchable_post_types(). If nothing is left, the post types
+	 * selected in the settings are used.
 	 *
 	 * @since 4.5.3
 	 *
@@ -529,25 +529,36 @@ class Better_Search_Core_Query extends \WP_Query {
 	/**
 	 * Get every post type a front-end search may return.
 	 *
-	 * Post types not excluded from search, plus those selected in the settings. Revisions are never included.
+	 * Post types WordPress lets visitors query by URL (publicly queryable), post types not excluded from search, and
+	 * the post types selected in the settings. This matches WP::parse_request(), so a search form limited to a
+	 * public post type that is excluded from general search still works. Revisions are never included.
 	 *
 	 * @since 4.5.3
 	 *
 	 * @return string[] Post types.
 	 */
 	public static function get_searchable_post_types(): array {
-		return array_values( array_diff( array_unique( array_merge( array_values( get_post_types( array( 'exclude_from_search' => false ) ) ), self::get_configured_post_types() ) ), array( 'revision' ) ) );
+		$post_types = array_merge(
+			array_values( get_post_types( array( 'publicly_queryable' => true ) ) ),
+			array_values( get_post_types( array( 'exclude_from_search' => false ) ) ),
+			self::get_configured_post_types()
+		);
+
+		return array_values( array_diff( array_unique( $post_types ), array( 'revision' ) ) );
 	}
 
 	/**
-	 * Get the registered post types selected in the settings, without revisions.
+	 * Get the post types selected in the settings, without revisions.
+	 *
+	 * These are not checked against the registered post types: on multisite they can belong to another site, whose
+	 * post types are not registered while it is searched through switch_to_blog().
 	 *
 	 * @since 4.5.3
 	 *
 	 * @return string[] Post types.
 	 */
 	protected static function get_configured_post_types(): array {
-		return array_values( array_diff( array_filter( wp_parse_list( bsearch_get_option( 'post_types' ) ), 'post_type_exists' ), array( 'revision' ) ) );
+		return array_values( array_diff( array_map( 'sanitize_key', wp_parse_list( bsearch_get_option( 'post_types' ) ) ), array( 'revision', '' ) ) );
 	}
 
 	/**
