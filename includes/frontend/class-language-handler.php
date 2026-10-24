@@ -47,7 +47,7 @@ class Language_Handler {
 	 *
 	 * @since 3.3.0
 	 *
-	 * @param int[] $results Arry of Posts.
+	 * @param \WP_Post[]|int[] $results Array of posts or post IDs.
 	 * @return \WP_Post[] Updated array of WP_Post objects.
 	 */
 	public static function translate_ids( $results ) {
@@ -56,18 +56,23 @@ class Language_Handler {
 
 		foreach ( $results as $result ) {
 
-			$result = self::object_id_cur_lang( $result );
+			// Multisite search returns posts from other sites, which can share an ID with a post here.
+			// Only posts from this site are translated, and duplicates are matched by site and ID.
+			$blog_id = is_object( $result ) && isset( $result->blog_id ) ? (int) $result->blog_id : get_current_blog_id();
+			if ( get_current_blog_id() === $blog_id ) {
+				$result = self::object_id_cur_lang( $result );
+			}
 			if ( ! $result ) {
 				continue;
 			}
 
 			// If this is NULL or already processed ID or matches current post then skip processing this loop.
-			if ( ! $result->ID || in_array( $result->ID, $processed_ids ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			if ( ! $result->ID || in_array( $blog_id . '_' . $result->ID, $processed_ids, true ) ) {
 				continue;
 			}
 
 			// Push the current ID into the array to ensure we're not repeating it.
-			array_push( $processed_ids, $result->ID );
+			array_push( $processed_ids, $blog_id . '_' . $result->ID );
 
 			// Let's get the Post using the ID.
 			$result = get_post( $result );

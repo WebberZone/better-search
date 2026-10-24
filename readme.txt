@@ -145,6 +145,7 @@ Release date: 24 October 2026
 **Fixed**
 
 * Attachment searches served from the cache returned no results.
+* [Pro] Multisite searches outside the main results page, such as live search, dropped a post when another site had a post with the same ID.
 
 = 4.5.2 =
 
