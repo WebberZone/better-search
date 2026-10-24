@@ -360,4 +360,28 @@ class PostTypeAccessTest extends WP_UnitTestCase {
 
 		$this->assertSame( array( 'attachment_public', 'attachment_unattached', 'public' ), $this->labels( $restore->invoke( $core, $this->poisoned_items(), $query ) ) );
 	}
+
+	public function test_filter_visible_post_ids(): void {
+		$ids    = array_values( $this->ids );
+		$orphan = self::factory()->post->create( array( 'post_type' => 'attachment', 'post_status' => 'inherit', 'post_parent' => PHP_INT_MAX ) );
+		$ids[]  = $orphan;
+
+		$visible = Better_Search_Core_Query::filter_visible_post_ids( $ids, array( 'post', 'attachment' ), array( 'publish', 'inherit' ), true );
+		$this->assertSame( array( 'attachment_public', 'attachment_unattached', 'public' ), $this->labels( $visible ) );
+
+		$visible = Better_Search_Core_Query::filter_visible_post_ids( $ids, array( 'post', 'attachment' ), array( 'publish', 'inherit' ), false );
+		$this->assertSame( array( 'attachment_protected', 'attachment_public', 'attachment_unattached', 'protected', 'public' ), $this->labels( $visible ) );
+
+		$this->assertSame( array( 'public' ), $this->labels( Better_Search_Core_Query::filter_visible_post_ids( $ids, 'post', '', true ) ), 'Empty status means publish.' );
+		$this->assertSame( array(), Better_Search_Core_Query::filter_visible_post_ids( $ids, array( 'revision' ), array( 'inherit' ), true ), 'Revisions never pass, even with a published parent.' );
+		$this->assertSame( array(), Better_Search_Core_Query::filter_visible_post_ids( array(), 'post', 'publish', true ) );
+
+		$ordered = array( $this->ids['public_page'], $this->ids['public'] );
+		$this->assertSame( $ordered, Better_Search_Core_Query::filter_visible_post_ids( $ordered, 'any', 'publish', true ), 'Order and any are preserved.' );
+	}
+
+	public function test_default_post_status(): void {
+		$this->assertSame( array( 'publish' ), Better_Search_Core_Query::get_default_post_status( array( 'post', 'page' ) ) );
+		$this->assertSame( array( 'publish', 'inherit' ), Better_Search_Core_Query::get_default_post_status( 'attachment' ) );
+	}
 }
