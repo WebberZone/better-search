@@ -474,9 +474,9 @@ class Better_Search_Core_Query extends \WP_Query {
 
 		$args['meta_query'] = $meta_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 
-		// Set post_status.
+		// Set post_status. Only attachments use inherit; revisions do too, which is why they never reach post_type.
 		if ( empty( $args['post_status'] ) ) {
-			$args['post_status'] = self::get_default_post_status( $args['post_type'] );
+			$args['post_status'] = in_array( 'attachment', (array) $args['post_type'], true ) ? array( 'publish', 'inherit' ) : array( 'publish' );
 		}
 
 		// Set post__not_in for WP_Query using exclude_post_ids.
@@ -510,148 +510,69 @@ class Better_Search_Core_Query extends \WP_Query {
 	}
 
 	/**
-	 * Restrict post types to those that can be searched.
+	 * Restrict requested post types to those a visitor may search.
 	 *
-	 * Allowed post types are those returned by get_searchable_post_types(). If nothing is left, the post types
-	 * selected in the settings are used.
-	 *
-	 * @since 4.5.3
-	 *
-	 * @param array $post_types Requested post types.
-	 * @return array Allowed post types.
-	 */
-	public static function get_allowed_post_types( $post_types ) {
-		$post_types = array_values( array_intersect( array_map( 'sanitize_key', (array) $post_types ), self::get_searchable_post_types() ) );
-
-		return empty( $post_types ) ? self::get_configured_post_types() : $post_types;
-	}
-
-	/**
-	 * Get every post type a front-end search may return.
-	 *
-	 * Post types WordPress lets visitors query by URL (publicly queryable), post types not excluded from search, and
-	 * the post types selected in the settings. This matches WP::parse_request(), so a search form limited to a
-	 * public post type that is excluded from general search still works. Revisions are never included.
+	 * Allows what WP::parse_request() allows from a URL (publicly queryable post types), post types not excluded
+	 * from search, and the post types in the settings. Revisions are never allowed. If nothing is left, the post
+	 * types in the settings are used. Those are not checked with post_type_exists(), because on multisite they can
+	 * belong to another site.
 	 *
 	 * @since 4.5.3
 	 *
-	 * @return string[] Post types.
+	 * @param string|array $post_types Requested post types.
+	 * @return string[] Allowed post types.
 	 */
-	public static function get_searchable_post_types(): array {
-		$post_types = array_merge(
-			array_values( get_post_types( array( 'publicly_queryable' => true ) ) ),
-			array_values( get_post_types( array( 'exclude_from_search' => false ) ) ),
-			self::get_configured_post_types()
-		);
+	public static function get_allowed_post_types( $post_types ): array {
+		$configured = array_diff( array_map( 'sanitize_key', wp_parse_list( bsearch_get_option( 'post_types' ) ) ), array( 'revision', '' ) );
+		$allowed    = array_merge( get_post_types( array( 'publicly_queryable' => true ) ), get_post_types( array( 'exclude_from_search' => false ) ), $configured );
+		$post_types = array_intersect( array_map( 'sanitize_key', (array) $post_types ), array_diff( $allowed, array( 'revision' ) ) );
 
-		return array_values( array_diff( array_unique( $post_types ), array( 'revision' ) ) );
-	}
-
-	/**
-	 * Get the post types selected in the settings, without revisions.
-	 *
-	 * These are not checked against the registered post types: on multisite they can belong to another site, whose
-	 * post types are not registered while it is searched through switch_to_blog().
-	 *
-	 * @since 4.5.3
-	 *
-	 * @return string[] Post types.
-	 */
-	protected static function get_configured_post_types(): array {
-		return array_values( array_diff( array_map( 'sanitize_key', wp_parse_list( bsearch_get_option( 'post_types' ) ) ), array( 'revision', '' ) ) );
-	}
-
-	/**
-	 * Get the post statuses a front-end search returns by default.
-	 *
-	 * Only attachments use the inherit status, so it is added only when attachments are searched. Revisions also use
-	 * inherit, which is why they must never reach the post types.
-	 *
-	 * @since 4.5.3
-	 *
-	 * @param string|array $post_types Post types being searched.
-	 * @return string[] Post statuses.
-	 */
-	public static function get_default_post_status( $post_types ): array {
-		return in_array( 'attachment', (array) $post_types, true ) ? array( 'publish', 'inherit' ) : array( 'publish' );
+		return array_values( empty( $post_types ) ? $configured : $post_types );
 	}
 
 	/**
 	 * Get the WHERE clause that hides attachments whose parent visitors cannot see.
 	 *
-	 * An attachment is visible when it is unattached, or its parent is published, belongs to a post type visitors
-	 * can view (is_post_type_viewable()) and, when protected posts are excluded, has no password. Attachments of
-	 * deleted parents are hidden. Every search path applies this rule, either through posts_where() or through
-	 * filter_visible_post_ids().
+	 * Attachments use the inherit status. One is shown when it is unattached, or its parent is published, of a
+	 * viewable post type and, when protected posts are excluded, has no password.
 	 *
 	 * @since 4.5.3
 	 *
-	 * @param string $table             Posts table name or alias whose rows are checked.
-	 * @param bool   $exclude_protected Whether to hide attachments of password-protected parents.
+	 * @param bool $exclude_protected Whether to hide attachments of password-protected parents.
 	 * @return string SQL clause starting with AND.
 	 */
-	public static function get_visibility_where( string $table, bool $exclude_protected ): string {
+	public static function get_attachment_parent_where( bool $exclude_protected ): string {
 		global $wpdb;
 
-		$protected = $exclude_protected ? " AND bsearch_parent.post_password = ''" : '';
 		$viewable  = "'" . implode( "','", esc_sql( array_values( array_filter( get_post_types(), 'is_post_type_viewable' ) ) ) ) . "'";
+		$protected = $exclude_protected ? " AND bsearch_parent.post_password = ''" : '';
 
-		return " AND ( {$table}.post_status <> 'inherit' OR {$table}.post_parent = 0 OR {$table}.post_parent IN ( SELECT bsearch_parent.ID FROM {$wpdb->posts} AS bsearch_parent WHERE bsearch_parent.post_status = 'publish' AND bsearch_parent.post_type IN ({$viewable}){$protected} ) )";
+		return " AND ( {$wpdb->posts}.post_status <> 'inherit' OR {$wpdb->posts}.post_parent = 0 OR {$wpdb->posts}.post_parent IN ( SELECT bsearch_parent.ID FROM {$wpdb->posts} AS bsearch_parent WHERE bsearch_parent.post_status = 'publish' AND bsearch_parent.post_type IN ({$viewable}){$protected} ) )";
 	}
 
 	/**
-	 * Keep only the post IDs a search with these settings may return.
+	 * Drop attachments whose parent visitors cannot see from a list of post IDs.
 	 *
-	 * For result sets that are re-fetched outside the search query, such as cached results and indexed rows, so they
-	 * are checked against the current rules instead of being trusted. Post types outside get_searchable_post_types()
-	 * are dropped, so revisions never pass even when their parent is published.
+	 * For results re-fetched with get_posts(), such as cached results, which cannot apply
+	 * get_attachment_parent_where() itself.
 	 *
 	 * @since 4.5.3
 	 *
-	 * @param int[]        $post_ids          Candidate post IDs on the current site.
-	 * @param string|array $post_types        Post types being searched.
-	 * @param string|array $post_status       Post statuses being searched.
-	 * @param bool         $exclude_protected Whether password-protected posts are excluded.
-	 * @return int[] Visible post IDs, in their original order.
+	 * @param int[] $post_ids          Post IDs on the current site.
+	 * @param bool  $exclude_protected Whether to hide attachments of password-protected parents.
+	 * @return int[] Remaining post IDs, in their original order.
 	 */
-	public static function filter_visible_post_ids( array $post_ids, $post_types, $post_status, bool $exclude_protected ): array {
+	public static function filter_attachment_parents( array $post_ids, bool $exclude_protected ): array {
 		global $wpdb;
 
-		$post_ids    = wp_parse_id_list( $post_ids );
-		$post_types  = array_filter( (array) $post_types, 'is_string' );
-		$post_status = array_filter( (array) ( $post_status ? $post_status : 'publish' ), 'is_string' );
-
-		// Match what WP_Query means by 'any', then drop post types search never returns.
-		if ( in_array( 'any', $post_types, true ) ) {
-			$post_types = array_values( get_post_types( array( 'exclude_from_search' => false ) ) );
-		}
-		$post_types = array_values( array_intersect( $post_types, self::get_searchable_post_types() ) );
-		if ( in_array( 'any', $post_status, true ) ) {
-			$post_status = array_values( get_post_stati( array( 'exclude_from_search' => false ) ) );
-		}
-
-		if ( empty( $post_ids ) || empty( $post_types ) || empty( $post_status ) ) {
+		$post_ids = wp_parse_id_list( $post_ids );
+		if ( empty( $post_ids ) ) {
 			return array();
 		}
 
-		$where = $wpdb->prepare(
-			'ID IN (' . implode( ',', array_fill( 0, count( $post_ids ), '%d' ) ) . ')' .
-			' AND post_type IN (' . implode( ',', array_fill( 0, count( $post_types ), '%s' ) ) . ')' .
-			' AND post_status IN (' . implode( ',', array_fill( 0, count( $post_status ), '%s' ) ) . ')',
-			array_merge( $post_ids, $post_types, $post_status )
-		);
+		$visible = $wpdb->get_col( "SELECT ID FROM {$wpdb->posts} WHERE ID IN (" . implode( ',', $post_ids ) . ')' . self::get_attachment_parent_where( $exclude_protected ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 
-		if ( $exclude_protected ) {
-			$where .= " AND post_password = ''";
-		}
-
-		if ( in_array( 'inherit', $post_status, true ) ) {
-			$where .= self::get_visibility_where( $wpdb->posts, $exclude_protected );
-		}
-
-		$visible = array_map( 'intval', $wpdb->get_col( "SELECT ID FROM {$wpdb->posts} WHERE {$where}" ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-
-		return array_values( array_intersect( $post_ids, $visible ) );
+		return array_values( array_intersect( $post_ids, array_map( 'intval', $visible ) ) );
 	}
 
 	/**
@@ -1059,10 +980,8 @@ class Better_Search_Core_Query extends \WP_Query {
 		 * @param \WP_Query                $query    The WP_Query instance.
 		 * @param Better_Search_Core_Query $instance The Better_Search_Core_Query instance (passed by reference).
 		 */
-		// Attachments use the inherit status, so hide those whose parent visitors cannot see.
 		if ( in_array( 'inherit', (array) $query->get( 'post_status' ), true ) ) {
-			global $wpdb;
-			$where .= self::get_visibility_where( $wpdb->posts, ! empty( $this->query_args['exclude_protected_posts'] ) );
+			$where .= self::get_attachment_parent_where( ! empty( $this->query_args['exclude_protected_posts'] ) );
 		}
 
 		$where = apply_filters_ref_array( 'better_search_query_posts_where', array( $where, $query, &$this ) );
@@ -1643,10 +1562,8 @@ class Better_Search_Core_Query extends \WP_Query {
 	/**
 	 * Get the arguments for a LIKE search of a phrase with this query's settings.
 	 *
-	 * Secondary searches, such as the LIKE fallback and Did You Mean auto-correct, run these through
-	 * Better_Search_Query so they apply the same post type, status and visibility rules as the original search.
-	 * They start from the original input, not the processed query variables, so every rule is applied afresh.
-	 * The is_like_fallback flag stops either feature from running again on the secondary search.
+	 * For the Pro LIKE fallback and auto-correct, which run them through Better_Search_Query so the original
+	 * search's rules apply. is_like_fallback stops either feature running again on that search.
 	 *
 	 * @since 4.5.3
 	 *
@@ -1666,11 +1583,10 @@ class Better_Search_Core_Query extends \WP_Query {
 	}
 
 	/**
-	 * Get the get_posts() arguments that re-fetch cached post IDs the current query can return.
+	 * Get the get_posts() arguments that re-fetch cached post IDs.
 	 *
-	 * Cached IDs may predate a change to the search rules, so they are re-checked with filter_visible_post_ids().
-	 * The query's statuses are passed explicitly; without them get_posts() would default to publish and drop
-	 * every attachment.
+	 * Cached IDs are re-checked against the current rules rather than trusted. The query's statuses are passed so
+	 * get_posts() does not default to publish and drop every attachment.
 	 *
 	 * @since 4.5.3
 	 *
@@ -1679,17 +1595,22 @@ class Better_Search_Core_Query extends \WP_Query {
 	 * @return array Arguments for get_posts().
 	 */
 	protected function get_cache_restore_args( $query, array $post_ids ): array {
-		$post_status = $query->get( 'post_status' ) ? $query->get( 'post_status' ) : 'publish';
-		$visible     = self::filter_visible_post_ids( $post_ids, $query->get( 'post_type' ), $post_status, ! empty( $this->query_args['exclude_protected_posts'] ) );
+		$exclude_protected = ! empty( $this->query_args['exclude_protected_posts'] );
+		$post_ids          = self::filter_attachment_parents( $post_ids, $exclude_protected );
 
-		return array(
-			// An empty post__in would match every post.
-			'post__in'       => empty( $visible ) ? array( 0 ) : $visible,
+		$args = array(
+			'post__in'       => empty( $post_ids ) ? array( 0 ) : $post_ids, // An empty post__in would match every post.
 			'post_type'      => $query->get( 'post_type' ),
-			'post_status'    => $post_status,
+			'post_status'    => $query->get( 'post_status' ) ? $query->get( 'post_status' ) : 'publish',
 			'orderby'        => 'post__in',
-			'posts_per_page' => max( 1, count( $visible ) ),
+			'posts_per_page' => max( 1, count( $post_ids ) ),
 		);
+
+		if ( $exclude_protected ) {
+			$args['has_password'] = false;
+		}
+
+		return $args;
 	}
 
 	/**
