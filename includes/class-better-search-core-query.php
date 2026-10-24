@@ -579,9 +579,10 @@ class Better_Search_Core_Query extends \WP_Query {
 	/**
 	 * Get the WHERE clause that hides attachments whose parent visitors cannot see.
 	 *
-	 * An attachment is visible when it is unattached, or its parent is published and, when protected posts are
-	 * excluded, has no password. Attachments of deleted parents are hidden. Every search path applies this rule,
-	 * either through posts_where() or through filter_visible_post_ids().
+	 * An attachment is visible when it is unattached, or its parent is published, belongs to a post type visitors
+	 * can view (is_post_type_viewable()) and, when protected posts are excluded, has no password. Attachments of
+	 * deleted parents are hidden. Every search path applies this rule, either through posts_where() or through
+	 * filter_visible_post_ids().
 	 *
 	 * @since 4.5.3
 	 *
@@ -593,8 +594,9 @@ class Better_Search_Core_Query extends \WP_Query {
 		global $wpdb;
 
 		$protected = $exclude_protected ? " AND bsearch_parent.post_password = ''" : '';
+		$viewable  = "'" . implode( "','", esc_sql( array_values( array_filter( get_post_types(), 'is_post_type_viewable' ) ) ) ) . "'";
 
-		return " AND ( {$table}.post_status <> 'inherit' OR {$table}.post_parent = 0 OR {$table}.post_parent IN ( SELECT bsearch_parent.ID FROM {$wpdb->posts} AS bsearch_parent WHERE bsearch_parent.post_status = 'publish'{$protected} ) )";
+		return " AND ( {$table}.post_status <> 'inherit' OR {$table}.post_parent = 0 OR {$table}.post_parent IN ( SELECT bsearch_parent.ID FROM {$wpdb->posts} AS bsearch_parent WHERE bsearch_parent.post_status = 'publish' AND bsearch_parent.post_type IN ({$viewable}){$protected} ) )";
 	}
 
 	/**

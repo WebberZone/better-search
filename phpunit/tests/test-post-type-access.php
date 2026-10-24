@@ -83,6 +83,9 @@ class PostTypeAccessTest extends WP_UnitTestCase {
 		$post( 'wp_block', array( 'post_type' => 'wp_block' ) );
 		$post( 'customize_changeset', array( 'post_type' => 'customize_changeset' ) );
 		$post( 'bs_private_cpt', array( 'post_type' => 'bs_private_cpt' ) );
+
+		// Published parent, but of a post type visitors cannot view.
+		$post( 'attachment_hidden_type', array( 'post_type' => 'attachment', 'post_status' => 'inherit', 'post_parent' => $this->ids['bs_private_cpt'], 'post_mime_type' => 'image/jpeg' ) );
 		$post( 'bs_hidden_cpt', array( 'post_type' => 'bs_hidden_cpt' ) );
 		$post( 'bs_internal_cpt', array( 'post_type' => 'bs_internal_cpt' ) );
 		$post( 'bs_public_cpt', array( 'post_type' => 'bs_public_cpt' ) );
@@ -305,7 +308,7 @@ class PostTypeAccessTest extends WP_UnitTestCase {
 	 */
 	private function poisoned_items(): array {
 		$items = array();
-		foreach ( array( 'revision_draft', 'revision_private', 'revision_protected', 'revision_real', 'draft', 'private', 'attachment_draft', 'attachment_private', 'attachment_protected', 'attachment_public', 'attachment_unattached', 'public', 'nav_menu_item' ) as $label ) {
+		foreach ( array( 'revision_draft', 'revision_private', 'revision_protected', 'revision_real', 'draft', 'private', 'attachment_draft', 'attachment_private', 'attachment_protected', 'attachment_hidden_type', 'attachment_public', 'attachment_unattached', 'public', 'nav_menu_item' ) as $label ) {
 			$items[] = array( 'ID' => $this->ids[ $label ], 'blog_id' => get_current_blog_id(), 'score' => 1 );
 		}
 		return $items;
