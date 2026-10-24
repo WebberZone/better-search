@@ -140,6 +140,7 @@ Release date: 24 October 2026
 
 * Restricted the `post_type` search parameter to searchable post types, so revisions of draft, private and password-protected posts no longer appeared in front-end search results.
 * Excluded attachments of unpublished posts from search results, and attachments of password-protected posts when "Exclude password protected posts" was enabled.
+* [Pro] Applied the same visibility rules to the LIKE fallback and Did You Mean auto-correct, which had returned these attachments and, to logged-in users, password-protected posts.
 
 **Fixed**
 

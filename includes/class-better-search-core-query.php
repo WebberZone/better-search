@@ -1517,6 +1517,48 @@ class Better_Search_Core_Query extends \WP_Query {
 	}
 
 	/**
+	 * Apply the search's visibility rules to arguments for a query that runs with filters suppressed.
+	 *
+	 * Used by secondary queries, such as the LIKE fallback, that copy this query's variables but bypass posts_where().
+	 * Excludes password-protected posts when that setting is on, and attachments whose parent visitors cannot see.
+	 *
+	 * @since 4.5.3
+	 *
+	 * @param array $args Query arguments.
+	 * @return array Query arguments with the visibility rules applied.
+	 */
+	public function apply_visibility_args( array $args ): array {
+		global $wpdb;
+
+		$exclude_protected = ! empty( $this->query_args['exclude_protected_posts'] );
+		if ( $exclude_protected ) {
+			$args['has_password'] = false;
+		}
+
+		if ( ! in_array( 'attachment', (array) ( $args['post_type'] ?? array() ), true ) || ! in_array( 'inherit', (array) ( $args['post_status'] ?? array() ), true ) ) {
+			return $args;
+		}
+
+		$protected = $exclude_protected ? " OR parent.post_password <> ''" : '';
+
+		// Same rule as the attachment parent check in posts_where().
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Fixed SQL with table names only.
+		$hidden = $wpdb->get_col(
+			"SELECT attachment.ID FROM {$wpdb->posts} AS attachment
+			LEFT JOIN {$wpdb->posts} AS parent ON parent.ID = attachment.post_parent
+			WHERE attachment.post_type = 'attachment' AND attachment.post_status = 'inherit' AND attachment.post_parent > 0
+			AND ( parent.ID IS NULL OR parent.post_status <> 'publish'{$protected} )"
+		);
+		// phpcs:enable
+
+		if ( ! empty( $hidden ) ) {
+			$args['post__not_in'] = array_merge( wp_parse_id_list( $args['post__not_in'] ?? array() ), array_map( 'intval', $hidden ) );
+		}
+
+		return $args;
+	}
+
+	/**
 	 * Get the arguments that limit cached post IDs to posts the current query can return.
 	 *
 	 * Cached IDs may predate a change to the query rules, so they are re-checked against the current post types,
