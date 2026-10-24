@@ -937,7 +937,8 @@ class Better_Search_Core_Query extends \WP_Query {
 		// Attachments use the inherit status, so only return those that are unattached or whose parent is published.
 		if ( in_array( 'inherit', (array) $query->get( 'post_status' ), true ) ) {
 			global $wpdb;
-			$where .= " AND ( {$wpdb->posts}.post_status <> 'inherit' OR {$wpdb->posts}.post_parent = 0 OR {$wpdb->posts}.post_parent IN ( SELECT bsearch_parent.ID FROM {$wpdb->posts} AS bsearch_parent WHERE bsearch_parent.post_status = 'publish' ) )";
+			$parent_where = ! empty( $this->query_args['exclude_protected_posts'] ) ? " AND bsearch_parent.post_password = ''" : '';
+			$where       .= " AND ( {$wpdb->posts}.post_status <> 'inherit' OR {$wpdb->posts}.post_parent = 0 OR {$wpdb->posts}.post_parent IN ( SELECT bsearch_parent.ID FROM {$wpdb->posts} AS bsearch_parent WHERE bsearch_parent.post_status = 'publish'{$parent_where} ) )";
 		}
 
 		$where = apply_filters_ref_array( 'better_search_query_posts_where', array( $where, $query, &$this ) );
