@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://wzn.io/donate-wz
-Stable tag: 4.5.2
+Stable tag: 4.5.3
 Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -132,6 +132,20 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.5.3 =
+
+Release date: 24 October 2026
+
+**Security**
+
+* Restricted the `post_type` search parameter to searchable post types, so revisions of draft, private and password-protected posts no longer appeared in front-end search results.
+* Excluded attachments of unpublished posts from search results, and attachments of password-protected posts when "Exclude password protected posts" is enabled.
+* Re-checked cached search results against the current post type and visibility rules.
+
+**Fixed**
+
+* Attachment searches served from the cache returned no results.
+
 = 4.5.2 =
 
 Release date: 15 October 2026
@@ -162,6 +176,7 @@ Release date: 12 October 2026
 
 **Fixed**
 
+* [Pro] AI answers crashed on single sites with ECSI, could cite another company's article, and Enter ran a normal search in Ask AI only mode.
 * Searches raised a PHP 8.5 deprecation warning while loading stopwords.
 
 = 4.5.0 =
@@ -205,6 +220,13 @@ Release post: https://webberzone.com/announcements/better-search-v4-5/
 * Network search caches remained stale after settings changes or manual cache clearing, and nested queries could prevent caching.
 * Cache-clearing confirmation and error messages were missing.
 * Live search suggestions could reopen after pressing Escape or submitting the search.
+* [Pro] Custom-table searches ignored some search settings, taxonomy weights and term restrictions.
+* [Pro] Custom-table searches could show empty pages, and multisite searches could repeat, skip or return posts from the wrong site.
+* [Pro] Multisite custom-table searches returned no results when `posts_per_page` was `-1`.
+* [Pro] Custom-table schema and taxonomy indexes were not reliably updated.
+* [Pro] Fuzzy searches could ignore Boolean operators or match common words, returning too many results.
+* [Pro] Multisite and fuzzy searches could omit posts matching slugs, taxonomies, metadata, authors or comments.
+* [Pro] Search terms containing a dollar sign followed by a digit were omitted from relevance scoring.
 
 = Earlier versions =
 
@@ -212,5 +234,5 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 
 == Upgrade Notice ==
 
-= 4.5.2 =
-Security release. Hardens password protection in thumbnail fallbacks and rejects unsafe thumbnail URLs. Also fixes errors with malformed thumbnail dimensions. Update recommended.
+= 4.5.3 =
+Security release. Stops front-end search from returning revisions of draft, private and password-protected posts, and attachments of unpublished posts. Update as soon as you can.
