@@ -66,7 +66,9 @@ class Template_Handler {
 
 		if ( $should_force_seamless ) {
 			if ( ! isset( $query->query_vars['is_better_search_loaded'] ) || ! $query->query_vars['is_better_search_loaded'] ) {
-				new \Better_Search_Core_Query( $query->query_vars );
+				// Tie the search to this query so its hooks leave nested queries, such as the LIKE fallback, alone.
+				$core_query = new \Better_Search_Core_Query( $query->query_vars );
+				$core_query->set_owner( $query );
 				$query->set( 'is_better_search_loaded', true );
 			}
 			return;

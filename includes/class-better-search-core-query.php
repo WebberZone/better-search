@@ -305,11 +305,11 @@ class Better_Search_Core_Query extends \WP_Query {
 		$search_query = isset( $args['s'] ) ? $args['s'] : '';
 		$this->set_class_variables( $search_query );
 
-		// In seamless mode, check for post_type from URL if not already in args.
-		if ( empty( $args['post_type'] ) ) {
-			$post_type_param = filter_input( INPUT_GET, 'post_type', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		// In seamless mode, check for post_type from the parsed request if not already in args.
+		if ( empty( $args['post_type'] ) && isset( $GLOBALS['wp_query'] ) && $GLOBALS['wp_query'] instanceof \WP_Query ) {
+			$post_type_param = get_query_var( 'post_type' );
 			if ( ! empty( $post_type_param ) ) {
-				$args['post_type'] = sanitize_title( wp_unslash( $post_type_param ) );
+				$args['post_type'] = is_array( $post_type_param ) ? array_map( 'sanitize_key', $post_type_param ) : sanitize_key( $post_type_param );
 			}
 		}
 
@@ -342,6 +342,9 @@ class Better_Search_Core_Query extends \WP_Query {
 		if ( empty( $post_types ) || in_array( 'any', $post_types, true ) ) {
 			$post_types = wp_parse_list( bsearch_get_option( 'post_types' ) );
 		}
+
+		// Restrict to searchable post types so request input cannot pull in revisions or other internal types.
+		$post_types = self::get_allowed_post_types( $post_types );
 
 		/**
 		 * Filter the post_types passed to the query.
@@ -471,8 +474,10 @@ class Better_Search_Core_Query extends \WP_Query {
 
 		$args['meta_query'] = $meta_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 
-		// Set post_status.
-		$args['post_status'] = empty( $args['post_status'] ) ? array( 'publish', 'inherit' ) : $args['post_status'];
+		// Set post_status. Only attachments use inherit; revisions do too, which is why they never reach post_type.
+		if ( empty( $args['post_status'] ) ) {
+			$args['post_status'] = in_array( 'attachment', (array) $args['post_type'], true ) ? array( 'publish', 'inherit' ) : array( 'publish' );
+		}
 
 		// Set post__not_in for WP_Query using exclude_post_ids.
 		$exclude_post_ids = empty( $args['exclude_post_ids'] ) ? array() : wp_parse_id_list( $args['exclude_post_ids'] );
@@ -502,6 +507,72 @@ class Better_Search_Core_Query extends \WP_Query {
 		 * @param Better_Search_Core_Query $query The Better_Search instance (passed by reference).
 		 */
 		$this->query_args = apply_filters_ref_array( 'better_search_query_args', array( $args, &$this ) );
+	}
+
+	/**
+	 * Restrict requested post types to those a visitor may search.
+	 *
+	 * Allows what WP::parse_request() allows from a URL (publicly queryable post types), post types not excluded
+	 * from search, and the post types in the settings. Revisions are never allowed. If nothing is left, the post
+	 * types in the settings are used. Those are not checked with post_type_exists(), because on multisite they can
+	 * belong to another site.
+	 *
+	 * @since 4.5.3
+	 *
+	 * @param string|array $post_types Requested post types.
+	 * @return string[] Allowed post types.
+	 */
+	public static function get_allowed_post_types( $post_types ): array {
+		$configured = array_diff( array_map( 'sanitize_key', wp_parse_list( bsearch_get_option( 'post_types' ) ) ), array( 'revision', '' ) );
+		$allowed    = array_merge( get_post_types( array( 'publicly_queryable' => true ) ), get_post_types( array( 'exclude_from_search' => false ) ), $configured );
+		$post_types = array_intersect( array_map( 'sanitize_key', (array) $post_types ), array_diff( $allowed, array( 'revision' ) ) );
+
+		return array_values( empty( $post_types ) ? $configured : $post_types );
+	}
+
+	/**
+	 * Get the WHERE clause that hides attachments whose parent visitors cannot see.
+	 *
+	 * Attachments use the inherit status. One is shown when it is unattached, or its parent is published, of a
+	 * viewable post type and, when protected posts are excluded, has no password.
+	 *
+	 * @since 4.5.3
+	 *
+	 * @param bool $exclude_protected Whether to hide attachments of password-protected parents.
+	 * @return string SQL clause starting with AND.
+	 */
+	public static function get_attachment_parent_where( bool $exclude_protected ): string {
+		global $wpdb;
+
+		$viewable  = "'" . implode( "','", esc_sql( array_values( array_filter( get_post_types(), 'is_post_type_viewable' ) ) ) ) . "'";
+		$protected = $exclude_protected ? " AND bsearch_parent.post_password = ''" : '';
+
+		return " AND ( {$wpdb->posts}.post_status <> 'inherit' OR {$wpdb->posts}.post_parent = 0 OR {$wpdb->posts}.post_parent IN ( SELECT bsearch_parent.ID FROM {$wpdb->posts} AS bsearch_parent WHERE bsearch_parent.post_status = 'publish' AND bsearch_parent.post_type IN ({$viewable}){$protected} ) )";
+	}
+
+	/**
+	 * Drop attachments whose parent visitors cannot see from a list of post IDs.
+	 *
+	 * For results re-fetched with get_posts(), such as cached results, which cannot apply
+	 * get_attachment_parent_where() itself.
+	 *
+	 * @since 4.5.3
+	 *
+	 * @param int[] $post_ids          Post IDs on the current site.
+	 * @param bool  $exclude_protected Whether to hide attachments of password-protected parents.
+	 * @return int[] Remaining post IDs, in their original order.
+	 */
+	public static function filter_attachment_parents( array $post_ids, bool $exclude_protected ): array {
+		global $wpdb;
+
+		$post_ids = wp_parse_id_list( $post_ids );
+		if ( empty( $post_ids ) ) {
+			return array();
+		}
+
+		$visible = $wpdb->get_col( "SELECT ID FROM {$wpdb->posts} WHERE ID IN (" . implode( ',', $post_ids ) . ')' . self::get_attachment_parent_where( $exclude_protected ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
+
+		return array_values( array_intersect( $post_ids, array_map( 'intval', $visible ) ) );
 	}
 
 	/**
@@ -909,6 +980,10 @@ class Better_Search_Core_Query extends \WP_Query {
 		 * @param \WP_Query                $query    The WP_Query instance.
 		 * @param Better_Search_Core_Query $instance The Better_Search_Core_Query instance (passed by reference).
 		 */
+		if ( in_array( 'inherit', (array) $query->get( 'post_status' ), true ) ) {
+			$where .= self::get_attachment_parent_where( ! empty( $this->query_args['exclude_protected_posts'] ) );
+		}
+
 		$where = apply_filters_ref_array( 'better_search_query_posts_where', array( $where, $query, &$this ) );
 
 		Hook_Registry::remove_filter( 'posts_where', array( $this, 'posts_where' ) );
@@ -1485,6 +1560,60 @@ class Better_Search_Core_Query extends \WP_Query {
 	}
 
 	/**
+	 * Get the arguments for a LIKE search of a phrase with this query's settings.
+	 *
+	 * For the Pro LIKE fallback and auto-correct, which run them through Better_Search_Query so the original
+	 * search's rules apply. is_like_fallback stops either feature running again on that search.
+	 *
+	 * @since 4.5.3
+	 *
+	 * @param string $phrase Search phrase.
+	 * @return array Arguments for Better_Search_Query.
+	 */
+	public function get_like_search_args( string $phrase ): array {
+		return array_merge(
+			$this->input_query_args,
+			array(
+				's'                       => $phrase,
+				'use_fulltext'            => false,
+				'is_like_fallback'        => true,
+				'is_better_search_loaded' => true,
+			)
+		);
+	}
+
+	/**
+	 * Get the get_posts() arguments that re-fetch cached post IDs.
+	 *
+	 * Cached IDs are re-checked against the current rules rather than trusted. The query's statuses are passed so
+	 * get_posts() does not default to publish and drop every attachment.
+	 *
+	 * @since 4.5.3
+	 *
+	 * @param \WP_Query $query    The WP_Query instance.
+	 * @param int[]     $post_ids Cached post IDs on the current site.
+	 * @return array Arguments for get_posts().
+	 */
+	protected function get_cache_restore_args( $query, array $post_ids ): array {
+		$exclude_protected = ! empty( $this->query_args['exclude_protected_posts'] );
+		$post_ids          = self::filter_attachment_parents( $post_ids, $exclude_protected );
+
+		$args = array(
+			'post__in'       => empty( $post_ids ) ? array( 0 ) : $post_ids, // An empty post__in would match every post.
+			'post_type'      => $query->get( 'post_type' ),
+			'post_status'    => $query->get( 'post_status' ) ? $query->get( 'post_status' ) : 'publish',
+			'orderby'        => 'post__in',
+			'posts_per_page' => max( 1, count( $post_ids ) ),
+		);
+
+		if ( $exclude_protected ) {
+			$args['has_password'] = false;
+		}
+
+		return $args;
+	}
+
+	/**
 	 * Rebuild a cached page of results, fetching each site's posts on that site.
 	 *
 	 * @since 4.5.0
@@ -1511,16 +1640,22 @@ class Better_Search_Core_Query extends \WP_Query {
 				switch_to_blog( $blog_id );
 			}
 
-			foreach ( (array) get_posts(
-				array(
-					'post__in'       => $post_ids,
-					'fields'         => $fields,
-					'orderby'        => 'post__in',
-					'post_type'      => $query->get( 'post_type' ),
-					'posts_per_page' => count( $post_ids ),
-					'lang'           => '',
+			/**
+			 * Posts, or IDs when fields is 'ids'.
+			 *
+			 * @var array<int, \WP_Post|int> $restored
+			 */
+			$restored = get_posts(
+				array_merge(
+					$this->get_cache_restore_args( $query, $post_ids ),
+					array(
+						'fields' => $fields,
+						'lang'   => '',
+					)
 				)
-			) as $post ) {
+			);
+
+			foreach ( $restored as $post ) {
 				$id = $post instanceof \WP_Post ? (int) $post->ID : (int) $post;
 
 				$fetched[ $blog_id . '_' . $id ] = $post;
@@ -1590,13 +1725,15 @@ class Better_Search_Core_Query extends \WP_Query {
 				} else {
 					$post__in = $cached_data;
 					unset( $post__in['found_posts'], $post__in['topscore'], $post__in['items'] );
+					/**
+					 * Posts, or IDs when fields is 'ids'.
+					 *
+					 * @var array<int, \WP_Post|int> $posts
+					 */
 					$posts = get_posts(
-						array(
-							'post__in'       => array_keys( $post__in ),
-							'fields'         => $query->get( 'fields' ),
-							'orderby'        => 'post__in',
-							'post_type'      => $query->get( 'post_type' ),
-							'posts_per_page' => $query->get( 'posts_per_page' ),
+						array_merge(
+							$this->get_cache_restore_args( $query, array_keys( $post__in ) ),
+							array( 'fields' => $query->get( 'fields' ) )
 						)
 					);
 					// Set the score and blog_id for each of the posts.

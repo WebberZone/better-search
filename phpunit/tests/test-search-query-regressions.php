@@ -69,4 +69,14 @@ class SearchQueryRegressionsTest extends WP_UnitTestCase {
 		$this->assertSame( 'SELECT 1', $core->set_topscore( 'SELECT 1', $other, $core ) );
 		$this->assertSame( 23, $other->topscore );
 	}
+
+	public function test_posts_from_different_sites_with_the_same_id_are_kept(): void {
+		$here  = get_post( self::factory()->post->create() );
+		$other = clone $here;
+
+		$other->blog_id = get_current_blog_id() + 1;
+
+		$this->assertCount( 2, WebberZone\Better_Search\Frontend\Language_Handler::translate_ids( array( $here, $other ) ) );
+		$this->assertCount( 1, WebberZone\Better_Search\Frontend\Language_Handler::translate_ids( array( $here, $here ) ) );
+	}
 }

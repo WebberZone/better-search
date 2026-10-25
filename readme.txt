@@ -2,7 +2,7 @@
 Contributors: webberzone, Ajay
 Tags: search, Better Search, related search, relevant search, relevance
 Donate link: https://wzn.io/donate-wz
-Stable tag: 4.5.2
+Stable tag: 4.5.3
 Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -132,6 +132,21 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.5.3 =
+
+Release date: 24 October 2026
+
+**Security**
+
+* Restricted the `post_type` search parameter to searchable post types, so revisions of draft, private and password-protected posts, and internal content such as menu items, no longer appeared in front-end search results.
+* Excluded attachments of unpublished posts and of post types visitors cannot view from search results, and attachments of password-protected posts when "Exclude password protected posts" was enabled.
+* [Pro] Applied the same rules to the LIKE fallback and Did You Mean auto-correct, which had returned revisions, these attachments and, to logged-in users, password-protected posts.
+
+**Fixed**
+
+* Attachment searches served from the cache returned no results.
+* [Pro] Multisite searches outside the main results page, such as live search, dropped a post when another site had a post with the same ID.
+
 = 4.5.2 =
 
 Release date: 15 October 2026
@@ -162,6 +177,7 @@ Release date: 12 October 2026
 
 **Fixed**
 
+* [Pro] AI answers crashed on single sites with ECSI, could cite another company's article, and Enter ran a normal search in Ask AI only mode.
 * Searches raised a PHP 8.5 deprecation warning while loading stopwords.
 
 = 4.5.0 =
@@ -171,19 +187,19 @@ Release post: https://webberzone.com/announcements/better-search-v4-5/
 
 **Added**
 
-* Added WordPress Abilities API support for site searches, with an option to disable it in the Features tab.
-* Added a Status section to Tools showing database, index and cache health.
-* Added a setting to restrict search results to selected terms.
-* Added `*` wildcard support to filtered words, so `spam*` also blocked "spammer".
-* Added translated titles and language-specific links to TranslatePress live-search suggestions.
-* Added the `data-bsearch-live-search="off"` form attribute, so forms with their own live search did not show a second list of suggestions.
-* [Pro] Added abilities for popular search terms, spelling suggestions and cache clearing.
-* [Pro] Added optional AI answers grounded in Better Search results, with source links, cached answers, usage limits and a Content gaps report.
-* [Pro] Added WP-CLI commands for AI questions, answer-cache management and Content gaps.
+* WordPress Abilities API support for site searches, with an option to disable it in the Features tab.
+* Status section in Tools showing database, index and cache health.
+* Setting to restrict search results to selected terms.
+* `*` wildcard support in filtered words, so `spam*` also blocked "spammer".
+* Translated titles and language-specific links in TranslatePress live-search suggestions.
+* `data-bsearch-live-search="off"` form attribute, so forms with their own live search did not show a second list of suggestions.
+* [Pro] Abilities for popular search terms, spelling suggestions and cache clearing.
+* [Pro] Optional AI answers grounded in Better Search results, with source links, cached answers, usage limits and a Content gaps report.
+* [Pro] WP-CLI commands for AI questions, answer-cache management and Content gaps.
 * [Pro] Expanded Tools status with custom-table and AI-provider health.
-* [Pro] Added optional recency weighting, disabled by default; existing custom-table indexes required a one-time backfill from Tools.
-* [Pro] Added optional ranking weights for slug, metadata, author and comment matches.
-* [Pro] Added wildcard search redirects, so `help*` could match multiple search phrases.
+* [Pro] Optional recency weighting, disabled by default; existing custom-table indexes required a one-time backfill from Tools.
+* [Pro] Optional ranking weights for slug, metadata, author and comment matches.
+* [Pro] Wildcard search redirects, so `help*` could match multiple search phrases.
 
 **Changed**
 
@@ -205,6 +221,13 @@ Release post: https://webberzone.com/announcements/better-search-v4-5/
 * Network search caches remained stale after settings changes or manual cache clearing, and nested queries could prevent caching.
 * Cache-clearing confirmation and error messages were missing.
 * Live search suggestions could reopen after pressing Escape or submitting the search.
+* [Pro] Custom-table searches ignored some search settings, taxonomy weights and term restrictions.
+* [Pro] Custom-table searches could show empty pages, and multisite searches could repeat, skip or return posts from the wrong site.
+* [Pro] Multisite custom-table searches returned no results when `posts_per_page` was `-1`.
+* [Pro] Custom-table schema and taxonomy indexes were not reliably updated.
+* [Pro] Fuzzy searches could ignore Boolean operators or match common words, returning too many results.
+* [Pro] Multisite and fuzzy searches could omit posts matching slugs, taxonomies, metadata, authors or comments.
+* [Pro] Search terms containing a dollar sign followed by a digit were omitted from relevance scoring.
 
 = Earlier versions =
 
@@ -212,5 +235,5 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 
 == Upgrade Notice ==
 
-= 4.5.2 =
-Security release. Hardens password protection in thumbnail fallbacks and rejects unsafe thumbnail URLs. Also fixes errors with malformed thumbnail dimensions. Update recommended.
+= 4.5.3 =
+Security release. Stops front-end search from returning revisions of draft, private and password-protected posts, and attachments of unpublished posts. Update as soon as you can.
