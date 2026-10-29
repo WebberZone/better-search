@@ -333,7 +333,7 @@ function get_bsearch_title( $text_only = true ) {
 
 
 /**
- * Display the header table on the search results page.
+ * Display the header on the search results page.
  *
  * @since 3.0.0
  * @since 3.3.0 Removed $echo parameter. This function will always display the header.
@@ -347,13 +347,13 @@ function get_bsearch_title( $text_only = true ) {
 function the_bsearch_header( $args = array() ) {
 
 	/**
-	 * Filter the header table.
+	 * Filter the header.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @see get_bsearch_header()
 	 *
-	 * @param string $output Header table.
+	 * @param string $output Header HTML.
 	 * @param array  $args   Array of arguments.
 	 */
 	echo apply_filters( 'the_bsearch_header', get_bsearch_header( $args ), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -369,8 +369,8 @@ function the_bsearch_header( $args = array() ) {
  * @param string|array $args {
  *     Optional. Array or string of parameters.
  *
- *     @type string $before        Markup to prepend to the header table.
- *     @type string $after         Markup to append to the header table.
+ *     @type string $before        Markup to prepend to the header.
+ *     @type string $after         Markup to append to the header.
  *     @type int    $limit         Number of posts per page.
  *     @type int    $found_posts   Total number of posts found.
  *     @type int    $max_num_pages Maximum number of pages of results.
@@ -413,16 +413,16 @@ function get_bsearch_header( $args = array() ) {
 	$total_pages  = ( $pages < 1 ) ? 1 : $pages;
 
 	$output .= '
-	<table width="100%" border="0" class="bsearch_nav">
-	 <tr class="bsearch_nav_row1">
-	  <td width="50%" style="text-align:left">';
+	<div class="bsearch_nav">
+	 <div class="bsearch_nav_row1">
+	  <div class="bsearch_nav_results">';
 
 	/* translators: 1: First, 2: Last, 3: Number of rows */
 	$output .= sprintf( __( 'Results <strong>%1$s</strong> - <strong>%2$s</strong> of <strong>%3$s</strong>', 'better-search' ), $first, $last, $args['found_posts'] );
 
 	$output .= '
-	  </td>
-	  <td width="50%" style="text-align:right">';
+	  </div>
+	  <div class="bsearch_nav_pages">';
 	/* translators: 1: Current page number, 2: Total pages */
 	$output .= sprintf( __( 'Page <strong>%1$s</strong> of <strong>%2$s</strong>', 'better-search' ), $current_page, $total_pages );
 
@@ -483,10 +483,10 @@ function get_bsearch_header( $args = array() ) {
 	$rpp = implode( ' | ', $rpp );
 
 	$output .= '
-	  </td>
-	 </tr>
-	 <tr class="bsearch_nav_row2">
-	  <td style="text-align:left">
+	  </div>
+	 </div>
+	 <div class="bsearch_nav_row2">
+	  <div class="bsearch_nav_sort">
 	';
 
 	$rel_or_date_link_args['s']          = $args['search_query'];
@@ -511,14 +511,14 @@ function get_bsearch_header( $args = array() ) {
 
 	$output .= $sorted_by . ' | ' . $sort_by;
 	$output .= '
-	  </td>
-	  <td style="text-align:right">';
+	  </div>
+	  <div class="bsearch_nav_limits">';
 	/* translators: 1: Results per page. */
 	$output .= sprintf( __( 'Results per-page: %s ', 'better-search' ), $rpp );
 	$output .= '
-	  </td>
-	 </tr>
-	</table>';
+	  </div>
+	 </div>
+	</div>';
 
 	/**
 	 * Filter the Better Search header HTML.
