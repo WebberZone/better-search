@@ -152,6 +152,7 @@ Release date: 1 November 2026
 
 **Fixed**
 
+* On attachment pages, and in search results that included an attachment, posts without a featured image used that attachment as their thumbnail.
 * Attachment searches served from the cache returned no results.
 
 = 4.5.2 =
