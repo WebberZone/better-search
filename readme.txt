@@ -134,7 +134,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.5.3 =
 
-Release date: 24 October 2026
+Release date: 31 October 2026
 
 **Changed**
 
@@ -231,4 +231,4 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 == Upgrade Notice ==
 
 = 4.5.3 =
-Security release. Stops front-end search from returning revisions of draft, private and password-protected posts, and attachments of unpublished posts. Update as soon as you can.
+Security release. Stops front-end search from returning revisions of draft, private and password-protected posts, and attachments of unpublished posts. Update as soon as you can. Pro users with custom tables should reindex them from the Tools page.
