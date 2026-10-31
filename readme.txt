@@ -136,6 +136,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 Release date: 24 October 2026
 
+**Changed**
+
+* Replaced the layout table in the search results header with a CSS Grid, so screen readers no longer announce it as a data table. Custom CSS targeting its `table`, `tr` or `td` elements needs updating.
+
 **Security**
 
 * Restricted the `post_type` search parameter to searchable post types, so revisions of draft, private and password-protected posts, and internal content such as menu items, no longer appeared in front-end search results.
@@ -145,7 +149,6 @@ Release date: 24 October 2026
 **Fixed**
 
 * Attachment searches served from the cache returned no results.
-* [Pro] Multisite searches outside the main results page, such as live search, dropped a post when another site had a post with the same ID.
 
 = 4.5.2 =
 
@@ -177,7 +180,6 @@ Release date: 12 October 2026
 
 **Fixed**
 
-* [Pro] AI answers crashed on single sites with ECSI, could cite another company's article, and Enter ran a normal search in Ask AI only mode.
 * Searches raised a PHP 8.5 deprecation warning while loading stopwords.
 
 = 4.5.0 =
@@ -221,13 +223,6 @@ Release post: https://webberzone.com/announcements/better-search-v4-5/
 * Network search caches remained stale after settings changes or manual cache clearing, and nested queries could prevent caching.
 * Cache-clearing confirmation and error messages were missing.
 * Live search suggestions could reopen after pressing Escape or submitting the search.
-* [Pro] Custom-table searches ignored some search settings, taxonomy weights and term restrictions.
-* [Pro] Custom-table searches could show empty pages, and multisite searches could repeat, skip or return posts from the wrong site.
-* [Pro] Multisite custom-table searches returned no results when `posts_per_page` was `-1`.
-* [Pro] Custom-table schema and taxonomy indexes were not reliably updated.
-* [Pro] Fuzzy searches could ignore Boolean operators or match common words, returning too many results.
-* [Pro] Multisite and fuzzy searches could omit posts matching slugs, taxonomies, metadata, authors or comments.
-* [Pro] Search terms containing a dollar sign followed by a digit were omitted from relevance scoring.
 
 = Earlier versions =
 
