@@ -119,6 +119,69 @@ Options:
 
 - `--format=<format>` — Output format: table, json, csv
 
+### Efficient Content Storage and Indexing (ECSI)
+
+Manage the custom search tables used by [Efficient Content Storage and Indexing](https://webberzone.com/support/knowledgebase/efficient-content-storage-and-indexing/).
+
+#### Status
+
+```bash
+wp bsearch ecsi status
+wp bsearch ecsi status --format=json
+wp bsearch ecsi status --network
+```
+
+Options:
+
+- `--format=<format>` — Output format: table, json, csv. Default: table
+- `--network` — Show status for all sites in the network
+
+#### Enable and disable
+
+```bash
+wp bsearch ecsi enable
+wp bsearch ecsi enable --network
+wp bsearch ecsi disable --blog-id=3
+```
+
+Turns ECSI on or off. Without options, the current site is changed.
+
+Options:
+
+- `--network` — Apply to all sites in the network (multisite only)
+- `--blog-id=<id>` — Apply to a specific site (multisite only)
+
+#### Reindex
+
+```bash
+wp bsearch ecsi reindex
+wp bsearch ecsi reindex --force
+wp bsearch ecsi reindex --batch-size=50 --post-type=post,page
+```
+
+Indexes published posts into the custom tables.
+
+Options:
+
+- `--force` — Empty the tables before reindexing
+- `--batch-size=<size>` — Posts processed per batch, from 1 to 1000. Default: 100
+- `--post-type=<types>` — Comma-separated post types to index. Default: all public post types
+- `--dry-run` — Show what would be indexed without making changes
+- `--verbose` — Show per-post output instead of a progress bar
+- `--network` — Reindex all sites in the network (multisite only)
+
+Each post that cannot be written is reported as a warning. From Better Search Pro 4.5.3, the command finishes processing every selected site, then exits with an error when any post failed, so scripts and deployments can detect an incomplete index. The failed posts are listed under **Better Search → Tools**, where you can retry them after fixing the database problem.
+
+#### Create and drop tables
+
+```bash
+wp bsearch ecsi create
+wp bsearch ecsi create --dry-run
+wp bsearch ecsi drop --force
+```
+
+`create` creates the custom tables; `--dry-run` shows what would be created. `drop` permanently deletes the custom tables and asks for confirmation unless `--force` is supplied.
+
 ### AI Answers
 
 Inspect and operate Better Search Pro AI Answers from WP-CLI.
