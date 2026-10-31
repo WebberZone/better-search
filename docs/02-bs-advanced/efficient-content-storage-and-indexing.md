@@ -144,6 +144,18 @@ For bulk operations:
 - Marks tables as ready at 80% completion
 - Handles network-wide operations
 
+### Posts that failed to index
+
+From Better Search Pro 4.5.3, a post whose content could not be written to the custom table is recorded instead of being reported as indexed. A write that fails because the database is briefly locked is retried up to three times before it is recorded.
+
+When any post has failed, administrators see the notice "Some posts could not be indexed by Better Search." on admin screens, with a link to the **Reindex Custom Tables** section of **Better Search → Tools**. That section shows:
+
+- A summary of the last reindex: posts attempted, indexed, failed and skipped.
+- Each failed post with its site ID, post ID, number of write attempts and the database error.
+- A **Retry indexing** button next to each post, which reindexes only that post without rebuilding the table.
+
+A post is removed from the list as soon as it is indexed, by a retry, a later save or a reindex. Fix the underlying database problem first, such as a full disk, a lock held by another process or a corrupt table, then retry. On a multisite network, the network Tools page lists failures from every site.
+
 ### Recency ranking backfill
 
 After upgrading an existing ECSI index, open **Better Search → Tools** and run **Recency Ranking Backfill**. It fills `post_date_gmt` for older rows in batches. Better Search keeps recency ordering disabled on the custom-table path until the backfill completes, then clears the search caches. The shared multisite index requires a network administrator to run this operation.
@@ -189,6 +201,7 @@ No. New and updated content is automatically processed and added to the custom t
 | Synchronization issues | WordPress cron is not running; Post hooks are not firing correctly | Check WordPress cron status; Review error logs; Try a force reindex |
 | Performance issues | Database server load; Large tables; Insufficient server resources | Monitor database server load; Optimize the database if performance drops; Consider database server upgrades if necessary |
 | Renamed term not reflected in results | The background term-refresh job has not run yet; WP-Cron is disabled | Wait for WP-Cron to process `crp_refresh_term_posts` / `bsearch_refresh_term_posts`; if WP-Cron is disabled, schedule a real cron job for `wp-cron.php` or run a force reindex |
+| Admin notice: "Some posts could not be indexed by Better Search." | A database write failed while a post was being indexed | Open **Better Search → Tools**, review the error for each post under **Reindex Custom Tables**, fix the database problem, then click **Retry indexing** |
 | Table status looks wrong after a database change made outside WordPress | Table and index status is cached to avoid repeated `SHOW TABLES` and `SHOW INDEX` queries | Better Search Pro re-checks table health live on the Tools and network admin screens; open **Better Search → Tools** to refresh the cached status |
 
 ## Best practices

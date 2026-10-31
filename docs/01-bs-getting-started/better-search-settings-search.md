@@ -24,6 +24,10 @@ Set the maximum number of search results displayed per page.
 
 Select which post types you want to include in the search results (e.g., post, page, custom post types).
 
+Visitors can narrow a search to particular post types, using the post type dropdown in the [[bsearch_form]] shortcode or a `post_type` parameter in the search URL. From 4.5.3, Better Search accepts only post types that WordPress lets visitors view or search, plus the ones selected here. Revisions are never searchable. Post types that are not allowed are ignored, and if none are left, the post types selected here are used.
+
+When attachments are searched, an attachment appears only if it is not attached to a post, or its parent post is published. With **Exclude password protected posts** enabled, attachments of password-protected posts are left out too.
+
 ### Enable MySQL FULLTEXT searching
 
 Disabling this option will no longer give relevance-based results. If you’re using Better Search Pro, you will see the installation status of the FULLTEXT indexes along with a button which allows you to recreate them.
