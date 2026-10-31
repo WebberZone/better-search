@@ -136,6 +136,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 Release date: 31 October 2026
 
+**Added**
+
+* [Pro] List of posts that failed to index in Tools, with a Retry button. WP-CLI reindexing now exits with an error when any post fails.
+
 **Changed**
 
 * Replaced the layout table in the search results header with a CSS Grid, so screen readers no longer announce it as a data table. Custom CSS targeting its `table`, `tr` or `td` elements needs updating.
