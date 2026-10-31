@@ -10,8 +10,12 @@
 		convertWarningsToExceptions="true"
 	>
 	<testsuites>
-		<testsuite name="default">
-			<directory suffix=".php">phpunit/tests/</directory>
+		<testsuite name="core">
+			<directory suffix=".php">phpunit/tests</directory>
+			<exclude>phpunit/tests/ai</exclude>
+		</testsuite>
+		<testsuite name="ai">
+			<directory suffix=".php">phpunit/tests/ai</directory>
 		</testsuite>
 	</testsuites>
 
