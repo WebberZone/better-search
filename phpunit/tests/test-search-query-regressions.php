@@ -58,6 +58,7 @@ class SearchQueryRegressionsTest extends WP_UnitTestCase {
 		$unweighted          = new Better_Search_Query( $args );
 		$this->assertContains( $plain, wp_list_pluck( $unweighted->posts, 'ID' ) );
 	}
+
 	public function test_posts_from_different_sites_with_the_same_id_are_kept(): void {
 		$here  = get_post( self::factory()->post->create() );
 		$other = clone $here;

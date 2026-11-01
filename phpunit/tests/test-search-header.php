@@ -60,9 +60,11 @@ class SearchHeaderTest extends WP_UnitTestCase {
 			'large resultset' => array( 12345, 50, 247, 247, 12301, 12345, 1 ),
 		);
 	}
+
 	public static function sort_cases(): array {
 		return array( 'relevance' => array( 0 ), 'date' => array( 1 ) );
 	}
+
 	private function parse_header( string $html ): DOMXPath {
 		$document = new DOMDocument();
 		$this->assertTrue( $document->loadHTML( '<!doctype html><html><head><meta charset="utf-8"><title>Search</title></head><body>' . $html . '</body></html>' ) );
