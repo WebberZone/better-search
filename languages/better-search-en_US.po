@@ -181,7 +181,7 @@ msgstr ""
 #: better-search.php
 #: includes/admin/class-dashboard.php:203
 #: includes/admin/network/class-admin.php:106
-#: includes/frontend/class-template-handler.php:185
+#: includes/frontend/class-template-handler.php:187
 msgid "Better Search"
 msgstr ""
 
@@ -1501,7 +1501,7 @@ msgstr ""
 msgid "Follow me"
 msgstr ""
 
-#: includes/class-better-search-core-query.php:2116
+#: includes/class-better-search-core-query.php:2253
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,what,when,where,who,will,with,www"
 msgstr ""
