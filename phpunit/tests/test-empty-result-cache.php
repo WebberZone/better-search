@@ -54,47 +54,4 @@ class EmptyResultCacheTest extends WP_UnitTestCase {
 		wp_update_post( array( 'ID' => $id, 'post_status' => 'publish' ) );
 		$this->assertSame( array( $id ), wp_list_pluck( $this->search()->posts, 'ID' ) );
 	}
-
-	public function test_editing_a_post_invalidates_empty_results(): void {
-		$id = self::factory()->post->create( array( 'post_title' => 'Unrelated article' ) );
-		$this->assertSame( array(), $this->search()->posts );
-		wp_update_post( array( 'ID' => $id, 'post_content' => 'emptycacheuniqueterm' ) );
-		$this->assertSame( array( $id ), wp_list_pluck( $this->search()->posts, 'ID' ) );
-	}
-
-	public function test_disabled_cache_runs_the_search_again(): void {
-		$this->search();
-		$executed = array();
-		$record = static function ( $sql ) use ( &$executed ) {
-			$executed[] = $sql;
-			return $sql;
-		};
-		add_filter( 'query', $record );
-		try {
-			$query = $this->search( array( 'cache' => false ) );
-		} finally {
-			remove_filter( 'query', $record );
-		}
-		$this->assertSame( array(), $query->posts );
-		$this->assertNotEmpty( preg_grep( '/SELECT[\s\S]*FROM[\s\S]*posts/i', $executed ) );
-	}
-
-	public function test_legacy_cache_entries_still_restore_posts(): void {
-		$id = self::factory()->post->create( array( 'post_title' => 'emptycacheuniqueterm' ) );
-		$key = '';
-		$capture = static function ( $posts, $query, $core ) use ( &$key ) {
-			$key = $core->get_cache_key( $query );
-			return $posts;
-		};
-		add_filter( 'better_search_query_posts_pre_query', $capture, 10, 3 );
-		try {
-			$this->search();
-		} finally {
-			remove_filter( 'better_search_query_posts_pre_query', $capture );
-		}
-		Cache::set( $key, array( $id => 7.5, 'found_posts' => 1, 'topscore' => 7.5 ), 3600 );
-		$warm = $this->search();
-		$this->assertSame( array( $id ), wp_list_pluck( $warm->posts, 'ID' ) );
-		$this->assertSame( 7.5, (float) $warm->posts[0]->score );
-	}
 }

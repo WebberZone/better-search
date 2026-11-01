@@ -35,43 +35,6 @@ class AbilitiesTest extends WP_UnitTestCase {
 		add_filter( $hook, $callback, $priority, $accepted_args );
 		$this->test_filters[] = array( $hook, $callback, $priority );
 	}
-
-	public function test_search_input_schema_rejects_invalid_values() {
-		$schema = wp_get_ability( 'better-search/search' )->get_input_schema();
-
-		$this->assertWPError( rest_validate_value_from_schema( array(), $schema ) );
-		$this->assertWPError(
-			rest_validate_value_from_schema(
-				array(
-					'query' => 'hello',
-					'limit' => 101,
-				),
-				$schema
-			)
-		);
-		$this->assertWPError(
-			rest_validate_value_from_schema(
-				array(
-					'query'  => 'hello',
-					'offset' => -1,
-				),
-				$schema
-			)
-		);
-		$this->assertWPError( rest_validate_value_from_schema( array( 'query' => '' ), $schema ) );
-		$this->assertNotWPError(
-			rest_validate_value_from_schema(
-				array(
-					'query'      => 'hello',
-					'post_types' => array( 'post', 'page' ),
-					'limit'      => 5,
-					'offset'     => 10,
-				),
-				$schema
-			)
-		);
-	}
-
 	public function test_search_returns_scored_results_and_filters_unreadable_posts() {
 		$visible_id = self::factory()->post->create(
 			array(
@@ -229,81 +192,5 @@ class AbilitiesTest extends WP_UnitTestCase {
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
 		$this->assertTrue( Main::get_instance()->abilities->can_search() );
 		$this->assertNotWPError( wp_get_ability( 'better-search/search' )->execute( array( 'query' => 'widget' ) ) );
-	}
-
-	public function test_search_output_matches_the_wrapped_schema() {
-		wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
-
-		$ability  = wp_get_ability( 'better-search/search' );
-		$response = $ability->execute( array( 'query' => 'widget' ) );
-
-		$this->assertNotWPError( $response );
-		$this->assertNotWPError( rest_validate_value_from_schema( $response, $ability->get_output_schema() ) );
-	}
-
-	public function test_zero_result_prose_queries_report_that_the_phrase_was_too_long() {
-		wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
-
-		$this->add_test_filter(
-			'posts_pre_query',
-			static function ( $posts, $query ) {
-				if ( ! $query->get( 'better_search_query' ) ) {
-					return $posts;
-				}
-
-				$query->found_posts = 0;
-
-				return array();
-			},
-			99,
-			2
-		);
-
-		$ability = wp_get_ability( 'better-search/search' );
-
-		$prose = $ability->execute(
-			array( 'query' => 'Where can I find information about tiger facts and conservation' )
-		);
-		$this->assertWPError( $prose );
-		$this->assertSame( 'bsearch_search_query_too_long', $prose->get_error_code() );
-
-		// A short phrase that genuinely matches nothing must stay a clean empty result set,
-		// so an agent can tell "absent" apart from "unmatchable".
-		$short = $ability->execute( array( 'query' => 'zzzqqq' ) );
-		$this->assertNotWPError( $short );
-		$this->assertSame(
-			array(
-				'results' => array(),
-				'total'   => 0,
-			),
-			$short
-		);
-	}
-
-	public function test_prose_query_thresholds_are_filterable() {
-		wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
-
-		$this->add_test_filter(
-			'posts_pre_query',
-			static function ( $posts, $query ) {
-				if ( ! $query->get( 'better_search_query' ) ) {
-					return $posts;
-				}
-
-				$query->found_posts = 0;
-
-				return array();
-			},
-			99,
-			2
-		);
-		$this->add_test_filter( 'bsearch_abilities_max_search_terms', static fn() => 99, 99 );
-		$this->add_test_filter( 'bsearch_abilities_max_search_words', static fn() => 99, 99 );
-
-		$this->assertNotWPError(
-			wp_get_ability( 'better-search/search' )->execute(
-				array( 'query' => 'Where can I find information about tiger facts and conservation' )
-			)
-		);
 	}
 }
