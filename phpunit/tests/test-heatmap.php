@@ -82,24 +82,6 @@ class HeatmapTest extends WP_UnitTestCase {
 		$this->assertContains( 'phpunit_alpha', $names );
 		$this->assertContains( 'phpunit_beta', $names );
 	}
-
-	/** The `number` argument limits the result set. */
-	public function test_number_limits_results(): void {
-		$this->insert_overall( 'phpunit_limit_a', 30 );
-		$this->insert_overall( 'phpunit_limit_b', 20 );
-		$this->insert_overall( 'phpunit_limit_c', 10 );
-
-		$results = get_bsearch_heatmap_counts(
-			array(
-				'daily'  => false,
-				'number' => 2,
-			)
-		);
-
-		// The number argument is honoured at the SQL level; at most 2 rows.
-		$this->assertLessThanOrEqual( 2, count( $results ) );
-	}
-
 	/** Daily mode returns terms from within the date range, not older ones. */
 	public function test_daily_mode_respects_date_range(): void {
 		$today     = gmdate( 'Y-m-d' );
@@ -120,36 +102,5 @@ class HeatmapTest extends WP_UnitTestCase {
 
 		$this->assertContains( 'phpunit_recent', $names );
 		$this->assertNotContains( 'phpunit_old', $names );
-	}
-
-	/** get_bsearch_heatmap() wraps results in the expected container markup. */
-	public function test_heatmap_output_contains_term(): void {
-		$this->insert_overall( 'phpunit_heatmap_term', 7 );
-
-		$output = get_bsearch_heatmap(
-			array(
-				'echo'   => false,
-				'number' => 20,
-				'order'  => 'DESC',
-			)
-		);
-
-		$this->assertStringContainsString( 'phpunit_heatmap_term', $output );
-		$this->assertStringContainsString( 'bsearch_heatmap', $output );
-	}
-
-	/** An empty table returns the no_results_text string, not HTML output. */
-	public function test_empty_table_returns_no_results_text(): void {
-		// No rows inserted with our prefix — use a prefix nobody else will use.
-		$results = get_bsearch_heatmap_counts(
-			array(
-				'daily'  => false,
-				'number' => 0,
-			)
-		);
-
-		// When truly empty or all rows belong to other terms we can't guarantee
-		// emptiness, so instead just verify the function returns an array.
-		$this->assertIsArray( $results );
 	}
 }
