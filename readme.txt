@@ -237,3 +237,12 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 
 = 4.5.3 =
 Security release. Stops front-end search from returning revisions of draft, private and password-protected posts, and attachments of unpublished posts. Update as soon as you can. Pro users with custom tables should reindex them from the Tools page.
+
+= 4.5.2 =
+Security release. Hardens password protection in thumbnail fallbacks and rejects unsafe thumbnail URLs. Also fixes errors with malformed thumbnail dimensions. Update recommended.
+
+= 4.5.1 =
+Faster Pro AI answers with a choice of model, better answer caching, and fixes for Pro AI crashes with ECSI. Adds Ask AI to theme search forms. Update recommended for all users.
+
+= 4.5.0 =
+Security and performance release. Adds optional Pro AI answers and ranking controls, and fixes multilingual caching and search accuracy. Requires WordPress 6.9 or later.
