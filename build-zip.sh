@@ -33,6 +33,7 @@ dev-helpers/
 dev-tools/
 wporg-assets/
 test-tools/
+tests/
 docs/
 build-assets.js
 eslint.config.*
