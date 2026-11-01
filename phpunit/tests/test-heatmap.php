@@ -82,6 +82,7 @@ class HeatmapTest extends WP_UnitTestCase {
 		$this->assertContains( 'phpunit_alpha', $names );
 		$this->assertContains( 'phpunit_beta', $names );
 	}
+
 	/** Daily mode returns terms from within the date range, not older ones. */
 	public function test_daily_mode_respects_date_range(): void {
 		$today     = gmdate( 'Y-m-d' );

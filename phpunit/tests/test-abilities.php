@@ -35,6 +35,7 @@ class AbilitiesTest extends WP_UnitTestCase {
 		add_filter( $hook, $callback, $priority, $accepted_args );
 		$this->test_filters[] = array( $hook, $callback, $priority );
 	}
+
 	public function test_search_returns_scored_results_and_filters_unreadable_posts() {
 		$visible_id = self::factory()->post->create(
 			array(
