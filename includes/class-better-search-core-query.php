@@ -475,8 +475,17 @@ class Better_Search_Core_Query extends \WP_Query {
 		$args['meta_query'] = $meta_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 
 		// Set post_status. Only attachments use inherit; revisions do too, which is why they never reach post_type.
+		$default_status = in_array( 'attachment', (array) $args['post_type'], true ) ? array( 'publish', 'inherit' ) : array( 'publish' );
+
+		// On the front end, users who cannot see others' unpublished posts get public statuses only, plus
+		// inherit for attachments. Admin searches keep WordPress's own status and capability handling.
+		if ( ! empty( $args['post_status'] ) && ! is_admin() && ! current_user_can( 'edit_others_posts' ) ) {
+			$allowed             = array_merge( array_values( get_post_stati( array( 'public' => true ) ) ), array_diff( $default_status, array( 'publish' ) ) );
+			$args['post_status'] = array_values( array_intersect( wp_parse_list( $args['post_status'] ), $allowed ) );
+		}
+
 		if ( empty( $args['post_status'] ) ) {
-			$args['post_status'] = in_array( 'attachment', (array) $args['post_type'], true ) ? array( 'publish', 'inherit' ) : array( 'publish' );
+			$args['post_status'] = $default_status;
 		}
 
 		// Set post__not_in for WP_Query using exclude_post_ids.
@@ -2153,9 +2162,12 @@ class Better_Search_Core_Query extends \WP_Query {
 	 * @return string Cache meta key.
 	 */
 	public function get_cache_key( $query, $context = 'query' ) {
-		$cache_attr          = $this->input_query_args;
-		$cache_attr['s']     = $this->search_query;
-		$cache_attr['paged'] = 1;
+		$cache_attr      = $this->input_query_args;
+		$cache_attr['s'] = $this->search_query;
+
+		// Key on the statuses actually queried, so users whose requested statuses were narrowed never share an entry.
+		$cache_attr['_effective_post_status'] = $this->query_args['post_status'] ?? null;
+		$cache_attr['paged']                  = 1;
 		if ( isset( $this->query_args['paged'] ) ) {
 			$cache_attr['paged'] = $this->query_args['paged'];
 		}
