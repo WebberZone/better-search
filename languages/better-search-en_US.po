@@ -129,8 +129,8 @@ msgid "Popular Searches"
 msgstr ""
 
 #: includes/admin/class-admin.php:361
-#: includes/admin/class-settings.php:162
-#: includes/admin/class-settings.php:1559
+#: includes/admin/class-settings.php:161
+#: includes/admin/class-settings.php:1558
 #: includes/admin/network/class-admin.php:116
 msgid "Settings"
 msgstr ""
@@ -238,7 +238,7 @@ msgstr ""
 #. translators: 1: Github Issues link, 2: Github page.
 #. translators: 1: Github issues link, 2: Github plugin page link.
 #: includes/admin/class-dashboard.php:618
-#: includes/admin/class-settings.php:1601
+#: includes/admin/class-settings.php:1600
 #: includes/admin/class-tools-page.php:667
 #, php-format
 msgid "<a href=\"%1$s\">Post an issue</a> on <a href=\"%2$s\">GitHub</a> (bug reports only)."
@@ -438,629 +438,629 @@ msgstr ""
 msgid "Test Search"
 msgstr ""
 
-#: includes/admin/class-settings.php:123
-#: includes/admin/class-settings.php:161
+#: includes/admin/class-settings.php:122
+#: includes/admin/class-settings.php:160
 msgid "Better Search Settings"
 msgstr ""
 
-#: includes/admin/class-settings.php:124
+#: includes/admin/class-settings.php:123
 msgid "Settings have been reset to their default values. Reload this page to view the updated settings."
 msgstr ""
 
-#: includes/admin/class-settings.php:125
+#: includes/admin/class-settings.php:124
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/class-settings.php:126
+#: includes/admin/class-settings.php:125
 msgid "Save Changes"
 msgstr ""
 
-#: includes/admin/class-settings.php:127
+#: includes/admin/class-settings.php:126
 msgid "Reset all settings"
 msgstr ""
 
-#: includes/admin/class-settings.php:128
+#: includes/admin/class-settings.php:127
 msgid "Do you really want to reset all these settings to their default values?"
 msgstr ""
 
-#: includes/admin/class-settings.php:129
+#: includes/admin/class-settings.php:128
 msgid "Modified from default setting"
 msgstr ""
 
-#: includes/admin/class-settings.php:179
-#: includes/admin/class-settings.php:1625
+#: includes/admin/class-settings.php:178
+#: includes/admin/class-settings.php:1624
 #: includes/admin/class-tools-page.php:676
 msgid "General"
 msgstr ""
 
-#: includes/admin/class-settings.php:180
+#: includes/admin/class-settings.php:179
 msgid "Performance"
 msgstr ""
 
-#: includes/admin/class-settings.php:181
-#: includes/admin/class-settings.php:1632
+#: includes/admin/class-settings.php:180
+#: includes/admin/class-settings.php:1631
 msgid "Search"
 msgstr ""
 
-#: includes/admin/class-settings.php:183
+#: includes/admin/class-settings.php:182
 msgid "Output"
 msgstr ""
 
-#: includes/admin/class-settings.php:184
-#: includes/admin/class-settings.php:1639
+#: includes/admin/class-settings.php:183
+#: includes/admin/class-settings.php:1638
 msgid "Heatmap"
 msgstr ""
 
-#: includes/admin/class-settings.php:397
+#: includes/admin/class-settings.php:396
 msgid "Enable seamless integration"
 msgstr ""
 
-#: includes/admin/class-settings.php:404
+#: includes/admin/class-settings.php:403
 msgid "Enable search tracking"
 msgstr ""
 
-#: includes/admin/class-settings.php:405
+#: includes/admin/class-settings.php:404
 msgid "If you turn this off, then the plugin will no longer track and display the popular search terms."
 msgstr ""
 
-#: includes/admin/class-settings.php:411
+#: includes/admin/class-settings.php:410
 msgid "Track admin searches"
 msgstr ""
 
-#: includes/admin/class-settings.php:412
+#: includes/admin/class-settings.php:411
 msgid "Disabling this option will stop searches made by admins from being tracked."
 msgstr ""
 
-#: includes/admin/class-settings.php:418
+#: includes/admin/class-settings.php:417
 msgid "Track editor user group searches"
 msgstr ""
 
-#: includes/admin/class-settings.php:419
+#: includes/admin/class-settings.php:418
 msgid "Disabling this option will stop searches made by editors from being tracked."
 msgstr ""
 
-#: includes/admin/class-settings.php:425
+#: includes/admin/class-settings.php:424
 msgid "Stop search engines from indexing search results pages"
 msgstr ""
 
-#: includes/admin/class-settings.php:426
+#: includes/admin/class-settings.php:425
 msgid "This is a recommended option to turn ON. Adds noindex,follow meta tag to the head of the page"
 msgstr ""
 
-#: includes/admin/class-settings.php:432
+#: includes/admin/class-settings.php:431
 msgid "Number format count"
 msgstr ""
 
-#: includes/admin/class-settings.php:433
+#: includes/admin/class-settings.php:432
 msgid "Activating this option will convert the search counts into a number format based on the locale"
 msgstr ""
 
-#: includes/admin/class-settings.php:439
+#: includes/admin/class-settings.php:438
 msgid "Link to Better Search plugin page"
 msgstr ""
 
 #. translators: 1: Opening a tag, 2: Closing a tag
-#: includes/admin/class-settings.php:615
+#: includes/admin/class-settings.php:614
 #, php-format
 msgid "Efficient Content Storage and Indexing (ECSI) creates a dedicated database table optimized for related content queries. This enhances performance, particularly on sites with a large number of posts or high traffic. To create the ECSI tables, visit the %1$sTools tab%2$s."
 msgstr ""
 
-#: includes/admin/class-settings.php:631
+#: includes/admin/class-settings.php:630
 msgid "Efficient Content Storage and Indexing (ECSI)"
 msgstr ""
 
-#: includes/admin/class-settings.php:638
+#: includes/admin/class-settings.php:637
 msgid "Use Custom Tables"
 msgstr ""
 
-#: includes/admin/class-settings.php:639
+#: includes/admin/class-settings.php:638
 msgid "Use dedicated custom tables for related posts queries. This can significantly improve performance on large sites with many posts."
 msgstr ""
 
-#: includes/admin/class-settings.php:648
+#: includes/admin/class-settings.php:647
 msgid "Optimization"
 msgstr ""
 
-#: includes/admin/class-settings.php:649
+#: includes/admin/class-settings.php:648
 msgid "Settings for optimizing performance"
 msgstr ""
 
-#: includes/admin/class-settings.php:654
+#: includes/admin/class-settings.php:653
 msgid "Enable cache"
 msgstr ""
 
-#: includes/admin/class-settings.php:655
+#: includes/admin/class-settings.php:654
 msgid "If activated, Better Search will use the Transients API to cache the search results for 1 hour."
 msgstr ""
 
-#: includes/admin/class-settings.php:661
+#: includes/admin/class-settings.php:660
 msgid "Time to cache"
 msgstr ""
 
-#: includes/admin/class-settings.php:662
+#: includes/admin/class-settings.php:661
 msgid "Enter the number of seconds to cache the output."
 msgstr ""
 
-#: includes/admin/class-settings.php:668
+#: includes/admin/class-settings.php:667
 msgid "Max Execution Time"
 msgstr ""
 
-#: includes/admin/class-settings.php:699
+#: includes/admin/class-settings.php:698
 msgid "Search Configuration"
 msgstr ""
 
-#: includes/admin/class-settings.php:705
+#: includes/admin/class-settings.php:704
 msgid "Number of Search Results per page"
 msgstr ""
 
-#: includes/admin/class-settings.php:706
+#: includes/admin/class-settings.php:705
 msgid "Set the maximum number of search results displayed per page."
 msgstr ""
 
-#: includes/admin/class-settings.php:713
+#: includes/admin/class-settings.php:712
 msgid "Post types to include"
 msgstr ""
 
-#: includes/admin/class-settings.php:714
+#: includes/admin/class-settings.php:713
 msgid "Select which post types you want to include in the search results."
 msgstr ""
 
-#: includes/admin/class-settings.php:720
+#: includes/admin/class-settings.php:719
 msgid "Enable MySQL FULLTEXT searching"
 msgstr ""
 
-#: includes/admin/class-settings.php:721
+#: includes/admin/class-settings.php:720
 msgid "Disabling this option will no longer give relevancy-based results."
 msgstr ""
 
-#: includes/admin/class-settings.php:727
+#: includes/admin/class-settings.php:726
 msgid "Minimum characters"
 msgstr ""
 
-#: includes/admin/class-settings.php:728
+#: includes/admin/class-settings.php:727
 msgid "Minimum characters required for a fulltext search. If the search term has fewer characters, a LIKE search will be performed instead."
 msgstr ""
 
-#: includes/admin/class-settings.php:737
+#: includes/admin/class-settings.php:736
 msgid "Activate BOOLEAN mode"
 msgstr ""
 
 #. translators: 1: Opening anchor tag, 2: Closing anchor tag,
-#: includes/admin/class-settings.php:739
+#: includes/admin/class-settings.php:738
 #, php-format
 msgid "Limits relevancy matches but removes several limitations of NATURAL LANGUAGE mode. %1$sCheck the mySQL docs for further information on BOOLEAN indices%2$s"
 msgstr ""
 
-#: includes/admin/class-settings.php:745
+#: includes/admin/class-settings.php:744
 msgid "Enable LIKE fallback"
 msgstr ""
 
-#: includes/admin/class-settings.php:746
+#: includes/admin/class-settings.php:745
 msgid "Enabling this option will perform a LIKE search when FULLTEXT returns zero results. This does not work with custom tables."
 msgstr ""
 
-#: includes/admin/class-settings.php:753
+#: includes/admin/class-settings.php:752
 msgid "Minimum relevance percentage"
 msgstr ""
 
-#: includes/admin/class-settings.php:754
+#: includes/admin/class-settings.php:753
 msgid "The minimum relevance percentage required for a post to be included in the search results. This is a number between 0 and 100."
 msgstr ""
 
-#: includes/admin/class-settings.php:771
+#: includes/admin/class-settings.php:770
 msgid "Fuzzy search level"
 msgstr ""
 
-#: includes/admin/class-settings.php:775
+#: includes/admin/class-settings.php:774
 msgid "Off"
 msgstr ""
 
-#: includes/admin/class-settings.php:776
+#: includes/admin/class-settings.php:775
 msgid "Low"
 msgstr ""
 
-#: includes/admin/class-settings.php:777
+#: includes/admin/class-settings.php:776
 msgid "Medium"
 msgstr ""
 
-#: includes/admin/class-settings.php:778
+#: includes/admin/class-settings.php:777
 msgid "High"
 msgstr ""
 
-#: includes/admin/class-settings.php:827
+#: includes/admin/class-settings.php:826
 msgid "Weighting"
 msgstr ""
 
-#: includes/admin/class-settings.php:833
+#: includes/admin/class-settings.php:832
 msgid "Post title"
 msgstr ""
 
-#: includes/admin/class-settings.php:841
+#: includes/admin/class-settings.php:840
 msgid "Post content"
 msgstr ""
 
-#: includes/admin/class-settings.php:842
+#: includes/admin/class-settings.php:841
 msgid "The weight to give to the post content when calculating the relevance of the post."
 msgstr ""
 
-#: includes/admin/class-settings.php:849
+#: includes/admin/class-settings.php:848
 msgid "Post excerpt"
 msgstr ""
 
-#: includes/admin/class-settings.php:850
+#: includes/admin/class-settings.php:849
 msgid "The weight to give to the post excerpt when calculating the relevance of the post."
 msgstr ""
 
-#: includes/admin/class-settings.php:859
+#: includes/admin/class-settings.php:858
 msgid "Categories"
 msgstr ""
 
-#: includes/admin/class-settings.php:860
+#: includes/admin/class-settings.php:859
 msgid "Weight to give category matches when calculating relevance."
 msgstr ""
 
-#: includes/admin/class-settings.php:869
+#: includes/admin/class-settings.php:868
 msgid "Tags"
 msgstr ""
 
-#: includes/admin/class-settings.php:870
+#: includes/admin/class-settings.php:869
 msgid "Weight to give tag matches when calculating relevance."
 msgstr ""
 
-#: includes/admin/class-settings.php:879
+#: includes/admin/class-settings.php:878
 msgid "Default taxonomy weight"
 msgstr ""
 
-#: includes/admin/class-settings.php:880
+#: includes/admin/class-settings.php:879
 msgid "Weight to give other taxonomy matches when calculating relevance."
 msgstr ""
 
-#: includes/admin/class-settings.php:954
+#: includes/admin/class-settings.php:953
 msgid "Use precomputed taxonomy score"
 msgstr ""
 
-#: includes/admin/class-settings.php:955
+#: includes/admin/class-settings.php:954
 msgid "Enable to use precomputed taxonomy score for relevance calculation. This can improve performance but will ignore the above weights for taxonomies when running live queries."
 msgstr ""
 
-#: includes/admin/class-settings.php:964
-#: includes/admin/class-settings.php:1013
+#: includes/admin/class-settings.php:963
+#: includes/admin/class-settings.php:1012
 msgid "Inclusion options"
 msgstr ""
 
-#: includes/admin/class-settings.php:970
+#: includes/admin/class-settings.php:969
 msgid "Search Post slug"
 msgstr ""
 
-#: includes/admin/class-settings.php:971
+#: includes/admin/class-settings.php:970
 msgid "Select to search the post slug."
 msgstr ""
 
-#: includes/admin/class-settings.php:978
+#: includes/admin/class-settings.php:977
 msgid "Search Excerpt"
 msgstr ""
 
-#: includes/admin/class-settings.php:979
+#: includes/admin/class-settings.php:978
 msgid "Select to search the post excerpt."
 msgstr ""
 
-#: includes/admin/class-settings.php:985
+#: includes/admin/class-settings.php:984
 msgid "Search Taxonomies"
 msgstr ""
 
-#: includes/admin/class-settings.php:986
+#: includes/admin/class-settings.php:985
 msgid "Select to include posts where all taxonomies match the search term(s). This includes categories, tags and custom post types."
 msgstr ""
 
-#: includes/admin/class-settings.php:992
+#: includes/admin/class-settings.php:991
 msgid "Search Meta"
 msgstr ""
 
-#: includes/admin/class-settings.php:993
+#: includes/admin/class-settings.php:992
 msgid "Select to include posts where meta values match the search term(s)."
 msgstr ""
 
-#: includes/admin/class-settings.php:999
+#: includes/admin/class-settings.php:998
 msgid "Search Authors"
 msgstr ""
 
-#: includes/admin/class-settings.php:1000
+#: includes/admin/class-settings.php:999
 msgid "Select to include posts from authors that match the search term(s)."
 msgstr ""
 
-#: includes/admin/class-settings.php:1006
+#: includes/admin/class-settings.php:1005
 msgid "Search Comments"
 msgstr ""
 
-#: includes/admin/class-settings.php:1007
+#: includes/admin/class-settings.php:1006
 msgid "Select to include posts where comments include the search term(s)."
 msgstr ""
 
-#: includes/admin/class-settings.php:1029
+#: includes/admin/class-settings.php:1028
 msgid "Exclusion options"
 msgstr ""
 
-#: includes/admin/class-settings.php:1035
+#: includes/admin/class-settings.php:1034
 msgid "Exclude password protected posts"
 msgstr ""
 
-#: includes/admin/class-settings.php:1036
+#: includes/admin/class-settings.php:1035
 msgid "Enabling this option will remove password protected posts from the search results"
 msgstr ""
 
-#: includes/admin/class-settings.php:1058
+#: includes/admin/class-settings.php:1057
 msgid "Exclude post IDs"
 msgstr ""
 
-#: includes/admin/class-settings.php:1059
+#: includes/admin/class-settings.php:1058
 msgid "Enter a comma separated list of post/page/custom post type IDs e.g. 188,1024,50"
 msgstr ""
 
-#: includes/admin/class-settings.php:1065
+#: includes/admin/class-settings.php:1064
 msgid "Exclude Categories"
 msgstr ""
 
-#: includes/admin/class-settings.php:1020
-#: includes/admin/class-settings.php:1066
+#: includes/admin/class-settings.php:1019
+#: includes/admin/class-settings.php:1065
 msgid "The field above has an autocomplete. Start typing in the starting letters, and it will prompt you with options. This field requires a specific format as displayed by the autocomplete."
 msgstr ""
 
-#: includes/admin/class-settings.php:1075
+#: includes/admin/class-settings.php:1074
 msgid "Banned words options"
 msgstr ""
 
-#: includes/admin/class-settings.php:1081
+#: includes/admin/class-settings.php:1080
 msgid "Filter these words"
 msgstr ""
 
-#: includes/admin/class-settings.php:1088
+#: includes/admin/class-settings.php:1087
 msgid "Match whole words only"
 msgstr ""
 
-#: includes/admin/class-settings.php:1095
+#: includes/admin/class-settings.php:1094
 msgid "Block searches containing banned words"
 msgstr ""
 
-#: includes/admin/class-settings.php:1224
+#: includes/admin/class-settings.php:1223
 msgid "Include heatmap on the search results"
 msgstr ""
 
-#: includes/admin/class-settings.php:1225
+#: includes/admin/class-settings.php:1224
 msgid "This option will display the heatmaps at the bottom of the search results page. Display popular searches to your visitors. Does not apply when Seamless mode is enabled."
 msgstr ""
 
-#: includes/admin/class-settings.php:1231
+#: includes/admin/class-settings.php:1230
 msgid "Heading of Overall Popular Searches"
 msgstr ""
 
-#: includes/admin/class-settings.php:1232
-#: includes/admin/class-settings.php:1240
+#: includes/admin/class-settings.php:1231
+#: includes/admin/class-settings.php:1239
 msgid "Displayed before the list of the searches as a the master heading"
 msgstr ""
 
-#: includes/admin/class-settings.php:1234
+#: includes/admin/class-settings.php:1233
 msgid "Popular searches:"
 msgstr ""
 
-#: includes/admin/class-settings.php:1239
+#: includes/admin/class-settings.php:1238
 msgid "Heading of Daily Popular Searches"
 msgstr ""
 
-#: includes/admin/class-settings.php:1242
+#: includes/admin/class-settings.php:1241
 msgid "Currently trending searches:"
 msgstr ""
 
-#: includes/admin/class-settings.php:1247
+#: includes/admin/class-settings.php:1246
 msgid "Currently trending should contain searches of how many days?"
 msgstr ""
 
-#: includes/admin/class-settings.php:1248
+#: includes/admin/class-settings.php:1247
 msgid "This settings allows you to change the number of days for the currently trending heatmap. This used to be called Daily popular in previous versions."
 msgstr ""
 
-#: includes/admin/class-settings.php:1255
+#: includes/admin/class-settings.php:1254
 msgid "Number of search terms to display"
 msgstr ""
 
-#: includes/admin/class-settings.php:1263
+#: includes/admin/class-settings.php:1262
 msgid "Font size of least popular search term"
 msgstr ""
 
-#: includes/admin/class-settings.php:1271
+#: includes/admin/class-settings.php:1270
 msgid "Font size of most popular search term"
 msgstr ""
 
-#: includes/admin/class-settings.php:1279
+#: includes/admin/class-settings.php:1278
 msgid "Color of least popular search term"
 msgstr ""
 
-#: includes/admin/class-settings.php:1290
+#: includes/admin/class-settings.php:1289
 msgid "Color of most popular search term"
 msgstr ""
 
-#: includes/admin/class-settings.php:1301
+#: includes/admin/class-settings.php:1300
 msgid "Text to include before each search term"
 msgstr ""
 
-#: includes/admin/class-settings.php:1308
+#: includes/admin/class-settings.php:1307
 msgid "Text to include after each search term"
 msgstr ""
 
-#: includes/admin/class-settings.php:1315
+#: includes/admin/class-settings.php:1314
 msgid "Open links in new window"
 msgstr ""
 
-#: includes/admin/class-settings.php:1322
+#: includes/admin/class-settings.php:1321
 msgid "Add nofollow to links"
 msgstr ""
 
-#: includes/admin/class-settings.php:1351
+#: includes/admin/class-settings.php:1350
 msgid "Display options"
 msgstr ""
 
-#: includes/admin/class-settings.php:1352
+#: includes/admin/class-settings.php:1351
 msgid "These settings allow you to customize the output of the search results page. Except for the highlight setting, these only apply when Seamless mode is off."
 msgstr ""
 
-#: includes/admin/class-settings.php:1357
+#: includes/admin/class-settings.php:1356
 msgid "Highlight search terms"
 msgstr ""
 
-#: includes/admin/class-settings.php:1358
+#: includes/admin/class-settings.php:1357
 msgid "If enabled, the search terms are wrapped with the class \"bsearch_highlight\" on the search results page. The default stylesheet includes CSS to add some colour."
 msgstr ""
 
-#: includes/admin/class-settings.php:1364
+#: includes/admin/class-settings.php:1363
 msgid "Highlight followed links"
 msgstr ""
 
-#: includes/admin/class-settings.php:1371
+#: includes/admin/class-settings.php:1370
 msgid "Display thumbnail"
 msgstr ""
 
-#: includes/admin/class-settings.php:1378
+#: includes/admin/class-settings.php:1377
 msgid "Display relevance"
 msgstr ""
 
-#: includes/admin/class-settings.php:1385
+#: includes/admin/class-settings.php:1384
 msgid "Display post type"
 msgstr ""
 
-#: includes/admin/class-settings.php:1392
+#: includes/admin/class-settings.php:1391
 msgid "Display author"
 msgstr ""
 
-#: includes/admin/class-settings.php:1399
+#: includes/admin/class-settings.php:1398
 msgid "Display date"
 msgstr ""
 
-#: includes/admin/class-settings.php:1406
+#: includes/admin/class-settings.php:1405
 msgid "Display taxonomies"
 msgstr ""
 
-#: includes/admin/class-settings.php:1413
+#: includes/admin/class-settings.php:1412
 msgid "Styles options"
 msgstr ""
 
-#: includes/admin/class-settings.php:1419
+#: includes/admin/class-settings.php:1418
 msgid "Length of excerpt (in words)"
 msgstr ""
 
-#: includes/admin/class-settings.php:1427
+#: includes/admin/class-settings.php:1426
 msgid "Include inbuilt styles"
 msgstr ""
 
-#: includes/admin/class-settings.php:1428
+#: includes/admin/class-settings.php:1427
 msgid "Uncheck this to disable this plugin from adding the inbuilt styles. You will need to add your own CSS styles if you disable this option"
 msgstr ""
 
-#: includes/admin/class-settings.php:1434
+#: includes/admin/class-settings.php:1433
 msgid "Custom CSS"
 msgstr ""
 
 #. translators: 1: Opening a tag, 2: Closing a tag, 3: Opening code tag, 4: Closing code tag.
-#: includes/admin/class-settings.php:1436
+#: includes/admin/class-settings.php:1435
 #, php-format
 msgid "Do not include %3$sstyle%4$s tags. Check out the %1$sFAQ%2$s for available CSS classes to style."
 msgstr ""
 
-#: includes/admin/class-settings.php:1578
+#: includes/admin/class-settings.php:1577
 #: includes/admin/sidebar.php:30
 msgid "Support"
 msgstr ""
 
-#: includes/admin/class-settings.php:1579
+#: includes/admin/class-settings.php:1578
 msgid "Donate"
 msgstr ""
 
-#: includes/admin/class-settings.php:1580
+#: includes/admin/class-settings.php:1579
 msgid "Contribute"
 msgstr ""
 
 #. translators: 1: Plugin support site link.
-#: includes/admin/class-settings.php:1596
+#: includes/admin/class-settings.php:1595
 #, php-format
 msgid "For more information or how to get support visit the <a href=\"%s\">support site</a>."
 msgstr ""
 
 #. translators: 1: WordPress.org support forums link.
-#: includes/admin/class-settings.php:1598
+#: includes/admin/class-settings.php:1597
 #, php-format
 msgid "Support queries should be posted in the <a href=\"%s\">WordPress.org support forums</a>."
 msgstr ""
 
-#: includes/admin/class-settings.php:1627
+#: includes/admin/class-settings.php:1626
 msgid "This screen provides the basic settings for configuring Better Search."
 msgstr ""
 
-#: includes/admin/class-settings.php:1628
+#: includes/admin/class-settings.php:1627
 msgid "Enable tracking, seamless mode and the cache, configure basic tracker and uninstall settings."
 msgstr ""
 
-#: includes/admin/class-settings.php:1634
+#: includes/admin/class-settings.php:1633
 msgid "This screen provides settings to tweak the search algorithm."
 msgstr ""
 
-#: includes/admin/class-settings.php:1635
+#: includes/admin/class-settings.php:1634
 msgid "Configure number of search results, enable FULLTEXT and BOOLEAN mode, tweak the weight of title and content and block words."
 msgstr ""
 
-#: includes/admin/class-settings.php:1641
+#: includes/admin/class-settings.php:1640
 msgid "This screen provides settings to tweak the output of the search heatmap to display popular searches."
 msgstr ""
 
-#: includes/admin/class-settings.php:1642
+#: includes/admin/class-settings.php:1641
 msgid "Configure title of the searches, period of trending searches, color and font sizes of the heatmap."
 msgstr ""
 
-#: includes/admin/class-settings.php:1646
+#: includes/admin/class-settings.php:1645
 msgid "Styles"
 msgstr ""
 
-#: includes/admin/class-settings.php:1648
+#: includes/admin/class-settings.php:1647
 msgid "This screen provides options to control the look and feel of the search page."
 msgstr ""
 
-#: includes/admin/class-settings.php:1649
+#: includes/admin/class-settings.php:1648
 msgid "Choose for default set of styles or add your own custom CSS to tweak the display of the search results page."
 msgstr ""
 
 #. translators: 1: Opening achor tag with Plugin page link, 2: Closing anchor tag, 3: Opening anchor tag with review link.
-#: includes/admin/class-settings.php:1672
+#: includes/admin/class-settings.php:1671
 #, php-format
 msgid "Thank you for using %1$sWebberZone Better_Search%2$s! Please %3$srate us%2$s on %3$sWordPress.org%2$s"
 msgstr ""
 
-#: includes/admin/class-settings.php:1701
+#: includes/admin/class-settings.php:1700
 #: includes/admin/class-tools-page.php:85
 #: includes/admin/network/class-admin.php:80
 msgid "Are you sure you want to clear the cache?"
 msgstr ""
 
-#: includes/admin/class-settings.php:1702
+#: includes/admin/class-settings.php:1701
 #: includes/admin/class-tools-page.php:86
 #: includes/admin/network/class-admin.php:81
 msgid "Failed to clear cache. Please try again."
 msgstr ""
 
-#: includes/admin/class-settings.php:1703
+#: includes/admin/class-settings.php:1702
 #: includes/admin/class-tools-page.php:87
 #: includes/admin/network/class-admin.php:82
 msgid "Request failed: "
 msgstr ""
 
+#: includes/admin/class-settings.php:1820
 #: includes/admin/class-settings.php:1821
-#: includes/admin/class-settings.php:1822
 msgid "Upgrade to Pro"
 msgstr ""
 
-#: includes/admin/class-settings.php:1837
+#: includes/admin/class-settings.php:1836
+#: includes/admin/class-settings.php:1838
 #: includes/admin/class-settings.php:1839
-#: includes/admin/class-settings.php:1840
 msgid "Start Settings Wizard"
 msgstr ""
 
-#: includes/admin/class-settings.php:1877
+#: includes/admin/class-settings.php:1876
 msgctxt "tag delimiter"
 msgid ","
 msgstr ""
@@ -1501,7 +1501,7 @@ msgstr ""
 msgid "Follow me"
 msgstr ""
 
-#: includes/class-better-search-core-query.php:2253
+#: includes/class-better-search-core-query.php:2265
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,what,when,where,who,will,with,www"
 msgstr ""
@@ -1782,19 +1782,19 @@ msgstr ""
 msgid "No results found."
 msgstr ""
 
-#: includes/admin/class-settings.php:1042
+#: includes/admin/class-settings.php:1041
 msgid "Exclude Front page"
 msgstr ""
 
-#: includes/admin/class-settings.php:1043
+#: includes/admin/class-settings.php:1042
 msgid "If you have designated a specific page for your Front page via Settings > Reading, enable this option to exclude it from appearing in the search results."
 msgstr ""
 
-#: includes/admin/class-settings.php:1050
+#: includes/admin/class-settings.php:1049
 msgid "Exclude Posts page"
 msgstr ""
 
-#: includes/admin/class-settings.php:1051
+#: includes/admin/class-settings.php:1050
 msgid "If you have designated a specific page for your Posts page via Settings > Reading, enable this option to exclude it from appearing in the search results."
 msgstr ""
 
@@ -1802,19 +1802,19 @@ msgstr ""
 msgid "Searches in period"
 msgstr ""
 
-#: includes/admin/class-settings.php:965
+#: includes/admin/class-settings.php:964
 msgid "These options control which parts of posts are searched explicitly irrespective of the weight settings above."
 msgstr ""
 
-#: includes/admin/class-settings.php:1030
+#: includes/admin/class-settings.php:1029
 msgid "These options control which posts are excluded from search results."
 msgstr ""
 
-#: includes/admin/class-settings.php:1076
+#: includes/admin/class-settings.php:1075
 msgid "These options control which words are filtered out of search results."
 msgstr ""
 
-#: includes/admin/class-settings.php:1365
+#: includes/admin/class-settings.php:1364
 msgid "If enabled, search terms are highlighted on posts/pages visited from the search results page. A JavaScript fallback ensures highlighting works even when the page is served from a full-page cache (e.g. LiteSpeed Cache)."
 msgstr ""
 
@@ -1838,288 +1838,288 @@ msgstr ""
 msgid "Custom index tables are not in use. Turn on \"Use Custom Tables\" on the Performance tab of the settings page, then index your content from the Tools page."
 msgstr ""
 
-#: includes/admin/class-settings.php:130
+#: includes/admin/class-settings.php:129
 msgid "Setting modified from its default value"
 msgstr ""
 
-#: includes/admin/class-settings.php:131
+#: includes/admin/class-settings.php:130
 msgid "Default"
 msgstr ""
 
-#: includes/admin/class-settings.php:132
+#: includes/admin/class-settings.php:131
 msgid "None"
 msgstr ""
 
-#: includes/admin/class-settings.php:178
-#: includes/admin/class-settings.php:470
+#: includes/admin/class-settings.php:177
+#: includes/admin/class-settings.php:469
 msgid "Features"
 msgstr ""
 
-#: includes/admin/class-settings.php:182
+#: includes/admin/class-settings.php:181
 msgid "Redirects"
 msgstr ""
 
-#: includes/admin/class-settings.php:365
+#: includes/admin/class-settings.php:364
 msgid "This has no effect while the feature is turned off on the Features tab."
 msgstr ""
 
-#: includes/admin/class-settings.php:398
+#: includes/admin/class-settings.php:397
 msgid "Use your theme's native search template instead of the plugin's own layout, while still sorting results by relevance."
 msgstr ""
 
-#: includes/admin/class-settings.php:440
+#: includes/admin/class-settings.php:439
 msgid "Adds a nofollow link to the Better Search plugin page at the bottom of the popular searches list."
 msgstr ""
 
-#: includes/admin/class-settings.php:471
+#: includes/admin/class-settings.php:470
 msgid "Turn off any features you do not use and the plugin will not load their code."
 msgstr ""
 
-#: includes/admin/class-settings.php:476
+#: includes/admin/class-settings.php:475
 msgid "Classic widgets"
 msgstr ""
 
-#: includes/admin/class-settings.php:477
+#: includes/admin/class-settings.php:476
 msgid "Registers the classic Search Box and Search Heatmap widgets."
 msgstr ""
 
-#: includes/admin/class-settings.php:483
+#: includes/admin/class-settings.php:482
 msgid "Shortcodes"
 msgstr ""
 
-#: includes/admin/class-settings.php:484
+#: includes/admin/class-settings.php:483
 msgid "Registers the [bsearch_form] and [bsearch_heatmap] shortcodes."
 msgstr ""
 
-#: includes/admin/class-settings.php:490
+#: includes/admin/class-settings.php:489
 msgid "Block patterns"
 msgstr ""
 
-#: includes/admin/class-settings.php:491
+#: includes/admin/class-settings.php:490
 msgid "Registers the Better Search block patterns (search form, search results, query loop) for the block editor."
 msgstr ""
 
-#: includes/admin/class-settings.php:497
+#: includes/admin/class-settings.php:496
 msgid "Live search"
 msgstr ""
 
-#: includes/admin/class-settings.php:498
+#: includes/admin/class-settings.php:497
 msgid "Enables the live search feature on the search form, including its AJAX endpoint."
 msgstr ""
 
-#: includes/admin/class-settings.php:525
+#: includes/admin/class-settings.php:524
 msgid "Pro Features"
 msgstr ""
 
-#: includes/admin/class-settings.php:531
-#: includes/admin/class-settings.php:764
+#: includes/admin/class-settings.php:530
+#: includes/admin/class-settings.php:763
 msgid "Fuzzy search"
 msgstr ""
 
-#: includes/admin/class-settings.php:532
+#: includes/admin/class-settings.php:531
 msgid "Loads the fuzzy search subsystem (MySQL functions, index tools and admin notices). Use the Fuzzy search level setting on the Search tab to control how loosely it matches."
 msgstr ""
 
-#: includes/admin/class-settings.php:539
+#: includes/admin/class-settings.php:538
 msgid "\"Did you mean\" suggestions"
 msgstr ""
 
-#: includes/admin/class-settings.php:540
+#: includes/admin/class-settings.php:539
 msgid "Suggest a corrected search term, drawn from your own search log, when a search returns zero results. Configure the mode and thresholds on the Search tab."
 msgstr ""
 
-#: includes/admin/class-settings.php:547
+#: includes/admin/class-settings.php:546
 msgid "Search redirects"
 msgstr ""
 
-#: includes/admin/class-settings.php:548
+#: includes/admin/class-settings.php:547
 msgid "Lets you send searches for chosen keywords straight to a specific post, page or URL. Configure the rules on the Redirects tab."
 msgstr ""
 
-#: includes/admin/class-settings.php:555
+#: includes/admin/class-settings.php:554
 msgid "Custom index tables (ECSI)"
 msgstr ""
 
-#: includes/admin/class-settings.php:556
+#: includes/admin/class-settings.php:555
 msgid "Enables the dedicated search index table subsystem, including the Tools tab reindexing and InnoDB conversion tools."
 msgstr ""
 
-#: includes/admin/class-settings.php:563
+#: includes/admin/class-settings.php:562
 msgid "Multisite search"
 msgstr ""
 
-#: includes/admin/class-settings.php:564
+#: includes/admin/class-settings.php:563
 msgid "Enables cross-site search across multiple blogs in a WordPress Multisite network."
 msgstr ""
 
-#: includes/admin/class-settings.php:571
+#: includes/admin/class-settings.php:570
 msgid "Network admin dashboard & stats"
 msgstr ""
 
-#: includes/admin/class-settings.php:572
+#: includes/admin/class-settings.php:571
 msgid "Adds the network admin dashboard and statistics pages on Multisite installs."
 msgstr ""
 
-#: includes/admin/class-settings.php:579
+#: includes/admin/class-settings.php:578
 msgid "Dashboard chart drill-down"
 msgstr ""
 
-#: includes/admin/class-settings.php:580
+#: includes/admin/class-settings.php:579
 msgid "Lets you click a bar in the daily searches chart to view the top searches for that day."
 msgstr ""
 
-#: includes/admin/class-settings.php:587
+#: includes/admin/class-settings.php:586
 msgid "WP-CLI commands"
 msgstr ""
 
-#: includes/admin/class-settings.php:588
+#: includes/admin/class-settings.php:587
 msgid "Registers the bsearch WP-CLI commands."
 msgstr ""
 
-#: includes/admin/class-settings.php:669
+#: includes/admin/class-settings.php:668
 msgid "Maximum time (in milliseconds) allowed for MySQL queries to execute. Setting to 0 disables this limit. If a query exceeds this time, Better Search will terminate it and display no results. Setting this value too low may prevent legitimate searches from completing."
 msgstr ""
 
-#: includes/admin/class-settings.php:772
+#: includes/admin/class-settings.php:771
 msgid "How loosely to match misspelled search terms; higher levels catch more typos but cost more to compute, so enable caching on high-traffic sites. Automatically disabled for queries using boolean operators (+, -, ~, >, <, *)."
 msgstr ""
 
-#: includes/admin/class-settings.php:788
+#: includes/admin/class-settings.php:787
 msgid "Minimum searches to qualify as a suggestion"
 msgstr ""
 
-#: includes/admin/class-settings.php:789
+#: includes/admin/class-settings.php:788
 msgid "A term must have been searched at least this many times before it can be suggested as a correction."
 msgstr ""
 
-#: includes/admin/class-settings.php:801
+#: includes/admin/class-settings.php:800
 msgid "\"Did you mean\" mode"
 msgstr ""
 
-#: includes/admin/class-settings.php:802
+#: includes/admin/class-settings.php:801
 msgid "Suggest shows a \"Did you mean\" link but still displays the original (empty) results. Auto-correct transparently re-runs the search with the corrected term when it actually returns results, showing a link back to the original query."
 msgstr ""
 
-#: includes/admin/class-settings.php:805
+#: includes/admin/class-settings.php:804
 msgid "Suggest (\"Did you mean\")"
 msgstr ""
 
-#: includes/admin/class-settings.php:806
+#: includes/admin/class-settings.php:805
 msgid "Auto-correct"
 msgstr ""
 
-#: includes/admin/class-settings.php:816
+#: includes/admin/class-settings.php:815
 msgid "Use enchant as a fallback"
 msgstr ""
 
-#: includes/admin/class-settings.php:817
+#: includes/admin/class-settings.php:816
 msgid "Falls back to the server's enchant spellchecker if your search log and site content have no close match."
 msgstr ""
 
-#: includes/admin/class-settings.php:834
+#: includes/admin/class-settings.php:833
 msgid "Weight given to the post title in the relevance calculation. Set higher than Post content to prioritize title matches."
 msgstr ""
 
-#: includes/admin/class-settings.php:1089
+#: includes/admin/class-settings.php:1088
 msgid "When enabled, banned words must match as complete words (e.g. blocks \"grow\" but not \"grown\"). When disabled, they can also match inside longer words."
 msgstr ""
 
-#: includes/admin/class-settings.php:1096
+#: includes/admin/class-settings.php:1095
 msgid "When enabled, if the search query contains any banned words, Better Search will stop and return no results."
 msgstr ""
 
-#: includes/admin/class-settings.php:1124
+#: includes/admin/class-settings.php:1123
 msgid "Search Redirects"
 msgstr ""
 
-#: includes/admin/class-settings.php:1125
+#: includes/admin/class-settings.php:1124
 msgid "Send searches for specific keywords straight to a post, page or URL instead of showing the results page. Redirected searches are still recorded in your search statistics."
 msgstr ""
 
-#: includes/admin/class-settings.php:1131
+#: includes/admin/class-settings.php:1130
 msgid "Redirect rules"
 msgstr ""
 
-#: includes/admin/class-settings.php:1137
+#: includes/admin/class-settings.php:1136
 msgid "New redirect"
 msgstr ""
 
-#: includes/admin/class-settings.php:1138
+#: includes/admin/class-settings.php:1137
 msgid "Add redirect"
 msgstr ""
 
-#: includes/admin/class-settings.php:1143
+#: includes/admin/class-settings.php:1142
 msgid "Keywords"
 msgstr ""
 
-#: includes/admin/class-settings.php:1144
+#: includes/admin/class-settings.php:1143
 msgid "Comma-separated list of search terms that trigger this redirect. e.g. support, help, contact us"
 msgstr ""
 
-#: includes/admin/class-settings.php:1152
+#: includes/admin/class-settings.php:1151
 msgid "Send visitors to this post or page"
 msgstr ""
 
-#: includes/admin/class-settings.php:1153
+#: includes/admin/class-settings.php:1152
 msgid "Enter the ID of the post or page. You can see it in the address bar while editing it, as post=123. The post must be published and not password protected. Leave this blank to use the URL below instead."
 msgstr ""
 
-#: includes/admin/class-settings.php:1160
+#: includes/admin/class-settings.php:1159
 msgid "Or send them to this URL"
 msgstr ""
 
-#: includes/admin/class-settings.php:1161
+#: includes/admin/class-settings.php:1160
 msgid "Only used when the post or page above is blank. Enter a full address such as https://example.com/help/, or a path on this site such as /contact/."
 msgstr ""
 
-#: includes/admin/class-settings.php:1168
+#: includes/admin/class-settings.php:1167
 msgid "Match type"
 msgstr ""
 
-#: includes/admin/class-settings.php:1173
+#: includes/admin/class-settings.php:1172
 msgid "Exact match"
 msgstr ""
 
-#: includes/admin/class-settings.php:1175
+#: includes/admin/class-settings.php:1174
 msgid "Contains"
 msgstr ""
 
-#: includes/admin/class-settings.php:1180
+#: includes/admin/class-settings.php:1179
 msgid "Redirect type"
 msgstr ""
 
-#: includes/admin/class-settings.php:1181
+#: includes/admin/class-settings.php:1180
 msgid "Use a temporary redirect unless you are certain the rule is permanent, because browsers cache permanent redirects aggressively."
 msgstr ""
 
-#: includes/admin/class-settings.php:1185
+#: includes/admin/class-settings.php:1184
 msgid "302 - Temporary"
 msgstr ""
 
-#: includes/admin/class-settings.php:1186
+#: includes/admin/class-settings.php:1185
 msgid "301 - Permanent"
 msgstr ""
 
-#: includes/admin/class-settings.php:1191
+#: includes/admin/class-settings.php:1190
 msgid "Enabled"
 msgstr ""
 
-#: includes/admin/class-settings.php:1192
+#: includes/admin/class-settings.php:1191
 msgid "Uncheck to switch this rule off without deleting it."
 msgstr ""
 
-#: includes/admin/class-settings.php:1414
+#: includes/admin/class-settings.php:1413
 msgid "These settings only apply when Seamless mode is off."
 msgstr ""
 
 #. translators: 1: repeater field name, 2: row position, 3: comma-separated list of missing subfield names.
-#: includes/admin/class-settings.php:1793
+#: includes/admin/class-settings.php:1792
 #, php-format
 msgid "%1$s row %2$d is missing %3$s, so it will be ignored."
 msgstr ""
 
 #. translators: 1: repeater field name, 2: row position, 3: comma/or-separated list of alternative subfield names.
-#: includes/admin/class-settings.php:1802
+#: includes/admin/class-settings.php:1801
 #, php-format
 msgid "%1$s row %2$d needs at least one of %3$s, so it will be ignored."
 msgstr ""
@@ -2136,119 +2136,119 @@ msgstr ""
 msgid "Showing results for %1$s — search instead for %2$s"
 msgstr ""
 
-#: includes/admin/class-settings.php:133
+#: includes/admin/class-settings.php:132
 msgid "Move item up"
 msgstr ""
 
-#: includes/admin/class-settings.php:134
+#: includes/admin/class-settings.php:133
 msgid "Move item down"
 msgstr ""
 
-#: includes/admin/class-settings.php:135
+#: includes/admin/class-settings.php:134
 msgid "Remove item"
 msgstr ""
 
-#: includes/admin/class-settings.php:383
+#: includes/admin/class-settings.php:382
 msgid "Unavailable on SQLite: the date calculation this uses is not supported, so the setting is ignored."
 msgstr ""
 
-#: includes/admin/class-settings.php:504
+#: includes/admin/class-settings.php:503
 msgid "API integrations"
 msgstr ""
 
-#: includes/admin/class-settings.php:505
+#: includes/admin/class-settings.php:504
 msgid "Control Better Search integrations exposed through WordPress APIs."
 msgstr ""
 
-#: includes/admin/class-settings.php:510
+#: includes/admin/class-settings.php:509
 msgid "REST API search integration"
 msgstr ""
 
-#: includes/admin/class-settings.php:511
+#: includes/admin/class-settings.php:510
 msgid "Uses Better Search relevance for WordPress REST API search requests."
 msgstr ""
 
-#: includes/admin/class-settings.php:518
+#: includes/admin/class-settings.php:517
 msgid "WordPress Abilities API"
 msgstr ""
 
-#: includes/admin/class-settings.php:519
+#: includes/admin/class-settings.php:518
 msgid "Registers Better Search abilities with WordPress when the Abilities API is available."
 msgstr ""
 
-#: includes/admin/class-settings.php:889
+#: includes/admin/class-settings.php:888
 msgid "Post slug"
 msgstr ""
 
-#: includes/admin/class-settings.php:890
+#: includes/admin/class-settings.php:889
 msgid "Score added when the post slug matches. Requires Search Post slug below. Unlike the title and content weights, this adds a flat score to any post whose slug matches."
 msgstr ""
 
-#: includes/admin/class-settings.php:899
+#: includes/admin/class-settings.php:898
 msgid "Meta fields"
 msgstr ""
 
-#: includes/admin/class-settings.php:900
+#: includes/admin/class-settings.php:899
 msgid "Score added when a meta value matches. Requires Search Meta below. Scoring meta matches adds a subquery for every candidate post, so leave this at 0 on sites with a large postmeta table."
 msgstr ""
 
-#: includes/admin/class-settings.php:909
+#: includes/admin/class-settings.php:908
 msgid "Authors"
 msgstr ""
 
-#: includes/admin/class-settings.php:910
+#: includes/admin/class-settings.php:909
 msgid "Score added when the author name matches. Requires Search Authors below."
 msgstr ""
 
-#: includes/admin/class-settings.php:919
+#: includes/admin/class-settings.php:918
 msgid "Comments"
 msgstr ""
 
-#: includes/admin/class-settings.php:920
+#: includes/admin/class-settings.php:919
 msgid "Score added when a comment matches. Requires Search Comments below. Scoring comment matches adds a subquery for every candidate post, so leave this at 0 on sites with a large comments table."
 msgstr ""
 
-#: includes/admin/class-settings.php:929
+#: includes/admin/class-settings.php:928
 msgid "Recency boost (%)"
 msgstr ""
 
-#: includes/admin/class-settings.php:930
+#: includes/admin/class-settings.php:929
 msgid "Blend post age into the ranking. 0 ranks purely by relevance. Raise it to favor fresher content: at a high enough boost a newer result with lower relevance will outrank an older, more relevant one. A strongly relevant old result can still outrank a weakly relevant new one, so raise the boost to favor freshness and raise the half-life below to keep older content competitive for longer. Relevance percentages and the minimum relevance filter keep using the unboosted score."
 msgstr ""
 
-#: includes/admin/class-settings.php:941
+#: includes/admin/class-settings.php:940
 msgid "Recency half-life (days)"
 msgstr ""
 
-#: includes/admin/class-settings.php:942
+#: includes/admin/class-settings.php:941
 msgid "Post age at which half of the recency boost has decayed. Larger values keep older content competitive for longer. Minimum 1 day. Values below 7 days recalculate hourly instead of daily."
 msgstr ""
 
-#: includes/admin/class-settings.php:1014
+#: includes/admin/class-settings.php:1013
 msgid "These options restrict search results to the selected terms. Leave blank to search everything."
 msgstr ""
 
-#: includes/admin/class-settings.php:1019
+#: includes/admin/class-settings.php:1018
 msgid "Only include Categories"
 msgstr ""
 
-#: includes/admin/class-settings.php:1082
+#: includes/admin/class-settings.php:1081
 msgid "Words in this list will be stripped out of the search results. Enter these as a comma-separated list. Use * as a wildcard for any run of letters or digits, e.g. spam* also matches spammer."
 msgstr ""
 
-#: includes/admin/class-settings.php:1132
+#: includes/admin/class-settings.php:1131
 msgid "Rules are checked in order, with exact matches taking priority over wildcard matches, and wildcard matches over \"contains\" matches. Matching ignores case, leading and trailing spaces, and repeated spaces. The same keyword may appear in more than one rule; the first rule that matches wins, so put the rule you want to take precedence higher up the list. Add bsearch_no_redirect=1 to a search URL to see the results page instead; this works for administrators only."
 msgstr ""
 
-#: includes/admin/class-settings.php:1144
+#: includes/admin/class-settings.php:1143
 msgid "With the wildcard match type, * stands for any characters, so help* matches \"help me\" and *help* matches \"please help me\"."
 msgstr ""
 
-#: includes/admin/class-settings.php:1169
+#: includes/admin/class-settings.php:1168
 msgid "Exact matches the whole search phrase. Wildcard matches the whole search phrase with * standing for any characters. Contains matches when the keyword appears anywhere in the search phrase."
 msgstr ""
 
-#: includes/admin/class-settings.php:1174
+#: includes/admin/class-settings.php:1173
 msgid "Wildcard (*)"
 msgstr ""
 
