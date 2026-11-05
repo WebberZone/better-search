@@ -1,6 +1,6 @@
 ---
 slug: better-search-settings-general
-title: "Better Search Settings – General"
+title: "Better Search Settings: General"
 products: [better-search]
 sections: ["01-bs-getting-started"]
 tags: [better-search, search, settings]

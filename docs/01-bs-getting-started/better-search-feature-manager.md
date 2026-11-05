@@ -11,7 +11,7 @@ toc: true
 
 [toc]
 
-The Feature Manager, introduced in [Better Search](https://webberzone.com/plugins/better-search/) 4.4.0, lets you turn off optional features you are not using. When a feature is turned off, its code never loads — saving memory and removing its settings from the rest of the interface.
+The Feature Manager, introduced in [Better Search](https://webberzone.com/plugins/better-search/) 4.4.0, lets you turn off optional features you are not using. When a feature is turned off, its code does not load. Its settings remain visible but are marked as having no effect and are not saved.
 
 Live search, REST API search integration and "Did you mean" suggestions start turned off. All other features are enabled by default. The Features tab appears at **Better Search → Settings**.
 
@@ -85,6 +85,6 @@ Registers the `bsearch` WP-CLI commands.
 
 ## How feature gating works
 
-When you turn off a feature, the plugin stops loading that feature's PHP classes on the next request. Settings that belong to a turned-off feature stay visible on the settings page and in the setup wizard — they are marked as having no effect and are not saved.
+When you turn off a feature, the plugin stops loading that feature's PHP classes on the next request. Settings that belong to a turned-off feature stay visible on the settings page and in the setup wizard: they are marked as having no effect and are not saved.
 
 Turning a feature back on restores all its settings and behavior immediately. You can change these toggles at any time.

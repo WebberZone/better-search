@@ -50,7 +50,7 @@ The input accepts these properties:
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `query` | String | Yes | The search phrase. Use a few distinctive keywords rather than a sentence. Accepts 1 to 500 characters. |
-| `limit` | Integer | No | Maximum number of results. Defaults to `10`; accepted values are `1`–`100`. |
+| `limit` | Integer | No | Maximum number of results. Defaults to `10`; accepted values are `1` to `100`. |
 | `offset` | Integer | No | Number of results to skip. Defaults to `0`. Use it with `total` to page through results. |
 | `post_types` | String array | No | Post type names to search. Only public, searchable post types are accepted; anything else is rejected. |
 
@@ -84,7 +84,7 @@ The output is an object with two properties:
 
 `total` is the number of posts matching the search, ignoring `limit` and `offset`. Compare it with the number of results you have already received to decide whether to request another page.
 
-`relevance` is the raw score Better Search calculated for that result. It is meaningful only when comparing results within the same response — scores from two different searches are not comparable. The search results page shows this as a percentage instead.
+`relevance` is the raw score Better Search calculated for that result. It is meaningful only when comparing results within the same response: scores from two different searches are not comparable. The search results page shows this as a percentage instead.
 
 `title` and `excerpt` are plain text, with markup and HTML entities removed.
 
@@ -96,7 +96,7 @@ The ability uses Better Search's normal query and saved settings. It does not ch
 
 ### Long search phrases
 
-Because search terms are combined with `AND`, a phrase written as a sentence or question usually matches nothing. Rather than return an empty result set — which would suggest your site has no such content — the ability returns an error when a search finds nothing *and* the phrase was longer than a few keywords:
+Because search terms are combined with `AND`, a phrase written as a sentence or question usually matches nothing. Rather than return an empty result set (which would suggest your site has no such content), the ability returns an error when a search finds nothing *and* the phrase was longer than a few keywords:
 
 > The search ran and matched nothing, but the phrase was too long to match reliably: it produced 7 search terms, which are combined with AND. Search again with at most 4 distinctive keywords instead of a sentence or question. A zero result here does not mean the site has no content on the subject.
 
@@ -154,7 +154,7 @@ Better Search Pro registers three more abilities.
 }
 ```
 
-`period` accepts `overall` for lifetime totals or `daily` for a recent window — not only the current day. The window is the number of days set by **Currently trending should contain searches of how many days?** on the [Heatmap settings](https://webberzone.com/support/knowledgebase/better-search-settings-heatmap/), which defaults to `7`. `limit` defaults to `20` and accepts `1`–`100`.
+`period` accepts `overall` for lifetime totals or `daily` for a recent window that can span several days. The window is the number of days set by **Currently trending should contain searches of how many days?** on the [Heatmap settings](https://webberzone.com/support/knowledgebase/better-search-settings-heatmap/), which defaults to `7`. `limit` defaults to `20` and accepts `1` to `100`.
 
 The output is an array of objects with `term` and `count` properties.
 
@@ -168,7 +168,7 @@ The output is an array of objects with `term` and `count` properties.
 }
 ```
 
-The result contains a `suggestion` property — `"english"` for the example above, or `null` when there is nothing to suggest.
+The result contains a `suggestion` property: `"english"` for the example above, or `null` when there is nothing to suggest.
 
 It only answers for a phrase that found nothing. Correcting a phrase that already matches content produces misleading suggestions, so a search with results always returns `null`.
 

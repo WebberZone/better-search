@@ -14,14 +14,14 @@ order: 0
 
 Highlighting has two settings on the **Output** tab of the Better Search settings page:
 
-- **Highlight search terms** — wraps matching terms in the search results excerpt with the `bsearch_highlight` CSS class.
-- **Highlight followed links** — when a visitor clicks through from the search results page to a post or page, the terms they searched for are highlighted there too.
+- **Highlight search terms**: wraps matching terms in the search results excerpt with the `bsearch_highlight` CSS class.
+- **Highlight followed links**: when a visitor clicks through from the search results page to a post or page, the terms they searched for are highlighted there too.
 
 Both settings work together with two different mechanisms depending on where the highlighting needs to happen:
 
 ### Server-side highlighting (search results page)
 
-On the search results page itself, Better Search highlights terms server-side. The `Display` class hooks into `the_title`, `the_content`, `get_the_excerpt`, and [`the_bsearch_excerpt`](https://webberzone.dev/better-search/hooks/the_bsearch_excerpt/) and wraps each matched term while the page is being generated. Because this only runs on `is_search()`, it always works — it doesn't depend on the visitor's browser or any caching layer.
+On the search results page itself, Better Search highlights terms server-side. The `Display` class hooks into `the_title`, `the_content`, `get_the_excerpt`, and [`the_bsearch_excerpt`](https://webberzone.dev/better-search/hooks/the_bsearch_excerpt/) and wraps each matched term while the page is being generated. Because this only runs on `is_search()`, it always works: it doesn't depend on the visitor's browser or any caching layer.
 
 ### Client-side highlighting (followed links)
 
@@ -33,7 +33,7 @@ To handle this, Better Search enqueues a small JavaScript file (`better-search-h
 2. Extracts the search terms from the referrer URL (supporting both `?s=term` and pretty-permalink `/search/term/` formats).
 3. Walks the page's text nodes within the main content area and wraps each matching term in a highlight element.
 
-If the referrer isn't a search on your site, or no search terms can be extracted, the script does nothing — it never adds highlighting based on the current page's own URL.
+If the referrer isn't a search on your site, or no search terms can be extracted, the script does nothing: it never adds highlighting based on the current page's own URL.
 
 ## Developer reference
 
@@ -87,7 +87,7 @@ add_filter( 'bsearch_highlight_js_selectors', function () {
 } );
 ```
 
-Default: `.entry-content, .entry-title, .entry-summary`. Use this if your theme wraps post content in different markup — anything not matched by the selector is left untouched.
+Default: `.entry-content, .entry-title, .entry-summary`. Use this if your theme wraps post content in different markup: anything not matched by the selector is left untouched.
 
 #### [`bsearch_highlight_use_boundaries`](https://webberzone.dev/better-search/hooks/bsearch_highlight_use_boundaries/)
 
@@ -109,11 +109,11 @@ Default: `false`, which matches terms inside larger words so CJK and emoji conte
 - "Highlight followed links" is enabled in settings.
 - The current page is a singular post or page (`is_singular()`).
 
-It is not enqueued on archives, the homepage, or the search results page itself — those are handled server-side.
+It is not enqueued on archives, the homepage, or the search results page itself: those are handled server-side.
 
 ## See also
 
-- [Better Search Settings – Output](https://webberzone.com/support/knowledgebase/better-search-settings-output/)
+- [Better Search Settings: Output](https://webberzone.com/support/knowledgebase/better-search-settings-output/)
 - [`the_bsearch_excerpt`](https://webberzone.dev/better-search/hooks/the_bsearch_excerpt/)
 - [`bsearch_highlight_tag`](https://webberzone.dev/better-search/hooks/bsearch_highlight_tag/)
 - [`bsearch_highlight_class`](https://webberzone.dev/better-search/hooks/bsearch_highlight_class/)

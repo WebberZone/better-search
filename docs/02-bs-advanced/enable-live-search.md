@@ -6,7 +6,10 @@ sections: ["02-bs-advanced"]
 tags: [better-search, live-search, search]
 status: publish
 order: 0
+toc: true
 ---
+
+[toc]
 
 ## What is Live Search?
 

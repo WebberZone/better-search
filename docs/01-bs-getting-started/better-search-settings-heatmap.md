@@ -1,6 +1,6 @@
 ---
 slug: better-search-settings-heatmap
-title: "Better Search Settings – Heatmap"
+title: "Better Search Settings: Heatmap"
 products: [better-search]
 sections: ["01-bs-getting-started"]
 tags: [better-search, search, settings]

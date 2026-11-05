@@ -7,7 +7,10 @@ tags: [better-search, search]
 status: publish
 order: 0
 featured_image: "https://webberzone.com/wp-content/uploads/2024/11/Better-Search-Pro-Search-everything.webp"
+toc: true
 ---
+
+[toc]
 
 [Better Search](https://webberzone.com/plugins/better-search/) uses <a href="https://dev.mysql.com/doc/refman/8.4/en/fulltext-search.html" target="_blank" rel="noreferrer noopener">MySQL Full-Text search</a> to rank results by relevance. Here is how Better Search processes search queries, ranks posts, and calculates relevance.
 

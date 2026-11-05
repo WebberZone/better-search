@@ -43,12 +43,12 @@ wp bsearch search "search term"
 
 #### Options
 
-- `--limit=<number>` — Number of results (default: 10)
-- `--post-type=<types>` — Comma-separated post types (default: post)
-- `--[no-]use-fulltext` — Force FULLTEXT search ON or OFF
-- `--[no-]boolean-mode` — Use boolean mode for FULLTEXT ON or OFF
-- `--format=<format>` — Output format: table, json, csv (default: table)
-- `--verbose` — Show detailed output
+- `--limit=<number>`: Number of results (default: 10)
+- `--post-type=<types>`: Comma-separated post types (default: post)
+- `--[no-]use-fulltext`: Force FULLTEXT search ON or OFF
+- `--[no-]boolean-mode`: Use boolean mode for FULLTEXT ON or OFF
+- `--format=<format>`: Output format: table, json, csv (default: table)
+- `--verbose`: Show detailed output
 
 #### Examples
 
@@ -73,9 +73,9 @@ wp bsearch status
 
 Options:
 
-- `--format=<format>` — Output format: table, json, csv
-- `--verbose` — Show detailed information
-- `--network` — Show status for all network sites
+- `--format=<format>`: Output format: table, json, csv
+- `--verbose`: Show detailed information
+- `--network`: Show status for all network sites
 
 ### Cache
 
@@ -89,10 +89,10 @@ wp bsearch cache clear
 
 Options:
 
-- `--network` — Clear cache for all sites in the network
-- `--force` — Skip confirmation
-- `--dry-run` — Preview without making changes
-- `--verbose` — Show detailed output
+- `--network`: Clear cache for all sites in the network
+- `--force`: Skip confirmation
+- `--dry-run`: Preview without making changes
+- `--verbose`: Show detailed output
 
 #### Warm Cache
 
@@ -104,10 +104,10 @@ wp bsearch cache warm
 
 Options:
 
-- `--limit=<number>` — Number of top searches to warm (default: 50)
-- `--batch-size=<size>` — Batch size for processing (default: 100)
-- `--dry-run` — Preview without making changes
-- `--force` — Force cache warming even if cache exists
+- `--limit=<number>`: Number of top searches to warm (default: 50)
+- `--batch-size=<size>`: Batch size for processing (default: 100)
+- `--dry-run`: Preview without making changes
+- `--force`: Force cache warming even if cache exists
 
 #### Cache Status
 
@@ -117,7 +117,7 @@ wp bsearch cache status
 
 Options:
 
-- `--format=<format>` — Output format: table, json, csv
+- `--format=<format>`: Output format: table, json, csv
 
 ### Efficient Content Storage and Indexing (ECSI)
 
@@ -133,8 +133,8 @@ wp bsearch ecsi status --network
 
 Options:
 
-- `--format=<format>` — Output format: table, json, csv. Default: table
-- `--network` — Show status for all sites in the network
+- `--format=<format>`: Output format: table, json, csv. Default: table
+- `--network`: Show status for all sites in the network
 
 #### Enable and disable
 
@@ -148,8 +148,8 @@ Turns ECSI on or off. Without options, the current site is changed.
 
 Options:
 
-- `--network` — Apply to all sites in the network (multisite only)
-- `--blog-id=<id>` — Apply to a specific site (multisite only)
+- `--network`: Apply to all sites in the network (multisite only)
+- `--blog-id=<id>`: Apply to a specific site (multisite only)
 
 #### Reindex
 
@@ -163,12 +163,12 @@ Indexes published posts into the custom tables.
 
 Options:
 
-- `--force` — Empty the tables before reindexing
-- `--batch-size=<size>` — Posts processed per batch, from 1 to 1000. Default: 100
-- `--post-type=<types>` — Comma-separated post types to index. Default: all public post types
-- `--dry-run` — Show what would be indexed without making changes
-- `--verbose` — Show per-post output instead of a progress bar
-- `--network` — Reindex all sites in the network (multisite only)
+- `--force`: Empty the tables before reindexing
+- `--batch-size=<size>`: Posts processed per batch, from 1 to 1000. Default: 100
+- `--post-type=<types>`: Comma-separated post types to index. Default: all public post types
+- `--dry-run`: Show what would be indexed without making changes
+- `--verbose`: Show per-post output instead of a progress bar
+- `--network`: Reindex all sites in the network (multisite only)
 
 Each post that cannot be written is reported as a warning. From Better Search Pro 4.5.3, the command finishes processing every selected site, then exits with an error when any post failed, so scripts and deployments can detect an incomplete index. The failed posts are listed under **Better Search → Tools**, where you can retry them after fixing the database problem.
 

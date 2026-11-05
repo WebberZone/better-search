@@ -1,6 +1,6 @@
 ---
 slug: better-search-settings-search
-title: "Better Search Settings – Search"
+title: "Better Search Settings: Search"
 products: [better-search]
 sections: ["01-bs-getting-started"]
 tags: [better-search, search, settings]
@@ -58,8 +58,8 @@ With BOOLEAN mode active, visitors can use the following operators in the search
 A few things worth knowing:
 
 - **`-` and `~` are not the same.** `-` filters a post out of the results; `~` keeps it but ranks it lower. Use `~` for "noise" words that shouldn't disqualify a post.
-- **`>` and `<` only affect ranking, not matching.** They change the relevance score, so the effect is only visible when results are sorted by relevance (the default). They also do not make a word required — a word with no `+` in front of it stays optional. A typical use is inside a group: `+wordpress +(>plugin <theme)` returns posts containing "wordpress" plus at least one of "plugin" or "theme", ranking the "plugin" matches higher.
-- **Very short words are ignored.** MySQL skips words below its minimum token length — 3 characters for InnoDB (`innodb_ft_min_token_size`) and 4 for MyISAM (`ft_min_word_len`) by default.
+- **`>` and `<` only affect ranking, not matching.** They change the relevance score, so the effect is only visible when results are sorted by relevance (the default). They also do not make a word required: a word with no `+` in front of it stays optional. A typical use is inside a group: `+wordpress +(>plugin <theme)` returns posts containing "wordpress" plus at least one of "plugin" or "theme", ranking the "plugin" matches higher.
+- **Very short words are ignored.** MySQL skips words below its minimum token length: 3 characters for InnoDB (`innodb_ft_min_token_size`) and 4 for MyISAM (`ft_min_word_len`) by default.
 - **Phrase searches work even with BOOLEAN mode off.** If a query contains double-quoted text, Better Search enables BOOLEAN mode automatically for that query so the phrase is matched correctly.
 - **Fuzzy search is skipped for these queries.** If a search uses any of `+ - ~ > < *`, [fuzzy matching](https://webberzone.com/support/knowledgebase/fuzzy-matches/) is automatically disabled for it, since the visitor has asked for a precise query.
 - **A query can be nothing but exclusions.** `-theme` on its own returns every post that does not contain "theme", rather than no results. Exclusions are applied across each of the search fields you have enabled below, and are preserved when fuzzy LIKE matching is in use.
@@ -73,7 +73,7 @@ If FULLTEXT returns zero results, a LIKE search is performed instead.
 
 ### Minimum relevance percentage *(Pro only)*
 
-The minimum relevance percentage required for a post to be included in the search results (0–100).
+The minimum relevance percentage required for a post to be included in the search results (0 to 100).
 
 ### Fuzzy search level *(Pro only)*
 
@@ -86,11 +86,11 @@ Enable [fuzzy search](https://webberzone.com/support/knowledgebase/fuzzy-matches
 
 These settings only appear when **"Did you mean" suggestions** is turned on in the [Features tab](https://webberzone.com/support/knowledgebase/better-search-feature-manager/). See [Did You Mean Spelling Suggestions](https://webberzone.com/support/knowledgebase/did-you-mean-spelling-suggestions/) for full configuration details.
 
-**Minimum searches to qualify as a suggestion** — a term must have been searched at least this many times before it can be suggested as a correction. Default: `3`.
+**Minimum searches to qualify as a suggestion**: a term must have been searched at least this many times before it can be suggested as a correction. Default: `3`.
 
-**"Did you mean" mode** — **Suggest ("Did you mean")** shows a "Did you mean" link but still displays the original (empty) results. **Auto-correct** transparently re-runs the search with the corrected term when it actually returns results, showing a link back to the original query.
+**"Did you mean" mode**: **Suggest ("Did you mean")** shows a "Did you mean" link but still displays the original (empty) results. **Auto-correct** transparently re-runs the search with the corrected term when it actually returns results, showing a link back to the original query.
 
-**Use enchant as a fallback** — falls back to the server's enchant spellchecker if your search log and site content have no close match. Disabled if the extension isn't installed. See [Installing enchant on your server](https://webberzone.com/support/knowledgebase/did-you-mean-spelling-suggestions/#installing-enchant-on-your-server).
+**Use enchant as a fallback**: falls back to the server's enchant spellchecker if your search log and site content have no close match. Disabled if the extension isn't installed. See [Installing enchant on your server](https://webberzone.com/support/knowledgebase/did-you-mean-spelling-suggestions/#installing-enchant-on-your-server).
 
 ## Weighting
 

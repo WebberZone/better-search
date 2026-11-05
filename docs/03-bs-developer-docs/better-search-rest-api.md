@@ -38,4 +38,4 @@ All parameters are optional. If not provided, Better Search will use its default
 
 ## See also
 
-- [Better Search Abilities API](https://webberzone.com/support/knowledgebase/better-search-abilities-api/) — a separate endpoint under `wp-abilities/v1` that exposes Better Search to AI assistants. It does not change the WordPress search endpoint described on this page.
+- [Better Search Abilities API](https://webberzone.com/support/knowledgebase/better-search-abilities-api/): a separate endpoint under `wp-abilities/v1` that exposes Better Search to AI assistants. It does not change the WordPress search endpoint described on this page.

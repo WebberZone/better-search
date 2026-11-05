@@ -11,7 +11,7 @@ toc: true
 
 [toc]
 
-Search redirects, introduced in [Better Search Pro](https://webberzone.com/plugins/better-search/pro/) 4.4.0, send visitors straight to a specific post, page or URL when they search for a matching keyword — before the search results page loads. Redirected searches are still recorded in your search statistics.
+Search redirects, introduced in [Better Search Pro](https://webberzone.com/plugins/better-search/pro/) 4.4.0, send visitors straight to a specific post, page or URL when they search for a matching keyword, before the search results page loads. Redirected searches are still recorded in your search statistics.
 
 ## Enabling search redirects
 
@@ -24,12 +24,12 @@ Search redirects, introduced in [Better Search Pro](https://webberzone.com/plugi
 
 Click **Add redirect** and fill in these fields:
 
-- **Keywords** — comma-separated list of search terms that trigger this redirect (e.g. `support, help, contact us`). With the **Wildcard** match type, `*` stands for any characters.
-- **Send visitors to this post or page** — enter the ID of the post or page. The post must be published and not password protected. Leave this blank to use a URL instead.
-- **Or send them to this URL** — a full address such as `https://example.com/help/`, or a path on this site such as `/contact/`. Only used when the post or page field is blank.
-- **Match type** — **Exact match** matches the whole search phrase. **Wildcard (`*`)** matches the whole search phrase with `*` standing for any characters. **Contains** matches when the keyword appears anywhere in the phrase.
-- **Redirect type** — **302 (Temporary)** or **301 (Permanent)**. Use 302 unless you are certain the rule is permanent — browsers cache 301 redirects aggressively.
-- **Enabled** — uncheck to switch a rule off without deleting it.
+- **Keywords**: comma-separated list of search terms that trigger this redirect (e.g. `support, help, contact us`). With the **Wildcard** match type, `*` stands for any characters.
+- **Send visitors to this post or page**: enter the ID of the post or page. The post must be published and not password protected. Leave this blank to use a URL instead.
+- **Or send them to this URL**: a full address such as `https://example.com/help/`, or a path on this site such as `/contact/`. Only used when the post or page field is blank.
+- **Match type**: **Exact match** matches the whole search phrase. **Wildcard (`*`)** matches the whole search phrase with `*` standing for any characters. **Contains** matches when the keyword appears anywhere in the phrase.
+- **Redirect type**: **302 (Temporary)** or **301 (Permanent)**. Use 302 unless you are certain the rule is permanent: browsers cache 301 redirects aggressively.
+- **Enabled**: uncheck to switch a rule off without deleting it.
 
 You can add as many rules as you need. Rules are checked in order, with exact matches always taking priority over wildcard matches, and wildcard matches over "contains" matches. Matching ignores case, leading/trailing spaces, and repeated spaces.
 
@@ -51,13 +51,13 @@ Wildcard keywords are anchored, so the pattern has to cover the whole search phr
 | Keyword | Matches | Does not match |
 | --- | --- | --- |
 | `help*` | help, help me, helpdesk | please help me |
-| `*help*` | help, please help me, self-help guide | — |
+| `*help*` | help, please help me, self-help guide | Not applicable |
 | `*guide` | buying guide, style guide | guide to WordPress |
-| `*` | every search | — |
+| `*` | every search | Not applicable |
 
 - A keyword with no `*` behaves exactly like an exact match.
 - A bare `*` is a catch-all. Because wildcard rules are checked before "contains" rules, a catch-all rule stops any "contains" rule further down the list from ever running.
-- Characters that have a special meaning in patterns elsewhere — such as `.`, `(` or `+` — are treated literally, so a keyword like `f(x)*` matches the text you typed.
+- Characters that have a special meaning in patterns elsewhere: such as `.`, `(` or `+`: are treated literally, so a keyword like `f(x)*` matches the text you typed.
 
 ### Bypassing redirects for testing
 
@@ -65,10 +65,10 @@ Append `?bsearch_no_redirect=1` to any search URL to see the results page instea
 
 ## Developer hooks
 
-- [`bsearch_before_search_redirect`](https://webberzone.dev/better-search/hooks/bsearch_before_search_redirect/) — fires before a search query is redirected. Receives the destination URL, matched rule array, and search query.
-- [`bsearch_search_redirects`](https://webberzone.dev/better-search/hooks/bsearch_search_redirects/) — filters the array of redirect rules before matching.
-- [`bsearch_is_redirectable_search`](https://webberzone.dev/better-search/hooks/bsearch_is_redirectable_search/) — filters whether the current request may be redirected by search rules. Return `false` to skip redirection for the current request.
-- [`bsearch_allow_offsite_redirect`](https://webberzone.dev/better-search/hooks/bsearch_allow_offsite_redirect/) — filters whether a redirect may send visitors off-site. Default `true`. Return `false` to restrict redirects to the current site only.
+- [`bsearch_before_search_redirect`](https://webberzone.dev/better-search/hooks/bsearch_before_search_redirect/): fires before a search query is redirected. Receives the destination URL, matched rule array, and search query.
+- [`bsearch_search_redirects`](https://webberzone.dev/better-search/hooks/bsearch_search_redirects/): filters the array of redirect rules before matching.
+- [`bsearch_is_redirectable_search`](https://webberzone.dev/better-search/hooks/bsearch_is_redirectable_search/): filters whether the current request may be redirected by search rules. Return `false` to skip redirection for the current request.
+- [`bsearch_allow_offsite_redirect`](https://webberzone.dev/better-search/hooks/bsearch_allow_offsite_redirect/): filters whether a redirect may send visitors off-site. Default `true`. Return `false` to restrict redirects to the current site only.
 
 ## See also
 
