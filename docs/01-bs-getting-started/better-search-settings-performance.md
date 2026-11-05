@@ -1,6 +1,6 @@
 ---
 slug: better-search-settings-performance
-title: "Better Search Settings – Performance"
+title: "Better Search Settings: Performance"
 products: [better-search]
 sections: ["01-bs-getting-started"]
 tags: [better-search, search, settings]

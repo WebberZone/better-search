@@ -29,8 +29,8 @@ Better Search detects WPML through the `SitePress` class. For each result it cal
 
 Two filters customize the WPML lookup:
 
-- `bsearch_wpml_return_original` — controls whether the original post is returned when a translation is missing. Default: `false`.
-- `bsearch_object_id_cur_lang` — filters the post object resolved for the current language.
+- `bsearch_wpml_return_original`: controls whether the original post is returned when a translation is missing. Default: `false`.
+- `bsearch_object_id_cur_lang`: filters the post object resolved for the current language.
 
 ## Polylang
 

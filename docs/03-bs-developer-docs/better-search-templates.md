@@ -45,4 +45,4 @@ The template uses custom block patterns: `better-search/search-form` and `better
 
 Alternatively, you can keep seamless mode enabled and edit the search template for your site. The plugin registers a design called **Better Search Results** which you can find in the sidebar.
 
-![](https://webberzone.com/wp-content/uploads/2024/11/Edit-the-Search-Template-1024x492.webp)
+![Editing the search template in the WordPress Site Editor](https://webberzone.com/wp-content/uploads/2024/11/Edit-the-Search-Template-1024x492.webp)

@@ -1,6 +1,6 @@
 ---
 slug: better-search-settings-output
-title: "Better Search Settings – Output"
+title: "Better Search Settings: Output"
 products: [better-search]
 sections: ["01-bs-getting-started"]
 tags: [better-search, search, settings]

@@ -103,6 +103,12 @@ $args = array(
 $better_search_query = new Better_Search_Query( $args );
 ```
 
+## Post statuses and caching
+
+On the front end, a caller-supplied `post_status` is restricted to public statuses when the current user lacks `edit_others_posts`. Queries that include attachments may also use `inherit`. An empty selection falls back to `publish`, or to `publish` and `inherit` when attachments are included.
+
+Admin searches retain WordPress's own status and capability handling. The plugin's result cache includes the effective post statuses after restriction, so requests with different allowed statuses do not share the same cache entry.
+
 ## Advanced Features
 
 ### Using Boolean Operators

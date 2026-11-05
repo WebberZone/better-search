@@ -6,7 +6,10 @@ sections: ["02-bs-advanced"]
 tags: [better-search, search]
 status: publish
 order: 0
+toc: true
 ---
+
+[toc]
 
 ## What is Fuzzy Search?
 
@@ -39,7 +42,7 @@ This is ideal for e-commerce sites, educational resources, or content-heavy plat
 - **Searches titles only**: To maintain speed and performance, the fuzzy search only checks the words against the post title.
 - **Resource-intensive**: Fuzzy search can be computationally intensive, especially at higher levels. On high-traffic sites, this could impact performance.
 - **Enable caching**: To mitigate load, ensure caching is enabled on your server, via a WordPress plugin, or through Better Search’s built-in options.
-- **Note on Boolean Operators**: Fuzzy search is automatically disabled when your query contains Boolean operators (`+`, `-`, `~`, `>`, `<`, or `*`) and BOOLEAN mode is turned on. These operators express explicit search intent — for example, `+wordpress +plugin` requires both terms. Enabling fuzzy/phonetic matching would undermine that specificity, so fuzzy search doesn’t apply to such queries.
+- **Note on Boolean Operators**: Fuzzy search is automatically disabled when your query contains Boolean operators (`+`, `-`, `~`, `>`, `<`, or `*`) and BOOLEAN mode is turned on. These operators express explicit search intent: for example, `+wordpress +plugin` requires both terms. Enabling fuzzy/phonetic matching would undermine that specificity, so fuzzy search doesn’t apply to such queries.
 
 ## Fuzzy Match Threshold (Custom Tables)
 
