@@ -132,6 +132,13 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.5.5 =
+
+**Security**
+
+* Search tracking now applies the normal cleaning and banned-word checks, obeys the tracking setting, and rejects terms over 100 characters. Banned terms already in the log are excluded from heatmaps.
+* [Pro] Banned terms already in the log are excluded from fuzzy search suggestions.
+
 = 4.5.4 =
 
 Release date: 3 November 2026
@@ -243,5 +250,5 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 
 == Upgrade Notice ==
 
-= 4.5.4 =
-Security hardening release. Update recommended.
+= 4.5.5 =
+Fix for multisite cross-site search when terms contain SQL-like words.

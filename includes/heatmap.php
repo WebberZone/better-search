@@ -376,12 +376,23 @@ function get_bsearch_heatmap_counts( $args = array() ) {
 	 * @param int   $cache_time Cache time in seconds.
 	 * @param array $args       Heatmap arguments.
 	 */
-	$cache_time = (int) apply_filters( 'bsearch_heatmap_cache_time', 15 * MINUTE_IN_SECONDS, $args );
-	$cache_key  = 'bs_heatmap_' . md5( wp_json_encode( $args ) );
+	$cache_time   = (int) apply_filters( 'bsearch_heatmap_cache_time', 15 * MINUTE_IN_SECONDS, $args );
+	$cache_key    = 'bs_heatmap_' . md5( wp_json_encode( $args ) );
+	$filter_terms = static function ( $results ) {
+		return array_values(
+			array_filter(
+				(array) $results,
+				static function ( $result ) {
+					return isset( $result->name ) && ! Helpers::has_banned_words( (string) $result->name );
+				}
+			)
+		);
+	};
 
 	if ( $cache_time > 0 ) {
 		$cached = get_transient( $cache_key );
 		if ( false !== $cached ) {
+			$cached = $filter_terms( $cached );
 			/** This filter is documented in includes/heatmap.php */
 			return apply_filters( 'get_bsearch_heatmap_counts', $cached, $args );
 		}
@@ -418,6 +429,7 @@ function get_bsearch_heatmap_counts( $args = array() ) {
 	}
 
 	$results = $wpdb->get_results( $wpdb->prepare( $sql, $sargs ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+	$results = $filter_terms( $results );
 
 	if ( $cache_time > 0 ) {
 		set_transient( $cache_key, $results, $cache_time );

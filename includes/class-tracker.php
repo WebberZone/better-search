@@ -8,6 +8,7 @@
 namespace WebberZone\Better_Search;
 
 use WebberZone\Better_Search\Util\Hook_Registry;
+use WebberZone\Better_Search\Util\Helpers;
 
 if ( ! defined( 'WPINC' ) ) {
 	exit;
@@ -174,7 +175,7 @@ class Tracker {
 
 		if ( array_key_exists( 'bsearch_search_query', $wp->query_vars ) && ! empty( $wp->query_vars['bsearch_search_query'] ) ) {
 
-			$search_query = rawurldecode( wp_kses_data( wp_unslash( $wp->query_vars['bsearch_search_query'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$search_query = is_string( $wp->query_vars['bsearch_search_query'] ) ? wp_unslash( $wp->query_vars['bsearch_search_query'] ) : '';
 			$debug        = ( array_key_exists( 'bsearch_debug', $wp->query_vars ) && 1 === absint( $wp->query_vars['bsearch_debug'] ) );
 
 			$str = self::update_count( $search_query );
@@ -200,7 +201,7 @@ class Tracker {
 	 */
 	public static function tracker_parser() {
 
-		$search_query = isset( $_POST['bsearch_search_query'] ) ? rawurldecode( wp_kses_data( wp_unslash( $_POST['bsearch_search_query'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$search_query = isset( $_POST['bsearch_search_query'] ) && is_string( $_POST['bsearch_search_query'] ) ? wp_unslash( $_POST['bsearch_search_query'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$debug        = isset( $_POST['bsearch_debug'] ) ? absint( $_POST['bsearch_debug'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$str = self::update_count( $search_query );
@@ -219,7 +220,7 @@ class Tracker {
 	 *
 	 * @since 3.3.0
 	 *
-	 * @param string $search_query Search Query.
+	 * @param mixed $search_query Search Query.
 	 * @return string Response on database update.
 	 */
 	public static function update_count( $search_query ) {
@@ -228,10 +229,13 @@ class Tracker {
 
 		$table_name       = $wpdb->prefix . 'bsearch';
 		$table_name_daily = $wpdb->prefix . 'bsearch_daily';
-		$search_query     = str_replace( '&quot;', '"', $search_query );
 		$str              = '';
+		$search_query     = is_scalar( $search_query ) ? Helpers::clean_terms( (string) $search_query ) : '';
 
-		if ( '' !== $search_query ) {
+		global $bsearch_error;
+		$banned_term = isset( $bsearch_error ) && $bsearch_error instanceof \WP_Error && in_array( 'bsearch_banned', $bsearch_error->get_error_codes(), true );
+
+		if ( '' !== $search_query && ! $banned_term && mb_strlen( $search_query ) <= 100 && self::should_track() ) {
 			$bst = $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->prepare(
 					"INSERT INTO $table_name (searchvar, cntaccess) VALUES (%s, 1) ON DUPLICATE KEY UPDATE cntaccess = cntaccess + 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
