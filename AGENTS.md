@@ -36,7 +36,7 @@ Activating either plugin auto-deactivates the other; both share text domain `bet
 
 Namespace: `WebberZone\Better_Search`. Prefix: `bsearch`. Requires WordPress 6.9+, PHP 7.4+.
 
-Versions: `readme.txt`'s `Stable tag` is the released version; `BETTER_SEARCH_VERSION` in `better-search.php` is the working version — use it for new `@since` tags. Do not bump either unless asked.
+Versions: `readme.txt`'s `Stable tag` is the released version; `BETTER_SEARCH_VERSION` in `better-search.php` is the working version — use it for new `@since` tags. If the working version equals `Stable tag`, it is already released — don't use it for new work. Follow the root versioning rule: next `X.Y.(Z+1)` for fixes, `X.(Y+1).0` for features, never `X+1.0.0` ([../AGENTS.md](../AGENTS.md#versioning)).
 
 Pro-only code lives exclusively in `includes/pro/`, declared as `@fs_premium_only /includes/pro/` in the plugin header; all files outside it are identical in the two repos.
 
