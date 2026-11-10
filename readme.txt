@@ -136,8 +136,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 **Security**
 
-* Search tracking now applies the normal cleaning and banned-word checks, obeys the tracking setting, and rejects terms over 100 characters. Banned terms already in the log are excluded from heatmaps.
+* Search tracking now applies the normal cleaning and banned-word checks, obeys the tracking setting, rejects terms over 100 characters, excludes known bot user agents by default, and has a configurable per-site limit of 20 tracked requests per minute by default. Searches still run when the tracking budget is reached, but are not added to the log. Banned terms already in the log are excluded from heatmaps.
 * [Pro] Banned terms already in the log are excluded from fuzzy search suggestions.
+* Search heatmaps reflect search terms reported by visitors' browsers; they can include terms that visitors did not actually search for.
 
 = 4.5.4 =
 

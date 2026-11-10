@@ -137,6 +137,46 @@ class Helpers {
 	}
 
 	/**
+	 * Checks the request user agent against known crawler and script patterns.
+	 *
+	 * @since 4.5.5
+	 *
+	 * @return bool Whether the request appears to come from a bot.
+	 */
+	public static function is_bot() {
+		if ( empty( $_SERVER['HTTP_USER_AGENT'] ) || ! is_string( $_SERVER['HTTP_USER_AGENT'] ) ) {
+			return false;
+		}
+
+		$user_agent = strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) );
+		$patterns   = apply_filters(
+			'bsearch_bot_user_agents',
+			array(
+				'bot',
+				'crawler',
+				'spider',
+				'slurp',
+				'curl',
+				'wget',
+				'python-requests',
+				'python-urllib',
+				'go-http-client',
+				'scrapy',
+				'headlesschrome',
+				'phantomjs',
+			)
+		);
+
+		foreach ( (array) $patterns as $pattern ) {
+			if ( is_string( $pattern ) && '' !== $pattern && false !== strpos( $user_agent, strtolower( $pattern ) ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Whether a term contains a currently banned word.
 	 *
 	 * @since 4.5.5
