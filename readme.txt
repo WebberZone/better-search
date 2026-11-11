@@ -271,4 +271,4 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 == Upgrade Notice ==
 
 = 4.6.0 =
-Fix for multisite cross-site search when terms contain SQL-like words.
+Security release: search tracking is hardened and rate limited. Also adds a count of searches with no results to the dashboard, and in Pro the terms behind it, new Abilities API tools and a daily AI cap for anonymous visitors.
