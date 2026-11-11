@@ -1,5 +1,122 @@
 This file holds the archive of changelog entries
 
+= 4.5.4 =
+
+Release date: 3 November 2026
+
+**Security**
+
+* Hardened post status handling in search queries.
+
+= 4.5.3 =
+
+Release date: 1 November 2026
+
+**Added**
+
+* [Pro] List of posts that failed to index in Tools, with a Retry button. WP-CLI reindexing now exits with an error when any post fails.
+
+**Changed**
+
+* Replaced the layout table in the search results header with a CSS Grid, so screen readers no longer announce it as a data table. Custom CSS targeting its `table`, `tr` or `td` elements needs updating.
+
+**Security**
+
+* Restricted the `post_type` search parameter to searchable post types, so revisions of draft, private and password-protected posts, and internal content such as menu items, no longer appeared in front-end search results.
+* Excluded attachments of unpublished posts and of post types visitors cannot view from search results, and attachments of password-protected posts when "Exclude password protected posts" was enabled.
+* [Pro] Applied the same rules to the LIKE fallback and Did You Mean auto-correct, which had returned revisions, these attachments and, to logged-in users, password-protected posts.
+
+**Fixed**
+
+* On attachment pages, and in search results that included an attachment, posts without a featured image used that attachment as their thumbnail.
+* Attachment searches served from the cache returned no results.
+* [Pro] Efficient Content Storage and Indexing dropped everything in a post after a literal comparison such as `<0.10`, so later words were not searchable. Reindex the custom tables from the Tools page after updating.
+* [Pro] Custom-table reindexing reported success when a database write failed, leaving the post's search content out of date.
+* [Pro] AI answers lost source text, titles and answer text that followed a literal comparison such as `<0.10`.
+* [Pro] Multisite searches outside the main results page, such as live search, dropped a post when another site had a post with the same ID.
+
+= 4.5.2 =
+
+Release date: 15 October 2026
+
+**Security**
+
+* Prevented thumbnail fallbacks from using images inside or attached to password-protected posts before the password was entered.
+* Hardened thumbnail URLs to reject unsafe protocols.
+
+**Fixed**
+
+* Malformed custom thumbnail dimensions caused PHP errors during image-size selection.
+
+= 4.5.1 =
+
+Release date: 12 October 2026
+
+**Added**
+
+* [Pro] Ask AI in theme search forms, plus model settings for AI answers with a Compare models window.
+
+**Changed**
+
+* Cached searches with no matches, refreshing them when posts changed.
+* [Pro] Renamed ECSI to Efficient Content Storage and Indexing.
+* [Pro] Reused cached AI answers for reworded questions until their source posts change.
+* Updated Freemius SDK to the latest version.
+
+**Fixed**
+
+* [Pro] AI answers crashed on single sites with ECSI, could cite another company's article, and Enter ran a normal search in Ask AI only mode.
+* Searches raised a PHP 8.5 deprecation warning while loading stopwords.
+
+= 4.5.0 =
+
+Release date: 2 October 2026
+Release post: https://webberzone.com/announcements/better-search-v4-5/
+
+**Added**
+
+* WordPress Abilities API support for site searches, with an option to disable it in the Features tab.
+* Status section in Tools showing database, index and cache health.
+* Setting to restrict search results to selected terms.
+* `*` wildcard support in filtered words, so `spam*` also blocked "spammer".
+* Translated titles and language-specific links in TranslatePress live-search suggestions.
+* `data-bsearch-live-search="off"` form attribute, so forms with their own live search did not show a second list of suggestions.
+* [Pro] Abilities for popular search terms, spelling suggestions and cache clearing.
+* [Pro] Optional AI answers grounded in Better Search results, with source links, cached answers, usage limits and a Content gaps report.
+* [Pro] WP-CLI commands for AI questions, answer-cache management and Content gaps.
+* [Pro] Expanded Tools status with custom-table and AI-provider health.
+* [Pro] Optional recency weighting, disabled by default; existing custom-table indexes required a one-time backfill from Tools.
+* [Pro] Optional ranking weights for slug, metadata, author and comment matches.
+* [Pro] Wildcard search redirects, so `help*` could match multiple search phrases.
+
+**Changed**
+
+* Raised the minimum WordPress version to 6.9 for the Abilities API.
+* Improved keyboard and screen reader access to settings and repeater controls.
+* [Pro] Expanded include and exclude settings to all public taxonomies.
+* [Pro] Improved custom-table search performance on large sites.
+* [Pro] Moved the REST API search setting to the Features tab.
+
+**Security**
+
+* Hardened thumbnail dimensions to prevent markup injection through custom image sizes.
+
+**Fixed**
+
+* Cached search results could appear in the wrong language on WPML, Polylang and TranslatePress sites.
+* Searches covering taxonomies, metadata, authors or comments could time out on large sites.
+* Common words were not excluded on sites without a Better Search translation.
+* Network search caches remained stale after settings changes or manual cache clearing, and nested queries could prevent caching.
+* Cache-clearing confirmation and error messages were missing.
+* Live search suggestions could reopen after pressing Escape or submitting the search.
+* [Pro] Custom-table searches ignored some search settings, taxonomy weights and term restrictions.
+* [Pro] Custom-table searches could show empty pages, and multisite searches could repeat, skip or return posts from the wrong site.
+* [Pro] Multisite custom-table searches returned no results when `posts_per_page` was `-1`.
+* [Pro] Custom-table schema and taxonomy indexes were not reliably updated.
+* [Pro] Fuzzy searches could ignore Boolean operators or match common words, returning too many results.
+* [Pro] Multisite and fuzzy searches could omit posts matching slugs, taxonomies, metadata, authors or comments.
+* [Pro] Search terms containing a dollar sign followed by a digit were omitted from relevance scoring.
+
 = 4.4.4 =
 
 Release date: 10 September 2026

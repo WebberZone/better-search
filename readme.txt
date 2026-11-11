@@ -134,135 +134,33 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.6.0 =
 
-**Security**
-
-* Search tracking now applies the normal cleaning and banned-word checks, obeys the tracking setting, rejects terms over 100 characters, excludes known bot user agents by default, and has a configurable per-site limit of 20 tracked requests per minute by default. Searches still run when the tracking budget is reached, but are not added to the log. Banned terms already in the log are excluded from heatmaps.
-* [Pro] Banned terms already in the log are excluded from fuzzy search suggestions.
-* Search heatmaps reflect search terms reported by visitors' browsers; they can include terms that visitors did not actually search for.
+Release date: 14 November 2026
 
 **Added**
 
-* The dashboard now shows how many searches returned no results in each period. The counts are kept from this version onwards in a new `bsearch_no_results_daily` table, which is created automatically. Only the number of searches is stored, not the search terms.
-* [Pro] The dashboard lists which searches returned no results, so you can see what visitors look for and cannot find: the top 20 for each period, for a single day when you click a chart bar, and across every site on the network dashboard. The terms are recorded from the day Pro runs this version, in a new `bsearch_no_results` table.
-* [Pro] Abilities API: 16 new abilities let AI agents and automation tools manage the site the way WP-CLI can: cache status, keys and on/off; database and custom index status; search statistics (view, export and clear); settings (get, update, export and import); and stopwords (list, add, remove and clear). All need the `manage_options` capability, and the ones that delete or overwrite data need `confirm`.
-* [Pro] AI answers: new **Daily cap for anonymous visitors** setting limits how much of the daily request cap visitors who are not logged in can use, keeping the rest for logged-in users. Off by default.
+* Count of searches that returned no results on the dashboard for each period. Only the number of searches is stored, in a new `bsearch_no_results_daily` table.
+* [Pro] Search terms that returned no results on the dashboard: the top 20 for each period, for a single day from the chart, and across the network. Terms are recorded from this version onward in a new `bsearch_no_results` table.
+* [Pro] 16 Abilities API abilities for cache, database, custom index, statistics, settings and stopwords. All require `manage_options`; those that delete or overwrite data require `confirm`.
+* [Pro] **Daily cap for anonymous visitors** setting for AI answers, keeping the rest of the daily request cap for logged-in users. Off by default.
 
 **Changed**
 
-* [Pro] WP-CLI: `wp bsearch settings set` and `wp bsearch settings import` now sanitize values the same way as the settings page and reject unknown keys. An import without `--merge` resets settings missing from the file to their defaults.
-* [Pro] AI answers: anonymous visitors can use at most a quarter of the daily request cap in any one hour. Change the share with the `bsearch_ai_hourly_share` filter.
-
-**Fixed**
-
-* Backslashes in Custom CSS, such as icon font codes, are no longer removed on the front end.
-* Importing a settings file that contains only some settings no longer deletes the settings missing from the file.
-* Settings imports are now sanitized the same way as settings saved from the settings page, and invalid files are rejected.
-* Live search messages can now be translated; they used the wrong text domain.
-
-= 4.5.4 =
-
-Release date: 3 November 2026
+* [Pro] `wp bsearch settings set` and `wp bsearch settings import` validated and sanitized values like the settings page and rejected unknown keys. An import without `--merge` reset settings missing from the file to their defaults.
+* [Pro] Limited anonymous AI answers to a quarter of the daily request cap in any one hour. Use `bsearch_ai_hourly_share` to change it.
 
 **Security**
 
-* Hardened post status handling in search queries.
-
-= 4.5.3 =
-
-Release date: 1 November 2026
-
-**Added**
-
-* [Pro] List of posts that failed to index in Tools, with a Retry button. WP-CLI reindexing now exits with an error when any post fails.
-
-**Changed**
-
-* Replaced the layout table in the search results header with a CSS Grid, so screen readers no longer announce it as a data table. Custom CSS targeting its `table`, `tr` or `td` elements needs updating.
-
-**Security**
-
-* Restricted the `post_type` search parameter to searchable post types, so revisions of draft, private and password-protected posts, and internal content such as menu items, no longer appeared in front-end search results.
-* Excluded attachments of unpublished posts and of post types visitors cannot view from search results, and attachments of password-protected posts when "Exclude password protected posts" was enabled.
-* [Pro] Applied the same rules to the LIKE fallback and Did You Mean auto-correct, which had returned revisions, these attachments and, to logged-in users, password-protected posts.
+* Hardened search tracking: terms are cleaned and checked against banned words, the tracking setting is obeyed, terms over 100 characters are rejected and known bots are excluded by default.
+* Limited search tracking to 20 tracked searches a minute per site by default. Searches still run beyond the limit but are not logged. Use the `tracker_limit` setting or `bsearch_tracker_rate_limit_per_minute` to change it.
+* Excluded banned terms already in the log from heatmaps.
+* [Pro] Excluded banned terms already in the log from fuzzy search suggestions.
 
 **Fixed**
 
-* On attachment pages, and in search results that included an attachment, posts without a featured image used that attachment as their thumbnail.
-* Attachment searches served from the cache returned no results.
-
-= 4.5.2 =
-
-Release date: 15 October 2026
-
-**Security**
-
-* Prevented thumbnail fallbacks from using images inside or attached to password-protected posts before the password was entered.
-* Hardened thumbnail URLs to reject unsafe protocols.
-
-**Fixed**
-
-* Malformed custom thumbnail dimensions caused PHP errors during image-size selection.
-
-= 4.5.1 =
-
-Release date: 12 October 2026
-
-**Added**
-
-* [Pro] Ask AI in theme search forms, plus model settings for AI answers with a Compare models window.
-
-**Changed**
-
-* Cached searches with no matches, refreshing them when posts changed.
-* [Pro] Renamed ECSI to Efficient Content Storage and Indexing.
-* [Pro] Reused cached AI answers for reworded questions until their source posts change.
-* Updated Freemius SDK to the latest version.
-
-**Fixed**
-
-* Searches raised a PHP 8.5 deprecation warning while loading stopwords.
-
-= 4.5.0 =
-
-Release date: 2 October 2026
-Release post: https://webberzone.com/announcements/better-search-v4-5/
-
-**Added**
-
-* WordPress Abilities API support for site searches, with an option to disable it in the Features tab.
-* Status section in Tools showing database, index and cache health.
-* Setting to restrict search results to selected terms.
-* `*` wildcard support in filtered words, so `spam*` also blocked "spammer".
-* Translated titles and language-specific links in TranslatePress live-search suggestions.
-* `data-bsearch-live-search="off"` form attribute, so forms with their own live search did not show a second list of suggestions.
-* [Pro] Abilities for popular search terms, spelling suggestions and cache clearing.
-* [Pro] Optional AI answers grounded in Better Search results, with source links, cached answers, usage limits and a Content gaps report.
-* [Pro] WP-CLI commands for AI questions, answer-cache management and Content gaps.
-* [Pro] Expanded Tools status with custom-table and AI-provider health.
-* [Pro] Optional recency weighting, disabled by default; existing custom-table indexes required a one-time backfill from Tools.
-* [Pro] Optional ranking weights for slug, metadata, author and comment matches.
-* [Pro] Wildcard search redirects, so `help*` could match multiple search phrases.
-
-**Changed**
-
-* Raised the minimum WordPress version to 6.9 for the Abilities API.
-* Improved keyboard and screen reader access to settings and repeater controls.
-* [Pro] Expanded include and exclude settings to all public taxonomies.
-* [Pro] Improved custom-table search performance on large sites.
-* [Pro] Moved the REST API search setting to the Features tab.
-
-**Security**
-
-* Hardened thumbnail dimensions to prevent markup injection through custom image sizes.
-
-**Fixed**
-
-* Cached search results could appear in the wrong language on WPML, Polylang and TranslatePress sites.
-* Searches covering taxonomies, metadata, authors or comments could time out on large sites.
-* Common words were not excluded on sites without a Better Search translation.
-* Network search caches remained stale after settings changes or manual cache clearing, and nested queries could prevent caching.
-* Cache-clearing confirmation and error messages were missing.
-* Live search suggestions could reopen after pressing Escape or submitting the search.
+* Backslashes in Custom CSS, such as icon font codes, were removed on the front end.
+* Importing a settings file containing only some settings deleted the settings missing from the file.
+* Settings imports were not sanitized like settings saved from the settings page, and invalid files were accepted.
+* Live search messages could not be translated because they used the wrong text domain.
 
 = Earlier versions =
 
@@ -271,4 +169,4 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 == Upgrade Notice ==
 
 = 4.6.0 =
-Security release: search tracking is hardened and rate limited. Also adds a count of searches with no results to the dashboard, and in Pro the terms behind it, new Abilities API tools and a daily AI cap for anonymous visitors.
+Adds a count of searches with no results to the dashboard, and in Pro the terms behind it, new Abilities API tools and a daily AI cap for anonymous visitors. Search tracking is also hardened and rate limited. No action needed on existing sites.
