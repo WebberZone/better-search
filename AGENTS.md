@@ -113,6 +113,7 @@ Both plugins include a `bsearch_deactivate_other_instances()` function (in-file,
 - **`includes/class-hook-loader.php`** — Registers plugin-wide hooks (`init`, `widgets_init`).
 - **`includes/class-tracker.php`** — Tracks search queries via AJAX and `parse_request`; stores results in `bsearch` / `bsearch_daily` DB tables.
 - **`includes/class-db.php`** — Static class managing the `bsearch` / `bsearch_daily` search-tracking tables and FULLTEXT indexes on `wp_posts`.
+- **`includes/class-no-results.php`** — `No_Results`: daily *count* of searches that returned no results (`bsearch_no_results_daily`, own schema version option, created on `init`). Free stores the number only, never the terms — see the WordPress.org note below. `Tracker` flags a zero-result page with an HMAC token (`get_token()`), so browsers cannot flag other terms; `record()` fires `bsearch_no_result_search` with the term for Pro.
 
 ### Query Engine
 
@@ -170,6 +171,8 @@ Both plugins include a `bsearch_deactivate_other_instances()` function (in-file,
   - `Custom_Tables_Admin` — Admin UI with reindex action, InnoDB conversion tool (shows current engine status with conversion form), enqueues `reindex.js` for AJAX reindexing progress.
   - `Posts_Search` — Executes search queries against the custom table.
 
+- **`No_Result_Terms`** (`class-no-result-terms.php`) — Records *which* terms returned no results (`bsearch_no_results`, one row per term per day) by hooking `bsearch_no_result_search`, and adds the top-20 list under the free count on the dashboard, the day drill-down and the network dashboard (`bsearch_dashboard_no_result_details` / `bsearch_dashboard_no_result_count`).
+
 - **`Admin`** (`class-admin.php`) — Pro-specific admin additions (extra settings sections, tools). Includes dashboard chart drill-down: click a bar in the daily searches chart to view top 20 popular searches for that day (`bsearch_get_day_searches` AJAX action). Enqueues `includes/pro/js/chart-interactions.js` for Chart.js click/hover/tooltip handling.
 
 - **`Network`** (`network/`) — Multisite network admin pages. `Dashboard` registers a network-admin dashboard page and reuses the base `Admin\Dashboard` internally. `Statistics` reuses `Statistics_Table` to display cross-network search stats under the network admin menu.
@@ -208,6 +211,9 @@ Pro settings are added to the existing `bsearch_settings` option; `Pro\Admin` re
 | WP-CLI commands | No | Yes (`CLI_Manager`, 8 subcommands incl. `ecsi`) |
 | Network admin dashboard & stats | No | Yes (`Network\Dashboard`, `Network\Statistics`) |
 | "Did you mean" spelling suggestions | No | Yes (`Pro::suggest_did_you_mean`, `Fuzzy_Search`, `Spell_Dictionary`) |
+| No-result searches | Daily count only (`No_Results`) | Terms, day drill-down, network totals (`No_Result_Terms`) |
+
+**WordPress.org rule for free/Pro splits.** Free must never hold data or a capability that it caps or hides to sell Pro (guidelines 5 and 9: no artificial limits then upsell, no implying payment unlocks something included). Split by capability instead: free does a smaller thing completely, Pro adds code that free does not contain. Upgrade prompts stay inline on the plugin's own pages (guideline 11).
 
 ## Shared framework files: `@since` convention
 

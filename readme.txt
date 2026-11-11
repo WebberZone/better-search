@@ -132,13 +132,32 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 4.5.5 =
+= 4.6.0 =
 
 **Security**
 
 * Search tracking now applies the normal cleaning and banned-word checks, obeys the tracking setting, rejects terms over 100 characters, excludes known bot user agents by default, and has a configurable per-site limit of 20 tracked requests per minute by default. Searches still run when the tracking budget is reached, but are not added to the log. Banned terms already in the log are excluded from heatmaps.
 * [Pro] Banned terms already in the log are excluded from fuzzy search suggestions.
 * Search heatmaps reflect search terms reported by visitors' browsers; they can include terms that visitors did not actually search for.
+
+**Added**
+
+* The dashboard now shows how many searches returned no results in each period. The counts are kept from this version onwards in a new `bsearch_no_results_daily` table, which is created automatically. Only the number of searches is stored, not the search terms.
+* [Pro] The dashboard lists which searches returned no results, so you can see what visitors look for and cannot find: the top 20 for each period, for a single day when you click a chart bar, and across every site on the network dashboard. The terms are recorded from the day Pro runs this version, in a new `bsearch_no_results` table.
+* [Pro] Abilities API: 16 new abilities let AI agents and automation tools manage the site the way WP-CLI can: cache status, keys and on/off; database and custom index status; search statistics (view, export and clear); settings (get, update, export and import); and stopwords (list, add, remove and clear). All need the `manage_options` capability, and the ones that delete or overwrite data need `confirm`.
+* [Pro] AI answers: new **Daily cap for anonymous visitors** setting limits how much of the daily request cap visitors who are not logged in can use, keeping the rest for logged-in users. Off by default.
+
+**Changed**
+
+* [Pro] WP-CLI: `wp bsearch settings set` and `wp bsearch settings import` now sanitize values the same way as the settings page and reject unknown keys. An import without `--merge` resets settings missing from the file to their defaults.
+* [Pro] AI answers: anonymous visitors can use at most a quarter of the daily request cap in any one hour. Change the share with the `bsearch_ai_hourly_share` filter.
+
+**Fixed**
+
+* Backslashes in Custom CSS, such as icon font codes, are no longer removed on the front end.
+* Importing a settings file that contains only some settings no longer deletes the settings missing from the file.
+* Settings imports are now sanitized the same way as settings saved from the settings page, and invalid files are rejected.
+* Live search messages can now be translated; they used the wrong text domain.
 
 = 4.5.4 =
 
@@ -251,5 +270,5 @@ For the changelog of earlier versions, please refer to the [releases page on Git
 
 == Upgrade Notice ==
 
-= 4.5.5 =
+= 4.6.0 =
 Fix for multisite cross-site search when terms contain SQL-like words.

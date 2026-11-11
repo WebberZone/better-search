@@ -12,6 +12,7 @@ namespace WebberZone\Better_Search\Admin;
 use WebberZone\Better_Search\Util\Helpers;
 use WebberZone\Better_Search\Util\Hook_Registry;
 use WebberZone\Better_Search\Db;
+use WebberZone\Better_Search\No_Results;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -166,6 +167,8 @@ class Dashboard {
 							<a href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( 'View all popular searches', 'better-search' ); ?> &raquo;</a>
 
 						</div>
+
+						<?php echo $this->display_no_result_searches( $tab_name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 					</div><!-- /#tab_id-->
 
@@ -453,6 +456,73 @@ class Dashboard {
 
 		$output = ob_get_clean();
 		return $output;
+	}
+
+	/**
+	 * Get the count of searches that returned no results for a date range.
+	 *
+	 * @since 4.6.0
+	 *
+	 * @param array $args {
+	 *     Optional. Query parameters.
+	 *
+	 *     @type string $from_date From date. A date/time string.
+	 *     @type string $to_date   To date. A date/time string.
+	 *     @type bool   $network   Whether the network dashboard is asking.
+	 * }
+	 * @return string HTML for the no-result searches section.
+	 */
+	public function display_no_result_searches( $args = array() ) {
+		$args = wp_parse_args(
+			$args,
+			array(
+				'from_date' => null,
+				'to_date'   => null,
+				'network'   => false,
+			)
+		);
+
+		/**
+		 * Filters the number of searches with no results shown on the dashboard.
+		 *
+		 * @since 4.6.0
+		 *
+		 * @param int   $count Number of searches with no results on this site.
+		 * @param array $args  Query parameters.
+		 */
+		$count = (int) apply_filters( 'bsearch_dashboard_no_result_count', No_Results::get_count( $args ), $args );
+
+		if ( $count > 0 ) {
+			$summary = sprintf(
+				/* translators: %s: number of searches. */
+				_n( '%s search returned no results.', '%s searches returned no results.', $count, 'better-search' ),
+				Helpers::number_format_i18n( $count )
+			);
+		} else {
+			$summary = __( 'No searches without results were recorded for this period.', 'better-search' );
+		}
+
+		/**
+		 * Filters the content shown under the count of searches with no results.
+		 *
+		 * @since 4.6.0
+		 *
+		 * @param string $details HTML. Default empty.
+		 * @param array  $args    Query parameters.
+		 * @param int    $count   Number of searches with no results.
+		 */
+		$details = (string) apply_filters( 'bsearch_dashboard_no_result_details', '', $args, $count );
+
+		if ( '' === $details && $count > 0 && function_exists( '\WebberZone\Better_Search\bsearch_freemius' ) ) {
+			$details = sprintf(
+				'<p class="description">%1$s <a href="%2$s">%3$s</a></p>',
+				esc_html__( 'Better Search Pro records which searches these were, and can help rescue them with fuzzy matching, Did You Mean and redirects.', 'better-search' ),
+				esc_url( \WebberZone\Better_Search\bsearch_freemius()->get_upgrade_url() ),
+				esc_html__( 'Upgrade to Pro', 'better-search' )
+			);
+		}
+
+		return '<h3>' . esc_html__( 'Searches with no results', 'better-search' ) . '</h3><p>' . esc_html( $summary ) . '</p>' . $details;
 	}
 
 	/**

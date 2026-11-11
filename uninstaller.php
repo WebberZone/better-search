@@ -76,6 +76,10 @@ function bsearch_delete_data() {
 		$wpdb->query( 'DROP TABLE ' . $wpdb->prefix . 'bsearch' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( 'DROP TABLE ' . $wpdb->prefix . 'bsearch_daily' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( 'DROP TABLE ' . $wpdb->prefix . 'bsearch_dictionary' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'bsearch_no_results_daily' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'bsearch_no_results' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
+		delete_option( 'bsearch_no_results_daily_db_version' );
+		delete_option( 'bsearch_no_results_db_version' );
 		wp_clear_scheduled_hook( 'bsearch_rebuild_spell_dictionary' );
 	}
 
@@ -83,6 +87,7 @@ function bsearch_delete_data() {
 	delete_option( 'ald_bsearch_settings' );
 	delete_option( 'bsearch_settings' );
 	delete_option( 'bsearch_db_version' );
+	delete_option( 'bsearch_tracker_rate_limit' );
 	delete_option( 'bsearch_empty_results_version' );
 	delete_site_option( 'better_search_selected_sites' );
 

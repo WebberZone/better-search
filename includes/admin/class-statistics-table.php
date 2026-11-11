@@ -319,6 +319,15 @@ class Statistics_Table extends \WP_List_Table {
 			),
 			array( '%s' )
 		);
+
+		/**
+		 * Fires after a search term is deleted from the statistics.
+		 *
+		 * @since 4.6.0
+		 *
+		 * @param string $id Search term.
+		 */
+		do_action( 'bsearch_delete_search_entry', (string) $id );
 	}
 
 	/**

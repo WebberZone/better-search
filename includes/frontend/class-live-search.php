@@ -54,23 +54,23 @@ class Live_Search {
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'language' => Language_Handler::get_trp_current_language(),
 				'strings'  => array(
-					'no_results'         => __( 'No results found', 'better-search-pro' ),
-					'searching'          => __( 'Searching...', 'better-search-pro' ),
-					'min_chars'          => __( 'Please enter at least 3 characters to search', 'better-search-pro' ),
-					'suggestions_closed' => __( 'Search suggestions closed', 'better-search-pro' ),
-					'back_to_search'     => __( 'Back to search', 'better-search-pro' ),
-					'back_to_input'      => __( 'Back to search input', 'better-search-pro' ),
-					'error_loading'      => __( 'Error loading search results', 'better-search-pro' ),
-					'no_suggestions'     => __( 'No search suggestions found', 'better-search-pro' ),
+					'no_results'         => __( 'No results found', 'better-search' ),
+					'searching'          => __( 'Searching...', 'better-search' ),
+					'min_chars'          => __( 'Please enter at least 3 characters to search', 'better-search' ),
+					'suggestions_closed' => __( 'Search suggestions closed', 'better-search' ),
+					'back_to_search'     => __( 'Back to search', 'better-search' ),
+					'back_to_input'      => __( 'Back to search input', 'better-search' ),
+					'error_loading'      => __( 'Error loading search results', 'better-search' ),
+					'no_suggestions'     => __( 'No search suggestions found', 'better-search' ),
 					/* translators: %d is the number of suggestions found */
-					'suggestions_found'  => __( '%d search suggestions found. Use up and down arrow keys to navigate.', 'better-search-pro' ),
+					'suggestions_found'  => __( '%d search suggestions found. Use up and down arrow keys to navigate.', 'better-search' ),
 					/* translators: %s is the destination being navigated to */
-					'navigating_to'      => __( 'Navigating to %s', 'better-search-pro' ),
-					'submitting_search'  => __( 'Submitting search', 'better-search-pro' ),
+					'navigating_to'      => __( 'Navigating to %s', 'better-search' ),
+					'submitting_search'  => __( 'Submitting search', 'better-search' ),
 					/* translators: %1$d is the current result number, %2$d is the total number of results */
-					'result_position'    => __( 'Result %1$d of %2$d', 'better-search-pro' ),
+					'result_position'    => __( 'Result %1$d of %2$d', 'better-search' ),
 					/* translators: %s is the post title */
-					'view_post'          => __( 'View post: %s', 'better-search-pro' ),
+					'view_post'          => __( 'View post: %s', 'better-search' ),
 				),
 			)
 		);

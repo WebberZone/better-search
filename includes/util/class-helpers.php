@@ -139,7 +139,7 @@ class Helpers {
 	/**
 	 * Checks the request user agent against known crawler and script patterns.
 	 *
-	 * @since 4.5.5
+	 * @since 4.6.0
 	 *
 	 * @return bool Whether the request appears to come from a bot.
 	 */
@@ -179,7 +179,7 @@ class Helpers {
 	/**
 	 * Whether a term contains a currently banned word.
 	 *
-	 * @since 4.5.5
+	 * @since 4.6.0
 	 *
 	 * @param mixed $val Search term.
 	 * @return bool Whether the term contains a banned word.
@@ -195,7 +195,7 @@ class Helpers {
 	/**
 	 * Decode and normalize a search term before filtering or storing it.
 	 *
-	 * @since 4.5.5
+	 * @since 4.6.0
 	 *
 	 * @param mixed $val Search term.
 	 * @return string Normalized plain-text term.

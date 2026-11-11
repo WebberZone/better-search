@@ -785,6 +785,15 @@ class Db {
 
 		self::maybe_create_table( $wpdb->prefix . self::$table_name, self::create_full_table_sql() );
 		self::maybe_create_table( $wpdb->prefix . self::$table_name_daily, self::create_daily_table_sql() );
+		No_Results::install();
+
+		/**
+		 * Fires after the Better Search tables are created, so extensions can create theirs.
+		 *
+		 * @since 4.6.0
+		 */
+		do_action( 'bsearch_db_create_tables' );
+
 		self::clear_network_table_status_cache();
 	}
 

@@ -53,7 +53,7 @@ class Styles_Handler {
 		);
 
 		// Add custom CSS to header.
-		$custom_css = stripslashes( bsearch_get_option( 'custom_css' ) );
+		$custom_css = (string) bsearch_get_option( 'custom_css' );
 		if ( $custom_css ) {
 			wp_add_inline_style( 'bsearch-custom-style', $custom_css );
 		}

@@ -117,6 +117,7 @@ class Activator {
 		// Create tables if not exists.
 		Db::maybe_create_table( $table_name, Db::create_full_table_sql() );
 		Db::maybe_create_table( $table_name_daily, Db::create_daily_table_sql() );
+		\WebberZone\Better_Search\No_Results::install();
 
 		// Upgrade table code for 2.0.0.
 		$current_db_version = get_option( 'bsearch_db_version' );
@@ -185,6 +186,7 @@ class Activator {
 
 		$tables[] = $wpdb->prefix . self::$table_name;
 		$tables[] = $wpdb->prefix . self::$table_name_daily;
+		$tables[] = $wpdb->prefix . \WebberZone\Better_Search\No_Results::TABLE;
 		$tables[] = $wpdb->prefix . 'bsearch_ai_questions';
 		Db::clear_network_table_status_cache();
 

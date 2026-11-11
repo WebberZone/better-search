@@ -41,7 +41,8 @@ class Tools_Page {
 		Hook_Registry::add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		Hook_Registry::add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		Hook_Registry::add_action( 'admin_init', array( $this, 'process_settings_export' ) );
-		Hook_Registry::add_action( 'admin_init', array( $this, 'process_settings_import' ), 9 );
+		// After Settings_API::admin_init() (priority 10) registers the sanitize callback that update_option() applies.
+		Hook_Registry::add_action( 'admin_init', array( $this, 'process_settings_import' ), 11 );
 	}
 
 	/**
@@ -395,6 +396,7 @@ class Tools_Page {
 			array(
 				$wpdb->prefix . 'bsearch'       => __( 'Popular searches', 'better-search' ),
 				$wpdb->prefix . 'bsearch_daily' => __( 'Daily searches', 'better-search' ),
+				\WebberZone\Better_Search\No_Results::table() => __( 'Daily count of searches with no results', 'better-search' ),
 			)
 		);
 		$indexes_installed = Db::is_fulltext_index_installed( false );
@@ -448,6 +450,10 @@ class Tools_Page {
 
 		$sql = "TRUNCATE TABLE $table_name";
 		$wpdb->query( $sql ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
+
+		if ( $daily ) {
+			\WebberZone\Better_Search\No_Results::clear();
+		}
 	}
 
 	/**
@@ -628,14 +634,27 @@ class Tools_Page {
 
 		$import_file = isset( $_FILES[ $filename ]['tmp_name'] ) ? ( wp_unslash( $_FILES[ $filename ]['tmp_name'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
-		if ( empty( $import_file ) ) {
+		if ( empty( $import_file ) || ! is_uploaded_file( $import_file ) ) {
 			wp_die( esc_html__( 'Please upload a file to import', 'better-search' ) );
 		}
 
-		// Retrieve the settings from the file and convert the json object to an array.
-		$settings = (array) json_decode( file_get_contents( $import_file ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$settings = json_decode( (string) file_get_contents( $import_file ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 
-		update_option( 'bsearch_settings', $settings );
+		if ( empty( $settings ) || ! is_array( $settings ) || ! array_intersect_key( $settings, bsearch_settings_defaults() ) ) {
+			wp_die( esc_html__( 'Please upload a valid .json file', 'better-search' ) );
+		}
+
+		// The sanitize callback is only registered on screens that fire admin_menu.
+		if ( ! has_filter( 'sanitize_option_bsearch_settings' ) ) {
+			wp_die( esc_html__( 'Settings can only be imported from the Tools page.', 'better-search' ) );
+		}
+
+		// The sanitize callback drops registered keys missing from the input, so keep the current values.
+		$current  = get_option( 'bsearch_settings', array() );
+		$settings = array_merge( is_array( $current ) ? $current : array(), $settings );
+
+		// The sanitize callback unslashes form input; JSON isn't slashed.
+		update_option( 'bsearch_settings', wp_slash( $settings ) );
 
 		wp_safe_redirect(
 			add_query_arg(

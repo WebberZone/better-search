@@ -167,6 +167,8 @@ final class Main {
 			$this->abilities = new Abilities();
 		}
 
+		new No_Results();
+
 		// Load all hooks.
 		new Hook_Loader();
 

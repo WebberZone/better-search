@@ -64,6 +64,12 @@ class Tracker {
 				'bsearch_rnd'          => wp_rand( 1, time() ),
 			);
 
+			global $wp_query;
+			if ( $wp_query instanceof \WP_Query && 0 === (int) $wp_query->found_posts && 0 === (int) $wp_query->post_count ) {
+				$ajax_bsearch_tracker['bsearch_no_results'] = 1;
+				$ajax_bsearch_tracker['bsearch_token']      = No_Results::get_token( $search_query );
+			}
+
 			/**
 			 * Filter the localize script arguments for the Better Search tracker.
 			 *
@@ -141,7 +147,12 @@ class Tracker {
 		$search_query = isset( $_POST['bsearch_search_query'] ) && is_string( $_POST['bsearch_search_query'] ) ? wp_unslash( $_POST['bsearch_search_query'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$debug        = isset( $_POST['bsearch_debug'] ) ? absint( $_POST['bsearch_debug'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		$str = self::update_count( $search_query );
+		$token = isset( $_POST['bsearch_token'] ) && is_string( $_POST['bsearch_token'] ) ? sanitize_text_field( wp_unslash( $_POST['bsearch_token'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+		// The token is issued only on a results page that had no results, so browsers cannot flag other terms.
+		$no_results = ! empty( $_POST['bsearch_no_results'] ) && '' !== $token && hash_equals( No_Results::get_token( $search_query ), $token ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+		$str = self::update_count( $search_query, $no_results );
 
 		if ( 1 === $debug ) {
 			header( 'Content-Type: text/plain; charset=UTF-8' );
@@ -156,11 +167,13 @@ class Tracker {
 	 * Function to update the count in the database.
 	 *
 	 * @since 3.3.0
+	 * @since 4.6.0 Added $no_results parameter.
 	 *
 	 * @param mixed $search_query Search Query.
+	 * @param bool  $no_results   Whether the search returned no results.
 	 * @return string Response on database update.
 	 */
-	public static function update_count( $search_query ) {
+	public static function update_count( $search_query, $no_results = false ) {
 
 		global $wpdb;
 
@@ -194,6 +207,10 @@ class Tracker {
 			); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
 			$str .= ( false === $bsd ) ? ' bsd_error' : ' bsd_' . $bsd;
+
+			if ( $no_results ) {
+				$str .= No_Results::record( $search_query ) ? ' bsn_1' : ' bsn_error';
+			}
 		}
 
 		/**
@@ -210,7 +227,7 @@ class Tracker {
 	/**
 	 * Enforces a site-wide search tracking budget without storing visitor identifiers.
 	 *
-	 * @since 4.5.5
+	 * @since 4.6.0
 	 *
 	 * @return bool Whether the tracking budget has been reached.
 	 */
