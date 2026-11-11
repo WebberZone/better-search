@@ -144,6 +144,8 @@ class No_Results {
 		// A failed write usually means the table is missing; clearing the version recreates it on the next request.
 		if ( false === $result ) {
 			delete_option( self::DB_VERSION_OPTION );
+
+			return false;
 		}
 
 		/**
@@ -155,7 +157,7 @@ class No_Results {
 		 */
 		do_action( 'bsearch_no_result_search', $term );
 
-		return false !== $result;
+		return true;
 	}
 
 	/**
