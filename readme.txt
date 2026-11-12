@@ -157,7 +157,8 @@ Release date: 14 November 2026
 
 **Fixed**
 
-* Backslashes in Custom CSS, such as icon font codes, were removed on the front end.
+* Backslashes in Custom CSS and other settings, such as icon font codes, were removed when settings were saved and on the front end.
+* Quotes in Custom CSS were converted to HTML entities in the styles added for the Search Box widget.
 * Importing a settings file containing only some settings deleted the settings missing from the file.
 * Settings imports were not sanitized like settings saved from the settings page, and invalid files were accepted.
 * Live search messages could not be translated because they used the wrong text domain.

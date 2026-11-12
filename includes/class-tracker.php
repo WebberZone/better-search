@@ -28,6 +28,7 @@ class Tracker {
 	 */
 	public function __construct() {
 		Hook_Registry::add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		Hook_Registry::add_action( 'wp_loaded', array( $this, 'handle_request' ) );
 		Hook_Registry::add_action( 'wp_ajax_nopriv_bsearch_tracker', array( $this, 'tracker_parser' ) );
 		Hook_Registry::add_action( 'wp_ajax_bsearch_tracker', array( $this, 'tracker_parser' ) );
 	}
@@ -43,7 +44,7 @@ class Tracker {
 
 		if ( $include_code ) {
 			$search_query = rawurlencode( get_bsearch_query() );
-			$home_url     = admin_url( 'admin-ajax.php' );
+			$home_url     = home_url( '/' );
 
 			/**
 			 * Filter the URL of the tracker.
@@ -138,6 +139,24 @@ class Tracker {
 	}
 
 	/**
+	 * Handle a tracker request posted to the front end, which skips the admin bootstrap that admin-ajax.php runs.
+	 *
+	 * @since 4.6.0
+	 */
+	public static function handle_request() {
+		if ( is_admin() || ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+			return;
+		}
+
+		if ( ! isset( $_POST['action'], $_POST['bsearch_search_query'] ) || 'bsearch_tracker' !== $_POST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return;
+		}
+
+		nocache_headers();
+		self::tracker_parser();
+	}
+
+	/**
 	 * Parse the ajax response.
 	 *
 	 * @since 2.4.0
@@ -157,10 +176,13 @@ class Tracker {
 		if ( 1 === $debug ) {
 			header( 'Content-Type: text/plain; charset=UTF-8' );
 			echo $str; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die();
 		}
 
-		wp_die( '', '', array( 'response' => 200 ) );
+		if ( wp_doing_ajax() ) {
+			wp_die( '', '', array( 'response' => 200 ) );
+		}
+
+		exit;
 	}
 
 	/**
