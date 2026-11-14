@@ -53,6 +53,8 @@ Better Search is free to use and replaces WordPress search with relevance-ranked
 | Multilingual support (WPML, Polylang and TranslatePress) | ✅ | ✅ |
 | REST API search integration | ❌ | ✅ |
 | Dashboard search chart with daily drill-down | ❌ | ✅ |
+| [Dashboard count of searches with no results](https://webberzone.com/support/knowledgebase/better-search-dashboard/) | ✅ | ✅ |
+| Dashboard list of the search terms that returned no results | ❌ | ✅ |
 | **Multisite** |  |  |
 | Per-site search | ✅ | ✅ |
 | Cross-site search across the entire network | ❌ | ✅ |
@@ -61,6 +63,7 @@ Better Search is free to use and replaces WordPress search with relevance-ranked
 | WP-CLI commands (search, cache, db, stats, settings, ecsi, status, stopwords) | ❌ | ✅ |
 | Abilities API: search ability for AI assistants | ✅ | ✅ |
 | Abilities API: popular search terms, spelling suggestions and cache clearing | ❌ | ✅ |
+| Abilities API: management of the cache, database, custom index, statistics, settings and stopwords | ❌ | ✅ |
 | **Support** |  |  |
 | Community forum | ✅ | ✅ |
 | Priority email support | ❌ | ✅ |

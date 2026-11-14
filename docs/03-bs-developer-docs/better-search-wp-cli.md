@@ -182,6 +182,23 @@ wp bsearch ecsi drop --force
 
 `create` creates the custom tables; `--dry-run` shows what would be created. `drop` permanently deletes the custom tables and asks for confirmation unless `--force` is supplied.
 
+### Settings
+
+Read, change, export, and import Better Search settings.
+
+```bash
+wp bsearch settings get tracker_limit
+wp bsearch settings set tracker_limit 60
+wp bsearch settings export --file=bsearch-settings.json
+wp bsearch settings import bsearch-settings.json --dry-run
+```
+
+`get` accepts `--format` with `table`, `json`, `csv`, or `value` (default). `set` accepts `--type` with `string`, `int`, `float`, `bool`, or `array`, and detects the type when you omit it.
+
+Values from `set` and `import` are validated and sanitized by the same rules as the settings page. Unknown keys are rejected by `set` and skipped by `import`, which lists them in a warning.
+
+Without `--merge`, `import` replaces the stored settings, and any setting missing from the file returns to its default. Use `--merge` to change only the settings in the file. Files can only be read from or written to the WordPress root, the uploads directory, or the system temp directory.
+
 ### AI Answers
 
 Inspect and operate Better Search Pro AI Answers from WP-CLI.

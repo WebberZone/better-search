@@ -46,9 +46,12 @@ Better Search never stores API keys; WordPress sends each request through your c
 | **Search form buttons** | Search and Ask AI | Show both buttons, or **Ask AI only**. Search results stay available from the answer. |
 | **Ask AI button text** | Ask AI | Custom label for the button. |
 | **Daily request cap** | `200` | Provider requests per day across the site. Once reached, visitors are sent to the search results until the next day in site time. |
+| **Daily cap for anonymous visitors** | `0` | Provider requests per day from visitors who are not logged in, from 0 to 100,000. The rest of the daily request cap is kept for logged-in users. `0` lets anonymous visitors use the whole cap. |
 | **Questions per visitor per hour** | `10` | Per-visitor limit, from 1 to 1,000. |
 | **Record questions for Content gaps** | Off | Stores question text for the **Content gaps** report. |
 | **Log retention (days)** | `90` | Recorded questions are deleted after this many days. |
+
+Anonymous visitors are also limited to a quarter of the daily request cap in any one hour, so a burst of traffic cannot use the whole cap at once. Developers can change this share with the `bsearch_ai_hourly_share` filter.
 
 **Compare models.** The **Compare models** button under **AI provider** opens a window where you ask one question with two models side by side and see each answer, its sources and how long it took. **Use this model** fills in the matching **Model** setting; close the window and save to keep it. Each model costs one provider request, counted towards the daily request cap. These answers are not cached or recorded.
 

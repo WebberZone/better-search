@@ -11,7 +11,7 @@ toc: true
 
 [toc]
 
-[Better Search](https://webberzone.com/plugins/better-search/) 4.5.0 registers abilities with the WordPress Abilities API. The shared ability runs a relevance-weighted search; Better Search Pro adds abilities for popular search terms, spelling suggestions, and clearing the cache.
+[Better Search](https://webberzone.com/plugins/better-search/) 4.5.0 registers abilities with the WordPress Abilities API. The shared ability runs a relevance-weighted search; Better Search Pro adds abilities for popular search terms, spelling suggestions, and clearing the cache. Pro 4.6.0 adds management abilities for the cache, database, custom index, statistics, settings, and stopwords.
 
 ## Requirements
 
@@ -141,7 +141,7 @@ This is a different endpoint from the [Better Search REST API integration](https
 
 ## Pro abilities
 
-Better Search Pro registers three more abilities.
+Better Search Pro registers three more abilities, followed by the management abilities described below.
 
 ### Popular search terms
 
@@ -187,6 +187,64 @@ Like the search ability, this one requires the `read` capability rather than `ma
 The result contains a `cleared` boolean and a `count` integer holding the number of cache entries removed.
 
 On a multisite network, the ability also clears the shared network cache, but only for a user who can manage network options.
+
+## Management abilities *(Pro only)*
+
+Better Search Pro 4.6.0 registers 16 abilities for managing the site from a connected client. All of them require the `manage_options` capability and apply to the current site.
+
+| Area | Ability | What it does |
+| --- | --- | --- |
+| Cache | `better-search/get-cache-status` | Reports whether the results cache is on and how many results are cached. |
+| Cache | `better-search/list-cache-keys` | Lists cache keys. Accepts `offset` and `limit`. |
+| Cache | `better-search/set-cache-enabled` | Turns the results cache on or off. Existing entries are kept. |
+| Database | `better-search/get-database-status` | Reports the database version, each statistics table with its row count, and the FULLTEXT index status. |
+| Custom index | `better-search/get-custom-index-status` | Reports whether the custom search index is on and its tables are ready. |
+| Custom index | `better-search/set-custom-index-enabled` | Changes the setting only. It does not create, fill, or delete the index tables. |
+| Statistics | `better-search/get-search-statistics` | Returns search terms with counts, a page at a time. |
+| Statistics | `better-search/clear-search-statistics` | Permanently deletes recorded search statistics. |
+| Settings | `better-search/get-setting` | Returns one setting by key. |
+| Settings | `better-search/update-setting` | Changes one setting, using the same sanitization as the settings page. |
+| Settings | `better-search/export-settings` | Returns every setting as a key and value map, leaving out settings that hold secrets. |
+| Settings | `better-search/import-settings` | Replaces the supplied settings. Unknown keys are skipped. |
+| Stopwords | `better-search/list-stopwords` | Lists the configured stopwords. |
+| Stopwords | `better-search/add-stopwords` | Adds one or more stopwords. |
+| Stopwords | `better-search/remove-stopwords` | Removes one or more stopwords. |
+| Stopwords | `better-search/clear-stopwords` | Removes every stopword. |
+
+`better-search/clear-search-statistics`, `better-search/import-settings`, and `better-search/clear-stopwords` overwrite or delete data, so they are marked destructive and require `confirm` to be `true`. The `better-search/clear-cache` ability described above follows the same rule.
+
+### Read statistics
+
+`better-search/get-search-statistics` accepts these inputs.
+
+| Input | Description |
+| --- | --- |
+| `table` | `overall` for lifetime totals or `daily` for one row per term per day. |
+| `orderby` | `count`, `term`, or `date`. `date` applies to the daily table only. |
+| `order` | `asc` or `desc`. |
+| `from_date` and `to_date` | Date range as `YYYY-MM-DD`. Daily table only. |
+| `offset` | Number of rows to skip. |
+| `limit` | Rows to return, from 1 to 500. Default `20`. |
+
+The output contains a `total` and an array of `rows`, each with `term` and `count`, plus `date` for the daily table.
+
+### Clear statistics
+
+`better-search/clear-search-statistics` takes `confirm` and an optional `table` of `all` (default), `overall`, or `daily`. Clearing the daily table also clears the recorded no-result searches. Use `before` with a `YYYY-MM-DD` date to delete only rows dated before that day. The overall table has no dates, so it is skipped when `before` is set. This cannot be undone.
+
+```json
+{
+  "table": "daily",
+  "before": "2026-01-01",
+  "confirm": true
+}
+```
+
+### Change settings
+
+`better-search/update-setting` takes a `key` and a `value`. Use `1` or `0` for checkboxes, a string for text and select fields, and an array for multiple-choice fields. The result returns the `previous` and stored `value`, which can differ from the input after sanitization, and whether anything `changed`.
+
+The `enable_abilities_api` setting is protected. `update-setting` rejects it, and `import-settings` skips it, so a client cannot switch off its own access.
 
 ## Visibility and permissions
 

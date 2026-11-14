@@ -28,6 +28,20 @@ Disabling this will use the plugin’s in-built advanced search results page, wh
 
 This option allows Better Search to track and display popular search terms. If disabled, the plugin stops recording search queries, which will affect the heatmap and analytics features.
 
+Tracked searches are cleaned first. A search is not recorded if it contains a banned word, if the term is longer than 100 characters, or if the tracking limit below has been reached. Banned terms that are already in the log are left out of the heatmaps.
+
+## Search Tracking Limit per Minute
+
+Sets the maximum number of search terms added to the popular-search log per minute across the whole site. The default is `20`, and the accepted range is 1 to 1,000,000. Searches still work after the limit is reached, but they are not logged until the next minute. Increase the value on high-traffic sites.
+
+To change the limit in code, use the `bsearch_tracker_rate_limit_per_minute` filter:
+
+```php
+add_filter( 'bsearch_tracker_rate_limit_per_minute', function () {
+    return 60;
+} );
+```
+
 ## Track Admin Searches
 
 Enable this option to include search queries made by administrators in the tracking data. Disabling it will prevent admin searches from being logged.
@@ -35,6 +49,10 @@ Enable this option to include search queries made by administrators in the track
 ## Track Editor User Group Searches
 
 Similar to admin tracking, this setting logs searches performed by users in the Editor role. Disable it to exclude these searches from being tracked.
+
+## Exclude Bots from Search Tracking
+
+Does not add searches from known crawler and script user agents to popular searches. It is on by default.
 
 ## Stop Search Engines from Indexing Search Results Pages
 

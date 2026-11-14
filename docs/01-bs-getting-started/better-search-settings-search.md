@@ -90,7 +90,7 @@ These settings only appear when **"Did you mean" suggestions** is turned on in t
 
 **"Did you mean" mode**: **Suggest ("Did you mean")** shows a "Did you mean" link but still displays the original (empty) results. **Auto-correct** transparently re-runs the search with the corrected term when it actually returns results, showing a link back to the original query.
 
-**Use enchant as a fallback**: falls back to the server's enchant spellchecker if your search log and site content have no close match. Disabled if the extension isn't installed. See [Installing enchant on your server](https://webberzone.com/support/knowledgebase/did-you-mean-spelling-suggestions/#installing-enchant-on-your-server).
+**Use enchant as a fallback**: falls back to the server's enchant spellchecker if your search log and site content have no close match. Disabled if the extension isn't installed. It is also skipped on macOS web servers, where enchant's AppleSpell provider can crash PHP. Use the `bsearch_did_you_mean_enchant_usable` filter to turn it back on after removing that provider. See [Installing enchant on your server](https://webberzone.com/support/knowledgebase/did-you-mean-spelling-suggestions/#installing-enchant-on-your-server).
 
 ## Weighting
 
@@ -234,4 +234,6 @@ When enabled, only whole words in the search query are filtered. Partial matches
 ### Block searches containing banned words
 
 When enabled, no results are returned if the search query includes any banned words.
+
+Banned terms are also left out of the heatmaps and, in Better Search Pro, out of fuzzy search suggestions, including terms that were logged before they were banned.
 If Seamless mode is disabled, an error message is displayed. With Seamless mode enabled, a “Nothing found” message is shown (customizable via your theme).

@@ -150,6 +150,7 @@ Words that differ only by letter case or accents are combined into a single entr
 - [`bsearch_spelling_suggestion`](https://webberzone.dev/better-search/hooks/bsearch_spelling_suggestion/): Filters the final suggestion resolved for a single search token, after the search log, content index, and enchant fallback have all been tried.
 - [`bsearch_did_you_mean_min_searches`](https://webberzone.dev/better-search/hooks/bsearch_did_you_mean_min_searches/): Filters the minimum search-log count required for a term to qualify as a suggestion, overriding the **Minimum searches to qualify as a suggestion** setting.
 - `bsearch_did_you_mean_enchant_locale`: Filters the locale (default `en_US`) used to request a dictionary from enchant for the fallback.
+- `bsearch_did_you_mean_enchant_usable`: Filters whether enchant is safe to call. It returns `false` on macOS web servers because enchant's AppleSpell provider can crash PHP. Return `true` only after removing that provider.
 - `get_bsearch_did_you_mean` / `get_bsearch_autocorrect_notice`: Filter the generated markup for each notice.
 - `bsearch_spell_dictionary_batch_size`: Filters the number of posts read in each dictionary rebuild batch. Default `2000`.
 

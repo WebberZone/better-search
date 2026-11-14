@@ -43,6 +43,8 @@ The module provides these filters:
 | `bsearch_ai_answer_cache_ttl` | Adjust how long answers are cached, in seconds. Default one week. |
 | `bsearch_ai_lock_wait` | Adjust how long a request waits for a concurrent request to answer the same question. |
 | `bsearch_ai_answer` | Inspect or adjust the validated answer result. |
+| `bsearch_ai_hourly_share` | Adjust the fraction of the daily request cap that anonymous visitors can use in one clock hour. Default `0.25`; accepts 0 to 1. |
+| `bsearch_ai_anonymous_daily_cap` | Adjust the daily cap for anonymous visitors. Receives the saved cap and the site-wide daily cap. |
 | `bsearch_ai_is_bot` | Adjust browser-client detection for the public REST route. |
 | `bsearch_ai_allowed_origins` | Extend the allowed browser origins for the REST route. |
 
