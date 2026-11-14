@@ -134,35 +134,35 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.6.0 =
 
-Release date: 14 November 2026
+Release date: 15 November 2026
 Release post: https://webberzone.com/announcements/better-search-v4-6/
 
 **Added**
 
-* Count of searches that returned no results on the dashboard for each period. Only the number of searches is stored, in a new `bsearch_no_results_daily` table.
-* [Pro] Search terms that returned no results on the dashboard: the top 20 for each period, for a single day from the chart, and across the network. Terms are recorded from this version onward in a new `bsearch_no_results` table.
-* [Pro] 16 Abilities API abilities for cache, database, custom index, statistics, settings and stopwords. All require `manage_options`; those that delete or overwrite data require `confirm`.
-* [Pro] **Daily cap for anonymous visitors** setting for AI answers, keeping the rest of the daily request cap for logged-in users. Off by default.
+* Zero-result search counts on the dashboard for each period.
+* [Pro] Top zero-result search terms on the dashboard, chart drill-down and network reports, stored in `bsearch_no_results` from this version onward.
+* [Pro] Abilities API abilities for cache, database, custom index, statistics, settings and stopwords.
+* [Pro] Daily cap for anonymous AI answers, reserving the rest of the daily limit for logged-in users. Off by default.
 
 **Changed**
 
-* [Pro] `wp bsearch settings set` and `wp bsearch settings import` validated and sanitized values like the settings page. An import skipped unknown keys and invalid values with a warning instead of saving them.
-* [Pro] Limited anonymous AI answers to a quarter of the daily request cap in any one hour. Use `bsearch_ai_hourly_share` to change it.
+* [Pro] `wp bsearch settings set` and `wp bsearch settings import` validate and sanitize like the settings page, skipping unknown keys with a warning.
+* [Pro] Anonymous AI answers limited to one quarter of the daily cap in any hour. Use `bsearch_ai_hourly_share` to change it.
 
 **Security**
 
-* Hardened search tracking: terms are cleaned and checked against banned words, the tracking setting is obeyed, terms over 100 characters are rejected and known bots are excluded by default.
-* Limited search tracking to 20 tracked searches a minute per site by default. Searches still run beyond the limit but are not logged. Use the `tracker_limit` setting or `bsearch_tracker_rate_limit_per_minute` to change it.
+* Hardened search tracking with banned-word checks, the tracking setting, a 100-character term limit and bot exclusion by default.
+* Limited search tracking to 20 searches a minute per site by default. Use `tracker_limit` or `bsearch_tracker_rate_limit_per_minute` to change it.
 * Excluded banned terms already in the log from heatmaps.
 * [Pro] Excluded banned terms already in the log from Did You Mean suggestions.
 
 **Fixed**
 
-* Backslashes in Custom CSS and other settings, such as icon font codes, were removed when settings were saved and on the front end.
-* Quotes in Custom CSS were converted to HTML entities in the styles added for the Search Box widget.
-* Importing a settings file containing only some settings deleted the settings missing from the file.
-* Settings imports were not sanitized like settings saved from the settings page, and invalid files were accepted.
-* Live search messages could not be translated because they used the wrong text domain.
+* Backslashes in Custom CSS and other settings, such as icon font codes, were removed on save and on the front end.
+* Quotes in Custom CSS were converted to HTML entities in Search Box widget styles.
+* Partial settings imports deleted keys missing from the file.
+* Settings imports were not sanitized like the settings page, and invalid files were accepted.
+* Live search messages used the wrong text domain and could not be translated.
 
 = Earlier versions =
 
