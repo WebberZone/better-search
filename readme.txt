@@ -145,7 +145,7 @@ Release date: 14 November 2026
 
 **Changed**
 
-* [Pro] `wp bsearch settings set` and `wp bsearch settings import` validated and sanitized values like the settings page and rejected unknown keys. An import without `--merge` reset settings missing from the file to their defaults.
+* [Pro] `wp bsearch settings set` and `wp bsearch settings import` validated and sanitized values like the settings page. An import skipped unknown keys and invalid values with a warning instead of saving them.
 * [Pro] Limited anonymous AI answers to a quarter of the daily request cap in any one hour. Use `bsearch_ai_hourly_share` to change it.
 
 **Security**
@@ -153,7 +153,7 @@ Release date: 14 November 2026
 * Hardened search tracking: terms are cleaned and checked against banned words, the tracking setting is obeyed, terms over 100 characters are rejected and known bots are excluded by default.
 * Limited search tracking to 20 tracked searches a minute per site by default. Searches still run beyond the limit but are not logged. Use the `tracker_limit` setting or `bsearch_tracker_rate_limit_per_minute` to change it.
 * Excluded banned terms already in the log from heatmaps.
-* [Pro] Excluded banned terms already in the log from fuzzy search suggestions.
+* [Pro] Excluded banned terms already in the log from Did You Mean suggestions.
 
 **Fixed**
 
