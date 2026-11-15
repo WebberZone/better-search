@@ -139,6 +139,7 @@ Release post: https://webberzone.com/announcements/better-search-v4-6/
 
 **Added**
 
+* Save Changes button in settings navigation.
 * Zero-result search counts on the dashboard for each period.
 * [Pro] Top zero-result search terms on the dashboard, chart drill-down and network reports, stored in `bsearch_no_results` from this version onward.
 * [Pro] Abilities API abilities for cache, database, custom index, statistics, settings and stopwords.
