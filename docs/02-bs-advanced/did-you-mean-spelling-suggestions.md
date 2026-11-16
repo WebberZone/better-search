@@ -160,6 +160,7 @@ Words that differ only by letter case or accents are combined into a single entr
 - **Auto-correct is re-run, not guessed**: In Auto-correct mode, the corrected phrase is only adopted if re-running the search with it actually returns results; otherwise Better Search falls back to showing the normal zero-results page.
 - **Accepted corrections reinforce your search log**: When Auto-correct mode succeeds, the corrected term is logged as a search, strengthening future suggestions.
 - **Repeated saves no longer skew frequencies**: When you save a post, its title words are added to the dictionary only if they are missing, rather than having their counts incremented again. Frequencies now reflect how common a word is, not how often a post was edited. The scheduled rebuild recomputes true frequencies twice a day.
+- **Banned terms are filtered out of suggestions**: Suggestions drawn from your search log or the content dictionary skip terms on your banned words list, including terms that were logged before they were banned.
 
 ## Available to AI assistants
 

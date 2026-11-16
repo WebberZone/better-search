@@ -235,5 +235,5 @@ When enabled, only whole words in the search query are filtered. Partial matches
 
 When enabled, no results are returned if the search query includes any banned words.
 
-Banned terms are also left out of the heatmaps and, in Better Search Pro, out of fuzzy search suggestions, including terms that were logged before they were banned.
+Banned terms are also left out of the heatmaps and, in Better Search Pro, out of fuzzy search and "Did you mean" suggestions, including terms that were logged before they were banned.
 If Seamless mode is disabled, an error message is displayed. With Seamless mode enabled, a “Nothing found” message is shown (customizable via your theme).

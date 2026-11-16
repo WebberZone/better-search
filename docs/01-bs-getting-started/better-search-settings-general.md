@@ -14,6 +14,12 @@ featured_image: "https://webberzone.com/wp-content/uploads/2024/11/Better-Search
 
 The **General** section is the first in the [Better Search](https://webberzone.com/plugins/better-search/) settings screen. It gives you the main options for configuring Better Search on your WordPress blog.
 
+## Finding settings and saving
+
+The tab bar at the top of the settings screen includes a search box that live-filters settings across every tab as you type. Each tab shows how many of its settings match. While a search is active, clicking a tab scrolls to its matches instead of switching tabs.
+
+A **Save Changes** button in the tab bar (added in 4.6.0) submits the settings form without scrolling to the bottom of a long tab. While a search is active, a Save Changes button is also shown with the matching settings.
+
 ## Enable Seamless Integration
 
 This setting integrates Better Search completely with your theme. When enabled, the plugin ignores the `better-search-template.php` file. Search results will still be sorted by relevance without displaying the relevance percentage.
