@@ -159,6 +159,7 @@ Release post: https://webberzone.com/announcements/better-search-v4-6/
 
 **Fixed**
 
+* Thumbnails without alt text now output an empty `alt` attribute so screen readers skip decorative images.
 * Backslashes in Custom CSS and other settings, such as icon font codes, were removed on save and on the front end.
 * Quotes in Custom CSS were converted to HTML entities in Search Box widget styles.
 * Partial settings imports deleted keys missing from the file.
