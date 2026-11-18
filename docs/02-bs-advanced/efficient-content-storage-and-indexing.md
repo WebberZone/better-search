@@ -121,7 +121,7 @@ ECSI keeps the custom tables consistent with your content through:
 
 Changes made outside the post editor are picked up as well. Quick Edit, bulk term changes, REST API updates, and the primary-term keys written by Yoast SEO, Rank Math, and SEOPress all queue a resync of the affected post.
 
-Meta changes queue a resync only when the key is one you have configured for indexing. In Contextual Related Posts Pro that is the **Meta keys to index** setting on the Performance tab, extendable with the `crp_index_meta_keys` filter. Better Search Pro has no equivalent setting on its settings page; list the keys you want indexed with the `bsearch_index_meta_keys` filter instead.
+Meta changes queue a resync only when the key is one you have configured for indexing. In Contextual Related Posts Pro that is the **Meta keys to index** setting on the Performance tab, extendable with the [`crp_index_meta_keys`](https://webberzone.dev/contextual-related-posts/hooks/crp_index_meta_keys/) filter. Better Search Pro has no equivalent setting on its settings page; list the keys you want indexed with the [`bsearch_index_meta_keys`](https://webberzone.dev/better-search/hooks/bsearch_index_meta_keys/) filter instead.
 
 ### Term renames and large terms
 

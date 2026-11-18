@@ -12,7 +12,7 @@ toc: true
 
 [toc]
 
-[Better Search](https://webberzone.com/plugins/better-search/) enhances WordPress’s native search capabilities to deliver more relevant results to visitors. At the heart of this functionality is the `Better_Search_Query` class, which you can use for optimal search performance on your site.
+[Better Search](https://webberzone.com/plugins/better-search/) enhances WordPress’s native search capabilities to deliver more relevant results to visitors. At the heart of this functionality is the [`Better_Search_Query`](https://webberzone.dev/better-search/classes/Better_Search_Query/) class, which you can use for optimal search performance on your site.
 
 ## What is Better_Search_Query?
 

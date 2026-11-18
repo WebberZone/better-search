@@ -21,7 +21,7 @@ Both settings work together with two different mechanisms depending on where the
 
 ### Server-side highlighting (search results page)
 
-On the search results page itself, Better Search highlights terms server-side. The `Display` class hooks into `the_title`, `the_content`, `get_the_excerpt`, and [`the_bsearch_excerpt`](https://webberzone.dev/better-search/hooks/the_bsearch_excerpt/) and wraps each matched term while the page is being generated. Because this only runs on `is_search()`, it always works: it doesn't depend on the visitor's browser or any caching layer.
+On the search results page itself, Better Search highlights terms server-side. The [`Display`](https://webberzone.dev/better-search/classes/WebberZone-Better_Search-Frontend-Display/) class hooks into `the_title`, `the_content`, `get_the_excerpt`, and [`the_bsearch_excerpt`](https://webberzone.dev/better-search/hooks/the_bsearch_excerpt/) and wraps each matched term while the page is being generated. Because this only runs on `is_search()`, it always works: it doesn't depend on the visitor's browser or any caching layer.
 
 ### Client-side highlighting (followed links)
 

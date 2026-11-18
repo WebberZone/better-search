@@ -102,7 +102,7 @@ Because search terms are combined with `AND`, a phrase written as a sentence or 
 
 A short phrase that genuinely matches nothing still returns an ordinary empty response, so a connected client can tell the two situations apart.
 
-Developers can change when this applies with two filters:
+Developers can change when this applies with the [`bsearch_abilities_max_search_terms`](https://webberzone.dev/better-search/hooks/bsearch_abilities_max_search_terms/) and [`bsearch_abilities_max_search_words`](https://webberzone.dev/better-search/hooks/bsearch_abilities_max_search_words/) filters:
 
 ```php
 // Allow up to 8 search terms before reporting a phrase as too long.

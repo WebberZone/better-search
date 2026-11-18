@@ -164,7 +164,7 @@ Include posts where all taxonomies (categories, tags, custom taxonomies) match t
 
 Include posts where meta values match the search terms.
 
-On sites with a large `postmeta` table this is often the most expensive part of the query, because every meta key is searched. Use the `bsearch_search_meta_keys` filter to restrict the search to the keys you actually want. Returning an empty array keeps the default behavior of searching all keys.
+On sites with a large `postmeta` table this is often the most expensive part of the query, because every meta key is searched. Use the [`bsearch_search_meta_keys`](https://webberzone.dev/better-search/hooks/bsearch_search_meta_keys/) filter to restrict the search to the keys you actually want. Returning an empty array keeps the default behavior of searching all keys.
 
 ```php
 add_filter(

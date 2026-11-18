@@ -113,7 +113,7 @@ If [Seamless Mode](https://webberzone.com/support/knowledgebase/better-search-se
 
 If Seamless Mode is on, your theme renders its own `search.php`, so call these template tags directly wherever you want the notice to appear:
 
-### `the_bsearch_did_you_mean()`
+### [`the_bsearch_did_you_mean()`](https://webberzone.dev/better-search/functions/the_bsearch_did_you_mean/)
 
 Displays a "Did you mean: `<suggested term>`?" link when Suggest mode found a correction but the original search still returned no results.
 
@@ -123,7 +123,7 @@ Displays a "Did you mean: `<suggested term>`?" link when Suggest mode found a co
 
 Accepts an optional `$args` array with `before` and `after` markup, defaulting to `<p class="bsearch-did-you-mean">` / `</p>`. Returns an empty string when there's no suggestion for the current query. You can call it unconditionally. A [`get_bsearch_did_you_mean()`](https://webberzone.dev/better-search/hooks/get_bsearch_did_you_mean/) variant returns the markup instead of echoing it.
 
-### `the_bsearch_autocorrect_notice()`
+### [`the_bsearch_autocorrect_notice()`](https://webberzone.dev/better-search/functions/the_bsearch_autocorrect_notice/)
 
 Displays a "Showing results for **`<corrected term>`**: search instead for `<original term>`" notice when Auto-correct mode transparently corrected the query.
 
@@ -135,7 +135,7 @@ Accepts the same `before` / `after` arguments, defaulting to `<p class="bsearch-
 
 ## Rebuilding the dictionary
 
-The content dictionary is built from your published post titles. Rebuilds read titles in batches of 2,000 posts rather than loading every title at once, which keeps memory use flat on large sites. Use the `bsearch_spell_dictionary_batch_size` filter to change the batch size.
+The content dictionary is built from your published post titles. Rebuilds read titles in batches of 2,000 posts rather than loading every title at once, which keeps memory use flat on large sites. Use the [`bsearch_spell_dictionary_batch_size`](https://webberzone.dev/better-search/hooks/bsearch_spell_dictionary_batch_size/) filter to change the batch size.
 
 ```php
 add_filter( 'bsearch_spell_dictionary_batch_size', fn() => 500 );

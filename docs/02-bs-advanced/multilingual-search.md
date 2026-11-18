@@ -15,9 +15,9 @@ toc: true
 
 ## How Better Search handles languages
 
-The language logic lives in one class, `Language_Handler`, in `includes/frontend/class-language-handler.php`. It ships in the free plugin and runs on every front-end search.
+The language logic lives in one class, [`Language_Handler`](https://webberzone.dev/better-search/classes/WebberZone-Better_Search-Frontend-Language_Handler/), in `includes/frontend/class-language-handler.php`. It ships in the free plugin and runs on every front-end search.
 
-- The `better_search_query_the_posts` filter runs `translate_ids()`, which maps each result to its translation for WPML and Polylang.
+- The [`better_search_query_the_posts`](https://webberzone.dev/better-search/hooks/better_search_query_the_posts/) filter runs `translate_ids()`, which maps each result to its translation for WPML and Polylang.
 - `get_cache_language()` adds a language component to Better Search cache keys.
 - TranslatePress support detects the active language and translates live search output, because TranslatePress translates text at render time instead of creating separate posts for each language.
 
@@ -29,8 +29,8 @@ Better Search detects WPML through the `SitePress` class. For each result it cal
 
 Two filters customize the WPML lookup:
 
-- `bsearch_wpml_return_original`: controls whether the original post is returned when a translation is missing. Default: `false`.
-- `bsearch_object_id_cur_lang`: filters the post object resolved for the current language.
+- [`bsearch_wpml_return_original`](https://webberzone.dev/better-search/hooks/bsearch_wpml_return_original/): controls whether the original post is returned when a translation is missing. Default: `false`.
+- [`bsearch_object_id_cur_lang`](https://webberzone.dev/better-search/hooks/bsearch_object_id_cur_lang/): filters the post object resolved for the current language.
 
 ## Polylang
 
@@ -50,7 +50,7 @@ Search-term highlighting splits titles with markup, which can stop TranslatePres
 
 Better Search adds the active language to its cache keys through `get_cache_language()`. It checks TranslatePress first, then Polylang (`pll_current_language( 'locale' )`), then WPML (`wpml_current_language`). The result is included in the internal output cache key, so cached results from one language are not reused in another.
 
-Use the `bsearch_cache_language` filter to supply a language key when your setup uses custom language detection that Better Search does not recognize:
+Use the [`bsearch_cache_language`](https://webberzone.dev/better-search/hooks/bsearch_cache_language/) filter to supply a language key when your setup uses custom language detection that Better Search does not recognize:
 
 ```php
 // Provide a language key for a custom multilingual setup.
@@ -66,7 +66,7 @@ add_filter( 'bsearch_cache_language', function ( $language ) {
 
 On TranslatePress sites, live search requests carry the active language. The AJAX handler resolves it with `get_trp_ajax_language()`, which reads the `lang` POST field, resolves a language URL slug to its locale, or falls back to the referring URL. The language is included in the response cache key, and when a non-default language is active, Better Search translates each result title with `trp_translate()` and converts each result URL with TranslatePress's URL converter before sending the response.
 
-Override the resolved language with the `bsearch_trp_ajax_language` filter:
+Override the resolved language with the [`bsearch_trp_ajax_language`](https://webberzone.dev/better-search/hooks/bsearch_trp_ajax_language/) filter:
 
 ```php
 // Force live search to translate results into a specific language.

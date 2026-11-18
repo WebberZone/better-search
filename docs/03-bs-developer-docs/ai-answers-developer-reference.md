@@ -29,26 +29,26 @@ The module provides these filters:
 
 | Filter | Purpose |
 | --- | --- |
-| `bsearch_ai_retriever` | Replace the retrieval implementation with an object implementing the AI retriever interface. |
-| `bsearch_ai_retrieved_articles` | Adjust retrieved article selection; article IDs are revalidated before sending context. |
-| `bsearch_ai_system_instruction` | Adjust the system instruction sent with the question and excerpts. |
-| `bsearch_ai_prompt_builder` | Adjust the WordPress AI Client prompt builder. |
-| `bsearch_ai_provider_cooldown` | Adjust how long a provider is paused after a qualifying error. |
-| `bsearch_ai_provider_options` | Adjust the providers offered in the primary and fallback settings. |
-| `bsearch_ai_configured_providers` | Adjust the providers considered configured for fallback selection. |
-| `bsearch_ai_model_options` | Adjust the models offered for a provider. Receives the options and the provider ID. |
-| `bsearch_ai_model` | Adjust the model used for a provider. Receives the model ID (empty for the provider default) and the provider ID. |
-| `bsearch_ai_request_timeout` | Adjust how many seconds each provider is given to answer. Default `20`. The answer lock, the wait for a concurrent request and the browser's timeout follow from it. |
-| `bsearch_ai_canonical_question` | Adjust the canonical form of a question. Questions with the same canonical form share a cached answer. |
-| `bsearch_ai_answer_cache_ttl` | Adjust how long answers are cached, in seconds. Default one week. |
-| `bsearch_ai_lock_wait` | Adjust how long a request waits for a concurrent request to answer the same question. |
-| `bsearch_ai_answer` | Inspect or adjust the validated answer result. |
+| [`bsearch_ai_retriever`](https://webberzone.dev/better-search/hooks/bsearch_ai_retriever/) | Replace the retrieval implementation with an object implementing the AI retriever interface. |
+| [`bsearch_ai_retrieved_articles`](https://webberzone.dev/better-search/hooks/bsearch_ai_retrieved_articles/) | Adjust retrieved article selection; article IDs are revalidated before sending context. |
+| [`bsearch_ai_system_instruction`](https://webberzone.dev/better-search/hooks/bsearch_ai_system_instruction/) | Adjust the system instruction sent with the question and excerpts. |
+| [`bsearch_ai_prompt_builder`](https://webberzone.dev/better-search/hooks/bsearch_ai_prompt_builder/) | Adjust the WordPress AI Client prompt builder. |
+| [`bsearch_ai_provider_cooldown`](https://webberzone.dev/better-search/hooks/bsearch_ai_provider_cooldown/) | Adjust how long a provider is paused after a qualifying error. |
+| [`bsearch_ai_provider_options`](https://webberzone.dev/better-search/hooks/bsearch_ai_provider_options/) | Adjust the providers offered in the primary and fallback settings. |
+| [`bsearch_ai_configured_providers`](https://webberzone.dev/better-search/hooks/bsearch_ai_configured_providers/) | Adjust the providers considered configured for fallback selection. |
+| [`bsearch_ai_model_options`](https://webberzone.dev/better-search/hooks/bsearch_ai_model_options/) | Adjust the models offered for a provider. Receives the options and the provider ID. |
+| [`bsearch_ai_model`](https://webberzone.dev/better-search/hooks/bsearch_ai_model/) | Adjust the model used for a provider. Receives the model ID (empty for the provider default) and the provider ID. |
+| [`bsearch_ai_request_timeout`](https://webberzone.dev/better-search/hooks/bsearch_ai_request_timeout/) | Adjust how many seconds each provider is given to answer. Default `20`. The answer lock, the wait for a concurrent request and the browser's timeout follow from it. |
+| [`bsearch_ai_canonical_question`](https://webberzone.dev/better-search/hooks/bsearch_ai_canonical_question/) | Adjust the canonical form of a question. Questions with the same canonical form share a cached answer. |
+| [`bsearch_ai_answer_cache_ttl`](https://webberzone.dev/better-search/hooks/bsearch_ai_answer_cache_ttl/) | Adjust how long answers are cached, in seconds. Default one week. |
+| [`bsearch_ai_lock_wait`](https://webberzone.dev/better-search/hooks/bsearch_ai_lock_wait/) | Adjust how long a request waits for a concurrent request to answer the same question. |
+| [`bsearch_ai_answer`](https://webberzone.dev/better-search/hooks/bsearch_ai_answer/) | Inspect or adjust the validated answer result. |
 | `bsearch_ai_hourly_share` | Adjust the fraction of the daily request cap that anonymous visitors can use in one clock hour. Default `0.25`; accepts 0 to 1. |
 | `bsearch_ai_anonymous_daily_cap` | Adjust the daily cap for anonymous visitors. Receives the saved cap and the site-wide daily cap. |
-| `bsearch_ai_is_bot` | Adjust browser-client detection for the public REST route. |
-| `bsearch_ai_allowed_origins` | Extend the allowed browser origins for the REST route. |
+| [`bsearch_ai_is_bot`](https://webberzone.dev/better-search/hooks/bsearch_ai_is_bot/) | Adjust browser-client detection for the public REST route. |
+| [`bsearch_ai_allowed_origins`](https://webberzone.dev/better-search/hooks/bsearch_ai_allowed_origins/) | Extend the allowed browser origins for the REST route. |
 
-Use `bsearch_ai_pre_prompt` only for integrations that intentionally replace the provider response. It receives the provider ID after the prompt arguments. Returned answers still pass the module's source validation. Keep custom retrieval scoped to public, published content; the plugin rechecks article IDs, but custom integrations remain responsible for the content they send to a provider.
+Use [`bsearch_ai_pre_prompt`](https://webberzone.dev/better-search/hooks/bsearch_ai_pre_prompt/) only for integrations that intentionally replace the provider response. It receives the provider ID after the prompt arguments. Returned answers still pass the module's source validation. Keep custom retrieval scoped to public, published content; the plugin rechecks article IDs, but custom integrations remain responsible for the content they send to a provider.
 
 ## Provider chain and cooldowns
 
@@ -58,6 +58,6 @@ Qualifying failures increase the cooldown from five minutes up to one hour. Netw
 
 ## Cache operations
 
-AI answers use transients prefixed with `bsearch_ai_answer_`, keyed by the canonical question (`Ask_Handler::canonical_question()`), the settings that affect answers, the provider and model, the locale and the search context. Clearing the AI cache also removes keyword-count caches, the provider availability result, and every provider cooldown and failure counter.
+AI answers use transients prefixed with `bsearch_ai_answer_`, keyed by the canonical question ([`Ask_Handler::canonical_question()`](https://webberzone.dev/better-search/classes/WebberZone-Better_Search-Pro-AI-Ask_Handler/)), the settings that affect answers, the provider and model, the locale and the search context. Clearing the AI cache also removes keyword-count caches, the provider availability result, and every provider cooldown and failure counter.
 
-Each cached answer stores a fingerprint of every post sent to the provider: its modified date plus the `_bsearch_ai_rev` post meta, which changes when the post is updated or its terms, indexed meta keys or approved comments change. The answer is a cache miss once a fingerprint differs or a post is no longer public. The fingerprints are taken before the provider request, so an edit made while the provider answers still retires the answer. Two options act as versions: `bsearch_ai_content_version` retires every answer, and `bsearch_ai_publish_version`, changed when a searched post is published or updated, retires only unanswered results. `Answer_Cache::touch_post()` retires the answers built from a post when it changes in a way the plugin cannot see.
+Each cached answer stores a fingerprint of every post sent to the provider: its modified date plus the `_bsearch_ai_rev` post meta, which changes when the post is updated or its terms, indexed meta keys or approved comments change. The answer is a cache miss once a fingerprint differs or a post is no longer public. The fingerprints are taken before the provider request, so an edit made while the provider answers still retires the answer. Two options act as versions: `bsearch_ai_content_version` retires every answer, and `bsearch_ai_publish_version`, changed when a searched post is published or updated, retires only unanswered results. [`Answer_Cache::touch_post()`](https://webberzone.dev/better-search/classes/WebberZone-Better_Search-Pro-AI-Answer_Cache/) retires the answers built from a post when it changes in a way the plugin cannot see.

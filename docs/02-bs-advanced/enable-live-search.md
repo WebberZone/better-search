@@ -55,7 +55,7 @@ Live search fires on every keystroke, so Better Search keeps each request cheap.
 - **Queries are capped at 128 characters.** Anything longer is truncated before the search runs.
 - **No result count is calculated.** Live search asks only for the posts it will show, skipping the extra count query a normal search performs.
 
-Change the cache duration with the `bsearch_live_search_cache_time` filter. Return `0` to disable live search caching.
+Change the cache duration with the [`bsearch_live_search_cache_time`](https://webberzone.dev/better-search/hooks/bsearch_live_search_cache_time/) filter. Return `0` to disable live search caching.
 
 ```php
 // Cache live search responses for one minute instead of five.

@@ -16,11 +16,11 @@ The classic theme layout included within the plugin differs from the block theme
 
 ## For Classic Themes
 
-You can view the code behind the <a href="https://github.com/WebberZone/better-search/blob/master/templates/better-search-template.php" target="_blank" rel="noreferrer noopener">default template</a> Better Search uses if your site uses a classic theme. Behind the scenes, Better Search uses `Better_Search_Query`, a wrapper for <a href="https://developer.wordpress.org/reference/classes/wp_query/" target="_blank" rel="noreferrer noopener">WP_Query</a> with additional settings needed for Better Search to fetch the relevant search results. This means that if you’re familiar with `WP_Query`, then you only need to make a few minor tweaks.
+You can view the code behind the <a href="https://github.com/WebberZone/better-search/blob/master/templates/better-search-template.php" target="_blank" rel="noreferrer noopener">default template</a> Better Search uses if your site uses a classic theme. Behind the scenes, Better Search uses [`Better_Search_Query`](https://webberzone.dev/better-search/classes/Better_Search_Query/), a wrapper for <a href="https://developer.wordpress.org/reference/classes/wp_query/" target="_blank" rel="noreferrer noopener">WP_Query</a> with additional settings needed for Better Search to fetch the relevant search results. This means that if you’re familiar with `WP_Query`, then you only need to make a few minor tweaks.
 
 ### Results header
 
-The classic template calls `the_bsearch_header()` to show the results count, page number, sort links and results-per-page links above the results. From 4.5.3, the header is built with `div` elements laid out with CSS Grid instead of a table, so screen readers no longer announce it as a data table:
+The classic template calls [`the_bsearch_header()`](https://webberzone.dev/better-search/functions/the_bsearch_header/) to show the results count, page number, sort links and results-per-page links above the results. From 4.5.3, the header is built with `div` elements laid out with CSS Grid instead of a table, so screen readers no longer announce it as a data table:
 
 ```html
 <div class="bsearch_nav">
