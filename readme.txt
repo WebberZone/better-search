@@ -134,7 +134,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 4.6.0 =
 
-Release date: 15 November 2026
+Release date: 18 November 2026
 Release post: https://webberzone.com/announcements/better-search-v4-6/
 
 **Added**
