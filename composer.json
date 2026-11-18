@@ -49,7 +49,6 @@
         "phpunit:all": "vendor/bin/phpunit --configuration phpunit.xml.dist",
         "phpunit:ci": "vendor/bin/phpunit --configuration phpunit.xml.dist --testsuite core",
         "phpunit:release": "vendor/bin/phpunit --configuration phpunit.xml.dist --testsuite core --exclude-group slow",
-        "phpunit:ai": "vendor/bin/phpunit --configuration phpunit.xml.dist --testsuite ai",
         "test:security": "vendor/bin/phpunit --configuration phpunit.xml.dist --filter 'Media_Security'",
         "phpstan-baseline": "vendor/bin/phpstan analyse --memory-limit=2048M --generate-baseline",
         "phpcs": "vendor/bin/phpcs -p -v -s --standard=phpcs.xml.dist $(find . -name '*.php')",
