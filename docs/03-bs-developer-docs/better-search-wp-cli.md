@@ -73,9 +73,10 @@ wp bsearch status
 
 Options:
 
-- `--format=<format>`: Output format: table, json, csv
-- `--verbose`: Show detailed information
-- `--network`: Show status for all network sites
+- `--format=<format>`: Output format: table, json, csv. Default: table
+- `--url=<url>`: Show status for a specific site URL (multisite only)
+- `--network`: Show status for all sites in the network
+- `--blog-id=<id>`: Show status for a specific blog ID (multisite only)
 
 ### Cache
 
@@ -105,9 +106,9 @@ wp bsearch cache warm
 Options:
 
 - `--limit=<number>`: Number of top searches to warm (default: 50)
-- `--batch-size=<size>`: Batch size for processing (default: 100)
 - `--dry-run`: Preview without making changes
 - `--force`: Force cache warming even if cache exists
+- `--verbose`: Show which queries were skipped because they have no results or are already cached
 
 #### Cache Status
 
@@ -118,6 +119,134 @@ wp bsearch cache status
 Options:
 
 - `--format=<format>`: Output format: table, json, csv
+- `--url=<url>`: Show cache status for a specific site URL (multisite only)
+- `--network`: Show cache status for all sites in the network
+- `--blog-id=<id>`: Show cache status for a specific blog ID (multisite only)
+
+### Statistics
+
+View, export, and clear the search statistics that Better Search records.
+
+#### View statistics
+
+```bash
+wp bsearch stats view
+wp bsearch stats view --table=daily --orderby=dp_date --limit=50
+wp bsearch stats view --format=json
+```
+
+Options:
+
+- `--limit=<number>`: Number of entries to show. Default: 20
+- `--table=<table>`: Table to query: `overall` or `daily`. Default: `overall`
+- `--orderby=<field>`: Sort field: `searchvar`, `cntaccess`, or `dp_date`. Default: `cntaccess`
+- `--order=<direction>`: Sort order: `asc` or `desc`. Default: `desc`
+- `--format=<format>`: Output format: table, json, csv. Default: table
+- `--url=<url>`: Show statistics for a specific site URL (multisite only)
+- `--network`: Show statistics for all sites in the network
+- `--blog-id=<id>`: Show statistics for a specific blog ID (multisite only)
+
+#### Top searches
+
+```bash
+wp bsearch stats top
+wp bsearch stats top --limit=50 --network
+```
+
+Shows the most frequent search queries. It accepts `--limit` (default: 20), `--format`, `--url`, `--network`, and `--blog-id`.
+
+#### Clear statistics
+
+```bash
+wp bsearch stats clear --force
+wp bsearch stats clear --table=daily --before=2026-01-01 --dry-run
+```
+
+Options:
+
+- `--before=<date>`: Clear entries before this date, in `YYYY-MM-DD` format
+- `--table=<table>`: Table to clear: `overall`, `daily`, or `all`. Default: `all`
+- `--force`: Skip confirmation
+- `--dry-run`: Show what would be cleared without making changes
+
+The overall table has no date column, so `--before` skips it with a warning and clears the daily table only.
+
+#### Export statistics
+
+```bash
+wp bsearch stats export
+wp bsearch stats export --file=stats.csv --table=daily --limit=1000
+```
+
+Writes the statistics to a CSV file.
+
+Options:
+
+- `--file=<path>`: Path of the export file. Default: `bsearch-stats-<timestamp>.csv`
+- `--table=<table>`: Table to export: `overall` or `daily`. Default: `overall`
+- `--limit=<number>`: Maximum number of entries to export. Default: all
+
+Files can only be written to the WordPress root, the uploads directory, or the system temp directory.
+
+### Stopwords
+
+Manage the stopwords list from the command line.
+
+```bash
+wp bsearch stopwords list
+wp bsearch stopwords add the and a an
+wp bsearch stopwords remove the and
+wp bsearch stopwords clear --force
+```
+
+- `list` shows the stopwords. It accepts `--format` (table, json, csv).
+- `add <words>...` adds one or more words. Words that already exist are skipped.
+- `remove <words>...` removes one or more words.
+- `clear` removes every stopword and asks for confirmation unless you pass `--force`.
+
+Every subcommand accepts `--network` to apply to all sites in the network and `--blog-id=<id>` to target a single site (multisite only).
+
+### Database
+
+Inspect and repair the tracking tables and the FULLTEXT indexes.
+
+#### Status
+
+```bash
+wp bsearch db status
+wp bsearch db status --format=json
+wp bsearch db status --network
+```
+
+Shows the database engine, whether the `bsearch` and `bsearch_daily` tables exist, how many entries each holds, and how many FULLTEXT indexes are installed. It accepts `--format`, `--network`, and `--blog-id`.
+
+#### Create and recreate tables
+
+```bash
+wp bsearch db create-tables --dry-run
+wp bsearch db recreate-tables --no-backup
+```
+
+`create-tables` creates any missing tracking tables. It accepts `--dry-run` and `--force`; without `--force` it stops when both tables already exist.
+
+`recreate-tables` rebuilds the tracking tables and backs them up first. It asks for confirmation unless you pass `--force`.
+
+Options:
+
+- `--no-backup`: Skip creating backup tables before recreating
+- `--force`: Recreate without confirmation
+- `--dry-run`: Show what would be done without making changes
+
+#### Indexes
+
+```bash
+wp bsearch db indexes status
+wp bsearch db indexes create
+wp bsearch db indexes recreate
+wp bsearch db indexes delete --force
+```
+
+Manages the FULLTEXT indexes on the posts table and the custom search tables, and the fuzzy stored functions. `status` is the default when you give no subcommand. `create`, `recreate`, and `delete` accept `--dry-run`, and `delete` asks for confirmation unless you pass `--force`.
 
 ### Efficient Content Storage and Indexing (ECSI)
 
