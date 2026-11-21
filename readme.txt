@@ -132,6 +132,14 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.6.1 =
+
+Release date: 21 November 2026
+
+**Security**
+
+* Hardened the View link in the statistics table so search terms are URL-encoded and escaped for the link.
+
 = 4.6.0 =
 
 Release date: 18 November 2026
@@ -171,6 +179,9 @@ Release post: https://webberzone.com/announcements/better-search-v4-6/
 For the changelog of earlier versions, please refer to the [releases page on GitHub](https://github.com/WebberZone/better-search/releases).
 
 == Upgrade Notice ==
+
+= 4.6.1 =
+Hardens the search statistics table. No action needed on existing sites.
 
 = 4.6.0 =
 Adds a count of searches with no results to the dashboard, and in Pro the terms behind it, new Abilities API tools and a daily AI cap for anonymous visitors. Search tracking is also hardened and rate limited. No action needed on existing sites.

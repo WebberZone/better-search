@@ -438,7 +438,7 @@ class Statistics_Table extends \WP_List_Table {
 		$actions = array(
 			'view'   => sprintf(
 				'<a href="%s" target="_blank">' . __( 'View', 'better-search' ) . '</a>',
-				home_url() . '/?s=' . esc_attr( $item['title'] )
+				esc_url( add_query_arg( 's', rawurlencode( $item['title'] ), home_url( '/' ) ) )
 			),
 			'delete' => sprintf(
 				'<a href="?page=%s&action=%s&id=%s&_wpnonce=%s">' . __( 'Delete', 'better-search' ) . '</a>',
@@ -453,7 +453,7 @@ class Statistics_Table extends \WP_List_Table {
 		return sprintf(
 			'<a href="%2$s">%1$s</a>%3$s',
 			esc_attr( $item['title'] ),
-			home_url() . '/?s=' . esc_attr( $item['title'] ),
+			esc_url( add_query_arg( 's', rawurlencode( $item['title'] ), home_url( '/' ) ) ),
 			$this->row_actions( $actions )
 		);
 	}
