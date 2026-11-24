@@ -139,6 +139,7 @@ Release date: TBD
 **Fixed**
 
 * Live search sent queries shorter than the Minimum characters setting and showed no explanation. The browser check and the message now use the same value as the server.
+* The live search message asking for more characters was cleared before screen readers could announce it.
 * Live search used a minimum of three characters, instead of the default of four, when the Minimum characters setting was missing from the saved settings.
 
 = 4.6.1 =

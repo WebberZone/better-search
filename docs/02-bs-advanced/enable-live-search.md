@@ -51,7 +51,7 @@ Better Search ignores the form and lets it submit as a regular search. This is u
 Live search fires on every keystroke, so Better Search keeps each request cheap.
 
 - **Responses are cached.** A successful live search response is stored in a transient for five minutes, keyed on the query, the active TranslatePress language, the site locale, and the blog ID. On TranslatePress sites the result titles and URLs are translated before the response is sent. Repeat searches for the same term are served from that cache without touching the database.
-- **Short queries are rejected in the browser and on the server.** A query shorter than the **Minimum characters** setting is not sent, and the search box asks for more characters. The default is `4`, which is also the lowest value the field allows. Changing it is Pro only, so the free plugin uses the default. The server runs the same check and returns an empty response, so a crafted request cannot run a full search either.
+- **Short queries are rejected in the browser and on the server.** A query shorter than the **Minimum characters** setting is not sent, and a message asking for more characters is announced to screen readers. The default is `4`, which is also the lowest value the field allows. Changing it is Pro only, so the free plugin uses the default. The server runs the same check and returns an empty response, so a crafted request cannot run a full search either.
 - **Queries are capped at 128 characters.** Anything longer is truncated before the search runs.
 - **No result count is calculated.** Live search asks only for the posts it will show, skipping the extra count query a normal search performs.
 

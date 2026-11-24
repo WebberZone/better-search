@@ -165,8 +165,8 @@ class SearchAutocomplete {
                 this.announce(bsearch_live_search.strings.searching);
                 this.fetchResults(searchTerm);
             } else {
-                this.announce(searchTerm.length === 0 ? '' : bsearch_live_search.strings.min_chars);
                 this.clearResults();
+                this.announce(searchTerm.length === 0 ? '' : bsearch_live_search.strings.min_chars);
             }
         }, SearchAutocomplete.DEBOUNCE_DELAY);
     }
