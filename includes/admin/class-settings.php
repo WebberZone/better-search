@@ -744,7 +744,7 @@ class Settings {
 			'min_char'                  => array(
 				'id'      => 'min_char',
 				'name'    => esc_html__( 'Minimum characters', 'better-search' ),
-				'desc'    => esc_html__( 'Minimum characters required for a fulltext search. If the search term has fewer characters, a LIKE search will be performed instead.', 'better-search' ),
+				'desc'    => esc_html__( 'Minimum characters required for a fulltext search. If the search term has fewer characters, a LIKE search will be performed instead. Live search also waits for this many characters before it sends a request.', 'better-search' ),
 				'type'    => 'number',
 				'default' => '4',
 				'size'    => 'small',

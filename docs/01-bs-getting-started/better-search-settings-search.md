@@ -34,7 +34,7 @@ Disabling this option will no longer give relevance-based results. If you’re u
 
 ### Minimum characters *(Pro only)*
 
-Minimum characters required for a fulltext search. If the search term has fewer characters, a LIKE search will be performed instead.
+Minimum characters required for a fulltext search. If the search term has fewer characters, a LIKE search will be performed instead. Live search also waits for this many characters before it sends a request.
 
 ### Activate BOOLEAN mode
 
