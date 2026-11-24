@@ -18,6 +18,7 @@ class SearchAutocomplete {
         this.requestId = 0;
         this.cache = new Map();
         this.observer = null;
+        this.minLength = parseInt(bsearch_live_search.min_length, 10);
 
         if (!this.searchInput) return;
 
@@ -160,7 +161,7 @@ class SearchAutocomplete {
         this.debounceTimer = setTimeout(() => {
             const searchTerm = this.searchInput.value.trim();
 
-            if (searchTerm.length > 2) {
+            if (searchTerm.length >= this.minLength) {
                 this.announce(bsearch_live_search.strings.searching);
                 this.fetchResults(searchTerm);
             } else {
@@ -206,7 +207,7 @@ class SearchAutocomplete {
      * @param {NodeList} items
      */
     handleArrowDown(items) {
-        if (!items.length && this.searchInput.value.length > 2) {
+        if (!items.length && this.searchInput.value.length >= this.minLength) {
             this.fetchResults(this.searchInput.value);
             return;
         }
@@ -389,7 +390,7 @@ class SearchAutocomplete {
      * Handles input focus
      */
     handleInputFocus() {
-        if (this.resultsContainer.innerHTML.trim() && this.searchInput.value.length > 2) {
+        if (this.resultsContainer.innerHTML.trim() && this.searchInput.value.length >= this.minLength) {
             this.resultsContainer.style.display = 'block';
         }
     }

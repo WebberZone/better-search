@@ -132,6 +132,15 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 4.6.2 =
+
+Release date: TBD
+
+**Fixed**
+
+* Live search sent queries shorter than the Minimum characters setting and showed no explanation. The browser check and the message now use the same value as the server.
+* Live search used a minimum of three characters, instead of the default of four, when the Minimum characters setting was missing from the saved settings.
+
 = 4.6.1 =
 
 Release date: 21 November 2026

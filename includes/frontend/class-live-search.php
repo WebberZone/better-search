@@ -38,7 +38,8 @@ class Live_Search {
 	 * Enqueue the live search script.
 	 */
 	public function enqueue_scripts() {
-		$minimize = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+		$minimize  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+		$min_chars = self::get_min_chars();
 
 		wp_enqueue_script(
 			'bsearch-live-search',
@@ -51,12 +52,17 @@ class Live_Search {
 			'bsearch-live-search',
 			'bsearch_live_search',
 			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'language' => Language_Handler::get_trp_current_language(),
-				'strings'  => array(
+				'ajax_url'   => admin_url( 'admin-ajax.php' ),
+				'language'   => Language_Handler::get_trp_current_language(),
+				'min_length' => $min_chars,
+				'strings'    => array(
 					'no_results'         => __( 'No results found', 'better-search' ),
 					'searching'          => __( 'Searching...', 'better-search' ),
-					'min_chars'          => __( 'Please enter at least 3 characters to search', 'better-search' ),
+					'min_chars'          => sprintf(
+						/* translators: %d is the minimum number of characters required to search */
+						_n( 'Please enter at least %d character to search', 'Please enter at least %d characters to search', $min_chars, 'better-search' ),
+						$min_chars
+					),
 					'suggestions_closed' => __( 'Search suggestions closed', 'better-search' ),
 					'back_to_search'     => __( 'Back to search', 'better-search' ),
 					'back_to_input'      => __( 'Back to search input', 'better-search' ),
@@ -84,6 +90,19 @@ class Live_Search {
 	}
 
 	/**
+	 * Get the minimum query length for live search.
+	 *
+	 * @since 4.6.2
+	 *
+	 * @return int Minimum number of characters.
+	 */
+	public static function get_min_chars() {
+		$min_chars = (int) \bsearch_get_option( 'min_char' );
+
+		return $min_chars > 0 ? $min_chars : (int) \bsearch_get_default_option( 'min_char' );
+	}
+
+	/**
 	 * Live search function.
 	 */
 	public function live_search() {
@@ -93,9 +112,7 @@ class Live_Search {
 
 		// The minimum length was previously enforced only in the browser, so a crafted
 		// one-character request still ran a full search on every keystroke.
-		$min_char = (int) \bsearch_get_option( 'min_char', 3 );
-
-		if ( '' === $search_query || mb_strlen( $search_query ) < $min_char ) {
+		if ( '' === $search_query || mb_strlen( $search_query ) < self::get_min_chars() ) {
 			wp_send_json( array() );
 		}
 
